@@ -1,0 +1,43 @@
+﻿"pageUniqueId": 8d8ab0ad-b3e6-4b2a-a994-fb3da44bfd44
+"sourcePageId": 8336
+"name": "Asset Info"
+"menuText": "Asset Info"
+"sortOrder": 2
+"isActive": false
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"navigationTag": "AssetInfoService"
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2025-05-26T12:59:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1034"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Asset Info"
+"propertyFields":
+  "Id": "2634"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

@@ -1,0 +1,73 @@
+﻿"pageUniqueId": 6df1f7a1-1112-49c2-b243-8c1e72ed86ec
+"sourcePageId": 8309
+"name": "Product Assets"
+"menuText": "Product Assets"
+"sortOrder": 2
+"isActive": true
+"itemType": "Swift-v2_Shop"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"navigationTag": "Shop"
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2025-05-13T14:35:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlDataProviderTypeName": "Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider, Dynamicweb.Ecommerce"
+  "urlDataProviderParameters": |-
+    <?xml version="1.0" encoding="utf-8"?>
+    <Parameters addin="Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider">
+      <Parameter addin="Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider" name="IncludeFrom" value="ContextShop" />
+      <Parameter addin="Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider" name="SelectedShopId" value="" />
+      <Parameter addin="Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider" name="IncludeLanguage" value="ContextLanguage" />
+      <Parameter addin="Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider" name="SelectedLanguageId" value="" />
+      <Parameter addin="Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider" name="Include" value="GroupsProductsVariants" />
+      <Parameter addin="Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider" name="GroupPath" value="Tree" />
+      <Parameter addin="Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider" name="ProductPath" value="Tree" />
+      <Parameter addin="Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider" name="IncludeVariantsInSitemapXml" value="False" />
+    </Parameters>
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"navigationSettings":
+  "useEcomGroups": true
+  "parentType": "Groups"
+  "groups": "[some][g:GROUP1][g:GROUP9][g:GROUP46][g:GROUP156]"
+  "shopID": "SHOP1"
+  "maxLevels": 3
+  "productPage": "Default.aspx?Id=8309"
+  "includeProducts": false
+"fields":
+  "Id": "6"
+  "ItemInstanceType": ""
+  "Sort": 2
+  "Title": "Product Assets"
+"propertyFields":
+  "Id": "2607"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"
+"permissions":
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1
+- "owner": "AuthenticatedFrontend"
+  "ownerType": "role"
+  "level": "all"
+  "levelValue": 1364

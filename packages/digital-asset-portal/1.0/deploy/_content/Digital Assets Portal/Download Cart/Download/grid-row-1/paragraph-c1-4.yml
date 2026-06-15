@@ -1,0 +1,68 @@
+﻿"paragraphUniqueId": 762b8b52-288f-45e1-82a4-9e78369cac18
+"sourceParagraphId": 22048
+"sortOrder": 4
+"itemType": "Swift-v2_DownloadCartApp"
+"header": "Download cart"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "eCom_CartV2"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <ShopSelector>SHOP1</ShopSelector>
+    <CartSelector>ORDERCONTEXT1</CartSelector>
+    <CheckoutToQuote>0</CheckoutToQuote>
+    <DoValidateCustomerAccepted>0</DoValidateCustomerAccepted>
+    <CustomerAcceptedErrorMessage>Please accept the terms and conditions</CustomerAcceptedErrorMessage>
+    <DoValidateStockStatus>0</DoValidateStockStatus>
+    <StockStatusErrorMessage>The quantity of products in cart exceeds the stock quantity ({ProductName})</StockStatusErrorMessage>
+    <UseNewsletterSubscription>0</UseNewsletterSubscription>
+    <EmptyCartRadio>EmptyCartRadioRedirect</EmptyCartRadio>
+    <EmptyCartRedirectPage>Default.aspx?Id=8342</EmptyCartRedirectPage>
+    <EmptyCartTemplate></EmptyCartTemplate>
+    <EmptyCartTemplate_path></EmptyCartTemplate_path>
+    <SetUserDetailsRadio>SetUserDetailsRadioTrue</SetUserDetailsRadio>
+    <DoCreateUserInCheckout>0</DoCreateUserInCheckout>
+    <CreateNewUserGroupsHidden></CreateNewUserGroupsHidden>
+    <DoUpdateUsersByEmail>0</DoUpdateUsersByEmail>
+    <ErrorEmtyUsername>The username cannot be empty</ErrorEmtyUsername>
+    <ErrorUsernameTaken>This username is already taken</ErrorUsernameTaken>
+    <ErrorEmtyPassword>The password cannot be empty</ErrorEmtyPassword>
+    <ErrorPasswordsNotMatch>The passwords do not match</ErrorPasswordsNotMatch>
+    <ErrorPasswordLength>The length of the password cannot be 32</ErrorPasswordLength>
+    <ErrorIllegalPasswordCharacters>Your password contains system reserved characters. Please choose another password</ErrorIllegalPasswordCharacters>
+    <PaymetTypes></PaymetTypes>
+    <SelectAllPayments>1</SelectAllPayments>
+    <DeliveryTypes></DeliveryTypes>
+    <SelectAllDeliveries>1</SelectAllDeliveries>
+    <OnReEnterRadio>OnReEnterRadioFirstStep</OnReEnterRadio>
+    <CountryForShippingRadio>CountryForShippingRadioBoth</CountryForShippingRadio>
+    <CountryForPaymentRadio>CountryForPaymentRadioCustomer</CountryForPaymentRadio>
+    <RemoveNoneExistingProductsRadio>RemoveNoneExistingProductsRadioTrue</RemoveNoneExistingProductsRadio>
+    <DefaultPaymentId></DefaultPaymentId>
+    <DefaultShippingId></DefaultShippingId>
+    <Step1Name>Show download cart</Step1Name>
+    <Step1Template>eCom7/CartV2/Step/DownloadCart.cshtml</Step1Template>
+    <Step1Template_path></Step1Template_path>
+    <Step1IsCheckout>false</Step1IsCheckout>
+    <Step2Name>Checkout</Step2Name>
+    <Step2Template></Step2Template>
+    <Step2Template_path></Step2Template_path>
+    <Step2IsCheckout>true</Step2IsCheckout>
+    <ValidationGroups></ValidationGroups>
+    <SelectedValidations></SelectedValidations>
+  </Settings>
+"fields":
+  "ConfirmationPageLink": "Default.aspx?ID=8341"
+  "GlobalRecordPageGuid": "cec3a601-f8a0-4662-b586-e35421b24c8e"
+  "HideProductInformationForm": false
+  "HidePublicationForm": true
+  "Id": "3"
+  "ItemInstanceType": ""
+  "ShopPageLink": "8309"
+  "ShowCurrencySelector": false
+  "ShowLanguageSelector": false
+  "ShowPriceSelector": false
+  "Sort": 0
+  "Title": "Download cart"
+"columnId": 1

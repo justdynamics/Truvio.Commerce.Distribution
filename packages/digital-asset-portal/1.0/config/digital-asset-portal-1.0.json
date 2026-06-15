@@ -1,0 +1,31 @@
+{
+  "outputDirectory": "Serializer",
+  "deployOutputSubfolder": "deploy",
+  "seedOutputSubfolder": "seed",
+  "predicates": [
+    {
+      "name": "Digital Assets Portal",
+      "mode": "Deploy",
+      "providerType": "Content",
+      "areaId": 26,
+      "includeLanguageLayers": false,
+      "path": "/",
+      "excludes": [],
+      "excludeFields": [
+        "AreaDomain",
+        "AreaDomainLock",
+        "AreaNoindex",
+        "AreaNofollow",
+        "AreaRobotsTxt",
+        "AreaRobotsTxtIncludeSitemap"
+      ],
+      "excludeXmlElements": [],
+      "excludeAreaColumns": [
+        "AreaCdnHost",
+        "AreaCreatedDate",
+        "AreaUpdatedDate"
+      ],
+      "acknowledgedOrphanPageIds": [8330]
+    }
+  ]
+}

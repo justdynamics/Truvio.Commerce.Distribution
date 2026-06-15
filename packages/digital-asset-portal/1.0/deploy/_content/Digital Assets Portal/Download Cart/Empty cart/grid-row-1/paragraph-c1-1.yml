@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": fe74c340-0064-4403-a0e0-f239b3e1bbe7
+"sourceParagraphId": 22050
+"sortOrder": 1
+"itemType": "Swift-v2_Text"
+"header": "Empty cart"
+"template": "TextCenter.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "651fc67d-8493-46d8-8648-e510ce7a6975"
+  "Id": "1411"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Subtitle": "<p class=\"dw-paragraph-1\">You don&#39;t have any products in your cart"
+  "Text": ""
+  "Title": "<h2 class=\"dw-h2\">Empty cart</h2>"
+"columnId": 1

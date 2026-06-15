@@ -1,0 +1,43 @@
+﻿"pageUniqueId": 317ebb9f-cae1-402d-b895-0a915afc496f
+"sourcePageId": 8310
+"name": "Product list"
+"menuText": "Product list"
+"sortOrder": 1
+"isActive": false
+"itemType": "Swift-v2_ProductList"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"navigationTag": "ProductListPage"
+"hidden": false
+"allowclick": false
+"allowsearch": false
+"showInSitemap": false
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2025-05-13T14:35:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "41"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Product list"
+"propertyFields":
+  "Id": "2608"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

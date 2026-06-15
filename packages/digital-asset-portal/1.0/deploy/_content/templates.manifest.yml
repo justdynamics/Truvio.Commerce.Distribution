@@ -1,0 +1,264 @@
+﻿- path: 10ColumnsFlex
+  kind: grid-row
+  referencedBy:
+  - Desktop Header
+- path: 12ColumnsFlex
+  kind: grid-row
+  referencedBy:
+  - Desktop Header
+- path: 1Column
+  kind: grid-row
+  referencedBy:
+  - Home
+  - Product Assets
+  - Product list
+  - Search results
+  - Asset Info
+  - Digital Assets
+  - Download
+  - Confirmation
+  - Empty cart
+  - My profile
+  - Sign in
+  - Forgot password
+- path: 1ColumnFlex
+  kind: grid-row
+  referencedBy:
+  - Desktop Header
+  - Desktop Footer
+  - Mobile Footer
+  - Product list area
+  - Product list card
+  - Product info (right side)
+- path: 2Columns_3-9
+  kind: grid-row
+  referencedBy:
+  - Product list
+  - My account information
+- path: 2Columns_8-4
+  kind: grid-row
+  referencedBy:
+  - Product detail
+- path: 3ColumnsFlex
+  kind: grid-row
+  referencedBy:
+  - Mobile Header
+  - Desktop Footer
+- path: Swift-v2_App
+  kind: item-type
+  referencedBy:
+  - Product Assets
+  - Search results
+  - Asset Info
+  - Digital Assets
+  - My profile
+  - My account information
+  - Sign in
+  - Forgot password
+- path: Swift-v2_Cart
+  kind: item-type
+  referencedBy:
+  - Download
+- path: Swift-v2_CartSummary
+  kind: item-type
+  referencedBy:
+  - Cart summary
+- path: Swift-v2_DownloadCartApp
+  kind: item-type
+  referencedBy:
+  - Download
+- path: Swift-v2_Feature
+  kind: item-type
+  referencedBy:
+  - Confirmation
+- path: Swift-v2_Footer
+  kind: item-type
+  referencedBy:
+  - Desktop Footer
+  - Mobile Footer
+- path: Swift-v2_Header
+  kind: item-type
+  referencedBy:
+  - Desktop Header
+  - Mobile Header
+- path: Swift-v2_Logo
+  kind: item-type
+  referencedBy:
+  - Desktop Header
+  - Mobile Header
+  - Desktop Footer
+  - Mobile Footer
+- path: Swift-v2_MiniCart
+  kind: item-type
+  referencedBy:
+  - Desktop Header
+- path: Swift-v2_MyAccount
+  kind: item-type
+  referencedBy:
+  - Desktop Header
+- path: Swift-v2_Navigation
+  kind: item-type
+  referencedBy:
+  - Desktop Header
+  - Desktop Footer
+  - Mobile Footer
+- path: Swift-v2_OffCanvasNavigation
+  kind: item-type
+  referencedBy:
+  - Mobile Header
+- path: Swift-v2_Page
+  kind: item-type
+  referencedBy:
+  - Home
+  - Search results
+  - Asset Info
+  - Cart Service
+  - Confirmation
+  - Empty cart
+  - Search result page
+  - Customer center
+  - My profile
+  - My account information
+  - Sign in
+  - Forgot password
+- path: Swift-v2_Poster
+  kind: item-type
+  referencedBy:
+  - Home
+- path: Swift-v2_ProductAddToDownloadCart
+  kind: item-type
+  referencedBy:
+  - Product list card
+  - Product info (right side)
+- path: Swift-v2_ProductComponent
+  kind: item-type
+  referencedBy:
+  - Product list card
+  - Product info (right side)
+- path: Swift-v2_ProductComponentSelector
+  kind: item-type
+  referencedBy:
+  - Product detail
+- path: Swift-v2_ProductDefaultImage
+  kind: item-type
+  referencedBy:
+  - Product list card
+- path: Swift-v2_ProductDetails
+  kind: item-type
+  referencedBy:
+  - Product detail
+- path: Swift-v2_ProductHeader
+  kind: item-type
+  referencedBy:
+  - Product list card
+  - Product info (right side)
+- path: Swift-v2_ProductList
+  kind: item-type
+  referencedBy:
+  - Product list
+- path: Swift-v2_ProductListComponent
+  kind: item-type
+  referencedBy:
+  - Product list area
+- path: Swift-v2_ProductListComponentSelector
+  kind: item-type
+  referencedBy:
+  - Product list
+- path: Swift-v2_ProductListFacets
+  kind: item-type
+  referencedBy:
+  - Product list
+- path: Swift-v2_ProductListItemRepeater
+  kind: item-type
+  referencedBy:
+  - Product list area
+- path: Swift-v2_ProductListSelectedFacets
+  kind: item-type
+  referencedBy:
+  - Product list area
+- path: Swift-v2_ProductMedia
+  kind: item-type
+  referencedBy:
+  - Product detail
+- path: Swift-v2_ProductNumber
+  kind: item-type
+  referencedBy:
+  - Product list card
+  - Product info (right side)
+- path: Swift-v2_ProductShortDescription
+  kind: item-type
+  referencedBy:
+  - Product info (right side)
+- path: Swift-v2_ProductVariantSelector
+  kind: item-type
+  referencedBy:
+  - Product info (right side)
+- path: Swift-v2_Row
+  kind: item-type
+  referencedBy:
+  - Home
+  - Product Assets
+  - Product list
+  - Product detail
+  - Search results
+  - Asset Info
+  - Digital Assets
+  - Download
+  - Confirmation
+  - My profile
+  - My account information
+  - Sign in
+  - Forgot password
+- path: Swift-v2_RowFlex
+  kind: item-type
+  referencedBy:
+  - Desktop Header
+  - Mobile Header
+  - Desktop Footer
+  - Mobile Footer
+  - Product list area
+  - Product list card
+  - Product info (right side)
+- path: Swift-v2_SearchField
+  kind: item-type
+  referencedBy:
+  - Desktop Header
+- path: Swift-v2_ServicesFolder
+  kind: item-type
+  referencedBy:
+  - Service Pages
+- path: Swift-v2_Shop
+  kind: item-type
+  referencedBy:
+  - Product Assets
+  - Digital Assets
+- path: Swift-v2_SignIn
+  kind: item-type
+  referencedBy:
+  - Mobile Header
+- path: Swift-v2_Text
+  kind: item-type
+  referencedBy:
+  - Desktop Header
+  - Desktop Footer
+  - Product list
+  - Digital Assets
+  - Empty cart
+  - Sign in
+  - Forgot password
+- path: Swift-v2_VerticalNavigation
+  kind: item-type
+  referencedBy:
+  - My account information
+- path: Swift-v2_CustomerCenter.cshtml
+  kind: page-layout
+  referencedBy:
+  - Customer center
+- path: Swift-v2_MiniCart.cshtml
+  kind: page-layout
+  referencedBy:
+  - Cart Service
+- path: Swift-v2_PageClean.cshtml
+  kind: page-layout
+  referencedBy:
+  - Search results

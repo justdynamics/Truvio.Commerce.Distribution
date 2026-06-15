@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": 3357a4a2-9ea0-4f1b-b250-91f18f08419b
+"sourceParagraphId": 22066
+"sortOrder": 6
+"itemType": "Swift-v2_Navigation"
+"header": "Product assets"
+"template": "Vertical.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "1256a8dc-0e85-4adc-8e6f-77f743bd195a"
+  "Id": "329"
+  "ItemInstanceType": ""
+  "NavigationRoot": "Default.aspx?ID=8309"
+  "ShowOnlyFirstNavLevel": false
+  "Sort": 0
+  "Title": "<h5 class=\"dw-h5\">Product assets</h5>"
+"columnId": 2

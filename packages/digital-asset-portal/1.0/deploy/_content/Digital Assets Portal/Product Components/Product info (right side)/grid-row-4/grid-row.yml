@@ -1,0 +1,16 @@
+﻿"id": 67c4c326-d265-4c58-bf17-81e908b35847
+"sortOrder": 4
+"definitionId": "1ColumnFlex"
+"itemType": "Swift-v2_RowFlex"
+"container": "Grid"
+"containerWidth": 3
+"topSpacing": 2
+"bottomSpacing": 2
+"verticalAlignment": "None"
+"fields":
+  "Id": "101"
+  "Sort": 0
+  "ItemInstanceType": ""
+"columns":
+- "id": 1
+  "width": 0

@@ -1,0 +1,42 @@
+﻿"pageUniqueId": d7feb86f-bc8e-4156-949f-27fd419fdd55
+"sourcePageId": 8313
+"name": "Product list area"
+"menuText": "Product list area"
+"sortOrder": 1
+"isActive": true
+"itemType": "Swift-v2_ProductListComponent"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2025-05-13T14:50:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "6"
+  "ItemInstanceType": ""
+  "Sort": 1
+  "Title": "Product list area"
+"propertyFields":
+  "Id": "2611"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

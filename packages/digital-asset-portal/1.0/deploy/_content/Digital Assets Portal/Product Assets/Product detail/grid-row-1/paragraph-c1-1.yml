@@ -1,0 +1,27 @@
+﻿"paragraphUniqueId": 592dd62c-facd-447d-8148-be47f42cd1aa
+"sourceParagraphId": 22022
+"sortOrder": 1
+"itemType": "Swift-v2_ProductMedia"
+"header": "Media"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "DefaultImageFallback": false
+  "DisableGetImage": false
+  "DisableLazyLoading": false
+  "GlobalRecordPageGuid": "3bff658e-d9fb-4e54-a3da-01eeb19e83f7"
+  "Id": "6"
+  "ImageAspectRatio": "75%"
+  "ImageAssets": "[\"Images\",\"Product_details\",\"Video\"]"
+  "ImagePatternImages": false
+  "InvertModalArrowsColor": false
+  "ItemInstanceType": ""
+  "OpenVideoInModal": "grid"
+  "ShowOnlyPrimaryImage": false
+  "Sort": 0
+  "ThumbnailPlacement": "bottom"
+  "Title": "Media"
+  "VideoAutoPlay": false
+"columnId": 1

@@ -1,0 +1,44 @@
+﻿"pageUniqueId": ac697a3e-f6ab-436d-92c4-96feb882788a
+"sourcePageId": 8339
+"name": "Cart Service"
+"menuText": "Cart Service"
+"sortOrder": 3
+"isActive": false
+"itemType": "Swift-v2_Page"
+"layout": "Swift-v2_MiniCart.cshtml"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"navigationTag": "CartService"
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2025-05-26T13:42:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1035"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Cart Service"
+"propertyFields":
+  "Id": "2637"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

@@ -1,0 +1,21 @@
+﻿"paragraphUniqueId": 29660946-e883-4635-987d-22cc856c6be2
+"sourceParagraphId": 22012
+"sortOrder": 3
+"itemType": "Swift-v2_ProductListItemRepeater"
+"header": "Product component repeater"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "d7feb86f-bc8e-4156-949f-27fd419fdd55"
+  "GridLayoutDesktop": "3-columns"
+  "GridLayoutMobile": "list"
+  "HideNoProductsFoundMessage": false
+  "Id": "29"
+  "ItemInstanceType": ""
+  "ListComponentSource": "8315"
+  "NoProductsFoundMessage": "No products"
+  "Sort": 0
+  "Title": "Product component repeater"
+"columnId": 1

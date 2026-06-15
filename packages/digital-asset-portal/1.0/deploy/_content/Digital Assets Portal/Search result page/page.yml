@@ -1,0 +1,43 @@
+﻿"pageUniqueId": 68644f62-c6d5-409e-bd8d-1edfb87116c1
+"sourcePageId": 8298
+"name": "Search result page"
+"menuText": "Search result page"
+"sortOrder": 4
+"isActive": false
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"treeSection": "Swift Setup"
+"hidden": false
+"allowclick": false
+"allowsearch": false
+"showInSitemap": false
+"showInLegend": false
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2025-05-13T13:52:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1020"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Search result page"
+"propertyFields":
+  "Id": "2596"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

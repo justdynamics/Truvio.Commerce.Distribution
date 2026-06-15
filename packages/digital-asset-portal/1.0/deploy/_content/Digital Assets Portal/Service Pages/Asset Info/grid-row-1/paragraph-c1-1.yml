@@ -1,0 +1,29 @@
+﻿"paragraphUniqueId": c6e3ce77-ca7a-487d-84eb-bd0857e2d9a2
+"sourceParagraphId": 22041
+"sortOrder": 1
+"itemType": "Swift-v2_App"
+"header": "App"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "QueryPublisher"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <Query>/Files/System/Repositories/Files/Files.query</Query>
+    <Facets>/Files/System/Repositories/Files/Files.facets</Facets>
+    <ShowFacetOptionsWithNoResults>0</ShowFacetOptionsWithNoResults>
+    <TrackQueries>0</TrackQueries>
+    <Template>AssetInfo.cshtml</Template>
+    <QueryConditions>[]</QueryConditions>
+    <QuerySortByParams>[]</QuerySortByParams>
+    <PageSize>10</PageSize>
+    <ParameterToSpellCheck></ParameterToSpellCheck>
+    <FieldToSpellCheck></FieldToSpellCheck>
+  </Settings>
+"fields":
+  "GlobalRecordPageGuid": "8d8ab0ad-b3e6-4b2a-a994-fb3da44bfd44"
+  "Id": "346"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "App"
+"columnId": 1

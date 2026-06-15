@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 2ddb0285-7b6b-478b-b9ba-6a9761e9dac9
+"sourceParagraphId": 22021
+"sortOrder": 4
+"itemType": "Swift-v2_ProductAddToDownloadCart"
+"header": "Add to download cart"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "ContextCart": "ORDERCONTEXT1"
+  "GlobalRecordPageGuid": "ab09d751-0add-4602-badd-4c5e15f4a64d"
+  "HideButtonText": false
+  "HorizontalAlignment": "full"
+  "Id": "6"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Add to download cart"
+"columnId": 1

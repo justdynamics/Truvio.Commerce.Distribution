@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": c99a8901-4b19-4868-a827-3e2588be546b
+"sourceParagraphId": 21997
+"sortOrder": 3
+"itemType": "Swift-v2_SignIn"
+"header": ""
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "d4981aea-361a-4658-8f73-05d2db7946c2"
+  "Icon": "/Files/Images/Icons/user.svg"
+  "Id": "52"
+  "ItemInstanceType": ""
+  "SignInPage": ""
+  "Sort": 0
+  "Title": "<div class=\"dw-paragraph\">Sign in</div>"
+"columnId": 3

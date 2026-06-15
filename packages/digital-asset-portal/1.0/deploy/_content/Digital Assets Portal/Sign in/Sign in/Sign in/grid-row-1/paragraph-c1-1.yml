@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": 42a31220-73af-4f0f-bf67-9a3294e9e3d5
+"sourceParagraphId": 22032
+"sortOrder": 1
+"itemType": "Swift-v2_Text"
+"header": "Sign in"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "fca9cc18-8072-4515-ab41-2162db6c9a09"
+  "Id": "1407"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": "<p>Don&#39;t have a user profile yet? Create a user profile here</p>"
+  "Title": "<h2 class=\"dw-h2\">Sign in</h2>"
+"columnId": 1

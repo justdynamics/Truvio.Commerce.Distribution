@@ -1,0 +1,25 @@
+﻿"paragraphUniqueId": dace0e88-2611-4429-9559-c74a9678168b
+"sourceParagraphId": 22063
+"sortOrder": 2
+"itemType": "Swift-v2_App"
+"header": "My account information"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "UserEdit"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <ListTemplate></ListTemplate>
+    <EditUserTemplate>UserEdit.cshtml</EditUserTemplate>
+    <Source>CurrentUser</Source>
+    <PageSize>10</PageSize>
+    <SortBy>Id</SortBy>
+    <SortOrder>Asc</SortOrder>
+  </Settings>
+"fields":
+  "GlobalRecordPageGuid": "6c5d85ed-e7db-44aa-a85c-5eb0ca57b1eb"
+  "Id": "354"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "My account information"
+"columnId": 2

@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": 909d62b7-f311-4d49-9a02-7934ea722e4c
+"sourceParagraphId": 22068
+"sortOrder": 8
+"itemType": "Swift-v2_Navigation"
+"header": "Digital assets"
+"template": "Vertical.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "1256a8dc-0e85-4adc-8e6f-77f743bd195a"
+  "Id": "331"
+  "ItemInstanceType": ""
+  "NavigationRoot": "Default.aspx?ID=8312"
+  "ShowOnlyFirstNavLevel": false
+  "Sort": 0
+  "Title": "<h5 class=\"dw-h5\">Digital assets</h5>"
+"columnId": 3

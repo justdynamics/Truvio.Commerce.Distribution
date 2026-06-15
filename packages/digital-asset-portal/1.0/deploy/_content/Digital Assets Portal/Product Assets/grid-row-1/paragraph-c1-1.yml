@@ -1,0 +1,42 @@
+﻿"paragraphUniqueId": 864c522a-d5ef-47d6-9eab-52afc909fc83
+"sourceParagraphId": 22005
+"sortOrder": 1
+"itemType": "Swift-v2_App"
+"header": "App"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "eCom_ProductCatalog"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <IndexQuery>/Files/System/Repositories/ProductsFrontend/Products.query</IndexQuery>
+    <TrackQueries>0</TrackQueries>
+    <FacetGroups>/Files/System/Repositories/ProductsFrontend/Electricals.facets,/Files/System/Repositories/ProductsFrontend/Products.facets</FacetGroups>
+    <ShowFacetOptionsWithNoResults>0</ShowFacetOptionsWithNoResults>
+    <QueryConditions>[{&amp;quot;Name&amp;quot;:&amp;quot;IsVariant&amp;quot;,&amp;quot;TypeName&amp;quot;:&amp;quot;System.Boolean[]&amp;quot;,&amp;quot;DefaultValue&amp;quot;:&amp;quot;False&amp;quot;}]</QueryConditions>
+    <QuerySortByParams>[]</QuerySortByParams>
+    <UseGroupSortInGroupContext>1</UseGroupSortInGroupContext>
+    <FieldToSpellCheck></FieldToSpellCheck>
+    <ParameterToSpellCheck></ParameterToSpellCheck>
+    <PageSize>10</PageSize>
+    <ProductListTemplate>ProductListRenderGrid.cshtml</ProductListTemplate>
+    <ProductTemplate>ProductDetailRenderGrid.cshtml</ProductTemplate>
+    <CompareTemplate></CompareTemplate>
+    <FeedTemplate></FeedTemplate>
+    <SelectedPriceProperties></SelectedPriceProperties>
+    <SelectedProductProperties></SelectedProductProperties>
+    <SelectedProductListProperties></SelectedProductListProperties>
+    <SelectedAssetCategories></SelectedAssetCategories>
+    <SelectedAssets></SelectedAssets>
+    <SelectedVariantInfo></SelectedVariantInfo>
+    <SelectedStockUnits></SelectedStockUnits>
+    <SelectedProductFields></SelectedProductFields>
+    <SelectedProductCategoryFields></SelectedProductCategoryFields>
+  </Settings>
+"fields":
+  "GlobalRecordPageGuid": "6df1f7a1-1112-49c2-b243-8c1e72ed86ec"
+  "Id": "342"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "App"
+"columnId": 1

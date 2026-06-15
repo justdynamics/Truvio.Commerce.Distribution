@@ -1,0 +1,51 @@
+﻿"pageUniqueId": ae58d7e6-8105-4bcf-ae60-dd7eeae5d6ab
+"sourcePageId": 8312
+"name": "Digital Assets"
+"menuText": "Digital Assets"
+"sortOrder": 3
+"isActive": true
+"itemType": "Swift-v2_Shop"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2025-05-13T14:39:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "7"
+  "ItemInstanceType": ""
+  "Sort": 3
+  "Title": "Digital Assets"
+"propertyFields":
+  "Id": "2610"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"
+"permissions":
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1
+- "owner": "AuthenticatedFrontend"
+  "ownerType": "role"
+  "level": "all"
+  "levelValue": 1364

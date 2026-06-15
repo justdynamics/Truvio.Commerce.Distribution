@@ -1,0 +1,37 @@
+﻿"pageUniqueId": 6e11d877-e595-4e65-b130-82bc7554e699
+"sourcePageId": 8299
+"name": "Product Components"
+"menuText": "Product Components"
+"sortOrder": 2
+"isActive": true
+"layoutApplyToSubPages": false
+"isFolder": true
+"isTemplate": false
+"isStructuralStub": false
+"treeSection": "Swift Setup"
+"hidden": false
+"allowclick": false
+"allowsearch": false
+"showInSitemap": false
+"showInLegend": false
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2025-05-13T13:53:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": true
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": true
+  "hideForTablets": true
+  "hideForDesktops": true
+"propertyFields":
+  "Id": "2597"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

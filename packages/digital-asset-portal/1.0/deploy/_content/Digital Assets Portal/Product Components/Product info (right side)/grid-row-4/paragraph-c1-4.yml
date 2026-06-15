@@ -1,0 +1,21 @@
+﻿"paragraphUniqueId": b2ef7634-dcbe-467b-81fa-2eafaeba8276
+"sourceParagraphId": 22016
+"sortOrder": 4
+"itemType": "Swift-v2_ProductVariantSelector"
+"header": "Selectable variant option"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "DefaultVariantGroupLayout": "button"
+  "GlobalRecordPageGuid": "56b34106-1f7b-45de-b316-a119ccce9d59"
+  "HideGroupHeaders": "false"
+  "Id": "22"
+  "ItemInstanceType": ""
+  "ShowSelectedOptionName": false
+  "ShowVariantGroupOptions": "selected"
+  "Sort": 0
+  "Title": "Selectable variant option"
+  "VariantGroups": 392
+"columnId": 1

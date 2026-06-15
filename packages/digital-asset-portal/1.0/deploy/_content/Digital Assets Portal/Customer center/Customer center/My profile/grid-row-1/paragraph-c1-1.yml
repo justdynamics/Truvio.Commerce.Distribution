@@ -1,0 +1,37 @@
+﻿"paragraphUniqueId": a16882d6-4a79-416f-9a66-6691c9abf10f
+"sourceParagraphId": 22231
+"sortOrder": 1
+"itemType": "Swift-v2_App"
+"header": ""
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "UserView"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <ListTemplate></ListTemplate>
+    <DetailTemplate>UserDetail.cshtml</DetailTemplate>
+    <Source>CurrentUser</Source>
+    <ChosenUser></ChosenUser>
+    <ListUsers></ListUsers>
+    <ListUserGroups></ListUserGroups>
+    <ShowInactiveUsers>0</ShowInactiveUsers>
+    <PageSize>10</PageSize>
+    <SortBy>Id</SortBy>
+    <SortOrder>Ascending</SortOrder>
+    <EmailTemplate></EmailTemplate>
+    <SenderName></SenderName>
+    <SenderEmail></SenderEmail>
+    <EmailSubject>Confirm your account</EmailSubject>
+    <EditUserPageId></EditUserPageId>
+    <CreateUserPageId></CreateUserPageId>
+    <CreatePasswordPageId></CreatePasswordPageId>
+    <RedirectAfterImpersonation></RedirectAfterImpersonation>
+  </Settings>
+"fields":
+  "GlobalRecordPageGuid": "2395c195-0300-4378-a226-378bfaaba00a"
+  "Id": "404"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": ""
+"columnId": 1

@@ -1,0 +1,42 @@
+﻿"pageUniqueId": 1256a8dc-0e85-4adc-8e6f-77f743bd195a
+"sourcePageId": 8306
+"name": "Desktop Footer"
+"menuText": "Desktop Footer"
+"sortOrder": 3
+"isActive": false
+"itemType": "Swift-v2_Footer"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": false
+"allowsearch": false
+"showInSitemap": false
+"showInLegend": false
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2025-05-13T13:57:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "64"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Desktop Footer"
+"propertyFields":
+  "Id": "2604"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

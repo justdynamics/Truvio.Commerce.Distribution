@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": a385848d-c365-4323-8afe-2592b3927566
+"sourceParagraphId": 22230
+"sortOrder": 10
+"itemType": "Swift-v2_MyAccount"
+"header": ""
+"template": "UserAvatarDropdown.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "5583784a-06c2-4819-80f1-f9096c4e9d38"
+  "Icon": "/Files/Images/Icons/user.svg"
+  "Id": "8"
+  "ItemInstanceType": ""
+  "MyAccountPage": "Default.aspx?ID=8333"
+  "Sort": 0
+  "Title": "My account"
+"columnId": 10

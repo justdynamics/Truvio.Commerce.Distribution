@@ -1,0 +1,73 @@
+﻿"areaId": d930eef0-6ff9-4f56-887d-35dd2aa0b176
+"name": "Digital Assets Portal"
+"sortOrder": 101
+"itemType": "Swift-v2_Master"
+"itemFields":
+  "Id": "24"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "OpenLinksInNewTab": false
+  "HeaderDesktop": "8303"
+  "HeaderMobile": "8304"
+  "FooterDesktop": "8306"
+  "FooterMobile": "8307"
+  "Favicon": "/Files/Templates/Designs/Swift-v2/Assets/Images/favicon.png"
+  "AppleTouchIcon": ""
+  "PrivacyPolicyLink": ""
+  "CookiePolicyLink": ""
+  "CookieLayout": "modal"
+  "P_domain_verify": ""
+  "FacebookAppId": ""
+  "Google_APIKey": ""
+  "GoogleTagManagerID": ""
+  "TwitterSite": "@"
+  "MetaSiteName": ""
+  "MetaImage": ""
+  "MetaImageALT": ""
+  "MediaQueryLimit": ""
+  "CustomHeadInclude": ""
+"properties":
+  "AreaStyleId": 0
+  "AreaEncoding": ""
+  "AreaPermission": ""
+  "AreaPermissionTemplate": ""
+  "AreaTitle": ""
+  "AreaKeywords": ""
+  "AreaDescription": ""
+  "AreaFrontpage": ""
+  "AreaDateformat": ""
+  "AreaCodepage": 0
+  "AreaLanguage": 1
+  "StyleId": 1
+  "AreaMasterTemplate": ""
+  "AreaCulture": "en-US"
+  "AreaApprovalType": 0
+  "AreaEcomLanguageId": "ENU"
+  "AreaEcomCurrencyId": "USD"
+  "AreaActive": true
+  "AreaMasterAreaId": 0
+  "AreaUserManagementPermissions": ""
+  "AreaUrlName": ""
+  "AreaCopyOf": 0
+  "AreaLayout": "Designs/Swift-v2/Swift-v2_Page.cshtml"
+  "AreaNotFound": ""
+  "AreaRedirectFirstPage": 0
+  "AreaLockPagesToDomain": false
+  "AreaEcomCountryCode": "US"
+  "AreaEcomShopId": "SHOP1"
+  "AreaUrlIgnoreForChildren": true
+  "AreaCookieCustomNotifications": false
+  "AreaItemTypePageProperty": "Swift-v2_PageProperties"
+  "AreaIncludeProductsInSitemap": false
+  "AreaSSLMode": 0
+  "AreaEcomPricesWithVat": ""
+  "AreaIsCdnActive": true
+  "AreaCdnImageHost": ""
+  "AreaStockLocationID": 0
+  "AreaReverseChargeForVat": false
+  "AreaPublished": true
+  "AreaDeleted": false
+  "AreaColorSchemeGroupId": "swift"
+  "AreaColorSchemeId": "light"
+  "AreaTypographyId": "fonts"
+  "AreaButtonStyleId": "buttons"

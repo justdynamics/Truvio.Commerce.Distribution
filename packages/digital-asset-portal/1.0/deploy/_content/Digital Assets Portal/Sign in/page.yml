@@ -1,0 +1,38 @@
+﻿"pageUniqueId": 17563574-69e0-42ec-b6eb-fe47e66639fc
+"sourcePageId": 8449
+"name": "Sign in"
+"menuText": "Sign in"
+"sortOrder": 6
+"isActive": true
+"layoutApplyToSubPages": false
+"isFolder": true
+"isTemplate": false
+"isStructuralStub": false
+"treeSection": "Customer center"
+"hidden": false
+"allowclick": false
+"allowsearch": false
+"showInSitemap": false
+"showInLegend": false
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-01-28T10:24:43.4530000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": true
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": true
+  "hideForTablets": true
+  "hideForDesktops": true
+"propertyFields":
+  "Id": "2748"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "Icon": ""
+  "SubmenuType": "auto"

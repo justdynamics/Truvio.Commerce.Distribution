@@ -1,0 +1,25 @@
+﻿"paragraphUniqueId": 29539033-91e6-4195-8914-81170faf0f37
+"sourceParagraphId": 22059
+"sortOrder": 3
+"itemType": "Swift-v2_App"
+"header": "App"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "UserForgotPassword"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <Template>ResetPassword.cshtml</Template>
+    <PasswordTemplate>ChangePassword.cshtml</PasswordTemplate>
+    <EmailTemplate>ForgotPasswordEmail.cshtml</EmailTemplate>
+    <SenderName>Swift DAP</SenderName>
+    <SenderEmail>noreply@dynamicweb.dk</SenderEmail>
+    <EmailSubject>Reset your password</EmailSubject>
+  </Settings>
+"fields":
+  "GlobalRecordPageGuid": "8feb93ea-e47c-4192-b36e-6bb047dc63dd"
+  "Id": "352"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "App"
+"columnId": 1

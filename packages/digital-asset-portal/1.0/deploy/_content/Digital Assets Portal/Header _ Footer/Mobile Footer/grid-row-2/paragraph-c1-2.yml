@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": 25c74794-9b4a-41c5-b154-9e5733fa01bb
+"sourceParagraphId": 22003
+"sortOrder": 2
+"itemType": "Swift-v2_Navigation"
+"header": "About Swift"
+"template": "Horizontal.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "b775628b-6849-456c-8836-e9c7182cee40"
+  "Id": "326"
+  "ItemInstanceType": ""
+  "NavigationRoot": ""
+  "ShowOnlyFirstNavLevel": false
+  "Sort": 0
+  "Title": "<h5>About Swift</h5>"
+"columnId": 1
