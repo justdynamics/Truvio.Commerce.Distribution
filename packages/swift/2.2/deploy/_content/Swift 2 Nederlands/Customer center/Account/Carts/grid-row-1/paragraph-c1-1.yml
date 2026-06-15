@@ -1,0 +1,29 @@
+﻿"paragraphUniqueId": a9cc2bbd-c43a-414d-9bdd-af3a75ed4050
+"sourceParagraphId": 22374
+"sortOrder": 1
+"itemType": "Swift-v2_App"
+"header": "Carts"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "eCom_CustomerExperienceCenter"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <OrderType>Cart</OrderType>
+    <RetrieveListBasedOn>UseCustomerNumber</RetrieveListBasedOn>
+    <PageSize>12</PageSize>
+    <SortByField>CreatedAt</SortByField>
+    <SortOrder>Desc</SortOrder>
+    <OrderListTemplate>Carts_List.cshtml</OrderListTemplate>
+    <DetailTemplate>Carts_Details.cshtml</DetailTemplate>
+    <EmailTemplate></EmailTemplate>
+    <LedgerType></LedgerType>
+    <LedgerFlowStates></LedgerFlowStates>
+  </Settings>
+"fields":
+  "GlobalRecordPageGuid": "1bc4e8a6-7562-4b52-9b3d-3adcf1c0b560"
+  "Id": "418"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Carts"
+"columnId": 1

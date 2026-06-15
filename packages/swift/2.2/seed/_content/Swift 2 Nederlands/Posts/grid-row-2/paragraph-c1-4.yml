@@ -1,0 +1,29 @@
+﻿"paragraphUniqueId": b9e1e95d-f7d4-4b6c-ba93-eac93e15020a
+"sourceParagraphId": 22317
+"sortOrder": 4
+"itemType": "Swift-v2_App"
+"header": "App"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "QueryPublisher"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <Query>/Files/System/Repositories/Post/PostsCurrentPage.query</Query>
+    <Facets>/Files/System/Repositories/Post/PostFacets.facets</Facets>
+    <ShowFacetOptionsWithNoResults>0</ShowFacetOptionsWithNoResults>
+    <TrackQueries>0</TrackQueries>
+    <Template>PostGridWidthDate.cshtml</Template>
+    <QueryConditions>[]</QueryConditions>
+    <QuerySortByParams>[{&amp;quot;Field&amp;quot;:&amp;quot;PageCreatedDate&amp;quot;,&amp;quot;SortDirection&amp;quot;:&amp;quot;Ascending&amp;quot;}]</QuerySortByParams>
+    <PageSize>50</PageSize>
+    <ParameterToSpellCheck></ParameterToSpellCheck>
+    <FieldToSpellCheck></FieldToSpellCheck>
+  </Settings>
+"fields":
+  "GlobalRecordPageGuid": "b9302391-589c-4169-acc0-72020b2177ed"
+  "Id": "406"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "App"
+"columnId": 1

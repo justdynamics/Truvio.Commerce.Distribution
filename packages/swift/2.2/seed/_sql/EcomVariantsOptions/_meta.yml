@@ -1,0 +1,98 @@
+﻿"tableName": "EcomVariantsOptions"
+"nameColumn": "VariantOptionName"
+"compareColumns": ""
+"keyColumns":
+- "VariantOptionId"
+- "VariantOptionLanguageId"
+"identityColumns":
+- "VariantOptionAutoId"
+"allColumns":
+- "VariantOptionId"
+- "VariantOptionLanguageId"
+- "VariantOptionGroupId"
+- "VariantOptionName"
+- "VariantOptionImgSmall"
+- "VariantOptionImgMedium"
+- "VariantOptionImgLarge"
+- "VariantOptionSortOrder"
+- "VariantOptionAutoId"
+- "VariantOptionColor"
+- "VariantOptionIcon"
+"columnDefinitions":
+- "name": "VariantOptionId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "VariantOptionLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "VariantOptionGroupId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "VariantOptionName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "VariantOptionImgSmall"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "VariantOptionImgMedium"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "VariantOptionImgLarge"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "VariantOptionSortOrder"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "VariantOptionAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "VariantOptionColor"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "VariantOptionIcon"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

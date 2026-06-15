@@ -1,0 +1,11 @@
+﻿"id": 3758da47-f1f8-440a-9acd-a5f4b222cacc
+"sortOrder": 1
+"definitionId": "1Column"
+"container": "Grid"
+"containerWidth": 1
+"topSpacing": 6
+"bottomSpacing": 6
+"verticalAlignment": "None"
+"columns":
+- "id": 1
+  "width": 0

@@ -1,0 +1,16 @@
+﻿"paragraphUniqueId": 4f6cae5e-bf2d-4141-a7ae-20239e8bf8ae
+"sourceParagraphId": 22293
+"sortOrder": 24
+"itemType": "Swift-v2_Button"
+"header": "(EMPTY)"
+"template": "ButtonCenter.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": "{\r\n  \"SelectedValue\": \"8345\",\r\n  \"Label\": \"Click here to see all Travel guides, Reviews and Buying guides\",\r\n  \"Link\": \"Default.aspx?ID=8464\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"link\"\r\n}"
+  "GlobalRecordPageGuid": "000f59b7-5c38-401d-b8b6-b79359d70490"
+  "Id": "41"
+  "ItemInstanceType": ""
+  "Sort": 0
+"columnId": 1

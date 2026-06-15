@@ -9,7 +9,7 @@ main source of trouble, because the platform's schema can differ.
 
 | Package | Baseline version | Captured & verified against | Engine version used |
 | --- | --- | --- | --- |
-| `swift` | 2.2.0 | DW 10.23.9 | Truvio.Commerce.Serializer 0.6.x |
+| `swift` | 2.2.0 | DW 10.26.7 | Truvio.Commerce.Serializer 0.6.x |
 
 Each package's `BASELINE.md` repeats its tested platform version in its header.
 Treat that as the supported target.

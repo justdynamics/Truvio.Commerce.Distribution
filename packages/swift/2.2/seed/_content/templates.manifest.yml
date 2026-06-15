@@ -1,0 +1,4 @@
+﻿- path: Swift-v2_Email
+  kind: item-type
+  referencedBy:
+  - Swift - Newsletter - Announcement Email

@@ -1,0 +1,40 @@
+﻿"paragraphUniqueId": f508b826-41ea-46dd-9828-977bd21b87f8
+"sourceParagraphId": 22463
+"sortOrder": 3
+"itemType": "Swift-v2_ProductComponentSlider"
+"header": "Others also bought"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "95d9d67a-d324-444e-912e-bd36e5eb96f7"
+  "Id": "43"
+  "IndicatorStyle": "slider-indicators-round"
+  "IndicatorsHighlightActive": false
+  "IndicatorsInvertedColors": false
+  "IndicatorsOutsideSlider": true
+  "IndicatorsVisibleOnSmallDevices": false
+  "ItemInstanceType": ""
+  "Layout": "slider"
+  "ListComponentSource": "5861"
+  "NavigationAlwaysVisible": true
+  "NavigationInvertColors": false
+  "NavigationNoLoop": false
+  "NavigationPlacement": "slider-nav-outside-expand"
+  "NavigationShowScrollbar": false
+  "NavigationSlideEntirePage": false
+  "NavigationSmall": true
+  "NavigationStyle": "slider-nav-round"
+  "NavigationVisibleOnTouch": false
+  "ProductListPage": ""
+  "ProductSliderServicePage": ""
+  "ProductsCount": 10
+  "RelateTo": ""
+  "RelationType": "most-sold"
+  "RevealSlides": "reveal"
+  "SetMinHeightForLazyLoading": false
+  "SliderLayout": "4"
+  "Sort": 0
+  "Title": "Others also bought"
+"columnId": 1

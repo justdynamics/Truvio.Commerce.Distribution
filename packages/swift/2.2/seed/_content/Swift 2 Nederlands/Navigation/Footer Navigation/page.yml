@@ -1,0 +1,39 @@
+﻿"pageUniqueId": eddd085b-a991-4ec0-8a97-7cbb56941ecb
+"sourcePageId": 8468
+"name": "Footer Navigation"
+"menuText": "Footer Navigation"
+"sortOrder": 3
+"isActive": true
+"layoutApplyToSubPages": false
+"isFolder": true
+"isTemplate": false
+"isStructuralStub": true
+"hidden": false
+"allowclick": false
+"allowsearch": false
+"showInSitemap": false
+"showInLegend": false
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2024-12-18T10:15:02.5030000
+"activeTo": 2999-12-31T00:00:00.0000000
+"permissionType": 2
+"masterPageGuid": e4d97028-a073-4948-baa1-1d37881ebcf3
+"masterType": "None"
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": true
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": true
+  "hideForTablets": true
+  "hideForDesktops": true
+"propertyFields":
+  "Id": "2767"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "Icon": ""
+  "SubmenuType": "auto"

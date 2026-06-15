@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": 85c4aa9f-a31c-48d7-93c0-c1d2fb8b41a4
+"sourceParagraphId": 22444
+"sortOrder": 28
+"itemType": "Swift-v2_MenuRelatedContent"
+"header": "Menu: Ecom with Related Content"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "a1b0df06-a3c3-44bd-814e-c35f8b69993a"
+  "Id": "22"
+  "ItemInstanceType": ""
+  "MaxEndNodes": "6"
+  "NavigationRoot": "Default.aspx?ID=8459"
+  "ShowAllLinkLabel": "Show all"
+  "Sort": 0
+"columnId": 1

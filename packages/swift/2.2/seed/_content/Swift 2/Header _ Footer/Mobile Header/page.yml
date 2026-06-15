@@ -1,0 +1,38 @@
+﻿"pageUniqueId": 29698ead-ff6f-4736-ad4d-5e104ad7ecee
+"sourcePageId": 122
+"name": "Mobile Header"
+"menuText": "Mobile Header"
+"sortOrder": 2
+"isActive": false
+"itemType": "Swift-v2_Header"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": false
+"allowsearch": false
+"showInSitemap": false
+"showInLegend": false
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2020-12-08T11:08:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": true
+  "nofollow": true
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "HeaderPosition": "sticky-top"
+  "Id": "4"
+  "ItemInstanceType": ""
+  "Sort": 2
+  "Title": "Mobile Header"

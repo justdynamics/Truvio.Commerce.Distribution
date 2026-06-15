@@ -1,0 +1,58 @@
+﻿"areaId": fdde1e0f-1242-4746-b843-38b61ddc5c8b
+"name": "Swift 2"
+"sortOrder": 100
+"itemType": "Swift-v2_Master"
+"itemFields":
+  "Id": "6"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "OpenLinksInNewTab": false
+  "HeaderDesktop": "121"
+  "HeaderMobile": "122"
+  "FooterDesktop": "146"
+  "FooterMobile": "147"
+  "PrivacyPolicyLink": "Default.aspx?ID=490"
+  "CookiePolicyLink": "Default.aspx?ID=740"
+  "CookieLayout": "modal"
+  "MediaQueryLimit": ""
+"properties":
+  "AreaStyleId": 0
+  "AreaEncoding": ""
+  "AreaPermission": ""
+  "AreaPermissionTemplate": ""
+  "AreaTitle": ""
+  "AreaKeywords": ""
+  "AreaDescription": ""
+  "AreaDateformat": "dd/MM/yyyy"
+  "AreaCodepage": 0
+  "AreaLanguage": 1
+  "StyleId": 1
+  "AreaMasterTemplate": ""
+  "AreaHtmlType": ""
+  "AreaCulture": "en-US"
+  "AreaApprovalType": 0
+  "AreaActive": true
+  "AreaMasterAreaId": 0
+  "AreaUserManagementPermissions": ""
+  "AreaUrlName": ""
+  "AreaCopyOf": 1
+  "AreaLayout": "Designs/Swift-v2/Swift-v2_Page.cshtml"
+  "AreaNotFound": ""
+  "AreaRedirectFirstPage": 1
+  "AreaLayoutPhone": ""
+  "AreaLayoutTablet": ""
+  "AreaLockPagesToDomain": false
+  "AreaUrlIgnoreForChildren": false
+  "AreaCookieCustomNotifications": false
+  "AreaItemTypePageProperty": "Swift-v2_PageProperties"
+  "AreaIncludeProductsInSitemap": false
+  "AreaSSLMode": 0
+  "AreaEcomPricesWithVat": "False"
+  "AreaCdnImageHost": ""
+  "AreaReverseChargeForVat": false
+  "AreaPublished": true
+  "AreaDeleted": false
+  "AreaColorSchemeGroupId": "swift"
+  "AreaColorSchemeId": "light"
+  "AreaTypographyId": "fonts"
+  "AreaButtonStyleId": "buttons"

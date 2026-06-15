@@ -1,0 +1,30 @@
+﻿"paragraphUniqueId": 43d6650d-0c0b-45c0-b9a8-a69df53f26ab
+"sourceParagraphId": 22426
+"sortOrder": 1
+"itemType": "Swift-v2_App"
+"header": "Search results"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "QueryPublisher"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <Query>/Files/System/Repositories/Content/Content search.query</Query>
+    <Facets></Facets>
+    <Template>QueryPublisher/Content.cshtml</Template>
+    <Template_path>/Files/Templates/Designs/Swift-v2/QueryPublisher/Content.cshtml</Template_path>
+    <PageSize>10</PageSize>
+    <ShowFacetOptionsWithNoResults></ShowFacetOptionsWithNoResults>
+    <QueryConditions>null</QueryConditions>
+    <QuerySortByParams>null</QuerySortByParams>
+    <FieldToSpellCheck></FieldToSpellCheck>
+    <ParameterToSpellCheck></ParameterToSpellCheck>
+    <TrackQueries></TrackQueries>
+  </Settings>
+"fields":
+  "GlobalRecordPageGuid": "5f234b61-667a-4fa7-956b-00183e182dab"
+  "Id": "435"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Search results"
+"columnId": 1

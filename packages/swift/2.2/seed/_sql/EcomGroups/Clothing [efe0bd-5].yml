@@ -1,0 +1,48 @@
+﻿"GroupId": "GROUP173"
+"GroupLanguageId": "ENU"
+"GroupName": "Clothing"
+"GroupNumber": ""
+"GroupPageIDRel": 0
+"GroupSmallImage": ""
+"GroupLargeImage": "/Images/Products/GroupImages/clothes.jpg"
+"GroupDescription": "<p>Explore road, city, and mountain bike clothing made for comfort, style, and performance in our collection of bike shorts, cycling jerseys, and more!</p>"
+"GroupAssortment": false
+"GroupIcon": ""
+"GroupNavigationShowInMenu": true
+"GroupNavigationShowInSiteMap": true
+"GroupNavigationClickable": true
+"GroupInheritOrderLineFields": true
+"ProductCategoryId": 
+"GroupRelatedGroups": ""
+"GroupRelatedProducts": ""
+"GroupManufacturerId": ""
+"GroupVatGroupId": ""
+"GroupProductType": 0
+"GroupStockGroupId": ""
+"GroupMetaTitle": ""
+"GroupMetaKeywords": ""
+"GroupMetaDescription": ""
+"GroupMetaUrl": ""
+"GroupFilterPagedQueryMode": 
+"GroupMetaPrimaryPage": "Default.aspx?Id=1538"
+"GroupMetaCanonical": ""
+"GroupAutoId": 279
+"GroupInheritCategoryFieldsFromParent": true
+"GroupMetaUrlIgnoreParent": false
+"GroupWorkflowId": 0
+"GroupCompletionRules": ""
+"GroupCompletionLanguageIds": ""
+"GroupProductRelationRuleField1": ""
+"GroupProductRelationRuleValue1": ""
+"GroupProductRelationRuleField2": ""
+"GroupProductRelationRuleValue2": ""
+"ProductGroupPromotionImage": ""
+"ProductGroupPromotionDescription": ""
+"ProductGroupPromotionLinkLabel": ""
+"ProductGroupPromotionLink": ""
+"ProductGroupNavigationImage": "Products/NavigationImages/clothes.jpg"
+"SelectedGroup": false
+"GroupType": 
+"ProductGroupRelatedContent": 
+"GroupCompletenessOnAllCategoryFields": false
+"GroupMetaUrlIgnoreForChildren": false

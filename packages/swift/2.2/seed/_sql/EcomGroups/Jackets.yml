@@ -1,0 +1,48 @@
+﻿"GroupId": "GROUP61"
+"GroupLanguageId": "ENU"
+"GroupName": "Jackets"
+"GroupNumber": ""
+"GroupPageIDRel": 0
+"GroupSmallImage": ""
+"GroupLargeImage": ""
+"GroupDescription": "<div class=\"relative p-1 rounded-sm flex items-center justify-center bg-token-main-surface-primary text-token-text-primary h-8 w-8\">Explore our collection of jackets, designed for warmth and style. Perfect for various weather conditions, offering comfort, protection, and durability.</div><p></p>"
+"GroupAssortment": false
+"GroupIcon": ""
+"GroupNavigationShowInMenu": true
+"GroupNavigationShowInSiteMap": true
+"GroupNavigationClickable": true
+"GroupInheritOrderLineFields": true
+"ProductCategoryId": 
+"GroupRelatedGroups": 
+"GroupRelatedProducts": ""
+"GroupManufacturerId": ""
+"GroupVatGroupId": ""
+"GroupProductType": 0
+"GroupStockGroupId": "0"
+"GroupMetaTitle": ""
+"GroupMetaKeywords": ""
+"GroupMetaDescription": ""
+"GroupMetaUrl": ""
+"GroupFilterPagedQueryMode": 
+"GroupMetaPrimaryPage": ""
+"GroupMetaCanonical": ""
+"GroupAutoId": 61
+"GroupInheritCategoryFieldsFromParent": true
+"GroupMetaUrlIgnoreParent": false
+"GroupWorkflowId": 0
+"GroupCompletionRules": ""
+"GroupCompletionLanguageIds": ""
+"GroupProductRelationRuleField1": ""
+"GroupProductRelationRuleValue1": ""
+"GroupProductRelationRuleField2": ""
+"GroupProductRelationRuleValue2": ""
+"ProductGroupPromotionImage": ""
+"ProductGroupPromotionDescription": ""
+"ProductGroupPromotionLinkLabel": ""
+"ProductGroupPromotionLink": ""
+"ProductGroupNavigationImage": "/Files/Images/Products/Clothes/Jacket and vest/10063.jpg"
+"SelectedGroup": true
+"GroupType": 0
+"ProductGroupRelatedContent": ""
+"GroupCompletenessOnAllCategoryFields": false
+"GroupMetaUrlIgnoreForChildren": false

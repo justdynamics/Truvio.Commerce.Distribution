@@ -1,0 +1,45 @@
+﻿"pageUniqueId": d894aabc-0035-4204-b506-f227d0ffbde9
+"sourcePageId": 8487
+"name": "Empty cart"
+"menuText": "Empty cart"
+"sortOrder": 1
+"isActive": false
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": false
+"showInSitemap": false
+"showInLegend": false
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2021-03-17T11:24:00.0000000
+"activeTo": 2999-12-31T00:00:00.0000000
+"permissionType": 2
+"masterPageGuid": faff018a-8470-4173-9c3b-c6d4a5259c2f
+"masterType": "None"
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1141"
+  "ItemInstanceType": ""
+  "Sort": 1
+  "Title": "Empty cart"
+"propertyFields":
+  "Id": "2786"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "Icon": "/Files/Icons/1_none.svg"
+  "SubmenuType": "auto"

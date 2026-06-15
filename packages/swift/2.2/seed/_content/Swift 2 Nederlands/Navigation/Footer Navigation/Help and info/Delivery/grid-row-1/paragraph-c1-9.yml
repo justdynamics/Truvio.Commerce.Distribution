@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": 6ddf2691-9c93-4153-8e95-6ef0dbacb09d
+"sourceParagraphId": 22446
+"sortOrder": 9
+"itemType": "Swift-v2_Text"
+"header": "Delivery"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "a809f76a-9947-4abe-85db-ce2fd1a43dc1"
+  "Id": "1501"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": ""
+  "Title": "<h1 class=\"dw-h2\">Delivery</h1>"
+"columnId": 1

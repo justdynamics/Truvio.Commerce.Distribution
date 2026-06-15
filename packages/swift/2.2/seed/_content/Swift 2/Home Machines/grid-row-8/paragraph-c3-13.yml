@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": fc75f21e-85fe-43a5-9f00-021d607e61ad
+"sourceParagraphId": 15723
+"sortOrder": 13
+"itemType": "Swift-v2_Text"
+"header": "Feedback"
+"template": "TextCenter.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "2504cbec-3276-407d-8a25-0c9bf0958285"
+  "Id": "790"
+  "ItemInstanceType": ""
+  "SecondButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"primary\"\r\n}"
+  "Sort": 0
+  "Subtitle": "<h3 class=\"dw-h3\">300+</h3>"
+  "Title": "<p class=\"dw-paragraph-1\">Feedback"
+"columnId": 3

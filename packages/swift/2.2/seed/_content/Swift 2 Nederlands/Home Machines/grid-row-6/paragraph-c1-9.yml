@@ -1,0 +1,22 @@
+﻿"paragraphUniqueId": 0dd414c5-addb-4465-bfcc-c16f204ee081
+"sourceParagraphId": 22346
+"sortOrder": 9
+"itemType": "Swift-v2_Poster"
+"header": "(EMPTY)"
+"template": "TextMiddleCenter.cshtml"
+"colorSchemeId": "dark"
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "AltText": ""
+  "Eyebrow": "<h2 class=\"dw-h3\">Our best sellers</h2>"
+  "FirstButton": "{\r\n  \"SelectedValue\": \"5862\",\r\n  \"Label\": \"Shop all\",\r\n  \"Link\": \"Default.aspx?ID=8459\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"link\"\r\n}"
+  "GlobalRecordPageGuid": "04a12db3-c7fb-4394-b101-c03e8ae6d7e7"
+  "Height": "1"
+  "Id": "767"
+  "Image": "/Files/Images/Content/Environment/environment-7.jpg"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": ""
+  "Title": ""
+"columnId": 1

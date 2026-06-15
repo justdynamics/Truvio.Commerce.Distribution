@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 0429ac27-3eb5-4ffa-b089-c07bffb679d7
+"sourceParagraphId": 22471
+"sortOrder": 62
+"itemType": "Swift-v2_Feature"
+"header": "Sustainability"
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": "lightgrey1"
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"link\"\r\n}"
+  "GlobalRecordPageGuid": "24568e82-0fe5-4485-b783-08c4a5e4eef1"
+  "Icon": "/Files/Images/Icons/cart-shopping.svg"
+  "Id": "1686"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p>We are committed to promoting environmentally friendly practices, from sourcing materials to packaging.</p><p><br></p>"
+  "Title": "<h3 class=\"dw-h5\">Sustainability</h3>"
+"columnId": 2

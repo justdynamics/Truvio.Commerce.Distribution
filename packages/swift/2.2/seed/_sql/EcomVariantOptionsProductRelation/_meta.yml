@@ -1,0 +1,34 @@
+﻿"tableName": "EcomVariantOptionsProductRelation"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "VariantOptionsProductRelationProductId"
+- "VariantOptionsProductRelationVariantId"
+"identityColumns":
+- "VariantOptionsProductRelationAutoId"
+"allColumns":
+- "VariantOptionsProductRelationProductId"
+- "VariantOptionsProductRelationVariantId"
+- "VariantOptionsProductRelationAutoId"
+"columnDefinitions":
+- "name": "VariantOptionsProductRelationProductId"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "VariantOptionsProductRelationVariantId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "VariantOptionsProductRelationAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true

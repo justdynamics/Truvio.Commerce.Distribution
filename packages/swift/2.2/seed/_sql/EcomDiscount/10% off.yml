@@ -1,0 +1,59 @@
+﻿"DiscountId": 3
+"DiscountType": 2
+"DiscountName": "10% off"
+"DiscountActive": true
+"DiscountValidFrom": 2021-03-21T22:02:00.0000000
+"DiscountValidTo": 
+"DiscountDiscountType": 2
+"DiscountAmount": 0
+"DiscountCurrencyCode": 
+"DiscountPercentage": 10
+"DiscountProductId": 
+"DiscountProductVariantId": 
+"DiscountGroupId": 
+"DiscountShopId": "SHOP1"
+"DiscountLanguageId": 
+"DiscountProductQuantification": 1
+"DiscountProductQuantity": 1
+"DiscountAccessUserId": 0
+"DiscountAccessUserGroupId": 0
+"DiscountAccessUserCustomerNumber": 
+"DiscountCountryCode2": 
+"DiscountShippingId": 
+"DiscountPaymentId": 
+"DiscountOrderFieldName": 
+"DiscountOrderFieldValue": 
+"DiscountVoucherListId": 
+"DiscountOrderTotalPriceCondition": 6
+"DiscountOrderTotalPrice": 0
+"DiscountApplyOnce": false
+"DiscountExcludedProductsAndGroups": "[some]"
+"DiscountProductsAndGroups": "[some][g:GROUP1]"
+"DiscountAssignableFromProducts": false
+"DiscountDescription": 
+"DiscountOrderContextId": 
+"DiscountProductIdByDiscount": 
+"DiscountProductVariantIdByDiscount": 
+"DiscountLoyaltyPointsRate": 0
+"DiscountCheckForValidationReason": false
+"DiscountAmountProductFieldName": 
+"DiscountApplyToProduct": 1
+"DiscountCampaignName": 
+"DiscountCampaignImage": 
+"DiscountCampaignColor": 
+"DiscountCreatedDate": 2021-03-21T22:03:28.0000000
+"DiscountUpdatedDate": 2022-03-10T13:10:19.0000000
+"DiscountCreatedBy": 1
+"DiscountUpdatedBy": 1
+"DiscountOnlyApplyToNonDiscountedItems": false
+"DiscountStopFurtherProcessing": false
+"DiscountAddFreeShipping": false
+"DiscountUsePerCustomer": 0
+"DiscountPriority": 2147483647
+"DiscountMaximumLimits": 
+"DiscountExtenderType": 
+"DiscountExtenderSettings": 
+"DiscountOrderTotalPriceCurrencyCode": 
+"DiscountExternalId": 
+"DiscountAmountIncludesVat": false
+"DiscountAnonymousUsers": false

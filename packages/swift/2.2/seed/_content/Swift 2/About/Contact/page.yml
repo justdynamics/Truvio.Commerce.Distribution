@@ -1,0 +1,38 @@
+﻿"pageUniqueId": ed181bea-b563-41ef-9fb2-a969068214e2
+"sourcePageId": 106
+"name": "Contact"
+"menuText": "Contact"
+"sortOrder": 1
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2020-12-07T15:15:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "description": "If you have any questions or would just like to talk to the people behind Swift, this is where you get in touch."
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "62"
+  "ItemInstanceType": ""
+  "Sort": 1
+  "Title": "Contact"

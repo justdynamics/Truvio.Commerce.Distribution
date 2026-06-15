@@ -1,0 +1,66 @@
+﻿"tableName": "EcomGroupProductRelation"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "GroupProductRelationGroupId"
+- "GroupProductRelationProductId"
+"identityColumns":
+- "GroupProductRelationAutoId"
+"allColumns":
+- "GroupProductRelationGroupId"
+- "GroupProductRelationProductId"
+- "GroupProductRelationSorting"
+- "GroupProductRelationIsPrimary"
+- "GroupProductRelationAutoId"
+- "GroupProductRelationRuleId"
+- "GroupProductRelationCreated"
+"columnDefinitions":
+- "name": "GroupProductRelationGroupId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "GroupProductRelationProductId"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "GroupProductRelationSorting"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "GroupProductRelationIsPrimary"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "GroupProductRelationAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "GroupProductRelationRuleId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "GroupProductRelationCreated"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

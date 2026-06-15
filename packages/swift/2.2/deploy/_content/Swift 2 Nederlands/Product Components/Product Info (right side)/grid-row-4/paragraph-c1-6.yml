@@ -1,0 +1,27 @@
+﻿"paragraphUniqueId": 46bff828-6c47-4588-8a76-6f1f7704b6fd
+"sourceParagraphId": 22461
+"sortOrder": 6
+"itemType": "Swift-v2_ProductAddToCart"
+"header": "(EMPTY)"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "f100774e-2061-484d-aa59-6050df9fc539"
+  "HideButtonText": false
+  "HideInventory": false
+  "HideStockState": false
+  "HorizontalAlignment": "full"
+  "Id": "44"
+  "ItemInstanceType": ""
+  "ShowAddToFavorites": true
+  "ShowQuantitySelector": true
+  "ShowUnitsSelector": true
+  "Sort": 0
+  "Title": ""
+  "VariantButtonShape": "round"
+  "VariantImageAspectRatio": "56%"
+  "VariantSelectorServicePageId": "Default.aspx?ID=8497"
+  "WhenVariantsExist": "disable"
+"columnId": 1

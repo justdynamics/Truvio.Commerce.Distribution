@@ -1,0 +1,22 @@
+﻿"paragraphUniqueId": e75ed230-b78d-4629-acfe-5c5419b88dcd
+"sourceParagraphId": 22451
+"sortOrder": 6
+"itemType": "Swift-v2_ProductListInfo"
+"header": "Group description (info)"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "DescriptionFontSize": "fs-5"
+  "GlobalRecordPageGuid": "781e72d3-f8f2-4927-bf6f-7764a4276ba6"
+  "HideGroupDescription": true
+  "HideGroupTitle": false
+  "Id": "22"
+  "ItemInstanceType": ""
+  "Layout": "text-start"
+  "Sort": 0
+  "TextReadability": "max-width-on"
+  "Title": ""
+  "TitleFontSize": "h3"
+"columnId": 1

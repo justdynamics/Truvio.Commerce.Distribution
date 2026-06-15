@@ -1,0 +1,44 @@
+﻿"pageUniqueId": f609ae0a-0a38-4b25-a910-46c824600505
+"sourcePageId": 8368
+"name": "Cruising the Boardwalks of Santa Monica on the Nirve Forty-Nine"
+"menuText": "Cruising the Boardwalks of Santa Monica on the Nirve Forty-Nine"
+"sortOrder": 1
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"topImage": "/Files/Images/Content/Environment/environment-10.jpg"
+"displayMode": "Normal"
+"activeFrom": 2025-06-22T22:40:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "description": "A Vintage Ride for Sun, Sand, and Ocean Breeze"
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1059"
+  "ItemInstanceType": ""
+  "Sort": 1
+  "Title": "Cruising the Boardwalks of Santa Monica on the Nirve Forty-Nine"
+"propertyFields":
+  "Id": "2667"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

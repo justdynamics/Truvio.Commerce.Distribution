@@ -20,7 +20,7 @@ versions. At a glance:
 
 | Package | Version | Solution | Status |
 | --- | --- | --- | --- |
-| `swift` | 2.2 | Swift storefront (B2C/B2B commerce) | Deploy ready · seed capture pending |
+| `swift` | 2.2 | Swift storefront (B2C/B2B commerce) | Stable (round-trip verified) |
 | `digital-asset-portal` | 1.0 | Digital Asset Portal | In progress |
 
 ## What is a package?

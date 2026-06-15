@@ -1,0 +1,28 @@
+﻿"ShopId": "SHOP9"
+"ShopName": "Digital Assets Portal"
+"ShopCreated": 2021-12-01T08:43:11.0000000
+"ShopDefault": false
+"ShopIcon": ""
+"ShopOrderFlowId": 
+"ShopStockStateId": ""
+"ShopOrderContextId": ""
+"ShopAutoId": 9
+"ShopStockLocationID": 0
+"ShopDefaultPrintTemplate": ""
+"ShopUseAlternativeImages": false
+"ShopImageFolder": "/"
+"ShopImagePatternSmall": ""
+"ShopImagePatternMedium": ""
+"ShopImagePatternLarge": ""
+"ShopAlternativeImagePatterns": "[]"
+"ShopProductWarehouse": false
+"ShopProductPrimaryPageId": 
+"ShopAutoBuildIndex": true
+"ShopImageSearchInSubFolders": false
+"ShopImageUploadFolder": 
+"ShopAutoCreateUploadFolderPerProduct": false
+"ShopType": 3
+"ShopCompletionRules": ""
+"ShopCompletionLanguageIds": ""
+"ShopImagePatternMain": "/{ProductNumber}{VariantOptionLevel1}.jpg"
+"ShopImagePatternVariant": "/{ProductNumber}{VariantOptionLevel1}.jpg"

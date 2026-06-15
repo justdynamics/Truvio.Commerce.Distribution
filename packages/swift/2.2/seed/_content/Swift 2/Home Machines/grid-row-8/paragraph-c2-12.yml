@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 9795c6cf-9010-4d99-b60d-fde17415c854
+"sourceParagraphId": 15721
+"sortOrder": 12
+"itemType": "Swift-v2_Text"
+"header": "Sales"
+"template": "TextCenter.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "2504cbec-3276-407d-8a25-0c9bf0958285"
+  "Id": "788"
+  "ItemInstanceType": ""
+  "SecondButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"primary\"\r\n}"
+  "Sort": 0
+  "Subtitle": "<h3 class=\"dw-h3\">1m+</h3>"
+  "Title": "<p class=\"dw-paragraph-1\">Sales"
+"columnId": 2

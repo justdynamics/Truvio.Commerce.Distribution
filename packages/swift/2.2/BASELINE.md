@@ -2,8 +2,13 @@
 
 **Solution:** Swift storefront (B2C/B2B commerce)
 **Baseline version:** 2.2.0
-**Captured & verified against:** DW 10.23.9
+**Captured & verified against:** DW 10.26.7
+**Languages:** English (`Swift 2`) + Dutch language layer (`Swift 2 Nederlands`)
 **Config:** [`config/swift-2.2.json`](config/swift-2.2.json)
+**Round-trip:** verified — deploy + seed deserialize into a clean database return
+HTTP 200 with zero escalations; both language areas round-trip page-for-page (123
+each); `EcomProducts` (2051), `EcomGroups` (316), and `EcomCountries` (96) match
+source; frontend smoke renders all pages 2xx.
 
 When a customer adopts Swift as their commerce platform they get a working
 storefront before adding a single product: hundreds of structural pages,
@@ -37,19 +42,18 @@ Structural, source-owned data that must be identical across dev/test/QA/prod.
   `EcomOrderStates`, `EcomOrderStateRules`.
 - **Routing:** `UrlPath`.
 
-## Seed (`seed/`) — 9 predicates
+## Seed (`seed/`) — 18 predicates
 
 Bootstrap content delivered once, then owned by the customer. Deserialize fills
 only fields the target left empty, so customer edits survive re-runs.
 
-- **Content — Swift 2 area:** seed defaults for customer-tunable fields.
+- **Content subtrees** (one predicate each): Homepage, Homepage (machines), Site
+  chrome (header/footer), About pages, Starter blog posts, Find dealers, Footer:
+  about the shop, Footer: help and info, Newsletter examples (light), Newsletter
+  examples (dark).
 - **Catalog & promotions:** `EcomGroups`, `EcomProducts`,
   `EcomGroupProductRelation`, `EcomVariantGroups`, `EcomVariantsOptions`,
   `EcomVariantOptionsProductRelation`, `EcomDiscount`, `EcomDiscountTranslation`.
-
-> **Seed tree status:** the seed catalog is captured into this package via the
-> [authoring loop](../../../docs/authoring-a-baseline.md) against a clean source
-> host. See [`seed/README.md`](seed/README.md) for the current state.
 
 ## Not-serialized (configured per environment)
 

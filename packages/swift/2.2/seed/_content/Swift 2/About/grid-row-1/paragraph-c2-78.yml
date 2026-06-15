@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": d0e0ef05-f8b7-4e40-8b8d-19f99ee0bc61
+"sourceParagraphId": 20205
+"sortOrder": 78
+"itemType": "Swift-v2_VideoPlayer"
+"header": "Video"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "6fa6c6ff-ca41-41b5-b896-41d9e1ffe6e0"
+  "Id": "51"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "VideoDescription": ""
+  "VideoName": ""
+  "VideoSource": "{\r\n  \"Path\": \"/Files/Images/Content/Videos/video-1.mp4\"\r\n}"
+"columnId": 2

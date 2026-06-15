@@ -1,0 +1,58 @@
+﻿"tableName": "EcomDiscountTranslation"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "DiscountTranslationDiscountId"
+- "DiscountTranslationLanguageId"
+"identityColumns":
+- "DiscountTranslationAutoId"
+"allColumns":
+- "DiscountTranslationAutoId"
+- "DiscountTranslationDiscountId"
+- "DiscountTranslationLanguageId"
+- "DiscountTranslationName"
+- "DiscountTranslationDescription"
+- "DiscountTranslationCampaignName"
+"columnDefinitions":
+- "name": "DiscountTranslationAutoId"
+  "dataType": "bigint"
+  "maxLength": 0
+  "precision": 19
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "DiscountTranslationDiscountId"
+  "dataType": "bigint"
+  "maxLength": 0
+  "precision": 19
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountTranslationLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountTranslationName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountTranslationDescription"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountTranslationCampaignName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

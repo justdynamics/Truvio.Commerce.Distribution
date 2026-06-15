@@ -1,0 +1,48 @@
+﻿"GroupId": "GROUP130"
+"GroupLanguageId": "DAN"
+"GroupName": "E-bikes"
+"GroupNumber": ""
+"GroupPageIDRel": 0
+"GroupSmallImage": ""
+"GroupLargeImage": ""
+"GroupDescription": ""
+"GroupAssortment": false
+"GroupIcon": ""
+"GroupNavigationShowInMenu": true
+"GroupNavigationShowInSiteMap": true
+"GroupNavigationClickable": true
+"GroupInheritOrderLineFields": true
+"ProductCategoryId": 
+"GroupRelatedGroups": ""
+"GroupRelatedProducts": ""
+"GroupManufacturerId": ""
+"GroupVatGroupId": ""
+"GroupProductType": 0
+"GroupStockGroupId": "0"
+"GroupMetaTitle": ""
+"GroupMetaKeywords": ""
+"GroupMetaDescription": ""
+"GroupMetaUrl": ""
+"GroupFilterPagedQueryMode": 
+"GroupMetaPrimaryPage": ""
+"GroupMetaCanonical": ""
+"GroupAutoId": 195
+"GroupInheritCategoryFieldsFromParent": true
+"GroupMetaUrlIgnoreParent": false
+"GroupWorkflowId": 0
+"GroupCompletionRules": "1004,1005,1007"
+"GroupCompletionLanguageIds": "NLD,ISL,NON,SVE"
+"GroupProductRelationRuleField1": ""
+"GroupProductRelationRuleValue1": ""
+"GroupProductRelationRuleField2": ""
+"GroupProductRelationRuleValue2": ""
+"ProductGroupPromotionImage": "Swift Demo Content/vadim-misyuchenko-TB3kvVPBbr8-unsplash.jpg"
+"ProductGroupPromotionDescription": "Fokus på naturlig energi"
+"ProductGroupPromotionLinkLabel": "Bliv inspireret"
+"ProductGroupPromotionLink": "Default.aspx?Id=1306"
+"ProductGroupNavigationImage": ""
+"SelectedGroup": false
+"GroupType": 0
+"ProductGroupRelatedContent": 
+"GroupCompletenessOnAllCategoryFields": false
+"GroupMetaUrlIgnoreForChildren": false

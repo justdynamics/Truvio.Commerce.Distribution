@@ -1,0 +1,23 @@
+﻿"paragraphUniqueId": eaf1ff89-20cd-4da8-81dc-b2ccc15c1e9e
+"sourceParagraphId": 22321
+"sortOrder": 1
+"itemType": "Swift-v2_Poster"
+"header": "(EMPTY)"
+"template": "TextMiddleCenter.cshtml"
+"colorSchemeId": "dark"
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "AltText": ""
+  "Eyebrow": ""
+  "FirstButton": "{\r\n  \"SelectedValue\": \"106\",\r\n  \"Label\": \"Request a quote\",\r\n  \"Link\": \"Default.aspx?ID=8475\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "04a12db3-c7fb-4394-b101-c03e8ae6d7e7"
+  "Height": "4"
+  "Id": "765"
+  "Image": "/Files/Images/Content/People/people-2.png"
+  "ItemInstanceType": ""
+  "SecondButton": "{\r\n  \"SelectedValue\": \"15717\",\r\n  \"Label\": \"Become partner\",\r\n  \"Link\": \"Default.aspx?ID=8457#22349\",\r\n  \"LinkType\": \"paragraph\",\r\n  \"Style\": \"outline-primary\"\r\n}"
+  "Sort": 0
+  "Text": ""
+  "Title": "<h2>Streamline Your Business with High-Quality Industrial Machines</h2>"
+"columnId": 1

@@ -1,0 +1,48 @@
+﻿"GroupId": "GROUP130"
+"GroupLanguageId": "ENU"
+"GroupName": "E-bikes"
+"GroupNumber": ""
+"GroupPageIDRel": 0
+"GroupSmallImage": ""
+"GroupLargeImage": ""
+"GroupDescription": "<p>Discover our range of e-bikes, blending technology and comfort. Perfect for commuting or adventure, with models for various needs and terrains<br></p>"
+"GroupAssortment": false
+"GroupIcon": ""
+"GroupNavigationShowInMenu": true
+"GroupNavigationShowInSiteMap": true
+"GroupNavigationClickable": true
+"GroupInheritOrderLineFields": true
+"ProductCategoryId": 
+"GroupRelatedGroups": 
+"GroupRelatedProducts": ""
+"GroupManufacturerId": ""
+"GroupVatGroupId": 
+"GroupProductType": 0
+"GroupStockGroupId": "0"
+"GroupMetaTitle": ""
+"GroupMetaKeywords": ""
+"GroupMetaDescription": ""
+"GroupMetaUrl": ""
+"GroupFilterPagedQueryMode": 
+"GroupMetaPrimaryPage": ""
+"GroupMetaCanonical": ""
+"GroupAutoId": 132
+"GroupInheritCategoryFieldsFromParent": true
+"GroupMetaUrlIgnoreParent": false
+"GroupWorkflowId": 1
+"GroupCompletionRules": "1004,1005,1007"
+"GroupCompletionLanguageIds": "NLD,ISL,NON,SVE"
+"GroupProductRelationRuleField1": ""
+"GroupProductRelationRuleValue1": ""
+"GroupProductRelationRuleField2": ""
+"GroupProductRelationRuleValue2": ""
+"ProductGroupPromotionImage": ""
+"ProductGroupPromotionDescription": "Focus on natural energy"
+"ProductGroupPromotionLinkLabel": "Get inspired"
+"ProductGroupPromotionLink": "Default.aspx?Id=1297"
+"ProductGroupNavigationImage": "/Files/Images/Products/NavigationImages/e-bikes.jpg"
+"SelectedGroup": false
+"GroupType": 0
+"ProductGroupRelatedContent": ""
+"GroupCompletenessOnAllCategoryFields": false
+"GroupMetaUrlIgnoreForChildren": false

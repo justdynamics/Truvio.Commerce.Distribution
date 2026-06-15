@@ -1,0 +1,74 @@
+﻿"tableName": "EcomVariantGroups"
+"nameColumn": "VariantGroupName"
+"compareColumns": ""
+"keyColumns":
+- "VariantGroupId"
+- "VariantGroupLanguageId"
+"identityColumns":
+- "VariantGroupAutoId"
+"allColumns":
+- "VariantGroupId"
+- "VariantGroupLanguageId"
+- "VariantGroupName"
+- "VariantGroupLabel"
+- "VariantGroupUnit"
+- "VariantGroupAutoId"
+- "VariantGroupFamily"
+- "VariantGroupDisplayType"
+"columnDefinitions":
+- "name": "VariantGroupId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "VariantGroupLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "VariantGroupName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "VariantGroupLabel"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "VariantGroupUnit"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "VariantGroupAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "VariantGroupFamily"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "VariantGroupDisplayType"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

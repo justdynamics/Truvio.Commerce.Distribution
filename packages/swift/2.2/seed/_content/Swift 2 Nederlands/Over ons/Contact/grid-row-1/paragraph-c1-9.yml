@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": 6930659d-3e97-44f7-ae9a-3c28ded75ddd
+"sourceParagraphId": 22266
+"sortOrder": 9
+"itemType": "Swift-v2_Text"
+"header": "Get in Touch"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "d5bfaab0-f90a-48b0-bbd4-f96c118d0ed0"
+  "Id": "1456"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Subtitle": "<p class=\"dw-paragraph-1\">Have a project in mind? To request a quote contact us directly or fill out the form and let us know how we can help."
+  "Text": ""
+  "Title": "<h1 class=\"dw-h3\">Get in Touch</h1>"
+"columnId": 1

@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 542ed006-5eb5-4124-b091-5c65f7b36bdc
+"sourceParagraphId": 22270
+"sortOrder": 10
+"itemType": "Swift-v2_Feature"
+"header": "Feature"
+"template": "IconBoxLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"109\",\r\n  \"Label\": \"Shipping\",\r\n  \"Link\": \"Default.aspx?ID=8484\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"secondary\"\r\n}"
+  "GlobalRecordPageGuid": "d5bfaab0-f90a-48b0-bbd4-f96c118d0ed0"
+  "Icon": "/Files/Images/Icons/truck.svg"
+  "Id": "1674"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Whether it’s in our homes, our communities, or our daily routines, every small action we take adds up to a big change for our world.</p>"
+  "Title": ""
+"columnId": 1

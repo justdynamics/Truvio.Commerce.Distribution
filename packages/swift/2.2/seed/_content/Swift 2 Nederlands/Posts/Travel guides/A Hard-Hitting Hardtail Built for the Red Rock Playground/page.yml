@@ -1,0 +1,46 @@
+﻿"pageUniqueId": 3c5abcf6-4b12-435a-bb6a-e13ff0cb492e
+"sourcePageId": 8544
+"name": "A Hard-Hitting Hardtail Built for the Red Rock Playground"
+"menuText": "A Hard-Hitting Hardtail Built for the Red Rock Playground"
+"sortOrder": 3
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"topImage": "/Files/Images/Content/Environment/environment-3.png"
+"displayMode": "Normal"
+"activeFrom": 2025-06-22T22:40:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"masterPageGuid": 415fc75a-a7dd-47bd-9665-29ae5f001681
+"masterType": "None"
+"seo":
+  "description": "A Hard-Hitting Hardtail Built for the Red Rock Playground"
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1169"
+  "ItemInstanceType": ""
+  "Sort": 3
+  "Title": "A Hard-Hitting Hardtail Built for the Red Rock Playground"
+"propertyFields":
+  "Id": "2843"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

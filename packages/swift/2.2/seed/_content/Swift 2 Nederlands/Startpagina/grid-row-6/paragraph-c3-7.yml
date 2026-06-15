@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": f6480b1d-7ff4-4989-9457-be3d43a68301
+"sourceParagraphId": 22480
+"sortOrder": 7
+"itemType": "Swift-v2_Feature"
+"header": "Dedicated account support"
+"template": "IconLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"outline-primary\"\r\n}"
+  "GlobalRecordPageGuid": "000f59b7-5c38-401d-b8b6-b79359d70490"
+  "Icon": "/Files/Images/Icons/house.svg"
+  "Id": "1690"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p>Whether it’s in our homes, our communities, or our daily routines, every small action we take adds up to a big change for our world.<br></p>"
+  "Title": "<h3 class=\"dw-h6\">Dedicated account support</h3>"
+"columnId": 3

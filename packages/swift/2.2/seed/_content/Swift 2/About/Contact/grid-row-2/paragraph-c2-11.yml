@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 0c024fa0-07e8-4faa-947b-6da34c383d1b
+"sourceParagraphId": 15647
+"sortOrder": 11
+"itemType": "Swift-v2_Feature"
+"header": "Feature"
+"template": "IconBoxLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"490\",\r\n  \"Label\": \"Customer support\",\r\n  \"Link\": \"Default.aspx?ID=490\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"secondary\"\r\n}"
+  "GlobalRecordPageGuid": "ed181bea-b563-41ef-9fb2-a969068214e2"
+  "Icon": "/Files/Images/Icons/user.svg"
+  "Id": "1471"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Whether it’s in our homes, our communities, or our daily routines, every small action we take adds up to a big change for our world.</p>"
+  "Title": ""
+"columnId": 2

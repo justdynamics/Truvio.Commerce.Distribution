@@ -4,22 +4,20 @@ This directory holds the **Seed-mode** YAML for the Swift 2.2 baseline: the
 bootstrap catalog and customer-tunable content that deserialize fills only where
 the target is empty.
 
-Seed predicates for this package (from `config/swift-2.2.json`):
+Captured from a clean source host (18 seed predicates): the customer-owned
+content subtrees (Homepage, Site chrome, About, Starter blog posts, Find dealers,
+footers, Newsletter examples) and the starter catalog (`EcomGroups`,
+`EcomProducts`, variants, discounts, and their relations).
 
-- **Content — Swift 2 area** (seed defaults for customer-tunable fields)
-- `EcomGroups`, `EcomProducts`, `EcomGroupProductRelation`
-- `EcomVariantGroups`, `EcomVariantsOptions`, `EcomVariantOptionsProductRelation`
-- `EcomDiscount`, `EcomDiscountTranslation`
+## Re-capturing
 
-## Populating this tree
-
-The seed catalog is captured from a clean source host with the
+To refresh after a config or source change, re-run the
 [authoring loop](../../../../docs/authoring-a-baseline.md):
 
 ```powershell
-pwsh tools/capture/new-baseline.ps1 -Product swift -Version 2.2 -Mode seed
+pwsh tools/capture/new-baseline.ps1 -Product swift -Version 2.2 `
+  -SourceHostUrl https://localhost:56100 `
+  -SourceFilesRoot <host>\wwwroot\Files -Mode seed
 ```
 
-This runs `serialize?mode=seed` against the cleaned source host and stages the
-resulting YAML here. The capture is then verified end-to-end with
-`tools/e2e/full-clean-roundtrip.ps1` before the package is released as Stable.
+Then verify the round-trip into a clean target before release.

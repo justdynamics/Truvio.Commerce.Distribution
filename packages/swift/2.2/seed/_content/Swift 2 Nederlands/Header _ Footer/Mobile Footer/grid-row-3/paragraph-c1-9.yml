@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": 7c34c319-1a08-4786-9473-72681670ba60
+"sourceParagraphId": 22436
+"sortOrder": 9
+"itemType": "Swift-v2_Navigation"
+"header": "Shopping"
+"template": "Vertical.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "ed361fdc-376b-4df4-803c-a93efe1b48e9"
+  "Id": "336"
+  "ItemInstanceType": ""
+  "NavigationRoot": "Default.aspx?ID=8459"
+  "ShowOnlyFirstNavLevel": true
+  "Sort": 0
+  "Title": "<p class=\"dw-h5\">Shopping"
+"columnId": 1

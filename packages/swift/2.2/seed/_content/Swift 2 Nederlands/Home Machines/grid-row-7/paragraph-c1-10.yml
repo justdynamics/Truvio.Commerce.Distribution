@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 45542c18-bdf4-4608-8120-40834de9f329
+"sourceParagraphId": 22349
+"sortOrder": 10
+"itemType": "Swift-v2_Text"
+"header": "Become partner today"
+"template": "TextCenter.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "04a12db3-c7fb-4394-b101-c03e8ae6d7e7"
+  "Id": "1474"
+  "ItemInstanceType": ""
+  "SecondButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"primary\"\r\n}"
+  "Sort": 0
+  "Subtitle": "<p class=\"dw-paragraph-1\">Join our network of trusted dealers and distributors. Enjoy special pricing, marketing, resources and priority support."
+  "Title": "<h2 class=\"dw-h3\">Become partner today</h2>"
+"columnId": 1

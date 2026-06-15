@@ -1,0 +1,46 @@
+﻿"pageUniqueId": f9e03b2d-ebc3-47f6-bc69-232a02b2db86
+"sourcePageId": 8533
+"name": "The Mongoose Crossway 450 Disc: Ready for Anything"
+"menuText": "The Mongoose Crossway 450 Disc: Ready for Anything"
+"sortOrder": 7
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"topImage": "/Files/Images/Products/Bikes/Merida/Events/eONE SIXTY/1775.jpg"
+"displayMode": "Normal"
+"activeFrom": 2025-06-22T22:40:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"masterPageGuid": ff3a0e81-02c5-4e79-af40-bf7423b0d88b
+"masterType": "None"
+"seo":
+  "description": "The Ultimate Everyday Hybrid for Commuting and Fitness"
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1158"
+  "ItemInstanceType": ""
+  "Sort": 7
+  "Title": "The Mongoose Crossway 450 Disc: Ready for Anything"
+"propertyFields":
+  "Id": "2832"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

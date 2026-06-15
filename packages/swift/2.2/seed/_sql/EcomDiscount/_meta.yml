@@ -1,0 +1,481 @@
+﻿"tableName": "EcomDiscount"
+"nameColumn": "DiscountName"
+"compareColumns": ""
+"keyColumns":
+- "DiscountId"
+"identityColumns":
+- "DiscountId"
+"allColumns":
+- "DiscountId"
+- "DiscountType"
+- "DiscountName"
+- "DiscountActive"
+- "DiscountValidFrom"
+- "DiscountValidTo"
+- "DiscountDiscountType"
+- "DiscountAmount"
+- "DiscountCurrencyCode"
+- "DiscountPercentage"
+- "DiscountProductId"
+- "DiscountProductVariantId"
+- "DiscountGroupId"
+- "DiscountShopId"
+- "DiscountLanguageId"
+- "DiscountProductQuantification"
+- "DiscountProductQuantity"
+- "DiscountAccessUserId"
+- "DiscountAccessUserGroupId"
+- "DiscountAccessUserCustomerNumber"
+- "DiscountCountryCode2"
+- "DiscountShippingId"
+- "DiscountPaymentId"
+- "DiscountOrderFieldName"
+- "DiscountOrderFieldValue"
+- "DiscountVoucherListId"
+- "DiscountOrderTotalPriceCondition"
+- "DiscountOrderTotalPrice"
+- "DiscountApplyOnce"
+- "DiscountExcludedProductsAndGroups"
+- "DiscountProductsAndGroups"
+- "DiscountAssignableFromProducts"
+- "DiscountDescription"
+- "DiscountOrderContextId"
+- "DiscountProductIdByDiscount"
+- "DiscountProductVariantIdByDiscount"
+- "DiscountLoyaltyPointsRate"
+- "DiscountCheckForValidationReason"
+- "DiscountAmountProductFieldName"
+- "DiscountApplyToProduct"
+- "DiscountCampaignName"
+- "DiscountCampaignImage"
+- "DiscountCampaignColor"
+- "DiscountCreatedDate"
+- "DiscountUpdatedDate"
+- "DiscountCreatedBy"
+- "DiscountUpdatedBy"
+- "DiscountOnlyApplyToNonDiscountedItems"
+- "DiscountStopFurtherProcessing"
+- "DiscountAddFreeShipping"
+- "DiscountUsePerCustomer"
+- "DiscountPriority"
+- "DiscountMaximumLimits"
+- "DiscountExtenderType"
+- "DiscountExtenderSettings"
+- "DiscountOrderTotalPriceCurrencyCode"
+- "DiscountExternalId"
+- "DiscountAmountIncludesVat"
+- "DiscountAnonymousUsers"
+"columnDefinitions":
+- "name": "DiscountId"
+  "dataType": "bigint"
+  "maxLength": 0
+  "precision": 19
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "DiscountType"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountActive"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountValidFrom"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountValidTo"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountDiscountType"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountAmount"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountCurrencyCode"
+  "dataType": "nvarchar"
+  "maxLength": 3
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountPercentage"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountProductId"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountProductVariantId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountGroupId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountShopId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountProductQuantification"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountProductQuantity"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountAccessUserId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountAccessUserGroupId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountAccessUserCustomerNumber"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountCountryCode2"
+  "dataType": "nvarchar"
+  "maxLength": 2
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountShippingId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountPaymentId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountOrderFieldName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountOrderFieldValue"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountVoucherListId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountOrderTotalPriceCondition"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountOrderTotalPrice"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountApplyOnce"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountExcludedProductsAndGroups"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountProductsAndGroups"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountAssignableFromProducts"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountDescription"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountOrderContextId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountProductIdByDiscount"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountProductVariantIdByDiscount"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountLoyaltyPointsRate"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountCheckForValidationReason"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountAmountProductFieldName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountApplyToProduct"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountCampaignName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountCampaignImage"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountCampaignColor"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountCreatedDate"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountUpdatedDate"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountCreatedBy"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountUpdatedBy"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountOnlyApplyToNonDiscountedItems"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountStopFurtherProcessing"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountAddFreeShipping"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountUsePerCustomer"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountPriority"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountMaximumLimits"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountExtenderType"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountExtenderSettings"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountOrderTotalPriceCurrencyCode"
+  "dataType": "nvarchar"
+  "maxLength": 3
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountExternalId"
+  "dataType": "nvarchar"
+  "maxLength": 250
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DiscountAmountIncludesVat"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DiscountAnonymousUsers"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

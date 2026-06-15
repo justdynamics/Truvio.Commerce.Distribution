@@ -1,0 +1,48 @@
+﻿"GroupId": "GROUP2"
+"GroupLanguageId": "ENU"
+"GroupName": "Mountain bikes"
+"GroupNumber": "11111"
+"GroupPageIDRel": 0
+"GroupSmallImage": "/Files/Icons/envelope.svg"
+"GroupLargeImage": ""
+"GroupDescription": "<p>Conquer rugged trails with our mountain bikes. Designed for durability and performance, perfect for off-road adventures and challenging terrains.</p>"
+"GroupAssortment": false
+"GroupIcon": ""
+"GroupNavigationShowInMenu": true
+"GroupNavigationShowInSiteMap": true
+"GroupNavigationClickable": true
+"GroupInheritOrderLineFields": true
+"ProductCategoryId": 
+"GroupRelatedGroups": 
+"GroupRelatedProducts": "RELGRP2#;#10104#;#RELGRP2#;#10101#;#RELGRP2#;#10108"
+"GroupManufacturerId": ""
+"GroupVatGroupId": ""
+"GroupProductType": 0
+"GroupStockGroupId": "0"
+"GroupMetaTitle": ""
+"GroupMetaKeywords": ""
+"GroupMetaDescription": ""
+"GroupMetaUrl": ""
+"GroupFilterPagedQueryMode": 
+"GroupMetaPrimaryPage": ""
+"GroupMetaCanonical": ""
+"GroupAutoId": 2
+"GroupInheritCategoryFieldsFromParent": true
+"GroupMetaUrlIgnoreParent": false
+"GroupWorkflowId": 1
+"GroupCompletionRules": ""
+"GroupCompletionLanguageIds": ""
+"GroupProductRelationRuleField1": ""
+"GroupProductRelationRuleValue1": ""
+"GroupProductRelationRuleField2": ""
+"GroupProductRelationRuleValue2": ""
+"ProductGroupPromotionImage": ""
+"ProductGroupPromotionDescription": ""
+"ProductGroupPromotionLinkLabel": ""
+"ProductGroupPromotionLink": ""
+"ProductGroupNavigationImage": "/Files/Images/Products/Bikes/Merida/Sideview/ONE-TWENTY_RC_XT-EDITION_redblk_MY2021.jpg"
+"SelectedGroup": true
+"GroupType": 0
+"ProductGroupRelatedContent": ""
+"GroupCompletenessOnAllCategoryFields": false
+"GroupMetaUrlIgnoreForChildren": false

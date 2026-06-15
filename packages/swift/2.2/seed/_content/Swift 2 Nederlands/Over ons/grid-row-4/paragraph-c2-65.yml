@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": 2e6d1134-45ac-449f-b2d5-9c4b7fd4227e
+"sourceParagraphId": 22479
+"sortOrder": 65
+"itemType": "Swift-v2_Text"
+"header": "Text"
+"template": "TextCenter.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "24568e82-0fe5-4485-b783-08c4a5e4eef1"
+  "Id": "1509"
+  "ItemInstanceType": ""
+  "SecondButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"primary\"\r\n}"
+  "Sort": 0
+  "Text": "<h4 class=\"dw-h2\">4,500+</h4><p class=\"dw-paragraph\">Cities<br></p>"
+"columnId": 2

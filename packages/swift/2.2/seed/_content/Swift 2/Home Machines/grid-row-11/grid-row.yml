@@ -1,0 +1,13 @@
+﻿"id": 1920502f-cd90-4eca-b204-4378cdde646c
+"sortOrder": 11
+"definitionId": "3Columns"
+"itemType": "Swift-v2_Row"
+"container": "Grid"
+"verticalAlignment": "None"
+"fields":
+  "Id": "517"
+  "Sort": 0
+  "ItemInstanceType": ""
+"columns":
+- "id": 1
+  "width": 0
