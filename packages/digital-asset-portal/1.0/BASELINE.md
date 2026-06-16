@@ -3,9 +3,9 @@
 **Solution:** Digital Asset Portal — a digital-asset browsing/download portal built on Swift
 **Baseline version:** 1.0.0
 **Captured against:** DW 10.26.7
-**Status:** **Beta.** Captures cleanly and deploys onto a properly provisioned
-Swift target; not yet a clean strict-mode round-trip on a bare database (see
-Known issues).
+**Status:** **Beta.** Captures cleanly and renders on the source; a clean
+strict-mode deploy requires a target carrying the complete Swift-v2 design (see
+Deployment notes). Not yet demonstrated end-to-end on such a target.
 **Config:** [`config/digital-asset-portal-1.0.json`](config/digital-asset-portal-1.0.json)
 
 The Digital Asset Portal is a content area (area 26, ~32 pages) built on the
@@ -34,29 +34,40 @@ already have:
    Item-type *schemas* live in the design/database, not in serialized content, so
    this baseline cannot carry them — they must already exist on the target.
 
-## Known issues (why this is Beta)
+## Deployment notes
 
-1. **`Swift-v2_VerticalNavigation` item type must exist on the target.** Two pages
-   (Sign in, My account information) embed a `Swift-v2_VerticalNavigation` item.
-   The content serializer captures item *instances*, not item-type *definitions*,
-   so on a target that lacks this type the deserialize escalates under strict mode
-   (the rest of the portal deploys). Provision the Swift-v2 design with this item
-   type, or deserialize with strict mode off, until item-type-schema carriage is
-   added.
+1. **Requires the complete Swift-v2 design on the target.** The portal's Sign-in
+   and account pages use the `Swift-v2_VerticalNavigation` item type — a Swift
+   item type (listed among `Swift-v2_PageProperties`'s allowed child types and
+   noted in Swift's v2.2.0 changelog; it renders fine on a complete Swift
+   install). Item types belong to the **design layer**, which ships with the host
+   (like templates), not with serialized content — see Not-serialized below.
+
+   The serializer's strict-mode pre-flight **correctly** verifies that every
+   referenced item type and template exists on the target before writing content.
+   On a target whose Swift design is a subset (missing this item type/template),
+   that check escalates under strict mode and the affected pages are skipped — the
+   gate doing its job, not a baseline defect. Deploy onto a host with the full
+   Swift-v2 design, or run the deserialize with strict mode off, to apply the
+   portal in full.
 2. **One dangling demo link.** The "My account information" page links to page
    8330, which no longer exists in the source data. It is acknowledged in the
-   config (`acknowledgedOrphanPageIds: [8330]`) and surfaces as a warning.
+   config (`acknowledgedOrphanPageIds: [8330]`) and surfaces as a warning. This is
+   minor source-data cleanup, independent of the design requirement above.
 
 ## Not-serialized (per environment)
 
-Same as Swift: live domain, secrets, analytics IDs, CDN host, and the design
-filesystem/item-type schemas (see Prerequisites).
+Same as Swift: live domain, secrets, analytics IDs, CDN host, and the **design
+layer** — templates and item-type definitions (incl. `Swift-v2_VerticalNavigation`)
+ship with the host's Swift design, not with this content baseline.
 
 ## Verification status
 
 - **Serialize:** clean (HTTP 200, zero escalations, 122 YAML files).
-- **Deserialize onto a Swift target:** area 26 created with 111 items; the only
-  failures are the two `Swift-v2_VerticalNavigation` pages on a design-incomplete
-  target. A clean strict-mode round-trip is tracked for the Stable release once
-  the target design carries the item type (or the serializer carries item-type
-  schemas).
+- **Source renders:** the Sign-in / account pages render on the source host
+  (HTTP 200), confirming the item type is functional, not orphaned.
+- **Deserialize onto a Swift target:** area 26 created with 111 items; the two
+  pages using `Swift-v2_VerticalNavigation` are skipped under strict mode because
+  the test target's Swift design lacked that item type. A clean strict round-trip
+  is pending a target provisioned with the complete Swift-v2 design — the same
+  "design ships with the host" prerequisite the Swift baseline already documents.
