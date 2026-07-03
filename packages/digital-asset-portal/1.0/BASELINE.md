@@ -28,7 +28,7 @@ This package deploys *on top of* an existing Swift install. The target host must
 already have:
 
 1. **The Swift commerce foundation** — shop, products, countries, currencies,
-   etc. Deploy the [`swift/2.2`](../../swift/2.2/) package first (the portal's
+   etc. Deploy the [`swift/2.3`](../../swift/2.3/) package first (the portal's
    product components reference the global catalog).
 2. **The Swift-v2 design, including the `Swift-v2_VerticalNavigation` item type.**
    Item-type *schemas* live in the design/database, not in serialized content, so
