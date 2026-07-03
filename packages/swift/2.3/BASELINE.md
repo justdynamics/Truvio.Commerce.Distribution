@@ -1,7 +1,7 @@
 # Swift 2.3 baseline
 
 **Solution:** Swift storefront (B2C/B2B commerce)
-**Baseline version:** 2.3.0
+**Baseline version:** 2.3.1
 **Captured & verified against:** DW 10.26.9
 **Languages:** English (`Swift 2`) + Dutch language layer (`Swift 2 Nederlands`)
 **Config:** [`config/swift-2.3.json`](config/swift-2.3.json)
