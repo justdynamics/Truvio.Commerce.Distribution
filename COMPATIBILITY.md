@@ -9,8 +9,7 @@ main source of trouble, because the platform's schema can differ.
 
 | Package | Baseline version | Captured & verified against | Engine version used |
 | --- | --- | --- | --- |
-| `swift` | 2.2.0 | DW 10.26.7 | Truvio.Commerce.Serializer 0.6.x |
-| `swift` | 2.3.0 | DW 10.26.9 | Truvio.Commerce.Serializer 0.6.8-beta |
+| `swift` | 2.3.2 | DW 10.26.9 (scaffolding) | Truvio.Commerce.Serializer 0.6.8-beta |
 
 Each package's `BASELINE.md` repeats its tested platform version in its header.
 Treat that as the supported target.
@@ -23,7 +22,9 @@ mentions, but the safest deployment keeps platform versions aligned. Known
 drift-prone areas observed across versions:
 
 - **Area** — legacy layout columns (`AreaHtmlType`, `AreaLayoutPhone`,
-  `AreaLayoutTablet`) present in some versions, empty/absent in others.
+  `AreaLayoutTablet`) present in some versions, empty/absent in others. As of
+  swift/2.3.2 these three (empty) columns are stripped from the shipped
+  `area.yml`, so the package deserializes cleanly on both 10.26.9 and 10.27.x.
 - **EcomProducts** — legacy columns such as `ProductPeriodId`,
   `ProductVariantGroupCounter`, `ProductPriceMatrixPeriod`, `ProductOptimizedFor`.
 - **EcomGroups** — `GroupPageIDRel`.

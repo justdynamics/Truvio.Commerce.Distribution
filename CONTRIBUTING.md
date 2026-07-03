@@ -10,10 +10,9 @@ it merges.
 A change to a package under `packages/` is mergeable only when:
 
 1. **Structure is valid.** The package has `config/<name>.json`, a `deploy/`
-   tree, a `seed/` tree, and `templates.manifest.yml`. The config parses, and
-   every predicate declares a valid `mode` (`Deploy` or `Seed`) and
-   `providerType` (`Content` or `SqlTable`). This is checked by
-   `.github/workflows/validate-pr.yml`.
+   tree, and a `seed/` tree. The config parses, and every predicate declares a
+   valid `mode` (`Deploy` or `Seed`) and `providerType` (`Content` or
+   `SqlTable`). This is checked by `.github/workflows/validate-pr.yml`.
 
 2. **The clean-room round-trip is green.** The package deploys into a freshly
    purged CleanDB target and reaches disposition **CLOSED**: serialize and
@@ -43,6 +42,8 @@ to follow a doc without knowing how the project got here.
 ## Conventions
 
 - One package per `packages/<product>/<version>/` directory.
-- Release tags are `<product>/<semver>` (e.g. `swift/2.2.1`).
+- Distribution is `git clone` of `main`; consumers pin by commit SHA. There are
+  no release zips or tags to resolve.
+- Swift support is rolling latest-only: one maintained version at a time.
 - Large binary inputs (bacpacs) are **not** committed — they are provided
   out-of-band and gitignored. See [docs/host-setup.md](docs/host-setup.md).

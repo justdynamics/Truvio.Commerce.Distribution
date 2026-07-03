@@ -10,8 +10,8 @@ packages/<product>/<version>/
   config/<name>.json        # predicate configuration
   deploy/                   # Deploy-mode YAML tree
   seed/                     # Seed-mode YAML tree
-  templates.manifest.yml    # template references for upload pre-flight
   BASELINE.md               # human documentation of the split
+  INSTALL.txt               # the Management-API deserialize flow
   CHANGELOG.md
 ```
 
@@ -76,9 +76,9 @@ in `resolveLinksInColumns`.
 
 ## `templates.manifest.yml`
 
-Lists the layouts, grid rows, and item types the content tree references. The
-in-admin **Upload Package** flow reads it and refuses the upload if any required
-template is missing on the target, so content never lands half-broken.
+Shipped inside each `_content/` tree, it lists the layouts, grid rows, and item
+types the content references — a manifest of the template dependencies the
+target host must already carry (from the Swift design) for the content to render.
 
 ## What is deliberately absent
 

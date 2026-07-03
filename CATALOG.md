@@ -1,4 +1,4 @@
-﻿# Catalog
+# Catalog
 
 Every published baseline, its tested platform version, and its status. Status
 values: **Stable** (passed the clean-room round-trip gate, suitable for use),
@@ -6,18 +6,16 @@ values: **Stable** (passed the clean-room round-trip gate, suitable for use),
 
 | Package | Version | Solution | DW version tested | Status | Notes |
 | --- | --- | --- | --- | --- | --- |
-| [`swift/2.2`](packages/swift/2.2/) | 2.2.0 | Swift storefront (B2C/B2B commerce) | DW 10.26.7 | Stable | 17 Deploy + 18 Seed predicates; English + Dutch language layer. Round-trip verified (HTTP 200, zero escalations, page parity, frontend all-2xx). See [BASELINE](packages/swift/2.2/BASELINE.md). |
-| [`digital-asset-portal/1.0`](packages/digital-asset-portal/1.0/) | 1.0.0 | Digital Asset Portal | DW 10.26.7 | Beta | Portal area (area 26) captured; deploys as an add-on to `swift/2.2`. Needs the Swift-v2 design (incl. `Swift-v2_VerticalNavigation` item type) on the target. See [BASELINE](packages/digital-asset-portal/1.0/BASELINE.md). |
+| [`swift/2.3`](packages/swift/2.3/) | 2.3.2 | Swift storefront (B2C/B2B commerce) — scaffolding-only | DW 10.26.9 | Stable | 18 Deploy + 10 Seed (Content) predicates; English + Dutch. **Scaffolding-only:** framework + starter content/pages, zero sample catalog. Catalog is authored per-demo. See [BASELINE](packages/swift/2.3/BASELINE.md). |
+| [`digital-asset-portal/1.0`](packages/digital-asset-portal/1.0/) | 1.0.0 | Digital Asset Portal | DW 10.26.7 | Beta | Portal area (area 26) captured; deploys as an add-on to Swift. Needs the Swift-v2 design (incl. `Swift-v2_VerticalNavigation` item type) on the target. See [BASELINE](packages/digital-asset-portal/1.0/BASELINE.md). |
 
-| [`swift/2.3`](packages/swift/2.3/) | 2.3.0 | Swift storefront (B2C/B2B commerce) | DW 10.26.9 | Stable | 18 Deploy + 19 Seed predicates; English + Dutch; adds Customer Center user-group predicate + contract-pricing seed; PASS 3/3 across Swift 2.3.0/2.2.0/2.1.0. See [BASELINE](packages/swift/2.3/BASELINE.md). |
+## Distribution
 
-## Release tags
+Baselines are distributed by **`git clone`** of this repository (or a
+sparse-checkout of a single `packages/<product>/<version>/`). There are no
+release zips or tags to resolve. Pin reproducibility by **commit SHA** — record
+the SHA you deployed in the consuming demo's CUSTOMISATIONS.md.
 
-Each package is released independently with a `<product>/<semver>` tag, which
-builds an Upload-ready `.zip` and attaches it to a GitHub Release:
-
-- `swift/2.2.0`
-- `digital-asset-portal/1.0.0`
-
-The baseline version tracks the **source solution** version; the patch digit
-bumps for content fixes within that solution version.
+Swift support is **rolling latest-only**: exactly one Swift baseline version is
+maintained at a time (the current latest). When the next Swift version ships,
+maintenance rolls forward and the prior package is removed.
