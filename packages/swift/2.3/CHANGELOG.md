@@ -3,6 +3,19 @@
 All notable changes to the Swift 2.3 baseline. Versions track the source solution version;
 the patch digit bumps for content fixes.
 
+## 2.3.1
+
+- **ProductPriceTable partial on the PDP (Deploy — 2 content files, EN + NL):** added a
+  `paragraph-c1-3.yml` paragraph to the `Product Components/Product Info (right side)`
+  component page in both language areas, wiring Swift's stock `Swift-v2_ProductPriceTable`
+  partial into the standard product detail page. The partial is data-driven and renders only
+  when a product carries multiple `EcomPrices` rows (quantity tiers or, for a signed-in buyer,
+  a contract price such as this baseline's `PriceUserCustomerNumber` demo row) — single-price
+  products render no artifact. Zero custom code; authored via live host round-trip.
+- Clean-room attestation: run `20260703-131045` on DW 10.26.9 / Swift 2.3.0 — deploy + seed
+  deserialize HTTP 200, zero escalations, row-count parity (EcomProducts 2051, EcomGroups 316,
+  EcomCountries 96), all 3 demo themes PASS, frontend smoke all-2xx.
+
 ## 2.3.0
 
 - Initial published baseline for Swift 2.3 on DW 10.26.9.
