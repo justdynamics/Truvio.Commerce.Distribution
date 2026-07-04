@@ -3,6 +3,31 @@
 All notable changes to the Swift 2.3 baseline. Versions track the source solution version;
 the patch digit bumps for content fixes.
 
+## 2.3.2
+
+- **Scaffolding-only — the sample catalog is removed.** Dropped all nine Seed catalog
+  predicates and their YAML: `EcomGroups`, `EcomProducts`, `EcomGroupProductRelation`,
+  `EcomVariantGroups`, `EcomVariantsOptions`, `EcomVariantOptionsProductRelation`,
+  `EcomDiscount`, `EcomDiscountTranslation`, and the `EcomPrices` contract-pricing row. The
+  baseline now ships framework (Deploy `_sql`) plus starter site content and pages (Seed
+  `_content`) and **zero** products, groups, prices, variants or discounts. Seed drops from
+  19 predicates to 10 (all Content).
+- **Why:** a baseline is scaffolding, not sample data. The 2051-product bike catalog was
+  foreign freight that every re-content demo had to bulk-delete before authoring its own
+  brand catalog (observed in the Northvale partner-readiness run, wave B). There is no
+  sample-catalog companion artifact — the demo catalog is authored per-demo with the
+  dw-demo-pim recipes.
+- **New consumption story:** clone the repo (or sparse-checkout this package) at a pinned
+  commit, deserialize the scaffolding via the Management API (Deploy pass, then `?mode=Seed`),
+  then build the catalog tailored to the demo. See `INSTALL.txt`.
+- **10.27.x schema-drift fix:** stripped the three empty `Area` columns (`AreaHtmlType`,
+  `AreaLayoutPhone`, `AreaLayoutTablet`) from the shipped `area.yml` — they exist on the
+  10.26.9 capture schema but not on 10.27.x, and being empty they are harmless-by-omission on
+  both. Prevents strict-mode "source column not present on target schema" escalations on
+  10.27.x targets without disabling strict mode.
+- **Distribution:** release zips are retired; the package is consumed by `git clone`, pinned
+  by commit SHA (recorded in the consuming demo's CUSTOMISATIONS.md).
+
 ## 2.3.1
 
 - **ProductPriceTable partial on the PDP (Deploy — 2 content files, EN + NL):** added a

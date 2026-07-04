@@ -1,22 +1,24 @@
 # Swift 2.3 baseline
 
-**Solution:** Swift storefront (B2C/B2B commerce)
-**Baseline version:** 2.3.1
-**Captured & verified against:** DW 10.26.9
+**Solution:** Swift storefront (B2C/B2B commerce) — **scaffolding-only**
+**Baseline version:** 2.3.2
+**Captured & verified against:** DW 10.26.9 (scaffolding), consumed on the current latest platform
 **Languages:** English (`Swift 2`) + Dutch language layer (`Swift 2 Nederlands`)
 **Config:** [`config/swift-2.3.json`](config/swift-2.3.json)
 **Engine:** Truvio.Commerce.Serializer v0.6.8-beta (min DW 10.23.9)
-**Round-trip:** verified across Swift 2.3.0, 2.2.0, and 2.1.0 on DW 10.26.9 — deploy + seed
-deserialize into a clean database return HTTP 200 with zero escalations; both language areas
-round-trip page-for-page (123 each); `EcomProducts` (2051), `EcomGroups` (316), and
-`EcomCountries` (96) match source; frontend smoke renders all pages 2xx.
 
-When a customer adopts Swift as their commerce platform they get a working storefront before
-adding a single product: hundreds of structural pages, item-type definitions, shop setup,
-payment and shipping definitions, country/currency/VAT reference data, the order state machine,
-URL-rewriting infrastructure, and a ready-to-use Customer Center with access control for buyer,
-account-admin, and CSR roles. This package captures exactly that starting point so a clean install
-can be brought to a known-good state and kept in sync across environments.
+This baseline is **scaffolding-only**: it lays the framework and starter content a Swift
+storefront stands on, and ships **zero sample catalog**. When a customer adopts Swift they get a
+working shell before adding a single product: hundreds of structural pages, item-type
+definitions, shop setup, payment and shipping definitions, country/currency/VAT reference data,
+the order state machine, URL-rewriting infrastructure, and a ready-to-use Customer Center with
+access control for buyer, account-admin, and CSR roles. The demo catalog (products, groups,
+prices, variants) is **authored per-demo** with the dw-demo-pim recipes, not shipped here — the
+2051-product sample catalog was removed in 2.3.2 because it was foreign freight every re-content
+demo had to purge. There is no sample-catalog companion artifact.
+
+Distribution is `git clone` (or sparse-checkout `packages/swift/2.3`), pinned by commit SHA;
+install via the Management API (see [`INSTALL.txt`](INSTALL.txt)).
 
 ## The three buckets
 
@@ -46,7 +48,7 @@ Structural, source-owned data that must be identical across dev/test/QA/prod.
   `EcomMethodCountryRelation`, `EcomOrderFlow`, `EcomOrderStates`, `EcomOrderStateRules`.
 - **Routing:** `UrlPath`.
 
-## Seed (`seed/`) — 19 predicates
+## Seed (`seed/`) — 10 predicates (content only)
 
 Bootstrap content delivered once, then owned by the customer. Deserialize fills only fields the
 target left empty, so customer edits survive re-runs.
@@ -54,12 +56,12 @@ target left empty, so customer edits survive re-runs.
 - **Content subtrees** (one predicate each): Homepage, Homepage (machines), Site chrome
   (header/footer), About pages, Starter blog posts, Find dealers, Footer: about the shop,
   Footer: help and info, Newsletter examples (light), Newsletter examples (dark).
-- **Catalog & promotions:** `EcomGroups`, `EcomProducts`, `EcomGroupProductRelation`,
-  `EcomVariantGroups`, `EcomVariantsOptions`, `EcomVariantOptionsProductRelation`,
-  `EcomDiscount`, `EcomDiscountTranslation`.
-- **Contract pricing:** `EcomPrices` rows scoped by customer number
-  (`PriceUserCustomerNumber`) — demonstrates customer-specific contract pricing through the
-  standard DW 10 price resolver. No custom code is required.
+
+**No catalog.** As of 2.3.2 the Seed tree carries content structure only. The nine catalog/
+promotion predicates (`EcomGroups`, `EcomProducts`, `EcomGroupProductRelation`,
+`EcomVariantGroups`, `EcomVariantsOptions`, `EcomVariantOptionsProductRelation`, `EcomDiscount`,
+`EcomDiscountTranslation`, and the `EcomPrices` contract-pricing row) were removed. Author the
+demo's products, groups, prices and variants per-demo with the dw-demo-pim recipes.
 
 ## Not-serialized (configured per environment)
 
@@ -77,8 +79,9 @@ serialized XML payloads so they do not leak into the baseline.
 
 ## Deploying this package
 
-- **CI/CD:** see [docs/consuming-cicd.md](../../../docs/consuming-cicd.md).
-- **In-admin upload:** see [docs/consuming-upload.md](../../../docs/consuming-upload.md).
+Clone the repo (or sparse-checkout `packages/swift/2.3`) at a pinned commit and deserialize via
+the Management API — see [`INSTALL.txt`](INSTALL.txt) and
+[docs/consuming-cicd.md](../../../docs/consuming-cicd.md).
 
 Deploy onto a host running the tested platform version (see
 [COMPATIBILITY.md](../../../COMPATIBILITY.md)) for a deployment with no schema warnings.

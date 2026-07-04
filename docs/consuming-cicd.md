@@ -1,9 +1,9 @@
 # Consuming a baseline in CI/CD
 
-This is the primary path. Your pipeline checks out a package's YAML, copies it
-into the target host's Serializer folder, and calls the deserialize endpoints
-under strict mode. The baseline promotes identically across dev/test/QA/prod and
-every change is reviewable as a YAML diff.
+Your pipeline clones this repo at a pinned commit, copies a package's YAML into
+the target host's Serializer folder, and calls the deserialize endpoints under
+strict mode. The baseline promotes identically across dev/test/QA/prod and every
+change is reviewable as a YAML diff. There are no release zips — pin by commit SHA.
 
 ## Prerequisites
 
@@ -29,18 +29,18 @@ Files/System/Serializer/
 ## Pipeline outline
 
 ```yaml
-# 1. Check out this baselines repo (pin a tag, e.g. swift/2.2.0)
+# 1. Check out this baselines repo (pin a commit SHA to reproduce exactly)
 - uses: actions/checkout@v4
   with:
     repository: justdynamics/Truvio.Commerce.Serializer.Baselines
-    ref: swift/2.2.0
+    ref: <commit-sha>
     path: baselines
 
 # 2. Stage the package into the target host's Serializer folder
 #    (adjust the transport — file copy, FTPS, deploy task — to your infra)
 - run: |
-    PKG=baselines/packages/swift/2.2
-    cp $PKG/config/swift-2.2.json   "$HOST_FILES/System/Serializer/Serializer.config.json"
+    PKG=baselines/packages/swift/2.3
+    cp $PKG/config/swift-2.3.json   "$HOST_FILES/System/Serializer/Serializer.config.json"
     rsync -a --delete $PKG/deploy/  "$HOST_FILES/System/Serializer/SerializeRoot/deploy/"
     rsync -a --delete $PKG/seed/    "$HOST_FILES/System/Serializer/SerializeRoot/seed/"
 
@@ -63,8 +63,8 @@ failure in the pipeline.
 
 ## Promotion model
 
-- Commit the baseline tag your environments track.
-- To roll an update forward, bump to a newer package tag and re-run the same
+- Pin the baseline commit SHA your environments track.
+- To roll an update forward, bump to a newer commit and re-run the same
   deserialize step. Deploy data is overwritten (source wins); seed data merges
   without clobbering customer edits.
 

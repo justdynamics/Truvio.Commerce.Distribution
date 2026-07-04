@@ -809,65 +809,6 @@
         165,
         168
       ]
-    },
-    {
-      "name": "EcomGroups",
-      "mode": "Seed",
-      "providerType": "SqlTable",
-      "table": "EcomGroups",
-      "nameColumn": "GroupName"
-    },
-    {
-      "name": "EcomProducts",
-      "mode": "Seed",
-      "providerType": "SqlTable",
-      "table": "EcomProducts",
-      "nameColumn": "ProductName"
-    },
-    {
-      "name": "EcomGroupProductRelation",
-      "mode": "Seed",
-      "providerType": "SqlTable",
-      "table": "EcomGroupProductRelation"
-    },
-    {
-      "name": "EcomVariantGroups",
-      "mode": "Seed",
-      "providerType": "SqlTable",
-      "table": "EcomVariantGroups",
-      "nameColumn": "VariantGroupName"
-    },
-    {
-      "name": "EcomVariantsOptions",
-      "mode": "Seed",
-      "providerType": "SqlTable",
-      "table": "EcomVariantsOptions",
-      "nameColumn": "VariantOptionName"
-    },
-    {
-      "name": "EcomVariantOptionsProductRelation",
-      "mode": "Seed",
-      "providerType": "SqlTable",
-      "table": "EcomVariantOptionsProductRelation"
-    },
-    {
-      "name": "EcomDiscount",
-      "mode": "Seed",
-      "providerType": "SqlTable",
-      "table": "EcomDiscount",
-      "nameColumn": "DiscountName"
-    },
-    {
-      "name": "EcomDiscountTranslation",
-      "mode": "Seed",
-      "providerType": "SqlTable",
-      "table": "EcomDiscountTranslation"
-    },
-    {
-      "name": "Demo contract pricing",
-      "mode": "Seed",
-      "providerType": "SqlTable",
-      "table": "EcomPrices"
     }
   ]
 }

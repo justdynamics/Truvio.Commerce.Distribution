@@ -1,0 +1,33 @@
+Truvio Commerce Serialized package: swift 2.3 (scaffolding-only)
+
+WHAT THIS IS
+  A scaffolding-only Swift baseline: framework (payments, shipping, VAT,
+  currencies, countries, order states, URL routing, Customer Center user
+  groups) plus starter site content and pages. It ships ZERO sample catalog
+  — no products, groups, prices, variants or discounts. Author the demo
+  catalog per-demo (see the dw-demo-pim recipes); this baseline only lays the
+  ground it sits on.
+
+DISTRIBUTION
+  There are no release zips. Get the package by cloning this repository (or a
+  sparse-checkout of packages/swift/2.3) at the commit you want to reproduce.
+  Record that commit SHA in your demo's CUSTOMISATIONS.md as the pin.
+
+INSTALL (Management API — no admin-UI upload)
+  1. Copy this package's config/, deploy/ and seed/ into the host:
+       config/swift-2.3.json  ->  wwwroot/Files/System/Serializer/Serializer.config.json
+       deploy/                ->  wwwroot/Files/System/Serializer/SerializeRoot/deploy/
+       seed/                  ->  wwwroot/Files/System/Serializer/SerializeRoot/seed/
+  2. Deploy pass (source-wins framework):
+       POST /Admin/Api/SerializerDeserialize
+       Authorization: Bearer <Management API key>
+  3. Seed pass (destination-wins starter content):
+       POST /Admin/Api/SerializerDeserialize?mode=Seed
+       Authorization: Bearer <Management API key>
+     Both passes run under strict mode (schema drift escalates). The bare POST
+     runs Deploy only; the Seed pass needs the explicit ?mode=Seed.
+
+  There is no "Settings -> Developer -> Serialize -> Upload Package" screen on
+  the current engine — the Management API deserialize above is the flow.
+
+See: https://github.com/justdynamics/Truvio.Commerce.Serializer.Baselines
