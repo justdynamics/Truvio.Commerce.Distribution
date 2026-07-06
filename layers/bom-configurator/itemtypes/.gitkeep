@@ -1,0 +1,2 @@
+# The stock Swift-v2_ProductBom item type suffices — this pack ships no custom item type.
+# The pack's only custom code lives in src/PackBomSlotStampSubscriber.cs (csLedger-classified).

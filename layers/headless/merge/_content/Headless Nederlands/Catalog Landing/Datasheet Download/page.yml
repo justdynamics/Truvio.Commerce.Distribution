@@ -1,0 +1,45 @@
+﻿"pageUniqueId": 89d56780-678c-4540-82ef-be61d0a75b92
+"sourcePageId": 0
+"name": "Datasheet Download"
+"menuText": "Datasheet Download"
+"sortOrder": 2
+"isActive": true
+"itemType": "Headless_DownloadableAsset"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-07-03T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 0
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "200118"
+  "ItemInstanceType": ""
+  "Sort": 2
+  "Title": "Datasheet Download"
+  "AssetPath": "/Files/Assets/datasheet-nl.pdf"
+  "MimeType": "application/pdf"
+  "Locale": "nl-NL"
+  "ProductRef": "PROD1"
+"propertyFields":
+  "Id": "200119"
+  "Sort": 0
+  "ItemInstanceType": ""

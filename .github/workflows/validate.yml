@@ -1,0 +1,26 @@
+name: validate-distribution
+
+# Machine-enforced merge gate (v3.0 Distribution, plan §4 Phase 3). Every PR to the
+# layers/ or editions/ contract must pass the structural validator. The deep clean-room
+# deserialize roundtrip stays a documented operator step (run in the Foundry harness).
+on:
+  pull_request:
+    paths:
+      - 'layers/**'
+      - 'editions/**'
+      - 'tools/ci/**'
+      - '.github/workflows/validate.yml'
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate distribution contract (schema, edition refs, base contract, protected strings, SPEC-06)
+        shell: pwsh
+        run: ./tools/ci/Validate-Distribution.ps1

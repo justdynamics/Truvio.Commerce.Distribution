@@ -1,0 +1,44 @@
+﻿"pageUniqueId": a6c6bffd-b159-46de-9fe2-d1ea4c2aa6fa
+"sourcePageId": 0
+"name": "Users"
+"menuText": "Users"
+"sortOrder": 3
+"isActive": true
+"itemType": "Headless_AccountSection"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-07-03T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "200058"
+  "ItemInstanceType": ""
+  "Sort": 3
+  "Title": "Users"
+  "SectionKey": "users"
+  "DeliveryEndpoint": "/dwapi/users"
+  "RequiredRole": "Account Admin"
+"propertyFields":
+  "Id": "200059"
+  "Sort": 0
+  "ItemInstanceType": ""

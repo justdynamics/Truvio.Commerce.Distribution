@@ -1,0 +1,9 @@
+{
+  "themeName": "fashion-lifestyle",
+  "displayName": "Fashion / Lifestyle",
+  "brandId": "fashion-lifestyle",
+  "defaultSchemeId": "dark",
+  "customHeadInclude": "Custom/FashionLifestyleHeadInclude.cshtml",
+  "baselineTarget": "swift/2.3",
+  "areaId": 3
+}

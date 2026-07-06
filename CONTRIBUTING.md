@@ -1,49 +1,50 @@
 # Contributing
 
-This is a **curated** catalog. Baselines are authored and maintained by
-JustDynamics. Pull requests are welcome — bug fixes to existing baselines, new
-solutions, documentation — but every package change passes the same gate before
-it merges.
+This is a **curated** distribution, authored and maintained by JustDynamics. Pull
+requests are welcome — layer fixes, new layers, new editions, documentation — but every
+change passes the same gate before it merges. See [GLOSSARY.md](GLOSSARY.md) for the
+vocabulary and [LAYERS.md](LAYERS.md) for the catalog.
 
 ## The merge gate
 
-A change to a package under `packages/` is mergeable only when:
+A change to `layers/` or `editions/` is mergeable only when both hold:
 
-1. **Structure is valid.** The package has `config/<name>.json`, a `deploy/`
-   tree, and a `seed/` tree. The config parses, and every predicate declares a
-   valid `mode` (`Deploy` or `Seed`) and `providerType` (`Content` or
-   `SqlTable`). This is checked by `.github/workflows/validate-pr.yml`.
+1. **The structural gate is green (machine-enforced).**
+   [`.github/workflows/validate.yml`](.github/workflows/validate.yml) runs
+   [`tools/ci/Validate-Distribution.ps1`](tools/ci/Validate-Distribution.ps1) on every PR:
+   - every `layers/<name>/layer.json` validates against `layers/layer.schema.json`, and its
+     `name` equals the directory name;
+   - every `editions/<name>.json` validates against `editions/edition.schema.json`, and its
+     `from` / `add` / `surfaces` refs resolve to a `layers/<name>` whose version matches the
+     pinned semver; `themes[]` resolve to `layers/theme-<name>`;
+   - `layers/base/base.contract.json` parses; no two non-base layers ship the same
+     `_sql/<Table>/<key>.yml` (silent-collision guard);
+   - the protected-string guard passes (the layer/mode vocabulary never leaked into a
+     DW/Swift identifier or path); theme layers carry no serialized content (SPEC-06).
 
-2. **The clean-room round-trip is green.** The package deploys into a freshly
-   purged CleanDB target and reaches disposition **CLOSED**: serialize and
-   deserialize all return HTTP 200, zero escalations, row-count parity between
-   source and target, and no orphan YAML. This is
-   `tools/e2e/full-clean-roundtrip.ps1`, run against the package. It needs a
-   live DW host + SQL Server, so it runs on a self-hosted runner or is attested
-   by a maintainer in the PR (`.github/workflows/e2e-gate.yml`).
+2. **The clean-room roundtrip is attested (operator step).** The deep proof — a layer or
+   edition deserializes cleanly on the current latest Swift with row-count parity and zero
+   strict-mode escalations — runs in the **Foundry** harness
+   (`Truvio.Commerce.Serializer.BaselineUpdater`), not on a hosted runner (it needs a live
+   DW host + SQL Server). The maintainer runs `gate.ps1 -Edition <name>` and records the
+   run id in the PR. A layer that cannot pass ships **Beta**, flagged in its `BASELINE.md`
+   with the promote-out path (see `layers/dap-portal`).
 
-3. **The package is documented.** `BASELINE.md` explains the deploy/seed/
-   not-serialized split and any known source-data issues; `CHANGELOG.md` records
-   the change; `CATALOG.md` and `COMPATIBILITY.md` are updated if the status or
-   tested platform version changed.
+## Authoring
 
-## Authoring a new baseline
-
-Follow [docs/authoring-a-baseline.md](docs/authoring-a-baseline.md) end to end.
-In short: clean source host → write the predicate config → capture with
-`tools/capture/new-baseline.ps1` → verify with the round-trip → document → PR.
-
-## Documentation style
-
-Docs describe **current** behavior in the present tense. They do not narrate fix
-history, previous approaches, or internal phase numbers. A reader should be able
-to follow a doc without knowing how the project got here.
+Layers are produced and proven in the Foundry harness, then published here. A new layer
+carries a `layer.json` (correct `kind`), its `replace/`+`merge/` mode trees and/or a
+`files/` overlay, and a `BASELINE.md`. A new edition is a `editions/<name>.json`
+composition whose refs resolve. Run `tools/ci/Validate-Distribution.ps1` locally before
+opening the PR.
 
 ## Conventions
 
-- One package per `packages/<product>/<version>/` directory.
-- Distribution is `git clone` of `main`; consumers pin by commit SHA. There are
-  no release zips or tags to resolve.
-- Swift support is rolling latest-only: one maintained version at a time.
-- Large binary inputs (bacpacs) are **not** committed — they are provided
-  out-of-band and gitignored. See [docs/host-setup.md](docs/host-setup.md).
+- One layer per `layers/<name>/` directory; one edition per `editions/<name>.json`.
+- **Git-clone distribution** of `main` — no release archives. Each proven artifact is
+  pinned by an annotated tag `layers/<name>/<semver>` / `editions/<name>/<semver>` carrying
+  the gate run id + Swift version; consumers pin by tag or commit SHA.
+- Modes are `replace` / `merge` everywhere (never `deploy` / `seed`).
+- Swift support is **rolling latest-only** — one maintained version at a time.
+- Large binary inputs (bacpacs, DBs) are **not** committed.
+- Docs describe **current** behavior in the present tense — no fix history or phase numbers.

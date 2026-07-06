@@ -1,0 +1,38 @@
+﻿"pageUniqueId": 41acd3d1-a19a-4e5c-be60-7c0c124eca3f
+"sourcePageId": 0
+"name": "Subscriptions"
+"menuText": "Subscriptions"
+"sortOrder": 7
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"navigationTag": "PackSubscriptionsPage"
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-07-02T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "100003"
+  "ItemInstanceType": ""
+  "Sort": 7
+  "Title": "Subscriptions"

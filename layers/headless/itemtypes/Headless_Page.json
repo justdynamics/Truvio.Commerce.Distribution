@@ -1,0 +1,34 @@
+{
+  "systemName": "Headless_Page",
+  "name": "Headless Page",
+  "category": "page",
+  "presentationFree": true,
+  "note": "Generic semantic content node. Slug + summary + SEO only; no layout/CSS/spacing/colorscheme.",
+  "fields": [
+    {
+      "systemName": "Title",
+      "name": "Title",
+      "type": "Text"
+    },
+    {
+      "systemName": "Slug",
+      "name": "Slug",
+      "type": "Text"
+    },
+    {
+      "systemName": "Summary",
+      "name": "Summary",
+      "type": "LongText"
+    },
+    {
+      "systemName": "SeoTitle",
+      "name": "SEO title",
+      "type": "Text"
+    },
+    {
+      "systemName": "SeoDescription",
+      "name": "SEO description",
+      "type": "LongText"
+    }
+  ]
+}

@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Justinvolved/Truvio.Commerce.Serializer.BaselineUpdater/layers/layer.schema.json",
+  "title": "Truvio distribution layer manifest (layer.json)",
+  "description": "Contract schema for layers/<name>/layer.json. Supersedes the historical packs/pack.schema.json (v3.0 Distribution). Validated at the gate via Test-Json -SchemaFile with -ErrorAction Stop (MANDATORY - a broken schema must THROW, never vacuously pass). Digit classes are written as [0-9]: a backslash-d escape is invalid JSON and would make this whole schema unparseable. A layer ships serializer-shaped DB content (replace/ and/or merge/ mode trees) and/or a DW-filesystem disk overlay (files/). Additions bind ONLY to the base contract (layers/base/base.contract.json), never to each other.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "version",
+    "kind",
+    "swiftVersion"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Layer identity. Reused in filesystem paths and release tags - lowercase letters, digits, and hyphen only (identifier-allowlist compatible)."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semver release version; component of the layers/<name>/<version> annotated tag."
+    },
+    "kind": {
+      "enum": ["base", "catalog", "feature", "theme", "sample-data", "surface"],
+      "description": "Layer classification. base = the one privileged layer every edition builds on (ships the base contract). catalog = shop catalog content (groups/products/prices). feature = a customization tier bundle (may carry src/ .cs). theme = disk-overlay-only presentation (files/ mirroring System/Styles per SPEC-06; no DB data). sample-data = optional demo content (orders/users/contract prices). surface = what a frontend leg needs (e.g. headless content + itemtypes + repositories)."
+    },
+    "swiftVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "The single supported Swift version this layer claims compatibility with (the rolling latest). The gate PROVES it against the configured version - this is a claim, never trusted."
+    },
+    "repositoryName": {
+      "type": "string",
+      "pattern": "^[a-zA-Z0-9._-]+$",
+      "description": "Convention: the storefront search repository the layer's eCom_ProductCatalog surfaces (e.g. the Quick Order validation feed) query. Default 'Products' - the repository the gate provisions (Products.index + Products.query + Products.facets, base contract). The sku-validation probe exercises this feed."
+    },
+    "csLedger": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "classification", "registration"],
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "Path of the .cs source file relative to the layer root (e.g. src/NoopFixtureSubscriber.cs)."
+          },
+          "classification": {
+            "type": "string",
+            "description": "Free-form purpose label (e.g. fixture-noop, checkout-handler)."
+          },
+          "registration": {
+            "enum": [
+              "assembly-scan",
+              "addin-attribute-config-row",
+              "notification-subscriber"
+            ],
+            "description": "How DW discovers this type. addin-attribute-config-row entries MUST have at least one matching configRows entry (cross-field rule enforced at activation, not expressible in JSON Schema)."
+          }
+        }
+      },
+      "description": "OPTIONAL per-.cs-file ledger. Only feature layers carrying src/ populate it; every file under src/ must appear here (ledger-completeness checked at publish time). Layers with no custom code (base, catalog, theme, sample-data, most surfaces) omit the field or ship an empty array."
+    },
+    "configRows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["table", "where", "description"],
+        "properties": {
+          "table": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9._-]+$",
+            "description": "Table name - identifier charset only (letters, digits, dot, hyphen, underscore); re-validated against the identifier allowlist before any SQL interpolation."
+          },
+          "where": {
+            "type": "string",
+            "pattern": "^ *[A-Za-z0-9_]+ *= *'[a-zA-Z0-9 ._-]*'( +AND +[A-Za-z0-9_]+ *= *'[a-zA-Z0-9 ._-]*')* *$",
+            "description": "SQL WHERE predicate restricted to the exact structural shape <Column> = '<value>' optionally AND-joined (uppercase AND). The old charset-only pattern admitted OR 1=1 and -- comment tails, letting a layer make its own assert vacuously PASS (WR-05). Values carry no quote character so the literal can never be escaped. Consumers re-validate at runtime before any interpolation."
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable purpose of the declared row."
+          }
+        }
+      },
+      "description": "OPTIONAL rows Invoke-LayerAssert verifies exist after activation (SQL EXISTS probes). Layers touching no config rows (theme, most catalog/sample-data) omit the field."
+    },
+    "fragmentModes": {
+      "type": "array",
+      "items": {
+        "enum": ["replace", "merge"]
+      },
+      "description": "Which SerializeRoot mode trees the layer ships. replace = source-wins (was 'deploy'), merge = destination-wins field-level (was 'seed'). Only listed modes are POSTed at activation. Theme layers (files/ only, no DB data) omit the field."
+    },
+    "fragmentTables": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9_]+$"
+      },
+      "description": "OPTIONAL declared table footprint - input to the static key-collision check against the base contract. Strict identifier charset (letters, digits, underscore ONLY - no dot/hyphen): fragment tables feed the activation manifest's rowsInserted, whose teardown DELETE enforces this exact allowlist (Invoke-LayerDeactivation) - a looser charset here would create an activated state that can never be torn down (WR-03). Layers shipping no SqlTable rows (theme) omit the field."
+    },
+    "fragmentContent": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["areaId", "path"],
+        "properties": {
+          "areaId": {
+            "type": "integer",
+            "description": "Area id the declared page tree lives under (matches the fragment manifest Content entry areaId; base contract anchors area 3 = 'Swift 2', area 27 = 'Swift 2 Nederlands')."
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9 ._/-]+$",
+            "description": "Page path under the area (matches the fragment manifest Content entry path). Charset-constrained: letters, digits, space, dot, underscore, slash, hyphen - no quote characters. Traversal sequences ('..') are additionally rejected at activation (T-07-03)."
+          }
+        }
+      },
+      "description": "OPTIONAL declared content footprint - the fragmentTables analog for pages (WR-03 philosophy: declared footprint gates what may land). Every providerType=Content entry in a shipped fragment manifest must match a declared entry (areaId + path) or activation fails before any POST. Layers shipping no _content omit this field."
+    },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9 ._/-]+$"
+      },
+      "description": "OPTIONAL declared disk-overlay footprint - DW-filesystem-rooted paths the layer's files/ tree overlays (e.g. System/Styles/ColorSchemes/..., Templates/Designs/Swift-v2/Assets/..., Files/Images/Icons/...). The files/ analog of fragmentTables/fragmentContent: theme (SPEC-06) and surface layers declare here what disk paths they own. Charset-constrained (no quote characters); traversal sequences ('..') rejected at activation. Disk FKs stay on disk; DB bindings stay in the serializer (SPEC-06 boundary)."
+    },
+    "asserts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["behaviorProbes"],
+      "properties": {
+        "behaviorProbes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["kind", "path"],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "description": "Probe kind. Supported registry (07-02, extended 08-01, 09-01, scaffolding-only round): marker-file, http-body-contains, authenticated-body-contains, cart-price, checkout-recurring, bom-cart-lines, sku-validation. An unknown kind produces a fail-closed FAIL row at assert time - never a silent skip."
+              },
+              "path": {
+                "type": "string",
+                "description": "marker-file: host-relative artifact path the probe checks. http-body-contains / authenticated-body-contains: frontend path the probe GETs. cart-price: frontend path receiving the cartcmd=addmulti POST. checkout-recurring: the layer Subscribe page - addmulti POST target AND render-proof GET AND checkout POST target. bom-cart-lines: the layer Kit Configurator page - the kind appends ?ProductID={productId} internally for the render proof, then POSTs cartcmd=add here (path-only - a query string is rejected, the charset never loosens)."
+              },
+              "pattern": {
+                "type": "string",
+                "description": "Regex the response body must match (http-body-contains / authenticated-body-contains). Charset-validated (printable ASCII) and compile-checked at runtime BEFORE any request (T-07-06). Kind-conditional requiredness is enforced at runtime by the probe functions (fail-closed FAIL rows) - the section-6 registration-asymmetry precedent for rules JSON Schema cannot express."
+              },
+              "cartPath": {
+                "type": "string",
+                "description": "cart-price: frontend cart path GET after the addmulti POST (e.g. /swift-2/cart/). Required at runtime for kind cart-price (fail-closed FAIL row when absent). bom-cart-lines: the layer cart render path - path-only (query string rejected), validated when present; the SQL leg is the arbiter so it is not GET at assert time."
+              },
+              "productId": {
+                "type": "string",
+                "description": "cart-price / checkout-recurring: product id added via the numbered addmulti fields (ProductId1); cart-price additionally locates it in the cart body. bom-cart-lines: the BOM parent product id - appended to the render URL as ?ProductID={productId}, POSTed as the add-POST ProductId, AND matched against parent.OrderLineProductId in the SQL leg. Conservative charset re-validated at runtime before any request or SQL interpolation (T-06-08)."
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "cart-price / checkout-recurring: line quantity POSTed as Quantity1 (for cart-price it must reach the declared tier threshold to prove qty-break pricing)."
+              },
+              "expectedAmount": {
+                "type": "number",
+                "description": "cart-price only: expected unit price on the cart line for productId. Matched locale-tolerantly at runtime (dot or comma decimal separator, optional thousand separators). A cart showing only the base price FAILs with the observed price in the detail."
+              },
+              "paymentMethodId": {
+                "type": "string",
+                "description": "checkout-recurring only: payment method id (e.g. PAY2) POSTed as EcomCartPaymethodID at checkout. Conservative identifier charset re-validated at runtime before any request (T-08-02). Required at runtime for kind checkout-recurring (fail-closed FAIL row when absent)."
+              },
+              "shippingMethodId": {
+                "type": "string",
+                "description": "checkout-recurring only: shipping method id (e.g. SHIP9) POSTed as EcomCartShippingmethodID at checkout. Conservative identifier charset re-validated at runtime before any request (T-08-02). Required at runtime for kind checkout-recurring (fail-closed FAIL row when absent)."
+              },
+              "checkoutStepIndex": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "checkout-recurring only: the CartV2.GotoStep{i} submit-button index of the step whose IsCheckout=true, POSTed as CartV2.GotoStep{checkoutStepIndex}. CartV2.GotoStep{i} is 0-BASED - index 1 targets the SECOND step, so for a paragraph whose Step2IsCheckout=true declare checkoutStepIndex 1, NEVER 2 (the 08-03 live failure was exactly this off-by-one). Declared data - a 3-step vs 5-step paragraph fallback is a layer.json edit, never a harness change. Required at runtime for kind checkout-recurring (fail-closed FAIL row when absent or < 1)."
+              },
+              "selections": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["group", "product"],
+                  "properties": {
+                    "group": {
+                      "type": "string",
+                      "description": "bom-cart-lines: the BOM SLOT id = EcomProductItems.ProductItemId (NOT the EcomGroups id - the stock Swift-v2_ProductBom radio name=\"@group.Id\" is the BOM item/slot id, 09-03 live finding). Posted as the add-POST field NAME, and matched against the child line's native OrderLineBOMItemId in the per-child disambiguation SQL leg. Conservative identifier charset re-validated at runtime before it enters the POST body / SQL literal (T-09-02)."
+                    },
+                    "product": {
+                      "type": "string",
+                      "description": "bom-cart-lines: the NON-default child product id selected in that slot - posted as the add-POST field VALUE (<slot>=<product>) and matched against the child line's OrderLineProductId in the disambiguation leg (proves the non-default selection was consumed, not the slot default). Conservative charset re-validated at runtime (T-09-02)."
+                    }
+                  }
+                },
+                "description": "bom-cart-lines only: one {group, product} per BOM slot the add POST selects, posted as <group>=<product> alongside cartcmd=add. Required at runtime for kind bom-cart-lines (fail-closed FAIL row when absent or empty) - the kind-conditional requiredness JSON Schema cannot express is enforced by the probe (section-6 registration-asymmetry precedent)."
+              },
+              "expectedChildLines": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "bom-cart-lines only: the number of BOM child lines the add POST must create. The SQL leg PASSes on COUNT >= expectedChildLines (never = exact - 12c cycle legs accumulate rows). Required at runtime for kind bom-cart-lines (fail-closed FAIL row when absent or < 1)."
+              },
+              "fieldStamp": {
+                "type": "string",
+                "description": "bom-cart-lines only: OPTIONAL OrderLineFieldValues key the PK3-02 slot-stamp subscriber writes (e.g. PackBomSlot). ADDITIVE / best-effort as of 09-03: reported informationally in the PASS detail, NEVER a hard gate - PK3-02 per-child disambiguation is proven by the native OrderLineBOMItemId (engine-populated), so the subscriber stamp is enrichment only (its non-persistence is a documented morning investigation item). Conservative identifier charset re-validated at runtime before the SQL LIKE interpolation (T-09-02)."
+              },
+              "renderProof": {
+                "type": "boolean",
+                "description": "bom-cart-lines only: OPTIONAL, default true. When true the probe GETs {path}?ProductID={productId} and requires the js-product-bom-configurator marker + >=1 radio group (NOT a compile-error dump) BEFORE the add POST - the Pitfall-1 UI-wiring guard for hosts whose storefront product index is provisioned. Set false when the storefront render is out of the harness's scope (09-03: the harness clean-room does not provision the ProductsFrontend index, so no eCom_ProductCatalog app renders any product; the BOM cart behavior - non-default child lines keyed by native OrderLineBOMItemId - is the harness-provable requirement, and the storefront configurator render becomes a real-Swift-host UAT item)."
+              },
+              "sku": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9 ._-]+$",
+                "description": "sku-validation only: a layer-owned ProductNumber the Quick Order validation feed must resolve. The probe GETs {path}?feed=true&redirect=false&isVariant=true,false&q={sku} (query built internally; path never accepts ?/=/&). Conservative ProductNumber charset re-validated at runtime before the request (T-06-08). Required at runtime for kind sku-validation (fail-closed FAIL row when absent)."
+              },
+              "expectProductNumber": {
+                "type": "string",
+                "pattern": "^[a-zA-Z0-9 ._-]+$",
+                "description": "sku-validation only: OPTIONAL - the ProductNumber the feed article must carry (default = sku). Set when the queried SKU differs from the expected resolved ProductNumber. Same charset guard as sku."
+              }
+            }
+          },
+          "description": "Behavior probes Invoke-LayerAssert runs after activation. Authenticated kinds (authenticated-body-contains, cart-price, checkout-recurring) ride the canonical seeded buyer session (gate config packs.buyerUsername + the buyerPassword secret from git-ignored config/gate-secrets.local.json, falling back to the documented demo default) and FAIL closed when credentials are absent - never a silent skip."
+        },
+        "criticalPaths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Optional frontend paths that must respond 2xx after activation. Enforced by Invoke-LayerAssert (WR-07): one anonymous GET per path, PASS on 2xx, FAIL row otherwise - never silently skipped."
+        }
+      },
+      "description": "OPTIONAL behavior assertion declarations consumed by Invoke-LayerAssert."
+    },
+    "knownCycleLimitations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["probe", "path", "phase", "reason"],
+        "properties": {
+          "probe": {
+            "enum": [
+              "marker-file",
+              "http-body-contains",
+              "authenticated-body-contains",
+              "cart-price",
+              "checkout-recurring",
+              "bom-cart-lines",
+              "sku-validation"
+            ],
+            "description": "The behavior-probe kind of the exempted assert (matches an asserts.behaviorProbes[].kind)."
+          },
+          "path": {
+            "type": "string",
+            "pattern": "^/[a-zA-Z0-9/._-]*$",
+            "description": "The frontend path of the exempted assert (matches the asserts.behaviorProbes[].path). Rooted, conservative charset - no query characters."
+          },
+          "phase": {
+            "enum": ["behavior-cycle"],
+            "description": "The gate phase in which the exemption applies. ONLY 'behavior-cycle' (the deactivate->reactivate cycle leg) is honored - a first-activation FAIL, a config-row-cycle FAIL, or any other cycle assert is NEVER exempted."
+          },
+          "reason": {
+            "type": "string",
+            "description": "Human-readable tracked-known-issue rationale, surfaced VERBATIM in the gate's KNOWN-LIMITATION output (COMPATIBILITY layer rows + pipeline log)."
+          }
+        }
+      },
+      "description": "OPTIONAL. Layer-declared known cycle-limitations: tracked-but-unfixed cycle edges the gate records as KNOWN-LIMITATION (WARN) instead of FAIL. Matched TIGHTLY by layer + probe + path + phase; a NON-declared cycle FAIL still hard-fails the gate. Surfaced loudly (never a silent skip). Layers with no known limitations omit the field."
+    },
+    "provenOn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["swiftVersion", "gateRunId"],
+      "properties": {
+        "swiftVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "The Swift version the gate last proved this layer against."
+        },
+        "gateRunId": {
+          "type": "string",
+          "pattern": "^[0-9]{8}-[0-9]{6}$",
+          "description": "The gate run id (runs/<ts>) that produced the proof - the same id carried into the annotated release tag."
+        }
+      },
+      "description": "OPTIONAL attestation stamped by the gate on a PASS (never hand-authored as trusted): the swiftVersion + gate run id this layer was last proven against. Feeds the annotated layers/<name>/<semver> tag."
+    },
+    "costHints": {
+      "type": "object",
+      "description": "OPTIONAL free-form advisory metadata (e.g. activation cost, host-rebuild required, expected row counts). Never gates activation; consumed only for planning/reporting."
+    }
+  }
+}

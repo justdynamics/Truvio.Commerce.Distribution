@@ -1,0 +1,38 @@
+﻿"pageUniqueId": 1ba10522-96dc-4991-9746-0233346bd72e
+"sourcePageId": 0
+"name": "Subscribe"
+"menuText": "Subscribe"
+"sortOrder": 8
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"navigationTag": "PackSubscribePage"
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-07-02T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "100002"
+  "ItemInstanceType": ""
+  "Sort": 8
+  "Title": "Subscribe"

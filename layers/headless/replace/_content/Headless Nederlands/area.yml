@@ -1,0 +1,38 @@
+﻿"areaId": aabbccdd-2222-4bbb-9002-a1b2c3d40002
+"name": "Headless Nederlands"
+"sortOrder": 100
+"itemType": "Headless_Master"
+"itemFields":
+  "Id": "200001"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SiteName": "Headless Nederlands"
+  "DefaultLocale": "nl-NL"
+  "HeaderMenuRef": ""
+  "FooterMenuRef": ""
+  "CatalogMenuRef": ""
+  "PrivacyPolicyRef": ""
+  "ContactEmail": ""
+"properties":
+  "AreaStyleId": 0
+  "AreaEncoding": ""
+  "AreaPermission": ""
+  "AreaTitle": ""
+  "AreaDateformat": "dd/MM/yyyy"
+  "AreaCodepage": 0
+  "AreaLanguage": 2
+  "StyleId": 1
+  "AreaCulture": "nl-NL"
+  "AreaApprovalType": 0
+  "AreaActive": true
+  "AreaMasterAreaId": 0
+  "AreaUrlName": ""
+  "AreaLayout": ""
+  "AreaNotFound": ""
+  "AreaRedirectFirstPage": 1
+  "AreaLockPagesToDomain": false
+  "AreaItemTypePageProperty": "Headless_PageProperties"
+  "AreaIncludeProductsInSitemap": false
+  "AreaSSLMode": 0
+  "AreaPublished": true
+  "AreaDeleted": false

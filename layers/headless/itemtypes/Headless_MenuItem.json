@@ -1,0 +1,36 @@
+{
+  "systemName": "Headless_MenuItem",
+  "name": "Headless Menu Item",
+  "category": "navigation",
+  "presentationFree": true,
+  "note": "One navigation entry. Resolves to a Delivery API content path or a commerce group/product id — no template selection.",
+  "fields": [
+    {
+      "systemName": "Label",
+      "name": "Label",
+      "type": "Text"
+    },
+    {
+      "systemName": "LinkType",
+      "name": "Link type",
+      "type": "List",
+      "options": [
+        "ContentPage",
+        "ProductGroup",
+        "Product",
+        "ExternalUrl"
+      ]
+    },
+    {
+      "systemName": "TargetRef",
+      "name": "Target ref",
+      "type": "Text",
+      "note": "Page GUID/ID, EcomGroups.GroupId, EcomProducts.ProductId, or absolute URL depending on LinkType."
+    },
+    {
+      "systemName": "SortIndex",
+      "name": "Sort index",
+      "type": "Integer"
+    }
+  ]
+}

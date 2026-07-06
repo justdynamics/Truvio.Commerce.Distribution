@@ -1,0 +1,7 @@
+/* tech-saas */
+.dw-button, [data-dw-button] {
+--dw-btn-padding-x: 1.5rem;
+--dw-btn-padding-y: 0.625rem;
+--dw-btn-border-radius: 0.35rem;
+--dw-btn-border-width: 1px;
+}

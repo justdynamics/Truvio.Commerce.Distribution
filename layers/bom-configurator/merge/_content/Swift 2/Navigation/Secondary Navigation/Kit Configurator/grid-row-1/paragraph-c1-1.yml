@@ -1,0 +1,27 @@
+﻿"paragraphUniqueId": c55ffb09-012c-401e-b2cb-c647df4724b8
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_App"
+"header": "Kit Configurator"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "eCom_ProductCatalog"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <IndexQuery>/Files/System/Repositories/ProductsFrontend/Products.query</IndexQuery>
+    <TrackQueries>0</TrackQueries>
+    <FacetGroups>/Files/System/Repositories/ProductsFrontend/Products.facets</FacetGroups>
+    <ShowFacetOptionsWithNoResults>0</ShowFacetOptionsWithNoResults>
+    <QueryConditions>[{&amp;quot;Name&amp;quot;:&amp;quot;IsVariant&amp;quot;,&amp;quot;TypeName&amp;quot;:&amp;quot;System.Boolean[]&amp;quot;,&amp;quot;DefaultValue&amp;quot;:&amp;quot;False&amp;quot;}]</QueryConditions>
+    <PageSize>12</PageSize>
+    <ProductListTemplate>ProductListRenderGrid.cshtml</ProductListTemplate>
+    <ProductTemplate>PackBomDetailRenderGrid.cshtml</ProductTemplate>
+  </Settings>
+"fields":
+  "GlobalRecordPageGuid": "6c60a5e4-a4bb-48c7-985b-19f17b20dd49"
+  "Id": "100012"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": ""
+"columnId": 1

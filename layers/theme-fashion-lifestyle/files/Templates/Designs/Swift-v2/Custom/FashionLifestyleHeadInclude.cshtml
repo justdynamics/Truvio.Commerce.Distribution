@@ -1,0 +1,16 @@
+@inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.PageViewModel>
+@using Dynamicweb.Frontend
+@{
+    AddStylesheet("/Files/Templates/Designs/Swift-v2/Custom/fashion-lifestyle_custom.css", "all");
+}
+<style>
+    /* Render-critical brand tokens — inline to avoid cache-buster staleness (Pitfall 7) */
+    :root {
+        --fl-rose:       #C0627A;
+        --fl-rose-dark:  #A8506A;
+        --fl-charcoal:   #1A1A1A;
+        --fl-warm-white: #FAFAF8;
+        --fl-cream-1:    #F2F0EC;
+        --fl-stone:      #D8D4CC;
+    }
+</style>

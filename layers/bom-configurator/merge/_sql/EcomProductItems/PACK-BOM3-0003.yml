@@ -1,0 +1,14 @@
+﻿"ProductItemId": "PACK-BOM3-0003"
+"ProductItemProductId": "PACK-BOM-0001"
+"ProductItemBomProductId": ""
+"ProductItemBomGroupId": "PACK-BOM-RACKS"
+"ProductItemQuantity": 1
+"ProductItemName": "Rack"
+"ProductItemRequired": true
+"ProductItemDefaultProductId": "PACK-BOM-RACK-1"
+"ProductItemBomNoProductText": ""
+"ProductItemSortOrder": 2
+"ProductItemBomVariantId": ""
+"ProductItemDefaultVariantId": ""
+"ProductItemDefaultUnitId": ""
+"ProductItemBomUnitId": ""

@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "baseContractVersion": "1.0.0",
+  "swiftVersion": "2.3.0",
+  "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution). Additions (catalog/feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Consolidates the ID-range/collision rules from docs/pack-contract.md, the seeded anchors from Invoke-SeedGating.ps1 / Invoke-SeedVerify.ps1, and the anchor areas/repositories from config/gate-config.json + swift-2.3.json. The gate reads this file for the base-contract collision check. Operator-confirmed 2026-07-05 (DISTRIBUTION-DECISIONS.md).",
+
+  "idRules": {
+    "nvarcharPkPrefix": "PACK-<NAME>-",
+    "nvarcharPkNote": "When an addition writes rows into a base-owned table whose PK is nvarchar (most Ecom tables - PriceId, PaymentId, ProductId, etc.), it MUST namespace the PK with a PACK-<NAME>- prefix (uppercase layer name). Keeps additions disjoint from the base and from each other.",
+    "intIdentityFloor": 100000,
+    "intIdentityNote": "When an addition writes rows keyed by an int-identity PK, it MUST reserve an id at or above the 100000 floor. Applies equally to item-instance ids (ItemType_<systemName> PK rows).",
+    "baseCatalog": "empty",
+    "baseCatalogNote": "The base ships ZERO catalog (scaffolding-only, swift/2.3.2): EcomGroups, EcomProducts, EcomGroupProductRelation, EcomVariantGroups, EcomVariantsOptions, EcomVariantOptionsProductRelation, EcomDiscount, EcomDiscountTranslation, EcomPrices carry no base rows. The collision surface for these tables is addition-vs-fixture-vs-addition, arbitrated statically by the gate.",
+    "reservedFixtureKeys": ["FIXT*", "FIXTGRP*", "FIXT-PRICE-*"],
+    "reservedFixtureNote": "The gate fixture catalog (catalog-kind layer) reserves these key prefixes. Additions must not use them.",
+    "noPerItemTypeNumericTable": true,
+    "noPerItemTypeNumericTableNote": "The contract is prefix-based, not per-itemType-numeric. There is deliberately NO per-itemType numeric range table - do not invent one."
+  },
+
+  "guaranteedRows": {
+    "permissionGroups": [
+      { "table": "AccessUser", "accessUserType": 2, "id": 1325, "name": "Customers" },
+      { "table": "AccessUser", "accessUserType": 2, "id": 1270, "name": "Account Admin" },
+      { "table": "AccessUser", "accessUserType": 2, "id": 1292, "name": "CSR" }
+    ],
+    "permissionGroupsNote": "DW 10.26.9 has no AccessUserGroup table - groups ARE AccessUser rows of type 2.",
+    "users": [
+      { "table": "AccessUser", "accessUserType": 5, "id": 1328, "name": "IMCUser", "customerNumber": "98745621", "role": "buyer" },
+      { "table": "AccessUser", "accessUserType": 5, "id": 1326, "name": "IMCSalesrep", "customerNumber": "7789765", "role": "csr" }
+    ],
+    "memberships": [
+      { "table": "AccessUserGroupRelation", "userId": 1328, "groupId": 1325 },
+      { "table": "AccessUserGroupRelation", "userId": 1326, "groupId": 1292 }
+    ],
+    "referenceCategory": {
+      "parent": { "table": "EcomProductCategory", "categoryId": "reference_category", "categoryType": 2 },
+      "translation": { "table": "EcomProductCategoryTranslation", "categoryId": "reference_category", "languageId": "LANG1", "name": "Reference category" },
+      "note": "Hidden template category (CategoryType 2) required by DemoVerifier Check 2. Seeded pre-host-start (DW caches at startup)."
+    },
+    "contractPrice": {
+      "table": "EcomPrices",
+      "priceId": "b7e9c1a2-1111-2222-3333-000098745621",
+      "priceUserCustomerNumber": "98745621",
+      "unitRule": "list x 0.8",
+      "skippable": true,
+      "note": "Seeded by Invoke-SeedGating; SKIPPED under -SkipContractRow (the base baseline ships the row itself)."
+    }
+  },
+
+  "anchors": {
+    "areas": [
+      { "id": 3, "name": "Swift 2", "language": "EN" },
+      { "id": 27, "name": "Swift 2 Nederlands", "language": "NL" }
+    ],
+    "langPrefix": "/swift-2",
+    "buyerUsername": "IMCUser",
+    "buyerCustomerNumber": "98745621",
+    "csrUsername": "IMCSalesrep",
+    "csrCustomerNumber": "7789765"
+  },
+
+  "repositories": {
+    "provisionedByGate": true,
+    "name": "Products",
+    "index": "Products.index",
+    "query": "Products.query",
+    "facets": "Products.facets",
+    "installPath": "wwwroot/Files/System/Repositories/Products/",
+    "note": "The base guarantees the Products repository/index/query/facets are provisioned by the gate. 'ProductsFrontend' is dead/removed - never provisioned by the clean-room.",
+    "consumingApp": "eCom_ProductCatalog"
+  },
+
+  "baseOwnedTables": {
+    "replaceWholeTable": [
+      "EcomCountries", "EcomCountryText", "EcomCurrencies", "EcomLanguages",
+      "EcomVatGroups", "EcomVatCountryRelations", "EcomShops", "EcomShopLanguageRelation",
+      "EcomShopGroupRelation", "EcomPayments", "EcomShippings", "EcomMethodCountryRelation",
+      "EcomOrderFlow", "EcomOrderStates", "EcomOrderStateRules", "UrlPath"
+    ],
+    "replaceFiltered": [
+      {
+        "table": "AccessUser",
+        "where": "AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')",
+        "note": "FILTER-01: only the three permission groups are base-owned on AccessUser; user rows (1328/1326) are seeded, not serialized into the base."
+      }
+    ],
+    "contentAreas": [3, 27],
+    "note": "Additions touching a base-owned table follow idRules (prefix / floor) and must pass the static intersection checks below. Base ships zero catalog (see idRules.baseCatalog)."
+  },
+
+  "protectedItemTypes": {
+    "note": "Upstream DW/Swift identifiers - NEVER renamed by the vocabulary rewrite (plan section 3.1). PK tables are ItemType_<systemName> (hyphenated on DW 10.26.9).",
+    "swift": ["Swift-v2_Master", "Swift-v2_Page", "Swift-v2_Row", "Swift-v2_App", "Swift-v2_ProductBom", "Swift-v2_HelloUser", "Swift-v2_Text"],
+    "headless": ["Headless_Master", "Headless_Page", "Headless_PageProperties", "Headless_Menu", "Headless_MenuItem", "Headless_ContentPage", "Headless_CustomerCenter", "Headless_AccountSection", "Headless_DownloadableAsset", "Headless_SpecSheet"]
+  },
+
+  "collisionChecks": [
+    {
+      "id": "base-sqltable-intersection",
+      "rule": "Intersect an addition's _sql/<Table>/*.yml filenames (= row keys; composite keys join with $$) with the base's filenames for the same table. Non-empty = FAIL.",
+      "gateStep": "layer activation (was pack Step 3c)"
+    },
+    {
+      "id": "cross-layer-sqltable-intersection",
+      "rule": "WR-10: the same table+filename shipped by >1 active addition = FAIL. A single layer shipping the same key in its own replace+merge is NOT a collision.",
+      "gateStep": "layer activation"
+    },
+    {
+      "id": "content-path-collision",
+      "rule": "07-01: an addition's fragment-shipped _content relative paths must be disjoint from base _content paths (union of both mode trees); cross-layer parity; shipped-files-only (referenced base anchors excluded); declared-footprint parity (every Content entry matches a declared fragmentContent {areaId, path}).",
+      "gateStep": "layer activation"
+    },
+    {
+      "id": "item-instance-id-collision",
+      "rule": "WR-04: (itemType, fields.Id) pairs land as PK rows in shared ItemType_<systemName> tables. The same pair by >1 owner = FAIL. Reusing an id NUMBER across DIFFERENT itemType tables is fine (PK surface is per-table).",
+      "gateStep": "layer activation"
+    }
+  ],
+
+  "registrationAsymmetry": {
+    "rule": "Every csLedger entry with registration 'addin-attribute-config-row' MUST have >=1 matching configRows entry.",
+    "note": "Cross-field rule enforced at activation (not JSON-Schema-expressible); locked by tests."
+  }
+}

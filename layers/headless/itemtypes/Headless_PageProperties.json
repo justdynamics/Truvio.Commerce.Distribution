@@ -1,0 +1,19 @@
+{
+  "systemName": "Headless_PageProperties",
+  "name": "Headless Page Properties",
+  "category": "page",
+  "presentationFree": true,
+  "note": "Minimal structural page-property item (area AreaItemTypePageProperty target). No Icon/SubmenuType — those are presentation.",
+  "fields": [
+    {
+      "systemName": "NavigationTag",
+      "name": "Navigation tag",
+      "type": "Text"
+    },
+    {
+      "systemName": "ExcludeFromNav",
+      "name": "Exclude from navigation",
+      "type": "Checkbox"
+    }
+  ]
+}

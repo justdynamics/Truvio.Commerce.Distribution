@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 2,
+  "mode": "merge",
+  "writtenAtUtc": "2026-07-02T10:00:00Z",
+  "complete": true,
+  "excludeFieldsByItemType": {},
+  "excludeXmlElementsByType": {},
+  "entries": [
+    {
+      "providerType": "SqlTable",
+      "table": "EcomGroups",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomGroups",
+      "files": [
+        "_sql/EcomGroups/PACK-SUB-GRP1.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomProducts",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomProducts",
+      "files": [
+        "_sql/EcomProducts/PACK-SUB-PROD1.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomGroupProductRelation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomGroupProductRelation",
+      "files": [
+        "_sql/EcomGroupProductRelation/PACK-SUB-GRP1$$PACK-SUB-PROD1.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomShopGroupRelation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomShopGroupRelation",
+      "files": [
+        "_sql/EcomShopGroupRelation/PACK-SUB-GRP1$$SHOP1.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "ScheduledTask",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/ScheduledTask",
+      "files": [
+        "_sql/ScheduledTask/Place recurring orders.yml"
+      ]
+    },
+    {
+      "providerType": "Content",
+      "areaId": 3,
+      "areaName": "Swift 2",
+      "path": "/Navigation/Secondary Navigation/Subscribe",
+      "pageId": 0,
+      "acknowledgedOrphanPageIds": [
+        1,
+        2,
+        4,
+        16,
+        19,
+        21,
+        23,
+        24,
+        27,
+        33,
+        34,
+        37,
+        40,
+        41,
+        42,
+        44,
+        48,
+        60,
+        73,
+        74,
+        79,
+        80,
+        81,
+        84,
+        85,
+        86,
+        87,
+        89,
+        92,
+        97,
+        98,
+        104,
+        113,
+        149,
+        165,
+        168
+      ],
+      "excludeAreaColumns": [],
+      "excludeFields": [],
+      "entryId": "content/area-3/Navigation/Secondary Navigation/Subscribe",
+      "files": [
+        "_content/Swift 2/area.yml",
+        "_content/Swift 2/Navigation/page.yml",
+        "_content/Swift 2/Navigation/Secondary Navigation/Subscribe/grid-row-1/grid-row.yml",
+        "_content/Swift 2/Navigation/Secondary Navigation/Subscribe/grid-row-1/paragraph-c1-1.yml",
+        "_content/Swift 2/Navigation/Secondary Navigation/Subscribe/page.yml",
+        "_content/Swift 2/Navigation/Secondary Navigation/page.yml",
+        "_content/templates.manifest.yml"
+      ]
+    }
+  ]
+}

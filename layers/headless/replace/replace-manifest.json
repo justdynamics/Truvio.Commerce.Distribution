@@ -1,0 +1,103 @@
+{
+  "schemaVersion": 2,
+  "mode": "replace",
+  "writtenAtUtc": "2026-07-03T00:00:00.0000000Z",
+  "complete": true,
+  "excludeFieldsByItemType": {
+    "Headless_Master": [
+      "GoogleTagManagerID",
+      "Favicon",
+      "AppleTouchIcon",
+      "MetaSiteName",
+      "MetaImage",
+      "CustomHeadInclude"
+    ]
+  },
+  "excludeXmlElementsByType": {},
+  "entries": [
+    {
+      "providerType": "Content",
+      "areaId": 5,
+      "areaName": "Headless",
+      "path": "/",
+      "pageId": 0,
+      "acknowledgedOrphanPageIds": [],
+      "excludeAreaColumns": [
+        "AreaCdnHost",
+        "AreaFrontpage",
+        "AreaEcomShopId",
+        "AreaEcomCountryCode",
+        "AreaEcomLanguageId",
+        "AreaEcomCurrencyId",
+        "AreaStockLocationID",
+        "AreaCreatedDate",
+        "AreaUpdatedDate"
+      ],
+      "excludeFields": [
+        "AreaDomain",
+        "AreaDomainLock",
+        "AreaNoindex",
+        "AreaNofollow",
+        "AreaRobotsTxt",
+        "AreaRobotsTxtIncludeSitemap"
+      ],
+      "entryId": "content/area-5",
+      "files": [
+        "_content/Headless/Customer center/Addresses/page.yml",
+        "_content/Headless/Customer center/Orders/page.yml",
+        "_content/Headless/Customer center/Reorder/page.yml",
+        "_content/Headless/Customer center/Users/page.yml",
+        "_content/Headless/Customer center/page.yml",
+        "_content/Headless/Navigation/Footer Menu/Terms/page.yml",
+        "_content/Headless/Navigation/Footer Menu/page.yml",
+        "_content/Headless/Navigation/Header Menu/About/page.yml",
+        "_content/Headless/Navigation/Header Menu/Products/page.yml",
+        "_content/Headless/Navigation/Header Menu/page.yml",
+        "_content/Headless/Navigation/page.yml",
+        "_content/Headless/area.yml"
+      ]
+    },
+    {
+      "providerType": "Content",
+      "areaId": 6,
+      "areaName": "Headless Nederlands",
+      "path": "/",
+      "pageId": 0,
+      "acknowledgedOrphanPageIds": [],
+      "excludeAreaColumns": [
+        "AreaCdnHost",
+        "AreaFrontpage",
+        "AreaEcomShopId",
+        "AreaEcomCountryCode",
+        "AreaEcomLanguageId",
+        "AreaEcomCurrencyId",
+        "AreaStockLocationID",
+        "AreaCreatedDate",
+        "AreaUpdatedDate"
+      ],
+      "excludeFields": [
+        "AreaDomain",
+        "AreaDomainLock",
+        "AreaNoindex",
+        "AreaNofollow",
+        "AreaRobotsTxt",
+        "AreaRobotsTxtIncludeSitemap"
+      ],
+      "entryId": "content/area-6",
+      "files": [
+        "_content/Headless Nederlands/Customer center/Addresses/page.yml",
+        "_content/Headless Nederlands/Customer center/Orders/page.yml",
+        "_content/Headless Nederlands/Customer center/Reorder/page.yml",
+        "_content/Headless Nederlands/Customer center/Users/page.yml",
+        "_content/Headless Nederlands/Customer center/page.yml",
+        "_content/Headless Nederlands/Navigation/Footer Menu/Terms/page.yml",
+        "_content/Headless Nederlands/Navigation/Footer Menu/page.yml",
+        "_content/Headless Nederlands/Navigation/Header Menu/About/page.yml",
+        "_content/Headless Nederlands/Navigation/Header Menu/Products/page.yml",
+        "_content/Headless Nederlands/Navigation/Header Menu/page.yml",
+        "_content/Headless Nederlands/Navigation/page.yml",
+        "_content/Headless Nederlands/area.yml"
+      ]
+    }
+  ]
+}

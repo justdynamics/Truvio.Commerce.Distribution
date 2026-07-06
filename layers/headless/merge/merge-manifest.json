@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 2,
+  "mode": "merge",
+  "writtenAtUtc": "2026-07-03T00:00:00.0000000Z",
+  "complete": true,
+  "excludeFieldsByItemType": {},
+  "excludeXmlElementsByType": {},
+  "entries": [
+    {
+      "providerType": "Content",
+      "areaId": 5,
+      "areaName": "Headless",
+      "path": "/Home",
+      "pageId": 0,
+      "acknowledgedOrphanPageIds": [],
+      "excludeAreaColumns": [],
+      "excludeFields": [],
+      "entryId": "content/area-5/Home",
+      "files": [
+        "_content/Headless/Home/page.yml",
+        "_content/Headless/area.yml"
+      ]
+    },
+    {
+      "providerType": "Content",
+      "areaId": 6,
+      "areaName": "Headless Nederlands",
+      "path": "/Home",
+      "pageId": 0,
+      "acknowledgedOrphanPageIds": [],
+      "excludeAreaColumns": [],
+      "excludeFields": [],
+      "entryId": "content/area-6/Home",
+      "files": [
+        "_content/Headless Nederlands/Home/page.yml",
+        "_content/Headless Nederlands/area.yml"
+      ]
+    },
+    {
+      "providerType": "Content",
+      "areaId": 5,
+      "areaName": "Headless",
+      "path": "/About",
+      "pageId": 0,
+      "acknowledgedOrphanPageIds": [],
+      "excludeAreaColumns": [],
+      "excludeFields": [],
+      "entryId": "content/area-5/About",
+      "files": [
+        "_content/Headless/About/page.yml",
+        "_content/Headless/area.yml"
+      ]
+    },
+    {
+      "providerType": "Content",
+      "areaId": 6,
+      "areaName": "Headless Nederlands",
+      "path": "/About",
+      "pageId": 0,
+      "acknowledgedOrphanPageIds": [],
+      "excludeAreaColumns": [],
+      "excludeFields": [],
+      "entryId": "content/area-6/About",
+      "files": [
+        "_content/Headless Nederlands/About/page.yml",
+        "_content/Headless Nederlands/area.yml"
+      ]
+    },
+    {
+      "providerType": "Content",
+      "areaId": 5,
+      "areaName": "Headless",
+      "path": "/Catalog Landing",
+      "pageId": 0,
+      "acknowledgedOrphanPageIds": [],
+      "excludeAreaColumns": [],
+      "excludeFields": [],
+      "entryId": "content/area-5/Catalog Landing",
+      "files": [
+        "_content/Headless/Catalog Landing/Datasheet Download/page.yml",
+        "_content/Headless/Catalog Landing/Product Spec Sheet/page.yml",
+        "_content/Headless/Catalog Landing/page.yml",
+        "_content/Headless/area.yml"
+      ]
+    },
+    {
+      "providerType": "Content",
+      "areaId": 6,
+      "areaName": "Headless Nederlands",
+      "path": "/Catalog Landing",
+      "pageId": 0,
+      "acknowledgedOrphanPageIds": [],
+      "excludeAreaColumns": [],
+      "excludeFields": [],
+      "entryId": "content/area-6/Catalog Landing",
+      "files": [
+        "_content/Headless Nederlands/Catalog Landing/Datasheet Download/page.yml",
+        "_content/Headless Nederlands/Catalog Landing/Product Spec Sheet/page.yml",
+        "_content/Headless Nederlands/Catalog Landing/page.yml",
+        "_content/Headless Nederlands/area.yml"
+      ]
+    }
+  ]
+}

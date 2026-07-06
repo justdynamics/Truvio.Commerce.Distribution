@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Facets Name="Products.facets">
+  <Settings />
+  <Source Repository="Headless" Item="Products.query" />
+  <Meta />
+  <Facet Name="Manufacturer" Type="Field" Field="Manufacturer_Facet" QueryParameter="Manufacturer">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+  <Facet Name="Group" Type="Field" Field="ParentGroupIDs" QueryParameter="GroupID">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+  <Facet Name="Price" Type="Field" Field="PriceRange" QueryParameter="PriceRange">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+</Facets>
