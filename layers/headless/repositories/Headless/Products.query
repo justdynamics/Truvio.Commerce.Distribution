@@ -14,118 +14,84 @@
   <SortOrder>
     <Sort Field="_score" Direction="Descending" />
   </SortOrder>
+  <!--
+    Delivery-API-compatible product query (LRN-VRD-06, layers/headless 2.3.1).
+
+    A single flat AND of PRUNABLE parameter clauses (+ the Active constant). Two prior
+    constructs zeroed every /dwapi result and are deliberately removed:
+
+      1. The ecom-context macros (Dynamicweb.Ecommerce.Context:LanguageID / :ShopID) do
+         NOT resolve on the Delivery API (/dwapi has no ecommerce request context). They
+         resolved to empty and their Equal/MatchAny matched zero documents.
+
+      2. The nested Or search-group over empty ProductName_/ProductNumber_ Equal params
+         compiled to an empty boolean group = Lucene MatchNoDocs, which AND-zeroed the
+         whole query whenever no search term was supplied (the common headless PLP call).
+
+    Every clause below is a parameter expression the engine PRUNES when its parameter is
+    empty (freetext/sku/PriceRange/Manufacturer/GroupID), so an empty call degrades to
+    "Active = True" (all active products) instead of matching nothing. Search is served by
+    the prunable freetext Contains legs; exact-name Equal legs are dropped (freetext covers
+    name + number). Proven on the Verdanta live host over /dwapi.
+  -->
   <Expressions>
     <GroupExpression Operator="And">
-      <GroupExpression Operator="And">
-        <BinaryExpression Operator="Equal" Disabled="false">
-          <Left>
-            <FieldExpression Field="LanguageID" />
-          </Left>
-          <Right>
-            <MacroExpression Lookup="Dynamicweb.Ecommerce.Context:LanguageID" />
-          </Right>
-        </BinaryExpression>
-        <BinaryExpression Operator="MatchAny" Disabled="false">
-          <Left>
-            <FieldExpression Field="ShopIDs" />
-          </Left>
-          <Right>
-            <MacroExpression Lookup="Dynamicweb.Ecommerce.Context:ShopID" />
-          </Right>
-        </BinaryExpression>
-        <BinaryExpression Operator="Equal" Disabled="false">
-          <Left>
-            <FieldExpression Field="Active" />
-          </Left>
-          <Right>
-            <ConstantExpression Value="True" Type="System.Boolean" />
-          </Right>
-        </BinaryExpression>
-        <BinaryExpression Operator="MatchAny" Disabled="false">
-          <Left>
-            <FieldExpression Field="ParentGroupIDs" />
-          </Left>
-          <Right>
-            <ParameterExpression Name="GroupID" />
-          </Right>
-        </BinaryExpression>
-      </GroupExpression>
-      <GroupExpression Operator="Or">
-        <BinaryExpression Operator="Equal" Disabled="false">
-          <Left>
-            <FieldExpression Field="ProductName_Search" />
-          </Left>
-          <Right>
-            <ParameterExpression Name="eq" />
-          </Right>
-        </BinaryExpression>
-        <BinaryExpression Operator="Equal" Disabled="false">
-          <Left>
-            <FieldExpression Field="ProductNumber_Search" />
-          </Left>
-          <Right>
-            <ParameterExpression Name="eq" />
-          </Right>
-        </BinaryExpression>
-        <BinaryExpression Operator="Contains" Disabled="false">
-          <Left>
-            <FieldExpression Field="freetext" />
-          </Left>
-          <Right>
-            <ParameterExpression Name="eq" />
-          </Right>
-        </BinaryExpression>
-        <BinaryExpression Operator="Equal" Disabled="false">
-          <Left>
-            <FieldExpression Field="ProductName_Search" />
-          </Left>
-          <Right>
-            <ParameterExpression Name="q" />
-          </Right>
-        </BinaryExpression>
-        <BinaryExpression Operator="Equal" Disabled="false">
-          <Left>
-            <FieldExpression Field="ProductNumber_Search" />
-          </Left>
-          <Right>
-            <ParameterExpression Name="q" />
-          </Right>
-        </BinaryExpression>
-        <BinaryExpression Operator="Contains" Disabled="false">
-          <Left>
-            <FieldExpression Field="freetext" />
-          </Left>
-          <Right>
-            <ParameterExpression Name="q" />
-          </Right>
-        </BinaryExpression>
-      </GroupExpression>
-      <GroupExpression Operator="And">
-        <BinaryExpression Operator="In" Disabled="false">
-          <Left>
-            <FieldExpression Field="ProductNumber_Search" />
-          </Left>
-          <Right>
-            <ParameterExpression Name="sku" />
-          </Right>
-        </BinaryExpression>
-        <BinaryExpression Operator="In" Disabled="false">
-          <Left>
-            <FieldExpression Field="PriceRange" />
-          </Left>
-          <Right>
-            <ParameterExpression Name="PriceRange" />
-          </Right>
-        </BinaryExpression>
-        <BinaryExpression Operator="In" Disabled="false">
-          <Left>
-            <FieldExpression Field="Manufacturer_Facet" />
-          </Left>
-          <Right>
-            <ParameterExpression Name="Manufacturer" />
-          </Right>
-        </BinaryExpression>
-      </GroupExpression>
+      <BinaryExpression Operator="Equal" Disabled="false">
+        <Left>
+          <FieldExpression Field="Active" />
+        </Left>
+        <Right>
+          <ConstantExpression Value="True" Type="System.Boolean" />
+        </Right>
+      </BinaryExpression>
+      <BinaryExpression Operator="MatchAny" Disabled="false">
+        <Left>
+          <FieldExpression Field="ParentGroupIDs" />
+        </Left>
+        <Right>
+          <ParameterExpression Name="GroupID" />
+        </Right>
+      </BinaryExpression>
+      <BinaryExpression Operator="Contains" Disabled="false">
+        <Left>
+          <FieldExpression Field="freetext" />
+        </Left>
+        <Right>
+          <ParameterExpression Name="eq" />
+        </Right>
+      </BinaryExpression>
+      <BinaryExpression Operator="Contains" Disabled="false">
+        <Left>
+          <FieldExpression Field="freetext" />
+        </Left>
+        <Right>
+          <ParameterExpression Name="q" />
+        </Right>
+      </BinaryExpression>
+      <BinaryExpression Operator="In" Disabled="false">
+        <Left>
+          <FieldExpression Field="ProductNumber_Search" />
+        </Left>
+        <Right>
+          <ParameterExpression Name="sku" />
+        </Right>
+      </BinaryExpression>
+      <BinaryExpression Operator="In" Disabled="false">
+        <Left>
+          <FieldExpression Field="PriceRange" />
+        </Left>
+        <Right>
+          <ParameterExpression Name="PriceRange" />
+        </Right>
+      </BinaryExpression>
+      <BinaryExpression Operator="In" Disabled="false">
+        <Left>
+          <FieldExpression Field="Manufacturer_Facet" />
+        </Left>
+        <Right>
+          <ParameterExpression Name="Manufacturer" />
+        </Right>
+      </BinaryExpression>
     </GroupExpression>
   </Expressions>
   <ViewFields />
