@@ -13,7 +13,52 @@ including content, collision checks, activation manifest, publish guards).
 | Editable buy-it-again (empty-cart safe) | **The stock Express Buy `?OrderID=` prefill flow the baseline already routes to** — `OrderViewSearchList.cshtml` renders the Reorder button to `ExpressBuyPage?OrderID=<id>`; the flow prefills an editable quantity grid and submits `cartcmd=addmulti`, which needs no active cart. The pack PROVES this flow (probes on `/swift-2/express-buy`), it does not rebuild it | `pack.json` asserts (`http-body-contains` on the Express Buy page, criticalPath) |
 | Qty-break tier pricing | Anonymous-visible `EcomPrices` tier rows on **pack-owned** product `PACK-RPP-PROD1` (RPP-TIER-01, base 4995 EUR): qty 5 → 4500, qty 10 → 4200, qty 25 → 3900 | `baseline-fragment/seed/_sql/EcomPrices/PACK-RPP-0001..0003.yml` |
 | Customer contract pricing | Buyer-scoped `EcomPrices` row on **pack-owned** product `PACK-RPP-PROD2` (RPP-CTR-01, base 1599 EUR): 1399 EUR for customer number `98745621` | `baseline-fragment/seed/_sql/EcomPrices/PACK-RPP-0004.yml` |
-| Cart-enforced quantity tiers | `ReorderingPricingQtyBreakProvider` (cabp lineage) — **exactly why it exists: stock cart resolution ignores tier quantities (`PriceQuantity > 0`) at cart time**, so tier rows render on PDP surfaces but the cart charges the base price without it. The provider is non-exclusive (`HandlePricesExclusively = false`) and returns a price ONLY when a real tier (`Quantity > 1`) matches; base and contract rows fall through to the default provider | `src/ReorderingPricingQtyBreakProvider.cs` (csLedger: `price-provider`, `assembly-scan`) |
+| Cart-enforced quantity tiers | `ReorderingPricingQtyBreakProvider` (cabp lineage) — **exactly why it exists: stock cart resolution ignores tier quantities (`PriceQuantity > 0`) at cart time**, so tier rows render on PDP surfaces but the cart charges the base price without it. The provider is non-exclusive (`HandlePricesExclusively = false`) and returns a price ONLY when a real tier (`Quantity > 1`) matches; base and contract rows fall through to the default provider. **Compile-optional** — see below | `src/ReorderingPricingQtyBreakProvider.cs` (csLedger: `price-provider`, `assembly-scan`; `layer.json` `customCode`) |
+
+## Custom code is compile-optional (decision D3)
+
+The base layer stays **zero custom code** (constraint unchanged). This **feature** layer MAY ship a
+**declared, compile-optional** provider — declared machine-readably in [`layer.json`](layer.json)
+under `customCode` (`compileOptional: true`). The split:
+
+| | Without compiling (data-only, native platform) | With the opt-in compile |
+|---|---|---|
+| **Customer-contract pricing** — the **zero-code headline** | ✅ Enforced end-to-end by Dynamicweb's stock `DefaultPriceProvider`. The buyer-scoped `EcomPrices` row (`PACK-RPP-0004`, `PriceUserCustomerNumber 98745621`) prices `PACK-RPP-PROD2` at **1399** for customer `98745621` (base 1599). No custom code. | ✅ Identical — the provider returns `null` for base/contract rows, so they always fall through to the default provider. |
+| **Quantity-tier pricing** | ⚠️ Tier rows (`PACK-RPP-0001..0003`) ship as data and render on tier-aware surfaces, but the stock cart resolver ignores tier quantities at cart time — the cart charges the **base** price for tiers. | ✅ `ReorderingPricingQtyBreakProvider` (assembly-scan auto-discovery, non-exclusive) enforces tiers at cart time: `PACK-RPP-PROD1` prices **4500 / 4200 / 3900** at qty 5 / 10 / 25. |
+
+**Opt-in compile step:** add `src/*.cs` to the Swift solution's custom-code project and build; the
+provider self-registers via assembly scan (no config row). Documented in the dynamicweb-skills
+feature-layer compile recipe. Compiling is **additive** — it never removes or alters the contract-price
+guarantee. The Foundry gate compiles + proves the full behavior (both probes); a downstream partner who
+does not compile still gets the contract-price headline as pure data.
+
+## Fragment portability (Verdanta DESIGN-1)
+
+The Quick Order page fragment attaches under **base-provided structural ancestors** — the area
+(`Swift 2` = area 3, `Swift 2 Nederlands` = area 27), the `Navigation` and
+`Navigation/Secondary Navigation` structural-stub pages, plus the fragment-root `area.yml` and
+`templates.manifest.yml`. Those paths are **base-owned anchors**.
+
+**Why the layer does NOT ship those ancestor stubs.** The base contract's content-path collision rule
+(07-01 / T-07-04) forbids an addition from shipping any `_content` path the base also ships — a
+re-shipped ancestor would silently overwrite the base page and the gate throws
+(`Test-LayerContentCollision`). So the fragment **references** these ancestors by path and
+deliberately leaves them to the base (the intended architecture: additions bind to the base
+contract, never re-ship it). Consequence: the fragment deserializes cleanly onto any host that has
+the base (every edition composes base-first), but it is **not** standalone-deserializable onto a
+bare host — **the base is a prerequisite**. (True in-layer stub duplication would need the gate to
+exempt `isStructuralStub` anchor paths from the collision check — a harness/serializer change,
+tracked outside this layer.)
+
+**Applying on a renamed area.** The fragment hardcodes the area folder names `Swift 2` (area 3) and
+`Swift 2 Nederlands` (area 27) in its `merge/_content/<area>/...` paths and in the two
+`merge/merge-manifest.json` Content entries (`areaId` + `areaName`), matched by `layer.json`
+`fragmentContent[].areaId`. The base contract anchors these as **area 3 / area 27** — a solution
+maps by `areaId`, not by the display name. To apply on a solution whose areas are named
+differently: (1) rename the `merge/_content/<area>` folders to the target area names, (2) update the
+matching `areaName` (and `areaId` if it differs) in the two manifest Content entries, and (3) update
+`fragmentContent[].areaId` in `layer.json`. Nothing in the page bodies depends on the literal string
+`Swift 2`, so no paragraph edits are required.
 
 ## Canonical buyer contract
 
