@@ -1,12 +1,12 @@
 # bom-configurator
 
-Pack #3 — a bill-of-materials (BOM) product configurator delivered on the Phase 6-8
-feature-pack contract. A shopper picks one product per BOM slot (radio groups) on a
-pack-owned Product Detail page and adds the configured kit to the cart; the DW cart
+Feature layer #3 — a bill-of-materials (BOM) product configurator delivered on the Phase 6-8
+feature-layer contract. A shopper picks one product per BOM slot (radio groups) on a
+layer-owned Product Detail page and adds the configured kit to the cart; the DW cart
 engine creates the parent order line plus one child line per slot, each carrying its
 slot identity natively in `EcomOrderLines.OrderLineBOMItemId`.
 
-Everything the storefront does here is **stock platform + stock Swift 2.3**. The pack
+Everything the storefront does here is **stock platform + stock Swift 2.3**. The layer
 is **zero custom code** — it contributes only BOM structure data, page/template wiring,
 one ~10-line render-grid template, and gate proof.
 
@@ -23,7 +23,7 @@ The roadmap/REQUIREMENTS text for PK3-01 names the legacy `BOMConfigurators` /
 `BOMProducts` template-tag loops (the documentation-9 / Rapido tag API). Swift 2.3
 ships the **current** native surface instead: `product.GetBomConfiguration()` returning
 `BomConfigurationViewModel { Groups, Items }`, rendered by the stock
-`Paragraph/Swift-v2_ProductBom.cshtml`. This pack delivers "native BOM loops" via that
+`Paragraph/Swift-v2_ProductBom.cshtml`. This layer delivers "native BOM loops" via that
 ViewModel surface — the same native platform capability, current API. The verifier must
 accept this equivalence (recorded here and in 09-02-SUMMARY.md per orchestrator decision).
 
@@ -31,11 +31,11 @@ accept this equivalence (recorded here and in 09-02-SUMMARY.md per orchestrator 
 
 | Artifact | Purpose |
 |----------|---------|
-| `baseline-fragment/seed/_sql/EcomProductItems/PACK-BOM3-000{1,2,3}.yml` | BOM slot rows (Rule-A data, LRN-BASE-07 recipe) |
-| `baseline-fragment/seed/_sql/EcomProducts/PACK-BOM-0001.yml` | Rule-B multi-group parent product (ProductType 2) |
-| `baseline-fragment/seed/_content/.../Kit Configurator` | page A — hosts the `eCom_ProductCatalog` app |
-| `baseline-fragment/seed/_content/.../Kit Configurator Detail` | page B — hidden detail grid (stock BOM + AddToCart paragraphs) |
-| `templates/Designs/Swift-v2/eCom/ProductCatalog/PackBomDetailRenderGrid.cshtml` | pack Z-copy render-grid (new path only) |
+| `merge/_sql/EcomProductItems/PACK-BOM3-000{1,2,3}.yml` | BOM slot rows (Rule-A data, LRN-BASE-07 recipe) |
+| `merge/_sql/EcomProducts/PACK-BOM-0001.yml` | Rule-B multi-group parent product (ProductType 2) |
+| `merge/_content/.../Kit Configurator` | page A — hosts the `eCom_ProductCatalog` app |
+| `merge/_content/.../Kit Configurator Detail` | page B — hidden detail grid (stock BOM + AddToCart paragraphs) |
+| `templates/Designs/Swift-v2/eCom/ProductCatalog/PackBomDetailRenderGrid.cshtml` | layer Z-copy render-grid (new path only) |
 
 ## BOM data (LRN-BASE-07 recipe)
 
@@ -43,30 +43,30 @@ Each slot is one `EcomProductItems` row: `ProductItemBomGroupId` = a **real** `E
 id (that group's products become the radio options), `ProductItemDefaultProductId` set,
 `ProductItemBomProductId` / `ProductItemBomVariantId` blank.
 
-| Slot row | Parent | Group (pack-owned) | Default | (a non-default option) |
+| Slot row | Parent | Group (layer-owned) | Default | (a non-default option) |
 |----------|--------|--------------------|---------|------------------------|
 | PACK-BOM3-0002 | `PACK-BOM-0001` | `PACK-BOM-FORKS` | `PACK-BOM-FORK-1` | `PACK-BOM-FORK-2` |
 | PACK-BOM3-0003 | `PACK-BOM-0001` | `PACK-BOM-RACKS` | `PACK-BOM-RACK-1` | `PACK-BOM-RACK-2` |
 
-- **Catalog-self-sufficient (1.1.0).** The baseline is scaffolding-only, so this pack ships
+- **Catalog-self-sufficient (1.1.0).** The base layer is scaffolding-only, so this layer ships
   **all** of its own catalog: the Rule-B parent `PACK-BOM-0001` (`ProductNumber 10004kit`,
   `ProductType=2`), two child groups (`PACK-BOM-FORKS`, `PACK-BOM-RACKS`) each with two
-  pack-owned child products, and the parent's own group `PACK-BOM-GRP1` — all bound to
+  layer-owned child products, and the parent's own group `PACK-BOM-GRP1` — all bound to
   `SHOP1` via `EcomShopGroupRelation`. No base products/groups (PROD290/GROUP49/GROUP161/
   10028/10119) are referenced.
-- **PK3-02** rides `PACK-BOM-0001` with two slots in the two pack-owned groups; the
+- **PK3-02** rides `PACK-BOM-0001` with two slots in the two layer-owned groups; the
   `bom-cart-lines` probe selects the non-default child in each slot to prove per-child
   native disambiguation (`OrderLineBOMItemId` = slot id, `OrderLineProductId` = the chosen
   non-default).
 - The prior **PK3-01** slot on base `PROD290` is removed — a slot on a base product has no
-  meaning once the baseline ships no catalog; both slots now ride the pack's own parent.
+  meaning once the base layer ships no catalog; both slots now ride the layer's own parent.
 
 ## PDP wiring (no base edits)
 
-Base PDP content is base-owned, so the pack provides its own detail path:
+Base PDP content is base-owned, so the layer provides its own detail path:
 
 1. **Page A "Kit Configurator"** hosts an `eCom_ProductCatalog` app whose `ProductTemplate`
-   is the pack Z-copy `PackBomDetailRenderGrid.cshtml`.
+   is the layer Z-copy `PackBomDetailRenderGrid.cshtml`.
 2. That template stashes the `ProductViewModel` into `Context.Items["ProductDetails"]` and
    `RenderGrid(GetPageIdByNavigationTag("PackBomDetail"))`.
 3. **Page B "Kit Configurator Detail"** (hidden, `navigationTag=PackBomDetail`) carries the
@@ -78,18 +78,18 @@ Two pages (not one) because rendering the same page that hosts the app recurses 
 exactly how the base Shop app / Product Details pages are split.
 
 > **Note — bare BOM cards.** `Swift-v2_ProductBom` renders each option's card via
-> `RenderGrid(ListComponentSource)`. This pack ships `ListComponentSource` empty for
+> `RenderGrid(ListComponentSource)`. This layer ships `ListComponentSource` empty for
 > cross-Swift-version robustness (a hardcoded base component page id would drift across
 > 2.1/2.2/2.3), so the radio inputs render with minimal labels. Pointing `ListComponentSource`
 > at the base "Product List Card" component page for full product cards is a **swift/2.3.1**
 > theme-polish item.
 
-## Pack-parent PDP behavior
+## Layer-parent PDP behavior
 
 Adding `PACK-BOM-0001` from a plain Shop PDP (no configurator UI) creates default child
 sub-lines from the slots' `ProductItemDefaultProductId`. This is acceptable — the cart
 renders them natively and the defaults are sensible — but route the demo journey through
-the pack "Kit Configurator" page, where the shopper actually chooses.
+the layer "Kit Configurator" page, where the shopper actually chooses.
 
 ## PK3-02 disambiguation — engine-native, zero custom code
 
@@ -104,7 +104,7 @@ selection lands a child line matched on `OrderLineBOMItemId = <slot>` AND
 > An earlier revision shipped a `Cart.Line.Added` subscriber that additionally stamped
 > `OrderLineFieldValues["PackBomSlot"]`. It was removed: the native `OrderLineBOMItemId`
 > is the proven, canonical disambiguation, so the stamp was dead weight — and dropping it
-> makes the pack zero-custom-code.
+> makes the layer zero-custom-code.
 
 Showing the slot label **in the cart UI** would require overlaying a base cart template,
 which is forbidden (base cart templates must not be overlaid). Cart-visible slot labels are
@@ -112,7 +112,7 @@ queued as a **swift/2.3.1** / theme idea (RESEARCH Open Question 1).
 
 ## Before publish — mandatory storefront-render UAT gate (WR-02)
 
-The `bom-cart-lines` probe ships with **`renderProof: false`** in `pack.json`
+The `bom-cart-lines` probe ships with **`renderProof: false`** in `layer.json`
 (behaviorProbes[0]). This is deliberate and permanent for this harness: the clean-room
 gate does **not** provision the storefront index, so the harness genuinely cannot render
 the configurator page. `renderProof` therefore stays `false` — do not flip it.
@@ -123,12 +123,12 @@ compile-error-dump guard (`Test-PackBodyIsTemplateErrorDump`) are skipped, so a 
 compile failure or a broken `GetPageIdByNavigationTag("PackBomDetail")` lookup in
 `PackBomDetailRenderGrid.cshtml` would ship green from the harness.
 
-**Because pack.json cannot carry a comment (strict, schema-validated JSON), this is the
+**Because layer.json cannot carry a comment (strict, schema-validated JSON), this is the
 binding note:** the configurator storefront render is a **real-Swift-host UAT item**
 tracked as `09-UAT.md` item 1. **Publish is BLOCKED until that morning UAT gate is
 human-verified on a provisioned Swift host** — confirm the configurator page renders,
 shows one radio group per BOM slot, and adds the configured kit to the cart. Do not open
-or merge the downstream baseline/theme PR for this pack before that UAT item passes.
+or merge the downstream distribution/theme PR for this layer before that UAT item passes.
 
-This pack ships **no `.cs`** — `csLedger` is empty. The baseline stays configuration and
-content only, and so does the pack.
+This layer ships **no `.cs`** — `csLedger` is empty. The base layer stays configuration and
+content only, and so does the layer.
