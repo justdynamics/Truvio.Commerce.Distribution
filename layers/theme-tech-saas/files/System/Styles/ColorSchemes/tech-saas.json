@@ -1,0 +1,76 @@
+{
+  "Name": "Tech / SaaS",
+  "Id": "tech-saas",
+  "Schemes": [
+    {
+      "GroupId": "tech-saas",
+      "Name": "Light",
+      "Id": "light",
+      "BackgroundColor": "#F8FAFC",
+      "ForegroundColor": "#0F172A",
+      "PrimaryButtonColor": "#3B82F6",
+      "SecondaryButtonColor": "#64748B",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "tech-saas",
+      "Name": "Light Grey 1",
+      "Id": "lightgrey1",
+      "BackgroundColor": "#F1F5F9",
+      "ForegroundColor": "#0F172A",
+      "PrimaryButtonColor": "#3B82F6",
+      "SecondaryButtonColor": "#64748B",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "tech-saas",
+      "Name": "Light Grey 2",
+      "Id": "lightgrey2",
+      "BackgroundColor": "#E2E8F0",
+      "ForegroundColor": "#0F172A",
+      "PrimaryButtonColor": "#3B82F6",
+      "SecondaryButtonColor": "#334155",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "tech-saas",
+      "Name": "Dark",
+      "Id": "dark",
+      "BackgroundColor": "#0F172A",
+      "ForegroundColor": "#F1F5F9",
+      "PrimaryButtonColor": "#3B82F6",
+      "SecondaryButtonColor": "#475569",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "tech-saas",
+      "Name": "Dark Subtle",
+      "Id": "darksubtle",
+      "BackgroundColor": "#1E293B",
+      "ForegroundColor": "#CBD5E1",
+      "PrimaryButtonColor": "#3B82F6",
+      "SecondaryButtonColor": "#475569",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "tech-saas",
+      "Name": "Primary",
+      "Id": "primary",
+      "BackgroundColor": "#3B82F6",
+      "ForegroundColor": "#FFFFFF",
+      "PrimaryButtonColor": "#0F172A",
+      "SecondaryButtonColor": "#DBEAFE",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "tech-saas",
+      "Name": "Secondary",
+      "Id": "secondary",
+      "BackgroundColor": "#334155",
+      "ForegroundColor": "#F1F5F9",
+      "PrimaryButtonColor": "#3B82F6",
+      "SecondaryButtonColor": "#CBD5E1",
+      "CustomColors": []
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+@inherits Dynamicweb.Rendering.RazorTemplateBase<Dynamicweb.Rendering.RazorTemplateModel<Dynamicweb.Rendering.Template>>
+@*
+	Pack-owned Z-copy of the stock Helpers/ShippingMethods.cshtml (Swift 2.3).
+	WHY A COPY EXISTS (08-03 live finding): DW inlines @Include'd helpers into ONE
+	generated Razor class per step template. PackSubscribeCheckout.cshtml is the
+	only Swift document that combines ShippingMethods + PaymentMethods (the 3-step
+	flow collapses delivery+payment onto one step), and BOTH stock helpers declare
+	a local `methodSelected` — the combined document fails C# compilation
+	("cannot be declared in this scope because that name is used in an enclosing
+	local scope") and DW renders the source dump instead of the checkout.
+	Locals here are pack-prefixed (packShipping*) so they can never collide with
+	the stock PaymentMethods.cshtml locals. Markup is otherwise byte-equivalent
+	to stock; the posted field name EcomCartShippingmethodID is unchanged.
+	New-path-only overlay (Pitfall 1): this path does not exist in the stock tree.
+*@
+@{
+	if (GetLoop("Shippingmethods").Any())
+	{
+		bool packShippingMethodSelected = false;
+		<div class="mt-4" id="SelectDeliveryGroup">
+			<h3 class="fs-6 fw-normal mb-3">@Translate("Select delivery")</h3>
+			<div class="list-group" id="ShippingMethodsGroup">
+				@foreach (LoopItem method in GetLoop("Shippingmethods"))
+				{
+					if (method.GetBoolean("Ecom:Cart.Shippingmethod.IsSelected"))
+					{
+						packShippingMethodSelected = true;
+					}
+
+					bool packShippingIsActive = method.GetBoolean("Ecom:Cart.Shippingmethod.IsSelected");
+
+					<label class="list-group-item list-group-item-action" @(packShippingIsActive ? "aria-current=\"true\"" : string.Empty) role="button" style="@(packShippingIsActive ? "background-color: rgba(var(--bs-body-color-rgb), 0.05)" : null)">
+						<dl class="d-flex justify-content-between gap-2 mb-0">
+							<dt class="form-check fw-normal">
+								@{
+									string packShippingImagePath = Dynamicweb.Context.Current.Server.MapPath(method.GetString("Ecom:Cart.Shippingmethod.Icon.Clean"));
+
+									if (File.Exists(packShippingImagePath))
+									{
+										<input class="form-check-input" type="radio" name="EcomCartShippingmethodID" id="EcomCartShippingmethodID_@method.GetString("Ecom:Cart.Shippingmethod.ID")" value="@method.GetString("Ecom:Cart.Shippingmethod.ID")" @if (!string.IsNullOrWhiteSpace(method.GetString("Ecom:Cart.Shippingmethod.IsSelected"))) { <text> checked="checked" </text> } onchange="submitForm()">
+										<div class="d-flex flex-column gap-2">
+											<span class="m-0 d-block" style="height: 1.5rem; background: url('@method.GetString("Ecom:Cart.Shippingmethod.Icon.Clean")') no-repeat left center; background-size: contain;"></span>
+											<span class="form-check-label">@method.GetString("Ecom:Cart.Shippingmethod.Name")</span>
+										</div>
+									}
+									else
+									{
+										<input class="form-check-input" type="radio" name="EcomCartShippingmethodID" id="EcomCartShippingmethodID_@method.GetString("Ecom:Cart.Shippingmethod.ID")" value="@method.GetString("Ecom:Cart.Shippingmethod.ID")" @if (!string.IsNullOrWhiteSpace(method.GetString("Ecom:Cart.Shippingmethod.IsSelected"))) { <text> checked="checked" </text> } onchange="submitForm()">
+										<div class="d-flex flex-column">
+											<span class="form-check-label">@method.GetString("Ecom:Cart.Shippingmethod.Name")</span>
+											<span class="opacity-75 fs-8">@method.GetString("Ecom:Cart.Shippingmethod.Description")</span>
+										</div>
+									}
+								}
+							</dt>
+
+							<dd class="mb-0 text-end">
+								@if (!method.GetBoolean("Ecom:Cart.ShippingMethod.Price.IsZero"))
+								{
+									<span class="text-price">@method.GetString("Ecom:Cart.ShippingMethod.Price")</span>
+								}
+								else
+								{
+									<span class="text-price">@Translate("Free")</span>
+								}
+							</dd>
+						</dl>
+					</label>
+
+					if (!string.IsNullOrEmpty(method.GetString("Ecom:ShippingProvider.Content")))
+					{
+						@method.GetString("Ecom:ShippingProvider.Content")
+					}
+				}
+				@{
+					if (!packShippingMethodSelected)
+					{
+						//Enable the possibility to use validation if no default shipping method is selected
+						<input class="form-check-input d-none" type="radio" name="EcomCartShippingmethodID" value="" checked="checked" />
+					}
+				}
+			</div>
+		</div>
+	}
+}

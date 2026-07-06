@@ -1,0 +1,20 @@
+{
+  "systemName": "Headless_Menu",
+  "name": "Headless Menu",
+  "category": "navigation",
+  "presentationFree": true,
+  "note": "Navigation menu container. Menu entries are Headless_MenuItem child pages; shape maps to Vercel Commerce Menu[].",
+  "fields": [
+    {
+      "systemName": "MenuKey",
+      "name": "Menu key",
+      "type": "Text",
+      "note": "Stable identifier the frontend queries (e.g. 'header', 'footer', 'catalog')."
+    },
+    {
+      "systemName": "Title",
+      "name": "Title",
+      "type": "Text"
+    }
+  ]
+}

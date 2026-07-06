@@ -1,0 +1,38 @@
+﻿"areaId": aabbccdd-1111-4aaa-9001-a1b2c3d40001
+"name": "Headless"
+"sortOrder": 100
+"itemType": "Headless_Master"
+"itemFields":
+  "Id": "200000"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SiteName": "Headless"
+  "DefaultLocale": "en-US"
+  "HeaderMenuRef": ""
+  "FooterMenuRef": ""
+  "CatalogMenuRef": ""
+  "PrivacyPolicyRef": ""
+  "ContactEmail": ""
+"properties":
+  "AreaStyleId": 0
+  "AreaEncoding": ""
+  "AreaPermission": ""
+  "AreaTitle": ""
+  "AreaDateformat": "dd/MM/yyyy"
+  "AreaCodepage": 0
+  "AreaLanguage": 1
+  "StyleId": 1
+  "AreaCulture": "en-US"
+  "AreaApprovalType": 0
+  "AreaActive": true
+  "AreaMasterAreaId": 0
+  "AreaUrlName": ""
+  "AreaLayout": ""
+  "AreaNotFound": ""
+  "AreaRedirectFirstPage": 1
+  "AreaLockPagesToDomain": false
+  "AreaItemTypePageProperty": "Headless_PageProperties"
+  "AreaIncludeProductsInSitemap": false
+  "AreaSSLMode": 0
+  "AreaPublished": true
+  "AreaDeleted": false

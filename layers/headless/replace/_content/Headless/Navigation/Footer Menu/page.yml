@@ -1,0 +1,43 @@
+﻿"pageUniqueId": d85ebdd9-280e-4b01-b80a-1ccca25a7b11
+"sourcePageId": 0
+"name": "Footer Menu"
+"menuText": "Footer"
+"sortOrder": 2
+"isActive": true
+"itemType": "Headless_Menu"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"navigationTag": "HeadlessFooterMenu"
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-07-03T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "200014"
+  "ItemInstanceType": ""
+  "Sort": 2
+  "MenuKey": "footer"
+  "Title": "Footer"
+"propertyFields":
+  "Id": "200015"
+  "Sort": 0
+  "ItemInstanceType": ""

@@ -1,0 +1,9 @@
+{
+  "name": "dap-portal",
+  "version": "1.0.0",
+  "kind": "surface",
+  "swiftVersion": "2.3.0",
+  "fragmentModes": [
+    "replace"
+  ]
+}

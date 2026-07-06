@@ -1,0 +1,104 @@
+/* tech-saas_custom.css — brand polish layer
+ * Tier 1 of the re-skin escalation ladder.
+ * Loaded via TechSaasHeadInclude.cshtml after swift.css and Style asset sheets.
+ * Pitfall guards applied throughout:
+ *   P4: [data-dw-button] background always uses :not() chain for outline/ghost variants
+ *   P5: page-footer paint scoped to body > footer / [data-swift-page-footer]
+ *   P10: nav rules scoped via data-attributes, not bare nav selectors
+ */
+
+/* === Brand tokens (render-critical; also in HeadInclude <style> block for cache resilience) === */
+:root {
+  --ts-blue:       #3B82F6;
+  --ts-blue-dark:  #2563EB;
+  --ts-blue-deep:  #1D4ED8;
+  --ts-navy:       #0F172A;
+  --ts-slate-700:  #334155;
+  --ts-slate-500:  #64748B;
+  --ts-slate-300:  #CBD5E1;
+  --ts-slate-100:  #F1F5F9;
+  --ts-white:      #FFFFFF;
+}
+
+/* === Primary button hover — scoped to filled variant only (P4) === */
+[data-dw-button]:not([data-dw-button="outline"]):not([data-dw-button="ghost"]):not([data-dw-button="secondary"]):hover {
+  background-color: var(--ts-blue-dark);
+  border-color: var(--ts-blue-dark);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+/* === Secondary/outline button hover — slate tint (P4 compliant) === */
+[data-dw-button="outline"]:hover,
+[data-dw-button="ghost"]:hover {
+  background-color: rgba(59, 130, 246, 0.08);
+  border-color: var(--ts-blue);
+  color: var(--ts-blue);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+/* === Page-level site footer — scoped to landmark only (P5) === */
+body > footer,
+[data-swift-page-footer] {
+  background-color: var(--ts-navy);
+  color: var(--ts-slate-300);
+}
+
+body > footer a,
+[data-swift-page-footer] a {
+  color: var(--ts-slate-300);
+  text-decoration: none;
+}
+
+body > footer a:hover,
+[data-swift-page-footer] a:hover {
+  color: var(--ts-white);
+}
+
+/* === Site header / top navigation — scoped via Swift data-attribute (P10) === */
+[data-swift-page-header],
+[data-dw-navigation-level="1"] > [data-swift-navigation-node] {
+  /* No background override — let ColorScheme handle it */
+}
+
+/* Header link accent on hover — safe: scoped to Swift nav attribute */
+[data-swift-page-header] a:hover,
+[data-dw-navigation] a:hover {
+  color: var(--ts-blue);
+  text-decoration: none;
+}
+
+/* === Logo placement — referenced from disk overlay assets === */
+/* Logo is displayed via paragraph item-field or inline img in content;
+ * background-image fallback for header logo slot if wired via CSS.
+ * Asset path: /Files/Images/tech-saas/logo.svg (served from disk overlay) */
+[data-swift-logo-image] img {
+  max-height: 2rem;
+  width: auto;
+}
+
+/* === Generous whitespace — page-level section spacing === */
+[data-swift-container] {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+}
+
+/* === Focus ring — blue brand ring for keyboard accessibility === */
+:focus-visible {
+  outline: 2px solid var(--ts-blue);
+  outline-offset: 2px;
+}
+
+/* === Card / product tile — subtle depth on light background === */
+[data-dw-colorscheme="light"] .card,
+[data-dw-colorscheme="lightgrey1"] .card,
+[data-dw-colorscheme="lightgrey2"] .card {
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.06);
+  border-radius: 0.5rem;
+  transition: box-shadow 0.15s ease;
+}
+
+[data-dw-colorscheme="light"] .card:hover,
+[data-dw-colorscheme="lightgrey1"] .card:hover,
+[data-dw-colorscheme="lightgrey2"] .card:hover {
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12), 0 2px 4px rgba(15, 23, 42, 0.08);
+}

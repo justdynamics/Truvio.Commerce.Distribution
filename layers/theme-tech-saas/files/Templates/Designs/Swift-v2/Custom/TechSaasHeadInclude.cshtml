@@ -1,0 +1,16 @@
+@inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.PageViewModel>
+@using Dynamicweb.Frontend
+@{
+    AddStylesheet("/Files/Templates/Designs/Swift-v2/Custom/tech-saas_custom.css", "all");
+}
+<style>
+    /* Render-critical brand tokens — inline to avoid cache-buster staleness (Pitfall 7) */
+    :root {
+        --ts-blue:      #3B82F6;
+        --ts-blue-dark: #2563EB;
+        --ts-navy:      #0F172A;
+        --ts-slate-700: #334155;
+        --ts-slate-300: #CBD5E1;
+        --ts-white:     #FFFFFF;
+    }
+</style>

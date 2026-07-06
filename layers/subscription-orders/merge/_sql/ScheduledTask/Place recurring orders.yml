@@ -1,0 +1,17 @@
+﻿"TaskId": 100001
+"TaskName": "Place recurring orders"
+"TaskBegin": 1900-01-01T00:00:00.0000000
+"TaskEnd": 2999-12-31T00:00:00.0000000
+"TaskLastRun": 1900-01-01T00:00:00.0000000
+"TaskNextRun": 1900-01-01T00:00:00.0000000
+"TaskEnabled": false
+"TaskType": 0
+"TaskMinute": -1
+"TaskHour": -1
+"TaskDay": -1
+"TaskWday": -1
+"TaskStartFromLastRun": false
+"TaskAddInTypeName": "Dynamicweb.Ecommerce.Extensibility.ScheduledTaskAddins.RecurringOrdersScheduledTask"
+"TaskAddInSettings": ""
+"TaskSort": 0
+"TaskComment": "Pack-owned (subscription-orders): processes due recurring orders via the DW-native RecurringOrdersScheduledTask add-in. Disabled by default - enable in the demo to show renewals."

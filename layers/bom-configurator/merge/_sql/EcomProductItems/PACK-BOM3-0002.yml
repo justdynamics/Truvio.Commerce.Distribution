@@ -1,0 +1,14 @@
+﻿"ProductItemId": "PACK-BOM3-0002"
+"ProductItemProductId": "PACK-BOM-0001"
+"ProductItemBomProductId": ""
+"ProductItemBomGroupId": "PACK-BOM-FORKS"
+"ProductItemQuantity": 1
+"ProductItemName": "Fork"
+"ProductItemRequired": true
+"ProductItemDefaultProductId": "PACK-BOM-FORK-1"
+"ProductItemBomNoProductText": ""
+"ProductItemSortOrder": 1
+"ProductItemBomVariantId": ""
+"ProductItemDefaultVariantId": ""
+"ProductItemDefaultUnitId": ""
+"ProductItemBomUnitId": ""

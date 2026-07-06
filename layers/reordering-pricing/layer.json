@@ -1,0 +1,105 @@
+{
+  "name": "reordering-pricing",
+  "version": "1.1.0",
+  "kind": "feature",
+  "swiftVersion": "2.3.0",
+  "repositoryName": "Products",
+  "csLedger": [
+    {
+      "file": "src/ReorderingPricingQtyBreakProvider.cs",
+      "classification": "price-provider",
+      "registration": "assembly-scan"
+    }
+  ],
+  "configRows": [
+    {
+      "table": "EcomProducts",
+      "where": "ProductId = 'PACK-RPP-PROD1' AND ProductLanguageId = 'ENU'",
+      "description": "pack-owned tier product (RPP-TIER-01) — self-sufficiency proof"
+    },
+    {
+      "table": "EcomProducts",
+      "where": "ProductId = 'PACK-RPP-PROD2' AND ProductLanguageId = 'ENU'",
+      "description": "pack-owned contract product (RPP-CTR-01) — self-sufficiency proof"
+    },
+    {
+      "table": "EcomPrices",
+      "where": "PriceId = 'PACK-RPP-0001'",
+      "description": "qty-break tier row (PACK-RPP-PROD1, qty 5, unit 4500 EUR — base 4995)"
+    },
+    {
+      "table": "EcomPrices",
+      "where": "PriceId = 'PACK-RPP-0002'",
+      "description": "qty-break tier row (PACK-RPP-PROD1, qty 10, unit 4200 EUR)"
+    },
+    {
+      "table": "EcomPrices",
+      "where": "PriceId = 'PACK-RPP-0003'",
+      "description": "qty-break tier row (PACK-RPP-PROD1, qty 25, unit 3900 EUR)"
+    },
+    {
+      "table": "EcomPrices",
+      "where": "PriceId = 'PACK-RPP-0004'",
+      "description": "contract row for buyer 98745621 (PACK-RPP-PROD2, qty 1, unit 1399 EUR — base 1599; PriceUserCustomerNumber scoping only)"
+    }
+  ],
+  "fragmentModes": [
+    "merge"
+  ],
+  "fragmentTables": [
+    "EcomGroups",
+    "EcomProducts",
+    "EcomGroupProductRelation",
+    "EcomShopGroupRelation",
+    "EcomPrices"
+  ],
+  "fragmentContent": [
+    {
+      "areaId": 3,
+      "path": "/Navigation/Secondary Navigation/Quick Order"
+    },
+    {
+      "areaId": 27,
+      "path": "/Navigation/Secondary Navigation/Quick Order"
+    }
+  ],
+  "asserts": {
+    "behaviorProbes": [
+      {
+        "kind": "http-body-contains",
+        "path": "/swift-2/quick-order",
+        "pattern": "name=\"cartcmd\"[^>]*value=\"addmulti\""
+      },
+      {
+        "kind": "http-body-contains",
+        "path": "/swift-2/express-buy",
+        "pattern": "id=\"ExpressBuySearchForm\""
+      },
+      {
+        "kind": "sku-validation",
+        "path": "/swift-2/quick-order",
+        "sku": "RPP-TIER-01"
+      },
+      {
+        "kind": "cart-price",
+        "path": "/swift-2/quick-order",
+        "cartPath": "/swift-2/cart/",
+        "productId": "PACK-RPP-PROD2",
+        "quantity": 1,
+        "expectedAmount": 1399
+      },
+      {
+        "kind": "cart-price",
+        "path": "/swift-2/quick-order",
+        "cartPath": "/swift-2/cart/",
+        "productId": "PACK-RPP-PROD1",
+        "quantity": 5,
+        "expectedAmount": 4500
+      }
+    ],
+    "criticalPaths": [
+      "/swift-2/quick-order",
+      "/swift-2/express-buy"
+    ]
+  }
+}

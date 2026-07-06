@@ -1,0 +1,45 @@
+{
+  "systemName": "Headless_ContentPage",
+  "name": "Headless Content Page",
+  "category": "page",
+  "presentationFree": true,
+  "note": "Rich content page. Body is portable structured text, presentation-free.",
+  "fields": [
+    {
+      "systemName": "Title",
+      "name": "Title",
+      "type": "Text"
+    },
+    {
+      "systemName": "Slug",
+      "name": "Slug",
+      "type": "Text"
+    },
+    {
+      "systemName": "Lead",
+      "name": "Lead paragraph",
+      "type": "LongText"
+    },
+    {
+      "systemName": "BodyMarkdown",
+      "name": "Body (markdown)",
+      "type": "LongText",
+      "note": "Structured portable content (markdown/portable-text); rendered by the Next.js component, not a Razor template."
+    },
+    {
+      "systemName": "HeroImageRef",
+      "name": "Hero image (asset ref)",
+      "type": "Text"
+    },
+    {
+      "systemName": "SeoTitle",
+      "name": "SEO title",
+      "type": "Text"
+    },
+    {
+      "systemName": "SeoDescription",
+      "name": "SEO description",
+      "type": "LongText"
+    }
+  ]
+}

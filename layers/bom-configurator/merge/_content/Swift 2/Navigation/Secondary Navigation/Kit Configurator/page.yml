@@ -1,0 +1,38 @@
+﻿"pageUniqueId": 6c60a5e4-a4bb-48c7-985b-19f17b20dd49
+"sourcePageId": 0
+"name": "Kit Configurator"
+"menuText": "Kit Configurator"
+"sortOrder": 10
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"navigationTag": "PackKitConfigurator"
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-07-02T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "100010"
+  "ItemInstanceType": ""
+  "Sort": 10
+  "Title": "Kit Configurator"

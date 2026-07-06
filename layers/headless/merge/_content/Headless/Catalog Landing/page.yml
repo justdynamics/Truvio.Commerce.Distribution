@@ -1,0 +1,47 @@
+﻿"pageUniqueId": b7859020-e63b-4591-96b7-d0e67f770d55
+"sourcePageId": 0
+"name": "Catalog Landing"
+"menuText": "Catalog"
+"sortOrder": 3
+"isActive": true
+"itemType": "Headless_ContentPage"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-07-03T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 0
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "200108"
+  "ItemInstanceType": ""
+  "Sort": 3
+  "Title": "Catalog"
+  "Slug": "catalog"
+  "Lead": "Browse the product catalog."
+  "BodyMarkdown": "# Catalog\n\nProducts are served from the commerce Delivery API endpoints."
+  "HeroImageRef": ""
+  "SeoTitle": "Catalog"
+  "SeoDescription": "Browse the product catalog."
+"propertyFields":
+  "Id": "200109"
+  "Sort": 0
+  "ItemInstanceType": ""

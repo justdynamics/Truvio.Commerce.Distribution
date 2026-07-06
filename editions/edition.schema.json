@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/Justinvolved/Truvio.Commerce.Serializer.BaselineUpdater/editions/edition.schema.json",
+  "title": "Truvio distribution edition manifest (editions/<name>.json)",
+  "description": "Contract schema for editions/<name>.json (v3.0 Distribution, Phase 2). An edition is a named, gate-proven COMPOSITION: from a privileged base + an ordered list of additions (+ surfaces, sample data, themes). Additions bind ONLY to the base contract (layers/base/base.contract.json), NEVER to each other — a cross-addition dependency is a validation failure. Validated at the gate via Test-Json -SchemaFile with -ErrorAction Stop (a broken schema must THROW, never vacuously pass). Digit classes are written [0-9]: a backslash-d escape is invalid JSON. Layer references are '<name>@<semver>'; the gate resolves each to layers/<name>/ and checks the layer.json version equals the pinned semver (the ref is a claim the gate proves, never trusts).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "name",
+    "from",
+    "add"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Edition identity. Reused in filesystem paths and release tags - lowercase letters, digits, and hyphen only (identifier-allowlist compatible). Must equal the editions/<name>.json basename."
+    },
+    "from": {
+      "type": "string",
+      "pattern": "^base@[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "The privileged base layer this edition builds on, pinned as 'base@<semver>' (e.g. base@2.3.0). Exactly one base - every edition stands on the base contract. The gate resolves this to layers/base and checks layers/base/layer.json version == the pinned semver."
+    },
+    "add": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+@[0-9]+\\.[0-9]+\\.[0-9]+$"
+      },
+      "description": "Ordered list of ADDITIONS as '<layer>@<semver>' refs (catalog / feature / sample-data / any non-base, non-surface, non-theme layer). Activation order is the array order; teardown is reverse. Each ref resolves to layers/<name>/ (version-checked). Every addition binds ONLY to the base contract - a ref to a layer that depends on another addition fails validation (belongs in the base contract or the plan is wrong). MAY be empty (a base-only edition adds nothing)."
+    },
+    "surfaces": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+@[0-9]+\\.[0-9]+\\.[0-9]+$"
+      },
+      "description": "OPTIONAL ordered list of SURFACE layer refs ('<name>@<semver>', kind surface) the edition carries - what a frontend leg needs (e.g. headless@2.3.0: headless content + itemtypes + repositories). Activated after add, torn down before add's reverse. Omit for editions with no extra frontend surface (the base ships the Swift storefront surface itself)."
+    },
+    "sampleData": {
+      "type": "boolean",
+      "description": "OPTIONAL (default false). When true the edition activates the sample-data layer (demo buyer/CSR identities + contract data, seeded pre-host-start). When false the edition is scaffolding-only for identities - the base-only empty-shop scaffold sets this false."
+    },
+    "themes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      },
+      "description": "OPTIONAL theme names the edition applies (kind theme, disk-overlay-only per SPEC-06). In Phase 2 these map to the harness config.themes.items entries by themeName; the physical theme fold-in as layers/theme-* happens in Phase 3. Each theme is apply+asserted after the DB composition, DB never reset (themes are a transient post-deserialize test state)."
+    },
+    "criticalPaths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "OPTIONAL edition-level frontend paths that must respond 2xx after the full composition is activated (the edition's own smoke set, on top of each layer's asserts). Enforced by the gate (one anonymous GET per path; PASS on 2xx, FAIL row otherwise - never silently skipped)."
+    },
+    "provenOn": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["swiftVersion", "gateRunId"],
+      "properties": {
+        "swiftVersion": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+          "description": "The Swift version the gate last proved this edition against."
+        },
+        "gateRunId": {
+          "type": "string",
+          "pattern": "^[0-9]{8}-[0-9]{6}$",
+          "description": "The gate run id (runs/<ts>) that produced the proof - the same id carried into the annotated editions/<name>/<semver> tag."
+        }
+      },
+      "description": "OPTIONAL attestation stamped by the gate on a PASS (never hand-authored as trusted): the swiftVersion + gate run id this edition was last proven against. Feeds the annotated editions/<name>/<semver> tag (Phase 3)."
+    },
+    "description": {
+      "type": "string",
+      "description": "OPTIONAL human-readable summary of what this edition composes and demonstrates."
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "systemName": "Headless_AccountSection",
+  "name": "Headless Account Section",
+  "category": "b2b",
+  "presentationFree": true,
+  "note": "One customer-center section mapped to a Delivery API endpoint + role. reorder/impersonation are B2B behaviors documented as frontend contracts (feature-packs-as-docs).",
+  "fields": [
+    {
+      "systemName": "Title",
+      "name": "Title",
+      "type": "Text"
+    },
+    {
+      "systemName": "SectionKey",
+      "name": "Section key",
+      "type": "List",
+      "options": [
+        "orders",
+        "reorder",
+        "users",
+        "addresses",
+        "quotes",
+        "impersonation"
+      ]
+    },
+    {
+      "systemName": "DeliveryEndpoint",
+      "name": "Delivery API endpoint",
+      "type": "Text",
+      "note": "Generic Delivery API path the frontend calls, e.g. /dwapi/orders. Exact contract pending ADR-001."
+    },
+    {
+      "systemName": "RequiredRole",
+      "name": "Required role",
+      "type": "List",
+      "options": [
+        "Customers",
+        "Account Admin",
+        "CSR"
+      ]
+    }
+  ]
+}

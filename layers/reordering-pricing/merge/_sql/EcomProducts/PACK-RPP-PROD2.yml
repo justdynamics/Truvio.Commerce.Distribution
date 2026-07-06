@@ -1,0 +1,19 @@
+﻿"ProductId": "PACK-RPP-PROD2"
+"ProductLanguageId": "ENU"
+"ProductVariantId": ""
+"ProductNumber": "RPP-CTR-01"
+"ProductName": "Reordering Contract Product"
+"ProductShortDescription": "Pack-owned demo product for buyer-scoped contract pricing (reordering-pricing pack)."
+"ProductPrice": 1599
+"ProductStock": 0
+"ProductActive": true
+"ProductType": 0
+"ProductPriceType": 0
+"ProductNeverOutOfStock": true
+"ProductHidden": false
+"ProductExcludeFromIndex": false
+"ProductExcludeFromAllProducts": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductDefaultShopId": "SHOP1"
+"ProductUniqueId": "b1a7e2c4-2222-4a1b-9c01-a2a2a2a2a202"

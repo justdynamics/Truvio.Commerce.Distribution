@@ -1,0 +1,44 @@
+﻿"pageUniqueId": 8e8e7d9a-c6fa-4d3f-a274-8f9e4e6d6f24
+"sourcePageId": 0
+"name": "Customer center"
+"menuText": "Customer center"
+"sortOrder": 3
+"isActive": true
+"itemType": "Headless_CustomerCenter"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"navigationTag": "HeadlessCustomerCenter"
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-07-03T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "200040"
+  "ItemInstanceType": ""
+  "Sort": 3
+  "Title": "Customer center"
+  "RequireAuth": true
+  "PermittedGroups": "Customers,Account Admin,CSR"
+"propertyFields":
+  "Id": "200041"
+  "Sort": 0
+  "ItemInstanceType": ""

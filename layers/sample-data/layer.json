@@ -1,0 +1,6 @@
+{
+  "name": "sample-data",
+  "version": "1.0.0",
+  "kind": "sample-data",
+  "swiftVersion": "2.3.0"
+}

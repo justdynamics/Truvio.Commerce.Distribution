@@ -1,0 +1,25 @@
+{
+  "systemName": "Headless_CustomerCenter",
+  "name": "Headless Customer Center",
+  "category": "b2b",
+  "presentationFree": true,
+  "note": "Customer-center / B2B root descriptor.",
+  "fields": [
+    {
+      "systemName": "Title",
+      "name": "Title",
+      "type": "Text"
+    },
+    {
+      "systemName": "RequireAuth",
+      "name": "Require authentication",
+      "type": "Checkbox"
+    },
+    {
+      "systemName": "PermittedGroups",
+      "name": "Permitted access-user groups",
+      "type": "Text",
+      "note": "Comma-separated AccessUser group names (Customers, Account Admin, CSR). Binds to UnifiedPermission on deserialize."
+    }
+  ]
+}

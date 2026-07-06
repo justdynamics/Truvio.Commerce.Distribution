@@ -1,0 +1,55 @@
+{
+  "name": "bom-configurator",
+  "version": "1.1.0",
+  "kind": "feature",
+  "swiftVersion": "2.3.0",
+  "csLedger": [],
+  "configRows": [
+    {
+      "table": "EcomProducts",
+      "where": "ProductId = 'PACK-BOM-0001' AND ProductLanguageId = 'ENU'",
+      "description": "Rule-B multi-group BOM parent product (ProductType 2, ProductNumber 10004kit) — pack-owned"
+    },
+    {
+      "table": "EcomProductItems",
+      "where": "ProductItemId = 'PACK-BOM3-0002'",
+      "description": "BOM slot 1 on PACK-BOM-0001 (group PACK-BOM-FORKS, default PACK-BOM-FORK-1)"
+    },
+    {
+      "table": "EcomProductItems",
+      "where": "ProductItemId = 'PACK-BOM3-0003'",
+      "description": "BOM slot 2 on PACK-BOM-0001 (group PACK-BOM-RACKS, default PACK-BOM-RACK-1)"
+    }
+  ],
+  "fragmentModes": ["merge"],
+  "fragmentTables": ["EcomGroups", "EcomProducts", "EcomGroupProductRelation", "EcomShopGroupRelation", "EcomProductItems"],
+  "fragmentContent": [
+    {
+      "areaId": 3,
+      "path": "/Navigation/Secondary Navigation/Kit Configurator"
+    },
+    {
+      "areaId": 3,
+      "path": "/Navigation/Secondary Navigation/Kit Configurator Detail"
+    }
+  ],
+  "asserts": {
+    "behaviorProbes": [
+      {
+        "kind": "bom-cart-lines",
+        "path": "/swift-2/kit-configurator",
+        "productId": "PACK-BOM-0001",
+        "cartPath": "/swift-2/cart/",
+        "selections": [
+          { "group": "PACK-BOM3-0002", "product": "PACK-BOM-FORK-2" },
+          { "group": "PACK-BOM3-0003", "product": "PACK-BOM-RACK-2" }
+        ],
+        "expectedChildLines": 2,
+        "renderProof": false
+      }
+    ],
+    "criticalPaths": [
+      "/swift-2/kit-configurator"
+    ]
+  }
+}

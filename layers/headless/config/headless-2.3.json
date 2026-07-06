@@ -1,0 +1,245 @@
+{
+  "outputDirectory": "Serializer",
+  "deployOutputSubfolder": "deploy",
+  "seedOutputSubfolder": "seed",
+  "_note": "Distinct product line baseline/headless/2.3 (D5). Presentation-agnostic Headless_* item-type layer (D6). areaId values below are the harness-provisioned Headless area (EN) + Headless Nederlands language layer; the concrete integer areaId is host-assigned at serialize time and matched on deserialize by the area GUID/name in area.yml. See BASELINE.md 'Open items pending ADR-001'.",
+  "excludeFieldsByItemType": {
+    "Headless_Master": [
+      "GoogleTagManagerID",
+      "Favicon",
+      "AppleTouchIcon",
+      "MetaSiteName",
+      "MetaImage",
+      "CustomHeadInclude"
+    ]
+  },
+  "excludeXmlElementsByType": {},
+  "predicates": [
+    {
+      "name": "Headless site framework",
+      "mode": "Deploy",
+      "providerType": "Content",
+      "areaId": 5,
+      "includeLanguageLayers": true,
+      "path": "/",
+      "excludes": [
+        "/Home",
+        "/About",
+        "/Catalog Landing"
+      ],
+      "excludeFields": [
+        "AreaDomain",
+        "AreaDomainLock",
+        "AreaNoindex",
+        "AreaNofollow",
+        "AreaRobotsTxt",
+        "AreaRobotsTxtIncludeSitemap"
+      ],
+      "excludeXmlElements": [],
+      "excludeAreaColumns": [
+        "AreaCdnHost",
+        "AreaFrontpage",
+        "AreaEcomShopId",
+        "AreaEcomCountryCode",
+        "AreaEcomLanguageId",
+        "AreaEcomCurrencyId",
+        "AreaStockLocationID",
+        "AreaCreatedDate",
+        "AreaUpdatedDate"
+      ],
+      "acknowledgedOrphanPageIds": []
+    },
+    {
+      "name": "Headless home + content pages",
+      "mode": "Seed",
+      "providerType": "Content",
+      "areaId": 5,
+      "includeLanguageLayers": true,
+      "path": "/Home",
+      "excludes": [],
+      "excludeFields": [],
+      "excludeXmlElements": [],
+      "excludeAreaColumns": [],
+      "acknowledgedOrphanPageIds": []
+    },
+    {
+      "name": "Headless about pages",
+      "mode": "Seed",
+      "providerType": "Content",
+      "areaId": 5,
+      "includeLanguageLayers": true,
+      "path": "/About",
+      "excludes": [],
+      "excludeFields": [],
+      "excludeXmlElements": [],
+      "excludeAreaColumns": [],
+      "acknowledgedOrphanPageIds": []
+    },
+    {
+      "name": "Headless catalog landing",
+      "mode": "Seed",
+      "providerType": "Content",
+      "areaId": 5,
+      "includeLanguageLayers": true,
+      "path": "/Catalog Landing",
+      "excludes": [],
+      "excludeFields": [],
+      "excludeXmlElements": [],
+      "excludeAreaColumns": [],
+      "acknowledgedOrphanPageIds": []
+    },
+
+    {
+      "name": "EcomCountries",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomCountries",
+      "serviceCaches": [
+        "Dynamicweb.Ecommerce.International.CountryRelationService",
+        "Dynamicweb.Ecommerce.International.CountryService"
+      ]
+    },
+    {
+      "name": "EcomCurrencies",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomCurrencies",
+      "serviceCaches": [
+        "Dynamicweb.Ecommerce.International.CurrencyService"
+      ]
+    },
+    {
+      "name": "EcomLanguages",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomLanguages",
+      "serviceCaches": [
+        "Dynamicweb.Ecommerce.International.LanguageService"
+      ]
+    },
+    {
+      "name": "EcomVatGroups",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomVatGroups",
+      "nameColumn": "VatGroupName",
+      "serviceCaches": [
+        "Dynamicweb.Ecommerce.International.VatGroupService"
+      ]
+    },
+    {
+      "name": "EcomShops",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomShops"
+    },
+    {
+      "name": "EcomShopLanguageRelation",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomShopLanguageRelation"
+    },
+    {
+      "name": "EcomShopGroupRelation",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomShopGroupRelation"
+    },
+    {
+      "name": "EcomPayments",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomPayments",
+      "nameColumn": "PaymentName",
+      "xmlColumns": [
+        "PaymentGatewayParameters",
+        "PaymentCheckoutParameters"
+      ],
+      "serviceCaches": [
+        "Dynamicweb.Ecommerce.Orders.PaymentService"
+      ]
+    },
+    {
+      "name": "EcomShippings",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomShippings",
+      "nameColumn": "ShippingName",
+      "xmlColumns": [
+        "ShippingServiceParameters"
+      ],
+      "serviceCaches": [
+        "Dynamicweb.Ecommerce.Orders.ShippingService"
+      ]
+    },
+    {
+      "name": "EcomOrderFlow",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomOrderFlow",
+      "nameColumn": "OrderFlowName"
+    },
+    {
+      "name": "EcomOrderStates",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "EcomOrderStates",
+      "nameColumn": "OrderStateName"
+    },
+    {
+      "name": "Customer center user groups",
+      "mode": "Deploy",
+      "providerType": "SqlTable",
+      "table": "AccessUser",
+      "where": "AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')",
+      "nameColumn": "AccessUserName"
+    },
+
+    {
+      "name": "EcomGroups",
+      "mode": "Seed",
+      "providerType": "SqlTable",
+      "table": "EcomGroups",
+      "nameColumn": "GroupName"
+    },
+    {
+      "name": "EcomProducts",
+      "mode": "Seed",
+      "providerType": "SqlTable",
+      "table": "EcomProducts",
+      "nameColumn": "ProductName"
+    },
+    {
+      "name": "EcomGroupProductRelation",
+      "mode": "Seed",
+      "providerType": "SqlTable",
+      "table": "EcomGroupProductRelation"
+    },
+    {
+      "name": "EcomVariantGroups",
+      "mode": "Seed",
+      "providerType": "SqlTable",
+      "table": "EcomVariantGroups",
+      "nameColumn": "VariantGroupName"
+    },
+    {
+      "name": "EcomVariantsOptions",
+      "mode": "Seed",
+      "providerType": "SqlTable",
+      "table": "EcomVariantsOptions",
+      "nameColumn": "VariantOptionName"
+    },
+    {
+      "name": "EcomVariantOptionsProductRelation",
+      "mode": "Seed",
+      "providerType": "SqlTable",
+      "table": "EcomVariantOptionsProductRelation"
+    },
+    {
+      "name": "EcomPrices",
+      "mode": "Seed",
+      "providerType": "SqlTable",
+      "table": "EcomPrices"
+    }
+  ]
+}

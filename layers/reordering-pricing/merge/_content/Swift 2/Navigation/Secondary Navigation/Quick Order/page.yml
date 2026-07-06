@@ -1,0 +1,38 @@
+﻿"pageUniqueId": 9e6845f8-6f89-499b-b77b-2b87dde92f17
+"sourcePageId": 0
+"name": "Quick Order"
+"menuText": "Quick Order"
+"sortOrder": 7
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"navigationTag": "QuickOrderPadPage"
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-07-02T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "100001"
+  "ItemInstanceType": ""
+  "Sort": 7
+  "Title": "Quick Order"

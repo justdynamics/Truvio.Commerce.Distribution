@@ -1,0 +1,44 @@
+{
+  "systemName": "Headless_Master",
+  "name": "Headless Site Master",
+  "category": "site",
+  "presentationFree": true,
+  "note": "Site-level headless master. Menu references are page GUID/ID refs resolved by the frontend via the Delivery API; carries no template/layout/colorscheme fields.",
+  "fields": [
+    {
+      "systemName": "SiteName",
+      "name": "Site name",
+      "type": "Text"
+    },
+    {
+      "systemName": "DefaultLocale",
+      "name": "Default locale",
+      "type": "Text"
+    },
+    {
+      "systemName": "HeaderMenuRef",
+      "name": "Header menu (page ref)",
+      "type": "Link"
+    },
+    {
+      "systemName": "FooterMenuRef",
+      "name": "Footer menu (page ref)",
+      "type": "Link"
+    },
+    {
+      "systemName": "CatalogMenuRef",
+      "name": "Catalog menu (page ref)",
+      "type": "Link"
+    },
+    {
+      "systemName": "PrivacyPolicyRef",
+      "name": "Privacy policy (page ref)",
+      "type": "Link"
+    },
+    {
+      "systemName": "ContactEmail",
+      "name": "Contact email",
+      "type": "Text"
+    }
+  ]
+}

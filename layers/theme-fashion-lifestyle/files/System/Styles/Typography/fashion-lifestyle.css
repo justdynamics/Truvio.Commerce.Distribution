@@ -1,0 +1,32 @@
+/* fashion-lifestyle */
+/* Imports */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;1,700&family=Lato:ital,wght@0,300;0,400;0,600;1,300&display=swap');
+/* Basic types */
+body, .preview {
+/* Base */
+--dw-base-font-size: 16px;
+--dw-type-scale: 1.25;
+/* Paragraphs */
+--dw-font-family: Lato;
+--dw-font-style: normal;
+--dw-font-weight: 300;
+--dw-letter-spacing: 0.01em;
+--dw-line-height: 1.7;
+--dw-text-transform: none;
+}
+/* Headings */
+h1, h2, h3, h4, h5, h6, .dw-h1, .dw-h2, .dw-h3, .dw-h4, .dw-h5, .dw-h6 {
+--dw-font-family: Playfair Display;
+--dw-font-weight: 700;
+--dw-letter-spacing: 0.02em;
+--dw-line-height: 1.15;
+--dw-text-transform: none;
+}
+/* Buttons */
+[data-dw-button] {
+--dw-font-family: Lato;
+--dw-font-weight: 600;
+--dw-letter-spacing: 0.08em;
+--dw-line-height: 1.25;
+--dw-text-transform: uppercase;
+}

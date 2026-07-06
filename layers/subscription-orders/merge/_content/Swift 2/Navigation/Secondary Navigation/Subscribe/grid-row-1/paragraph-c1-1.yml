@@ -1,0 +1,35 @@
+﻿"paragraphUniqueId": beaf4ace-9a15-4fbd-9042-c4d00c7985d0
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_CheckoutApp"
+"header": "Subscribe"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "eCom_CartV2"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <ShopSelector>SHOP1</ShopSelector>
+    <DoValidateCustomerAccepted>0</DoValidateCustomerAccepted>
+    <SetUserDetailsRadio>SetUserDetailsRadioTrue</SetUserDetailsRadio>
+    <SelectAllPayments>1</SelectAllPayments>
+    <SelectAllDeliveries>1</SelectAllDeliveries>
+    <EmptyCartRadio>EmptyCartRadioRedirect</EmptyCartRadio>
+    <OnReEnterRadio>OnReEnterRadioFirstStep</OnReEnterRadio>
+    <RemoveNoneExistingProductsRadio>RemoveNoneExistingProductsRadioTrue</RemoveNoneExistingProductsRadio>
+    <Step1Name>Subscribe</Step1Name>
+    <Step1Template>eCom7/CartV2/Step/PackSubscribeCheckout.cshtml</Step1Template>
+    <Step1IsCheckout>false</Step1IsCheckout>
+    <Step2Name>Checkout</Step2Name>
+    <Step2Template></Step2Template>
+    <Step2IsCheckout>true</Step2IsCheckout>
+    <Step3Name>Receipt</Step3Name>
+    <Step3Template>eCom7/CartV2/Step/Receipt.cshtml</Step3Template>
+    <Step3IsCheckout>false</Step3IsCheckout>
+  </Settings>
+"fields":
+  "Id": "100001"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Subscribe"
+"columnId": 1

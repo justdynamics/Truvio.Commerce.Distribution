@@ -1,0 +1,24 @@
+{
+  "name": "swift-demo",
+  "from": "base@2.3.0",
+  "add": [
+    "fixture-catalog@1.0.0",
+    "reordering-pricing@1.1.0",
+    "subscription-orders@1.1.0",
+    "bom-configurator@1.1.0"
+  ],
+  "sampleData": true,
+  "themes": [
+    "tech-saas",
+    "fashion-lifestyle",
+    "industrial-b2b"
+  ],
+  "criticalPaths": [
+    "/swift-2/home",
+    "/swift-2/shop",
+    "/swift-2/cart/",
+    "/swift-2/customer-center",
+    "/swift-2/sign-in/sign-in"
+  ],
+  "description": "Full Swift storefront demo: base scaffold + fixture catalog + the three feature layers + demo identities, proven across all three demo themes. Equivalent to the historical full gate run."
+}

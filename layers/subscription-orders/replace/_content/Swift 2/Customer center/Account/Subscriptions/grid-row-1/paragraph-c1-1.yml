@@ -1,0 +1,28 @@
+﻿"paragraphUniqueId": 7cbb1403-9467-465b-9876-d1d8411e2f01
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_App"
+"header": "Subscriptions"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "eCom_CustomerExperienceCenter"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <OrderType>Recurringorder</OrderType>
+    <RetrieveListBasedOn>UseCustomerNumber</RetrieveListBasedOn>
+    <PageSize>10</PageSize>
+    <SortByField>CreatedAt</SortByField>
+    <SortOrder>Desc</SortOrder>
+    <OrderListTemplate>PackSubscriptions_List.cshtml</OrderListTemplate>
+    <DetailTemplate>Orders_Details.cshtml</DetailTemplate>
+    <EmailTemplate></EmailTemplate>
+    <LedgerType></LedgerType>
+    <LedgerFlowStates></LedgerFlowStates>
+  </Settings>
+"fields":
+  "Id": "100001"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Subscriptions"
+"columnId": 1

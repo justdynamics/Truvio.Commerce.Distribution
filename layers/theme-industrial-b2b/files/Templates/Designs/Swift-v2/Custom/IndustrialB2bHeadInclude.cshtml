@@ -1,0 +1,16 @@
+@inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.PageViewModel>
+@using Dynamicweb.Frontend
+@{
+    AddStylesheet("/Files/Templates/Designs/Swift-v2/Custom/industrial-b2b_custom.css", "all");
+}
+<style>
+    /* Render-critical brand tokens — inline to avoid cache-buster staleness (Pitfall 7) */
+    :root {
+        --ib-orange:      #E85D04;
+        --ib-orange-dark: #C94E00;
+        --ib-navy:        #1A1F2E;
+        --ib-steel:       #2D3748;
+        --ib-steel-light: #C8CDD8;
+        --ib-white:       #F8F9FA;
+    }
+</style>

@@ -1,0 +1,16 @@
+{
+  "Id": "fashion-lifestyle",
+  "Name": "Fashion / Lifestyle",
+  "BaseFontSize": 16,
+  "BaseFontScale": 1.25,
+  "ParagraphFont": "Lato",
+  "ParagraphFontWeight": 300,
+  "ParagraphLineHeight": 1.7,
+  "HeadingFont": "Playfair Display",
+  "HeadingFontWeight": 700,
+  "HeadingLetterSpacing": 0.02,
+  "HeadingLineHeight": 1.15,
+  "ButtonFont": "Lato",
+  "ButtonFontWeight": 600,
+  "ButtonLineHeight": 1.25
+}

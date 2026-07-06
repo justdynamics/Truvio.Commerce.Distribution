@@ -1,0 +1,26 @@
+{
+  "systemName": "Headless_SpecSheet",
+  "name": "Headless Spec Sheet",
+  "category": "commerce-content",
+  "presentationFree": true,
+  "note": "Genuinely presentation-free semantic type (D6-permitted fresh definition). Not a Swift port.",
+  "fields": [
+    {
+      "systemName": "Title",
+      "name": "Title",
+      "type": "Text"
+    },
+    {
+      "systemName": "ProductRef",
+      "name": "Product ref",
+      "type": "Text",
+      "note": "EcomProducts.ProductId this spec sheet annotates."
+    },
+    {
+      "systemName": "SpecRowsJson",
+      "name": "Spec rows (JSON)",
+      "type": "LongText",
+      "note": "Array of {label,value,unit} — presentation-free key/value spec data."
+    }
+  ]
+}
