@@ -246,10 +246,6 @@
   - Empty cart
   - Sign in
   - Forgot password
-- path: Swift-v2_VerticalNavigation
-  kind: item-type
-  referencedBy:
-  - My account information
 - path: Swift-v2_CustomerCenter.cshtml
   kind: page-layout
   referencedBy:
