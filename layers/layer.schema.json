@@ -298,6 +298,38 @@
     "costHints": {
       "type": "object",
       "description": "OPTIONAL free-form advisory metadata (e.g. activation cost, host-rebuild required, expected row counts). Never gates activation; consumed only for planning/reporting."
+    },
+    "customCode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compileOptional", "withoutCompile", "withCompile"],
+      "properties": {
+        "compileOptional": {
+          "type": "boolean",
+          "description": "TRUE when the layer's src/ providers are OPTIONAL to compile: the layer installs and delivers a documented headline of behavior as pure data (no custom code), and compiling the sources only ADDS behavior. FALSE would mean the layer is inert without its code. The base layer stays zero-custom-code (constraint unchanged); a FEATURE layer MAY ship declared, compile-optional providers via this block (decision D3)."
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9 ._/-]+$"
+          },
+          "description": "The src/ .cs file paths this declaration covers (a subset of csLedger[].file). Charset-constrained; no quote characters."
+        },
+        "withoutCompile": {
+          "type": "string",
+          "description": "The behavior the layer GUARANTEES with the sources NOT compiled (pure data on the native platform) — the zero-code headline. e.g. contract pricing enforced by the stock DefaultPriceProvider."
+        },
+        "withCompile": {
+          "type": "string",
+          "description": "The additional behavior UNLOCKED when the sources are compiled into the Swift solution and registered (e.g. assembly-scan). Must be additive: compiling never removes or breaks the withoutCompile guarantee."
+        },
+        "compileStep": {
+          "type": "string",
+          "description": "OPTIONAL human/skill-readable pointer to the opt-in compile recipe (the dynamicweb-skills feature-layer compile step)."
+        }
+      },
+      "description": "OPTIONAL declaration that a feature layer ships compile-optional custom code (decision D3). Documents what works as data-only (withoutCompile) vs after the opt-in compile (withCompile). Only feature layers carrying src/ populate it; layers with no custom code omit it. Advisory: never gates activation — the gate still compiles + proves the full behavior; this block tells downstream distribution consumers what is optional."
     }
   }
 }
