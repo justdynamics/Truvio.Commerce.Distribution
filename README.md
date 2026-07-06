@@ -1,89 +1,56 @@
-# Truvio.Commerce.Serializer.Baselines
+# Truvio Commerce Distribution
 
-**Versioned, deploy-ready Serialized baselines for Truvio Commerce (Dynamicweb 10) — Swift, Digital Asset Portal, and more.**
+Everything needed to make **Dynamicweb 10** run as **Truvio Commerce** — as one git
+clone. Structured as versioned **layers** composed into gate-proven **editions**, proven
+on the current latest Swift release (**Swift 2.3**; rolling latest-only).
 
-This repository is the home of the *content* baselines that pair with the
-[Truvio.Commerce.Serializer](https://github.com/justdynamics/Truvio.Commerce.Serializer)
-engine. The engine serializes and deserializes Truvio Commerce database state
-to and from YAML. This repository holds the YAML — curated, version-controlled
-snapshots of complete solutions that you can deploy into a clean install to
-reconstruct a known-good starting point.
+> Renamed from `Truvio.Commerce.Serializer.Baselines`. "Baseline" / "pack" / "DemoThemes"
+> are the previous vocabulary — see [GLOSSARY.md](GLOSSARY.md). Truvio Commerce is the
+> platform formerly known as Dynamicweb; host binaries still carry the `Dynamicweb` name.
+> We use **DW** as shorthand throughout.
 
-> Truvio Commerce is the platform formerly known as Dynamicweb. Host binaries
-> and APIs still carry the `Dynamicweb` name (e.g. `Dynamicweb.Host.Suite`); we
-> use **DW** as shorthand for the platform throughout.
-
-## Catalog
-
-See [CATALOG.md](CATALOG.md) for the full list with status and tested platform
-versions. At a glance:
-
-| Package | Version | Solution | Status |
-| --- | --- | --- | --- |
-| `swift` | 2.3 | Swift storefront (B2C/B2B commerce) — scaffolding-only | Stable (round-trip verified) |
-| `digital-asset-portal` | 1.0 | Digital Asset Portal | Beta (add-on to Swift) |
-
-The Swift baseline is **scaffolding-only**: framework plus starter content and pages,
-**zero sample catalog**. The demo catalog is authored per-demo (dw-demo-pim recipes).
-
-## What is a package?
-
-A package is one solution at one version, living under `packages/<product>/<version>/`:
+## What's here
 
 ```
-packages/swift/2.3/
-  config/swift-2.3.json     # predicate config: what gets serialized and how
-  deploy/                   # Deploy-mode YAML — source-wins structural baseline
-  seed/                     # Seed-mode YAML — bootstrap content, customer-editable
-  BASELINE.md               # what's in/out and why; per-environment carve-outs
-  INSTALL.txt               # the Management-API deserialize flow
-  CHANGELOG.md
+layers/            one versioned unit each (base, catalog, features, surfaces, themes, sample-data)
+  layer.schema.json         the layer contract
+  base/base.contract.json   guarantees the base makes to additions
+editions/          named compositions of layers (base-only, swift-demo, headless-demo, dap-portal)
+  edition.schema.json       the edition contract
+tools/ci/          the self-contained PR validator
 ```
 
-The split into **deploy** and **seed** mirrors the engine's two deployment
-modes:
+- **[LAYERS.md](LAYERS.md)** — the full catalog (every layer + edition, proven vs Beta).
+- **[GLOSSARY.md](GLOSSARY.md)** — authoritative vocabulary.
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** — the merge gate.
 
-- **Deploy** — developer-owned structure (site framework, item types, payment
-  and shipping definitions, VAT, currencies, countries, order states, URL
-  routing). On every deserialize, YAML wins and overwrites the target.
-- **Seed** — bootstrap content the customer is meant to edit (starter pages,
-  newsletter templates). Deserialize fills only fields the target left empty, so
-  customer edits survive re-runs. The Swift baseline's Seed tree is content-only —
-  no sample catalog.
+## Model
 
-Environment-specific data (domains, secrets, payment-gateway keys, analytics
-IDs) is deliberately **not** in any package — see each package's `BASELINE.md`
-and [docs/package-format.md](docs/package-format.md).
+A **layer** is one versioned unit: a `layer.json` manifest + serialized content (mode
+trees `replace/` source-wins, `merge/` field-level) and/or a `files/` disk overlay. Its
+`kind` (`base` / `catalog` / `feature` / `surface` / `sample-data` / `theme`) says how it
+composes.
 
-## Consuming a baseline
+An **edition** is a composition — `from` a privileged base + an ordered `add` of layers,
+plus optional `surfaces`, `sampleData`, and `themes`. Additions bind ONLY to the
+[base contract](layers/base/base.contract.json), never to each other. Three editions
+(`base-only`, `swift-demo`, `headless-demo`) are gate-proven from their specs alone;
+`dap-portal` ships **Beta** (gate-prove pending — see its BASELINE.md).
 
-**Clone the repo** (or sparse-checkout `packages/swift/2.3`) at the commit you
-want to reproduce — there are no release zips. Copy the package's `config/`,
-`deploy/` and `seed/` into the target host's Serializer folder, then call the
-Management-API deserialize endpoints under strict mode: the Deploy pass, then the
-Seed pass (`?mode=Seed`). See the package's [`INSTALL.txt`](packages/swift/2.3/INSTALL.txt)
-and [docs/consuming-cicd.md](docs/consuming-cicd.md).
+## Consuming
 
-Pin reproducibility by **commit SHA** — record it in the consuming demo's
-CUSTOMISATIONS.md. Diffs are reviewable in PRs and the same baseline promotes
-cleanly across dev/test/QA/prod.
+Git-clone distribution — no release archives. Clone, pick an edition, activate its layers
+against a DW10 host. The upstream **Foundry** harness
+(`Truvio.Commerce.Serializer.BaselineUpdater`) does this end-to-end and is where layers are
+produced and proven. Each proven artifact is pinned by an annotated tag
+`layers/<name>/<semver>` / `editions/<name>/<semver>` carrying the gate run id + Swift
+version it was proven against. Pin reproducibility by tag or commit SHA.
 
-## Authoring or updating a baseline (maintainers)
+## Policy
 
-Baselines are curated. Every package is captured from a cleaned source host and
-must pass the clean-room round-trip gate before it merges. The full loop —
-standing up a local host, getting the database into a clean Serialized context,
-capturing, and verifying — is in:
-
-- [docs/host-setup.md](docs/host-setup.md) — local DW host + clean database
-- [docs/authoring-a-baseline.md](docs/authoring-a-baseline.md) — capture → verify → PR
-- [CONTRIBUTING.md](CONTRIBUTING.md) — the merge gate and conventions
-
-## Compatibility
-
-Each baseline is captured and verified against a specific DW platform version.
-Schema drift between platform versions is the main cross-version failure mode —
-check [COMPATIBILITY.md](COMPATIBILITY.md) before deploying.
+**Rolling latest-only Swift support.** This distribution targets the current latest Swift
+release and validates on that one version. When the next Swift ships, maintenance rolls
+forward and the prior version is dropped — no back-support, no multi-version matrix.
 
 ## License
 
