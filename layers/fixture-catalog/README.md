@@ -1,7 +1,7 @@
 # fixture-catalog (kind: catalog)
 
 The gate's small deterministic shop catalog — the base ships **zero catalog** (scaffolding-only),
-so this `catalog` layer supplies the products/groups/variants/prices the smoke, verify, and pack
+so this `catalog` layer supplies the products/groups/variants/prices the smoke, verify, and layer
 asserts exercise. Reserved key prefixes `FIXT*` / `FIXTGRP*` / `FIXT-PRICE-*` (base contract).
 
 **Activation is SQL-seed, not serializer YAML.** The content is the hardcoded builder
