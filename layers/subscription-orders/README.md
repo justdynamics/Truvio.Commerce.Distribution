@@ -120,6 +120,6 @@ permission-tier analog of the storefront-index gap (LRN-HARNESS-01).
 Account-nested URL resolves + auth-gates (`criticalPath` 302→sign-in). **Verify on a real
 Swift 2.3 host:** sign in as the buyer, open `/swift-2/account/subscriptions` under the
 Account nav, and confirm the placed subscription renders with its `End subscription` action.
-This was previously a `/swift-2/subscriptions` (public, Secondary-Nav) gate probe; moving the
-page into the Account nav tree (its correct home, beside Orders) trades that in-gate render
-proof for this real-host UAT — the same trade the BOM configurator render makes.
+Because the page lives in the Account nav tree (its correct home, beside Orders) rather than
+as a public Secondary-Nav page, its in-gate proof is the auth-gate above rather than a public
+render, and full render is a real-host UAT — as with the BOM configurator render.
