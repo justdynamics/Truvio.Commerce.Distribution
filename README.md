@@ -4,10 +4,9 @@ Everything needed to make **Dynamicweb 10** run as **Truvio Commerce** — as on
 clone. Structured as versioned **layers** composed into gate-proven **editions**, proven
 on the current latest Swift release (**Swift 2.3**; rolling latest-only).
 
-> Themes and features ship as `theme` and `feature` layers under `layers/` — there is no
-> separate themes or feature-packs repo to clone. Truvio Commerce is the platform formerly
-> known as Dynamicweb; host binaries still carry the `Dynamicweb` name. We use **DW** as
-> shorthand throughout.
+> Themes and features ship as `theme` and `feature` layers under `layers/`. Truvio Commerce
+> is the platform formerly known as Dynamicweb; host binaries still carry the `Dynamicweb`
+> name. We use **DW** as shorthand throughout.
 
 ## What's here
 
