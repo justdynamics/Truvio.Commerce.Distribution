@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 7c2f49b7-d7ab-5e60-a988-486aa139f458
+"sourceParagraphId": 711
+"sortOrder": 23
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"86\",\r\n  \"Label\": \"Bekijken\",\r\n  \"Link\": \"Default.aspx?ID=86\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "3ba0ddbe-e01a-4d77-bf69-0ee3ceedd3b9"
+  "Icon": "/Files/Images/Icons/cart-shopping.svg"
+  "Id": "717"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Bekijk klantwinkelwagens.</p>"
+  "Title": "<h3 class=\"dw-h6\">Winkelwagens</h3>"
+"columnId": 1

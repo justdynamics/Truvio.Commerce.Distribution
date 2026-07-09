@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": ef4a7488-1d22-5425-8511-de31619280e1
+"sourceParagraphId": 612
+"sortOrder": 24
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"13\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=13\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "dfcef294-cc5e-4252-9047-8e5a703c5916"
+  "Icon": "/Files/Images/Icons/users.svg"
+  "Id": "618"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Manage account users.</p>"
+  "Title": "<h3 class=\"dw-h6\">Users</h3>"
+"columnId": 2

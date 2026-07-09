@@ -1,6 +1,6 @@
 {
   "name": "base-only",
-  "from": "base@2.3.1",
+  "from": "base@2.3.2",
   "add": [],
   "sampleData": false,
   "themes": [

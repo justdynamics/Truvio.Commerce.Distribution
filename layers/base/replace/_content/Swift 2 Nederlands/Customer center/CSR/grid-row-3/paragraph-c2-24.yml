@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 7cd0cfac-3659-5d0a-b605-05c4dc276210
+"sourceParagraphId": 712
+"sortOrder": 24
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"88\",\r\n  \"Label\": \"Bekijken\",\r\n  \"Link\": \"Default.aspx?ID=88\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "3ba0ddbe-e01a-4d77-bf69-0ee3ceedd3b9"
+  "Icon": "/Files/Images/Icons/users.svg"
+  "Id": "718"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Beheer accountgebruikers.</p>"
+  "Title": "<h3 class=\"dw-h6\">Gebruikers</h3>"
+"columnId": 2

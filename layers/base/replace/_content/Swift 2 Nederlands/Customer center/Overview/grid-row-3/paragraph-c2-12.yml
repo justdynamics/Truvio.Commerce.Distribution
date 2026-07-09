@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 224c6c04-5137-546c-8ad7-1bfa422400b0
+"sourceParagraphId": 702
+"sortOrder": 12
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"97\",\r\n  \"Label\": \"Bekijken\",\r\n  \"Link\": \"Default.aspx?ID=97\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "2ddf8daf-2ae0-4eb3-9d4b-268e195342d6"
+  "Icon": "/Files/Images/Icons/file-invoice.svg"
+  "Id": "703"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Bekijk en beheer uw offertes.</p>"
+  "Title": "<h3 class=\"dw-h6\">Mijn offertes</h3>"
+"columnId": 2

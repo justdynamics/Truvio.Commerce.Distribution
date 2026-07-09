@@ -1,14 +1,23 @@
-﻿"id": dd628ba6-c8ea-439a-9bcb-43b4001e87e6
+﻿"id": 738ac909-b583-50e4-92bc-325d3038c8e5
 "sortOrder": 3
-"definitionId": "1Column"
+"definitionId": "3Columns"
 "itemType": "Swift-v2_Row"
 "container": "Grid"
-"topSpacing": 3
+"containerWidth": 3
+"topSpacing": 0
+"bottomSpacing": 4
+"gapX": 3
+"gapY": 3
+"mobileLayout": "12,12,12"
 "verticalAlignment": "None"
 "fields":
-  "Id": "23"
+  "Id": "601"
   "Sort": 0
   "ItemInstanceType": ""
 "columns":
 - "id": 1
+  "width": 0
+- "id": 2
+  "width": 0
+- "id": 3
   "width": 0

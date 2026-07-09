@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": ceb8037c-d3ba-536e-92e6-4e5384b6c233
+"sourceParagraphId": 610
+"sortOrder": 22
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"12\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=12\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "dfcef294-cc5e-4252-9047-8e5a703c5916"
+  "Icon": "/Files/Images/Icons/clipboard-list.svg"
+  "Id": "615"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Review customer orders.</p>"
+  "Title": "<h3 class=\"dw-h6\">Orders</h3>"
+"columnId": 2

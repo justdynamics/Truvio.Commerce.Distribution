@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 02352a64-7356-5579-a217-658d51528a18
+"sourceParagraphId": 606
+"sortOrder": 16
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"20\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=20\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "621cb250-a28d-45ac-bef2-893e0536078b"
+  "Icon": "/Files/Images/Icons/user.svg"
+  "Id": "608"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Keep your profile up to date.</p>"
+  "Title": "<h3 class=\"dw-h6\">My profile</h3>"
+"columnId": 3

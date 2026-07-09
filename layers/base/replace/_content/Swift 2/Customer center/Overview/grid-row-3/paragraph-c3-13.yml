@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": b9bd165d-93db-5c6b-8d4a-17b911aa34c7
+"sourceParagraphId": 603
+"sortOrder": 13
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"17\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=17\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "621cb250-a28d-45ac-bef2-893e0536078b"
+  "Icon": "/Files/Images/Icons/cart-shopping.svg"
+  "Id": "604"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Resume your saved carts.</p>"
+  "Title": "<h3 class=\"dw-h6\">My carts</h3>"
+"columnId": 3

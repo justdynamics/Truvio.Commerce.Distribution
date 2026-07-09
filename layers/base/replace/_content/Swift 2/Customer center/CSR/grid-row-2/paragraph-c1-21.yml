@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 7ffa0466-0592-5e54-b2ca-a90686625def
+"sourceParagraphId": 609
+"sortOrder": 21
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"10\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=10\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "dfcef294-cc5e-4252-9047-8e5a703c5916"
+  "Icon": "/Files/Images/Icons/user-group.svg"
+  "Id": "614"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Browse customer accounts.</p>"
+  "Title": "<h3 class=\"dw-h6\">Accounts</h3>"
+"columnId": 1
