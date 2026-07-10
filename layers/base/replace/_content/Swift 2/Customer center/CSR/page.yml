@@ -10,7 +10,7 @@
 "isTemplate": false
 "isStructuralStub": false
 "hidden": false
-"allowclick": true
+"allowclick": false
 "allowsearch": true
 "showInSitemap": true
 "showInLegend": true

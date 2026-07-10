@@ -1,4 +1,42 @@
-# Changelog — base/2.3
+# Changelog — base
+
+## 2.4.0
+
+Per-role Customer Center, fully derived from the layer YAML. What a consumer sees change
+from 2.3.2:
+
+- **Per-role tile dashboard on ONE shared Overview.** The buyer tiles (My orders, Quotes,
+  Carts, Favorites, Addresses, Profile, Returns) and the CSR tiles (Accounts, Orders,
+  Carts, Users) now live on the same `Overview` page. Each tile — and its grid row —
+  carries a serialized `permissions:` block, so a signed-in **buyer** sees only the buyer
+  tiles and a signed-in **CSR** sees only the CSR tiles, on the same URL, with zero custom
+  code. English + Dutch. (Buyer tiles: Customers=all / CSR=none; CSR tiles: CSR=all /
+  Customers=none; Anonymous=none everywhere.)
+- **CSR split-landing retired.** The separate `CSR` tile dashboard (duplicated grid +
+  HelloUser) is removed; the CSR function pages (Accounts / Orders / Carts / Users) stay,
+  and a CSR now lands on the shared Overview. Nav stays permission-filtered.
+- **Dutch Customer Center is now gated for anonymous.** The NL `/customer-center/*` subtree
+  carries the same page-level `permissions:` blocks as the English side (Anonymous → sign-in),
+  closing the 2.3.2 "both languages" gap. (NL rows/paragraphs are independent content —
+  they do not inherit the EN master's permissions — so NL carries its own serialized blocks.)
+- **Historical title smears corrected.** Three bike-era `fields.Title` values from an old
+  engine link-resolution defect are fixed: NL "My profile", EN "Search result page", EN
+  "Favorites list service". (EN "Home preset" = "Contact" and NL "Home preset" = "Home" are
+  legitimate stock Swift preset labels — verified against the pristine control DB — and are
+  left untouched.)
+- **Engine floor.** This base carries render-time permissions on grid rows and paragraphs,
+  which require **Truvio.Commerce.Serializer >= 0.8.0-beta**. Older engines silently drop
+  those blocks → ungated tiles. The floor is machine-readable in
+  `base.contract.json` (`minSerializerVersion`). **Upgrade the serializer before consuming
+  this base.**
+
+Editions that build on the base (`swift-demo`, `headless-demo`, `base-only`, `dap-portal`)
+re-pin to `base@2.4.0`.
+
+Gate: base-only + swift-demo green on the current latest Swift (2.3), theme leg on, with two
+new gate legs — permissions-parity (every serialized page/row/paragraph block ⇔ matching
+`UnifiedPermission` rows) and title-integrity (item Title == YAML). Real buyer + CSR role UAT
+confirms the per-role tiles behaviorally.
 
 ## 2.3.2
 

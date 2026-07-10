@@ -17,3 +17,19 @@
   "Text": "<p class=\"dw-paragraph\">Manage your delivery addresses.</p>"
   "Title": "<h3 class=\"dw-h6\">My addresses</h3>"
 "columnId": 2
+
+"permissions":
+- "owner": "Customers"
+  "ownerType": "group"
+  "ownerId": "1325"
+  "level": "all"
+  "levelValue": 1364
+- "owner": "CSR"
+  "ownerType": "group"
+  "ownerId": "1292"
+  "level": "none"
+  "levelValue": 1
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1

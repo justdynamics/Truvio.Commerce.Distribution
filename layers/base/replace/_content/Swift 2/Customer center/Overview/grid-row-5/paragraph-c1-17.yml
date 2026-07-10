@@ -17,3 +17,19 @@
   "Text": "<p class=\"dw-paragraph\">View and manage your product returns.</p>"
   "Title": "<h3 class=\"dw-h6\">My returns</h3>"
 "columnId": 1
+
+"permissions":
+- "owner": "Customers"
+  "ownerType": "group"
+  "ownerId": "1325"
+  "level": "all"
+  "levelValue": 1364
+- "owner": "CSR"
+  "ownerType": "group"
+  "ownerId": "1292"
+  "level": "none"
+  "levelValue": 1
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1

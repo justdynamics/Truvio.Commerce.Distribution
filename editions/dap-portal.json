@@ -1,6 +1,6 @@
 {
   "name": "dap-portal",
-  "from": "base@2.3.2",
+  "from": "base@2.4.0",
   "add": [
     "fixture-catalog@1.0.0"
   ],

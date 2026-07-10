@@ -1,5 +1,5 @@
 ﻿"id": 0a2561ca-5d14-511b-95f0-084a90f86e67
-"sortOrder": 2
+"sortOrder": 6
 "definitionId": "2Columns"
 "itemType": "Swift-v2_Row"
 "container": "Grid"
@@ -19,3 +19,19 @@
   "width": 0
 - "id": 2
   "width": 0
+
+"permissions":
+- "owner": "CSR"
+  "ownerType": "group"
+  "ownerId": "1292"
+  "level": "all"
+  "levelValue": 1364
+- "owner": "Customers"
+  "ownerType": "group"
+  "ownerId": "1325"
+  "level": "none"
+  "levelValue": 1
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1

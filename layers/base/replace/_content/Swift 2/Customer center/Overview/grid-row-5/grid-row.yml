@@ -17,3 +17,19 @@
 "columns":
 - "id": 1
   "width": 0
+
+"permissions":
+- "owner": "Customers"
+  "ownerType": "group"
+  "ownerId": "1325"
+  "level": "all"
+  "levelValue": 1364
+- "owner": "CSR"
+  "ownerType": "group"
+  "ownerId": "1292"
+  "level": "none"
+  "levelValue": 1
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1
