@@ -1,6 +1,6 @@
 {
   "name": "headless-demo",
-  "from": "base@2.4.0",
+  "from": "base@2.4.1",
   "add": [
     "fixture-catalog@1.0.0"
   ],
