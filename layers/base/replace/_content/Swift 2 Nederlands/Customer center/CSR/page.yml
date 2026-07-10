@@ -10,7 +10,7 @@
 "isTemplate": false
 "isStructuralStub": false
 "hidden": false
-"allowclick": true
+"allowclick": false
 "allowsearch": true
 "showInSitemap": true
 "showInLegend": true
@@ -42,3 +42,24 @@
   "Sort": 0
   "ItemInstanceType": ""
   "SubmenuType": "auto"
+
+"permissions":
+- "owner": "Account Admin"
+  "ownerType": "group"
+  "ownerId": "1270"
+  "level": "none"
+  "levelValue": 1
+- "owner": "CSR"
+  "ownerType": "group"
+  "ownerId": "1292"
+  "level": "all"
+  "levelValue": 1364
+- "owner": "Customers"
+  "ownerType": "group"
+  "ownerId": "1325"
+  "level": "none"
+  "levelValue": 1
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1

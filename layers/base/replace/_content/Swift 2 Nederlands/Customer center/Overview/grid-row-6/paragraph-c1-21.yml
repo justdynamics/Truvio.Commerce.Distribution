@@ -9,7 +9,7 @@
 "moduleSettings": ""
 "fields":
   "Button": "{\r\n  \"SelectedValue\": \"85\",\r\n  \"Label\": \"Bekijken\",\r\n  \"Link\": \"Default.aspx?ID=85\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
-  "GlobalRecordPageGuid": "3ba0ddbe-e01a-4d77-bf69-0ee3ceedd3b9"
+  "GlobalRecordPageGuid": "2ddf8daf-2ae0-4eb3-9d4b-268e195342d6"
   "Icon": "/Files/Images/Icons/user-group.svg"
   "Id": "714"
   "ItemInstanceType": ""
@@ -17,3 +17,19 @@
   "Text": "<p class=\"dw-paragraph\">Blader door klantaccounts.</p>"
   "Title": "<h3 class=\"dw-h6\">Accounts</h3>"
 "columnId": 1
+
+"permissions":
+- "owner": "CSR"
+  "ownerType": "group"
+  "ownerId": "1292"
+  "level": "all"
+  "levelValue": 1364
+- "owner": "Customers"
+  "ownerType": "group"
+  "ownerId": "1325"
+  "level": "none"
+  "levelValue": 1
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1

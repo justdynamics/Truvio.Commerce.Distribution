@@ -2,6 +2,8 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "baseContractVersion": "1.0.0",
   "swiftVersion": "2.3.0",
+  "minSerializerVersion": "0.8.0-beta",
+  "minSerializerVersionNote": "ENGINE FLOOR (base >= 2.4.0). The base carries render-time permissions IN THE LAYER YAML on pages, grid rows, AND paragraphs (the per-role Customer Center dashboard). Serializer engines <= 0.7.1-beta SILENTLY DROP the grid-row/paragraph permission blocks on deserialize (IgnoreUnmatchedProperties) -> the per-role tiles render UNGATED, a security regression for the consumer. Consume this base ONLY with Truvio.Commerce.Serializer >= 0.8.0-beta, which also carries the deferred permission re-apply pass (+ user-group cache refresh) that lands group grants instead of collapsing to the Anonymous=None safety fallback when groups deserialize after content. Verify post-deserialize with the permissions-parity gate leg (every serialized block <-> matching UnifiedPermission rows).",
   "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution). Additions (catalog/feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Consolidates the ID-range/collision rules, the seeded anchors from Invoke-SeedGating.ps1 / Invoke-SeedVerify.ps1, and the anchor areas/repositories from config/gate-config.json + swift-2.3.json. The gate reads this file for the base-contract collision check. Operator-confirmed 2026-07-05 (DISTRIBUTION-DECISIONS.md).",
 
   "idRules": {

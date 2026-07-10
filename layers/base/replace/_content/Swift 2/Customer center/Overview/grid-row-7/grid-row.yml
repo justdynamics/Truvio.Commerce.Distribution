@@ -1,5 +1,5 @@
 ﻿"id": ca1c105e-5729-587a-96db-251cf252193e
-"sortOrder": 3
+"sortOrder": 7
 "definitionId": "2Columns"
 "itemType": "Swift-v2_Row"
 "container": "Grid"
@@ -19,3 +19,19 @@
   "width": 0
 - "id": 2
   "width": 0
+
+"permissions":
+- "owner": "CSR"
+  "ownerType": "group"
+  "ownerId": "1292"
+  "level": "all"
+  "levelValue": 1364
+- "owner": "Customers"
+  "ownerType": "group"
+  "ownerId": "1325"
+  "level": "none"
+  "levelValue": 1
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1

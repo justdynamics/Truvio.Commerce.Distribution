@@ -38,3 +38,13 @@
   "Sort": 0
   "ItemInstanceType": ""
   "SubmenuType": "auto"
+
+"permissions":
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1
+- "owner": "AuthenticatedFrontend"
+  "ownerType": "role"
+  "level": "read"
+  "levelValue": 4

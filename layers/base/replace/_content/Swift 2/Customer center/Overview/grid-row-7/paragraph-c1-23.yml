@@ -9,7 +9,7 @@
 "moduleSettings": ""
 "fields":
   "Button": "{\r\n  \"SelectedValue\": \"11\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=11\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
-  "GlobalRecordPageGuid": "dfcef294-cc5e-4252-9047-8e5a703c5916"
+  "GlobalRecordPageGuid": "621cb250-a28d-45ac-bef2-893e0536078b"
   "Icon": "/Files/Images/Icons/cart-shopping.svg"
   "Id": "617"
   "ItemInstanceType": ""
@@ -17,3 +17,19 @@
   "Text": "<p class=\"dw-paragraph\">Review customer carts.</p>"
   "Title": "<h3 class=\"dw-h6\">Carts</h3>"
 "columnId": 1
+
+"permissions":
+- "owner": "CSR"
+  "ownerType": "group"
+  "ownerId": "1292"
+  "level": "all"
+  "levelValue": 1364
+- "owner": "Customers"
+  "ownerType": "group"
+  "ownerId": "1325"
+  "level": "none"
+  "levelValue": 1
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1
