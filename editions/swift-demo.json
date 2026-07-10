@@ -13,6 +13,9 @@
     "fashion-lifestyle",
     "industrial-b2b"
   ],
+  "overlays": [
+    "nav-polish"
+  ],
   "criticalPaths": [
     "/swift-2/home",
     "/swift-2/shop",

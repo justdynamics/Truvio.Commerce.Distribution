@@ -10,8 +10,8 @@ Checks (all fail-closed; any failure -> exit 1):
   2. Dir/name agree    — layer.json "name" equals its directory name.
   3. Edition schema    — every editions/<name>.json validates vs editions/edition.schema.json.
   4. Edition refs      — from/add/surfaces '<name>@<semver>' resolve to layers/<name> whose
-                         layer.json version == the pinned semver; themes[] resolve to
-                         layers/theme-<name>.
+                         layer.json version == the pinned semver; themes[] and overlays[]
+                         resolve to layers/theme-<name>.
   5. Base contract     — layers/base/base.contract.json parses; reserved prefixes present.
   6. Cross-layer clash — no two non-base layers ship the same _sql/<Table>/<key>.yml path
                          (a silent last-writer-wins collision at deserialize).
@@ -80,6 +80,11 @@ foreach ($ef in $editionFiles) {
     foreach ($tn in @($spec.themes)) {
         if (-not $tn) { continue }
         & $log ($manifests.ContainsKey("theme-$tn")) "edition '$($ef.BaseName)': theme '$tn' -> layers/theme-$tn exists"
+    }
+    foreach ($ov in @($spec.overlays)) {
+        if (-not $ov) { continue }
+        $ovOk = $manifests.ContainsKey("theme-$ov") -and ("$($manifests["theme-$ov"].kind)" -eq 'theme')
+        & $log $ovOk "edition '$($ef.BaseName)': overlay '$ov' -> layers/theme-$ov (kind theme) exists"
     }
 }
 
