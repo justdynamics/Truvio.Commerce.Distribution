@@ -1,7 +1,0 @@
-{
-  "name": "fixture-catalog",
-  "version": "1.0.0",
-  "kind": "catalog",
-  "swiftVersion": "2.3.0",
-  "repositoryName": "Products"
-}

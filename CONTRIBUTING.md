@@ -16,7 +16,8 @@ A change to `layers/` or `editions/` is mergeable only when both hold:
      `name` equals the directory name;
    - every `editions/<name>.json` validates against `editions/edition.schema.json`, and its
      `from` / `add` / `surfaces` refs resolve to a `layers/<name>` whose version matches the
-     pinned semver; `themes[]` and `overlays[]` resolve to `layers/theme-<name>`;
+     pinned semver; `themes[]` resolve to `layers/theme-<name>` (kind theme) and `overlays[]`
+     resolve to `layers/overlay-<name>` (kind overlay);
    - `layers/base/base.contract.json` parses; no two non-base layers ship the same
      `_sql/<Table>/<key>.yml` (silent-collision guard);
    - the protected-string guard passes (the layer/mode vocabulary never leaked into a
@@ -29,6 +30,32 @@ A change to `layers/` or `editions/` is mergeable only when both hold:
    DW host + SQL Server). The maintainer runs `gate.ps1 -Edition <name>` and records the
    run id in the PR. A layer that cannot pass ships **Beta**, flagged in its `BASELINE.md`
    with the promote-out path (see `layers/dap-portal`).
+
+## Composition policy — when an improvement becomes a NEW layer
+
+Not every improvement earns its own layer; each new layer multiplies gate cost (editions ×
+themes × overlays × asserts). A change becomes a **new layer only when ALL THREE** hold —
+otherwise it **folds** into an existing layer (the base contract, an existing theme, or a
+feature layer):
+
+1. **Consumer optionality** — a consumer can meaningfully choose to take it or leave it.
+2. **Independent lifecycle** — it versions and ships on its own cadence, not lock-stepped to another layer.
+3. **Own files/data surface** — it owns a distinct `files/` and/or serialized-content surface, not a handful of edits to someone else's.
+
+Fail any one → fold it in. The naming follows the kind (`catalog-*`, `feature-*`,
+`surface-*`, `theme-*`, `overlay-*`); see [LAYERS.md](LAYERS.md) for the prefix→lane table.
+
+**Overlays are STAGING, not a permanent tier.** An `overlay-*` layer is an always-on
+affordance on top of the active theme (e.g. `overlay-nav-polish`). Two hard rules:
+
+- **Cap: at most 3 overlays live at once** across the distribution.
+- **Sunset: at the next Swift bump**, any overlay that has been composed into *every* edition
+  for a full Swift cycle folds into the theme layers (or is escalated as an upstream Swift
+  divergence report). Overlays stage a candidate default; they do not accumulate.
+
+Gate cost is tracked as a **KPI trend only** (gate cost per edition, in the Foundry's
+`docs/KPI.md`) — there is no per-publish leg budget; the constraint ranking triggers action,
+not a fixed threshold.
 
 ## Authoring
 

@@ -156,9 +156,9 @@
 
   "navDepth": {
     "guarantee": "The base ships the Swift storefront surface but makes NO guarantee that top navigation nodes have children. A fresh base scaffold starts with a shallow (childless) header bar.",
-    "obligation": "An edition that promises a header MENU-BAR default (carets, hover states, reachable dropdowns — e.g. by composing the theme-nav-polish affordance overlay) MUST ship or author nav DEPTH: the top nav groups/pages must have children. This is a DATA prerequisite, not a CSS one.",
+    "obligation": "An edition that promises a header MENU-BAR default (carets, hover states, reachable dropdowns — e.g. by composing the overlay-nav-polish affordance overlay) MUST ship or author nav DEPTH: the top nav groups/pages must have children. This is a DATA prerequisite, not a CSS one.",
     "mechanism": "The stock menu template Swift-v2_MenuRelatedContent/Menu.cshtml only emits the dropdown affordance attributes (data-bs-toggle='dropdown', the megamenu panel) when a top node has children (nodesExist = rootNode.Nodes.Any()). Childless top nodes get the bare nav-link branch and stay flat text — no overlay CSS can create the dropdown on a childless bar.",
     "authoring": "Author child groups under the top ecom groups via the Backend MCP save_groups recipe (parentGroupId), cross-assigning products with assign_products_to_group. The dw-demo-swift skill documents the recipe (references/templates.md, 'Header menu: make it read as a menu').",
-    "baseStaysContentOnly": "This is a contract NOTE to additions, not a base style change. The base ships zero CSS (SPEC-06); the affordance CSS lives in the theme-nav-polish overlay, and the nav depth lives in the catalog/sample-data additions or is authored per demo."
+    "baseStaysContentOnly": "This is a contract NOTE to additions, not a base style change. The base ships zero CSS (SPEC-06); the affordance CSS lives in the overlay-nav-polish overlay, and the nav depth lives in the catalog/sample-data additions or is authored per demo."
   }
 }

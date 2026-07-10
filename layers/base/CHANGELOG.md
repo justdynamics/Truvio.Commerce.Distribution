@@ -1,5 +1,26 @@
 # Changelog — base
 
+## Taxonomy big-bang rename (2026-07-11)
+
+Layer directories were renamed so the **dir-name prefix equals the kind**, traceable to the
+workflow lanes. This is a rename, not a content change — **layer versions carry over
+unchanged**, old tags remain immutable, and editions re-pin to the new names.
+
+| Old name | New name |
+|----------|----------|
+| `fixture-catalog` | `catalog-fixture` |
+| `headless` | `surface-headless` |
+| `dap-portal` | `surface-dap-portal` |
+| `reordering-pricing` | `feature-reordering-pricing` |
+| `subscription-orders` | `feature-subscription-orders` |
+| `bom-configurator` | `feature-bom-configurator` |
+| `theme-nav-polish` | `overlay-nav-polish` (kind `theme` → new kind `overlay`) |
+
+Unchanged: `base`, `sample-data`, `theme-tech-saas`, `theme-fashion-lifestyle`,
+`theme-industrial-b2b`. Post-merge, layers get new-name tags at their carried-over versions
+(e.g. `layers/catalog-fixture/1.0.0`) and re-pinned editions get bumped tags. `base` itself is
+unchanged by the rename (no base version bump).
+
 ## 2.4.1
 
 Brand-neutral starter content. The scaffolding base no longer reads as a bike shop:

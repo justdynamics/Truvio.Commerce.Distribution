@@ -1,0 +1,66 @@
+{
+  "name": "feature-subscription-orders",
+  "version": "1.1.0",
+  "kind": "feature",
+  "swiftVersion": "2.3.0",
+  "csLedger": [],
+  "configRows": [
+    {
+      "table": "EcomProducts",
+      "where": "ProductId = 'PACK-SUB-PROD1' AND ProductLanguageId = 'ENU'",
+      "description": "pack-owned recurring/subscription product (SUB-PLAN-01) — self-sufficiency proof"
+    },
+    {
+      "table": "EcomPayments",
+      "where": "PaymentId = 'PAY2' AND PaymentLanguageId = 'ENU'",
+      "description": "Baseline invoice payment method (no gateway - resolves to DefaultCheckoutHandler, IRecurring)"
+    },
+    {
+      "table": "EcomShippings",
+      "where": "ShippingId = 'SHIP9' AND ShippingLanguageId = 'ENU'",
+      "description": "Baseline Home delivery method used by the checkout probe"
+    },
+    {
+      "table": "ScheduledTask",
+      "where": "TaskName = 'Place recurring orders'",
+      "description": "Pack-owned recurring-order scheduled task (ships a ScheduledTask row bound to the DW-native RecurringOrdersScheduledTask add-in, TaskEnabled=false / disabled by default; the demo enables it to show renewals) - self-sufficiency: DW registers the add-in TYPE only, never the row"
+    }
+  ],
+  "fragmentModes": [
+    "merge",
+    "replace"
+  ],
+  "fragmentTables": [
+    "EcomGroups",
+    "EcomProducts",
+    "EcomGroupProductRelation",
+    "EcomShopGroupRelation",
+    "ScheduledTask"
+  ],
+  "fragmentContent": [
+    {
+      "areaId": 3,
+      "path": "/Navigation/Secondary Navigation/Subscribe"
+    },
+    {
+      "areaId": 3,
+      "path": "/Customer center/Account/Subscriptions"
+    }
+  ],
+  "asserts": {
+    "behaviorProbes": [
+      {
+        "kind": "checkout-recurring",
+        "path": "/swift-2/subscribe",
+        "productId": "PACK-SUB-PROD1",
+        "quantity": 1,
+        "paymentMethodId": "PAY2",
+        "shippingMethodId": "SHIP9",
+        "checkoutStepIndex": 1
+      }
+    ],
+    "criticalPaths": [
+      "/swift-2/account/subscriptions"
+    ]
+  }
+}
