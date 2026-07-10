@@ -1,13 +1,21 @@
 # Changelog — digital-asset-portal/1.0
 
-## Unreleased (beta)
+## 1.0.0 — graduated out of Beta (2026-07-10)
 
-- Removed the "< Swift Bikes Webshop" cross-link row from the Desktop Header
-  (`Digital Assets Portal/Header _ Footer/Desktop Header/grid-row-1`, the
-  `Swift-v2_Text` link to `Default.aspx?ID=6869`). Vice-versa half of the base
-  layer 2.3.2 DAP-decoupling pass (RUN-BASE-2.3.2 item B3): the base Swift header
-  no longer links to the DAP, and the DAP no longer links back to the Swift
-  storefront. Stays Beta/untagged — no version graduation with this edit.
+First gate-proven, tag-eligible release of the Digital Asset Portal surface. Proven
+end-to-end on base **2.4.1** + engine **0.8.0-beta** via `gate.ps1 -Edition dap-portal`
+(base replace+merge HTTP 200, permissions parity 133, title integrity 122, DAP surface
+replace HTTP 200 / 117 created / 0 failed, `/dap` smoke green). Re-pins `base@2.4.1`.
+
+- **Dangling `CreateUserPageId` page-8330 link pruned** (data-only). The Sign-in
+  `UserAuthentication` module referenced a non-existent create-account page (8330); the
+  portal has no self-registration flow, so the reference is blanked. Its two sibling links
+  (`RedirectToSpecificPage` 8308, `CreatePasswordPageId` 8329) resolve normally. The
+  now-moot `acknowledgedOrphanPageIds: [8330]` config entry is cleared.
+- **The two prior Beta blockers were already resolved in content** and re-confirmed by this
+  gate: the account page uses `Swift-v2_Navigation` (not the absent `Swift-v2_VerticalNavigation`),
+  and the Desktop Header no longer carries the `Default.aspx?ID=6869` cross-link (the base
+  2.3.2 DAP-decoupling B3 removal, now graduated from Unreleased).
 
 ## 1.0.0 (beta)
 

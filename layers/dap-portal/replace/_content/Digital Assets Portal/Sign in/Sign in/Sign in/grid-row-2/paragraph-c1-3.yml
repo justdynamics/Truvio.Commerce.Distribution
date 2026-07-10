@@ -13,7 +13,7 @@
     <RedirectToSpecificPage>Default.aspx?Id=8308</RedirectToSpecificPage>
     <RedirectToReferrer>1</RedirectToReferrer>
     <CreatePasswordPageId>Default.aspx?Id=8329</CreatePasswordPageId>
-    <CreateUserPageId>Default.aspx?Id=8330</CreateUserPageId>
+    <CreateUserPageId></CreateUserPageId>
   </Settings>
 "fields":
   "GlobalRecordPageGuid": "fca9cc18-8072-4515-ab41-2162db6c9a09"

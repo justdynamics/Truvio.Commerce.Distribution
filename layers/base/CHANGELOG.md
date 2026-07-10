@@ -1,5 +1,34 @@
 # Changelog — base
 
+## 2.4.1
+
+Brand-neutral starter content. The scaffolding base no longer reads as a bike shop:
+the bike-era editorial copy is rewritten to industry-neutral commerce copy so every
+demo starts from a clean, brand-agnostic slate.
+
+- **Bike-era copy neutralized (both languages).** About, Home, the Home-preset,
+  Employees, About-us/Delivery SEO descriptions and the store Terms heading no longer
+  reference bikes/bicycles/cycling. Examples: "Your Trusted Partner in Bicycle Solutions"
+  → "…in Commerce"; "High Quality Bikes & Parts" → "High Quality Products & Parts";
+  "Electric bikes are here to stay" → "Innovative products are here to stay"; "Swift
+  Bikes" team copy → generic. No posts deleted (the Posts index and its category pages
+  were already brand-neutral). Page titles are untouched, so the title-integrity gate leg
+  stays green (122 pages, DB Title == YAML).
+- **Legit survivors, left intentionally.** The stock Swift sample rich-text under
+  `Navigation` (mountain-trail review filler — no bike brand or model names) and the
+  `Product Info` `FieldDisplayGroups` config (a product field-group data identifier list,
+  not editorial copy) are not brand strings and remain.
+- **Line endings normalized.** All base YAML is uniformly CRLF + UTF-8 BOM (the
+  serializer-native convention); the 2.4.0-touched Customer Center subtree (40 files that
+  were LF/mixed in the working tree) is normalized, so a serializer round-trip is
+  byte-stable.
+
+No behavior, permissions, or engine-floor change from 2.4.0 — content-only patch. Editions
+re-pin to `base@2.4.1`.
+
+Gate: base-only PASS (`runs/20260710-155148`) + swift-demo PASS (theme leg on); permissions
+parity 133 and title integrity 122 both green.
+
 ## 2.4.0
 
 Per-role Customer Center, fully derived from the layer YAML. What a consumer sees change
