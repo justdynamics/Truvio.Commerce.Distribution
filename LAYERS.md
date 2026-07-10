@@ -20,15 +20,16 @@ Everything this Distribution ships, proven on **Swift 2.3** (rolling latest-only
 | `theme-tech-saas` | theme | 2.3.0 | Tech/SaaS brand overlay (disk-only, SPEC-06). |
 | `theme-fashion-lifestyle` | theme | 2.3.0 | Fashion/Lifestyle brand overlay. |
 | `theme-industrial-b2b` | theme | 2.3.0 | Industrial B2B brand overlay. |
+| `theme-nav-polish` | theme | 1.0.0 | Header menu-bar affordance overlay (Option B): carets, hover/active, reachable dropdowns. Always-on `overlays` entry (not a `themes` swap); layers on top of any demo theme. Icons opt-in. |
 
 ## Editions (`editions/<name>.json`)
 
-A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampleData`, `themes`).
+A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampleData`, `themes`, `overlays`).
 
 | Edition | Composition | Status |
 |---------|-------------|--------|
 | `base-only` | base + theme `tech-saas`; no catalog, no identities | **Proven** — the empty-shop scaffold (EcomProducts 0 / 0 / EcomCountries 96). |
-| `swift-demo` | base + fixture-catalog + reordering-pricing + subscription-orders + bom-configurator + sample data + all 3 themes | **Proven** — the full Swift storefront (20 / 3 / 96). |
+| `swift-demo` | base + fixture-catalog + reordering-pricing + subscription-orders + bom-configurator + sample data + all 3 themes + `nav-polish` affordance overlay | **Proven** — the full Swift storefront (20 / 3 / 96). |
 | `headless-demo` | base + fixture-catalog + `headless` surface + sample data | **Proven** — headless Delivery-API (A1–A9). |
 | `dap-portal` | base + fixture-catalog + `dap-portal` surface | **BETA** — gate-prove pending a Swift-2.3 re-capture (see the layer's BASELINE.md). |
 

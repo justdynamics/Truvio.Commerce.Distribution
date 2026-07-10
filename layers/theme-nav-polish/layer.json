@@ -1,0 +1,14 @@
+{
+  "name": "theme-nav-polish",
+  "version": "1.0.0",
+  "kind": "theme",
+  "swiftVersion": "2.3.0",
+  "files": [
+    "Templates/Designs/Swift-v2/Custom/nav-polish.css",
+    "Images/nav-icons/bone.svg",
+    "Images/nav-icons/shield-plus.svg",
+    "Images/nav-icons/layers.svg",
+    "Images/nav-icons/screw.svg",
+    "Images/nav-icons/instruments.svg"
+  ]
+}

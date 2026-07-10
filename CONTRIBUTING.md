@@ -16,7 +16,7 @@ A change to `layers/` or `editions/` is mergeable only when both hold:
      `name` equals the directory name;
    - every `editions/<name>.json` validates against `editions/edition.schema.json`, and its
      `from` / `add` / `surfaces` refs resolve to a `layers/<name>` whose version matches the
-     pinned semver; `themes[]` resolve to `layers/theme-<name>`;
+     pinned semver; `themes[]` and `overlays[]` resolve to `layers/theme-<name>`;
    - `layers/base/base.contract.json` parses; no two non-base layers ship the same
      `_sql/<Table>/<key>.yml` (silent-collision guard);
    - the protected-string guard passes (the layer/mode vocabulary never leaked into a
