@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 3c7a09a1-379d-5195-b9da-1903435f565c
+"sourceParagraphId": 710
+"sortOrder": 22
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"87\",\r\n  \"Label\": \"Bekijken\",\r\n  \"Link\": \"Default.aspx?ID=87\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "3ba0ddbe-e01a-4d77-bf69-0ee3ceedd3b9"
+  "Icon": "/Files/Images/Icons/clipboard-list.svg"
+  "Id": "715"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Bekijk klantbestellingen.</p>"
+  "Title": "<h3 class=\"dw-h6\">Bestellingen</h3>"
+"columnId": 2

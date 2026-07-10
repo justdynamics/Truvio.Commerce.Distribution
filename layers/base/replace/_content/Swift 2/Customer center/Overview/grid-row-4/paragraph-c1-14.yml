@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 9988821e-45c2-546d-8a22-c7b3326c0fd8
+"sourceParagraphId": 604
+"sortOrder": 14
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"18\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=18\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "621cb250-a28d-45ac-bef2-893e0536078b"
+  "Icon": "/Files/Images/Icons/heart.svg"
+  "Id": "606"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Your saved favorite products.</p>"
+  "Title": "<h3 class=\"dw-h6\">My favorites</h3>"
+"columnId": 1

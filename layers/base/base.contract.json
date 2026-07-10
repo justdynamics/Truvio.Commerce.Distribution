@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "baseContractVersion": "1.0.0",
   "swiftVersion": "2.3.0",
-  "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution). Additions (catalog/feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Consolidates the ID-range/collision rules from docs/pack-contract.md, the seeded anchors from Invoke-SeedGating.ps1 / Invoke-SeedVerify.ps1, and the anchor areas/repositories from config/gate-config.json + swift-2.3.json. The gate reads this file for the base-contract collision check. Operator-confirmed 2026-07-05 (DISTRIBUTION-DECISIONS.md).",
+  "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution). Additions (catalog/feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Consolidates the ID-range/collision rules, the seeded anchors from Invoke-SeedGating.ps1 / Invoke-SeedVerify.ps1, and the anchor areas/repositories from config/gate-config.json + swift-2.3.json. The gate reads this file for the base-contract collision check. Operator-confirmed 2026-07-05 (DISTRIBUTION-DECISIONS.md).",
 
   "idRules": {
     "nvarcharPkPrefix": "PACK-<NAME>-",
@@ -86,6 +86,36 @@
     ],
     "contentAreas": [3, 27],
     "note": "Additions touching a base-owned table follow idRules (prefix / floor) and must pass the static intersection checks below. Base ships zero catalog (see idRules.baseCatalog)."
+  },
+
+  "perEnvironmentAreaExclusions": {
+    "note": "Per-environment Area configuration deliberately NOT serialized by the base (LRN-08). These Area columns/fields are excluded by config/swift-2.3.json (the 'Site framework' deploy predicate's excludeAreaColumns + excludeFields), so the base ships brand/content-neutral structure only and every consuming environment owns these values. A fresh deserialize therefore leaves them at whatever the target DB already holds - it does NOT overwrite them.",
+    "excludeAreaColumns": [
+      "AreaCdnHost",
+      "AreaCookieWarningTemplate",
+      "AreaFrontpage",
+      "AreaEcomShopId",
+      "AreaEcomCountryCode",
+      "AreaEcomLanguageId",
+      "AreaEcomCurrencyId",
+      "AreaStockLocationID",
+      "AreaCreatedDate",
+      "AreaUpdatedDate"
+    ],
+    "excludeFields": [
+      "AreaDomain",
+      "AreaDomainLock",
+      "AreaNoindex",
+      "AreaNofollow",
+      "AreaRobotsTxt",
+      "AreaRobotsTxtIncludeSitemap"
+    ],
+    "consumerObligation": {
+      "bindSiteRoot": "After deserialize, set each area's AreaFrontpage to the environment's site-root page id.",
+      "bindShop": "After deserialize, set each area's AreaEcomShopId to the environment shop. The base ships exactly one shop: SHOP1 ('B2B Commerce Store').",
+      "restart": "Restart the DW host after binding - Area routing, frontpage resolution, and shop resolution are cached at host startup."
+    },
+    "source": "config/swift-2.3.json -> predicates[name='Site framework'].excludeAreaColumns + .excludeFields"
   },
 
   "protectedItemTypes": {

@@ -9,7 +9,7 @@
 "moduleSettings": ""
 "fields":
   "GlobalRecordPageGuid": "04756e52-bb63-4aee-a496-e036df7e66d6"
-  "GridLayoutDesktop": "4-columns"
+  "GridLayoutDesktop": "list"
   "GridLayoutMobile": "list"
   "HideNoProductsFoundMessage": false
   "Id": "1"

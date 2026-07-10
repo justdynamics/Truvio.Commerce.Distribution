@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": bb5dbdad-9a75-5b1b-a0f5-08c1b3a04967
+"sourceParagraphId": 611
+"sortOrder": 23
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"11\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=11\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "dfcef294-cc5e-4252-9047-8e5a703c5916"
+  "Icon": "/Files/Images/Icons/cart-shopping.svg"
+  "Id": "617"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Review customer carts.</p>"
+  "Title": "<h3 class=\"dw-h6\">Carts</h3>"
+"columnId": 1

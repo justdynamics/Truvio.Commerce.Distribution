@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": f6076748-9962-5946-9b7a-0ec83d3c04df
+"sourceParagraphId": 602
+"sortOrder": 12
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"22\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=22\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "621cb250-a28d-45ac-bef2-893e0536078b"
+  "Icon": "/Files/Images/Icons/file-invoice.svg"
+  "Id": "603"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">View and manage your quotes.</p>"
+  "Title": "<h3 class=\"dw-h6\">My quotes</h3>"
+"columnId": 2

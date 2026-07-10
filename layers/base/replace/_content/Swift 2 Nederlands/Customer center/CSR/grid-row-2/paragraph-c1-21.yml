@@ -1,0 +1,19 @@
+﻿"paragraphUniqueId": 9eaa7b8b-9049-54e0-b8a0-f9e0ce345d62
+"sourceParagraphId": 709
+"sortOrder": 21
+"itemType": "Swift-v2_Feature"
+"header": ""
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"85\",\r\n  \"Label\": \"Bekijken\",\r\n  \"Link\": \"Default.aspx?ID=85\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "3ba0ddbe-e01a-4d77-bf69-0ee3ceedd3b9"
+  "Icon": "/Files/Images/Icons/user-group.svg"
+  "Id": "714"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Blader door klantaccounts.</p>"
+  "Title": "<h3 class=\"dw-h6\">Accounts</h3>"
+"columnId": 1
