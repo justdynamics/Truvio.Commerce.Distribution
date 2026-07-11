@@ -6,7 +6,7 @@ subscription checkout, contract pricing) have a canonical buyer + CSR to run as 
 **Activation is SQL-seed, not serializer YAML.** The content is the hardcoded builder
 `Get-SeedGatingSql` in `tools/harness/Invoke-SeedGating.ps1`; the gate activates this layer at
 Step 3c2 (before host start — DW caches identity at startup) with `-SkipContractRow` (the fixture
-contract price is seeded by [`fixture-catalog`](../fixture-catalog/README.md) once products exist).
+contract price is seeded by [`catalog-fixture`](../catalog-fixture/README.md) once products exist).
 
 Seeds (exact ids, idempotent): `AccessUser` permission groups 1325 Customers / 1270 Account Admin /
 1292 CSR (type 2) + users 1328 **IMCUser** (buyer, cust 98745621) / 1326 **IMCSalesrep** (CSR, cust

@@ -27,14 +27,14 @@ tools/ci/          the self-contained PR validator
 
 A **layer** is one versioned unit: a `layer.json` manifest + serialized content (mode
 trees `replace/` source-wins, `merge/` field-level) and/or a `files/` disk overlay. Its
-`kind` (`base` / `catalog` / `feature` / `surface` / `sample-data` / `theme`) says how it
-composes.
+`kind` (`base` / `catalog` / `feature` / `surface` / `sample-data` / `theme` / `overlay`)
+says how it composes — the dir-name prefix equals the kind (`catalog-*`, `feature-*`,
+`surface-*`, `theme-*`, `overlay-*`). See [LAYERS.md](LAYERS.md) for the prefix→lane table.
 
 An **edition** is a composition — `from` a privileged base + an ordered `add` of layers,
-plus optional `surfaces`, `sampleData`, and `themes`. Additions bind ONLY to the
-[base contract](layers/base/base.contract.json), never to each other. Three editions
-(`base-only`, `swift-demo`, `headless-demo`) are gate-proven from their specs alone;
-`dap-portal` ships **Beta** (gate-prove pending — see its BASELINE.md).
+plus optional `surfaces`, `sampleData`, `themes`, and `overlays`. Additions bind ONLY to the
+[base contract](layers/base/base.contract.json), never to each other. All four editions
+(`base-only`, `swift-demo`, `headless-demo`, `dap-portal`) are gate-proven from their specs.
 
 ## Consuming
 

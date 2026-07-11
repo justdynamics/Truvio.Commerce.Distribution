@@ -2,10 +2,10 @@
   "name": "swift-demo",
   "from": "base@2.4.1",
   "add": [
-    "fixture-catalog@1.0.0",
-    "reordering-pricing@1.2.0",
-    "subscription-orders@1.1.0",
-    "bom-configurator@1.1.0"
+    "catalog-fixture@1.0.0",
+    "feature-reordering-pricing@1.2.0",
+    "feature-subscription-orders@1.1.0",
+    "feature-bom-configurator@1.1.0"
   ],
   "sampleData": true,
   "themes": [

@@ -2,10 +2,10 @@
   "name": "dap-portal",
   "from": "base@2.4.1",
   "add": [
-    "fixture-catalog@1.0.0"
+    "catalog-fixture@1.0.0"
   ],
   "surfaces": [
-    "dap-portal@1.0.0"
+    "surface-dap-portal@1.0.0"
   ],
   "sampleData": false,
   "criticalPaths": [

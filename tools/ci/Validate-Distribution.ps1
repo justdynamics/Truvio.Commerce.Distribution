@@ -10,14 +10,15 @@ Checks (all fail-closed; any failure -> exit 1):
   2. Dir/name agree    — layer.json "name" equals its directory name.
   3. Edition schema    — every editions/<name>.json validates vs editions/edition.schema.json.
   4. Edition refs      — from/add/surfaces '<name>@<semver>' resolve to layers/<name> whose
-                         layer.json version == the pinned semver; themes[] and overlays[]
-                         resolve to layers/theme-<name>.
+                         layer.json version == the pinned semver; themes[] resolve to
+                         layers/theme-<name> (kind theme); overlays[] resolve to
+                         layers/overlay-<name> (kind overlay).
   5. Base contract     — layers/base/base.contract.json parses; reserved prefixes present.
   6. Cross-layer clash — no two non-base layers ship the same _sql/<Table>/<key>.yml path
                          (a silent last-writer-wins collision at deserialize).
   7. Protected strings — plan §3.1 guard (Test-ProtectedStrings.ps1).
-  8. SPEC-06 themes    — no serialized content (*.yml/*.yaml/*.sql/*.bacpac/*.bak) under a
-                         kind:theme layer (disk-overlay-only).
+  8. SPEC-06 disk-only — no serialized content (*.yml/*.yaml/*.sql/*.bacpac/*.bak) under a
+                         kind:theme OR kind:overlay layer (both disk-overlay-only).
 
 Usage: pwsh tools/ci/Validate-Distribution.ps1  (run from repo root; exits 0 pass / 1 fail)
 #>
@@ -83,8 +84,8 @@ foreach ($ef in $editionFiles) {
     }
     foreach ($ov in @($spec.overlays)) {
         if (-not $ov) { continue }
-        $ovOk = $manifests.ContainsKey("theme-$ov") -and ("$($manifests["theme-$ov"].kind)" -eq 'theme')
-        & $log $ovOk "edition '$($ef.BaseName)': overlay '$ov' -> layers/theme-$ov (kind theme) exists"
+        $ovOk = $manifests.ContainsKey("overlay-$ov") -and ("$($manifests["overlay-$ov"].kind)" -eq 'overlay')
+        & $log $ovOk "edition '$($ef.BaseName)': overlay '$ov' -> layers/overlay-$ov (kind overlay) exists"
     }
 }
 
@@ -120,13 +121,14 @@ $clashes = @($sqlOwners.GetEnumerator() | Where-Object { @($_.Value | Select-Obj
 $psRow = Test-ProtectedStrings -LayersRoot $layersRoot
 & $log ($psRow.result -eq 'PASS') "protected strings: $($psRow.detail)"
 
-# SPEC-06: theme layers ship no serialized content.
+# SPEC-06: theme AND overlay layers ship no serialized content (both are disk-overlay-only).
 foreach ($d in $layerDirs) {
     if (-not $manifests.ContainsKey($d.Name)) { continue }
-    if ("$($manifests[$d.Name].kind)" -ne 'theme') { continue }
+    $k = "$($manifests[$d.Name].kind)"
+    if ($k -notin @('theme','overlay')) { continue }
     $bad = @(Get-ChildItem -LiteralPath $d.FullName -Recurse -File -ErrorAction SilentlyContinue |
         Where-Object { $_.Extension -in '.yml', '.yaml', '.sql', '.bacpac', '.bak', '.mdf', '.ldf' })
-    & $log ($bad.Count -eq 0) "theme '$($d.Name)': SPEC-06 disk-overlay-only ($($bad.Count) forbidden file(s))"
+    & $log ($bad.Count -eq 0) "$k '$($d.Name)': SPEC-06 disk-overlay-only ($($bad.Count) forbidden file(s))"
 }
 
 Write-Host ""

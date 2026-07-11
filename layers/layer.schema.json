@@ -23,8 +23,8 @@
       "description": "Semver release version; component of the layers/<name>/<version> annotated tag."
     },
     "kind": {
-      "enum": ["base", "catalog", "feature", "theme", "sample-data", "surface"],
-      "description": "Layer classification. base = the one privileged layer every edition builds on (ships the base contract). catalog = shop catalog content (groups/products/prices). feature = a customization tier bundle (may carry src/ .cs). theme = disk-overlay-only presentation (files/ mirroring System/Styles per SPEC-06; no DB data). sample-data = optional demo content (orders/users/contract prices). surface = what a frontend leg needs (e.g. headless content + itemtypes + repositories)."
+      "enum": ["base", "catalog", "feature", "theme", "overlay", "sample-data", "surface"],
+      "description": "Layer classification (prefix = kind; the layer dir name carries the kind as its prefix — catalog-*, feature-*, surface-*, theme-*, overlay-*; base and sample-data are singletons). base = the one privileged layer every edition builds on (ships the base contract). catalog = shop catalog content (groups/products/prices). feature = a customization tier bundle (may carry src/ .cs). theme = disk-overlay-only presentation (files/ mirroring System/Styles per SPEC-06; no DB data) — a swappable brand, applied one at a time via themes[]. overlay = disk-overlay-only presentation (SPEC-06, same disk-only constraint as theme) but an ALWAYS-ON affordance layered on top of whichever theme is active (composed via overlays[], never a themes[] swap) — e.g. the header menu-bar caret/hover/dropdown CSS. sample-data = optional demo content (orders/users/contract prices). surface = what a frontend leg needs (e.g. headless content + itemtypes + repositories)."
     },
     "swiftVersion": {
       "type": "string",
