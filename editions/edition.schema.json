@@ -27,7 +27,7 @@
         "type": "string",
         "pattern": "^[a-z0-9-]+@[0-9]+\\.[0-9]+\\.[0-9]+$"
       },
-      "description": "Ordered list of ADDITIONS as '<layer>@<semver>' refs (catalog / feature / sample-data / any non-base, non-surface, non-theme layer). Activation order is the array order; teardown is reverse. Each ref resolves to layers/<name>/ (version-checked). Every addition binds ONLY to the base contract - a ref to a layer that depends on another addition fails validation (belongs in the base contract or the plan is wrong). MAY be empty (a base-only edition adds nothing)."
+      "description": "Ordered list of ADDITIONS as '<layer>@<semver>' refs (feature / any non-base, non-surface, non-theme layer; the sample-data layer rides the sampleData toggle, never an add ref). Activation order is the array order; teardown is reverse. Each ref resolves to layers/<name>/ (version-checked). Every addition binds ONLY to the base contract - a ref to a layer that depends on another addition fails validation (belongs in the base contract or the plan is wrong). MAY be empty (a base-only edition adds nothing)."
     },
     "surfaces": {
       "type": "array",
@@ -39,7 +39,7 @@
     },
     "sampleData": {
       "type": "boolean",
-      "description": "OPTIONAL (default false). When true the edition activates the sample-data layer (demo buyer/CSR identities + contract data, seeded pre-host-start). When false the edition is scaffolding-only for identities - the base-only empty-shop scaffold sets this false."
+      "description": "OPTIONAL (default false). When true the edition activates the sample-data layer: demo buyer/CSR identities (applied pre-host-start) AND the demo shop catalog + contract pricing (applied after the base deserialize) - the layer ships both as SQL under merge/_sql/. When false the edition is the empty-shop scaffold (no identities, zero catalog) - base-only sets this false."
     },
     "themes": {
       "type": "array",

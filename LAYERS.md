@@ -14,20 +14,18 @@ and every layer traces to a lane of the ecosystem workflow (the Foundry's
 | Prefix | Kind | Workflow lane / component | What it carries |
 |--------|------|---------------------------|-----------------|
 | `base` | base | Foundry → Distribution (the privileged scaffold) | Framework + `base.contract.json`; zero catalog. Singleton. |
-| `catalog-*` | catalog | Distribution (published content) | Shop catalog content (groups / products / prices). |
 | `feature-*` | feature | Distribution (published content) | A customization-tier bundle; MAY carry a compile-optional `src/` provider. |
 | `surface-*` | surface | Distribution → Storefront (frontend leg) | What a frontend needs — headless content + Delivery-API, or a content area. |
 | `theme-*` | theme | Distribution (presentation) | A **swappable** brand: disk-overlay-only (SPEC-06), applied one at a time via `themes[]`. |
 | `overlay-*` | overlay | Distribution (presentation) | An **always-on affordance**: disk-overlay-only (SPEC-06), layered on top of the active theme via `overlays[]`. |
-| `sample-data` | sample-data | Distribution (published content) | Demo identities + contract data. Singleton. |
+| `sample-data` | sample-data | Distribution (published content) | Demo identities + demo shop catalog + contract data, shipped as SQL. Singleton. |
 
 ## Layers (`layers/<name>/`)
 
 | Layer | Kind | Version | Role |
 |-------|------|---------|------|
 | `base` | base | 2.4.1 | The privileged scaffold every edition builds on. Ships the framework + [`base.contract.json`](layers/base/base.contract.json); **zero sample catalog** (scaffolding-only). |
-| `catalog-fixture` | catalog | 1.0.0 | The demo product catalog (EcomProducts 20 / EcomGroups 3). Added by editions that need products. |
-| `sample-data` | sample-data | 1.0.0 | Demo identities (buyer/CSR) + contract data. Activated when an edition sets `sampleData: true`. |
+| `sample-data` | sample-data | 2.0.0 | Demo identities (buyer/CSR) + the demo product catalog (EcomProducts 20 / EcomGroups 3) + contract pricing, shipped as SQL under `merge/_sql/`. Activated when an edition sets `sampleData: true`. |
 | `feature-reordering-pricing` | feature | 1.2.0 | Quick-order reordering + quantity-break pricing (compile-optional provider). |
 | `feature-subscription-orders` | feature | 1.1.0 | Subscriptions + recurring-order scheduled task. |
 | `feature-bom-configurator` | feature | 1.1.0 | Kit / BOM configurator. |
@@ -44,10 +42,10 @@ A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampl
 
 | Edition | Composition | Status |
 |---------|-------------|--------|
-| `base-only` | base + theme `tech-saas`; no catalog, no identities | **Proven** — the empty-shop scaffold (EcomProducts 0 / 0 / EcomCountries 96). |
-| `swift-demo` | base + catalog-fixture + feature-reordering-pricing + feature-subscription-orders + feature-bom-configurator + sample data + all 3 themes + `nav-polish` affordance overlay | **Proven** — the full Swift storefront (20 / 3 / 96). |
-| `headless-demo` | base + catalog-fixture + `surface-headless` + sample data | **Proven** — headless Delivery-API (A1–A9). |
-| `dap-portal` | base + catalog-fixture + `surface-dap-portal` | **Proven** — the DAP content surface (area 26), gate-proven end-to-end on Swift 2.3. |
+| `base-only` | base + theme `tech-saas`; no sample data (no catalog, no identities) | **Proven** — the empty-shop scaffold (EcomProducts 0 / 0 / EcomCountries 96). |
+| `swift-demo` | base + feature-reordering-pricing + feature-subscription-orders + feature-bom-configurator + sample data + all 3 themes + `nav-polish` affordance overlay | **Proven** — the full Swift storefront (20 / 3 / 96). |
+| `headless-demo` | base + `surface-headless` + sample data | **Proven** — headless Delivery-API (A1–A9). |
+| `dap-portal` | base + `surface-dap-portal` + sample data | **Proven** — the DAP content surface (area 26), gate-proven end-to-end on Swift 2.3. |
 
 ## Consuming
 
@@ -56,20 +54,3 @@ edition, and activate its layers against a Dynamicweb 10 host (the Foundry harne
 this end-to-end). Modes are `replace` (source-wins) / `merge` (field-level). Annotated tags
 `layers/<name>/<semver>` and `editions/<name>/<semver>` pin each proven artifact to the gate
 run + Swift version it was proven against.
-
-## Migration — the taxonomy big-bang rename
-
-Layer directories were renamed to prefix-equals-kind. Old tags stay immutable; editions
-re-pin to the new names. Layer **versions carry over unchanged** (a rename is not a content change).
-
-| Old name | New name |
-|----------|----------|
-| `fixture-catalog` | `catalog-fixture` |
-| `headless` | `surface-headless` |
-| `dap-portal` | `surface-dap-portal` |
-| `reordering-pricing` | `feature-reordering-pricing` |
-| `subscription-orders` | `feature-subscription-orders` |
-| `bom-configurator` | `feature-bom-configurator` |
-| `theme-nav-polish` | `overlay-nav-polish` (kind `theme` → `overlay`) |
-
-Unchanged: `base`, `sample-data`, `theme-tech-saas`, `theme-fashion-lifestyle`, `theme-industrial-b2b`.

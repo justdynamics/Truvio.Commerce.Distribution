@@ -2,7 +2,6 @@
   "name": "swift-demo",
   "from": "base@2.4.1",
   "add": [
-    "catalog-fixture@1.0.0",
     "feature-reordering-pricing@1.2.0",
     "feature-subscription-orders@1.1.0",
     "feature-bom-configurator@1.1.0"
@@ -23,5 +22,5 @@
     "/swift-2/customer-center",
     "/swift-2/sign-in/sign-in"
   ],
-  "description": "Full Swift storefront demo: base scaffold + fixture catalog + the three feature layers + demo identities, proven across all three demo themes. Equivalent to the historical full gate run."
+  "description": "Full Swift storefront demo: base scaffold + the three feature layers + sample data (demo identities + demo catalog), proven across all three demo themes. Equivalent to the historical full gate run."
 }

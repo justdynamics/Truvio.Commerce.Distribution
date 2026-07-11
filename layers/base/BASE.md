@@ -1,6 +1,6 @@
 # Base layer — the contract every edition builds on
 
-The **base** is the one privileged layer (`kind: base`). It stands up DW10 as Truvio Commerce with **zero catalog** (scaffolding-only): shop structure, countries/currencies/languages/VAT, payment/shipping/order flow, permission groups, URL paths, and the area 3/27 page trees — but no products, groups, or prices. Editions compose the base with additions (`catalog`, `feature`, `sample-data`, `surface`, `theme` layers).
+The **base** is the one privileged layer (`kind: base`). It stands up DW10 as Truvio Commerce with **zero catalog** (scaffolding-only): shop structure, countries/currencies/languages/VAT, payment/shipping/order flow, permission groups, URL paths, and the area 3/27 page trees — but no products, groups, or prices. Editions compose the base with additions (`feature`, `sample-data`, `surface`, `theme` layers).
 
 The machine-readable guarantees live in [`base.contract.json`](base.contract.json); the gate reads that file for the base-contract collision check. This doc is the human companion. **Additions bind only to the base contract — never to each other.**
 
@@ -10,9 +10,9 @@ The machine-readable guarantees live in [`base.contract.json`](base.contract.jso
 |---|---|
 | **nvarchar PK** on a base-owned table (`PriceId`, `ProductId`, `PaymentId`, …) | Namespace with a **`PACK-<NAME>-`** prefix (uppercase layer name) |
 | **int-identity PK** (incl. `ItemType_<systemName>` item-instance ids) | Reserve an id at or above the **`100000`** floor |
-| Gate fixture catalog | Reserves `FIXT*` / `FIXTGRP*` / `FIXT-PRICE-*` |
+| sample-data demo catalog | Reserves `FIXT*` / `FIXTGRP*` / `FIXT-PRICE-*` |
 
-The base ships **zero catalog** — `EcomGroups/EcomProducts/EcomPrices/EcomDiscount/EcomVariant*/EcomGroupProductRelation` are empty of base rows, so for those tables the collision surface is addition-vs-fixture-vs-addition (arbitrated statically by the gate). There is deliberately **no per-itemType numeric range table** — the contract is prefix-based.
+The base ships **zero catalog** — `EcomGroups/EcomProducts/EcomPrices/EcomDiscount/EcomVariant*/EcomGroupProductRelation` are empty of base rows, so for those tables the collision surface is addition-vs-sample-data-vs-addition (arbitrated statically by the gate). There is deliberately **no per-itemType numeric range table** — the contract is prefix-based.
 
 ## Guaranteed anchors (additions may bind to these)
 
@@ -27,7 +27,7 @@ The base ships **zero catalog** — `EcomGroups/EcomProducts/EcomPrices/EcomDisc
 
 **Reference category:** `reference_category` (`EcomProductCategory`, CategoryType 2) + `LANG1` translation — required by DemoVerifier Check 2.
 
-**Contract price:** `EcomPrices` row `b7e9c1a2-…-000098745621` (customer `98745621`, list × 0.8) — skippable via `-SkipContractRow`.
+**Contract price:** `EcomPrices` row `FIXT-PRICE-CONTRACT` on `FIXT0001` (customer `98745621`, list × 0.8) — ships in the sample-data layer’s `catalog.sql`, present when an edition activates `sampleData: true`.
 
 **Repository:** `Products` / `Products.index` / `Products.query` / `Products.facets`, provisioned by the gate into `wwwroot/Files/System/Repositories/Products/`. (`ProductsFrontend` is dead/removed — never provisioned.)
 

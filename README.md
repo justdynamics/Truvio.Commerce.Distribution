@@ -11,7 +11,7 @@ on the current latest Swift release (**Swift 2.3**; rolling latest-only).
 ## What's here
 
 ```
-layers/            one versioned unit each (base, catalog, features, surfaces, themes, sample-data)
+layers/            one versioned unit each (base, features, surfaces, themes, sample-data)
   layer.schema.json         the layer contract
   base/base.contract.json   guarantees the base makes to additions
 editions/          named compositions of layers (base-only, swift-demo, headless-demo, dap-portal)
@@ -27,9 +27,9 @@ tools/ci/          the self-contained PR validator
 
 A **layer** is one versioned unit: a `layer.json` manifest + serialized content (mode
 trees `replace/` source-wins, `merge/` field-level) and/or a `files/` disk overlay. Its
-`kind` (`base` / `catalog` / `feature` / `surface` / `sample-data` / `theme` / `overlay`)
-says how it composes — the dir-name prefix equals the kind (`catalog-*`, `feature-*`,
-`surface-*`, `theme-*`, `overlay-*`). See [LAYERS.md](LAYERS.md) for the prefix→lane table.
+`kind` (`base` / `feature` / `surface` / `sample-data` / `theme` / `overlay`)
+says how it composes — the dir-name prefix equals the kind (`feature-*`,
+`surface-*`, `theme-*`, `overlay-*`; `base` and `sample-data` are singletons). See [LAYERS.md](LAYERS.md) for the prefix→lane table.
 
 An **edition** is a composition — `from` a privileged base + an ordered `add` of layers,
 plus optional `surfaces`, `sampleData`, `themes`, and `overlays`. Additions bind ONLY to the
