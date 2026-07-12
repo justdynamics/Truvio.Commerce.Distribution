@@ -18,12 +18,11 @@ $ErrorActionPreference = 'Stop'
 $swift = '2.3.0'
 # Proven gate runs (Foundry harness) — the run ids that proved each edition on the
 # theme-default 1.0.0 state (presentation lane consolidated into ONE theme, 2026-07-12).
-# RUNIDS-TBD: filled by the theme-default release sweep before the PR opens.
 $runs = @{
-    'base-only'     = 'RUNID-BASE-ONLY'
-    'swift-demo'    = 'RUNID-SWIFT-DEMO'   # full run — base + 3 features + sample data + theme-default (affordance folded in)
-    'headless-demo' = 'RUNID-HEADLESS'     # A1–A9 PASS (gate-headless runner)
-    'dap-portal'    = 'RUNID-DAP-PORTAL'
+    'base-only'     = '20260712-123011'
+    'swift-demo'    = '20260712-124412'   # full run — base + 3 features + sample data + theme-default (affordance folded in)
+    'headless-demo' = '20260712-125309'     # A1–A9 PASS (gate-headless runner)
+    'dap-portal'    = '20260712-130443'
 }
 # Per-edition RELEASE version. Bumped where the edition file changed (themes -> ["default"],
 # overlays retired). headless-demo / dap-portal are byte-unchanged — existing tags stand.
