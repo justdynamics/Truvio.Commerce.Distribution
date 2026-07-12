@@ -1,15 +1,13 @@
 {
   "name": "dap-portal",
   "from": "base@2.4.1",
-  "add": [
-    "catalog-fixture@1.0.0"
-  ],
+  "add": [],
   "surfaces": [
     "surface-dap-portal@1.0.0"
   ],
-  "sampleData": false,
+  "sampleData": true,
   "criticalPaths": [
     "/dap"
   ],
-  "description": "Digital Asset Portal edition: base scaffold + fixture catalog + the Digital Assets Portal content surface (area 26, ~32 pages on Swift-v2 item types). DAP is a content-only add-on surface (no item types / repositories / delivery API — unlike headless), so the gate proves it via the generic content-surface path: stage the surface replace tree, deserialize with the base engine (Invoke-DeserializeBoth), and smoke the portal home. NOTE: DAP 1.0 is Beta (captured DW 10.26.7, not previously demonstrated end-to-end strict-mode); this edition is its first gate proof."
+  "description": "Digital Asset Portal edition: base scaffold + sample data (demo catalog + demo identities) + the Digital Assets Portal content surface (area 26, ~32 pages on Swift-v2 item types). DAP is a content-only add-on surface (no item types / repositories / delivery API — unlike headless), so the gate proves it via the generic content-surface path: stage the surface replace tree, deserialize with the base engine (Invoke-DeserializeBoth), and smoke the portal home. NOTE: DAP 1.0 is Beta (captured DW 10.26.7, not previously demonstrated end-to-end strict-mode); this edition is its first gate proof."
 }

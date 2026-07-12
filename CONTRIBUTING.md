@@ -42,8 +42,8 @@ feature layer):
 2. **Independent lifecycle** — it versions and ships on its own cadence, not lock-stepped to another layer.
 3. **Own files/data surface** — it owns a distinct `files/` and/or serialized-content surface, not a handful of edits to someone else's.
 
-Fail any one → fold it in. The naming follows the kind (`catalog-*`, `feature-*`,
-`surface-*`, `theme-*`, `overlay-*`); see [LAYERS.md](LAYERS.md) for the prefix→lane table.
+Fail any one → fold it in. The naming follows the kind (`feature-*`, `surface-*`,
+`theme-*`, `overlay-*`); see [LAYERS.md](LAYERS.md) for the prefix→lane table.
 
 **Overlays are STAGING, not a permanent tier.** An `overlay-*` layer is an always-on
 affordance on top of the active theme (e.g. `overlay-nav-polish`). Two hard rules:

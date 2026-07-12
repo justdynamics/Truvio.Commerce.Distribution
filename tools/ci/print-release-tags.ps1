@@ -16,26 +16,26 @@ param([string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path)
 $ErrorActionPreference = 'Stop'
 
 $swift = '2.3.0'
-# Proven gate runs (Foundry harness) — the run id that proved each edition on the RENAMED
-# taxonomy state (taxonomy big-bang re-proof, 2026-07-11).
+# Proven gate runs (Foundry harness) — the run id that proved each edition on the
+# sample-data 2.0.0 state (catalog-fixture absorbed into sample-data, 2026-07-12).
 $runs = @{
-    'base-only'     = '20260711-011038'
-    'swift-demo'    = '20260711-011427'   # full run — base + catalog + sample-data + 3 features + 3 themes + nav overlay (affordance 4/4)
-    'headless-demo' = '20260711-012532'   # A1–A9 PASS (gate-headless runner)
-    'dap-portal'    = '20260711-013737'
+    'base-only'     = '20260712-000219'
+    'swift-demo'    = '20260712-000539'   # full run — base + 3 features + sample data (identities + catalog) + 3 themes + nav overlay
+    'headless-demo' = '20260712-001629'   # A1–A9 PASS (gate-headless runner)
+    'dap-portal'    = '20260712-004918'
 }
-# Per-edition RELEASE version. Bumped by a patch where the edition file changed in the rename
-# (re-pinned to new layer names); base-only was byte-unchanged, so it is NOT re-tagged here.
+# Per-edition RELEASE version. Bumped by a patch where the edition file changed
+# (catalog-fixture retired; catalog rides sampleData: true). base-only is byte-unchanged,
+# so it is NOT re-tagged here.
 $editionVersion = @{
-    'swift-demo'    = '2.4.3'
-    'headless-demo' = '2.4.2'
-    'dap-portal'    = '1.0.1'
-    # base-only: file unchanged by the rename — existing tag stands, no new tag.
+    'swift-demo'    = '2.4.4'
+    'headless-demo' = '2.4.3'
+    'dap-portal'    = '1.0.2'
+    # base-only: file unchanged — existing tag stands, no new tag.
 }
 # Which proven run each LAYER rides (the edition that exercised it). All layers are proven.
 $layerProof = @{
     base                            = $runs['swift-demo']
-    'catalog-fixture'               = $runs['swift-demo']
     'sample-data'                   = $runs['swift-demo']
     'feature-reordering-pricing'    = $runs['swift-demo']
     'feature-subscription-orders'   = $runs['swift-demo']
