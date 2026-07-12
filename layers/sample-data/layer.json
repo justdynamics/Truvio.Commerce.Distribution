@@ -1,7 +1,7 @@
 {
   "name": "sample-data",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "kind": "sample-data",
-  "swiftVersion": "2.3.0",
+  "swiftVersion": "2.4.0",
   "repositoryName": "Products"
 }

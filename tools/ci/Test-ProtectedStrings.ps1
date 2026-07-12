@@ -7,7 +7,7 @@ identifier or a YAML value / DW filesystem path. Ported verbatim from the harnes
 
 Fails closed on (A) mangled anchors ("Replace 2 Nederlands", "Swift-v2_Merge", ...),
 (B) a mode word as a DW path segment inside a value ("/replace/", "\merge\"), and
-(C) missing positive anchors ("Swift 2" + "Swift-v2_" must survive in layers/base).
+(C) missing positive anchors ("Swift 2" + "Swift-v2_" must survive in the content-carrying layer: surface-swift since the Swift 2.4 base split).
 #>
 function Test-ProtectedStrings {
     param(
@@ -45,7 +45,12 @@ function Test-ProtectedStrings {
         }
     }
 
-    $baseRoot = Join-Path $LayersRoot 'base'
+    # Base split (Swift 2.4): the Swift content anchors live in surface-swift;
+    # pre-split trees keep the base fallback.
+    $baseRoot = Join-Path $LayersRoot 'surface-swift'
+    if (-not (Test-Path -LiteralPath $baseRoot -PathType Container)) {
+        $baseRoot = Join-Path $LayersRoot 'base'
+    }
     $missingAnchors = @()
     if (Test-Path -LiteralPath $baseRoot -PathType Container) {
         foreach ($anchor in @('Swift 2', 'Swift-v2_')) {
@@ -54,7 +59,7 @@ function Test-ProtectedStrings {
             if (-not $present) { $missingAnchors += $anchor }
         }
     } else {
-        $missingAnchors += "(layers/base missing)"
+        $missingAnchors += "(content-carrying layer root missing)"
     }
 
     if ($violations.Count -eq 0 -and $missingAnchors.Count -eq 0) {

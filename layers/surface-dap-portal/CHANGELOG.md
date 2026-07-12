@@ -1,5 +1,12 @@
 # Changelog — digital-asset-portal/1.0
 
+## 1.0.1
+
+Swift 2.4 roll-forward re-prove (RUN-SWIFT-24): `swiftVersion` claim rolls to **2.4.0**
+on the split composition (base 3.0.0 framework-only + surface-swift carries the Swift
+content). Composes on the framework-only base; Swift-v2 item-type definitions come from the host design-package overlay (unchanged). No data/content changes. **Proven on DW 10.28.1-PreRelease**
+(stable re-prove due when DW 10.28 lands stable on NuGet).
+
 ## 1.0.0 — graduated out of Beta (2026-07-10)
 
 First gate-proven, tag-eligible release of the Digital Asset Portal surface. Proven

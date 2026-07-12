@@ -1,8 +1,8 @@
 {
   "name": "feature-bom-configurator",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "kind": "feature",
-  "swiftVersion": "2.3.0",
+  "swiftVersion": "2.4.0",
   "csLedger": [],
   "configRows": [
     {
@@ -21,8 +21,16 @@
       "description": "BOM slot 2 on PACK-BOM-0001 (group PACK-BOM-RACKS, default PACK-BOM-RACK-1)"
     }
   ],
-  "fragmentModes": ["merge"],
-  "fragmentTables": ["EcomGroups", "EcomProducts", "EcomGroupProductRelation", "EcomShopGroupRelation", "EcomProductItems"],
+  "fragmentModes": [
+    "merge"
+  ],
+  "fragmentTables": [
+    "EcomGroups",
+    "EcomProducts",
+    "EcomGroupProductRelation",
+    "EcomShopGroupRelation",
+    "EcomProductItems"
+  ],
   "fragmentContent": [
     {
       "areaId": 3,
@@ -41,8 +49,14 @@
         "productId": "PACK-BOM-0001",
         "cartPath": "/swift-2/cart/",
         "selections": [
-          { "group": "PACK-BOM3-0002", "product": "PACK-BOM-FORK-2" },
-          { "group": "PACK-BOM3-0003", "product": "PACK-BOM-RACK-2" }
+          {
+            "group": "PACK-BOM3-0002",
+            "product": "PACK-BOM-FORK-2"
+          },
+          {
+            "group": "PACK-BOM3-0003",
+            "product": "PACK-BOM-RACK-2"
+          }
         ],
         "expectedChildLines": 2,
         "renderProof": false

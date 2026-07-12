@@ -1,5 +1,12 @@
 # Changelog — sample-data
 
+## 2.0.1
+
+Swift 2.4 roll-forward re-prove (RUN-SWIFT-24): `swiftVersion` claim rolls to **2.4.0**
+on the split composition (base 3.0.0 framework-only + surface-swift carries the Swift
+content). SQL verified against the 10.28 schema (solution custom columns come from cleandb-align-schema.sql, applied by every gate run before the catalog). No data/content changes. **Proven on DW 10.28.1-PreRelease**
+(stable re-prove due when DW 10.28 lands stable on NuGet).
+
 ## 2.0.0
 
 The layer now ships its **entire content as SQL files** under `merge/_sql/` and absorbs

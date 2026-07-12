@@ -1,11 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "1.0.0",
-  "swiftVersion": "2.3.0",
-  "minSerializerVersion": "0.8.0-beta",
-  "minSerializerVersionNote": "ENGINE FLOOR (base >= 2.4.0). The base carries render-time permissions IN THE LAYER YAML on pages, grid rows, AND paragraphs (the per-role Customer Center dashboard). Serializer engines <= 0.7.1-beta SILENTLY DROP the grid-row/paragraph permission blocks on deserialize (IgnoreUnmatchedProperties) -> the per-role tiles render UNGATED, a security regression for the consumer. Consume this base ONLY with Truvio.Commerce.Serializer >= 0.8.0-beta, which also carries the deferred permission re-apply pass (+ user-group cache refresh) that lands group grants instead of collapsing to the Anonymous=None safety fallback when groups deserialize after content. Verify post-deserialize with the permissions-parity gate leg (every serialized block <-> matching UnifiedPermission rows).",
-  "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution). Additions (feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Consolidates the ID-range/collision rules, the identity/catalog anchors shipped by the sample-data layer (merge/_sql), and the anchor areas/repositories from config/gate-config.json + swift-2.3.json. The gate reads this file for the base-contract collision check. Operator-confirmed 2026-07-05 (DISTRIBUTION-DECISIONS.md).",
-
+  "baseContractVersion": "2.0.0",
+  "swiftVersion": "2.4.0",
+  "minSerializerVersion": "0.8.1-beta",
+  "minSerializerVersionNote": "ENGINE FLOOR (base >= 3.0.0): Truvio.Commerce.Serializer >= 0.8.1-beta — the first engine retargeted to DW 10.28.1-PreRelease (Swift 2.4 roll-forward). Carries everything the 0.8.0-beta floor guaranteed (render-time page/grid-row/paragraph permission blocks + deferred permission re-apply + user-group cache refresh). Proven on DW 10.28.1-PreRelease; stable re-prove due when DW 10.28 lands stable on NuGet.",
+  "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution, base 3.0.0 FRAMEWORK-ONLY). The Swift 2.4 base split moved ALL content (areas 3 + 27, both mode trees) and UrlPath to the surface-swift layer; the base now ships only the framework SQL sets + this contract + SQL-predicate config. Additions (feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Content-scoped contract bits (content areas, langPrefix, navDepth, page anchors, title rules, per-environment Area exclusions, protected Swift item types) moved to layers/surface-swift/surface.contract-notes.json. The gate reads this file for the base-contract collision check.",
   "idRules": {
     "nvarcharPkPrefix": "PACK-<NAME>-",
     "nvarcharPkNote": "When an addition writes rows into a base-owned table whose PK is nvarchar (most Ecom tables - PriceId, PaymentId, ProductId, etc.), it MUST namespace the PK with a PACK-<NAME>- prefix (uppercase layer name). Keeps additions disjoint from the base and from each other.",
@@ -13,30 +12,79 @@
     "intIdentityNote": "When an addition writes rows keyed by an int-identity PK, it MUST reserve an id at or above the 100000 floor. Applies equally to item-instance ids (ItemType_<systemName> PK rows).",
     "baseCatalog": "empty",
     "baseCatalogNote": "The base ships ZERO catalog (scaffolding-only, swift/2.3.2): EcomGroups, EcomProducts, EcomGroupProductRelation, EcomVariantGroups, EcomVariantsOptions, EcomVariantOptionsProductRelation, EcomDiscount, EcomDiscountTranslation, EcomPrices carry no base rows. The collision surface for these tables is addition-vs-sample-data-vs-addition, arbitrated statically by the gate.",
-    "reservedFixtureKeys": ["FIXT*", "FIXTGRP*", "FIXT-PRICE-*"],
+    "reservedFixtureKeys": [
+      "FIXT*",
+      "FIXTGRP*",
+      "FIXT-PRICE-*"
+    ],
     "reservedFixtureNote": "The sample-data layer's demo catalog (merge/_sql/catalog.sql) reserves these key prefixes. Additions must not use them.",
     "noPerItemTypeNumericTable": true,
     "noPerItemTypeNumericTableNote": "The contract is prefix-based, not per-itemType-numeric. There is deliberately NO per-itemType numeric range table - do not invent one."
   },
-
   "guaranteedRows": {
     "permissionGroups": [
-      { "table": "AccessUser", "accessUserType": 2, "id": 1325, "name": "Customers" },
-      { "table": "AccessUser", "accessUserType": 2, "id": 1270, "name": "Account Admin" },
-      { "table": "AccessUser", "accessUserType": 2, "id": 1292, "name": "CSR" }
+      {
+        "table": "AccessUser",
+        "accessUserType": 2,
+        "id": 1325,
+        "name": "Customers"
+      },
+      {
+        "table": "AccessUser",
+        "accessUserType": 2,
+        "id": 1270,
+        "name": "Account Admin"
+      },
+      {
+        "table": "AccessUser",
+        "accessUserType": 2,
+        "id": 1292,
+        "name": "CSR"
+      }
     ],
     "permissionGroupsNote": "DW 10.26.9 has no AccessUserGroup table - groups ARE AccessUser rows of type 2.",
     "users": [
-      { "table": "AccessUser", "accessUserType": 5, "id": 1328, "name": "IMCUser", "customerNumber": "98745621", "role": "buyer" },
-      { "table": "AccessUser", "accessUserType": 5, "id": 1326, "name": "IMCSalesrep", "customerNumber": "7789765", "role": "csr" }
+      {
+        "table": "AccessUser",
+        "accessUserType": 5,
+        "id": 1328,
+        "name": "IMCUser",
+        "customerNumber": "98745621",
+        "role": "buyer"
+      },
+      {
+        "table": "AccessUser",
+        "accessUserType": 5,
+        "id": 1326,
+        "name": "IMCSalesrep",
+        "customerNumber": "7789765",
+        "role": "csr"
+      }
     ],
     "memberships": [
-      { "table": "AccessUserGroupRelation", "userId": 1328, "groupId": 1325 },
-      { "table": "AccessUserGroupRelation", "userId": 1326, "groupId": 1292 }
+      {
+        "table": "AccessUserGroupRelation",
+        "userId": 1328,
+        "groupId": 1325
+      },
+      {
+        "table": "AccessUserGroupRelation",
+        "userId": 1326,
+        "groupId": 1292
+      }
     ],
     "referenceCategory": {
-      "parent": { "table": "EcomProductCategory", "categoryId": "reference_category", "categoryType": 2 },
-      "translation": { "table": "EcomProductCategoryTranslation", "categoryId": "reference_category", "languageId": "LANG1", "name": "Reference category" },
+      "parent": {
+        "table": "EcomProductCategory",
+        "categoryId": "reference_category",
+        "categoryType": 2
+      },
+      "translation": {
+        "table": "EcomProductCategoryTranslation",
+        "categoryId": "reference_category",
+        "languageId": "LANG1",
+        "name": "Reference category"
+      },
       "note": "Hidden template category (CategoryType 2) required by DemoVerifier Check 2. Seeded pre-host-start (DW caches at startup)."
     },
     "contractPrice": {
@@ -48,19 +96,13 @@
       "note": "Ships in the sample-data layer's catalog.sql, next to the product it scopes to; present only when an edition activates sampleData: true."
     }
   },
-
   "anchors": {
-    "areas": [
-      { "id": 3, "name": "Swift 2", "language": "EN" },
-      { "id": 27, "name": "Swift 2 Nederlands", "language": "NL" }
-    ],
-    "langPrefix": "/swift-2",
     "buyerUsername": "IMCUser",
     "buyerCustomerNumber": "98745621",
     "csrUsername": "IMCSalesrep",
-    "csrCustomerNumber": "7789765"
+    "csrCustomerNumber": "7789765",
+    "note": "Content anchors (areas 3/27, langPrefix /swift-2) moved to surface-swift (base 3.0.0 ships zero content areas)."
   },
-
   "repositories": {
     "provisionedByGate": true,
     "name": "Products",
@@ -71,13 +113,23 @@
     "note": "The base guarantees the Products repository/index/query/facets are provisioned by the gate. 'ProductsFrontend' is dead/removed - never provisioned by the clean-room.",
     "consumingApp": "eCom_ProductCatalog"
   },
-
   "baseOwnedTables": {
     "replaceWholeTable": [
-      "EcomCountries", "EcomCountryText", "EcomCurrencies", "EcomLanguages",
-      "EcomVatGroups", "EcomVatCountryRelations", "EcomShops", "EcomShopLanguageRelation",
-      "EcomShopGroupRelation", "EcomPayments", "EcomShippings", "EcomMethodCountryRelation",
-      "EcomOrderFlow", "EcomOrderStates", "EcomOrderStateRules", "UrlPath"
+      "EcomCountries",
+      "EcomCountryText",
+      "EcomCurrencies",
+      "EcomLanguages",
+      "EcomVatGroups",
+      "EcomVatCountryRelations",
+      "EcomShops",
+      "EcomShopLanguageRelation",
+      "EcomShopGroupRelation",
+      "EcomPayments",
+      "EcomShippings",
+      "EcomMethodCountryRelation",
+      "EcomOrderFlow",
+      "EcomOrderStates",
+      "EcomOrderStateRules"
     ],
     "replaceFiltered": [
       {
@@ -86,46 +138,8 @@
         "note": "FILTER-01: only the three permission groups are base-owned on AccessUser; user rows (1328/1326) are seeded, not serialized into the base."
       }
     ],
-    "contentAreas": [3, 27],
-    "note": "Additions touching a base-owned table follow idRules (prefix / floor) and must pass the static intersection checks below. Base ships zero catalog (see idRules.baseCatalog)."
+    "note": "Additions touching a base-owned table follow idRules (prefix / floor) and must pass the static intersection checks below. Base ships zero catalog (see idRules.baseCatalog) and zero content areas (base split 3.0.0). UrlPath is surface-swift-owned (its single row is a friendly-URL redirect bound to area 3 + a Swift page id - no route targets exist in a framework-only base)."
   },
-
-  "perEnvironmentAreaExclusions": {
-    "note": "Per-environment Area configuration deliberately NOT serialized by the base (LRN-08). These Area columns/fields are excluded by config/swift-2.3.json (the 'Site framework' deploy predicate's excludeAreaColumns + excludeFields), so the base ships brand/content-neutral structure only and every consuming environment owns these values. A fresh deserialize therefore leaves them at whatever the target DB already holds - it does NOT overwrite them.",
-    "excludeAreaColumns": [
-      "AreaCdnHost",
-      "AreaCookieWarningTemplate",
-      "AreaFrontpage",
-      "AreaEcomShopId",
-      "AreaEcomCountryCode",
-      "AreaEcomLanguageId",
-      "AreaEcomCurrencyId",
-      "AreaStockLocationID",
-      "AreaCreatedDate",
-      "AreaUpdatedDate"
-    ],
-    "excludeFields": [
-      "AreaDomain",
-      "AreaDomainLock",
-      "AreaNoindex",
-      "AreaNofollow",
-      "AreaRobotsTxt",
-      "AreaRobotsTxtIncludeSitemap"
-    ],
-    "consumerObligation": {
-      "bindSiteRoot": "After deserialize, set each area's AreaFrontpage to the environment's site-root page id.",
-      "bindShop": "After deserialize, set each area's AreaEcomShopId to the environment shop. The base ships exactly one shop: SHOP1 ('B2B Commerce Store').",
-      "restart": "Restart the DW host after binding - Area routing, frontpage resolution, and shop resolution are cached at host startup."
-    },
-    "source": "config/swift-2.3.json -> predicates[name='Site framework'].excludeAreaColumns + .excludeFields"
-  },
-
-  "protectedItemTypes": {
-    "note": "Upstream DW/Swift identifiers - NEVER renamed by the vocabulary rewrite (plan section 3.1). PK tables are ItemType_<systemName> (hyphenated on DW 10.26.9).",
-    "swift": ["Swift-v2_Master", "Swift-v2_Page", "Swift-v2_Row", "Swift-v2_App", "Swift-v2_ProductBom", "Swift-v2_HelloUser", "Swift-v2_Text"],
-    "headless": ["Headless_Master", "Headless_Page", "Headless_PageProperties", "Headless_Menu", "Headless_MenuItem", "Headless_ContentPage", "Headless_CustomerCenter", "Headless_AccountSection", "Headless_DownloadableAsset", "Headless_SpecSheet"]
-  },
-
   "collisionChecks": [
     {
       "id": "base-sqltable-intersection",
@@ -148,17 +162,11 @@
       "gateStep": "layer activation"
     }
   ],
-
   "registrationAsymmetry": {
     "rule": "Every csLedger entry with registration 'addin-attribute-config-row' MUST have >=1 matching configRows entry.",
     "note": "Cross-field rule enforced at activation (not JSON-Schema-expressible); locked by tests."
   },
-
-  "navDepth": {
-    "guarantee": "The base ships the Swift storefront surface but makes NO guarantee that top navigation nodes have children. A fresh base scaffold starts with a shallow (childless) header bar.",
-    "obligation": "An edition that promises a header MENU-BAR default (carets, hover states, reachable dropdowns — shipped by theme-default's menu-bar affordance CSS) MUST ship or author nav DEPTH: the top nav groups/pages must have children. This is a DATA prerequisite, not a CSS one.",
-    "mechanism": "The stock menu template Swift-v2_MenuRelatedContent/Menu.cshtml only emits the dropdown affordance attributes (data-bs-toggle='dropdown', the megamenu panel) when a top node has children (nodesExist = rootNode.Nodes.Any()). Childless top nodes get the bare nav-link branch and stay flat text — no theme CSS can create the dropdown on a childless bar.",
-    "authoring": "Author child groups under the top ecom groups via the Backend MCP save_groups recipe (parentGroupId), cross-assigning products with assign_products_to_group. The dw-demo-swift skill documents the recipe (references/templates.md, 'Header menu: make it read as a menu').",
-    "baseStaysContentOnly": "This is a contract NOTE to additions, not a base style change. The base ships zero CSS (SPEC-06); the affordance CSS lives in theme-default (default_custom.css), and the nav depth lives in the sample-data addition or is authored per demo."
+  "movedToSurfaceSwift": {
+    "note": "Moved by the base split (Swift 2.4 roll-forward): perEnvironmentAreaExclusions, protectedItemTypes, content anchors (areas/langPrefix), navDepth obligation, title-integrity rules. See layers/surface-swift/surface.contract-notes.json."
   }
 }

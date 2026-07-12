@@ -1,8 +1,12 @@
 # Base layer — the contract every edition builds on
 
-The **base** is the one privileged layer (`kind: base`). It stands up DW10 as Truvio Commerce with **zero catalog** (scaffolding-only): shop structure, countries/currencies/languages/VAT, payment/shipping/order flow, permission groups, URL paths, and the area 3/27 page trees — but no products, groups, or prices. Editions compose the base with additions (`feature`, `sample-data`, `surface`, `theme` layers).
+The **base** is the one privileged layer (`kind: base`). Since the Swift 2.4 base split (3.0.0) it is **framework-only**: shop structure, countries/currencies/languages/VAT, payment/shipping/order flow, and the three permission groups — **zero catalog, zero content areas, zero pages**. The Swift storefront content (areas 3 + 27, both mode trees) and `UrlPath` moved to the **`surface-swift`** layer; the headless content lives in `surface-headless`. Editions compose the base with additions (`feature`, `sample-data`, `surface`, `theme` layers).
 
-The machine-readable guarantees live in [`base.contract.json`](base.contract.json); the gate reads that file for the base-contract collision check. This doc is the human companion. **Additions bind only to the base contract — never to each other.**
+The machine-readable guarantees live in [`base.contract.json`](base.contract.json) (v2.0.0); the gate reads that file for the base-contract collision check. Content-scoped contract bits (content anchors, per-environment Area exclusions, protected Swift item types, navDepth, title rules) moved to `layers/surface-swift/surface.contract-notes.json`. This doc is the human companion. **Additions bind only to the base contract — never to each other.**
+
+## The UrlPath decision (Swift 2.4 base split)
+
+`UrlPath` ships in **surface-swift**, not in base 3.0.0. Its single row is a 301 friendly-URL redirect (`products-*` → a Swift page id) bound to area 3 — friendly URLs resolve against pages, and a framework-only base has no route targets. A base-owned UrlPath row would dangle and force base re-proves on Swift page churn. Recorded in both layer docs (this file + `layers/surface-swift/README.md`).
 
 ## ID rules
 
@@ -23,21 +27,21 @@ The base ships **zero catalog** — `EcomGroups/EcomProducts/EcomPrices/EcomDisc
 - `1328` **IMCUser** (buyer, customer number `98745621`) — member of `1325`
 - `1326` **IMCSalesrep** (CSR, customer number `7789765`) — member of `1292`
 
-**Content:** areas `3` = "Swift 2" (EN) and `27` = "Swift 2 Nederlands" (NL); langPrefix `/swift-2`.
+**Content:** none — the base ships zero content areas (3.0.0). Content anchors (areas 3/27, langPrefix `/swift-2`) are surface-swift-owned.
 
 **Reference category:** `reference_category` (`EcomProductCategory`, CategoryType 2) + `LANG1` translation — required by DemoVerifier Check 2.
 
-**Contract price:** `EcomPrices` row `FIXT-PRICE-CONTRACT` on `FIXT0001` (customer `98745621`, list × 0.8) — ships in the sample-data layer’s `catalog.sql`, present when an edition activates `sampleData: true`.
+**Contract price:** `EcomPrices` row `FIXT-PRICE-CONTRACT` on `FIXT0001` (customer `98745621`, list × 0.8) — ships in the sample-data layer's `catalog.sql`, present when an edition activates `sampleData: true`.
 
 **Repository:** `Products` / `Products.index` / `Products.query` / `Products.facets`, provisioned by the gate into `wwwroot/Files/System/Repositories/Products/`. (`ProductsFrontend` is dead/removed — never provisioned.)
 
 ## Base-owned tables
 
-**Whole-table (`replace`):** EcomCountries, EcomCountryText, EcomCurrencies, EcomLanguages, EcomVatGroups, EcomVatCountryRelations, EcomShops, EcomShopLanguageRelation, EcomShopGroupRelation, EcomPayments, EcomShippings, EcomMethodCountryRelation, EcomOrderFlow, EcomOrderStates, EcomOrderStateRules, UrlPath.
+**Whole-table (`replace`):** EcomCountries, EcomCountryText, EcomCurrencies, EcomLanguages, EcomVatGroups, EcomVatCountryRelations, EcomShops, EcomShopLanguageRelation, EcomShopGroupRelation, EcomPayments, EcomShippings, EcomMethodCountryRelation, EcomOrderFlow, EcomOrderStates, EcomOrderStateRules. (UrlPath: surface-swift-owned since 3.0.0.)
 
 **Filtered (`replace`, FILTER-01):** `AccessUser where AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')` — only the three groups are base-owned; user rows are seeded, not serialized.
 
-**Content:** areas 3 + 27 page trees.
+**Content:** none (framework-only).
 
 ## Collision checks (static, gate-enforced)
 

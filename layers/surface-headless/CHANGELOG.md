@@ -1,5 +1,12 @@
 # Changelog — surface-headless baseline
 
+## 2.3.2
+
+Swift 2.4 roll-forward re-prove (RUN-SWIFT-24): `swiftVersion` claim rolls to **2.4.0**
+on the split composition (base 3.0.0 framework-only + surface-swift carries the Swift
+content). Self-containment hardened: the headless gate leg no longer stages the Swift design package at all (base 3.0.0 is framework-only; this surface ships its own item types + repository). No data/content changes. **Proven on DW 10.28.1-PreRelease**
+(stable re-prove due when DW 10.28 lands stable on NuGet).
+
 All notable changes to the `baseline/headless/2.3` package.
 
 ## 2.3.0 — unreleased (STOREFRONT-PHASE Stage 1, §4.3)

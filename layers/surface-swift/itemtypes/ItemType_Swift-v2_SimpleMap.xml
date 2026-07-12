@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<items>
+  <item category="Swift-v2/Paragraphs/Standard" name="Simple map" systemName="Swift-v2_SimpleMap" description="Single location map (No API)" icon="LocationArrow" iconColor="None" image="" includeInUrlIndex="False" pageDefaultView="item" paragraphDefaultModule="" fieldForTitle="Title" title="" inherits="">
+    <fields>
+      <field name="Title" systemName="Title" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-DK" defaultValue="Our business location">
+        <editor type="Dynamicweb.Content.Items.Editors.RichTextEditorLight, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight"><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="DefaultFontStyle" value="dw-h3" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="DefaultTag" value="h5" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="ShowToggle" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="ShowTagSelector" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="ShowStyleSelector" value="True" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Address" systemName="Address" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor" /></editorConfuguration>
+        </editor>
+        <validators>
+          <validator type="Dynamicweb.Content.Items.Editors.RequiredValidator, Dynamicweb" errorMessage="" />
+        </validators>
+      </field>
+      <field name="Company name" systemName="CompanyName" description="Must be the real name of the company on the selected address" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor" /></editorConfuguration>
+        </editor>
+      </field>
+    </fields>
+    <rules>
+      <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
+      <rule name="" type="Dynamicweb.Content.Items.Activation.ChildItemTypeRestrictionRule, Dynamicweb" value="" />
+      <rule name="Allowed children" type="Dynamicweb.Content.Items.Activation.ChildRestrictionRule, Dynamicweb" value="" />
+      <rule name="Allowed parents" type="Dynamicweb.Content.Items.Activation.ParentItemTypeRestrictionRule, Dynamicweb" value="Swift-v2_Page" />
+      <rule name="Allowed parent types" type="Dynamicweb.Content.Items.Activation.ParentRestrictionRule, Dynamicweb" value="RootOfWebsite,RegularPage" />
+      <rule name="Allow in tree sections" type="Dynamicweb.Content.Items.Activation.SectionRestrictionRule, Dynamicweb" value="" />
+      <rule name="Enable item type for" type="Dynamicweb.Content.Items.Activation.StructureRestrictionRule, Dynamicweb" value="Paragraphs" />
+    </rules>
+    <layout>
+      <groups>
+        <group name="Simple map settings" systemName="General" sectionName="" collapsibleState="None" visibilityField="" visibilityCondition="" visibilityConditionValueType="" visibilityConditionValue="">
+          <fields>
+            <field systemName="Title" />
+            <field systemName="Address" />
+            <field systemName="CompanyName" />
+          </fields>
+        </group>
+      </groups>
+    </layout>
+  </item>
+</items>

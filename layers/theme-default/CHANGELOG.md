@@ -1,5 +1,14 @@
 # theme-default changelog
 
+## 1.0.1
+
+Swift 2.4 roll-forward re-prove (RUN-SWIFT-24). Checked against the official Swift
+v2.4.0 design package: the style-instance structure (`System/Styles/<Type>/<name>.{json,css}`)
+and the `Templates/Designs/Swift-v2/Custom/` hook are unchanged in 2.4 — **zero CSS/var
+adjustments needed**; the only change is the `swiftVersion` claim (2.4.0). Re-proven by
+the swift-demo gate theme leg (incl. the folded menu-bar affordance probes) on
+**DW 10.28.1-PreRelease** (stable re-prove due when DW 10.28 lands stable on NuGet).
+
 ## 1.0.0
 
 - Initial release: the one default presentation layer of the distribution.

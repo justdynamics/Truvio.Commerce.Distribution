@@ -1,0 +1,68 @@
+﻿"areaId": fdde1e0f-1242-4746-b843-38b61ddc5c8b
+"name": "Swift 2"
+"sortOrder": 100
+"itemType": "Swift-v2_Master"
+"itemFields":
+  "Id": "1"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "OpenLinksInNewTab": false
+  "HeaderDesktop": "157"
+  "HeaderMobile": "159"
+  "FooterDesktop": "156"
+  "FooterMobile": "158"
+  "PrivacyPolicyLink": "/swift-2/privacy-policy"
+  "CookiePolicyLink": "/swift-2/cookie-notice"
+  "CookieLayout": "modal"
+  "MediaQueryLimit": ""
+"properties":
+  "AreaStyleId": 0
+  "AreaDomain": ""
+  "AreaEncoding": ""
+  "AreaPermission": ""
+  "AreaPermissionTemplate": ""
+  "AreaTitle": ""
+  "AreaKeywords": ""
+  "AreaDescription": ""
+  "AreaDateformat": "dd/MM/yyyy"
+  "AreaCodepage": 0
+  "AreaLanguage": 1
+  "StyleId": 1
+  "AreaMasterTemplate": ""
+  "AreaCulture": "en-US"
+  "AreaApprovalType": 0
+  "AreaEcomLanguageId": ""
+  "AreaEcomCurrencyId": ""
+  "AreaActive": true
+  "AreaMasterAreaId": 0
+  "AreaRobotsTxt": ""
+  "AreaRobotsTxtIncludeSitemap": false
+  "AreaDomainLock": ""
+  "AreaUserManagementPermissions": ""
+  "AreaUrlName": ""
+  "AreaUpdatedDate": 2026-06-29T16:25:42.0430000
+  "AreaCopyOf": 1
+  "AreaLayout": "Designs/Swift-v2/Swift-v2_Page.cshtml"
+  "AreaNotFound": ""
+  "AreaRedirectFirstPage": 1
+  "AreaLockPagesToDomain": false
+  "AreaEcomCountryCode": "  "
+  "AreaEcomShopId": ""
+  "AreaUrlIgnoreForChildren": false
+  "AreaCookieCustomNotifications": false
+  "AreaItemTypePageProperty": "Swift-v2_PageProperties"
+  "AreaIncludeProductsInSitemap": false
+  "AreaSSLMode": 0
+  "AreaEcomPricesWithVat": "False"
+  "AreaCdnHost": ""
+  "AreaCdnImageHost": ""
+  "AreaStockLocationID": 0
+  "AreaReverseChargeForVat": false
+  "AreaNofollow": false
+  "AreaNoindex": false
+  "AreaPublished": true
+  "AreaDeleted": false
+  "AreaColorSchemeGroupId": "swift"
+  "AreaColorSchemeId": "light"
+  "AreaTypographyId": "fonts"
+  "AreaButtonStyleId": "buttons"
