@@ -1,8 +1,8 @@
 {
   "name": "feature-reordering-pricing",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "kind": "feature",
-  "swiftVersion": "2.3.0",
+  "swiftVersion": "2.4.0",
   "repositoryName": "Products",
   "csLedger": [
     {
@@ -13,7 +13,9 @@
   ],
   "customCode": {
     "compileOptional": true,
-    "sources": ["src/ReorderingPricingQtyBreakProvider.cs"],
+    "sources": [
+      "src/ReorderingPricingQtyBreakProvider.cs"
+    ],
     "withoutCompile": "Customer-contract pricing is the zero-code headline: the buyer-scoped EcomPrices row (PACK-RPP-0004, PriceUserCustomerNumber 98745621) is resolved and charged end-to-end by Dynamicweb's stock DefaultPriceProvider with NO custom code — PACK-RPP-PROD2 prices 1399 for customer 98745621 (base 1599). The quantity-tier EcomPrices rows (PACK-RPP-0001..0003 on PACK-RPP-PROD1) ship as data and render on tier-aware surfaces, but the stock cart resolver ignores tier quantities at cart time, so uncompiled the cart charges the base price for tiers.",
     "withCompile": "Compiling ReorderingPricingQtyBreakProvider (PriceProvider, discovered by assembly-scan; non-exclusive, HandlePricesExclusively=false) ADDS cart-time enforcement of the quantity tiers: PACK-RPP-PROD1 prices 4500/4200/3900 at qty 5/10/25. The provider returns a price ONLY for real tiers (Quantity > 1); base and contract rows fall through to the default provider, so contract pricing is identical whether or not it is compiled.",
     "compileStep": "Opt-in per the dynamicweb-skills feature-layer compile recipe (D3): add src/*.cs to the Swift solution's custom-code project and build; the provider self-registers via assembly scan (no config row required)."

@@ -1,25 +1,28 @@
 # Changelog — base
 
-## Taxonomy big-bang rename (2026-07-11)
+## 3.0.0
 
-Layer directories were renamed so the **dir-name prefix equals the kind**, traceable to the
-workflow lanes. This is a rename, not a content change — **layer versions carry over
-unchanged**, old tags remain immutable, and editions re-pin to the new names.
+**Framework-only (the Swift 2.4 base split).** Breaking restructure, executed at the
+Swift 2.4 roll-forward (RUN-SWIFT-24; FOLLOWUP bump plan):
 
-| Old name | New name |
-|----------|----------|
-| `fixture-catalog` | `catalog-fixture` |
-| `headless` | `surface-headless` |
-| `dap-portal` | `surface-dap-portal` |
-| `reordering-pricing` | `feature-reordering-pricing` |
-| `subscription-orders` | `feature-subscription-orders` |
-| `bom-configurator` | `feature-bom-configurator` |
-| `theme-nav-polish` | `overlay-nav-polish` (kind `theme` → new kind `overlay`) |
+- **ALL content moved out** to the new `surface-swift` 1.0.0 layer: `replace/_content`
+  (areas 3 "Swift 2" + 27 "Swift 2 Nederlands") and the ENTIRE `merge/` tree. The base
+  is now `fragmentModes: ["replace"]` — no merge pass.
+- **UrlPath moved to surface-swift** (its one row is a friendly-URL redirect bound to
+  area 3 + a Swift page id; no route targets exist in a framework-only base).
+- **Kept:** the 16 framework `replace/_sql` sets (shops + relations, languages,
+  currencies, countries + relations, VAT, order flow/states/rules, payments, shippings,
+  AccessUser permission-group trio) + `base.contract.json` (2.0.0, framework anchors
+  only) + the SQL-predicate config (`config/swift-2.4.json`).
+- **Engine floor: Truvio.Commerce.Serializer 0.8.1-beta** (DW packages retargeted to
+  10.28.1-PreRelease for Swift 2.4 / DW 10.28).
+- **Why at the bump:** the base had to be re-proven against 2.4 anyway; the restructure
+  rides that sweep, and future Swift content churn lands in surface-swift instead of
+  forcing base re-proves. Framework SQL is never duplicated across frontends
+  (swift-demo and headless-demo now share the identical framework root).
 
-Unchanged: `base`, `sample-data`, `theme-tech-saas`, `theme-fashion-lifestyle`,
-`theme-industrial-b2b`. Post-merge, layers get new-name tags at their carried-over versions
-(e.g. `layers/catalog-fixture/1.0.0`) and re-pinned editions get bumped tags. `base` itself is
-unchanged by the rename (no base version bump).
+**Proven on DW 10.28.1-PreRelease** (operator-approved override; stable re-prove
+mandatory when DW 10.28 reaches NuGet stable). Editions re-pin to `base@3.0.0`.
 
 ## 2.4.1
 

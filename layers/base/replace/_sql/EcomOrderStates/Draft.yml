@@ -1,11 +1,11 @@
-﻿"OrderStateId": "OS10"
+﻿"OrderStateId": "OS5"
 "OrderStateName": "Draft"
 "OrderStateDescription": ""
 "OrderStateIsDefault": true
 "OrderStateDontUseInstatistics": false
 "OrderStateIsDeleted": false
 "OrderStateMailTemplate": ""
-"OrderFlowId": 4
+"OrderFlowId": 2
 "OrderStateMailSender": ""
 "OrderStateMailSenderName": ""
 "OrderStateMailSubject": ""
@@ -14,10 +14,10 @@
 "OrderStateOthersMailTemplate": ""
 "OrderStateOthersRecipients": ""
 "OrderStateSortOrder": 0
-"OrderStateOrderType": 3
+"OrderStateOrderType": 4
 "OrderStateAllowOrder": false
 "OrderStateSendToDeliveryEmail": false
 "OrderStateSendToField": false
 "OrderStateCustomRecipientField": ""
 "OrderStateAllowEdit": false
-"OrderStateColor": "#bfbfbf"
+"OrderStateColor": "#c7c7c7"

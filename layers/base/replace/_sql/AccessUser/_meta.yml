@@ -110,6 +110,7 @@
 - "AccessUserInvitationSent"
 - "AccessUserDisableLiveDiscounts"
 - "AccessUserIsServiceAccount"
+- "AccessUserIsLogin"
 "columnDefinitions":
 - "name": "AccessUserId"
   "dataType": "int"
@@ -833,6 +834,13 @@
   "isNullable": true
   "isIdentity": false
 - "name": "AccessUserIsServiceAccount"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserIsLogin"
   "dataType": "bit"
   "maxLength": 0
   "precision": 0

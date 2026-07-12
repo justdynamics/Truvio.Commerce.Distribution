@@ -1,10 +1,13 @@
 {
   "name": "swift-demo",
-  "from": "base@2.4.1",
+  "from": "base@3.0.0",
   "add": [
-    "feature-reordering-pricing@1.2.0",
-    "feature-subscription-orders@1.1.0",
-    "feature-bom-configurator@1.1.0"
+    "feature-reordering-pricing@1.2.1",
+    "feature-subscription-orders@1.1.1",
+    "feature-bom-configurator@1.1.1"
+  ],
+  "surfaces": [
+    "surface-swift@1.0.0"
   ],
   "sampleData": true,
   "themes": [
@@ -17,5 +20,5 @@
     "/swift-2/customer-center",
     "/swift-2/sign-in/sign-in"
   ],
-  "description": "Full Swift storefront demo: base scaffold + the three feature layers + sample data (demo identities + demo catalog), proven on the default theme (theme-default — the one presentation layer, menu-bar affordance included). Equivalent to the historical full gate run."
+  "description": "Full Swift storefront demo on the split composition (Swift 2.4): framework-only base + the surface-swift content surface (both areas + UrlPath + own item types) + the three feature layers + sample data, proven on the default theme. Equivalent to the historical full gate run; proven on DW 10.28.1-PreRelease."
 }

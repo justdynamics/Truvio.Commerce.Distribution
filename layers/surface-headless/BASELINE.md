@@ -60,8 +60,9 @@ the two mode trees separately.
 ## Content model — the `Headless_*` item-type layer (D6)
 
 New, **presentation-agnostic** item types under the `Headless_*` namespace. They never reuse or
-share a Swift `ItemType_<systemName>` row — the same namespacing discipline the packs use for IDs
-(`docs/pack-contract.md`). No Swift paragraph item type is ported; the two candidates that are
+share a Swift `ItemType_<systemName>` row — the same namespacing discipline the feature layers use
+for IDs (the layer contract, `layers/layer.schema.json`). No Swift paragraph item type is ported;
+the two candidates that are
 genuinely presentation-free (spec-sheet, downloadable-asset) are defined **fresh** in this
 namespace rather than lifted from Swift.
 
@@ -90,8 +91,8 @@ Independent evolution is the point: Swift item types roll with Swift's Razor bui
 
 ## Item-instance ID floor band
 
-Per the pack contract (`docs/pack-contract.md` §3), item-instance ids are **global per itemType
-across packs/baselines** because `(itemType, fields.Id)` pairs land as PK rows in the shared
+Per the layer contract (`layers/layer.schema.json` §3), item-instance ids are **global per itemType
+across layers** because `(itemType, fields.Id)` pairs land as PK rows in the shared
 `ItemType_<systemName>` tables. Occupied floors today: reordering `100001/100004`, subscription
 `100001-100003`, bom `100010-100016`.
 
@@ -300,7 +301,7 @@ Runner `gate-headless.ps1` on Swift 2.3, clean-room shared-catalog:
   `ProductsFrontend` search index the `eCom_ProductCatalog` apps query, so **storefront product
   render is not gate-provable**. Design catalog/PLP/PDP asserts at the **SQL / Delivery-API** level
   (A2–A9), not via rendered HTML. Storefront render is a real-Swift-host UAT item (mirrors the
-  pack `renderProof:false` precedent, `docs/pack-contract.md` §2/§4). The `Headless` repository
+  feature-layer `renderProof:false` precedent, the layer contract `layers/layer.schema.json`). The `Headless` repository
   (A7–A9) closes the *search/query* gap for the Delivery API path; it does not (and need not)
   provision `ProductsFrontend` for Razor rendering.
 - **Customer-group → page-permission grants don't materialize in-gate (LRN-HARNESS-03).**

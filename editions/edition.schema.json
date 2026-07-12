@@ -59,7 +59,10 @@
     "provenOn": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["swiftVersion", "gateRunId"],
+      "required": [
+        "swiftVersion",
+        "gateRunId"
+      ],
       "properties": {
         "swiftVersion": {
           "type": "string",
@@ -77,6 +80,14 @@
     "description": {
       "type": "string",
       "description": "OPTIONAL human-readable summary of what this edition composes and demonstrates."
+    },
+    "expectedCounts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "description": "OPTIONAL row-count contract override/extension: table -> expected row count, merged over the sampleData-derived defaults (EcomProducts/EcomGroups/EcomCountries) by Set-ConfigFromEdition. Lets a page-free edition (base-only since the Swift 2.4 base split) carry DB-level framework asserts (e.g. EcomShops=1) in place of page smoke."
     }
   }
 }

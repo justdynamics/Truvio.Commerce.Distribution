@@ -1,14 +1,23 @@
 {
   "name": "base-only",
-  "from": "base@2.4.1",
+  "from": "base@3.0.0",
   "add": [],
   "sampleData": false,
-  "themes": [
-    "default"
-  ],
   "criticalPaths": [
-    "/swift-2/home",
-    "/swift-2/sign-in/sign-in"
+    "/Admin/"
   ],
-  "description": "Empty-shop scaffold: base + the default theme, ZERO catalog and no demo identities. Proves the base stands alone (scaffolding-only) and gate-PASSes with no additions - the catalog-free row-count contract (EcomProducts 0 / EcomGroups 0 / EcomCountries 96) and only catalog-independent critical paths (home, sign-in)."
+  "expectedCounts": {
+    "EcomProducts": 0,
+    "EcomGroups": 0,
+    "EcomCountries": 96,
+    "EcomShops": 1,
+    "EcomPayments": 5,
+    "EcomShippings": 17,
+    "EcomOrderStates": 14,
+    "EcomLanguages": 18,
+    "EcomCurrencies": 169,
+    "Page": 0,
+    "Area": 1
+  },
+  "description": "Framework-only proof (base split, Swift 2.4): base 3.0.0 alone - ZERO content areas, ZERO pages, ZERO catalog, no theme leg (nothing to skin). Smoke is API/DB-level: /Admin/ liveness + token auth + the framework row-count contract (shops/payments/shippings/order-states/languages/currencies + 0/0/96 catalog-free counts + Page=0/Area=0). Proven on DW 10.28.1-PreRelease."
 }

@@ -1,0 +1,72 @@
+{
+  "surfaceContractNotesVersion": "1.0.0",
+  "swiftVersion": "2.4.0",
+  "description": "Content-scoped contract bits moved OUT of base.contract.json by the Swift 2.4 base split (base 3.0.0 framework-only). surface-swift owns the Swift content surface: both areas, the entire merge tree, UrlPath, and its own item-type XMLs (itemtypes/, from the official Swift v2.4.0 design package) so the surface is self-contained.",
+  "anchors": {
+    "areas": [
+      {
+        "id": 3,
+        "name": "Swift 2",
+        "language": "EN"
+      },
+      {
+        "id": 27,
+        "name": "Swift 2 Nederlands",
+        "language": "NL"
+      }
+    ],
+    "langPrefix": "/swift-2"
+  },
+  "urlPathOwnership": {
+    "table": "UrlPath",
+    "decision": "UrlPath ships in surface-swift (replace/_sql/UrlPath), NOT in base 3.0.0.",
+    "rationale": "The table's single row is a 301 friendly-URL redirect (products-* -> Default.aspx?ID=50) bound to UrlPathAreaId 3 and a Swift page id. Friendly URLs resolve against pages; a framework-only base ships no areas and no pages, so a base-owned UrlPath row would dangle and force base re-proves on Swift page churn. It travels with the content it routes."
+  },
+  "navDepth": {
+    "note": "Menu-bar affordance obligation (RUN-NAV-DEFAULT): the header nav needs >=1 menu-visible child relation for the theme affordance probes to exercise dropdown depth. Owned by the Swift content tree (surface-swift); the gate's Ensure-NavDepth authors the minimal depth when absent."
+  },
+  "titleRules": {
+    "note": "Title-integrity contract (gate Step 10c2): for every item-typed page, DB item Title == YAML fields.Title. Applies to this surface's replace/_content tree."
+  },
+  "perEnvironmentAreaExclusions": {
+    "note": "Per-environment Area configuration deliberately NOT serialized by the base (LRN-08). These Area columns/fields are excluded by config/swift-2.3.json (the 'Site framework' deploy predicate's excludeAreaColumns + excludeFields), so the base ships brand/content-neutral structure only and every consuming environment owns these values. A fresh deserialize therefore leaves them at whatever the target DB already holds - it does NOT overwrite them.",
+    "excludeAreaColumns": [
+      "AreaCdnHost",
+      "AreaCookieWarningTemplate",
+      "AreaFrontpage",
+      "AreaEcomShopId",
+      "AreaEcomCountryCode",
+      "AreaEcomLanguageId",
+      "AreaEcomCurrencyId",
+      "AreaStockLocationID",
+      "AreaCreatedDate",
+      "AreaUpdatedDate"
+    ],
+    "excludeFields": [
+      "AreaDomain",
+      "AreaDomainLock",
+      "AreaNoindex",
+      "AreaNofollow",
+      "AreaRobotsTxt",
+      "AreaRobotsTxtIncludeSitemap"
+    ],
+    "consumerObligation": {
+      "bindSiteRoot": "After deserialize, set each area's AreaFrontpage to the environment's site-root page id.",
+      "bindShop": "After deserialize, set each area's AreaEcomShopId to the environment shop. The base ships exactly one shop: SHOP1 ('B2B Commerce Store').",
+      "restart": "Restart the DW host after binding - Area routing, frontpage resolution, and shop resolution are cached at host startup."
+    },
+    "source": "layers/surface-swift/config/swift-content-2.4.json -> predicates[name='Site framework'].excludeAreaColumns + .excludeFields"
+  },
+  "protectedItemTypes": {
+    "note": "Upstream DW/Swift identifiers - NEVER renamed by the vocabulary rewrite (plan section 3.1). PK tables are ItemType_<systemName> (hyphenated on DW 10.26.9). (Swift list owned by surface-swift since the base split; Headless list owned by surface-headless.)",
+    "swift": [
+      "Swift-v2_Master",
+      "Swift-v2_Page",
+      "Swift-v2_Row",
+      "Swift-v2_App",
+      "Swift-v2_ProductBom",
+      "Swift-v2_HelloUser",
+      "Swift-v2_Text"
+    ]
+  }
+}

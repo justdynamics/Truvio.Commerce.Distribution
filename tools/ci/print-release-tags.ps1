@@ -15,21 +15,22 @@ Usage: pwsh tools/ci/print-release-tags.ps1   # prints commands to stdout; execu
 param([string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path)
 $ErrorActionPreference = 'Stop'
 
-$swift = '2.3.0'
+$swift = '2.4.0'
 # Proven gate runs (Foundry harness) — the run ids that proved each edition on the
 # theme-default 1.0.0 state (presentation lane consolidated into ONE theme, 2026-07-12).
 $runs = @{
-    'base-only'     = '20260712-123011'
-    'swift-demo'    = '20260712-124412'   # full run — base + 3 features + sample data + theme-default (affordance folded in)
-    'headless-demo' = '20260712-125309'     # A1–A9 PASS (gate-headless runner)
-    'dap-portal'    = '20260712-130443'
+    'base-only'     = '20260712-162423'
+    'swift-demo'    = '20260712-161441'   # full run — framework base + surface-swift + 3 features + sample data + theme-default
+    'headless-demo' = '20260712-162938'     # A1–A9 PASS (gate-headless runner; ZERO Swift design files)
+    'dap-portal'    = '20260712-162829'
 }
 # Per-edition RELEASE version. Bumped where the edition file changed (themes -> ["default"],
 # overlays retired). headless-demo / dap-portal are byte-unchanged — existing tags stand.
 $editionVersion = @{
-    'swift-demo'    = '2.5.0'
-    'base-only'     = '2.5.0'
-    # headless-demo / dap-portal: files unchanged — existing tags stand, no new tag.
+    'swift-demo'    = '3.0.0'
+    'base-only'     = '3.0.0'
+    'headless-demo' = '2.5.0'
+    'dap-portal'    = '1.1.0'
 }
 # Which proven run each LAYER rides (the edition that exercised it). All layers are proven.
 $layerProof = @{
@@ -38,6 +39,7 @@ $layerProof = @{
     'feature-reordering-pricing'    = $runs['swift-demo']
     'feature-subscription-orders'   = $runs['swift-demo']
     'feature-bom-configurator'      = $runs['swift-demo']
+    'surface-swift'                 = $runs['swift-demo']
     'surface-headless'              = $runs['headless-demo']
     'surface-dap-portal'            = $runs['dap-portal']
     'theme-default'                 = $runs['swift-demo']
@@ -56,7 +58,7 @@ foreach ($d in (Get-ChildItem (Join-Path $RepoRoot 'layers') -Directory | Sort-O
     if (-not $layerProof.ContainsKey($d.Name)) { $skipped += "layers/$($d.Name)/$($m.version) (no proof mapping)"; continue }
     $run = $layerProof[$d.Name]
     $tag = "layers/$($d.Name)/$($m.version)"
-    Write-Host "git tag -a '$tag' -m 'layer $($d.Name) $($m.version) — proven on Swift $swift, gate run $run'"
+    Write-Host "git tag -a '$tag' -m 'layer $($d.Name) $($m.version) — proven on Swift $swift / DW 10.28.1-PreRelease, gate run $run (stable re-prove pending DW 10.28 stable)'"
 }
 
 Write-Host ""
@@ -69,7 +71,7 @@ foreach ($ef in (Get-ChildItem (Join-Path $RepoRoot 'editions') -File -Filter '*
     $run = $runs[$name]
     $ver = $editionVersion[$name]
     $tag = "editions/$name/$ver"
-    Write-Host "git tag -a '$tag' -m 'edition $name $ver — proven on Swift $swift, gate run $run'"
+    Write-Host "git tag -a '$tag' -m 'edition $name $ver — proven on Swift $swift / DW 10.28.1-PreRelease, gate run $run (stable re-prove pending DW 10.28 stable)'"
 }
 
 Write-Host ""
