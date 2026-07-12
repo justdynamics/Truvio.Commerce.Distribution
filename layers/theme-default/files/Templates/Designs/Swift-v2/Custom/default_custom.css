@@ -1,0 +1,272 @@
+/* default_custom.css — the CSS that makes stock Swift look great.
+ * theme-default: the starting point of every customer re-skin — not a brand.
+ * Tier 1 of the re-skin escalation ladder; customers overwrite the tokens below.
+ * Loaded via DefaultHeadInclude.cshtml after swift.css and the Style asset sheets.
+ * Pitfall guards applied throughout:
+ *   P4:  [data-dw-button] background always uses :not() chain for outline/ghost variants
+ *   P5:  page-footer paint scoped to body > footer / [data-swift-page-footer]
+ *   P10: nav rules scoped via data-attributes / .megamenu-wrapper, not bare nav selectors
+ */
+
+/* === Neutral tokens (render-critical; also in DefaultHeadInclude <style> for cache resilience).
+ * A customer re-skin overrides these first. === */
+:root {
+  --td-ink:          #1F2933;
+  --td-ink-soft:     #323F4B;
+  --td-slate:        #3E4C59;
+  --td-slate-mid:    #52606D;
+  --td-slate-light:  #CBD2D9;
+  --td-grey-light:   #F5F7FA;
+  --td-hairline:     #E4E7EB;
+  --td-white:        #FFFFFF;
+  --td-accent:       #3E4C59;                 /* the interaction accent — restrained slate */
+  --td-accent-soft:  rgba(62, 76, 89, .07);
+}
+
+/* === Primary button hover — filled variant only (P4) === */
+[data-dw-button]:not([data-dw-button="outline"]):not([data-dw-button="ghost"]):not([data-dw-button="secondary"]):hover {
+  background-color: var(--td-ink-soft);
+  border-color: var(--td-ink-soft);
+  transition: background-color 0.1s ease, border-color 0.1s ease;
+}
+
+/* === Outline/ghost button hover — soft neutral tint (P4 compliant) === */
+[data-dw-button="outline"]:hover,
+[data-dw-button="ghost"]:hover {
+  background-color: var(--td-accent-soft);
+  border-color: var(--td-accent);
+  color: var(--td-accent);
+  transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+}
+
+/* === Page-level site footer — scoped to landmark only (P5) === */
+body > footer,
+[data-swift-page-footer] {
+  background-color: var(--td-ink);
+  color: var(--td-slate-light);
+}
+
+body > footer a,
+[data-swift-page-footer] a {
+  color: var(--td-slate-light);
+  text-decoration: none;
+}
+
+body > footer a:hover,
+[data-swift-page-footer] a:hover {
+  color: var(--td-white);
+}
+
+/* === Site header / top navigation — scoped via Swift data-attribute (P10) === */
+[data-swift-page-header] a:hover,
+[data-dw-navigation] a:hover {
+  color: var(--td-accent);
+  text-decoration: none;
+}
+
+/* === Logo placement === */
+[data-swift-logo-image] img {
+  max-height: 1.75rem;
+  width: auto;
+}
+
+/* === Focus ring — visible neutral ring for keyboard accessibility === */
+:focus-visible {
+  outline: 2px solid var(--td-slate-mid);
+  outline-offset: 2px;
+}
+
+/* === Product / content card — quiet border, subtle radius on light schemes === */
+[data-dw-colorscheme="light"] .card,
+[data-dw-colorscheme="lightgrey1"] .card,
+[data-dw-colorscheme="lightgrey2"] .card {
+  box-shadow: none;
+  border: 1px solid var(--td-hairline);
+  border-radius: 0.35rem;
+  transition: border-color 0.1s ease;
+}
+
+[data-dw-colorscheme="light"] .card:hover,
+[data-dw-colorscheme="lightgrey1"] .card:hover,
+[data-dw-colorscheme="lightgrey2"] .card:hover {
+  border-color: var(--td-slate-mid);
+}
+
+/* =============================================================================
+ * Header menu-bar affordance — folded into theme-default.
+ * Turns a flat Swift-v2_MenuRelatedContent megamenu bar into a bar that READS as
+ * a menu: dropdown carets, hover + active states, and reachable dropdowns. Pure
+ * disk-overlay CSS — NO template edit, NO custom code, NO serialized DB content
+ * (SPEC-06 disk-overlay-only).
+ *
+ * PREREQUISITE (data, not CSS): the top navigation groups/pages must have
+ * children so Swift renders the dropdown/megamenu panel
+ * (`nodesExist = rootNode.Nodes.Any()` in Swift-v2_MenuRelatedContent/Menu.cshtml).
+ * A childless bar stays flat text no matter what this CSS does — the base
+ * contract records this data prerequisite (base.contract.json navDepth).
+ * ========================================================================== */
+
+/* --- Borderless band on the desktop category bar (no top/bottom hairline) --- */
+.megamenu-wrapper > nav.d-flex { padding-block: .15rem; gap: .25rem; }
+
+/* The (icon + caret) nav row shares a flex row with the header search field,
+ * whose inner wrapper carries a hardcoded min-width:260px that refuses to
+ * shrink and forces horizontal overflow around ~1440px. Relax it so the search
+ * fits (stays usable at ~190px). Scoped to the search field. */
+[data-dw-itemtype="swift-v2_searchfield"],
+[data-dw-itemtype="swift-v2_searchfield"] .js-async-fetch-placeholder { min-width: 0 !important; }
+
+/* --- Lay out icon + label + caret on one row on the top-level items.
+ * Tighter horizontal padding + gap keeps the icon/caret additions from widening
+ * the nav row enough to push the header search field past the viewport. --- */
+.megamenu-wrapper > nav > .nav-item > .nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding-inline: .3rem;
+  border-radius: .25rem;
+  transition: background-color .12s ease, color .12s ease, box-shadow .12s ease;
+}
+
+/* --- Icon hook (OPT-IN, generic; ships icon-free) ----------------------------
+ * Icons are keyed on a neutral hook — a `data-nav-icon="<name>"` attribute a
+ * demo sets on the nav node's CSS-class/attributes field. The box below is
+ * inert until a node opts in AND a binding maps <name> to an SVG. theme-default
+ * ships NO icon files and NO bindings — bind against the DW10 stock icon set
+ * (/Files/Images/Icons/, ~80 SVGs) in the consuming solution:
+ *   (1) pick <name>.svg from /Files/Images/Icons/,
+ *   (2) add one line `[data-swift-menu] a.nav-link[data-nav-icon="<name>"]::before{
+ *       -webkit-mask-image:url("/Files/Images/Icons/<name>.svg");
+ *       mask-image:url("/Files/Images/Icons/<name>.svg"); }`,
+ *   (3) set the nav node's field to data-nav-icon="<name>".
+ * Painted with mask-image + currentColor so each icon inherits the nav text
+ * colour and recolours on hover/active for free. */
+[data-swift-menu] a.nav-link[data-nav-icon]::before {
+  content: "";
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+  -webkit-mask-position: center;  mask-position: center;
+  -webkit-mask-size: contain;     mask-size: contain;
+  vertical-align: -0.15em;
+}
+
+/* --- Caret on top items that have a dropdown; rotates when open/hovered --- */
+.megamenu-wrapper > nav > .nav-item.dropdown > .nav-link::after {
+  content: "";
+  display: inline-block;
+  flex: 0 0 auto;
+  width: .42em;
+  height: .42em;
+  margin-left: .05rem;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform .2s ease;
+}
+.megamenu-wrapper > nav > .nav-item.dropdown > .nav-link[aria-expanded="true"]::after {
+  transform: translateY(1px) rotate(-135deg);
+}
+/* LRN-nav-04: Swift's link classes (text-decoration-underline-hover) reuse the
+ * SAME ::after pseudo as this caret; when the panel opens they repurpose ::after
+ * into an underline and zero the caret's side border, so the chevron VANISHES on
+ * open. Force the chevron to own ::after in every open state (hover / .show /
+ * aria-expanded) — border AND position, or the border-restored caret lands UNDER
+ * the item (the underline rule positions ::after absolutely at bottom-left). */
+.megamenu-wrapper > nav > .nav-item.dropdown:hover > .nav-link::after,
+.megamenu-wrapper > nav > .nav-item.dropdown > .nav-link.show::after,
+.megamenu-wrapper > nav > .nav-item.dropdown > .nav-link[aria-expanded="true"]::after {
+  position: static !important;
+  inset: auto !important;
+  display: inline-block !important;
+  width: .42em !important;
+  height: .42em !important;
+  border: 0 !important;
+  border-right: 1.5px solid currentColor !important;
+  border-bottom: 1.5px solid currentColor !important;
+  transform: translateY(1px) rotate(-135deg);
+}
+
+/* --- Hover + active affordances (desktop) --- */
+@media (min-width: 992px) {
+  /* open the megamenu / dropdown on hover, not only on click */
+  .megamenu-wrapper > nav > .nav-item.dropdown:hover > .dropdown-menu { display: block; }
+  .megamenu-wrapper > nav > .nav-item.dropdown:hover > .nav-link::after { transform: translateY(1px) rotate(-135deg); }
+
+  /* Keep the dropdown reachable while the mouse travels to it. TWO dead zones:
+   *
+   *   LRN-nav-05 (horizontal) — the stock dropdown min-width (~192px) is narrower
+   *      than a long category label, leaving a dead strip beside the panel.
+   *      min-width:100% (of the position:relative nav-item = the trigger width)
+   *      makes the panel underlap the whole label so every downward path lands on it.
+   *
+   *   LRN-nav-03 (vertical) — Popper positions the panel ~16px BELOW the trigger
+   *      with an inline transform (margin-top / CSS top cannot beat it). Bridge that
+   *      gap with the ITEM's ::after, gated on :has(> .show) — the OPEN state, NOT
+   *      :hover, which is already lost inside the gap. As the item's own pseudo it
+   *      hit-tests as the item (no item.mouseleave -> panel stays open); z-index lifts
+   *      it over the header layout; height must exceed the offset (1.25rem = 20px).
+   *
+   * 03 (vertical) + 05 (horizontal) together are the complete reach fix; neither
+   * alone suffices. Requires CSS :has() (all current evergreen browsers). */
+  .megamenu-wrapper > nav > .nav-item.dropdown > .dropdown-menu,
+  .megamenu-wrapper > nav > .nav-item.dropdown > .megamenu {
+    min-width: 100%;
+  }
+  .megamenu-wrapper > nav > .nav-item.dropdown:has(> .dropdown-menu.show)::after,
+  .megamenu-wrapper > nav > .nav-item.dropdown:has(> .megamenu.show)::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 1.25rem;
+    z-index: 1001;
+  }
+
+  /* soft hover background on the whole top item */
+  .megamenu-wrapper > nav > .nav-item > .nav-link:hover,
+  .megamenu-wrapper > nav > .nav-item.dropdown:hover > .nav-link {
+    background-color: var(--td-accent-soft);
+    color: var(--td-accent);
+  }
+
+  /* active category — accent bottom border */
+  .megamenu-wrapper > nav > .nav-item > .nav-link[aria-current="page"] {
+    box-shadow: inset 0 -3px 0 0 var(--td-accent);
+    color: var(--td-accent);
+    border-radius: .25rem .25rem 0 0;
+  }
+}
+
+/* --- Dropdown / megamenu panel polish: soft shadow + tidy links --- */
+.megamenu-wrapper .megamenu,
+.megamenu-wrapper .dropdown-menu.dropdown-menu-shadow {
+  box-shadow: 0 10px 26px rgba(31, 41, 51, .12);
+}
+.megamenu-wrapper .megamenu-col .nav-link:hover { color: var(--td-accent); }
+.megamenu-wrapper .dropdown-menu .dropdown-item:hover {
+  background-color: var(--td-accent-soft);
+  color: var(--td-accent);
+}
+
+/* --- Leaf subcategory landing pages: suppress stock empty-state placeholders ---
+ * A childless (leaf) product group renders two stock empty-state alerts — the
+ * ProductListNavigation editor placeholder ("navigation will be shown here") and
+ * an empty ProductListItemRepeater bar. On a category with real subgroups/products
+ * these item types render actual links/tiles instead, so hiding the empty alert is
+ * a no-op there. Result: a clicked subcategory shows a clean landing (breadcrumb +
+ * heading + description) instead of unfinished-looking grey placeholders. */
+[data-dw-itemtype="swift-v2_productlistnavigation"] .alert.alert-dark,
+[data-dw-itemtype="swift-v2_productlistitemrepeater"] .alert.alert-dark {
+  display: none !important;
+}
+
+/* === Utility: table data density === */
+table {
+  font-size: 0.9em;
+  border-collapse: collapse;
+}

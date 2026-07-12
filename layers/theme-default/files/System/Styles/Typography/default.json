@@ -1,0 +1,16 @@
+{
+  "Id": "default",
+  "Name": "Default",
+  "BaseFontSize": 16,
+  "BaseFontScale": 1.2,
+  "ParagraphFont": "Inter",
+  "ParagraphFontWeight": 400,
+  "ParagraphLineHeight": 1.5,
+  "HeadingFont": "Inter",
+  "HeadingFontWeight": 600,
+  "HeadingLetterSpacing": -0.01,
+  "HeadingLineHeight": 1.15,
+  "ButtonFont": "Inter",
+  "ButtonFontWeight": 500,
+  "ButtonLineHeight": 1.2
+}

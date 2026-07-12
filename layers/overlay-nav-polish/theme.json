@@ -1,9 +1,0 @@
-{
-  "themeName": "nav-polish",
-  "displayName": "Header Menu-Bar Affordance (Option B)",
-  "brandId": "nav-polish",
-  "kind": "affordance-overlay",
-  "baselineTarget": "swift/2.3",
-  "wiring": "Always-on affordance OVERLAY, not a full theme. Composed via an edition `overlays` entry (not `themes`), it deploys its files/** disk-overlay and the harness links Custom/nav-polish.css into the active area's CustomHeadInclude AFTER the brand custom CSS, so it layers on top of whichever demo theme is active without replacing it. Requires child nav nodes (data) for the dropdown/megamenu to render — CSS alone cannot create the affordance on a childless bar (see base.contract.json navDepth).",
-  "notes": "Affordance CORE only (carets, hover/active, reachable dropdowns per LRN-nav-03/04/05). Category icons are an OPT-IN add-on keyed on a neutral data-nav-icon hook (see README.md); no icon fires until a demo tags a nav node, so the core is catalog-agnostic. No template edit, no custom code, no serialized DB content (SPEC-06 disk-overlay-only)."
-}

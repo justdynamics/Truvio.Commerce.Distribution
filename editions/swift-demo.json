@@ -8,12 +8,7 @@
   ],
   "sampleData": true,
   "themes": [
-    "tech-saas",
-    "fashion-lifestyle",
-    "industrial-b2b"
-  ],
-  "overlays": [
-    "nav-polish"
+    "default"
   ],
   "criticalPaths": [
     "/swift-2/home",
@@ -22,5 +17,5 @@
     "/swift-2/customer-center",
     "/swift-2/sign-in/sign-in"
   ],
-  "description": "Full Swift storefront demo: base scaffold + the three feature layers + sample data (demo identities + demo catalog), proven across all three demo themes. Equivalent to the historical full gate run."
+  "description": "Full Swift storefront demo: base scaffold + the three feature layers + sample data (demo identities + demo catalog), proven on the default theme (theme-default — the one presentation layer, menu-bar affordance included). Equivalent to the historical full gate run."
 }

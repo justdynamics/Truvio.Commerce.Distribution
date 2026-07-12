@@ -1,0 +1,32 @@
+/* default */
+/* Imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+/* Basic types */
+body, .preview {
+/* Base */
+--dw-base-font-size: 16px;
+--dw-type-scale: 1.2;
+/* Paragraphs */
+--dw-font-family: Inter;
+--dw-font-style: normal;
+--dw-font-weight: 400;
+--dw-letter-spacing: 0em;
+--dw-line-height: 1.5;
+--dw-text-transform: none;
+}
+/* Headings */
+h1, h2, h3, h4, h5, h6, .dw-h1, .dw-h2, .dw-h3, .dw-h4, .dw-h5, .dw-h6 {
+--dw-font-family: Inter;
+--dw-font-weight: 600;
+--dw-letter-spacing: -0.01em;
+--dw-line-height: 1.15;
+--dw-text-transform: none;
+}
+/* Buttons */
+[data-dw-button] {
+--dw-font-family: Inter;
+--dw-font-weight: 500;
+--dw-letter-spacing: 0.01em;
+--dw-line-height: 1.2;
+--dw-text-transform: none;
+}

@@ -16,22 +16,21 @@ param([string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path)
 $ErrorActionPreference = 'Stop'
 
 $swift = '2.3.0'
-# Proven gate runs (Foundry harness) — the run id that proved each edition on the
-# sample-data 2.0.0 state (catalog-fixture absorbed into sample-data, 2026-07-12).
+# Proven gate runs (Foundry harness) — the run ids that proved each edition on the
+# theme-default 1.0.0 state (presentation lane consolidated into ONE theme, 2026-07-12).
+# RUNIDS-TBD: filled by the theme-default release sweep before the PR opens.
 $runs = @{
-    'base-only'     = '20260712-000219'
-    'swift-demo'    = '20260712-000539'   # full run — base + 3 features + sample data (identities + catalog) + 3 themes + nav overlay
-    'headless-demo' = '20260712-001629'   # A1–A9 PASS (gate-headless runner)
-    'dap-portal'    = '20260712-004918'
+    'base-only'     = 'RUNID-BASE-ONLY'
+    'swift-demo'    = 'RUNID-SWIFT-DEMO'   # full run — base + 3 features + sample data + theme-default (affordance folded in)
+    'headless-demo' = 'RUNID-HEADLESS'     # A1–A9 PASS (gate-headless runner)
+    'dap-portal'    = 'RUNID-DAP-PORTAL'
 }
-# Per-edition RELEASE version. Bumped by a patch where the edition file changed
-# (catalog-fixture retired; catalog rides sampleData: true). base-only is byte-unchanged,
-# so it is NOT re-tagged here.
+# Per-edition RELEASE version. Bumped where the edition file changed (themes -> ["default"],
+# overlays retired). headless-demo / dap-portal are byte-unchanged — existing tags stand.
 $editionVersion = @{
-    'swift-demo'    = '2.4.4'
-    'headless-demo' = '2.4.3'
-    'dap-portal'    = '1.0.2'
-    # base-only: file unchanged — existing tag stands, no new tag.
+    'swift-demo'    = '2.5.0'
+    'base-only'     = '2.5.0'
+    # headless-demo / dap-portal: files unchanged — existing tags stand, no new tag.
 }
 # Which proven run each LAYER rides (the edition that exercised it). All layers are proven.
 $layerProof = @{
@@ -42,10 +41,7 @@ $layerProof = @{
     'feature-bom-configurator'      = $runs['swift-demo']
     'surface-headless'              = $runs['headless-demo']
     'surface-dap-portal'            = $runs['dap-portal']
-    'theme-tech-saas'               = $runs['swift-demo']
-    'theme-fashion-lifestyle'       = $runs['swift-demo']
-    'theme-industrial-b2b'          = $runs['swift-demo']
-    'overlay-nav-polish'            = $runs['swift-demo']
+    'theme-default'                 = $runs['swift-demo']
 }
 
 Write-Host "# === Print-don't-run: annotated release tags (run AFTER the PR merges) ===" -ForegroundColor Cyan

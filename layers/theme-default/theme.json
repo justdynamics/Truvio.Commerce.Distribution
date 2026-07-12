@@ -1,0 +1,9 @@
+{
+  "themeName": "default",
+  "displayName": "Default",
+  "brandId": "default",
+  "defaultSchemeId": "light",
+  "customHeadInclude": "Custom/DefaultHeadInclude.cshtml",
+  "baselineTarget": "swift/2.3",
+  "areaId": 3
+}

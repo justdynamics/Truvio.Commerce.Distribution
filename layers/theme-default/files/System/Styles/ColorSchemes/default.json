@@ -1,0 +1,76 @@
+{
+  "Name": "Default",
+  "Id": "default",
+  "Schemes": [
+    {
+      "GroupId": "default",
+      "Name": "Light",
+      "Id": "light",
+      "BackgroundColor": "#FFFFFF",
+      "ForegroundColor": "#1F2933",
+      "PrimaryButtonColor": "#1F2933",
+      "SecondaryButtonColor": "#52606D",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "default",
+      "Name": "Light Grey 1",
+      "Id": "lightgrey1",
+      "BackgroundColor": "#F5F7FA",
+      "ForegroundColor": "#1F2933",
+      "PrimaryButtonColor": "#1F2933",
+      "SecondaryButtonColor": "#52606D",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "default",
+      "Name": "Light Grey 2",
+      "Id": "lightgrey2",
+      "BackgroundColor": "#E4E7EB",
+      "ForegroundColor": "#1F2933",
+      "PrimaryButtonColor": "#1F2933",
+      "SecondaryButtonColor": "#3E4C59",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "default",
+      "Name": "Dark",
+      "Id": "dark",
+      "BackgroundColor": "#1F2933",
+      "ForegroundColor": "#F5F7FA",
+      "PrimaryButtonColor": "#F5F7FA",
+      "SecondaryButtonColor": "#7B8794",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "default",
+      "Name": "Dark Subtle",
+      "Id": "darksubtle",
+      "BackgroundColor": "#323F4B",
+      "ForegroundColor": "#CBD2D9",
+      "PrimaryButtonColor": "#F5F7FA",
+      "SecondaryButtonColor": "#7B8794",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "default",
+      "Name": "Primary",
+      "Id": "primary",
+      "BackgroundColor": "#1F2933",
+      "ForegroundColor": "#F5F7FA",
+      "PrimaryButtonColor": "#F5F7FA",
+      "SecondaryButtonColor": "#9AA5B1",
+      "CustomColors": []
+    },
+    {
+      "GroupId": "default",
+      "Name": "Secondary",
+      "Id": "secondary",
+      "BackgroundColor": "#3E4C59",
+      "ForegroundColor": "#F5F7FA",
+      "PrimaryButtonColor": "#F5F7FA",
+      "SecondaryButtonColor": "#9AA5B1",
+      "CustomColors": []
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+/* default */
+.dw-colorscheme-light,
+[data-dw-colorscheme="light"] {
+/* Light */
+--dw-color-background: #FFFFFF;
+--dw-color-background-rgb: 255, 255, 255;
+--dw-color-foreground: #1F2933;
+--dw-color-foreground-rgb: 31, 41, 51;
+--dw-color-button-primary: #1F2933;
+--dw-color-button-primary-rgb: 31, 41, 51;
+--dw-color-button-primary-contrast: #fff;
+--dw-color-button-secondary: #52606D;
+--dw-color-button-secondary-rgb: 82, 96, 109;
+--dw-color-button-secondary-contrast: #fff;
+}
+.dw-colorscheme-lightgrey1,
+[data-dw-colorscheme="lightgrey1"] {
+/* Light Grey 1 */
+--dw-color-background: #F5F7FA;
+--dw-color-background-rgb: 245, 247, 250;
+--dw-color-foreground: #1F2933;
+--dw-color-foreground-rgb: 31, 41, 51;
+--dw-color-button-primary: #1F2933;
+--dw-color-button-primary-rgb: 31, 41, 51;
+--dw-color-button-primary-contrast: #fff;
+--dw-color-button-secondary: #52606D;
+--dw-color-button-secondary-rgb: 82, 96, 109;
+--dw-color-button-secondary-contrast: #fff;
+}
+.dw-colorscheme-lightgrey2,
+[data-dw-colorscheme="lightgrey2"] {
+/* Light Grey 2 */
+--dw-color-background: #E4E7EB;
+--dw-color-background-rgb: 228, 231, 235;
+--dw-color-foreground: #1F2933;
+--dw-color-foreground-rgb: 31, 41, 51;
+--dw-color-button-primary: #1F2933;
+--dw-color-button-primary-rgb: 31, 41, 51;
+--dw-color-button-primary-contrast: #fff;
+--dw-color-button-secondary: #3E4C59;
+--dw-color-button-secondary-rgb: 62, 76, 89;
+--dw-color-button-secondary-contrast: #fff;
+}
+.dw-colorscheme-dark,
+[data-dw-colorscheme="dark"] {
+/* Dark */
+--dw-color-background: #1F2933;
+--dw-color-background-rgb: 31, 41, 51;
+--dw-color-foreground: #F5F7FA;
+--dw-color-foreground-rgb: 245, 247, 250;
+--dw-color-button-primary: #F5F7FA;
+--dw-color-button-primary-rgb: 245, 247, 250;
+--dw-color-button-primary-contrast: #1F2933;
+--dw-color-button-secondary: #7B8794;
+--dw-color-button-secondary-rgb: 123, 135, 148;
+--dw-color-button-secondary-contrast: #fff;
+}
+.dw-colorscheme-darksubtle,
+[data-dw-colorscheme="darksubtle"] {
+/* Dark Subtle */
+--dw-color-background: #323F4B;
+--dw-color-background-rgb: 50, 63, 75;
+--dw-color-foreground: #CBD2D9;
+--dw-color-foreground-rgb: 203, 210, 217;
+--dw-color-button-primary: #F5F7FA;
+--dw-color-button-primary-rgb: 245, 247, 250;
+--dw-color-button-primary-contrast: #1F2933;
+--dw-color-button-secondary: #7B8794;
+--dw-color-button-secondary-rgb: 123, 135, 148;
+--dw-color-button-secondary-contrast: #fff;
+}
+.dw-colorscheme-primary,
+[data-dw-colorscheme="primary"] {
+/* Primary */
+--dw-color-background: #1F2933;
+--dw-color-background-rgb: 31, 41, 51;
+--dw-color-foreground: #F5F7FA;
+--dw-color-foreground-rgb: 245, 247, 250;
+--dw-color-button-primary: #F5F7FA;
+--dw-color-button-primary-rgb: 245, 247, 250;
+--dw-color-button-primary-contrast: #1F2933;
+--dw-color-button-secondary: #9AA5B1;
+--dw-color-button-secondary-rgb: 154, 165, 177;
+--dw-color-button-secondary-contrast: #1F2933;
+}
+.dw-colorscheme-secondary,
+[data-dw-colorscheme="secondary"] {
+/* Secondary */
+--dw-color-background: #3E4C59;
+--dw-color-background-rgb: 62, 76, 89;
+--dw-color-foreground: #F5F7FA;
+--dw-color-foreground-rgb: 245, 247, 250;
+--dw-color-button-primary: #F5F7FA;
+--dw-color-button-primary-rgb: 245, 247, 250;
+--dw-color-button-primary-contrast: #1F2933;
+--dw-color-button-secondary: #9AA5B1;
+--dw-color-button-secondary-rgb: 154, 165, 177;
+--dw-color-button-secondary-contrast: #1F2933;
+}

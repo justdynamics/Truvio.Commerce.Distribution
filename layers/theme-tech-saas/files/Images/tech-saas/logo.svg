@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" fill="none" role="img" aria-label="Tech / SaaS logo">
-  <!-- Geometric mark: stacked rectangles suggesting data layers / SaaS stack -->
-  <rect x="0" y="8" width="32" height="6" rx="1" fill="#3B82F6"/>
-  <rect x="0" y="17" width="24" height="6" rx="1" fill="#64748B"/>
-  <rect x="0" y="26" width="16" height="6" rx="1" fill="#CBD5E1"/>
-  <!-- Wordmark -->
-  <text x="44" y="28" font-family="DM Sans, system-ui, sans-serif" font-size="18" font-weight="700" letter-spacing="-0.03em" fill="#0F172A">TechSaaS</text>
-</svg>

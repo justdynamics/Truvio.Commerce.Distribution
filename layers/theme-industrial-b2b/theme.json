@@ -1,9 +1,0 @@
-{
-  "themeName": "industrial-b2b",
-  "displayName": "Industrial / B2B",
-  "brandId": "industrial-b2b",
-  "defaultSchemeId": "primary",
-  "customHeadInclude": "Custom/IndustrialB2bHeadInclude.cshtml",
-  "baselineTarget": "swift/2.3",
-  "areaId": 3
-}
