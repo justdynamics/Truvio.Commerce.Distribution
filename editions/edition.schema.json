@@ -47,15 +47,7 @@
         "type": "string",
         "pattern": "^[a-z0-9-]+$"
       },
-      "description": "OPTIONAL theme names the edition applies (kind theme, disk-overlay-only per SPEC-06). In Phase 2 these map to the harness config.themes.items entries by themeName; the physical theme fold-in as layers/theme-* happens in Phase 3. Each theme is apply+asserted after the DB composition, DB never reset (themes are a transient post-deserialize test state)."
-    },
-    "overlays": {
-      "type": "array",
-      "items": {
-        "type": "string",
-        "pattern": "^[a-z0-9-]+$"
-      },
-      "description": "OPTIONAL affordance-overlay layer names (kind overlay, disk-overlay-only per SPEC-06), resolved to layers/overlay-<name>. Unlike 'themes' — which are FULL themes applied one at a time and swapped (each brings its own ColorSchemes/Buttons/Typography style pairs) — an overlay is an AFFORDANCE layer that is ALWAYS ON: it deploys its files/** once at gate provision and layers ON TOP of whichever theme is active (e.g. overlay-nav-polish: the header menu-bar carets/hover/reachable-dropdown CSS). Overlays carry no style pairs and are never a themes[] swap entry (the full-theme apply asserts would fail on them); the harness links the overlay CSS into the active area's CustomHeadInclude after the brand CSS and the affordance gate leg asserts it renders. DB never reset. Composition policy: overlays are STAGING — a hard cap of 3 live at once, and any overlay composed into every edition for a full Swift cycle folds into the theme layers (or an upstream divergence report) at the next Swift bump."
+      "description": "OPTIONAL theme names the edition applies (kind theme, disk-overlay-only per SPEC-06), resolved to layers/theme-<name>. These map to the harness config.themes.items entries by themeName. Each theme is apply+asserted after the DB composition, DB never reset (themes are a transient post-deserialize test state). The theme assert set includes the header menu-bar affordance probes (nav depth permitting - base.contract.json navDepth)."
     },
     "criticalPaths": {
       "type": "array",

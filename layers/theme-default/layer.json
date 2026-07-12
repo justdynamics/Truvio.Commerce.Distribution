@@ -1,0 +1,16 @@
+{
+  "name": "theme-default",
+  "version": "1.0.0",
+  "kind": "theme",
+  "swiftVersion": "2.3.0",
+  "files": [
+    "System/Styles/Buttons/default.css",
+    "System/Styles/Buttons/default.json",
+    "System/Styles/ColorSchemes/default.css",
+    "System/Styles/ColorSchemes/default.json",
+    "System/Styles/Typography/default.css",
+    "System/Styles/Typography/default.json",
+    "Templates/Designs/Swift-v2/Custom/default_custom.css",
+    "Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml"
+  ]
+}

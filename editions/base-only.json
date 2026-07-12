@@ -4,11 +4,11 @@
   "add": [],
   "sampleData": false,
   "themes": [
-    "tech-saas"
+    "default"
   ],
   "criticalPaths": [
     "/swift-2/home",
     "/swift-2/sign-in/sign-in"
   ],
-  "description": "Empty-shop scaffold: base + one theme, ZERO catalog and no demo identities. Proves the base stands alone (scaffolding-only) and gate-PASSes with no additions - the catalog-free row-count contract (EcomProducts 0 / EcomGroups 0 / EcomCountries 96) and only catalog-independent critical paths (home, sign-in)."
+  "description": "Empty-shop scaffold: base + the default theme, ZERO catalog and no demo identities. Proves the base stands alone (scaffolding-only) and gate-PASSes with no additions - the catalog-free row-count contract (EcomProducts 0 / EcomGroups 0 / EcomCountries 96) and only catalog-independent critical paths (home, sign-in)."
 }

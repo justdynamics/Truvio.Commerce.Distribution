@@ -16,8 +16,7 @@ and every layer traces to a lane of the ecosystem workflow (the Foundry's
 | `base` | base | Foundry → Distribution (the privileged scaffold) | Framework + `base.contract.json`; zero catalog. Singleton. |
 | `feature-*` | feature | Distribution (published content) | A customization-tier bundle; MAY carry a compile-optional `src/` provider. |
 | `surface-*` | surface | Distribution → Storefront (frontend leg) | What a frontend needs — headless content + Delivery-API, or a content area. |
-| `theme-*` | theme | Distribution (presentation) | A **swappable** brand: disk-overlay-only (SPEC-06), applied one at a time via `themes[]`. |
-| `overlay-*` | overlay | Distribution (presentation) | An **always-on affordance**: disk-overlay-only (SPEC-06), layered on top of the active theme via `overlays[]`. |
+| `theme-*` | theme | Distribution (presentation) | Disk-overlay-only presentation (SPEC-06), applied via `themes[]`. The distribution ships **one** default theme (`theme-default`) — the neutral starting point of every customer re-skin. |
 | `sample-data` | sample-data | Distribution (published content) | Demo identities + demo shop catalog + contract data, shipped as SQL. Singleton. |
 
 ## Layers (`layers/<name>/`)
@@ -31,19 +30,16 @@ and every layer traces to a lane of the ecosystem workflow (the Foundry's
 | `feature-bom-configurator` | feature | 1.1.0 | Kit / BOM configurator. |
 | `surface-headless` | surface | 2.3.1 | Headless content surface: `Headless_*` item types + repository + Delivery-API. |
 | `surface-dap-portal` | surface | 1.0.0 | Digital Asset Portal content area (area 26, ~32 Swift-v2 pages). Content-only add-on surface. |
-| `theme-tech-saas` | theme | 2.3.0 | Tech/SaaS brand theme (disk-only, SPEC-06). |
-| `theme-fashion-lifestyle` | theme | 2.3.0 | Fashion/Lifestyle brand theme. |
-| `theme-industrial-b2b` | theme | 2.3.0 | Industrial B2B brand theme. |
-| `overlay-nav-polish` | overlay | 1.0.0 | Header menu-bar affordance overlay: carets, hover/active, reachable dropdowns. Always-on `overlays` entry (not a `themes` swap); layers on top of any theme. Icons opt-in. |
+| `theme-default` | theme | 1.0.0 | The one presentation layer (disk-only, SPEC-06): the CSS that makes stock Swift look great — neutral palette, quiet buttons, Inter typography, and the header menu-bar affordance (carets, hover/active, reachable dropdowns) folded in. The starting point of every customer re-skin, not a brand. |
 
 ## Editions (`editions/<name>.json`)
 
-A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampleData`, `themes`, `overlays`).
+A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampleData`, `themes`).
 
 | Edition | Composition | Status |
 |---------|-------------|--------|
-| `base-only` | base + theme `tech-saas`; no sample data (no catalog, no identities) | **Proven** — the empty-shop scaffold (EcomProducts 0 / 0 / EcomCountries 96). |
-| `swift-demo` | base + feature-reordering-pricing + feature-subscription-orders + feature-bom-configurator + sample data + all 3 themes + `nav-polish` affordance overlay | **Proven** — the full Swift storefront (20 / 3 / 96). |
+| `base-only` | base + theme `default`; no sample data (no catalog, no identities) | **Proven** — the empty-shop scaffold (EcomProducts 0 / 0 / EcomCountries 96). |
+| `swift-demo` | base + feature-reordering-pricing + feature-subscription-orders + feature-bom-configurator + sample data + theme `default` | **Proven** — the full Swift storefront (20 / 3 / 96). |
 | `headless-demo` | base + `surface-headless` + sample data | **Proven** — headless Delivery-API (A1–A9). |
 | `dap-portal` | base + `surface-dap-portal` + sample data | **Proven** — the DAP content surface (area 26), gate-proven end-to-end on Swift 2.3. |
 
