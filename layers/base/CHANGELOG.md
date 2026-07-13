@@ -1,5 +1,21 @@
 # Changelog — base
 
+## 3.0.1
+
+Learnings triage fixes (RUN-TRIAGE-20260713 in the Foundry):
+
+- **LRN-sapporo-01:** all 17 GBP `EcomCurrencies` rows shipped `CurrencyRate: 0` —
+  any price-context path converting through GBP (the index price sweep computes
+  prices per currency) threw `DivideByZeroException`, emptying PDP price/add-to-cart
+  paragraphs. Rows now ship `CurrencyRate: 86`. Gate lint: no `EcomCurrencies` row
+  may ship `CurrencyRate <= 0`.
+- **LRN-hosted-publish-03:** `config/swift-2.4.json` declared the retired predicate
+  mode enum (`"Deploy"` ×16), which engine 0.8.1-beta — this layer's own declared
+  floor — rejects with a 500 on every serializer call including the read-only
+  settings query. All predicates now `"mode": "Replace"`. Gate probe: after staging
+  the config, `GET /Admin/Api/SerializerSettings` must return 200 with a non-empty
+  `predicatesSummary`.
+
 ## 3.0.0
 
 **Framework-only (the Swift 2.4 base split).** Breaking restructure, executed at the
