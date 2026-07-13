@@ -1,5 +1,19 @@
 # Changelog — surface-swift
 
+## 1.0.1
+
+Learnings triage fix (RUN-TRIAGE-20260713 in the Foundry):
+
+- **LRN-uipass-03:** both areas wired `AreaColorSchemeGroupId: swift` /
+  `AreaTypographyId: fonts` / `AreaButtonStyleId: buttons` — style-asset pairs that
+  no layer (and no Swift release: `Files/System/Styles/` ships `ColorScheme.config`
+  only) provides. `TryGet*Style` fails silently and the storefront renders with
+  serif fallbacks. All three ids in both areas (replace AND merge trees) now point
+  at `default`, which `theme-default` ships as `ColorSchemes/Buttons/Typography
+  default.{json,css}`. Gate assert: after composing an edition with theme-default,
+  the main area's three style ids resolve to files under `files/System/Styles/`,
+  and the home `<head>` carries the three `Styles/` `<link>`s.
+
 ## 1.0.0
 
 Born in the Swift 2.4 base split (RUN-SWIFT-24; FOLLOWUP bump plan). The Swift

@@ -5,7 +5,7 @@
   "predicates": [
     {
       "name": "EcomCountries",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomCountries",
       "serviceCaches": [
@@ -15,7 +15,7 @@
     },
     {
       "name": "EcomCountryText",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomCountryText",
       "serviceCaches": [
@@ -24,7 +24,7 @@
     },
     {
       "name": "EcomCurrencies",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomCurrencies",
       "serviceCaches": [
@@ -33,7 +33,7 @@
     },
     {
       "name": "EcomLanguages",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomLanguages",
       "serviceCaches": [
@@ -42,7 +42,7 @@
     },
     {
       "name": "EcomVatGroups",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomVatGroups",
       "nameColumn": "VatGroupName",
@@ -52,7 +52,7 @@
     },
     {
       "name": "EcomVatCountryRelations",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomVatCountryRelations",
       "serviceCaches": [
@@ -61,25 +61,25 @@
     },
     {
       "name": "EcomShops",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomShops"
     },
     {
       "name": "EcomShopLanguageRelation",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomShopLanguageRelation"
     },
     {
       "name": "EcomShopGroupRelation",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomShopGroupRelation"
     },
     {
       "name": "EcomPayments",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomPayments",
       "nameColumn": "PaymentName",
@@ -93,7 +93,7 @@
     },
     {
       "name": "EcomShippings",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomShippings",
       "nameColumn": "ShippingName",
@@ -106,33 +106,33 @@
     },
     {
       "name": "EcomMethodCountryRelation",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomMethodCountryRelation"
     },
     {
       "name": "EcomOrderFlow",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomOrderFlow",
       "nameColumn": "OrderFlowName"
     },
     {
       "name": "EcomOrderStates",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomOrderStates",
       "nameColumn": "OrderStateName"
     },
     {
       "name": "EcomOrderStateRules",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomOrderStateRules"
     },
     {
       "name": "Customer center user groups",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "AccessUser",
       "where": "AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')",
