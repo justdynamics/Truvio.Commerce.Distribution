@@ -1,5 +1,16 @@
 # theme-default changelog
 
+## Unreleased
+
+- **Image-height caps (RUN-DISTRIBUTION-QUALITY T1-01, D-A).** `default_custom.css`
+  now caps `Swift-v2_Image` paragraph bands (`aspect-ratio: 16/9`,
+  `max-height: min(60vh, 640px)`, `object-fit: cover`) and the `Swift-v2_Slider`
+  featured-carousel cover cards (`height: clamp(15rem, 34vh, 21rem)`, overriding the
+  template's inline `min-height: 25rem`, cover image `object-fit: cover`). Durable,
+  image-agnostic: survives a fresh deserialize with any swapped-in photo, because
+  `Swift-v2_Image` ships no serialized height field. Disk-overlay only (SPEC-06).
+  Version bump + tag deferred to the run's P5 publish phase.
+
 ## 1.0.1
 
 Swift 2.4 roll-forward re-prove (RUN-SWIFT-24). Checked against the official Swift
