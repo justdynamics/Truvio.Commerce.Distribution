@@ -1,0 +1,53 @@
+{
+  "_comment": "Machine-readable layer index for Truvio.Commerce.Distribution (P3, RUN-VERSION-CURRENCY T3-01..T3-04). SOURCE OF TRUTH for what layers exist, their kind/version/status, and what a retired name was superseded by. Two consumers read it: (1) tools/ci/Validate-Distribution.ps1 regenerates the `layers` array from the live tree and diffs it clean (drift both directions FAILs), asserts `gateProven` is present, and rejects any edition ref or living-doc mention of a name absent from `layers` (a retired hit names its successor); (2) the DemoAgent currency preflight (Invoke-DemoGate.ps1 `currency` leg) asserts this file parses + carries `gateProven`, and that every layer the demo consumed is live here (a retired hit -> 'retired -> use <supersededBy>'). UPDATE MECHANICS: the `layers` array is regenerated from the tree by Validate-Distribution.ps1 -RegenerateIndex (deterministic); `retired` tombstones are authored on layer retirement (release checklist, FOLLOWUP.md T4-02); `gateProven` is stamped by the FOUNDRY publish flow at release time (tools/harness/Write-IndexGateProven.ps1) from the gate run(s) that proved this main -- never hand-authored as trusted. Consumers 'pin origin/main + assert INDEX.gateProven present' (D-CONSUME a).",
+
+  "gateProven": {
+    "date": "2026-07-17",
+    "swiftVersion": "2.4.0",
+    "dwPlatformVersion": "10.28.1-PreRelease",
+    "editions": {
+      "swift-demo": "20260717-030351",
+      "headless-demo": "20260717-031817",
+      "base-only": "20260717-032922"
+    },
+    "note": "Latest gate-proven main (RUN-DISTRIBUTION-QUALITY P5 sweep, DW 10.28.1-PreRelease). dap-portal is NOT in this set: it carries an open gate defect (Step 10d3 Area style-wiring, run 20260717-033113 FAIL) tracked in RUN-DISTRIBUTION-QUALITY -- an edition may be temporarily absent from gateProven without invalidating the marker."
+  },
+
+  "layers": [
+    { "name": "base", "kind": "base", "version": "3.0.1", "status": "active" },
+    { "name": "feature-bom-configurator", "kind": "feature", "version": "1.1.1", "status": "active" },
+    { "name": "feature-pricing", "kind": "feature", "version": "1.0.0", "status": "active" },
+    { "name": "feature-reordering", "kind": "feature", "version": "1.0.0", "status": "active" },
+    {
+      "name": "feature-reordering-pricing",
+      "kind": "feature",
+      "version": "1.2.1",
+      "status": "deprecated",
+      "supersededBy": ["feature-reordering@1.0.0", "feature-pricing@1.0.0"],
+      "note": "TOMBSTONED (RUN-DISTRIBUTION-QUALITY D-D). Over-bundled layer split into feature-reordering@1.0.0 + feature-pricing@1.0.0. No edition composes it; retained one release for consumers still pinning 1.2.1, then removed. Do NOT add to new editions."
+    },
+    { "name": "feature-rma", "kind": "feature", "version": "1.0.0", "status": "active" },
+    { "name": "feature-subscription-orders", "kind": "feature", "version": "1.1.1", "status": "active" },
+    { "name": "sample-data", "kind": "sample-data", "version": "2.0.2", "status": "active" },
+    { "name": "surface-dap-portal", "kind": "surface", "version": "1.0.3", "status": "active" },
+    { "name": "surface-headless", "kind": "surface", "version": "2.3.3", "status": "active" },
+    { "name": "surface-swift", "kind": "surface", "version": "1.0.1", "status": "active" },
+    { "name": "theme-default", "kind": "theme", "version": "1.0.2", "status": "active" }
+  ],
+
+  "retired": [
+    { "name": "theme-nav-polish", "retired": true, "kind": "theme", "supersededBy": "theme-default", "note": "Retired nav-polish theme overlay (the RUN-VERSION-CURRENCY incident layer). Hard-deleted with no tombstone in P0; tombstoned here (L-04). Layer tag deleted P1 T1-03. Successor: the shipped default theme." },
+    { "name": "overlay-nav-polish", "retired": true, "kind": "theme", "supersededBy": "theme-default", "note": "Rename of theme-nav-polish (the 2.4.3/2.4.4 tree name). Same retirement; layer tag deleted P1 T1-03. Successor: the shipped default theme." },
+    { "name": "theme-fashion-lifestyle", "retired": true, "kind": "theme", "supersededBy": "theme-default", "note": "One of the 3 demo themes retired when the overlay concept was dropped and presentation consolidated into a single default theme (theme-default 1.0.0)." },
+    { "name": "theme-industrial-b2b", "retired": true, "kind": "theme", "supersededBy": "theme-default", "note": "One of the 3 demo themes retired into theme-default 1.0.0 (overlay concept dropped)." },
+    { "name": "theme-tech-saas", "retired": true, "kind": "theme", "supersededBy": "theme-default", "note": "One of the 3 demo themes retired into theme-default 1.0.0 (overlay concept dropped)." },
+    { "name": "bom-configurator", "retired": true, "kind": "feature", "supersededBy": "feature-bom-configurator", "note": "Pre-rename name; renamed to feature-bom-configurator when layer dir names took their kind prefix." },
+    { "name": "subscription-orders", "retired": true, "kind": "feature", "supersededBy": "feature-subscription-orders", "note": "Pre-rename name; renamed to feature-subscription-orders (kind prefix)." },
+    { "name": "reordering-pricing", "retired": true, "kind": "feature", "supersededBy": ["feature-reordering@1.0.0", "feature-pricing@1.0.0"], "note": "Pre-rename name; became feature-reordering-pricing (kind prefix), then split into feature-reordering + feature-pricing. Points at the current live successors, not the deprecated bundle." },
+    { "name": "dap-portal", "retired": true, "kind": "surface", "supersededBy": "surface-dap-portal", "note": "Pre-rename LAYER name; renamed to surface-dap-portal (kind prefix). NB: an EDITION named dap-portal (editions/dap-portal.json) is live and unrelated -- this tombstone is the retired layer only." },
+    { "name": "headless", "retired": true, "kind": "surface", "supersededBy": "surface-headless", "note": "Pre-rename LAYER name; renamed to surface-headless (kind prefix). NB: an EDITION named headless-demo is live and unrelated." },
+    { "name": "catalog-fixture", "retired": true, "kind": "sample-data", "supersededBy": "sample-data", "note": "Absorbed into sample-data 2.0.0 (all content shipped as SQL layer files). See commit c066e52." },
+    { "name": "fixture-catalog", "retired": true, "kind": "sample-data", "supersededBy": "sample-data", "note": "Earliest name; renamed to catalog-fixture, then absorbed into sample-data 2.0.0." }
+  ]
+}
+
