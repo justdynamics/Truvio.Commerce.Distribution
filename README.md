@@ -38,12 +38,17 @@ plus optional `surfaces`, `sampleData`, and `themes`. Additions bind ONLY to the
 
 ## Consuming
 
-Git-clone distribution — no release archives. Clone, pick an edition, activate its layers
-against a DW10 host. The upstream **Foundry** harness
-(`Truvio.Commerce.Serializer.BaselineUpdater`) does this end-to-end and is where layers are
-produced and proven. Each proven artifact is pinned by an annotated tag
-`layers/<name>/<semver>` / `editions/<name>/<semver>` carrying the gate run id + Swift
-version it was proven against. Pin reproducibility by tag or commit SHA.
+Git-clone distribution — no release archives. **Pin `origin/main` — main IS the version.**
+Clone, `git pull --ff-only` to stay current, pick an edition, activate its layers against a
+DW10 host. The upstream **Foundry** harness (`Truvio.Commerce.Serializer.BaselineUpdater`)
+does this end-to-end and is where layers are produced and proven, and `main` only advances
+through the gate-proven, PR-approved merge.
+
+Under rolling-latest-only there is no supported old state to re-materialize, so **there is no
+re-consumable tag pin**. Annotated tags (`layers/<name>/<semver>` / `editions/<name>/<semver>`,
+carrying the gate run id + Swift version each artifact was proven against) are **provenance-only
+audit history**, cut **automatically by CI on merge to main** — never a frozen consumption pin.
+Need to reproduce a past state for forensics? Record the resolved commit SHA, not a tag.
 
 ## Policy
 
