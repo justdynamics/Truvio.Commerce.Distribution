@@ -1,0 +1,38 @@
+name: release-tags
+
+# Provenance-tag actuator (D-CONSUME (a), 2026-07-17). Consumers pin origin/main — main IS the
+# version — and annotated tags are PROVENANCE-ONLY audit history, cut AUTOMATICALLY here on every
+# merge to main. This closes the manual-tag lag that let main run ahead of the newest tag: there
+# is no operator "cut the tags after merge" step anymore. The job is idempotent — it cuts only the
+# tags missing for the current main and leaves existing tags untouched — so it is safe (and cheap)
+# to run on every push to main. Non-skippable: no path filter can bypass it.
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write   # required to push tags
+
+concurrency:
+  group: release-tags
+  cancel-in-progress: false
+
+jobs:
+  cut-provenance-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (full history + tags)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Configure git identity
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Cut + push missing provenance tags
+        shell: pwsh
+        run: ./tools/ci/print-release-tags.ps1 -Execute

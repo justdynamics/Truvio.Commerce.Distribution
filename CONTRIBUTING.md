@@ -61,9 +61,13 @@ opening the PR.
 ## Conventions
 
 - One layer per `layers/<name>/` directory; one edition per `editions/<name>.json`.
-- **Git-clone distribution** of `main` — no release archives. Each proven artifact is
-  pinned by an annotated tag `layers/<name>/<semver>` / `editions/<name>/<semver>` carrying
-  the gate run id + Swift version; consumers pin by tag or commit SHA.
+- **Git-clone distribution** of `main` — no release archives. **Consumers pin `origin/main`
+  (`git pull --ff-only`) — main IS the version.** Annotated tags `layers/<name>/<semver>` /
+  `editions/<name>/<semver>` (carrying the gate run id + Swift version) are **provenance-only**
+  audit history, **cut automatically by CI** ([`.github/workflows/release-tags.yml`](.github/workflows/release-tags.yml))
+  on merge to main — never a re-consumable frozen pin, never cut by hand. Rolling-latest-only
+  means there is no supported old state to re-materialize; forensic reproducibility is the
+  resolved commit SHA, not a tag.
 - Modes are `replace` / `merge` everywhere (never `deploy` / `seed`).
 - Swift support is **rolling latest-only** — one maintained version at a time.
 - Large binary inputs (bacpacs, DBs) are **not** committed.
