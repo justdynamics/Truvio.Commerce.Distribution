@@ -21,6 +21,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate distribution contract (schema, edition refs, base contract, protected strings, SPEC-06)
+      - name: Validate distribution contract (schema, edition refs, base contract, protected strings, SPEC-06, INDEX.json + gateProven + retired tombstones)
         shell: pwsh
         run: ./tools/ci/Validate-Distribution.ps1

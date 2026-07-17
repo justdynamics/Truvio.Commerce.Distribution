@@ -47,10 +47,40 @@ A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampl
 | `headless-demo` | base + `surface-headless` + sample data | **Proven on DW 10.28.1-PreRelease** — headless Delivery-API (A1–A9), ZERO Swift design-package dependency. |
 | `dap-portal` | base + `surface-dap-portal` + sample data | **Proven on DW 10.28.1-PreRelease** — the DAP content surface (area 26). |
 
+## Machine-readable index & retired layers ([`layers/INDEX.json`](layers/INDEX.json))
+
+[`layers/INDEX.json`](layers/INDEX.json) is the **single source of truth** for what this
+Distribution ships and what a dead layer name became. It carries three parts:
+
+- **`gateProven`** — the latest gate-proven state of `main`: the gate run id(s), date, and
+  edition set. **Stamped by the Foundry publish flow at release time** (`tools/harness/Write-IndexGateProven.ps1`),
+  never hand-authored. This is how *"main IS the version"* (D-CONSUME (a)) means **latest
+  gate-proven main**, not raw tip: a consumer pins `origin/main` and **asserts `INDEX.gateProven` is present**.
+- **`layers`** — every live layer with `kind`, `version`, and `status` (`active` | `deprecated`).
+  Regenerated from the live tree and **diffed clean** by `Validate-Distribution.ps1` (drift in
+  *either* direction — a dir with no entry, or an entry with no dir — fails the merge gate).
+- **`retired`** — a **tombstone per removed layer name** (`{ name, retired: true, supersededBy, note }`),
+  generalizing the `feature-reordering-pricing` `supersededBy` precedent (L-04: *retired ≠ silent*).
+  A reference to a retired name resolves to **"retired → use `<supersededBy>`"**, never silence. The
+  registry covers the retired presentation overlays and demo themes (→ the one default theme), the
+  absorbed catalog fixtures (→ the sample-data layer), and the pre-kind-prefix layer names (→ their
+  current `feature-*` / `surface-*` successors). **The authoritative dead-name list lives in
+  [`layers/INDEX.json`](layers/INDEX.json) `retired` — never enumerate it in prose** (a dead name in a
+  living doc is a latch-on target, which check 9e below forbids).
+
+The merge gate ([`tools/ci/Validate-Distribution.ps1`](tools/ci/Validate-Distribution.ps1), check 9)
+**fails** when an edition references a name absent from the live `layers` (naming the successor for
+a retired hit) and when a living root doc latches onto a retired layer name (tombstones belong in
+`INDEX.json`, not prose; CHANGELOG history and names that are a substring of a live identifier are out
+of scope). Regenerate the `layers` array after any layer add/remove with
+`pwsh tools/ci/Validate-Distribution.ps1 -RegenerateIndex`.
+
 ## Consuming
 
-This repo is **git-clone distribution** — there are no release archives. Clone it, pick an
-edition, and activate its layers against a Dynamicweb 10 host (the Foundry harness does
-this end-to-end). Modes are `replace` (source-wins) / `merge` (field-level). Annotated tags
-`layers/<name>/<semver>` and `editions/<name>/<semver>` pin each proven artifact to the gate
-run + Swift version it was proven against.
+This repo is **git-clone distribution** — there are no release archives. **Pin `origin/main`**
+(main IS the version, D-CONSUME (a)): clone, `git pull --ff-only`, assert `INDEX.gateProven` is
+present, pick an edition, and activate its layers against a Dynamicweb 10 host (the Foundry harness
+does this end-to-end). Modes are `replace` (source-wins) / `merge` (field-level). Annotated tags
+`layers/<name>/<semver>` and `editions/<name>/<semver>` are **provenance-only** audit history
+(cut automatically by CI on merge) — the gate run + Swift version each artifact was proven against —
+**not a re-consumable frozen pin** (re-materializing an old layer set is out of policy, L-01).
