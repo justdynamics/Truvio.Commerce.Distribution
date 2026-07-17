@@ -8,9 +8,10 @@
     "editions": {
       "swift-demo": "20260717-030351",
       "headless-demo": "20260717-031817",
-      "base-only": "20260717-032922"
+      "base-only": "20260717-032922",
+      "dap-portal": "20260717-034401"
     },
-    "note": "Latest gate-proven main (RUN-DISTRIBUTION-QUALITY P5 sweep, DW 10.28.1-PreRelease). dap-portal is NOT in this set: it carries an open gate defect (Step 10d3 Area style-wiring, run 20260717-033113 FAIL) tracked in RUN-DISTRIBUTION-QUALITY -- an edition may be temporarily absent from gateProven without invalidating the marker."
+    "note": "Latest gate-proven main (RUN-DISTRIBUTION-QUALITY P5 sweep, DW 10.28.1-PreRelease). All four editions are gate-proven on this main. dap-portal's earlier Step 10d3 Area style-wiring defect (run 20260717-033113 FAIL) was fixed in surface-dap-portal 1.0.3 (published in PR #15) and re-gated GREEN at run 20260717-034401 -- the latest dap-portal verdict. An edition may be temporarily absent from gateProven without invalidating the marker."
   },
 
   "layers": [
