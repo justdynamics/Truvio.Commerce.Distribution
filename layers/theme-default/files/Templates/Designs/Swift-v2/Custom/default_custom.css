@@ -265,6 +265,51 @@ body > footer a:hover,
   display: none !important;
 }
 
+/* =============================================================================
+ * Image-height caps — durable, image-agnostic (RUN-DISTRIBUTION-QUALITY T1-01, D-A).
+ * Swift-v2_Image ships NO height/aspect field: rendered height = column width ×
+ * whatever `r=` crop the author baked into the image URL, UNCAPPED. Any demo that
+ * swaps in its own photo reproduces the tall-portrait / full-bleed-filler defect.
+ * The serialized `r=` normalization (T1-02) fixes the Distribution's OWN images;
+ * THIS block is the load-bearing half — it survives a fresh deserialize with ANY
+ * new photo. Pure disk-overlay CSS (SPEC-06): no template edit, no serialized DB.
+ *
+ * Mechanic: force a landscape box (aspect-ratio) + a viewport-relative max-height
+ * on the paragraph wrapper, and object-fit:cover the image so a tall source is
+ * CROPPED to the box, never allowed to tower. Focal point stays honoured — Swift
+ * bakes the focal crop server-side into ToGetImage(); cover only trims the excess.
+ * ========================================================================== */
+
+/* --- Swift-v2_Image paragraph bands (figure > img.img-fluid) --- */
+[data-dw-itemtype="swift-v2_image"] figure {
+  aspect-ratio: 16 / 9;
+  max-height: min(60vh, 640px);
+  width: 100%;
+  overflow: hidden;
+}
+[data-dw-itemtype="swift-v2_image"] figure > img.img-fluid,
+[data-dw-itemtype="swift-v2_image"] figure > img {
+  width: 100%;
+  height: 100%;
+  max-height: min(60vh, 640px);
+  object-fit: cover;
+}
+
+/* --- Swift-v2_Slider featured-carousel cover cards (CardCoverNavInline) ---
+ * The cover card carries an INLINE `min-height:25rem` (≈400px) and the swiffy
+ * item width tops out at 25rem, so each slide reads as a tall near-square tile
+ * dominating the fold. Cap the card to a viewport-relative band height (inline
+ * min-height must be beaten with !important) and keep the cover image cropped. */
+[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .card {
+  min-height: 0 !important;
+  height: clamp(15rem, 34vh, 21rem);
+  aspect-ratio: auto;
+}
+[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .card > .card-img {
+  height: 100% !important;
+  object-fit: cover;
+}
+
 /* === Utility: table data density === */
 table {
   font-size: 0.9em;

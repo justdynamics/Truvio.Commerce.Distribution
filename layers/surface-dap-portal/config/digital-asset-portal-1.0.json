@@ -1,11 +1,11 @@
 {
   "outputDirectory": "Serializer",
-  "deployOutputSubfolder": "replace",
-  "seedOutputSubfolder": "merge",
+  "replaceOutputSubfolder": "replace",
+  "mergeOutputSubfolder": "merge",
   "predicates": [
     {
       "name": "Digital Assets Portal",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "Content",
       "areaId": 26,
       "includeLanguageLayers": false,

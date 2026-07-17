@@ -2,7 +2,9 @@
   "name": "swift-demo",
   "from": "base@3.0.1",
   "add": [
-    "feature-reordering-pricing@1.2.1",
+    "feature-reordering@1.0.0",
+    "feature-pricing@1.0.0",
+    "feature-rma@1.0.0",
     "feature-subscription-orders@1.1.1",
     "feature-bom-configurator@1.1.1"
   ],
@@ -20,5 +22,5 @@
     "/swift-2/customer-center",
     "/swift-2/sign-in/sign-in"
   ],
-  "description": "Full Swift storefront demo on the split composition (Swift 2.4): framework-only base + the surface-swift content surface (both areas + UrlPath + own item types) + the three feature layers + sample data, proven on the default theme. Equivalent to the historical full gate run; proven on DW 10.28.1-PreRelease."
+  "description": "Full Swift storefront demo on the split composition (Swift 2.4): framework-only base + the surface-swift content surface (both areas + UrlPath + own item types) + five feature layers (feature-reordering + feature-pricing — the P3 split of the retired feature-reordering-pricing — plus feature-rma, feature-subscription-orders, feature-bom-configurator) + sample data, proven on the default theme. Proven on DW 10.28.1-PreRelease."
 }

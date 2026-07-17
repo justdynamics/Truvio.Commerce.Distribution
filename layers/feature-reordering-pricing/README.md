@@ -1,3 +1,13 @@
+> # ⚠️ DEPRECATED — TOMBSTONED (P3, 2026-07-17)
+> This over-bundled layer is **split and superseded**. Do NOT add it to new editions.
+> - **Reordering** (Quick Order + Express Buy, data-only) → **`feature-reordering@1.0.0`**
+> - **Pricing** (qty-break tiers + customer contract + the compile-optional provider) → **`feature-pricing@1.0.0`**
+>
+> Retained for **one release** for any downstream Distribution edition still pinning `1.2.1`
+> (deprecation declared in `layer.json` `costHints.deprecated`). No Foundry edition pins it any
+> more (`swift-demo` re-pinned to the two split layers + `feature-rma@1.0.0`). See the split
+> verdict in `RUN-DISTRIBUTION-QUALITY.md` (decision D-D) and each successor's README/CHANGELOG.
+
 # feature-reordering-pricing — Feature layer #1: Reordering+ / Complex Pricing
 
 Feature layer delivering the quick-order pad, the buy-it-again proof surface, and qty-break +

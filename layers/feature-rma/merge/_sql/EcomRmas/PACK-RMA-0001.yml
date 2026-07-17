@@ -1,0 +1,14 @@
+"RmaId": "PACK-RMA-0001"
+"RmaEmailNotificationLanguage": "LANG1"
+"RmaStateId": 1
+"RmaClosed": false
+"RmaDeleted": false
+"RmaType": 1
+"RmaCustomerNumber": "98745621"
+"RmaCustomerCompany": "IMC Trading BV"
+"RmaCustomerName": "IMC User"
+"RmaCustomerEmail": "imcuser@example.com"
+"RmaCustomerCountryCode": "NL"
+"RmaDeliveryName": "IMC User"
+"RmaDeliveryCompany": "IMC Trading BV"
+"RmaDeliveryCountryCode": "NL"

@@ -1,0 +1,58 @@
+{
+  "name": "feature-reordering",
+  "version": "1.0.0",
+  "kind": "feature",
+  "swiftVersion": "2.4.0",
+  "repositoryName": "Products",
+  "fragmentModes": [
+    "merge"
+  ],
+  "fragmentTables": [],
+  "fragmentContent": [
+    {
+      "areaId": 3,
+      "path": "/Navigation/Secondary Navigation/Quick Order"
+    },
+    {
+      "areaId": 27,
+      "path": "/Navigation/Secondary Navigation/Quick Order"
+    }
+  ],
+  "asserts": {
+    "behaviorProbes": [
+      {
+        "kind": "http-body-contains",
+        "path": "/swift-2/quick-order",
+        "pattern": "name=\"cartcmd\"[^>]*value=\"addmulti\""
+      },
+      {
+        "kind": "http-body-contains",
+        "path": "/swift-2/express-buy",
+        "pattern": "id=\"ExpressBuySearchForm\""
+      },
+      {
+        "kind": "sku-validation",
+        "path": "/swift-2/quick-order",
+        "sku": "FIXT-0001"
+      }
+    ],
+    "criticalPaths": [
+      "/swift-2/quick-order",
+      "/swift-2/express-buy"
+    ]
+  },
+  "knownCycleLimitations": [
+    {
+      "probe": "http-body-contains",
+      "path": "/swift-2/quick-order",
+      "phase": "behavior-cycle",
+      "reason": "Quick Order deactivate->reactivate known limitation: the 2-page area 3 + area 27 NL-mirror fragment does not fully re-bind after a deactivate->reactivate cycle (the page 404s), so the http-body-contains cycle assert fails in the gate's Step 12c cycle leg. Scope: toggle-cycle only; first activation and every first-activation behavior assert are unaffected. A full re-deserialize of the base + this layer restores the page. Inherited verbatim from feature-reordering-pricing 1.1.0."
+    },
+    {
+      "probe": "sku-validation",
+      "path": "/swift-2/quick-order",
+      "phase": "behavior-cycle",
+      "reason": "Quick Order deactivate->reactivate known limitation: same 2-page fragment re-bind gap as the http-body-contains entry — the sku-validation cycle assert (feed GET against the 404'd page) fails in the Step 12c cycle leg. Scope: toggle-cycle only. Inherited verbatim from feature-reordering-pricing 1.1.0."
+    }
+  ]
+}

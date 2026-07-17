@@ -13,6 +13,15 @@ Learnings triage fix (RUN-TRIAGE-20260713 in the Foundry):
   default.{json,css}`. Gate assert: after composing an edition with theme-default,
   the main area's three style ids resolve to files under `files/System/Styles/`,
   and the home `<head>` carries the three `Styles/` `<link>`s.
+- **Config predicate-mode migration (LRN-base232-03):** `config/swift-content-2.4.json`
+  predicate modes migrated `Deploy`→`Replace` (×2) and `Seed`→`Merge` (×9), matching the
+  already-migrated base config. Engine `0.9.0-beta`'s `SerializerSettings` query validates
+  predicate modes strictly (`ConfigLoader.ValidatePredicates`: only `Replace`/`Merge`) and
+  returned HTTP 500 on the retired `Deploy`/`Seed` enums — the harness probes that query
+  before deserializing, so the WHOLE surface content-deserialize aborted (no Swift areas
+  created). With the modes migrated, the surface deserializes and persists the area.yml
+  `properties` (incl. the four style columns) as intended. Output split (`replace/`+`merge/`
+  dirs, `deployOutputSubfolder`/`seedOutputSubfolder` keys) unchanged.
 
 ## 1.0.0
 

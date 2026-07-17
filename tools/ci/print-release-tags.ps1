@@ -16,26 +16,29 @@ param([string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path)
 $ErrorActionPreference = 'Stop'
 
 $swift = '2.4.0'
-# Proven gate runs (Foundry harness) — the run ids that proved each edition on the
-# theme-default 1.0.0 state (presentation lane consolidated into ONE theme, 2026-07-12).
+# Proven gate runs (Foundry harness) — the FULL COLD MATRIX that proved this release
+# (RUN-DISTRIBUTION-QUALITY P5, all four editions green, 2026-07-17).
 $runs = @{
-    'base-only'     = '20260712-162423'
-    'swift-demo'    = '20260712-161441'   # full run — framework base + surface-swift + 3 features + sample data + theme-default
-    'headless-demo' = '20260712-162938'     # A1–A9 PASS (gate-headless runner; ZERO Swift design files)
-    'dap-portal'    = '20260712-162829'
+    'base-only'     = '20260717-032922'
+    'swift-demo'    = '20260717-030351'   # full run — framework base + surface-swift + 5 features + sample data + theme-default
+    'headless-demo' = '20260717-031817'   # A1–A9 PASS (gate-headless runner; ZERO Swift design files)
+    'dap-portal'    = '20260717-034401'   # DAP style-id migration re-proven (Step 10d3 clean)
 }
-# Per-edition RELEASE version. Bumped where the edition file changed (themes -> ["default"],
-# overlays retired). headless-demo / dap-portal are byte-unchanged — existing tags stand.
+# Per-edition RELEASE version. Bumped where the edition FILE changed this release:
+# swift-demo (re-pin to the split + rma), dap-portal (surface-dap-portal 1.0.3),
+# headless-demo (surface-headless 2.3.3). base-only is byte-unchanged — existing tag stands.
 $editionVersion = @{
-    'swift-demo'    = '3.0.0'
-    'base-only'     = '3.0.0'
-    'headless-demo' = '2.5.0'
-    'dap-portal'    = '1.1.0'
+    'swift-demo'    = '3.1.0'
+    'headless-demo' = '2.5.1'
+    'dap-portal'    = '1.1.1'
 }
 # Which proven run each LAYER rides (the edition that exercised it). All layers are proven.
 $layerProof = @{
     base                            = $runs['swift-demo']
     'sample-data'                   = $runs['swift-demo']
+    'feature-reordering'            = $runs['swift-demo']
+    'feature-pricing'               = $runs['swift-demo']
+    'feature-rma'                   = $runs['swift-demo']
     'feature-reordering-pricing'    = $runs['swift-demo']
     'feature-subscription-orders'   = $runs['swift-demo']
     'feature-bom-configurator'      = $runs['swift-demo']
