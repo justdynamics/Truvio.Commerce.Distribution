@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 2,
+  "mode": "merge",
+  "writtenAtUtc": "2026-07-17T00:00:00Z",
+  "complete": true,
+  "excludeFieldsByItemType": {},
+  "excludeXmlElementsByType": {},
+  "entries": [
+    {
+      "providerType": "SqlTable",
+      "table": "EcomGroups",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomGroups",
+      "files": [
+        "_sql/EcomGroups/PACK-RPP-GRP1.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomProducts",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomProducts",
+      "files": [
+        "_sql/EcomProducts/PACK-RPP-PROD1.yml",
+        "_sql/EcomProducts/PACK-RPP-PROD2.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomGroupProductRelation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomGroupProductRelation",
+      "files": [
+        "_sql/EcomGroupProductRelation/PACK-RPP-GRP1$$PACK-RPP-PROD1.yml",
+        "_sql/EcomGroupProductRelation/PACK-RPP-GRP1$$PACK-RPP-PROD2.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomShopGroupRelation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomShopGroupRelation",
+      "files": [
+        "_sql/EcomShopGroupRelation/PACK-RPP-GRP1$$SHOP1.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomPrices",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomPrices",
+      "files": [
+        "_sql/EcomPrices/PACK-RPP-0001.yml",
+        "_sql/EcomPrices/PACK-RPP-0002.yml",
+        "_sql/EcomPrices/PACK-RPP-0003.yml",
+        "_sql/EcomPrices/PACK-RPP-0004.yml"
+      ]
+    }
+  ]
+}

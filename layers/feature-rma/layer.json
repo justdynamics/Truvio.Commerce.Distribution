@@ -1,0 +1,37 @@
+{
+  "name": "feature-rma",
+  "version": "1.0.0",
+  "kind": "feature",
+  "swiftVersion": "2.4.0",
+  "repositoryName": "Products",
+  "fragmentModes": [
+    "merge"
+  ],
+  "fragmentTables": [
+    "EcomRmas"
+  ],
+  "configRows": [
+    {
+      "table": "EcomRmas",
+      "where": "RmaId = 'PACK-RMA-0001'",
+      "description": "seeded RMA return request (RmaType 1 = Return, RmaStateId 1 = 'Waiting for product(s) from customer', buyer 98745621) — the demo return the My returns customer-center page surfaces"
+    },
+    {
+      "table": "EcomRmaStates",
+      "where": "RmaStateDefaultName = 'Rejected'",
+      "description": "OOTB status-flow proof: DW10 Order Management ships the RMA state machine (7 states: Waiting for product(s) / Received / Rejected / Sent for repair / Received from repair / Returned to customer / Sent replacement). The layer seeds NO states — they are platform defaults; this assert documents the OOTB dependency the seeded request binds to."
+    }
+  ],
+  "asserts": {
+    "behaviorProbes": [
+      {
+        "kind": "authenticated-body-contains",
+        "path": "/swift-2/customer-center/my-returns",
+        "pattern": "Add new request"
+      }
+    ],
+    "criticalPaths": [
+      "/swift-2/customer-center/my-returns"
+    ]
+  }
+}

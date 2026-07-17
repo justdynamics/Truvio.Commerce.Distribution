@@ -1,5 +1,24 @@
 # Changelog — feature-reordering-pricing
 
+## DEPRECATED — 2026-07-17 (P3 tombstone, no version bump)
+
+**Split and superseded** (RUN-DISTRIBUTION-QUALITY decision D-D). The layer bundled two independent
+capabilities; they now ship as two clean layers:
+
+- **`feature-reordering@1.0.0`** — data-only Quick Order pad + Express Buy nav/pages/probes (the item
+  type, template, both-area page fragment, `http-body-contains` + `sku-validation` probes, and both
+  `/swift-2/quick-order` known cycle limitations). `sku-validation` re-pointed to the sample-data SKU
+  `FIXT-0001`.
+- **`feature-pricing@1.0.0`** — the qty-break tier rows, the customer-contract row, the six `configRows`,
+  the `customCode` block, and `ReorderingPricingQtyBreakProvider.cs` (all moved verbatim). The two
+  `cart-price` probes re-pointed off `/swift-2/quick-order` onto `/swift-2/cart/` (the only coupling
+  between the halves — a test-authoring convenience, not a real dependency).
+
+No version bump: `1.2.1` is retained unchanged for **one release** for downstream editions still pinning
+it (deprecation declared in `layer.json` `costHints.deprecated`, `supersededBy`). No Foundry edition pins
+it any longer — `swift-demo` re-pinned to `feature-reordering@1.0.0` + `feature-pricing@1.0.0` +
+`feature-rma@1.0.0`. Removal is a follow-on release once no edition references it.
+
 ## 1.2.1
 
 Swift 2.4 roll-forward re-prove (RUN-SWIFT-24): `swiftVersion` claim rolls to **2.4.0**

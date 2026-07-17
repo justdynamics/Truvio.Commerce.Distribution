@@ -1,5 +1,17 @@
 # Changelog — sample-data
 
+## 2.0.2
+
+RMA demo interplay (P3, RUN-DISTRIBUTION-QUALITY item E). `catalog.sql` gains a section 5
+seeding **one delivered order** `FIXT-ORDER-RMA1` (`OrderStateId OS2` Completed, buyer
+`98745621`, order line on `FIXT0001`) for the new `feature-rma` layer to return against, plus
+the `EcomRmaOrderLines` link to `feature-rma`'s `EcomRmas` request `PACK-RMA-0001`. The link is
+seeded here (not in feature-rma) because `EcomRmaOrderLines.RmaOrderLineId` is an int IDENTITY PK
+the serializer cannot natural-key insert; raw SQL handles it deterministically. No DB FK on the
+RMA tables (verified), so the cross-layer header/link order is free. Idempotent DELETE+INSERT on
+the demo keys; no impact on the EcomProducts=20 / EcomGroups=3 / EcomCountries=96 row-count
+contract, and harmless (orphan link + one extra completed order) in editions without feature-rma.
+
 ## 2.0.1
 
 Swift 2.4 roll-forward re-prove (RUN-SWIFT-24): `swiftVersion` claim rolls to **2.4.0**

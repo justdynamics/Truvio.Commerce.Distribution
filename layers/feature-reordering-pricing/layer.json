@@ -110,5 +110,11 @@
       "/swift-2/quick-order",
       "/swift-2/express-buy"
     ]
+  },
+  "costHints": {
+    "deprecated": true,
+    "deprecatedSince": "2026-07-17",
+    "deprecationNote": "TOMBSTONED (P3, RUN-DISTRIBUTION-QUALITY decision D-D). This over-bundled layer was split into feature-reordering@1.0.0 (data-only Quick Order + Express Buy) and feature-pricing@1.0.0 (qty-break tiers + customer-contract row + the compile-optional ReorderingPricingQtyBreakProvider). No edition pins this layer any more; it is retained for ONE release for any downstream Distribution edition still pinning 1.2.1, then removed. Do NOT add it to new editions.",
+    "supersededBy": ["feature-reordering@1.0.0", "feature-pricing@1.0.0"]
   }
 }

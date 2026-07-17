@@ -1,5 +1,19 @@
 # Changelog — surface-headless baseline
 
+## 2.3.3
+
+Config predicate-mode migration (LRN-base232-03), mirroring the base + surface-swift
+migration (`ee81375`). `config/headless-2.3.json` predicate modes migrated
+`Deploy`→`Replace` (×13) and `Seed`→`Merge` (×10); the output-subfolder keys renamed
+`deployOutputSubfolder`→`replaceOutputSubfolder` and `seedOutputSubfolder`→`mergeOutputSubfolder`
+(values `replace`/`merge`, matching the on-disk `replace/`+`merge/` trees — the stale
+`deploy`/`seed` values pointed at directories the base-split rename retired). Engine
+`0.9.0-beta`'s `SerializerSettings` query validates predicate modes strictly (`ConfigLoader`:
+only `Replace`/`Merge`) and the harness probes that query before deserializing, so the retired
+`Deploy`/`Seed` enums returned HTTP 500 and aborted the whole headless deserialize. No
+data/content changes; output split unchanged. Re-proven on DW 10.28.1-PreRelease
+(full cold matrix).
+
 ## 2.3.2
 
 Swift 2.4 roll-forward re-prove (RUN-SWIFT-24): `swiftVersion` claim rolls to **2.4.0**

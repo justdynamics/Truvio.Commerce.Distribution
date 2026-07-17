@@ -102,5 +102,26 @@ INSERT INTO EcomPrices (PriceId, PriceProductId, PriceCurrency, PriceQuantity, P
 INSERT INTO EcomPrices (PriceId, PriceProductId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('FIXT-PRICE-T25', 'FIXT0002', 'EUR', 25, 70.00, '', '');
 INSERT INTO EcomPrices (PriceId, PriceProductId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('FIXT-PRICE-CONTRACT', 'FIXT0001', 'EUR', 1, 160.00, '', '98745621');
 
+-- 5. RMA demo (P3 feature-rma interplay). One DELIVERED order for the base-contract
+--    buyer (98745621) to return against, plus the RMA<->order-line link. The RMA
+--    request HEADER (EcomRmas PACK-RMA-0001) is seeded by the feature-rma layer (its
+--    nvarchar PK is serializer-friendly); the link (EcomRmaOrderLines) lives HERE
+--    because RmaOrderLineId is an int IDENTITY PK the serializer cannot natural-key
+--    insert (base contract wires that path for only 4 relation tables). No DB FK on the
+--    RMA tables, so the header/link insert order across layers is free; both rows exist
+--    by render time. In an edition WITHOUT feature-rma the link is a harmless orphan and
+--    the order is just an extra completed order (no row-count / delivery-API impact).
+--    Idempotent: DELETE-then-INSERT on the demo keys (lines before order = FK-safe).
+DELETE FROM EcomRmaOrderLines WHERE RmaOrderLineRmaId = 'PACK-RMA-0001';
+DELETE FROM EcomOrderLines    WHERE OrderLineOrderId  = 'FIXT-ORDER-RMA1';
+DELETE FROM EcomOrders        WHERE OrderId           = 'FIXT-ORDER-RMA1';
+
+INSERT INTO EcomOrders (OrderId, OrderComplete, OrderCart, OrderStateId, OrderShopId, OrderLanguageId, OrderCurrencyCode, OrderCustomerNumber, OrderCustomerAccessUserId, OrderCustomerName, OrderCustomerEmail, OrderCustomerCompany, OrderCustomerCountryCode, OrderDate, OrderCompletedDate, OrderTotalPrice)
+VALUES ('FIXT-ORDER-RMA1', 1, 0, 'OS2', 'SHOP1', 'LANG1', 'EUR', '98745621', 1328, 'IMC User', 'imcuser@example.com', 'IMC Trading BV', 'NL', DATEADD(day, -30, GETDATE()), DATEADD(day, -28, GETDATE()), 200.00);
+INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
+VALUES ('FIXT-ORDER-RMA1-1', 'FIXT-ORDER-RMA1', 'FIXT0001', 'FIXT-0001', 'Fixture House Blend', 1, 200.00, 200.00, '0', DATEADD(day, -30, GETDATE()));
+INSERT INTO EcomRmaOrderLines (RmaOrderLineRmaId, RmaOrderLineOrderLineId)
+VALUES ('PACK-RMA-0001', 'FIXT-ORDER-RMA1-1');
+
 COMMIT TRAN;
-PRINT 'Done - sample-data catalog: 3 groups, 14 masters + 6 variants (EcomProducts=20), 4 prices in SHOP1.';
+PRINT 'Done - sample-data catalog: 3 groups, 14 masters + 6 variants (EcomProducts=20), 4 prices in SHOP1; + 1 delivered RMA demo order (FIXT-ORDER-RMA1) for buyer 98745621.';

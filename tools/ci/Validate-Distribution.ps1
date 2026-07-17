@@ -96,6 +96,16 @@ if (-not (Test-Path $contractPath)) {
 }
 
 # Cross-layer collision: same _sql/<Table>/<key>.yml shipped by two non-base layers.
+# A DEPRECATED layer (layer.json costHints.deprecated — the tombstone grace release) is
+# composed by no active edition, so it cannot cause the runtime last-writer-wins collision
+# this check guards against; it legitimately shadows the successor rows it was split into
+# (its supersededBy targets) for the one-release back-compat window. Therefore only
+# ACTIVE-vs-ACTIVE collisions FAIL — a clash whose only duplication is a deprecated tombstone
+# shadowing an active successor is expected and passes.
+$deprecatedLayers = @{}
+foreach ($n in $manifests.Keys) {
+    if ($manifests[$n].costHints -and $manifests[$n].costHints.deprecated) { $deprecatedLayers[$n] = $true }
+}
 $sqlOwners = @{}
 foreach ($d in $layerDirs) {
     if ($d.Name -eq 'base') { continue }
@@ -108,7 +118,11 @@ foreach ($d in $layerDirs) {
         $sqlOwners[$rel] += $d.Name
     }
 }
-$clashes = @($sqlOwners.GetEnumerator() | Where-Object { @($_.Value | Select-Object -Unique).Count -gt 1 })
+# Count only ACTIVE (non-deprecated) owners per row: a deprecated tombstone shadowing its
+# supersededBy successor during the grace window is not a real collision.
+$clashes = @($sqlOwners.GetEnumerator() | Where-Object {
+    @($_.Value | Select-Object -Unique | Where-Object { -not $deprecatedLayers.ContainsKey($_) }).Count -gt 1
+})
 & $log ($clashes.Count -eq 0) "cross-layer _sql collision: $($clashes.Count) clash(es)$(if($clashes.Count){' — ' + (($clashes | Select-Object -First 3 | ForEach-Object { $_.Key + ' <- ' + (($_.Value | Select-Object -Unique) -join ',') }) -join ' ; ')})"
 
 # Protected strings (plan §3.1).

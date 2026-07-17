@@ -1,5 +1,33 @@
 # Changelog — digital-asset-portal/1.0
 
+## 1.0.3
+
+Area style-id migration to the `default` scheme (LRN-uipass-03), mirroring the surface-swift
+P1 migration. `replace/_content/Digital Assets Portal/area.yml` `properties`: the legacy Swift
+design-package style ids were re-pointed to the shipped `default` asset scheme —
+`AreaColorSchemeGroupId` `swift`→`default`, `AreaTypographyId` `fonts`→`default`,
+`AreaButtonStyleId` `buttons`→`default`; `AreaColorSchemeId` stays `light` (the `light` scheme
+ships in the `default` ColorScheme group, matching surface-swift's `default/light/default/default`).
+The legacy `swift`/`fonts`/`buttons` ids resolved to **no shipped `{json,css}` pair** in the
+composed host Styles root (`wwwroot/Files/System/Styles` ships only `default.{json,css}` for
+ColorSchemes/Typography/Buttons), so `TryGet*Style` fell back silently to serif defaults — the
+exact defect class the RUN-DISTRIBUTION-QUALITY gate exists to kill. The gate Step 10d3
+Area style-wiring assert (added in the P1 back-sync) is the first pipeline pass to reach this
+edition and correctly named it. Content/pages/data unchanged; only the four Area style columns.
+Re-proven on DW 10.28.1-PreRelease (full cold matrix).
+
+## 1.0.2
+
+Config predicate-mode migration (LRN-base232-03), mirroring the base + surface-swift
+migration (`ee81375`). `config/digital-asset-portal-1.0.json`: the single Content predicate
+mode migrated `Deploy`→`Replace`; the output-subfolder keys renamed
+`deployOutputSubfolder`→`replaceOutputSubfolder` and `seedOutputSubfolder`→`mergeOutputSubfolder`
+(values already `replace`/`merge`). Engine `0.9.0-beta` validates predicate modes strictly
+(`Replace`/`Merge` only) and the harness probes `SerializerSettings` before deserializing, so
+the retired `Deploy` enum returned HTTP 500 and aborted the DAP surface deserialize. No
+data/content changes; output split unchanged. Re-proven on DW 10.28.1-PreRelease
+(full cold matrix).
+
 ## 1.0.1
 
 Swift 2.4 roll-forward re-prove (RUN-SWIFT-24): `swiftVersion` claim rolls to **2.4.0**

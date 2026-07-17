@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 2,
+  "mode": "merge",
+  "writtenAtUtc": "2026-07-17T00:00:00Z",
+  "complete": true,
+  "excludeFieldsByItemType": {},
+  "excludeXmlElementsByType": {},
+  "entries": [
+    {
+      "providerType": "SqlTable",
+      "table": "EcomRmas",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomRmas",
+      "files": [
+        "_sql/EcomRmas/PACK-RMA-0001.yml"
+      ]
+    }
+  ]
+}

@@ -89,7 +89,7 @@
   "predicates": [
     {
       "name": "Site framework",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "Content",
       "areaId": 3,
       "includeLanguageLayers": true,
@@ -167,7 +167,7 @@
     },
     {
       "name": "UrlPath",
-      "mode": "Deploy",
+      "mode": "Replace",
       "providerType": "SqlTable",
       "table": "UrlPath",
       "resolveLinksInColumns": [
@@ -176,7 +176,7 @@
     },
     {
       "name": "Homepage",
-      "mode": "Seed",
+      "mode": "Merge",
       "providerType": "Content",
       "areaId": 3,
       "includeLanguageLayers": true,
@@ -226,7 +226,7 @@
     },
     {
       "name": "Site chrome",
-      "mode": "Seed",
+      "mode": "Merge",
       "providerType": "Content",
       "areaId": 3,
       "includeLanguageLayers": true,
@@ -276,7 +276,7 @@
     },
     {
       "name": "About pages",
-      "mode": "Seed",
+      "mode": "Merge",
       "providerType": "Content",
       "areaId": 3,
       "includeLanguageLayers": true,
@@ -326,7 +326,7 @@
     },
     {
       "name": "Starter blog posts",
-      "mode": "Seed",
+      "mode": "Merge",
       "providerType": "Content",
       "areaId": 3,
       "includeLanguageLayers": true,
@@ -376,7 +376,7 @@
     },
     {
       "name": "Find dealers",
-      "mode": "Seed",
+      "mode": "Merge",
       "providerType": "Content",
       "areaId": 3,
       "includeLanguageLayers": true,
@@ -426,7 +426,7 @@
     },
     {
       "name": "Footer: about the shop",
-      "mode": "Seed",
+      "mode": "Merge",
       "providerType": "Content",
       "areaId": 3,
       "includeLanguageLayers": true,
@@ -476,7 +476,7 @@
     },
     {
       "name": "Footer: help and info",
-      "mode": "Seed",
+      "mode": "Merge",
       "providerType": "Content",
       "areaId": 3,
       "includeLanguageLayers": true,
@@ -526,7 +526,7 @@
     },
     {
       "name": "Newsletter examples (light)",
-      "mode": "Seed",
+      "mode": "Merge",
       "providerType": "Content",
       "areaId": 3,
       "includeLanguageLayers": true,
@@ -576,7 +576,7 @@
     },
     {
       "name": "Newsletter examples (dark)",
-      "mode": "Seed",
+      "mode": "Merge",
       "providerType": "Content",
       "areaId": 3,
       "includeLanguageLayers": true,

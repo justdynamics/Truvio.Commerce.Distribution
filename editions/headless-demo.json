@@ -3,7 +3,7 @@
   "from": "base@3.0.1",
   "add": [],
   "surfaces": [
-    "surface-headless@2.3.2"
+    "surface-headless@2.3.3"
   ],
   "sampleData": true,
   "description": "Headless surface demo: framework-only base + the Headless_* content surface (own itemtypes + repositories - self-contained, ZERO Swift design package / surface-swift dependency, proven by the Swift 2.4 base split) + sample data. The headless A1-A9 probes are contributed by the surface layer's own assert set (gate -Edition dispatch to gate-headless). Proven on DW 10.28.1-PreRelease."

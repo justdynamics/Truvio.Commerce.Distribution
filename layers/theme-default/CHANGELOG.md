@@ -1,6 +1,6 @@
 # theme-default changelog
 
-## Unreleased
+## 1.0.2
 
 - **Image-height caps (RUN-DISTRIBUTION-QUALITY T1-01, D-A).** `default_custom.css`
   now caps `Swift-v2_Image` paragraph bands (`aspect-ratio: 16/9`,
@@ -9,7 +9,8 @@
   template's inline `min-height: 25rem`, cover image `object-fit: cover`). Durable,
   image-agnostic: survives a fresh deserialize with any swapped-in photo, because
   `Swift-v2_Image` ships no serialized height field. Disk-overlay only (SPEC-06).
-  Version bump + tag deferred to the run's P5 publish phase.
+  Re-proven by the swift-demo gate theme leg on DW 10.28.1-PreRelease
+  (full cold matrix, run `20260717-030351`).
 
 ## 1.0.1
 

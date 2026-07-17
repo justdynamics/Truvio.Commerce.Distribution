@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<items>
+  <item category="Swift-v2/Utilities" name="Pack Quick Order Pad" systemName="PackQuickOrderPad" description="Quick-order pad: SKU + quantity grid with paste-from-Excel/CSV and one-click cart fill (feature-reordering layer)" icon="Table" iconColor="Modules" image="" includeInUrlIndex="False" pageDefaultView="item" paragraphDefaultModule="" fieldForTitle="Title" title="" inherits="">
+    <fields>
+      <field name="Title" systemName="Title" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor" /></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Intro" systemName="Intro" description="Optional intro text shown above the quick-order grid" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor" /></editorConfuguration>
+        </editor>
+      </field>
+    </fields>
+    <rules>
+      <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
+      <rule name="" type="Dynamicweb.Content.Items.Activation.ModuleAttachmentRestrictionRule, Dynamicweb" value="True" />
+      <rule name="Allowed parents" type="Dynamicweb.Content.Items.Activation.ParentRestrictionRule, Dynamicweb" value="RootOfWebsite,RegularPage" />
+      <rule name="Enable item type for" type="Dynamicweb.Content.Items.Activation.StructureRestrictionRule, Dynamicweb" value="Paragraphs" />
+    </rules>
+    <layout>
+      <groups>
+        <group name="Quick order pad settings" systemName="Content" sectionName="" collapsibleState="None" visibilityField="" visibilityCondition="0" visibilityConditionValueType="" visibilityConditionValue="">
+          <fields>
+            <field systemName="Title" />
+            <field systemName="Intro" />
+          </fields>
+        </group>
+      </groups>
+    </layout>
+  </item>
+</items>

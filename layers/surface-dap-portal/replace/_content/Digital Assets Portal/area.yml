@@ -67,7 +67,7 @@
   "AreaReverseChargeForVat": false
   "AreaPublished": true
   "AreaDeleted": false
-  "AreaColorSchemeGroupId": "swift"
+  "AreaColorSchemeGroupId": "default"
   "AreaColorSchemeId": "light"
-  "AreaTypographyId": "fonts"
-  "AreaButtonStyleId": "buttons"
+  "AreaTypographyId": "default"
+  "AreaButtonStyleId": "default"

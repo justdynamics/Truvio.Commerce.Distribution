@@ -1,6 +1,6 @@
 {
   "name": "surface-headless",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "kind": "surface",
   "swiftVersion": "2.4.0",
   "repositoryName": "Headless",
