@@ -1,5 +1,46 @@
 # theme-default changelog
 
+## 1.2.0
+
+**Mobile pass — kill the small-viewport layout blowout, wrap flex rows, align the
+list-mode PLP, open the spec table.** Structural version of the marine-demo second
+pass (2026-07-18, brief Part B addendum #8-13), made default in the neutral theme.
+Disk-overlay only (SPEC-06); the P-guards (P4 button `:not()` chains, P5 footer
+scoping, P10 nav scoping) are unchanged and honoured by the new rules.
+
+`default_custom.css` (all token-driven — a palette swap carries it for free):
+
+- **#8 Mega-menu collapse (the mobile bug).** `Swift-v2_MenuRelatedContent` renders
+  a fixed-width megamenu bar (~1282px) at every viewport; at 390px it stretched the
+  document canvas to 1356px (content squeezed left, blank right margin, broken
+  lazy-image paint that read as "missing PLP images"). Below `lg` the bar is now a
+  horizontally-scrollable category strip. A real burger/offcanvas is the durable fix
+  — deferred upstream to the Swift menu template. *Probe lesson recorded inline:*
+  `overflow-x:hidden` on `<body>` masks the blowout from
+  `document.documentElement.scrollWidth` — measure `document.body.scrollWidth`.
+- **#9 Flex rows wrap below md.** Any `NColumnsFlex` row (USP/feature bands) and the
+  footer (marine stretched it to ~704px alone) now wrap their columns below `md`.
+  Footer wrap is scoped to the `body>footer` / `[data-swift-page-footer]` landmark (P5).
+- **#10 List-mode PLP column discipline.** Bootstrap `.flex-fill`
+  (`flex:1 1 auto !important`) on every grid column defeated plain flex bases, so
+  CTAs landed on a different x per row. Column bases reasserted with `!important` +
+  a mobile stack; the durable fix (template dropping `.flex-fill` for columnar
+  layouts) is deferred upstream. Structural here because list-mode PLP is the
+  Distribution default.
+- **#11 Anon CTA calm state.** The "sign in for dealer pricing" pill renders inside
+  `swift-v2_productPRICE` (not add-to-cart); given a calm resting border + full
+  accent on row hover (border/color only — P4 intact). Which component *owns* the
+  anon CTA is a template normalization deferred upstream.
+- **#12 Open spec table.** Collapsed-by-default field display groups showed nothing
+  on the PDP; force-opened and restyled as two-column spec rows (headless style). A
+  native "open table" display mode is the upstream ask.
+- **#13 Mobile logo clamp.** The lockup is an inline SVG in a figure with a
+  hardcoded 210px width (the old `figure img` hook misses inline SVG); clamped to
+  150px below `md`, plus the Favorites link goes icon-only so the cart stays in view.
+
+Runtime proof (overflow-x 0 at 390, header budget, PLP/PDP/home screenshots, design
+probes) is the Foundry gate run on the current latest Swift — not this validator.
+
 ## 1.1.0
 
 **Fresh pass — close the design gap to a modern headless storefront.** The marine-demo

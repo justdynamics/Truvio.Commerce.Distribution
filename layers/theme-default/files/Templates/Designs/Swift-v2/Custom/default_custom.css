@@ -437,3 +437,203 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
   display: block;
   margin-bottom: .25rem;
 }
+
+/* =============================================================================
+ * MOBILE PASS — structural version of the marine-demo second pass (2026-07-18,
+ * brief Part B addendum #8-13). Kills the small-viewport layout blowout, wraps
+ * flex rows below md, gives the list-mode PLP real column discipline, and opens
+ * the spec accordion into a readable two-column table. Disk-overlay only
+ * (SPEC-06): no template edit, no serialized DB content. Everything paints with
+ * the --td-* tokens / currentColor, so a customer palette swap carries it free.
+ * P-guards honoured throughout: P4 (button variant :not() chains — the anon CTA
+ * pill below only sets border/color, never a variant background), P5 (footer
+ * wrap scoped to the body>footer / [data-swift-page-footer] landmarks), P10
+ * (nav rules scoped via data-attributes, never a bare `nav`).
+ *
+ * Probe lesson (record it, don't just trust it): `overflow-x:hidden` on <body>
+ * MASKS a horizontal blowout from `document.documentElement.scrollWidth` — the
+ * fresh canvas measured clean while the content still overflowed. Measure
+ * `document.body.scrollWidth` at 390px. (marine: 390px canvas read 1356px with
+ * the mega-menu present, footer alone stretched it to 704px.)
+ * ========================================================================== */
+
+/* --- #8  THE mobile bug: the desktop mega-menu never collapses. Swift-v2's
+ *     MenuRelatedContent renders a fixed-width `.nav-wrapper` megamenu bar
+ *     (~1282px on marine) at EVERY viewport; at 390px it stretched the document
+ *     canvas to 1356px — content squeezed into a left column, giant blank right
+ *     margin, and broken lazy-image paint that reads as "missing PLP images".
+ *     Constrain the bar to a swipeable, horizontally-scrollable category strip
+ *     below the lg breakpoint. Data-attribute scoped (P10); the desktop
+ *     affordance block above (>=992px) is untouched. A real burger/offcanvas is
+ *     the durable fix and belongs upstream in the Swift menu template. --- */
+@media (max-width: 991.98px) {
+  [data-dw-itemtype="swift-v2_menurelatedcontent"] {
+    max-width: 100vw;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  [data-dw-itemtype="swift-v2_menurelatedcontent"]::-webkit-scrollbar { display: none; }
+  [data-dw-itemtype="swift-v2_menurelatedcontent"] .nav-wrapper { width: max-content; }
+}
+
+/* --- #9  Rowflex columns must wrap below md (USP band, feature rows). Any
+ *     NColumnsFlex row keeps all columns on one line at 390 by default. Wrap is
+ *     the sane small-screen default. (Data trap noted upstream: changing a row's
+ *     definitionId without setting `flexibleColumns` int[] leaves the columns
+ *     without responsive classes — that is a serialized-content concern, not
+ *     theme CSS.) --- */
+@media (max-width: 767.98px) {
+  main [data-swift-gridrow$="ColumnsFlex"] > [data-swift-container] { flex-wrap: wrap; }
+  main [data-swift-gridrow$="ColumnsFlex"] > [data-swift-container] > [data-swift-gridcolumn] { flex: 1 1 100%; }
+}
+
+/* --- #9  Footer columns wrap too — the footer sits OUTSIDE <main> and still
+ *     stretched the mobile canvas (marine: to ~704px). Scoped to the footer
+ *     landmark only (P5). --- */
+@media (max-width: 767.98px) {
+  [data-swift-page-footer] [data-swift-gridrow] > [data-swift-container],
+  body > footer [data-swift-gridrow] > [data-swift-container] { flex-wrap: wrap; }
+  [data-swift-page-footer] [data-swift-gridrow] [data-swift-gridcolumn],
+  body > footer [data-swift-gridrow] [data-swift-gridcolumn] { flex: 1 1 100%; }
+}
+
+/* --- Mobile rhythm: halve section padding so the buy panel and content rows
+ *     sit together instead of floating in dead space (the FRESH PASS 1.25rem
+ *     desktop budget re-tightened for small screens). Scoped to `main`. --- */
+@media (max-width: 767.98px) {
+  main [data-swift-container] { padding-top: .5rem; padding-bottom: .5rem; }
+  main [data-swift-gridrow] > .grid { padding-top: .35rem; padding-bottom: .35rem; }
+}
+
+/* --- #10 Product line rows, mobile stack (PLP AND the PDP BOM — the BOM lacked
+ *     the .product-list scope so its rows clipped the same way). Shared stacked
+ *     layout below the lg breakpoint. --- */
+@media (max-width: 991.98px) {
+  main article.product section > [data-swift-container] { flex-wrap: wrap; gap: .35rem .75rem; }
+  main article.product [data-dw-itemtype="swift-v2_productdefaultimage"] { flex: 0 0 56px; max-width: 56px; }
+  main article.product [data-dw-itemtype="swift-v2_productnumber"] { flex: 1 1 40%; }
+  main article.product [data-dw-itemtype="swift-v2_productheader"] { flex: 1 1 100%; order: 5; }
+  main article.product [data-dw-itemtype="swift-v2_productshortdescription"] { flex: 1 1 40%; order: 6; }
+  main article.product [data-dw-itemtype="swift-v2_productstock"] { flex: 0 0 auto; order: 7; margin-left: 0; }
+  main article.product [data-dw-itemtype="swift-v2_productprice"] { flex: 0 0 auto; text-align: left; order: 2; }
+  main article.product [data-dw-itemtype="swift-v2_productaddtocart"] { flex: 1 1 100%; order: 8; max-width: 100%; }
+  main article.product [data-dw-itemtype="swift-v2_productaddtocart"] [data-dw-button] { max-width: 100%; }
+}
+
+/* --- #10 Desktop PLP column discipline. Swift-v2's list-mode PLP (the
+ *     Distribution's default product-list layout) carries Bootstrap `.flex-fill`
+ *     (`flex:1 1 auto !important`) on every grid column, which silently defeats
+ *     any plain flex base — every column grew with its content and the CTA
+ *     landed on a different x per row. Reassert honest column bases with
+ *     !important and pin the stock/price/CTA cluster to the right edge. The
+ *     durable fix is the template dropping `.flex-fill` when a layout is meant
+ *     to be columnar (deferred upstream); this keeps the default PLP aligned
+ *     meanwhile. Structural for theme-default because the list-mode PLP ships as
+ *     the Distribution default. --- */
+@media (min-width: 992px) {
+  .product-list article.product [data-dw-itemtype="swift-v2_productdefaultimage"] { flex: 0 0 72px !important; }
+  .product-list article.product [data-dw-itemtype="swift-v2_productnumber"] { flex: 0 0 150px !important; }
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] { flex: 1 1 auto !important; min-width: 0; }
+  .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] {
+    flex: 0 0 280px !important; max-width: 280px;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productstock"] { flex: 0 0 100px !important; margin-left: auto; }
+  .product-list article.product [data-dw-itemtype="swift-v2_productprice"] {
+    flex: 0 0 auto !important;
+    display: flex; justify-content: flex-end; align-items: center;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productaddtocart"] { flex: 0 0 auto !important; }
+}
+
+/* --- #11 Anon B2B CTA. The "sign in for dealer pricing" pill renders INSIDE
+ *     swift-v2_productPRICE (add-to-cart is a narrow stub), so selectors hunting
+ *     it via add-to-cart miss it entirely. WHICH component owns the anon CTA
+ *     needs normalizing in the template (deferred upstream). CSS-able here: give
+ *     the pill a calm resting state and full accent on row hover — token-driven,
+ *     border/color only, so the P4 filled-variant hover rule is untouched. --- */
+.product-list article.product [data-dw-itemtype="swift-v2_productprice"] [data-dw-button] {
+  font-size: .8rem;
+  --dw-btn-padding-y: .4rem;
+  --dw-btn-padding-x: 1.1rem;
+  border-color: var(--td-accent-soft);
+  transition: border-color .15s ease, background-color .15s ease, color .15s ease;
+}
+.product-list article.product:hover [data-dw-itemtype="swift-v2_productprice"] [data-dw-button] {
+  border-color: var(--td-accent);
+}
+
+/* --- #12 Specifications: open spec table, headless style — no harmonica.
+ *     Collapsed-by-default field display groups show NOTHING on the PDP. Force
+ *     them open and restyle the `li > strong + span` rows as two-column spec
+ *     lines with hairline separators. The component SHOULD offer a native "open
+ *     table" display mode (deferred upstream — this CSS is the interim). More
+ *     specific than the generic `main .accordion-item` rounding above, so it
+ *     wins for this itemtype only. --- */
+[data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-collapse {
+  display: block !important;
+  height: auto !important;
+}
+[data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-button {
+  pointer-events: none;
+  cursor: default;
+  padding-left: 0;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--td-slate-mid);
+  background: transparent;
+  box-shadow: none;
+}
+[data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-button::after { display: none; }
+[data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-item {
+  border: 0 !important;
+  border-radius: 0 !important;
+  overflow: visible;
+  background: transparent;
+}
+[data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-item + .accordion-item { margin-top: 1rem; }
+[data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-body { padding: 0; }
+/* the li rows -> two-column spec lines with hairline separators */
+[data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-body ul {
+  list-style: none !important;
+  opacity: 1 !important;
+  line-height: 1.4 !important;
+}
+[data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-body ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+  padding: .45rem 0;
+  border-bottom: 1px solid rgba(31, 41, 51, .08);
+  font-size: .875rem;
+}
+[data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-body ul li strong {
+  font-weight: 400;
+  color: rgba(31, 41, 51, .6);
+}
+[data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-body ul li span {
+  font-weight: 600;
+  text-align: right;
+}
+
+/* --- #13 Header logo lockup width is inline-hardcoded (a 210px figure), and
+ *     the img-era `[data-swift-logo-image] img` hook above misses an inline-SVG
+ *     logo. Clamp the figure itself so the icon cluster fits a 390px viewport,
+ *     and let the SVG scale inside it. --- */
+@media (max-width: 767.98px) {
+  header [data-dw-itemtype="swift-v2_logo"] figure { width: 150px !important; }
+  header [data-dw-itemtype="swift-v2_logo"] svg { width: 100%; height: auto; }
+}
+
+/* --- #13 (cluster) Mobile header fit: a text-labelled Favorites link pushed
+ *     the cart icon past the viewport (marine: by 69px). Make Favorites
+ *     icon-only like account/cart and tighten the header container gap. --- */
+@media (max-width: 767.98px) {
+  header [data-dw-itemtype="swift-v2_favorites"] a { font-size: 0 !important; gap: .25rem !important; }
+  header [data-dw-itemtype="swift-v2_favorites"] svg { width: 20px; height: 20px; }
+  [data-swift-page-header] [data-swift-container] { gap: .4rem !important; }
+}
