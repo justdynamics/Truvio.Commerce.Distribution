@@ -1,5 +1,25 @@
 # Changelog — surface-swift
 
+## 1.1.0
+
+Theme fresh-pass fold-in — product-page composition (marine-demo evidence, 2026-07-18).
+Ships the two product-description partials that the enriched catalog already carries but
+nothing rendered:
+
+- **`Swift-v2_ProductShortDescription`** added to the buy panel (`Product Components/
+  Product Info (right side)`), directly under the product title, in **both** content areas
+  (`Swift 2` + `Swift 2 Nederlands`). Renders the product teaser under the header, above
+  price.
+- **`Swift-v2_ProductLongDescription`** added as a full-width **"Overview"** section on the
+  `Shop/Product Details` page (new 1-column row at `sortOrder 3`, between the media/buy-panel
+  row and the "Similar products" row; the trailing rows shift down one), in both areas
+  (title `Overview` / `Overzicht`, `TitleFontSize: h4`, `TextReadability: max-width-on`).
+
+Data-only serialized content (`replace/_content/**`), registered in `replace-manifest.json`
+for both areas; new paragraph/row ids are fresh GUIDs, `sourceParagraphId` in a reserved
+90000+ band. Deep deserialize proof (row-count parity, strict-mode) runs in the Foundry
+gate — see the PR body.
+
 ## 1.0.1
 
 Learnings triage fix (RUN-TRIAGE-20260713 in the Foundry):
