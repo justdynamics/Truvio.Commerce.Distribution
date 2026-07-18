@@ -4,7 +4,7 @@
   "swiftVersion": "2.4.0",
   "minSerializerVersion": "0.8.1-beta",
   "minSerializerVersionNote": "ENGINE FLOOR (base >= 3.0.0): Truvio.Commerce.Serializer >= 0.8.1-beta — the first engine retargeted to DW 10.28.1-PreRelease (Swift 2.4 roll-forward). Carries everything the 0.8.0-beta floor guaranteed (render-time page/grid-row/paragraph permission blocks + deferred permission re-apply + user-group cache refresh). Proven on DW 10.28.1-PreRelease; stable re-prove due when DW 10.28 lands stable on NuGet.",
-  "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution, base 3.0.0 FRAMEWORK-ONLY). The Swift 2.4 base split moved ALL content (areas 3 + 27, both mode trees) and UrlPath to the surface-swift layer; the base now ships only the framework SQL sets + this contract + SQL-predicate config. Additions (feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Content-scoped contract bits (content areas, langPrefix, navDepth, page anchors, title rules, per-environment Area exclusions, protected Swift item types) moved to layers/surface-swift/surface.contract-notes.json. The gate reads this file for the base-contract collision check.",
+  "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution, base 3.0.0 FRAMEWORK-ONLY). The Swift 2.4 base split moved ALL content (both mode trees) and UrlPath to the surface-swift layer; the base now ships only the framework SQL sets + this contract + SQL-predicate config. Additions (feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Content-scoped contract bits (content areas, langPrefix, navDepth, page anchors, title rules, per-environment Area exclusions, protected Swift item types) moved to layers/surface-swift/surface.contract-notes.json. The gate reads this file for the base-contract collision check.",
   "idRules": {
     "nvarcharPkPrefix": "PACK-<NAME>-",
     "nvarcharPkNote": "When an addition writes rows into a base-owned table whose PK is nvarchar (most Ecom tables - PriceId, PaymentId, ProductId, etc.), it MUST namespace the PK with a PACK-<NAME>- prefix (uppercase layer name). Keeps additions disjoint from the base and from each other.",
@@ -101,7 +101,7 @@
     "buyerCustomerNumber": "98745621",
     "csrUsername": "IMCSalesrep",
     "csrCustomerNumber": "7789765",
-    "note": "Content anchors (areas 3/27, langPrefix /swift-2) moved to surface-swift (base 3.0.0 ships zero content areas)."
+    "note": "Content anchors (area 3, langPrefix /swift-2) moved to surface-swift (base 3.0.0 ships zero content areas)."
   },
   "repositories": {
     "provisionedByGate": true,

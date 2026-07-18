@@ -137,63 +137,6 @@
         "_content/Swift 2/Navigation/Secondary Navigation/page.yml",
         "_content/templates.manifest.yml"
       ]
-    },
-    {
-      "providerType": "Content",
-      "areaId": 27,
-      "areaName": "Swift 2 Nederlands",
-      "path": "/Navigation/Secondary Navigation/Quick Order",
-      "pageId": 0,
-      "acknowledgedOrphanPageIds": [
-        1,
-        2,
-        4,
-        16,
-        19,
-        21,
-        23,
-        24,
-        27,
-        33,
-        34,
-        37,
-        40,
-        41,
-        42,
-        44,
-        48,
-        60,
-        73,
-        74,
-        79,
-        80,
-        81,
-        84,
-        85,
-        86,
-        87,
-        89,
-        92,
-        97,
-        98,
-        104,
-        113,
-        149,
-        165,
-        168
-      ],
-      "excludeAreaColumns": [],
-      "excludeFields": [],
-      "entryId": "content/area-27/Navigation/Secondary Navigation/Quick Order",
-      "files": [
-        "_content/Swift 2 Nederlands/area.yml",
-        "_content/Swift 2 Nederlands/Navigation/page.yml",
-        "_content/Swift 2 Nederlands/Navigation/Secondary Navigation/Quick Order/grid-row-1/grid-row.yml",
-        "_content/Swift 2 Nederlands/Navigation/Secondary Navigation/Quick Order/grid-row-1/paragraph-c1-1.yml",
-        "_content/Swift 2 Nederlands/Navigation/Secondary Navigation/Quick Order/page.yml",
-        "_content/Swift 2 Nederlands/Navigation/Secondary Navigation/page.yml",
-        "_content/templates.manifest.yml"
-      ]
     }
   ]
 }

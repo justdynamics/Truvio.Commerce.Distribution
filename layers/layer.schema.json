@@ -112,7 +112,7 @@
         "properties": {
           "areaId": {
             "type": "integer",
-            "description": "Area id the declared page tree lives under (matches the fragment manifest Content entry areaId; base contract anchors area 3 = 'Swift 2', area 27 = 'Swift 2 Nederlands')."
+            "description": "Area id the declared page tree lives under (matches the fragment manifest Content entry areaId; surface-swift anchors area 3 = 'Swift 2')."
           },
           "path": {
             "type": "string",

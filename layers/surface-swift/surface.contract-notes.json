@@ -1,18 +1,13 @@
 {
   "surfaceContractNotesVersion": "1.0.0",
   "swiftVersion": "2.4.0",
-  "description": "Content-scoped contract bits moved OUT of base.contract.json by the Swift 2.4 base split (base 3.0.0 framework-only). surface-swift owns the Swift content surface: both areas, the entire merge tree, UrlPath, and its own item-type XMLs (itemtypes/, from the official Swift v2.4.0 design package) so the surface is self-contained.",
+  "description": "Content-scoped contract bits moved OUT of base.contract.json by the Swift 2.4 base split (base 3.0.0 framework-only). surface-swift owns the Swift content surface: the Swift 2 content area (area 3, EN), the entire merge tree, UrlPath, and its own item-type XMLs (itemtypes/, from the official Swift v2.4.0 design package) so the surface is self-contained.",
   "anchors": {
     "areas": [
       {
         "id": 3,
         "name": "Swift 2",
         "language": "EN"
-      },
-      {
-        "id": 27,
-        "name": "Swift 2 Nederlands",
-        "language": "NL"
       }
     ],
     "langPrefix": "/swift-2"

@@ -66,10 +66,6 @@
     {
       "areaId": 3,
       "path": "/Navigation/Secondary Navigation/Quick Order"
-    },
-    {
-      "areaId": 27,
-      "path": "/Navigation/Secondary Navigation/Quick Order"
     }
   ],
   "asserts": {

@@ -27,7 +27,7 @@ The base ships **zero catalog** — `EcomGroups/EcomProducts/EcomPrices/EcomDisc
 - `1328` **IMCUser** (buyer, customer number `98745621`) — member of `1325`
 - `1326` **IMCSalesrep** (CSR, customer number `7789765`) — member of `1292`
 
-**Content:** none — the base ships zero content areas (3.0.0). Content anchors (areas 3/27, langPrefix `/swift-2`) are surface-swift-owned.
+**Content:** none — the base ships zero content areas (3.0.0). Content anchors (area 3, langPrefix `/swift-2`) are surface-swift-owned.
 
 **Reference category:** `reference_category` (`EcomProductCategory`, CategoryType 2) + `LANG1` translation — required by DemoVerifier Check 2.
 
