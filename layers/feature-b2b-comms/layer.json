@@ -1,0 +1,30 @@
+{
+  "name": "feature-b2b-comms",
+  "version": "1.0.0",
+  "kind": "feature",
+  "swiftVersion": "2.4.0",
+  "repositoryName": "Products",
+  "fragmentModes": [
+    "merge"
+  ],
+  "fragmentTables": [
+    "EmailMarketingFlow",
+    "EmailMarketingFlowStep"
+  ],
+  "fragmentContent": [
+    {
+      "areaId": 3,
+      "path": "/Newsletter Emails/Dealer Emails"
+    }
+  ],
+  "asserts": {
+    "behaviorProbes": [],
+    "criticalPaths": []
+  },
+  "costHints": {
+    "dependsOn": [
+      "surface-swift"
+    ],
+    "note": "Depends on surface-swift (composes under its area-3 '/Newsletter Emails' subtree and reuses its Swift-v2_Email* item types + the shipped Unsubscribe confirmation page). The layer.schema.json has no formal 'depends' field; the dependency is documented here (advisory) and enforced by edition composition order (surface before feature). Data-only: no customCode/src."
+  }
+}

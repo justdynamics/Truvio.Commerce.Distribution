@@ -1,0 +1,22 @@
+"paragraphUniqueId": e87f8e96-6149-4ec8-af73-dbdf595b50ea
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_EmailProductCatalog"
+"header": "Product Catalog"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "474d9b63-be2d-4f82-b353-f382a2e40711"
+  "Id": "100348"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Compliant replacement parts"
+  "Products":
+  - "FIXT0006"
+  - "FIXT0008"
+  "ImageAspectRatio": "4-3"
+  "Layout": "2"
+  "HideProductPrice": "True"
+"columnId": 1

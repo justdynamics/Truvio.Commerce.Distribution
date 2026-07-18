@@ -1,0 +1,45 @@
+"pageUniqueId": f5fea6ef-0f40-40a2-84a0-f58c2d31caf0
+"sourcePageId": 0
+"name": "Dealer welcome"
+"menuText": "Dealer welcome"
+"sortOrder": 1
+"isActive": true
+"itemType": "Swift-v2_Email"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": false
+"allowsearch": false
+"showInSitemap": false
+"showInLegend": false
+"sslMode": 0
+"colorSchemeId": "dark"
+"displayMode": "Normal"
+"activeFrom": 2026-07-18T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": true
+  "nofollow": true
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "100301"
+  "ItemInstanceType": ""
+  "PreHeaderText": ""
+  "Sort": 1
+  "Title": "Dealer welcome"
+"propertyFields":
+  "Id": "100301"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "Icon": "/Files/Icons/1_none.svg"
+  "SubmenuType": "auto"

@@ -1,0 +1,17 @@
+"paragraphUniqueId": eeb5906c-fdea-4aca-b954-9b5481c34a7e
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_EmailArticle"
+"header": "Article"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "f5fea6ef-0f40-40a2-84a0-f58c2d31caf0"
+  "Id": "100307"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Your partner account is ready"
+  "Text": "<p>Welcome, {{UserManagement:User.Name}}. Your dealer account gives you catalog access with your contract pricing, online ordering, and your full order history in one place.</p><p>Sign in to set your password, browse the catalog, and place your first order. Your account manager is one reply away.</p>"
+"columnId": 1
