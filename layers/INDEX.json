@@ -33,7 +33,7 @@
     { "name": "surface-dap-portal", "kind": "surface", "version": "1.0.3", "status": "active" },
     { "name": "surface-headless", "kind": "surface", "version": "2.3.3", "status": "active" },
     { "name": "surface-swift", "kind": "surface", "version": "1.2.0", "status": "active" },
-    { "name": "theme-default", "kind": "theme", "version": "1.2.0", "status": "active" }
+    { "name": "theme-default", "kind": "theme", "version": "1.2.1", "status": "active" }
   ],
 
   "retired": [

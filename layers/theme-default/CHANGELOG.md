@@ -1,5 +1,28 @@
 # theme-default changelog
 
+## 1.2.1
+
+**Real-device fix — mobile list-mode PLP row consistency.** A phone screenshot
+(marine reference; DemoAgent commit `24e0df4`) showed one PLP row wrapping its CTA
+to its own line while its neighbours stayed inline. The #10 mobile flex bases carried
+no `!important`, so Bootstrap `.flex-fill` (`flex:1 1 auto !important`, on every
+list column) beat them and let the SKU column grow content-driven — 298px on the
+longest product number — tipping only the longest-SKU rows over the edge. The desktop
+#10 block already `!important`s every base for exactly this reason; the mobile bases
+needed it too. Disk-overlay only (SPEC-06); P4 button `:not()` chains, P5 footer
+scoping and P10 nav scoping are unchanged and honoured. Runtime proof: the Foundry
+gate on the current latest Swift.
+
+`default_custom.css` (`.product-list`-scoped so the PDP BOM that #10 mobile also
+covers is untouched):
+
+- **#14 Mobile PLP row consistency.** (a) Mobile flex bases re-asserted with
+  `!important` so `.flex-fill` can't grow them — the SKU column pinned to `0 1 auto`
+  (content width, never grows). (b) Uniform 56px square product thumbs. (c) Compact
+  SKU type. (d) Price pill right-anchored (`margin-left:auto` + `justify-content:
+  flex-end`, nowrap, compact padding) so it aligns to the right edge both when it
+  fits inline (~430px) and when it wraps (~390px), independent of column widths.
+
 ## 1.2.0
 
 **Mobile pass — kill the small-viewport layout blowout, wrap flex rows, align the
