@@ -1,8 +1,8 @@
 {
   "Id": "default",
   "Name": "Default",
-  "Shape": 1,
+  "Shape": 2,
   "BorderSize": 1,
-  "PaddingY": 0.5,
-  "PaddingX": 1.25
+  "PaddingY": 0.55,
+  "PaddingX": 1.4
 }
