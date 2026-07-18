@@ -9,7 +9,7 @@ decision D-D); the pricing half moved to `feature-pricing`.
 
 | Capability | How | Artifact |
 |------------|-----|----------|
-| Quick-order pad (CAND-01) | SKU + quantity grid with paste-from-Excel/CSV (tab-separated first, comma/semicolon fallback), feed-based SKU validation, one-click `cartcmd=addmulti` cart fill — all client-side parsing, zero custom server code | `templates/Designs/Swift-v2/Paragraph/PackQuickOrderPad.cshtml`, `itemtypes/ItemType_PackQuickOrderPad.xml`, Quick Order page fragment, shipped in **both** the `Swift 2` (area 3, `/swift-2/quick-order`) and `Swift 2 Nederlands` (area 27) nav trees, navigationTag `QuickOrderPadPage` |
+| Quick-order pad (CAND-01) | SKU + quantity grid with paste-from-Excel/CSV (tab-separated first, comma/semicolon fallback), feed-based SKU validation, one-click `cartcmd=addmulti` cart fill — all client-side parsing, zero custom server code | `templates/Designs/Swift-v2/Paragraph/PackQuickOrderPad.cshtml`, `itemtypes/ItemType_PackQuickOrderPad.xml`, Quick Order page fragment, shipped in the `Swift 2` (area 3, `/swift-2/quick-order`) nav tree, navigationTag `QuickOrderPadPage` |
 | Editable buy-it-again (empty-cart safe) | **The stock Express Buy `?OrderID=` prefill flow the base/surface already routes to** — `OrderViewSearchList.cshtml` renders the Reorder button to `ExpressBuyPage?OrderID=<id>`; the flow prefills an editable quantity grid and submits `cartcmd=addmulti`, which needs no active cart. The layer PROVES this flow (probes on `/swift-2/express-buy`), it does not rebuild it | `layer.json` asserts (`http-body-contains` on Express Buy, criticalPath) |
 
 ## Zero custom code
@@ -33,7 +33,7 @@ catalog rows of its own** — reordering is about the shop's real catalog.
 ## Fragment portability
 
 The Quick Order page fragment attaches under **base/surface-provided structural ancestors** — the area
-(`Swift 2` = area 3, `Swift 2 Nederlands` = area 27), the `Navigation` / `Navigation/Secondary
+(`Swift 2` = area 3), the `Navigation` / `Navigation/Secondary
 Navigation` structural-stub pages, plus the fragment-root `area.yml` and `templates.manifest.yml`. Those
 paths are **surface-owned anchors**: the fragment references them by path and deliberately leaves them to
 the surface (additions bind to the base contract, never re-ship it). Consequence: the fragment
@@ -52,7 +52,7 @@ matching `areaName`/`areaId` in `merge/merge-manifest.json` + `fragmentContent[]
 ## Known cycle limitation (declared, gate honors as WARN)
 
 Inherited verbatim from `feature-reordering-pricing` 1.1.0: after a deactivate→reactivate cycle the
-2-page area 3 + area 27 NL-mirror Quick Order fragment does not fully re-bind (the page 404s), so the two
+2-page area 3 Quick Order fragment does not fully re-bind (the page 404s), so the two
 `/swift-2/quick-order` cycle asserts (`http-body-contains` + `sku-validation`, phase `behavior-cycle`)
 fail in the gate's Step 12c cycle leg. Declared in `layer.json` `knownCycleLimitations`; the gate records
 them as **`KNOWN-LIMITATION` (WARN)**, not FAIL. Scope: toggle-cycle only — first activation and every

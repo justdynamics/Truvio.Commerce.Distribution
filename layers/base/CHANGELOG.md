@@ -1,5 +1,25 @@
 # Changelog — base
 
+## 3.1.0
+
+Multi-language reshape (RUN-SWIFT-MULTILANGUAGE, P1/P2 — Foundry plan). Retargets the
+shipped shop language set from the Danish-default legacy to en-US/es-MX/fr-CA:
+
+- **`EcomLanguages`** 18 → 20 rows: add ESM (es-MX, AutoId 19) + FRC (fr-CA, AutoId 20);
+  resolve the ENU/LANG1 dual en-US default in favour of ENU (`LANG1.LanguageIsDefault` →
+  false; the LANG1 row is retained for `reference_category` + sample-order FK). The 15
+  remaining seed rows stay inert (un-attached) so 120 `EcomCountryText` + 17 currency-format
+  FK rows are not orphaned.
+- **`EcomShopLanguageRelation`** on SHOP1 rewritten to exactly {ENU (default), ESM, FRC}:
+  128 ENU flipped `IsDefault` true; new 132 ESM + 133 FRC; removed 127 DAN (was the shop
+  default), 129 DEU, 130 FRA, 131 ITA. Danish is no longer the shop default — ENU is the
+  sole default.
+- **P2:** en-US fallback for es-MX/fr-CA country/currency formatting (no localized rows
+  added). `base-only` edition `expectedCounts.EcomLanguages` 18 → 20.
+
+Minor bump — additive language set + shop-relation reshape, framework contract unchanged.
+**Proven on DW 10.28.1-PreRelease.**
+
 ## 3.0.1
 
 Learnings triage fixes (RUN-TRIAGE-20260713 in the Foundry):

@@ -12,10 +12,6 @@
     {
       "areaId": 3,
       "path": "/Navigation/Secondary Navigation/Quick Order"
-    },
-    {
-      "areaId": 27,
-      "path": "/Navigation/Secondary Navigation/Quick Order"
     }
   ],
   "asserts": {
@@ -46,7 +42,7 @@
       "probe": "http-body-contains",
       "path": "/swift-2/quick-order",
       "phase": "behavior-cycle",
-      "reason": "Quick Order deactivate->reactivate known limitation: the 2-page area 3 + area 27 NL-mirror fragment does not fully re-bind after a deactivate->reactivate cycle (the page 404s), so the http-body-contains cycle assert fails in the gate's Step 12c cycle leg. Scope: toggle-cycle only; first activation and every first-activation behavior assert are unaffected. A full re-deserialize of the base + this layer restores the page. Inherited verbatim from feature-reordering-pricing 1.1.0."
+      "reason": "Quick Order deactivate->reactivate known limitation: the 2-page area 3 Quick Order fragment does not fully re-bind after a deactivate->reactivate cycle (the page 404s), so the http-body-contains cycle assert fails in the gate's Step 12c cycle leg. Scope: toggle-cycle only; first activation and every first-activation behavior assert are unaffected. A full re-deserialize of the base + this layer restores the page. Inherited verbatim from feature-reordering-pricing 1.1.0."
     },
     {
       "probe": "sku-validation",

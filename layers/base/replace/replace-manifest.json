@@ -458,8 +458,10 @@
         "_sql/EcomLanguages/DEU.yml",
         "_sql/EcomLanguages/ENG.yml",
         "_sql/EcomLanguages/ENU.yml",
+        "_sql/EcomLanguages/ESM.yml",
         "_sql/EcomLanguages/ESP.yml",
         "_sql/EcomLanguages/FRA.yml",
+        "_sql/EcomLanguages/FRC.yml",
         "_sql/EcomLanguages/HRV.yml",
         "_sql/EcomLanguages/ISL.yml",
         "_sql/EcomLanguages/ITA.yml",
@@ -540,11 +542,9 @@
       "schemaSync": null,
       "entryId": "sql/EcomShopLanguageRelation",
       "files": [
-        "_sql/EcomShopLanguageRelation/127.yml",
         "_sql/EcomShopLanguageRelation/128.yml",
-        "_sql/EcomShopLanguageRelation/129.yml",
-        "_sql/EcomShopLanguageRelation/130.yml",
-        "_sql/EcomShopLanguageRelation/131.yml",
+        "_sql/EcomShopLanguageRelation/132.yml",
+        "_sql/EcomShopLanguageRelation/133.yml",
         "_sql/EcomShopLanguageRelation/_meta.yml"
       ]
     },

@@ -19,7 +19,7 @@ fragment rules including content, collision checks, activation manifest, publish
 
 | Capability | How | Artifact |
 |------------|-----|----------|
-| Quick-order pad (CAND-01) | SKU + quantity grid with paste-from-Excel/CSV (tab-separated first, comma/semicolon fallback), feed-based SKU validation, one-click `cartcmd=addmulti` cart fill — all client-side parsing, zero custom server code | `templates/Designs/Swift-v2/Paragraph/PackQuickOrderPad.cshtml`, `itemtypes/ItemType_PackQuickOrderPad.xml`, Quick Order page fragment, shipped in **both** the `Swift 2` (area 3, `/swift-2/quick-order`) and `Swift 2 Nederlands` (area 27) nav trees, navigationTag `QuickOrderPadPage` |
+| Quick-order pad (CAND-01) | SKU + quantity grid with paste-from-Excel/CSV (tab-separated first, comma/semicolon fallback), feed-based SKU validation, one-click `cartcmd=addmulti` cart fill — all client-side parsing, zero custom server code | `templates/Designs/Swift-v2/Paragraph/PackQuickOrderPad.cshtml`, `itemtypes/ItemType_PackQuickOrderPad.xml`, Quick Order page fragment, shipped in the `Swift 2` (area 3, `/swift-2/quick-order`) nav tree, navigationTag `QuickOrderPadPage` |
 | Editable buy-it-again (empty-cart safe) | **The stock Express Buy `?OrderID=` prefill flow the base layer already routes to** — `OrderViewSearchList.cshtml` renders the Reorder button to `ExpressBuyPage?OrderID=<id>`; the flow prefills an editable quantity grid and submits `cartcmd=addmulti`, which needs no active cart. The layer PROVES this flow (probes on `/swift-2/express-buy`), it does not rebuild it | `layer.json` asserts (`http-body-contains` on the Express Buy page, criticalPath) |
 | Qty-break tier pricing | Anonymous-visible `EcomPrices` tier rows on **layer-owned** product `PACK-RPP-PROD1` (RPP-TIER-01, base 4995 EUR): qty 5 → 4500, qty 10 → 4200, qty 25 → 3900 | `merge/_sql/EcomPrices/PACK-RPP-0001..0003.yml` |
 | Customer contract pricing | Buyer-scoped `EcomPrices` row on **layer-owned** product `PACK-RPP-PROD2` (RPP-CTR-01, base 1599 EUR): 1399 EUR for customer number `98745621` | `merge/_sql/EcomPrices/PACK-RPP-0004.yml` |
@@ -45,7 +45,7 @@ does not compile still gets the contract-price headline as pure data.
 ## Fragment portability (Verdanta DESIGN-1)
 
 The Quick Order page fragment attaches under **base-provided structural ancestors** — the area
-(`Swift 2` = area 3, `Swift 2 Nederlands` = area 27), the `Navigation` and
+(`Swift 2` = area 3), the `Navigation` and
 `Navigation/Secondary Navigation` structural-stub pages, plus the fragment-root `area.yml` and
 `templates.manifest.yml`. Those paths are **base-owned anchors**.
 
@@ -60,13 +60,13 @@ bare host — **the base is a prerequisite**. (True in-layer stub duplication wo
 exempt `isStructuralStub` anchor paths from the collision check — a harness/serializer change,
 tracked outside this layer.)
 
-**Applying on a renamed area.** The fragment hardcodes the area folder names `Swift 2` (area 3) and
-`Swift 2 Nederlands` (area 27) in its `merge/_content/<area>/...` paths and in the two
-`merge/merge-manifest.json` Content entries (`areaId` + `areaName`), matched by `layer.json`
-`fragmentContent[].areaId`. The base contract anchors these as **area 3 / area 27** — a solution
+**Applying on a renamed area.** The fragment hardcodes the area folder name `Swift 2` (area 3)
+in its `merge/_content/<area>/...` paths and in the
+`merge/merge-manifest.json` Content entry (`areaId` + `areaName`), matched by `layer.json`
+`fragmentContent[].areaId`. The base contract anchors this as **area 3** — a solution
 maps by `areaId`, not by the display name. To apply on a solution whose areas are named
-differently: (1) rename the `merge/_content/<area>` folders to the target area names, (2) update the
-matching `areaName` (and `areaId` if it differs) in the two manifest Content entries, and (3) update
+differently: (1) rename the `merge/_content/<area>` folder to the target area name, (2) update the
+matching `areaName` (and `areaId` if it differs) in the manifest Content entry, and (3) update
 `fragmentContent[].areaId` in `layer.json`. Nothing in the page bodies depends on the literal string
 `Swift 2`, so no paragraph edits are required.
 
@@ -135,7 +135,7 @@ observed price tokens) — the 07-04 runbook owns that call.
 
 | Issue | Impact | Workaround |
 |-------|--------|------------|
-| Quick Order deactivate→reactivate cycle limitation (declared) | After `Invoke-LayerDeactivation` followed by re-activation, the Quick Order page (`/swift-2/quick-order`) returns 404 — the 2-page area 3 + area 27 NL-mirror fragment does not fully re-bind on reactivation, so the two quick-order **cycle** asserts (`http-body-contains` and `sku-validation` on `/swift-2/quick-order`) fail in the gate's Step 12c cycle leg. **Scope: toggle-cycle only.** Normal (first) activation, main-leg installation, and every behavior assert on first activation are unaffected; the sibling `/swift-2/express-buy` surface survives the cycle. | A full re-deserialize of the base layer + layer restores the page. |
+| Quick Order deactivate→reactivate cycle limitation (declared) | After `Invoke-LayerDeactivation` followed by re-activation, the Quick Order page (`/swift-2/quick-order`) returns 404 — the 2-page area 3 Quick Order fragment does not fully re-bind on reactivation, so the two quick-order **cycle** asserts (`http-body-contains` and `sku-validation` on `/swift-2/quick-order`) fail in the gate's Step 12c cycle leg. **Scope: toggle-cycle only.** Normal (first) activation, main-leg installation, and every behavior assert on first activation are unaffected; the sibling `/swift-2/express-buy` surface survives the cycle. | A full re-deserialize of the base layer + layer restores the page. |
 
 ### Gate treatment — declared known-cycle-limitation (WARN, not FAIL)
 

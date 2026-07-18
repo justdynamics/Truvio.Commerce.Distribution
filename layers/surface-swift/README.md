@@ -11,12 +11,12 @@ storefront leg.
 
 | Piece | Content |
 |---|---|
-| `replace/_content` | The full structural page trees of BOTH areas: `Swift 2` (EN, area 3) and `Swift 2 Nederlands` (NL language layer, area 27) — framework pages (Customer Center incl. per-role permissions, checkout, account, navigation), item types bindings, layouts. |
-| `merge/_content` | The ENTIRE former base merge tree: bootstrap content (Home, site chrome, About, posts, dealers, footer navs, newsletter examples) in both areas — field-level merge, customer edits survive. |
+| `replace/_content` | The full structural page tree of the `Swift 2` area (EN, area 3) — framework pages (Customer Center incl. per-role permissions, checkout, account, navigation), item types bindings, layouts. |
+| `merge/_content` | The ENTIRE former base merge tree: bootstrap content (Home, site chrome, About, posts, dealers, footer navs, newsletter examples) in the Swift 2 area — field-level merge, customer edits survive. |
 | `replace/_sql/UrlPath` | The friendly-URL redirect table (see the UrlPath decision below). |
 | `itemtypes/` | **Its own 128 `ItemType_Swift-v2_*.xml` definitions from the official Swift v2.4.0 design package** — the surface registers its item types itself (self-contained; the gate overlays them via `Deploy-LayerFilesOverlay` before deserialize). |
-| `config/swift-content-2.4.json` | The content predicates: `Site framework` (Deploy, areaId 3, language layers included) + the 10 Seed content predicates + UrlPath + the content-scoped exclude maps (`excludeFieldsByItemType`, `excludeXmlElementsByType`). |
-| `surface.contract-notes.json` | The content-scoped contract bits that moved OUT of `base.contract.json`: content anchors (areas 3/27, `/swift-2`), per-environment Area exclusions, protected Swift item types, navDepth obligation, title rules — and the UrlPath decision record. |
+| `config/swift-content-2.4.json` | The content predicates: `Site framework` (Deploy, areaId 3) + the 10 Seed content predicates + UrlPath + the content-scoped exclude maps (`excludeFieldsByItemType`, `excludeXmlElementsByType`). |
+| `surface.contract-notes.json` | The content-scoped contract bits that moved OUT of `base.contract.json`: content anchors (area 3, `/swift-2`), per-environment Area exclusions, protected Swift item types, navDepth obligation, title rules — and the UrlPath decision record. |
 
 ## The UrlPath decision (recorded here per RUN-SWIFT-24)
 
@@ -39,8 +39,8 @@ title integrity) bind to this layer's trees.
 
 ## Provenance
 
-- Content: the curated, brand-neutral commerce content trees (bike-era copy neutralized,
-  NL language layer included) carried forward from base 2.4.1 and re-proven on
+- Content: the curated, brand-neutral commerce content trees (bike-era copy neutralized)
+  carried forward from base 2.4.1 and re-proven on
   Swift 2.4 / DW 10.28.1-PreRelease by the gate.
 - Item types: official Swift v2.4.0 design package (`Swift_v2.4.0_Files.zip`,
   github.com/dynamicweb/Swift release v2.4.0).

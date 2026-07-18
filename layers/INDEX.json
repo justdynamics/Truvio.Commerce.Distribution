@@ -15,7 +15,7 @@
   },
 
   "layers": [
-    { "name": "base", "kind": "base", "version": "3.0.1", "status": "active" },
+    { "name": "base", "kind": "base", "version": "3.1.0", "status": "active" },
     { "name": "feature-bom-configurator", "kind": "feature", "version": "1.1.1", "status": "active" },
     { "name": "feature-pricing", "kind": "feature", "version": "1.0.0", "status": "active" },
     { "name": "feature-reordering", "kind": "feature", "version": "1.0.0", "status": "active" },
@@ -32,7 +32,7 @@
     { "name": "sample-data", "kind": "sample-data", "version": "2.0.2", "status": "active" },
     { "name": "surface-dap-portal", "kind": "surface", "version": "1.0.3", "status": "active" },
     { "name": "surface-headless", "kind": "surface", "version": "2.3.3", "status": "active" },
-    { "name": "surface-swift", "kind": "surface", "version": "1.1.0", "status": "active" },
+    { "name": "surface-swift", "kind": "surface", "version": "1.2.0", "status": "active" },
     { "name": "theme-default", "kind": "theme", "version": "1.1.0", "status": "active" }
   ],
 
