@@ -1,0 +1,24 @@
+"paragraphUniqueId": f0840b8a-f1f4-4c3a-a060-73eb88649661
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_EmailProductCatalog"
+"header": "Product Catalog"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "4081a661-c987-4804-897d-5a1a6b500f10"
+  "Id": "100617"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "On sale now"
+  "Products":
+  - "FIXT0002"
+  - "FIXT0004"
+  - "FIXT0006"
+  - "FIXT0010"
+  "ImageAspectRatio": "4-3"
+  "Layout": "2"
+  "HideProductPrice": "False"
+"columnId": 1

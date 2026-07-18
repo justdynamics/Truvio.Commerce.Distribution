@@ -1,4 +1,39 @@
-﻿- path: Swift-v2_Email
+- path: 1ColumnEmail
+  kind: grid-row
+  referencedBy:
+  - Swift - Newsletter - Announcement Email
+  - Swift - Newsletter - Sale Email
+- path: Swift-v2_Email
   kind: item-type
   referencedBy:
   - Swift - Newsletter - Announcement Email
+  - Swift - Newsletter - Sale Email
+- path: Swift-v2_EmailHeader
+  kind: item-type
+  referencedBy:
+  - Swift - Newsletter - Announcement Email
+  - Swift - Newsletter - Sale Email
+- path: Swift-v2_EmailHeading
+  kind: item-type
+  referencedBy:
+  - Swift - Newsletter - Announcement Email
+  - Swift - Newsletter - Sale Email
+- path: Swift-v2_EmailArticle
+  kind: item-type
+  referencedBy:
+  - Swift - Newsletter - Announcement Email
+  - Swift - Newsletter - Sale Email
+- path: Swift-v2_EmailButton
+  kind: item-type
+  referencedBy:
+  - Swift - Newsletter - Announcement Email
+  - Swift - Newsletter - Sale Email
+- path: Swift-v2_EmailProductCatalog
+  kind: item-type
+  referencedBy:
+  - Swift - Newsletter - Sale Email
+- path: Swift-v2_EmailFooter
+  kind: item-type
+  referencedBy:
+  - Swift - Newsletter - Announcement Email
+  - Swift - Newsletter - Sale Email

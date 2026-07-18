@@ -1,5 +1,28 @@
 # Changelog — surface-swift
 
+## 1.3.0
+
+Newsletter-email shells fix (P18 B2B email-pack fold, marine-demo evidence 2026-07-18).
+The Swift 2.4 serialization shipped the OOTB newsletter-email page SHELLS with no body
+(page.yml only) — near-useless on a fresh deserialize. This authors generic-Swift bodies
+for the two OOTB shells so demos start from designed emails:
+
+- **`Swift - Newsletter - Announcement Email`** (Dark) — 5 `1ColumnEmail` rows:
+  Header / Heading / Article / Button / Footer, brand-neutral announcement copy.
+- **`Swift - Newsletter - Sale Email`** (Light) — 6 `1ColumnEmail` rows: Header / Heading /
+  Article / **Product Catalog** / Button / Footer. The product rail references the real
+  sample-data catalog SKUs (`FIXT0002/0004/0006/0010`), `Layout: "2"` (numeric-string column
+  count — a non-numeric value crashes the template with DivideByZero), `HideProductPrice: False`
+  (a Sale shows prices). `EmailButton` link targets left blank (Swift page ids are assigned at
+  deserialize and are not stable to hardcode).
+
+Data-only serialized content in the `merge/_content` tree, registered in `merge-manifest.json`;
+new row/paragraph ids are fresh GUIDs with `sourceParagraphId: 0`, item-instance `fields.Id` in
+the reserved `100600+` band (base-contract `intIdentityFloor`). `templates.manifest.yml` updated
+to reference the new `Swift-v2_Email*` item types + `1ColumnEmail` rows. Item-type XMLs unchanged.
+Minor bump — additive content only. Deep deserialize proof (row-count parity, strict-mode) runs
+in the Foundry gate — see the PR body.
+
 ## 1.2.0
 
 Multi-language reshape (RUN-SWIFT-MULTILANGUAGE, P3 — Foundry plan). Drops the Dutch
