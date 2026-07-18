@@ -637,3 +637,44 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
   header [data-dw-itemtype="swift-v2_favorites"] svg { width: 20px; height: 20px; }
   [data-swift-page-header] [data-swift-container] { gap: .4rem !important; }
 }
+
+/* --- #14 Mobile PLP row consistency (real-device fix). A phone screenshot showed
+ *     ONE PLP row wrapping its CTA to its own line while its neighbours stayed
+ *     inline — mixed alignments that read as broken. Cause: the #10 mobile bases
+ *     above carry NO !important, so Bootstrap `.flex-fill` (`flex:1 1 auto !important`,
+ *     on every list column) beat them and let the SKU column grow content-driven
+ *     (298px on the longest product number), tipping only the longest-SKU rows over
+ *     the edge. The desktop #10 block already !importants every base for exactly this
+ *     reason; the mobile bases need it too. Fix:
+ *       (a) re-assert the mobile flex bases with !important so .flex-fill can't grow
+ *           them — the SKU column pinned to `0 1 auto` (content width, never grows),
+ *       (b) uniform 56px square thumbs,
+ *       (c) compact SKU type,
+ *       (d) right-anchor the price pill (margin-left:auto + justify-content:flex-end,
+ *           nowrap, compact padding) so it sits at the right edge BOTH when it fits
+ *           inline (~430px) and when it wraps (~390px), independent of column widths.
+ *     PLP-scoped (.product-list) so the PDP BOM that #10 mobile also covers is left
+ *     alone, and so these win the cascade over #10 mobile (main-scoped) + the #11
+ *     pill rule. P4 honoured: the pill sets type / padding / flow only, never a
+ *     variant background. --- */
+@media (max-width: 991.98px) {
+  .product-list article.product [data-dw-itemtype="swift-v2_productdefaultimage"] { flex: 0 0 56px !important; max-width: 56px !important; }
+  .product-list article.product [data-dw-itemtype="swift-v2_productdefaultimage"] img { width: 56px; height: 56px; object-fit: cover; }
+  .product-list article.product [data-dw-itemtype="swift-v2_productnumber"] { flex: 0 1 auto !important; font-size: .75rem; }
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] { flex: 1 1 100% !important; }
+  .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] { flex: 1 1 40% !important; }
+  .product-list article.product [data-dw-itemtype="swift-v2_productstock"] { flex: 0 0 auto !important; }
+  .product-list article.product [data-dw-itemtype="swift-v2_productprice"] {
+    flex: 0 0 auto !important;
+    margin-left: auto !important;
+    display: flex; justify-content: flex-end;
+    text-align: right;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productprice"] [data-dw-button] {
+    font-size: .78rem;
+    --dw-btn-padding-y: .35rem;
+    --dw-btn-padding-x: .9rem;
+    white-space: nowrap;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productaddtocart"] { flex: 1 1 100% !important; }
+}
