@@ -21,6 +21,11 @@
   --td-white:        #FFFFFF;
   --td-accent:       #3E4C59;                 /* the interaction accent — restrained slate */
   --td-accent-soft:  rgba(62, 76, 89, .07);
+  /* Shape + elevation system (fresh-pass structural defaults). Foreground-tinted
+   * so a customer re-skin that only swaps the palette keeps a coherent depth model. */
+  --td-radius:       12px;                     /* surfaces: cards, media figures */
+  --td-radius-sm:    8px;                      /* small chips, thumbnails, inputs */
+  --td-shadow-soft:  0 1px 2px rgba(31, 41, 51, .06), 0 12px 28px -14px rgba(31, 41, 51, .22);
 }
 
 /* === Primary button hover — filled variant only (P4) === */
@@ -76,20 +81,25 @@ body > footer a:hover,
   outline-offset: 2px;
 }
 
-/* === Product / content card — quiet border, subtle radius on light schemes === */
+/* === Product / content card — rounded, hairline border, soft lift on hover ===
+ * Elevation model: resting = hairline foreground border + no shadow; hover =
+ * stronger hairline + soft layered shadow + 2px lift. 150ms transition. === */
 [data-dw-colorscheme="light"] .card,
 [data-dw-colorscheme="lightgrey1"] .card,
 [data-dw-colorscheme="lightgrey2"] .card {
   box-shadow: none;
-  border: 1px solid var(--td-hairline);
-  border-radius: 0.35rem;
-  transition: border-color 0.1s ease;
+  border: 1px solid rgba(31, 41, 51, .08);
+  border-radius: var(--td-radius);
+  overflow: hidden;
+  transition: border-color .15s ease, box-shadow .15s ease, transform .15s ease;
 }
 
 [data-dw-colorscheme="light"] .card:hover,
 [data-dw-colorscheme="lightgrey1"] .card:hover,
 [data-dw-colorscheme="lightgrey2"] .card:hover {
-  border-color: var(--td-slate-mid);
+  border-color: rgba(31, 41, 51, .16);
+  box-shadow: var(--td-shadow-soft);
+  transform: translateY(-2px);
 }
 
 /* =============================================================================
@@ -314,4 +324,116 @@ body > footer a:hover,
 table {
   font-size: 0.9em;
   border-collapse: collapse;
+}
+
+/* =============================================================================
+ * FRESH PASS — close the design gap to a modern headless storefront.
+ * A structural version of the marine-demo re-skin, generalized to the neutral
+ * theme: shape + elevation system, muted secondary-text tier, calmer motion,
+ * a slim two-row header, rounded imagery. Disk-overlay only (SPEC-06): no
+ * template edit, no serialized DB content. Everything paints with the --td-*
+ * tokens / currentColor, so a customer palette swap carries it for free.
+ * P-guards honoured: P4 (button variant :not() chains — unchanged above),
+ * P5 (footer scoped to the landmark — unchanged above), P10 (nav scoped via
+ * data-attributes / .megamenu-wrapper — unchanged above).
+ * ========================================================================== */
+
+/* --- Header density: budget the standard two-row header <=170px desktop.
+ *     Section padding is scoped to `main` — NEVER to the header/footer
+ *     landmarks — so tightening content rhythm never re-inflates the chrome
+ *     (the header/footer trims below stay independent of this). --- */
+main [data-swift-container] {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+[data-swift-page-header] section > .grid {
+  padding-top: .45rem;
+  padding-bottom: .45rem;
+}
+[data-swift-page-header] [data-swift-container] {
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+}
+
+/* --- Secondary text tier: soften body copy on light schemes (~78% fg).
+ *     Headings are unaffected (rule targets <p>); CTAs/buttons contain no <p>. --- */
+main [data-dw-colorscheme="light"] p,
+main [data-dw-colorscheme="lightgrey1"] p,
+main [data-dw-colorscheme="lightgrey2"] p {
+  color: rgba(31, 41, 51, .78);
+}
+
+/* --- Breadcrumbs: quiet wayfinding, not a heading (small, ~65% opacity). --- */
+[data-dw-itemtype="swift-v2_breadcrumbnavigation"] {
+  font-size: .85rem;
+  opacity: .65;
+}
+
+/* --- Motion: 120ms color/bg/border on links; cards + buttons carry 150ms /
+ *     100ms above. No layout-affecting transitions. --- */
+main a {
+  transition: color .12s ease, background-color .12s ease, border-color .12s ease;
+}
+
+/* --- Rounded imagery: content + product media pick up the surface radius.
+ *     The full-bleed hero poster stays square (it is not swift-v2_image and is
+ *     capped square by the image-height block above). --- */
+main [data-dw-itemtype="swift-v2_image"] figure,
+main [data-dw-itemtype="swift-v2_image"] figure > img,
+main [data-dw-itemtype="swift-v2_image"] figure > img.img-fluid,
+main [data-dw-itemtype="swift-v2_productmedia"] img {
+  border-radius: var(--td-radius);
+}
+main [data-dw-itemtype="swift-v2_productdefaultimage"] img {
+  border-radius: var(--td-radius-sm);
+  border: 1px solid rgba(31, 41, 51, .06);
+}
+
+/* --- Accordion (specs / FAQ): rounded panels, hairline borders. --- */
+main .accordion-item {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(31, 41, 51, .08);
+}
+main .accordion-item + .accordion-item { margin-top: .5rem; }
+main .accordion-button { font-weight: 600; }
+
+/* --- Facet / sort dropdown toggles: pill chips. --- */
+main .dropdown > .btn,
+main .dropdown-toggle { border-radius: 999px; }
+
+/* --- Feature (USP) tiles: subtle lift like a headless value band. --- */
+main [data-dw-itemtype="swift-v2_feature"] { transition: transform .15s ease; }
+main [data-dw-itemtype="swift-v2_feature"]:hover { transform: translateY(-2px); }
+
+/* =============================================================================
+ * Structural template-gap mitigations (disk-overlay). Each mirrors a Part B
+ * template finding; the durable fix lives upstream in the Swift design package,
+ * these keep the default demo clean until it lands.
+ * ========================================================================== */
+
+/* --- Poster-first rows (Part B-3): the row grid's default ~20px top padding
+ *     reads as a white gap between a sticky header and a full-bleed hero.
+ *     Zero it only when the first section holds a poster, so PLP/breadcrumb
+ *     rows keep their breathing room. --- */
+main > section:first-child:has([data-swift-poster]) > .grid { padding-top: 0 !important; }
+
+/* --- Long BOM (Part B-5): a Swift-v2_ProductBom with 30+ rows dominates the
+ *     page. Cap it to a scroll frame so it never runs the page length. --- */
+[data-dw-itemtype="swift-v2_productbom"] {
+  max-height: 640px;
+  overflow-y: auto;
+  padding-right: .5rem;
+}
+
+/* --- Slider card text run-on (Part B-4): the category/product slider item
+ *     concatenates title + text with no separator ("PropulsionGenuine drive
+ *     components..."). Force the card title to a block so the text starts on
+ *     its own line. (CSS mitigation of a missing spacing element in the slider
+ *     item template — the durable fix is the template, upstream.) --- */
+main [data-dw-itemtype="swift-v2_slider"] .card .card-title,
+main [data-dw-itemtype="swift-v2_productgroupslider"] .card .card-title,
+main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
+  display: block;
+  margin-bottom: .25rem;
 }

@@ -8,9 +8,9 @@
   "ParagraphLineHeight": 1.5,
   "HeadingFont": "Inter",
   "HeadingFontWeight": 600,
-  "HeadingLetterSpacing": -0.01,
+  "HeadingLetterSpacing": -0.02,
   "HeadingLineHeight": 1.15,
   "ButtonFont": "Inter",
-  "ButtonFontWeight": 500,
+  "ButtonFontWeight": 600,
   "ButtonLineHeight": 1.2
 }

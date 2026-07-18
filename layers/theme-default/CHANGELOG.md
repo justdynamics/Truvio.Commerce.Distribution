@@ -1,5 +1,40 @@
 # theme-default changelog
 
+## 1.1.0
+
+**Fresh pass — close the design gap to a modern headless storefront.** The marine-demo
+re-skin defaults (2026-07-18), made structural in the neutral theme so every future demo
+starts fresh instead of re-deriving the same layer. Disk-overlay only (SPEC-06); the
+P-guards (P4 button `:not()` chains, P5 footer scoping, P10 nav scoping) are unchanged.
+
+Style assets:
+
+- **Buttons pill shape.** `Buttons/default.{css,json}`: `Shape 2`, `--dw-btn-border-radius:
+  999px`, padding `0.55/1.4rem`. `Typography/default.{css,json}`: button weight `600`,
+  tracking `0.01em` (no wide tracking).
+- **Typography.** Heading letter-spacing `-0.01em → -0.02em`; line-height stays `1.15`
+  (avoids descender clipping on Inter-class faces).
+
+`default_custom.css` (structural, token-driven — a palette swap carries it for free):
+
+- **Shape + elevation system.** New `--td-radius: 12px` / `--td-radius-sm: 8px` /
+  `--td-shadow-soft` tokens. Cards get `12px` radius + hairline `rgba(fg,.08)` border;
+  hover = border `.16` + soft layered shadow + `translateY(-2px)` (150ms). Radius applied
+  to content/product media figures, product thumbnails (hairline-framed), accordion items;
+  facet/sort dropdown toggles become pill chips.
+- **Muted secondary-text tier.** `main` body copy on light schemes at `rgba(fg,.78)`;
+  breadcrumbs `.85rem` at `65%` opacity.
+- **Motion.** `main a` 120ms colour/bg/border; cards/buttons 150ms/100ms.
+- **Header density.** Section padding scoped to `main` (never the header/footer landmarks)
+  + header row/container trims — budgets the standard two-row header `<=170px` desktop
+  (marine measured `261px → 165px`).
+- **Template-gap mitigations (disk-overlay).** Poster-first-row top-padding exception
+  (`:has()`), long-BOM cap+scroll frame, slider card title→block separator. Durable fixes
+  are upstream in the Swift design package; these keep the default demo clean meanwhile.
+- **Raw head-injection point.** `DefaultHeadInclude.cshtml` documents an inert, copy-ready
+  `@Html.Raw` region for JSON-LD / `<meta>` (the Swift master's `CustomHeadInclude` *field*
+  HTML-encodes; this Razor include is the unencoded output point).
+
 ## 1.0.2
 
 - **Image-height caps (RUN-DISTRIBUTION-QUALITY T1-01, D-A).** `default_custom.css`
