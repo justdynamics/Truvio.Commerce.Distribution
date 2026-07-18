@@ -1,6 +1,6 @@
 {
   "name": "surface-swift",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "kind": "surface",
   "swiftVersion": "2.4.0",
   "fragmentModes": [

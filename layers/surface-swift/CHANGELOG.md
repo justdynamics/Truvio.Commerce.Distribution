@@ -1,5 +1,18 @@
 # Changelog — surface-swift
 
+## 1.2.0
+
+Multi-language reshape (RUN-SWIFT-MULTILANGUAGE, P3 — Foundry plan). Drops the Dutch
+content leg now that nld is removed from the Distribution shop languages (base 3.1.0):
+
+- **Removes the `Swift 2 Nederlands` (area 27) content area** and its feature coupling —
+  the entire NL `replace/_content` mirror and its manifest entry. The Distribution now ships
+  the single `Swift 2` (en-US, area 3) content area.
+- Composes on base 3.1.0 (en-US sole shop default). Data-only serialized content; deep
+  deserialize proof (row-count parity, strict-mode) runs in the Foundry gate — see the PR body.
+
+Minor bump — content-area removal, item-type XMLs + merge tree unchanged.
+
 ## 1.1.0
 
 Theme fresh-pass fold-in — product-page composition (marine-demo evidence, 2026-07-18).

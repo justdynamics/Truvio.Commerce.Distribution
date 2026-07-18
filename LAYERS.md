@@ -23,8 +23,8 @@ and every layer traces to a lane of the ecosystem workflow (the Foundry's
 
 | Layer | Kind | Version | Role |
 |-------|------|---------|------|
-| `base` | base | 3.0.1 | The privileged FRAMEWORK-ONLY scaffold (Swift 2.4 base split): the 16 framework SQL sets + [`base.contract.json`](layers/base/base.contract.json); **zero catalog, zero content areas** — all Swift content moved to `surface-swift`. Proven on DW 10.28.1-PreRelease. |
-| `surface-swift` | surface | 1.1.0 | The Swift storefront content surface (born in the base split): both content areas (EN + NL), the entire merge tree, `UrlPath`, and its own 128 Swift v2.4.0 item-type XMLs (self-contained). 1.1.0 ships the product short/long descriptions in the product-page composition (buy-panel teaser + full-width "Overview", en-US area). 1.0.1 added the durable image-crop normalization + the List-mode PLP card (SKU/price/stock/qty/add-to-cart). Proven on DW 10.28.1-PreRelease. |
+| `base` | base | 3.1.0 | The privileged FRAMEWORK-ONLY scaffold (Swift 2.4 base split): the 16 framework SQL sets + [`base.contract.json`](layers/base/base.contract.json); **zero catalog, zero content areas** — all Swift content moved to `surface-swift`. 3.1.0 reshapes the shipped shop languages to en-US (sole default) / es-MX / fr-CA and drops the DAN/DEU/FRA/ITA shop attach (`EcomLanguages` 18→20, `EcomShopLanguageRelation` rewritten on SHOP1). Proven on DW 10.28.1-PreRelease. |
+| `surface-swift` | surface | 1.2.0 | The Swift storefront content surface (born in the base split): the `Swift 2` (en-US) content area, the entire merge tree, `UrlPath`, and its own 128 Swift v2.4.0 item-type XMLs (self-contained). 1.2.0 removes the `Swift 2 Nederlands` (area 27) content area and its feature coupling (nld dropped from the Distribution). 1.1.0 shipped the product short/long descriptions in the product-page composition (buy-panel teaser + full-width "Overview", en-US area). 1.0.1 added the durable image-crop normalization + the List-mode PLP card (SKU/price/stock/qty/add-to-cart). Proven on DW 10.28.1-PreRelease. |
 | `sample-data` | sample-data | 2.0.2 | Demo identities (buyer/CSR) + the demo product catalog (EcomProducts 20 / EcomGroups 3) + contract pricing, shipped as SQL under `merge/_sql/`. 2.0.2 seeds the delivered order + RMA link for `feature-rma`. Activated when an edition sets `sampleData: true`. |
 | `feature-reordering` | feature | 1.0.0 | Quick Order pad + Express Buy nav/pages (data-only, zero customCode). Split from `feature-reordering-pricing`. |
 | `feature-pricing` | feature | 1.0.0 | Quantity-break tiers + customer-contract pricing; carries the compile-optional `ReorderingPricingQtyBreakProvider`. Split from `feature-reordering-pricing`. |
@@ -42,7 +42,7 @@ A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampl
 
 | Edition | Composition | Status |
 |---------|-------------|--------|
-| `base-only` | base 3.0.1 alone — framework-only, no theme (nothing to skin) | **Proven on DW 10.28.1-PreRelease** — API/DB-level proof (framework row-count contract + /Admin/; zero pages by design). |
+| `base-only` | base 3.1.0 alone — framework-only, no theme (nothing to skin) | **Proven on DW 10.28.1-PreRelease** — API/DB-level proof (framework row-count contract + /Admin/; zero pages by design). |
 | `swift-demo` | base + `surface-swift` + five feature layers (`feature-reordering` + `feature-pricing` + `feature-rma` + `feature-subscription-orders` + `feature-bom-configurator`) + sample data + theme `default` | **Proven on DW 10.28.1-PreRelease** — the full Swift 2.4 storefront (20 / 3 / 96). |
 | `headless-demo` | base + `surface-headless` + sample data | **Proven on DW 10.28.1-PreRelease** — headless Delivery-API (A1–A9), ZERO Swift design-package dependency. |
 | `dap-portal` | base + `surface-dap-portal` + sample data | **Proven on DW 10.28.1-PreRelease** — the DAP content surface (area 26). |
