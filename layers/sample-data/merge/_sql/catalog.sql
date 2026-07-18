@@ -117,7 +117,7 @@ DELETE FROM EcomOrderLines    WHERE OrderLineOrderId  = 'FIXT-ORDER-RMA1';
 DELETE FROM EcomOrders        WHERE OrderId           = 'FIXT-ORDER-RMA1';
 
 INSERT INTO EcomOrders (OrderId, OrderComplete, OrderCart, OrderStateId, OrderShopId, OrderLanguageId, OrderCurrencyCode, OrderCustomerNumber, OrderCustomerAccessUserId, OrderCustomerName, OrderCustomerEmail, OrderCustomerCompany, OrderCustomerCountryCode, OrderDate, OrderCompletedDate, OrderTotalPrice)
-VALUES ('FIXT-ORDER-RMA1', 1, 0, 'OS2', 'SHOP1', 'LANG1', 'EUR', '98745621', 1328, 'IMC User', 'imcuser@example.com', 'IMC Trading BV', 'NL', DATEADD(day, -30, GETDATE()), DATEADD(day, -28, GETDATE()), 200.00);
+VALUES ('FIXT-ORDER-RMA1', 1, 0, 'OS2', 'SHOP1', 'ENU', 'EUR', '98745621', 1328, 'IMC User', 'imcuser@example.com', 'IMC Trading BV', 'NL', DATEADD(day, -30, GETDATE()), DATEADD(day, -28, GETDATE()), 200.00);
 INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
 VALUES ('FIXT-ORDER-RMA1-1', 'FIXT-ORDER-RMA1', 'FIXT0001', 'FIXT-0001', 'Fixture House Blend', 1, 200.00, 200.00, '0', DATEADD(day, -30, GETDATE()));
 INSERT INTO EcomRmaOrderLines (RmaOrderLineRmaId, RmaOrderLineOrderLineId)
