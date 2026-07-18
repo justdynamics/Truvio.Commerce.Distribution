@@ -14,3 +14,19 @@
         --td-white:       #FFFFFF;
     }
 </style>
+@*
+    RAW HEAD-INJECTION POINT (Part B-6).
+    The Swift master's CustomHeadInclude *field* HTML-encodes its value, which blocks
+    JSON-LD / structured-data / raw <meta> injection at the design layer. This design-
+    package head-include renders through Razor, so it is the raw (unencoded) output
+    point: emit head markup here with @@Html.Raw(...) and it reaches the <head> verbatim.
+    theme-default ships NO injected markup — the block below is an inert, copy-ready
+    example a consuming solution fills in (product JSON-LD, Open Graph, verification
+    meta, etc.). Leaving it commented keeps the default demo's head clean.
+
+    Example (uncomment + populate in the consuming solution):
+    @@{
+        var jsonLd = "{\"@@context\":\"https://schema.org\",\"@@type\":\"Organization\"}";
+    }
+    @@Html.Raw("<script type=\"application/ld+json\">" + jsonLd + "</script>")
+*@
