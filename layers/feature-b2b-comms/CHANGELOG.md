@@ -1,5 +1,19 @@
 # Changelog — feature-b2b-comms
 
+## 1.0.1
+
+Fix the `SqlTable` flow predicates so they deserialize against the live DW 10.28.1 physical
+schema. The `EmailMarketingFlow` and `EmailMarketingFlowStep` YAML rows named their non-PK
+columns with short, unprefixed names (`FolderId`, `Name`, `RecipientsIds`, `Active`,
+`StartDate`, … and step `FlowId`, `EmailId`, `DelayUnit`, `Delay`); the step PK was also
+unprefixed (`StepId`). DW's physical schema prefixes every column with the table name, so the
+inserts 400'd with "column not present on target schema" and **0 rows landed** in the Foundry
+gate run. Every non-PK key is renamed to `<TableName>` + short name, and the step PK
+`StepId` → `EmailMarketingFlowStepId`; the already-correct flow PK `EmailMarketingFlowId` is
+kept. Values are unchanged — key names only. Cross-checked against the passing `feature-pricing`
+(`EcomPrices` → `Price*`) and `feature-subscription-orders` (`ScheduledTask` → `Task*`) layers,
+which fully prefix every column including the PK.
+
 ## 1.0.0
 
 Initial release (P18 B2B email-pack fold, marine-demo evidence 2026-07-18). A data-only

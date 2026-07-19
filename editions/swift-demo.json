@@ -7,7 +7,7 @@
     "feature-rma@1.0.0",
     "feature-subscription-orders@1.1.1",
     "feature-bom-configurator@1.1.1",
-    "feature-b2b-comms@1.0.0"
+    "feature-b2b-comms@1.0.1"
   ],
   "surfaces": [
     "surface-swift@1.3.0"

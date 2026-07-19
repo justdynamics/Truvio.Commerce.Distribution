@@ -1,5 +1,5 @@
-"StepId": 100503
-"FlowId": 100500
-"EmailId": 100512
-"DelayUnit": 0
-"Delay": 7
+"EmailMarketingFlowStepId": 100503
+"EmailMarketingFlowStepFlowId": 100500
+"EmailMarketingFlowStepEmailId": 100512
+"EmailMarketingFlowStepDelayUnit": 0
+"EmailMarketingFlowStepDelay": 7

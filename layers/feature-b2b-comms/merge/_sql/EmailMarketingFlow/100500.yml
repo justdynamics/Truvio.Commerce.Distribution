@@ -1,12 +1,12 @@
 "EmailMarketingFlowId": 100500
-"FolderId": 2
-"Name": "Dealer onboarding"
-"RecipientsIds": "G1325"
-"StopAddingNewRecipients": false
-"ScheduledRepeatInterval": 1440
-"ProcessOnlyFlowRecipients": false
-"Active": true
-"StartDate": 2026-07-18T00:00:00.0000000
-"CreatedDate": 2026-07-18T00:00:00.0000000
-"UpdatedDate": 2026-07-18T00:00:00.0000000
-"RecipientsUpdateTime": 2026-07-18T00:00:00.0000000
+"EmailMarketingFlowFolderId": 2
+"EmailMarketingFlowName": "Dealer onboarding"
+"EmailMarketingFlowRecipientsIds": "G1325"
+"EmailMarketingFlowStopAddingNewRecipients": false
+"EmailMarketingFlowScheduledRepeatInterval": 1440
+"EmailMarketingFlowProcessOnlyFlowRecipients": false
+"EmailMarketingFlowActive": true
+"EmailMarketingFlowStartDate": 2026-07-18T00:00:00.0000000
+"EmailMarketingFlowCreatedDate": 2026-07-18T00:00:00.0000000
+"EmailMarketingFlowUpdatedDate": 2026-07-18T00:00:00.0000000
+"EmailMarketingFlowRecipientsUpdateTime": 2026-07-18T00:00:00.0000000
