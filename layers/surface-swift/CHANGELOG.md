@@ -1,5 +1,22 @@
 # Changelog — surface-swift
 
+## 1.2.1
+
+Raw page-id link hygiene (runtime E2E deserialize sweep, DW 10.27.6, risewell-e2e). A sweep
+of the merge/replace trees for raw page-id link references (`Default.aspx?ID=<n>`, page
+`shortCut`, and bare page-reference item fields) found every such link resolves to an
+in-tree page **except one casing outlier**:
+
+- **`About us` page shortcut** (`Navigation/Footer Navigation/About the shop/About us`):
+  `"shortCut": "Default.aspx?Id=165"` → `"Default.aspx?ID=165"`. Every other link in the
+  surface uses the canonical `ID=` casing; the lowercase `Id=` risked being skipped by the
+  serializer's case-sensitive page-id remap, leaving a raw source id on the target. 165 is
+  the in-tree `About` page (sourcePageId 165), so the target is unambiguous.
+
+Data-only, one serialized-content line changed; item-type XMLs and the rest of the merge
+tree unchanged. Patch bump. Deep deserialize proof (strict-mode, row-count parity) runs in
+the Foundry gate — see the PR body.
+
 ## 1.2.0
 
 Multi-language reshape (RUN-SWIFT-MULTILANGUAGE, P3 — Foundry plan). Drops the Dutch

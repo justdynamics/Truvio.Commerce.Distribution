@@ -3,7 +3,7 @@
 "CurrencySymbol": "€"
 "CurrencyName": "Euro"
 "CurrencyRate": 100
-"CurrencyIsDefault": true
+"CurrencyIsDefault": false
 "CurrencyCultureInfo": "de-DE"
 "CurrencyPayGatewayCode": 978
 "CurrencyRoundingId": ""
