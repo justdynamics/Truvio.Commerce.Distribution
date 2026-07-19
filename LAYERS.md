@@ -29,7 +29,7 @@ and every layer traces to a lane of the ecosystem workflow (the Foundry's
 | `feature-reordering` | feature | 1.0.0 | Quick Order pad + Express Buy nav/pages (data-only, zero customCode). Split from `feature-reordering-pricing`. |
 | `feature-pricing` | feature | 1.0.0 | Quantity-break tiers + customer-contract pricing; carries the compile-optional `ReorderingPricingQtyBreakProvider`. Split from `feature-reordering-pricing`. |
 | `feature-rma` | feature | 1.0.0 | Data-only RMA seed (`EcomRmas`); the My-returns page + RMA state machine are OOTB (surface-swift + platform). |
-| `feature-b2b-comms` | feature | 1.0.0 | Data-only B2B dealer email pack (5 dealer emails under `/Newsletter Emails/Dealer Emails/`) + the email-marketing onboarding flow serialized via `SqlTable` predicates (`EmailMarketingFlow` + `EmailMarketingFlowStep`). Composes on `surface-swift`. |
+| `feature-b2b-comms` | feature | 1.0.1 | Data-only B2B dealer email pack (5 dealer emails under `/Newsletter Emails/Dealer Emails/`) + the email-marketing onboarding flow serialized via `SqlTable` predicates (`EmailMarketingFlow` + `EmailMarketingFlowStep`). Composes on `surface-swift`. |
 | `feature-reordering-pricing` | feature | 1.2.1 | **DEPRECATED / tombstoned** (superseded by `feature-reordering@1.0.0` + `feature-pricing@1.0.0`). Retained one release for consumers still pinning 1.2.1; no edition composes it. Do not add to new editions. |
 | `feature-subscription-orders` | feature | 1.1.1 | Subscriptions + recurring-order scheduled task. |
 | `feature-bom-configurator` | feature | 1.1.1 | Kit / BOM configurator. |
