@@ -15,7 +15,7 @@
   },
 
   "layers": [
-    { "name": "base", "kind": "base", "version": "3.1.1", "status": "active" },
+    { "name": "base", "kind": "base", "version": "3.1.2", "status": "active" },
     { "name": "feature-b2b-comms", "kind": "feature", "version": "1.0.1", "status": "active" },
     { "name": "feature-bom-configurator", "kind": "feature", "version": "1.1.1", "status": "active" },
     { "name": "feature-pricing", "kind": "feature", "version": "1.0.0", "status": "active" },
