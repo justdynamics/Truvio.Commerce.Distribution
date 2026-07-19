@@ -692,6 +692,18 @@
         "_content/Swift 2/Newsletter Emails/page.yml",
         "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/page.yml",
         "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/page.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-1/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-1/paragraph-c1-1.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-2/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-2/paragraph-c1-1.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-3/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-3/paragraph-c1-1.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-4/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-4/paragraph-c1-1.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-5/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-5/paragraph-c1-1.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-6/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Light/Swift - Newsletter - Sale Email/grid-row-6/paragraph-c1-1.yml",
         "_content/templates.manifest.yml"
       ]
     },
@@ -747,6 +759,16 @@
         "_content/Swift 2/Newsletter Emails/page.yml",
         "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/page.yml",
         "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/page.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/grid-row-1/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/grid-row-1/paragraph-c1-1.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/grid-row-2/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/grid-row-2/paragraph-c1-1.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/grid-row-3/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/grid-row-3/paragraph-c1-1.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/grid-row-4/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/grid-row-4/paragraph-c1-1.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/grid-row-5/grid-row.yml",
+        "_content/Swift 2/Newsletter Emails/Swift Newsletters - Dark/Swift - Newsletter - Announcement Email/grid-row-5/paragraph-c1-1.yml",
         "_content/templates.manifest.yml"
       ]
     }

@@ -1,0 +1,24 @@
+"paragraphUniqueId": e5f90048-0af4-475a-8137-836213848edb
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_EmailProductCatalog"
+"header": "Product Catalog"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "f5fea6ef-0f40-40a2-84a0-f58c2d31caf0"
+  "Id": "100309"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Popular with partners"
+  "Products":
+  - "FIXT0001"
+  - "FIXT0002"
+  - "FIXT0005"
+  - "FIXT0007"
+  "ImageAspectRatio": "4-3"
+  "Layout": "2"
+  "HideProductPrice": "True"
+"columnId": 1
