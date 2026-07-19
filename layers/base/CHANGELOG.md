@@ -1,5 +1,21 @@
 # Changelog — base
 
+## 3.1.1
+
+`EcomCurrencies` single-default fix (runtime E2E deserialize, DW 10.27.6, risewell-e2e).
+DW expects exactly one currency flagged `CurrencyIsDefault` per language context; the base
+shipped **16 EUR rows** (one per currency-language: DAN, DES, DEU, ENU, ESP, FRA, HRV, ISL,
+ITA, NLD, NON, PLK, RUS, SRP, SVE, UKR) all with `CurrencyIsDefault: true`, so the default-
+currency resolution was ambiguous.
+
+- Only the **en-US row (`EUR$$ENU`)** — matching the sole default language `ENU`
+  (`EcomLanguages.LanguageIsDefault`) — keeps `CurrencyIsDefault: true`; the other **15 EUR
+  rows flip to `false`**. Runtime resolved `DEFCUR=EUR`, which this preserves deterministically.
+- No other column touched; no other currency was default before or after (all non-EUR rows
+  were already `false`). Patch bump — one-bit data correction, framework contract unchanged.
+
+**Proven on DW 10.28.1-PreRelease** (structural validator); re-gate in the Foundry.
+
 ## 3.1.0
 
 Multi-language reshape (RUN-SWIFT-MULTILANGUAGE, P1/P2 — Foundry plan). Retargets the
