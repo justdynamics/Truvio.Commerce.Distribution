@@ -1,5 +1,34 @@
 # Changelog — base
 
+## 3.1.2
+
+`EcomCurrencies` **revert of the 3.1.1 single-default change** — restores
+`CurrencyIsDefault: true` on all 16 `EUR$$<lang>` rows (DAN, DES, DEU, ENU, ESP, FRA, HRV,
+ISL, ITA, NLD, NON, PLK, RUS, SRP, SVE, UKR).
+
+Root cause (swift-demo gate RED, run 20260719-110318): DW's
+`ProductIndexBuilder.ProcessProducts` calls `CurrencyService.GetDefaultCurrency()` **per
+language context** — not once globally. The `ProductIndexBuilder` build context resolves to
+a non-`ENU` language; with 3.1.1 leaving **only `EUR$$ENU`** flagged default, that language
+had **no default currency**, so `GetDefaultCurrency()` threw
+`InvalidOperationException: No default currency found` and the Full build aborted writing
+**0 of 28 documents** (`Completed (0 / 28)`, index build diagnostic log). An empty Products
+index means the Swift storefront resolves **zero products**: empty PLPs, the Quick-Order
+SKU feed reads "Unknown SKU", and authenticated `cartcmd=addmulti` creates no order line.
+
+3.1.1's premise ("DW expects exactly one currency flagged `CurrencyIsDefault`") was wrong:
+DW's model is **one default currency per language**, and the pre-reshape base (all 16 EUR
+rows default) was the gate-proven-green shape. Bisected live on the harness host: 16-default
+→ 28/28 documents; ENU-only and {ENU,ESM,FRC}-only → 0/28. The reshape's new shop languages
+`ESM`/`FRC` are **not** the build context and need no currency rows.
+
+- 15 `EUR$$<lang>` rows flip `false` → `true`; `EUR$$ENU` already `true`. No other column
+  touched; no non-EUR currency was default before or after. Patch bump — one-bit data
+  revert, framework contract unchanged.
+
+**Proven on DW 10.28.1-PreRelease** (live index build 28/28 + end-to-end frontend: PLP
+products, SKU feed resolves, addmulti order line at contract price); re-gated in the Foundry.
+
 ## 3.1.1
 
 `EcomCurrencies` single-default fix (runtime E2E deserialize, DW 10.27.6, risewell-e2e).
