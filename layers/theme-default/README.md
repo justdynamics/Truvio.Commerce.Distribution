@@ -30,6 +30,9 @@ dropdowns.
 ## Re-skin ladder
 
 1. Override the `--td-*` tokens (accent, ink, hairline) in the customer's custom CSS.
-2. Replace the three Style pairs (`ColorSchemes`/`Buttons`/`Typography`) with brand values.
+2. Replace the three Style pairs (`ColorSchemes`/`Buttons`/`Typography`) with brand values —
+   and set `--dw-color-accent` (+ `-rgb` / `-contrast`) per scheme: the brand accent slot.
+   `.text-accent` / `.bg-accent` / `.dw-eyebrow` in `default_custom.css` consume it and fall
+   back to button-primary when unset, so the accent never has to hijack the button color.
 3. Extend `default_custom.css` — the affordance section is brand-agnostic and survives
    any palette swap (everything paints with `currentColor` / the `--td-accent` token).

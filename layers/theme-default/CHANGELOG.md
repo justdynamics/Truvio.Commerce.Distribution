@@ -1,6 +1,29 @@
 # theme-default changelog
 
-## 1.2.1
+## 1.2.2
+
+**Brand accent slot + eyebrow utility (Foundry #32).** Two structural gaps in the
+theme *recipe* surfaced by the marine-demo source analysis: brand themes had no
+first-class home for their accent color (so it leaked into
+`--dw-color-button-primary` and painted every button), and the tracked-caps
+section-kicker voice existed only ad hoc (PDP spec-group labels here; poster
+scopes in brand themes). Disk-overlay only (SPEC-06); P-guards untouched; the
+neutral default's rendering is unchanged — every new consumer falls back to
+button-primary until a brand opts in.
+
+`default_custom.css`:
+
+- **Accent slot convention.** `--dw-color-accent` / `--dw-color-accent-rgb` /
+  `--dw-color-accent-contrast`, set per scheme in a brand's ColorSchemes CSS
+  (re-skin ladder step 2). Consuming utilities `.text-accent` / `.bg-accent`
+  carry the button-primary fallback, so the slot is additive and inert by default.
+  Distinct from `--td-accent`, the theme's static interaction tint.
+- **`.dw-eyebrow`.** The section kicker as one utility: `.78rem` / 600 / `.3em`
+  tracked uppercase, accent-colored (same fallback). Apply to the kicker
+  paragraph above a section h2.
+
+Runtime proof: the swift-demo gate theme leg on the current latest Swift — run id
+recorded in the publishing PR.
 
 **Real-device fix — mobile list-mode PLP row consistency.** A phone screenshot
 (marine reference; DemoAgent commit `24e0df4`) showed one PLP row wrapping its CTA
