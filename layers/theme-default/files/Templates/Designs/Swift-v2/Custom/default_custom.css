@@ -28,6 +28,35 @@
   --td-shadow-soft:  0 1px 2px rgba(31, 41, 51, .06), 0 12px 28px -14px rgba(31, 41, 51, .22);
 }
 
+/* === Brand accent slot (convention) ===
+ * --dw-color-accent (+ -rgb / -contrast) is the first-class home for a brand's
+ * accent color, set per scheme in the brand's ColorSchemes CSS (re-skin ladder
+ * step 2) — never by hijacking --dw-color-button-primary. Every consumer below
+ * falls back to button-primary, so the neutral default ships no values and
+ * nothing changes until a brand opts in. Distinct from --td-accent above,
+ * which is the theme's static interaction tint. */
+.text-accent {
+  color: var(--dw-color-accent, var(--dw-color-button-primary)) !important;
+}
+.bg-accent {
+  background-color: var(--dw-color-accent, var(--dw-color-button-primary)) !important;
+  color: var(--dw-color-accent-contrast, var(--dw-color-button-primary-contrast)) !important;
+}
+
+/* === Eyebrow / section kicker — the tracked-caps voice as one utility ===
+ * The pattern every strong brand site repeats above its section headings.
+ * Previously existed only ad hoc (PDP spec-group labels below; poster scopes
+ * in brand themes). Apply to the kicker paragraph above a section h2. */
+.dw-eyebrow {
+  display: block;
+  font-size: .78rem;
+  font-weight: 600;
+  letter-spacing: .3em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  color: var(--dw-color-accent, var(--dw-color-button-primary));
+}
+
 /* === Primary button hover — filled variant only (P4) === */
 [data-dw-button]:not([data-dw-button="outline"]):not([data-dw-button="ghost"]):not([data-dw-button="secondary"]):hover {
   background-color: var(--td-ink-soft);
