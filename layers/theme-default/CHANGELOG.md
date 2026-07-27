@@ -1,5 +1,95 @@
 # theme-default changelog
 
+## 1.3.0
+
+**Applied-learning pass — fold the demo-proven gate findings back as neutral defaults
+(Foundry #34, #35, #45, #36/#39/#55/#66/#69, #46, #50, #65, #70, #96, #97).** Minor
+rather than patch: three new structural conventions land (an opt-in floating-header
+mode, the sanctioned visually-hidden idiom, and the CSSOM block-marker convention),
+alongside two real defects the neutral theme was carrying. Every finding arrived from a
+marine-demo re-skin; what ships here is the palette-agnostic, token-driven version.
+Disk-overlay only (SPEC-06); P4 button `:not()` chains, P5 footer scoping and P10 nav
+scoping are unchanged and honoured throughout.
+
+Two defects in the shipped theme, fixed:
+
+- **`.dw-eyebrow` lost to its own sheet (Foundry #35).** The 1.2.2 kicker utility
+  (0,1,0) was out-specified by the 1.1.0 secondary-text softener
+  (`main [data-dw-colorscheme=light] p`, 0,1,2), so a kicker authored as a `<p>` —
+  the natural thing to type in a Swift heading Title field — rendered as muted body
+  ink on every light band while the dark band rendered correctly. Fixed at the
+  softener (`p:not(.dw-eyebrow)`) rather than by bumping the utility, so the kicker is
+  safe in *any* element and stays a single plain class a brand can recolour.
+- **`font-size: 0` removed from the mobile Favorites label (Foundry #70).** Block #13
+  hid the label by destroying it — the idiom that strips a control's accessible name.
+  Block #17 now does the hiding properly.
+
+`default_custom.css`:
+
+- **#15 Line-view PLP title discipline.** Block #10 left the title the only shrinkable
+  child of a nowrap flex line whose other columns are fixed and non-shrinkable, so once
+  they over-commit the lane the title collapses to width 0 and its text stacks one word
+  per line (measured up to 9) straight across the description — an unreadable row that
+  survived four gate PASSes because nothing asserted two sibling boxes do not intersect.
+  Title gets a real basis (`0 1 320px`) + a 180px floor + a hard 2-line clamp; the
+  description becomes the shrinkable single-line ellipsis lane (`1 1 140px`, `min-width:0`).
+- **#16 Floating / overlay header — opt-in.** Swift 2.4 exposes no native
+  transparent/overlay-header switch, so the hero-behind-the-menu motif is CSS-only and
+  every brand re-derives the same four mechanics. Gated on a `td-header-overlay` class a
+  build sets on the header's grid row (Visual Editor CSS-class field — no template edit,
+  no serialized content), so the neutral default renders exactly as before. Ships: fixed
+  (not sticky) bar; one rounded pill painted by `::before` with **no** `overflow:hidden`,
+  which would clip the megamenu and offcanvas; clearance keyed on the DOM the server sent
+  (`body:has(… swift-v2_offcanvasnavigation)`, outside every media query) because DW
+  selects between a short phone header and a tall desktop header **by user-agent**, so a
+  breakpoint-keyed token is fitted to whichever document was measured and silently wrong
+  for the other — this was a 94px dead band on real phones that four headless PASSes
+  never saw, and it self-corrects at every width (it fixed tablets with no tablet rule);
+  a container `max-width` restored to `min(cap, 100%)` inside the bar, dropping the
+  phantom 16px auto margin Swift's `calc(-32px + …)` cap creates; and a top-anchored
+  first-row poster crop, because `object-fit:cover` on a fixed-height box is width-driven
+  so a focal-point nudge only moves the failure to another viewport. All tuned through
+  `--td-bar-*` / `--td-container-cap` tokens.
+- **#17 Visually-hidden idiom.** `clip` + `clip-path: inset(50%)` with **no** `overflow`
+  declaration, shipped as `.td-visually-hidden` and applied to the mobile Favorites label.
+  Resolves the standing collision between the classic sr-only recipe and the
+  no-`overflow`-in-the-header guard: the two constraints were never really in conflict,
+  the idiom was just older than `clip-path`.
+- **#18 Content-vs-catalog scoping contract.** Documented, collision-free hooks every
+  Swift build already has: `body[data-dw-page-id="1234"]` scopes exactly one content page,
+  `body[data-dw-itemtype="swift-v2_shop"]` the entire catalog (shop root + every PLP +
+  every PDP). The theme ships no rule on either, which is what keeps them free for a
+  consuming build.
+- **#19 Palette deploy contract.** A brand colour lives in more than one file: buttons
+  paint from `--dw-color-button-primary`, declared only in the *generated*
+  `ColorSchemes/<design>.css` (hex **and** rgb triplet, 7 schemes = 14 literals), and that
+  file is emitted from a sibling `.json` model written in the same operation. So a
+  token-only rebrand leaves every primary button — the largest colour area on the site —
+  on the old brand, and hand-editing only the `.css` is silently reverted by the next
+  design save. Contract recorded here and in the README re-skin ladder; overriding the
+  variable from this sheet is explicitly the wrong fix.
+- **Retired tokens are aliased, never deleted (Foundry #34).** A token is bound in more
+  places than the sheet you edit: DB-authored content can carry it in an inline `style`,
+  and this layer's own `DefaultHeadInclude.cshtml` keeps a render-critical copy. Delete it
+  from the sheet and the head-include copy becomes its only definition. Convention block
+  added next to the tokens, with the matching warning in the head include itself.
+- **Authoring guards G1–G4 in the file header.** G1 (Foundry #50): never type a comment
+  terminator inside comment prose — it closes the banner early, the orphaned prose becomes
+  a selector prelude that swallows the next real rule, and every byte-level check still
+  reports the deploy healthy. G2 (Foundry #50): every numbered block now opens with an
+  inert `[data-td-block="<n>"]` marker rule (retro-added to #8–#14) so a CSSOM assert can
+  prove the block *parsed* and reached `document.styleSheets`, not merely that its bytes
+  landed on disk. G3 (Foundry #65): Bootstrap/Swift utilities are declared `!important`,
+  so any override of a platform-managed flex column must be `!important` in *every*
+  responsive tier or the tiers disagree across a band of widths — the #9 rowflex and
+  footer wrap bases were exactly this case and now carry it. G4: never write a
+  numeric-leading id selector.
+
+Runtime proof: the swift-demo gate theme leg on the current latest Swift — run id
+recorded in the publishing PR. Authoring-time proof taken here: a string-aware
+comment/brace scan reports clean, and a CSSOM parse resolves 93 top-level rules (matching
+the source block count) with all 12 block markers and every new selector present.
+
 ## 1.2.2
 
 **Brand accent slot + eyebrow utility (Foundry #32).** Two structural gaps in the

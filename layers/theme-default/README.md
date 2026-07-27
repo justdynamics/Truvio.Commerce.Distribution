@@ -30,9 +30,42 @@ dropdowns.
 ## Re-skin ladder
 
 1. Override the `--td-*` tokens (accent, ink, hairline) in the customer's custom CSS.
+   **Retire a token by aliasing it, never by deleting it** — `:root { --td-legacy:
+   var(--td-accent) !important; }`. DB-authored content can carry
+   `style="...var(--td-legacy)"` inline, and the render-critical copy in
+   `DefaultHeadInclude.cshtml` keeps the old definition alive after you edit the sheet.
 2. Replace the three Style pairs (`ColorSchemes`/`Buttons`/`Typography`) with brand values —
    and set `--dw-color-accent` (+ `-rgb` / `-contrast`) per scheme: the brand accent slot.
    `.text-accent` / `.bg-accent` / `.dw-eyebrow` in `default_custom.css` consume it and fall
    back to button-primary when unset, so the accent never has to hijack the button color.
+   **A palette change is a multi-file deploy.** Buttons paint from
+   `--dw-color-button-primary`, declared *only* in `ColorSchemes/default.css` (as hex **and**
+   rgb triplet, once per scheme — 7 schemes, 14 literals). Editing tokens in the custom sheet
+   alone turns eyebrows, links and icon tiles and leaves every primary button on the old
+   brand. Do not override `--dw-color-button-primary` from the custom sheet: it leaves the
+   generated file lying and the next design save reverts the site. And the `.css` is
+   *generated* from its sibling `.json` model (`Schemes[]` with `PrimaryButtonColor` etc.) —
+   **edit both, in the same pass**, or a regeneration silently undoes the edit. Enumerate
+   every literal of the outgoing colour in both notations across both files and assert an
+   exact count, so a silent miss aborts the deploy instead of shipping a half-rebrand.
 3. Extend `default_custom.css` — the affordance section is brand-agnostic and survives
    any palette swap (everything paints with `currentColor` / the `--td-accent` token).
+
+## Opt-in hooks (inert until a build opts in)
+
+| Hook | What it does |
+|------|--------------|
+| `data-nav-icon="<name>"` on a nav node | Binds a stock DW10 icon into the menu bar (3-step recipe in the CSS) |
+| `--dw-color-accent` (+ `-rgb` / `-contrast`) per scheme | The brand accent slot consumed by `.text-accent` / `.bg-accent` / `.dw-eyebrow` |
+| class `td-header-overlay` on any element inside the page header | Turns the sticky bar into a floating/transparent overlay header with a hero-behind composition (block #16): fixed bar, one rounded pill painted by `::before` with **no** `overflow:hidden`, DOM-keyed clearance, top-anchored first-row poster crop. Tune with `--td-bar-top` / `--td-bar-inset` / `--td-bar-h` / `--td-bar-h-phone` / `--td-bar-radius` / `--td-bar-bg` / `--td-container-cap`. |
+| class `td-visually-hidden` on a label | The sanctioned visually-hidden idiom (`clip` + `clip-path`, no `overflow`) — safe inside the header, keeps the accessible name |
+
+## Authoring guards
+
+Extending `default_custom.css` means honouring G1–G4 in the file header: never type a
+comment terminator inside comment prose (it swallows the next rule and no byte-level check
+can see it); open every numbered block with its `[data-td-block="<n>"]` marker so a CSSOM
+assert can prove the block parsed; `!important` every override of a Bootstrap/Swift-managed
+flex column, in *every* responsive tier; and never write a numeric-leading id selector —
+scope a page by `body[data-dw-page-id="1234"]` and the whole catalog by
+`body[data-dw-itemtype="swift-v2_shop"]` (block #18).
