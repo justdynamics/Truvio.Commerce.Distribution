@@ -6,6 +6,23 @@
  *   P4:  [data-dw-button] background always uses :not() chain for outline/ghost variants
  *   P5:  page-footer paint scoped to body > footer / [data-swift-page-footer]
  *   P10: nav rules scoped via data-attributes / .megamenu-wrapper, not bare nav selectors
+ *
+ * Authoring guards (folded from gate findings — read before extending this sheet):
+ *   G1 (Foundry #50): NEVER type the two-character comment-close sequence inside
+ *        comment PROSE. It closes the banner early; the orphaned prose becomes a
+ *        selector prelude that swallows the next real rule, and every byte-level
+ *        check still reports the deploy healthy. Spell it out in words instead.
+ *   G2 (Foundry #50): every numbered block below opens with an inert marker rule
+ *        [data-td-block="<n>"]. Nothing in a Swift document carries that attribute,
+ *        so it paints nothing — it exists so a CSSOM assert can prove the block
+ *        PARSED and reached document.styleSheets, not merely that its bytes landed.
+ *   G3 (Foundry #65): Bootstrap/Swift utilities (.flex-fill, .d-flex, .order-*) are
+ *        declared !important. Any rule overriding a platform-managed flex column must
+ *        carry !important in EVERY tier it appears in, or the tiers silently disagree
+ *        across a band of viewport widths. Grep the rendered column for utility
+ *        classes before authoring a flex override.
+ *   G4: never write an id selector that starts with a digit (a DW page id is numeric
+ *        and `#8653` is invalid CSS) — scope by attribute instead, see block #18.
  */
 
 /* === Neutral tokens (render-critical; also in DefaultHeadInclude <style> for cache resilience).
@@ -28,6 +45,24 @@
   --td-shadow-soft:  0 1px 2px rgba(31, 41, 51, .06), 0 12px 28px -14px rgba(31, 41, 51, .22);
 }
 
+/* === Retiring a token: ALIAS it, never delete it (Foundry #34) ===
+ * A token is bound in more places than the sheet you are editing. Two survive a
+ * delete every time:
+ *   (1) DB-authored content — a paragraph can carry an inline
+ *       style="background-color:var(--td-legacy)" that no stylesheet edit reaches
+ *       (content is not ours to rewrite; SPEC-06 keeps this layer disk-only), and
+ *   (2) the render-critical copy inlined in DefaultHeadInclude.cshtml for cache
+ *       resilience — this layer ships exactly such a block.
+ * Delete the token from this sheet and the head-include copy becomes its ONLY
+ * definition, so every consumer silently falls back to the retired value.
+ * Rule: re-point a retired token at its successor and mark it !important —
+ * custom-property !important is legal and beats a same-specificity :root declared
+ * in a template <style> regardless of source order:
+ *     :root { --td-legacy: var(--td-accent) !important; }
+ * Drop the alias only once a scan proves zero remaining references in content AND
+ * in every head include. theme-default currently retires no tokens; the convention
+ * is here so a re-skin that renames one does it safely. */
+
 /* === Brand accent slot (convention) ===
  * --dw-color-accent (+ -rgb / -contrast) is the first-class home for a brand's
  * accent color, set per scheme in the brand's ColorSchemes CSS (re-skin ladder
@@ -46,7 +81,13 @@
 /* === Eyebrow / section kicker — the tracked-caps voice as one utility ===
  * The pattern every strong brand site repeats above its section headings.
  * Previously existed only ad hoc (PDP spec-group labels below; poster scopes
- * in brand themes). Apply to the kicker paragraph above a section h2. */
+ * in brand themes). Apply to the kicker paragraph above a section h2.
+ * Foundry #35: authored as a <p> under a light scheme, this utility (0,1,0) lost to
+ * the secondary-text softener further down (0,1,2) and rendered as muted body ink on
+ * every light band while the dark band rendered correctly — the classic "works on one
+ * scheme only" report. Fixed at the softener, which now excludes .dw-eyebrow, so the
+ * kicker is safe in ANY element (a <p> from the Swift heading Title field included)
+ * and no author has to know to reach for a <span>. */
 .dw-eyebrow {
   display: block;
   font-size: .78rem;
@@ -385,10 +426,15 @@ main [data-swift-container] {
 }
 
 /* --- Secondary text tier: soften body copy on light schemes (~78% fg).
- *     Headings are unaffected (rule targets <p>); CTAs/buttons contain no <p>. --- */
-main [data-dw-colorscheme="light"] p,
-main [data-dw-colorscheme="lightgrey1"] p,
-main [data-dw-colorscheme="lightgrey2"] p {
+ *     Headings are unaffected (rule targets <p>); CTAs/buttons contain no <p>.
+ *     Foundry #35: .dw-eyebrow is EXCLUDED. A section kicker authored as a <p> is
+ *     a kicker, not body copy, and this softener out-specified the utility on every
+ *     light scheme. Excluding here (rather than bumping .dw-eyebrow) keeps the
+ *     utility usable in any element and leaves its specificity at (0,1,0) so a brand
+ *     can still recolour it with one plain class rule. --- */
+main [data-dw-colorscheme="light"] p:not(.dw-eyebrow),
+main [data-dw-colorscheme="lightgrey1"] p:not(.dw-eyebrow),
+main [data-dw-colorscheme="lightgrey2"] p:not(.dw-eyebrow) {
   color: rgba(31, 41, 51, .78);
 }
 
@@ -495,6 +541,7 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  *     below the lg breakpoint. Data-attribute scoped (P10); the desktop
  *     affordance block above (>=992px) is untouched. A real burger/offcanvas is
  *     the durable fix and belongs upstream in the Swift menu template. --- */
+[data-td-block="8"] { --td-block: 8; }
 @media (max-width: 991.98px) {
   [data-dw-itemtype="swift-v2_menurelatedcontent"] {
     max-width: 100vw;
@@ -511,10 +558,18 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  *     the sane small-screen default. (Data trap noted upstream: changing a row's
  *     definitionId without setting `flexibleColumns` int[] leaves the columns
  *     without responsive classes — that is a serialized-content concern, not
- *     theme CSS.) --- */
+ *     theme CSS.)
+ *     Foundry #65: the wrap and the column base now carry !important. Swift marks
+ *     whichever column is flexible with Bootstrap's .flex-fill, declared
+ *     `flex: 1 1 auto !important`, and Bootstrap ships .flex-nowrap the same way —
+ *     so the plain declarations here lost to a utility class regardless of how much
+ *     more specific the attribute selectors are, and the row only wrapped when it
+ *     happened not to fit. Both tiers of a responsive pair must be !important or
+ *     they disagree across a band of widths. --- */
+[data-td-block="9"] { --td-block: 9; }
 @media (max-width: 767.98px) {
-  main [data-swift-gridrow$="ColumnsFlex"] > [data-swift-container] { flex-wrap: wrap; }
-  main [data-swift-gridrow$="ColumnsFlex"] > [data-swift-container] > [data-swift-gridcolumn] { flex: 1 1 100%; }
+  main [data-swift-gridrow$="ColumnsFlex"] > [data-swift-container] { flex-wrap: wrap !important; }
+  main [data-swift-gridrow$="ColumnsFlex"] > [data-swift-container] > [data-swift-gridcolumn] { flex: 1 1 100% !important; }
 }
 
 /* --- #9  Footer columns wrap too — the footer sits OUTSIDE <main> and still
@@ -522,9 +577,9 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  *     landmark only (P5). --- */
 @media (max-width: 767.98px) {
   [data-swift-page-footer] [data-swift-gridrow] > [data-swift-container],
-  body > footer [data-swift-gridrow] > [data-swift-container] { flex-wrap: wrap; }
+  body > footer [data-swift-gridrow] > [data-swift-container] { flex-wrap: wrap !important; }
   [data-swift-page-footer] [data-swift-gridrow] [data-swift-gridcolumn],
-  body > footer [data-swift-gridrow] [data-swift-gridcolumn] { flex: 1 1 100%; }
+  body > footer [data-swift-gridrow] [data-swift-gridcolumn] { flex: 1 1 100% !important; }
 }
 
 /* --- Mobile rhythm: halve section padding so the buy panel and content rows
@@ -538,6 +593,7 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
 /* --- #10 Product line rows, mobile stack (PLP AND the PDP BOM — the BOM lacked
  *     the .product-list scope so its rows clipped the same way). Shared stacked
  *     layout below the lg breakpoint. --- */
+[data-td-block="10"] { --td-block: 10; }
 @media (max-width: 991.98px) {
   main article.product section > [data-swift-container] { flex-wrap: wrap; gap: .35rem .75rem; }
   main article.product [data-dw-itemtype="swift-v2_productdefaultimage"] { flex: 0 0 56px; max-width: 56px; }
@@ -582,6 +638,7 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  *     needs normalizing in the template (deferred upstream). CSS-able here: give
  *     the pill a calm resting state and full accent on row hover — token-driven,
  *     border/color only, so the P4 filled-variant hover rule is untouched. --- */
+[data-td-block="11"] { --td-block: 11; }
 .product-list article.product [data-dw-itemtype="swift-v2_productprice"] [data-dw-button] {
   font-size: .8rem;
   --dw-btn-padding-y: .4rem;
@@ -600,6 +657,7 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  *     table" display mode (deferred upstream — this CSS is the interim). More
  *     specific than the generic `main .accordion-item` rounding above, so it
  *     wins for this itemtype only. --- */
+[data-td-block="12"] { --td-block: 12; }
 [data-dw-itemtype="swift-v2_productfielddisplaygroupsaccordion"] .accordion-collapse {
   display: block !important;
   height: auto !important;
@@ -653,16 +711,22 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  *     the img-era `[data-swift-logo-image] img` hook above misses an inline-SVG
  *     logo. Clamp the figure itself so the icon cluster fits a 390px viewport,
  *     and let the SVG scale inside it. --- */
+[data-td-block="13"] { --td-block: 13; }
 @media (max-width: 767.98px) {
   header [data-dw-itemtype="swift-v2_logo"] figure { width: 150px !important; }
   header [data-dw-itemtype="swift-v2_logo"] svg { width: 100%; height: auto; }
 }
 
 /* --- #13 (cluster) Mobile header fit: a text-labelled Favorites link pushed
- *     the cart icon past the viewport (marine: by 69px). Make Favorites
- *     icon-only like account/cart and tighten the header container gap. --- */
+ *     the cart icon past the viewport. Make Favorites icon-only like account/cart
+ *     and tighten the header container gap.
+ *     Foundry #70: the original `font-size: 0` on the anchor is GONE from here. It
+ *     hid the label by destroying it rather than by hiding it, which is exactly the
+ *     idiom that strips a control's accessible name. Block #17 below now does the
+ *     hiding with the sanctioned clip + clip-path recipe; this block keeps only the
+ *     sizing/gap half. --- */
 @media (max-width: 767.98px) {
-  header [data-dw-itemtype="swift-v2_favorites"] a { font-size: 0 !important; gap: .25rem !important; }
+  header [data-dw-itemtype="swift-v2_favorites"] a { gap: .25rem !important; }
   header [data-dw-itemtype="swift-v2_favorites"] svg { width: 20px; height: 20px; }
   [data-swift-page-header] [data-swift-container] { gap: .4rem !important; }
 }
@@ -686,6 +750,7 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  *     alone, and so these win the cascade over #10 mobile (main-scoped) + the #11
  *     pill rule. P4 honoured: the pill sets type / padding / flow only, never a
  *     variant background. --- */
+[data-td-block="14"] { --td-block: 14; }
 @media (max-width: 991.98px) {
   .product-list article.product [data-dw-itemtype="swift-v2_productdefaultimage"] { flex: 0 0 56px !important; max-width: 56px !important; }
   .product-list article.product [data-dw-itemtype="swift-v2_productdefaultimage"] img { width: 56px; height: 56px; object-fit: cover; }
@@ -707,3 +772,264 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
   }
   .product-list article.product [data-dw-itemtype="swift-v2_productaddtocart"] { flex: 1 1 100% !important; }
 }
+
+/* =============================================================================
+ * APPLIED-LEARNING PASS — structural versions of gate findings folded back from
+ * the Foundry issue tracker (2026-07-27). Disk-overlay only (SPEC-06): no template
+ * edit, no serialized DB content. Everything paints with the --td-* tokens /
+ * currentColor, so a customer palette swap carries it for free. P-guards honoured
+ * throughout: P4 (button variant :not() chains — untouched), P5 (footer paint/wrap
+ * scoped to the body>footer / [data-swift-page-footer] landmarks — untouched),
+ * P10 (nav rules scoped via data-attributes / .megamenu-wrapper — untouched).
+ * ========================================================================== */
+
+/* --- #15 Line-view PLP: a title that can actually hold a line (Foundry #46).
+ *     Block #10 gave the desktop list row honest column bases but made the title the
+ *     ONLY shrinkable child of a nowrap flex line whose other columns are fixed and
+ *     non-shrinkable (thumb 72 + SKU 150 + description 280 + stock 100 + price + gaps).
+ *     Once those over-commit the content lane the title collapses to width 0 with
+ *     overflow visible, so its text stacks ONE WORD PER LINE (measured up to 9 lines)
+ *     and paints straight across the description lane — an unreadable row that four
+ *     gate PASSes never saw, because nothing asserted that two sibling boxes do not
+ *     intersect. Fix, three parts, all structural for a B2B line-view PLP:
+ *       (a) the title gets a real basis (0 1 320px) plus a min-width floor so it can
+ *           shrink but never to nothing,
+ *       (b) a hard 2-line clamp on the title's heading so a long name truncates
+ *           instead of growing the row height,
+ *       (c) the description stops being a fixed 280px block and becomes the
+ *           shrinkable single-line ellipsis lane (1 1 140px, min-width 0) — it is the
+ *           least load-bearing text in the row, so it is what should give.
+ *     Supersedes the #10 desktop title/description bases by source order at equal
+ *     specificity (both .product-list-scoped, both !important, per guard G3). --- */
+[data-td-block="15"] { --td-block: 15; }
+@media (min-width: 992px) {
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] {
+    flex: 0 1 320px !important;
+    min-width: 180px;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] .h6,
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] h2,
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] h3,
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] h4,
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] h5,
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] h6 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    overflow-wrap: anywhere;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] {
+    flex: 1 1 140px !important;
+    max-width: none;
+    min-width: 0;
+  }
+}
+
+/* =============================================================================
+ * #16 FLOATING / OVERLAY HEADER — opt-in, brand-generic (Foundry #36, #39, #55,
+ * #66, #69).
+ *
+ * Swift 2.4 exposes NO native transparent/overlay-header switch: the header is a
+ * full-width sticky bar in normal flow, and a hero-behind-the-menu composition is
+ * therefore CSS-only. Every brand that wants the motif re-derives the same four
+ * mechanics and gets the same four things wrong, so they live here instead.
+ *
+ * OPT-IN HOOK — nothing below applies until a build adds the class
+ * `td-header-overlay` to any element inside the page header (the CSS-class field of
+ * the header's grid row in the Visual Editor is enough — no template edit, and no
+ * serialized DB content of ours). The neutral default therefore renders exactly as
+ * before. The tokens are always defined, so a brand only overrides values.
+ *
+ * The four mechanics, and why each is shaped this way:
+ *
+ *  (1) fixed, not sticky. position:sticky keeps the bar IN FLOW, so a hero can never
+ *      flow behind it. The override carries !important per guard G3 — .sticky-top is
+ *      a platform-managed utility class.
+ *  (2) one pill painted by ::before, and NO overflow:hidden on it (the standing
+ *      header guard behind Foundry #70). A rounded pill drawn with overflow:hidden
+ *      clips the megamenu and offcanvas panels; painting the radius on the
+ *      pseudo-element and leaving overflow alone satisfies both constraints. One pill
+ *      behind transparent header sections also hides the seam between header rows.
+ *  (3) clearance keyed on the DOM the SERVER SENT, not on a breakpoint (Foundry #55,
+ *      #69). Dynamicweb selects between two header content pages server-side BY
+ *      USER-AGENT: a phone UA receives a short 2-row header carrying
+ *      swift-v2_offcanvasnavigation; a desktop UA at the SAME width receives the tall
+ *      3-row header. A media query cannot tell those two documents apart — they
+ *      arrive at identical widths — so any clearance token keyed on a breakpoint is
+ *      fitted to whichever document happened to be measured and is silently wrong for
+ *      the other (measured: a 94px dead band on real phones, invisible to four
+ *      consecutive headless PASSes). The body:has() rule below sits OUTSIDE every
+ *      media query, wins over :root on specificity, and self-corrects at every width —
+ *      which is why it also fixed tablets without a tablet-specific rule. It fails
+ *      safe: no :has() support means the :root default applies, i.e. over-clearance,
+ *      never occluded content. A hand-fitted constant is the anti-pattern this
+ *      replaces — it re-broke on every header edit, shipping a 45px under-clearance at
+ *      one tier and a 51px white gap at another. Where a constant must remain (the
+ *      desktop tier below), pair it with the shipped painted-clearance probe
+ *      PAINT-01 (Foundry tools/harness/design-paint-probes.mjs — point its
+ *      paint.owner selector at the header pill), which measures painted geometry
+ *      at the SAME viewport and user-agent. A brand build that keeps a constant
+ *      without wiring PAINT-01 is repeating the defect this block replaces.
+ *  (4) the container's hidden 32px (Foundry #66). Swift sets
+ *      max-width: calc(-32px + min(<cap>, 100%)) on [data-swift-container] — 32px
+ *      NARROWER than its parent — and then centres it with auto margins, which below
+ *      the cap resolve to 16px per side. Any horizontal budget computed as
+ *      viewport - 2*inset - 2*padding is 32px optimistic, and narrowing the bar inset
+ *      does not move the logo by the amount you asked for. Restoring
+ *      min(cap, 100%) inside the overlay bar drops the phantom margin while keeping
+ *      the cap, which is the composition's real max content width.
+ *
+ * Poster note (Foundry #39): a subject that must clear the floating bar cannot be
+ * fixed with the image focal point. object-fit:cover on a fixed-height poster box is
+ * WIDTH-driven, so the subject's vertical position scales with viewport WIDTH while
+ * the bar height is a fixed px — measured clearance varied about 1.5x across
+ * 1280..1920 on one unchanged sheet and image. Pair the TOP-anchored crop set below
+ * with a master image that carries headroom above the subject (subject in the lower
+ * third); nudging the focal point only moves the failure to another width.
+ * ========================================================================== */
+[data-td-block="16"] { --td-block: 16; }
+
+:root {
+  --td-bar-top:       0px;                 /* float inset from the top of the viewport */
+  --td-bar-inset:     0px;                 /* horizontal inset of the bar pill */
+  --td-bar-h:         170px;               /* desktop header document height */
+  --td-bar-h-phone:   84px;                /* phone (offcanvas) header document height */
+  --td-bar-radius:    var(--td-radius);
+  --td-bar-bg:        var(--td-ink);
+  --td-container-cap: 1680px;              /* Swift's [data-swift-container] max-width cap */
+  --td-bar-clearance: calc(var(--td-bar-top) + var(--td-bar-h));
+}
+
+/* Clearance keyed on the served DOM, outside every media query (Foundry #55). */
+body:has([data-swift-page-header] [data-dw-itemtype="swift-v2_offcanvasnavigation"]) {
+  --td-bar-clearance: calc(var(--td-bar-top) + var(--td-bar-h-phone));
+}
+
+[data-swift-page-header]:has(.td-header-overlay) {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1030;
+  background: transparent;
+  padding: var(--td-bar-top) var(--td-bar-inset) 0;
+}
+[data-swift-page-header]:has(.td-header-overlay)::before {
+  content: "";
+  position: absolute;
+  top: var(--td-bar-top);
+  left: var(--td-bar-inset);
+  right: var(--td-bar-inset);
+  bottom: 0;
+  z-index: -1;
+  border-radius: var(--td-bar-radius);
+  background-color: var(--td-bar-bg);
+}
+[data-swift-page-header]:has(.td-header-overlay) section { background: transparent; }
+[data-swift-page-header]:has(.td-header-overlay) [data-swift-container] {
+  max-width: min(var(--td-container-cap), 100%);
+}
+body:has([data-swift-page-header] .td-header-overlay) main {
+  padding-top: var(--td-bar-clearance);
+}
+/* A poster in the first row flows BEHIND the bar — it needs no clearance, and the
+ * poster-first-row exception further up already zeroes that row's own padding. */
+body:has([data-swift-page-header] .td-header-overlay) main:has(> section:first-child [data-swift-poster]) {
+  padding-top: 0;
+}
+/* Top-anchored poster crop, so the subject's clearance is viewport-stable. */
+body:has([data-swift-page-header] .td-header-overlay) main > section:first-child [data-swift-poster] img {
+  object-position: 50% 0%;
+}
+
+/* --- #17 Visually-hidden: the one sanctioned idiom (Foundry #70).
+ *     Making a header control icon-only needs its label hidden from view but kept in
+ *     the accessibility tree. The classic recipe uses overflow:hidden to crop the 1x1
+ *     box, which a standing guard bans anywhere in the header subtree because it clips
+ *     the megamenu and offcanvas panels. clip-path:inset(50%) performs the identical
+ *     crop with NO overflow declaration, so the two constraints were never really in
+ *     conflict — the idiom was simply older than clip-path. Ship it once, use it
+ *     everywhere. NEVER substitute display:none or font-size:0: both remove the label
+ *     from the accessible-name computation, turning an icon-only control into an
+ *     unlabelled one. The `clip` line is the legacy partner of `clip-path` and is kept
+ *     deliberately.
+ *     Applied here to the mobile Favorites label, replacing the font-size:0 that block
+ *     #13 used to carry. It targets element-wrapped labels only — a bare text node has
+ *     nothing to clip, so a build that renders one wraps it and applies
+ *     .td-visually-hidden. --- */
+[data-td-block="17"] { --td-block: 17; }
+.td-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+@media (max-width: 767.98px) {
+  header [data-dw-itemtype="swift-v2_favorites"] a > span:not(:has(svg, img, picture)) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* --- #18 Content-vs-catalog scoping contract (Foundry #45).
+ *     Every Swift build eventually needs to give ONE content page a different voice
+ *     from the WHOLE catalog with no leak either direction, and there was no
+ *     documented collision-free hook for it. There is one, and every Swift build has
+ *     it: the master emits
+ *         body[data-dw-page-id="<id>"][data-dw-itemtype="<page item system name>"]
+ *     and the catalog root, every PLP and every PDP all render the SAME body itemtype
+ *     `swift-v2_shop`, while content pages render `swift-v2_page`. So:
+ *         body[data-dw-page-id="1234"]            -> exactly one content page
+ *         body[data-dw-itemtype="swift-v2_shop"]  -> the entire catalog
+ *         body[data-dw-itemtype="swift-v2_page"]  -> every content page
+ *     Guard G4 is the trap here: a DW page id is numeric and `#1234` is an INVALID
+ *     selector (an id may not start with a digit) — always use the attribute form.
+ *     theme-default ships no rule on either hook, which is exactly what keeps them
+ *     collision-free for a consuming build; the marker below is the contract's
+ *     presence proof. Prove a split with a computed-style leak check in BOTH
+ *     directions, not only the one that was changed. --- */
+[data-td-block="18"] { --td-block: 18; }
+
+/* --- #19 Palette deploy contract: a brand colour lives in more than one file
+ *     (Foundry #96, #97).
+ *     Swift buttons paint from --dw-color-button-primary, which this hand-authored
+ *     sheet deliberately never declares. It is declared in
+ *     System/Styles/ColorSchemes/<design>.css — a file the admin Styles editor
+ *     GENERATES — which hardcodes the colour as BOTH a hex and an rgb triplet once per
+ *     scheme (this layer ships 7 schemes, so 14 literals). A custom sheet loaded after
+ *     it cannot override a variable it never mentions, which is why a token-only
+ *     rebrand turns eyebrows, links and icon tiles but leaves every primary button —
+ *     the largest single colour area on the site — on the old brand. Declaring
+ *     --dw-color-button-primary from here is the WRONG fix: it leaves the generated
+ *     file lying, the admin Styles editor keeps showing the old swatch, and the next
+ *     design save reverts the site.
+ *     The generated .css is not the source of truth either. A sibling <design>.json
+ *     holds the same values as a model (Schemes[] with BackgroundColor /
+ *     ForegroundColor / PrimaryButtonColor / SecondaryButtonColor / CustomColors) and
+ *     the editor writes BOTH files in one operation. Hand-edit only the .css and any
+ *     regeneration silently undoes it — days later, with no deploy to blame.
+ *     Contract, carried by the re-skin ladder in this layer's README:
+ *       1. treat a palette change as a MULTI-FILE deploy — this sheet AND the
+ *          ColorSchemes pair, both .css and .json, in the same pass;
+ *       2. enumerate every literal of the OUTGOING colour in hex AND rgb-triplet
+ *          notation across both files and assert an exact expected count per pattern,
+ *          so a silent miss aborts the deploy instead of shipping a half-rebrand;
+ *       3. pre-flight the .json: it must still parse, and every scheme must carry the
+ *          new value, before upload.
+ *     The accent slot near the top of this sheet is the other half of the contract: a
+ *     brand accent belongs in --dw-color-accent, never in --dw-color-button-primary.
+ *     --- */
+[data-td-block="19"] { --td-block: 19; }

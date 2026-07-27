@@ -4,7 +4,12 @@
     AddStylesheet("/Files/Templates/Designs/Swift-v2/Custom/default_custom.css", "all");
 }
 <style>
-    /* Render-critical neutral tokens — inline to avoid cache-buster staleness (Pitfall 7) */
+    /* Render-critical neutral tokens — inline to avoid cache-buster staleness (Pitfall 7).
+       SECOND BINDING SITE (Foundry #34): these declarations are a COPY of the token block
+       in default_custom.css. Renaming or retiring a token in the sheet alone leaves this
+       block as its only definition, so every consumer silently keeps the retired value.
+       Change both in one pass, and retire a token by ALIASING it to its successor with
+       !important (never by deleting it) — see the convention block in default_custom.css. */
     :root {
         --td-ink:         #1F2933;
         --td-ink-soft:    #323F4B;
