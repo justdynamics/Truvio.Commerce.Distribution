@@ -866,8 +866,11 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  *      never occluded content. A hand-fitted constant is the anti-pattern this
  *      replaces — it re-broke on every header edit, shipping a 45px under-clearance at
  *      one tier and a 51px white gap at another. Where a constant must remain (the
- *      desktop tier below), pair it with a gate assert that measures pill height and
- *      main padding-top at the SAME viewport and user-agent.
+ *      desktop tier below), pair it with the shipped painted-clearance probe
+ *      PAINT-01 (Foundry tools/harness/design-paint-probes.mjs — point its
+ *      paint.owner selector at the header pill), which measures painted geometry
+ *      at the SAME viewport and user-agent. A brand build that keeps a constant
+ *      without wiring PAINT-01 is repeating the defect this block replaces.
  *  (4) the container's hidden 32px (Foundry #66). Swift sets
  *      max-width: calc(-32px + min(<cap>, 100%)) on [data-swift-container] — 32px
  *      NARROWER than its parent — and then centres it with auto margins, which below
