@@ -49,6 +49,53 @@ matching `areaName`/`areaId` in `merge/merge-manifest.json` + `fragmentContent[]
 | `http-body-contains /swift-2/express-buy` | `id="ExpressBuySearchForm"` (buy-it-again surface, anonymous) |
 | `sku-validation /swift-2/quick-order` (sku `FIXT-0001`) | the Quick Order feed resolves the sample-data catalog SKU — proves the pad's index-feed wiring |
 
+## `Template file not found` on the Quick Order page is platform noise, not a layer defect (Foundry #143)
+
+Every render of a page carrying an `eCom_ProductCatalog` paragraph writes one line into
+`Files/System/Log/Templates/Errors/`:
+
+```
+Template file not found. Filename='eCom/ProductCatalog/List/ExpressBuySearchResponse.cshtml',
+Path='...\wwwroot\Files\Templates\eCom\ProductCatalog\List\ExpressBuySearchResponse.cshtml',
+Layout='/Files/Templates/Designs/Swift-v2/Swift-v2_Page.cshtml', Url=...Default.aspx?ID=207
+```
+
+The stack names `EcommerceTemplateHelper.TryCreateTemplate(templateName, folder, fallbackFolder, …)`.
+That helper probes the module's **default** folder (`eCom/ProductCatalog/List/`) first and logs the miss,
+then resolves the template from the **design** folder (`Designs/Swift-v2/eCom/ProductCatalog/`) where
+Swift actually ships it. The render succeeds on the fallback — the log line is the first probe, not a
+failed render.
+
+Swift-wide, not layer-scoped. The same gate host logs the identical entry for:
+
+| Page | Template | Owner |
+|------|----------|-------|
+| `ID=31` Express Buy | `ExpressBuySearchResponse.cshtml` | stock Swift + `surface-swift` |
+| `ID=51` Shop (PLP) | `ProductListRenderGrid.cshtml` | stock Swift + `surface-swift` |
+| `ID=211` / `ID=217` Kit Configurator | `PackBomDetailRenderGrid.cshtml` | `feature-bom-configurator` (ships it at the **design** path) |
+| `ID=207` Quick Order | `ExpressBuySearchResponse.cshtml` | this layer |
+
+And the Quick Order feed demonstrably renders. The `sku-validation` probe reads the **module-only** feed
+body (`Content.CreateFeedContent`, not the page), and it PASSes with *"resolved ProductNumber `FIXT-0001`
+in an ExpressBuySearchResponse article"* on the same host, in the same run that logged the error (Foundry
+run `20260727-193109`). A missing list template returns an empty feed body and FAILs that probe.
+
+Both candidate fixes are therefore **rejected**:
+
+- **Shipping a copy at the root `templates/eCom/ProductCatalog/List/` path** puts a layer-frozen fork of a
+  stock Swift template on the probe path that is tried *first* — so it would win over the design copy for
+  *every* consumer of `ExpressBuySearchResponse.cshtml`, including `surface-swift`'s Express Buy page,
+  which this layer does not own. It buys a silenced log line and pays with a cross-layer template fork
+  that goes stale at the next Swift release.
+- **Repointing `<ProductListTemplate>`** breaks the markup contract that both the pad's client-side
+  validation and the `sku-validation` probe read (`article` carrying `.productNumber` / `.productId` /
+  `.productPrice`), and the paragraph ships in a `merge` (destination-wins) fragment, so the repoint would
+  not reliably reach a host on which the paragraph already exists.
+
+Consequence for the harness: a lookout asserting *"the template-error log is empty after smoke"* cannot be
+adopted as written — it fails on stock Swift's own Shop and Express Buy pages. Scope such a check to
+entries whose template no design folder in the composition ships, or drop it.
+
 ## Known cycle limitation (declared, gate honors as WARN)
 
 Inherited verbatim from `feature-reordering-pricing` 1.1.0: after a deactivate→reactivate cycle the
