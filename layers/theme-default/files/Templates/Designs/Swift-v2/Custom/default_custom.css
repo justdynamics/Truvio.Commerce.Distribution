@@ -438,10 +438,21 @@ main [data-dw-colorscheme="lightgrey2"] p:not(.dw-eyebrow) {
   color: rgba(31, 41, 51, .78);
 }
 
-/* --- Breadcrumbs: quiet wayfinding, not a heading (small, ~65% opacity). --- */
+/* --- Breadcrumbs: quiet wayfinding, not a heading. Dimmed via color-mix, NOT a
+ *     component opacity: the old opacity .65 MULTIPLIED under Bootstrap's own
+ *     rgba(.75) on .breadcrumb-item.active to an effective alpha of .488 —
+ *     #939597 on white, 3.02:1 (Foundry #145's emergent-alpha class, measured
+ *     live by the gate contrast probe). color-mix pins ONE effective alpha of
+ *     .72 on every crumb — above the .635 floor for the default ink on white
+ *     (composite ~5.1:1) — and overrides Bootstrap's own .75 on .active so
+ *     alphas can no longer stack. Follows currentColor on dark schemes. --- */
 [data-dw-itemtype="swift-v2_breadcrumbnavigation"] {
   font-size: .85rem;
-  opacity: .65;
+}
+[data-dw-itemtype="swift-v2_breadcrumbnavigation"] .breadcrumb-item,
+[data-dw-itemtype="swift-v2_breadcrumbnavigation"] .breadcrumb-item.active,
+[data-dw-itemtype="swift-v2_breadcrumbnavigation"] .breadcrumb-item > a {
+  color: color-mix(in srgb, currentColor 72%, transparent);
 }
 
 /* --- Motion: 120ms color/bg/border on links; cards + buttons carry 150ms /

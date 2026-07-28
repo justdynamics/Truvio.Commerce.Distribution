@@ -1,5 +1,18 @@
 # theme-default changelog
 
+## 1.3.2
+
+**Breadcrumb contrast — the theme's own alpha stacking (Foundry #145's class,
+found live by the gate).** The 1.1.0 breadcrumb rule dimmed the whole component
+to opacity .65; Bootstrap's `.breadcrumb-item.active` carries its own
+`rgba(…,.75)`, and the two MULTIPLY: effective alpha .488 → `#939597` on white,
+3.02:1 — first measured by the new CONTRAST-01 gate probe (run 20260728-110700).
+Component opacity replaced by a single `color-mix(in srgb, currentColor 72%,
+transparent)` on every crumb (including `.active`, overriding Bootstrap's alpha
+so stacking is impossible): composite ~5.1:1 on light schemes, currentColor-
+driven on dark. Disk-overlay only (SPEC-06). Runtime proof: the upcoming
+Foundry gate run.
+
 ## 1.3.1
 
 **PDP gallery media weight recorded as an upstream ask — there is no CSS half to ship
