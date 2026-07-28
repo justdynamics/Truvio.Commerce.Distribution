@@ -60,6 +60,16 @@ dropdowns.
 | class `td-header-overlay` on any element inside the page header | Turns the sticky bar into a floating/transparent overlay header with a hero-behind composition (block #16): fixed bar, one rounded pill painted by `::before` with **no** `overflow:hidden`, DOM-keyed clearance, top-anchored first-row poster crop. Tune with `--td-bar-top` / `--td-bar-inset` / `--td-bar-h` / `--td-bar-h-phone` / `--td-bar-radius` / `--td-bar-bg` / `--td-container-cap`. |
 | class `td-visually-hidden` on a label | The sanctioned visually-hidden idiom (`clip` + `clip-path`, no `overflow`) — safe inside the header, keeps the accessible name |
 
+## Not fixable from a theme — upstream asks
+
+A disk-overlay theme is CSS, style assets and disk files; it forks no Swift template
+(SPEC-06). These are recorded so nobody re-derives them from a stylesheet:
+
+| Limit | Why CSS cannot reach it | Disposition |
+|-------|-------------------------|-------------|
+| **PDP gallery media weight** (block #20, Foundry #161) — Swift emits every gallery asset up to three times (gallery / modal / thumbnail), each with a hard-coded `preload="auto"`; one 5MB video costs a ~15MB PDP (measured 15,318 KB) | `preload` is an HTML **attribute**. CSS cannot read, set or remove one, and no property or at-rule suppresses a media fetch — a *hidden* `preload="auto"` video still downloads, so the duplicate copies cost full weight while invisible. The emitting files are stock Swift design templates (`Paragraph/Swift-v2_ProductMediaGallery.cshtml`, `Components/VideoPlayer.cshtml`), which this layer must not overlay | **Upstream (Swift):** `preload="none"` + a poster on every gallery video, and render each asset once. **Consuming build, until then:** a solution-owned Custom script that shows the poster and fetches the source on click — proven at 133 KB with 0 media bytes before interaction. That asset belongs to the build, not to the neutral theme |
+| Mega-menu burger/offcanvas (block #8), `.flex-fill` on columnar PLP layouts (#10), which component owns the anon CTA (#11), a native open-table spec display mode (#12) | Template/markup concerns; the CSS rules present are mitigations, not fixes | Upstream (Swift templates) |
+
 ## Authoring guards
 
 Extending `default_custom.css` means honouring G1–G4 in the file header: never type a
