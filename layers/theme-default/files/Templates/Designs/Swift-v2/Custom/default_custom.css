@@ -438,10 +438,21 @@ main [data-dw-colorscheme="lightgrey2"] p:not(.dw-eyebrow) {
   color: rgba(31, 41, 51, .78);
 }
 
-/* --- Breadcrumbs: quiet wayfinding, not a heading (small, ~65% opacity). --- */
+/* --- Breadcrumbs: quiet wayfinding, not a heading. Dimmed via color-mix, NOT a
+ *     component opacity: the old opacity .65 MULTIPLIED under Bootstrap's own
+ *     rgba(.75) on .breadcrumb-item.active to an effective alpha of .488 —
+ *     #939597 on white, 3.02:1 (Foundry #145's emergent-alpha class, measured
+ *     live by the gate contrast probe). color-mix pins ONE effective alpha of
+ *     .72 on every crumb — above the .635 floor for the default ink on white
+ *     (composite ~5.1:1) — and overrides Bootstrap's own .75 on .active so
+ *     alphas can no longer stack. Follows currentColor on dark schemes. --- */
 [data-dw-itemtype="swift-v2_breadcrumbnavigation"] {
   font-size: .85rem;
-  opacity: .65;
+}
+[data-dw-itemtype="swift-v2_breadcrumbnavigation"] .breadcrumb-item,
+[data-dw-itemtype="swift-v2_breadcrumbnavigation"] .breadcrumb-item.active,
+[data-dw-itemtype="swift-v2_breadcrumbnavigation"] .breadcrumb-item > a {
+  color: color-mix(in srgb, currentColor 72%, transparent);
 }
 
 /* --- Motion: 120ms color/bg/border on links; cards + buttons carry 150ms /
@@ -1033,3 +1044,35 @@ body:has([data-swift-page-header] .td-header-overlay) main > section:first-child
  *     brand accent belongs in --dw-color-accent, never in --dw-color-button-primary.
  *     --- */
 [data-td-block="19"] { --td-block: 19; }
+
+/* --- #20 PDP gallery media weight: preload is NOT CSS-reachable — the whole fix is
+ *     upstream in the Swift templates (Foundry #161).
+ *     Swift-v2 emits every PDP gallery asset up to THREE times (inline gallery,
+ *     lightbox modal, thumbnail strip) and hard-codes preload="auto" on each video
+ *     element: Paragraph/Swift-v2_ProductMediaGallery.cshtml (three sites) plus
+ *     Components/VideoPlayer.cshtml. One 5MB gallery video therefore costs a ~15MB
+ *     PDP before any interaction — measured 15,318 KB on a real product.
+ *     This sheet ships NO rule for it, deliberately:
+ *       - preload is an HTML ATTRIBUTE. CSS cannot read, set or remove one, and no
+ *         property, at-rule or media feature suppresses a media fetch. Hiding does
+ *         not help either: a hidden video element with preload="auto" still fetches,
+ *         so the duplicate modal and thumbnail copies cost full weight while
+ *         invisible. There is no partial CSS mitigation, and authoring one anyway
+ *         would be a rule that paints without moving a single byte.
+ *       - The two files that emit the attribute are stock Swift DESIGN templates.
+ *         theme-default is disk-overlay only (SPEC-06) and forks no Swift template:
+ *         overlaying either one freezes it at a Swift version and silently wins over
+ *         every later release.
+ *     Deferred upstream on purpose — same disposition as the asks at blocks #8, #10,
+ *     #11 and #12.
+ *     Upstream ask (Swift): preload="none" plus a poster on every gallery video, and
+ *     render each asset ONCE with the modal and thumbnail referencing it instead of
+ *     three independent media elements.
+ *     Consuming build, until then: a solution-owned Custom script that swaps each
+ *     gallery video for its poster and fetches the source on click. Proven on a real
+ *     demo PDP — 15,318 KB down to 133 KB with zero media bytes before interaction,
+ *     a 5.2 MB fetch on click, playback verified. That asset belongs to the CONSUMING
+ *     build, not to the neutral theme: it changes PDP behaviour, and no gate edition
+ *     ships a product carrying a gallery video to prove it against.
+ *     --- */
+[data-td-block="20"] { --td-block: 20; }

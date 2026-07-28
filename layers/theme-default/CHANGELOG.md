@@ -1,5 +1,62 @@
 # theme-default changelog
 
+## 1.3.2
+
+**Breadcrumb contrast — the theme's own alpha stacking (Foundry #145's class,
+found live by the gate).** The 1.1.0 breadcrumb rule dimmed the whole component
+to opacity .65; Bootstrap's `.breadcrumb-item.active` carries its own
+`rgba(…,.75)`, and the two MULTIPLY: effective alpha .488 → `#939597` on white,
+3.02:1 — first measured by the new CONTRAST-01 gate probe (run 20260728-110700).
+Component opacity replaced by a single `color-mix(in srgb, currentColor 72%,
+transparent)` on every crumb (including `.active`, overriding Bootstrap's alpha
+so stacking is impossible): composite ~5.1:1 on light schemes, currentColor-
+driven on dark. Disk-overlay only (SPEC-06). Runtime proof: the upcoming
+Foundry gate run.
+
+## 1.3.1
+
+**PDP gallery media weight recorded as an upstream ask — there is no CSS half to ship
+(Foundry #161).** Disk-overlay only (SPEC-06); P4 button `:not()` chains, P5 footer scoping
+and P10 nav scoping untouched. The neutral theme's rendering is unchanged: the release adds
+one documentation block and a README table, no paint.
+
+The reported defect is real and measured — Swift-v2 emits every PDP gallery asset up to
+three times (inline gallery, lightbox modal, thumbnail strip) and hard-codes
+`preload="auto"` on each `<video>`, so a single 5MB gallery video pulls a ~15MB PDP before
+any interaction (15,318 KB observed). The layer leg is honest about what a theme can do
+with it:
+
+- **No CSS-side mitigation exists.** `preload` is an HTML *attribute*; CSS cannot read, set
+  or remove one, and no property, at-rule or media feature suppresses a media fetch. Hiding
+  is not a workaround either — a hidden `<video preload="auto">` still downloads, so the two
+  duplicate copies cost full weight while invisible. Shipping *some* rule to look responsive
+  would move zero bytes.
+- **The template half is upstream-deferred.** The attribute is emitted by stock Swift design
+  templates (`Paragraph/Swift-v2_ProductMediaGallery.cshtml`, three sites, and
+  `Components/VideoPlayer.cshtml`). Overlaying either would fork a Swift template at a
+  version and silently win over every later release — exactly what SPEC-06 keeps this layer
+  out of. Same disposition as the standing asks at blocks #8, #10, #11 and #12.
+- **Upstream ask (Swift):** `preload="none"` plus a poster on every gallery video, and each
+  asset rendered once with the modal and thumbnail referencing it instead of three
+  independent media elements.
+- **Consuming build, until then:** a solution-owned Custom script that shows the poster and
+  fetches the source on click — proven on a real demo PDP at 133 KB with zero media bytes
+  before interaction, a 5.2 MB fetch on click, playback verified. That asset belongs to the
+  consuming build, not the neutral theme: it changes PDP behaviour, and no gate edition ships
+  a product carrying a gallery video to prove it against.
+
+`default_custom.css`:
+
+- **#20 Media-preload contract.** New numbered block carrying the above, with the G2 marker
+  rule (`[data-td-block="20"]`) so a CSSOM assert can prove it parsed. Prose only — the block
+  paints nothing, in the manner of the #18 scoping contract and the #19 palette deploy
+  contract.
+
+`README.md`: new **"Not fixable from a theme — upstream asks"** table, so the next re-skin
+reads the limit before trying to solve it in a stylesheet.
+
+Runtime proof: the upcoming Foundry gate run on the current latest Swift.
+
 ## 1.3.0
 
 **Applied-learning pass — fold the demo-proven gate findings back as neutral defaults
