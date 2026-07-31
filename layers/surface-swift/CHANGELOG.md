@@ -1,5 +1,53 @@
 # Changelog — surface-swift
 
+## 1.4.0
+
+Fresh-deserialize presentability pass. Everything below was visible to a prospect on a
+clean composition of this surface, and all of it lived in the layer source.
+
+- **Swift eco-lorem removed from item-type defaults.** Ten of the most-used item types
+  (`Text`, `Poster`, `VideoPoster`, `TextAndImage`, `Card`, `Feature`, `Blockquote`,
+  `Accordion_Item`, `Slider_Item`, `Logo`) carried Swift's upstream nature/eco demo copy
+  in their field `defaultValue` attributes, so every paragraph a demo builder created
+  arrived pre-filled with it — and it returned after every re-save. Prose and branding
+  defaults blanked (`Logo.LogoName` shipped the literal string "Swift"); generic
+  scaffolding defaults kept (button labels, `Poster.Height`, `Logo.LogoWidth`).
+- **Home `grid-row-6` authored.** Three side-by-side `Swift-v2_Feature` paragraphs
+  ("Bulk ordering made easy" / "Competitive wholesale pricing" / "Dedicated account
+  support") all carried the verbatim `Feature` default body, so three different B2B
+  promises were each explained by the same sentence about caring for the planet.
+- **Footer policy links are page references.** `PrivacyPolicyLink` /
+  `CookiePolicyLink` were literal `/swift-2/...` paths while `AreaUrlName` shipped
+  empty, so the segment was host-derived and both links 404 wherever culture drives the
+  prefix. Now `Default.aspx?ID=224` / `Default.aspx?ID=232`, the link form the rest of
+  the surface already uses. `AreaUrlName` is pinned to `swift-2` so the segment is
+  deterministic on every consumer host — which is what makes the edition's
+  `criticalPaths` a claim this layer can keep. (Foundry #439)
+- **Desktop header stops overflowing the viewport.** `Desktop Header/grid-row-4` is a
+  `2ColumnsFlex` row with `flexibleColumns: "0,0"` — flex-basis 0 on both columns, so
+  the mega-menu and the search field both sized to content and neither could shrink.
+  Now `"1,0"`. (Foundry #438)
+- **Three empty home-page bands removed**, each of which sat under a live heading: the
+  "Our products" slider (`Items: 323`), the "Latest travel guides" post list plus its
+  button, and the "Frequently asked questions" accordion (`Accordion_Items: 324`). No
+  `Slider_Item` / `Accordion_Item` child rows exist in any layer and none can be
+  authored here — the serializer's fragment manifests carry only `Content` and
+  `SqlTable` provider entries, and no layer ships a serialized ItemList table.
+- **PDP "Similar styles" band removed.** Its `ProductComponentSlider` used
+  `RelationType: "most-sold"`, which is empty on a host with no order history, and an
+  empty relation makes the component render its whole source page inline. Its heading
+  ("Similar styles") also disagreed with its own title ("Others also bought").
+- **Alt text authored** on all six content-bearing image paragraphs. The surface
+  previously shipped `AltText` set on zero paragraphs.
+- **Category description copy is no longer hidden.** `Shop/Product List/grid-row-2`
+  shipped `HideGroupDescription: true`, so group merchandising copy rendered nowhere
+  site-wide; the sibling instance under `Product Components` already shipped `false`.
+
+Minor bump: item-type XMLs change and shipped rows are removed, but no page, item type
+or field is added or renamed, and no consumer-facing id moves. Both fragment manifests'
+`files` lists are updated in lockstep with the removals. Deep deserialize proof
+(row-count parity, strict-mode) runs in the Foundry gate — see the PR body.
+
 ## 1.3.0
 
 Newsletter-email shells fix (P18 B2B email-pack fold, marine-demo evidence 2026-07-18).

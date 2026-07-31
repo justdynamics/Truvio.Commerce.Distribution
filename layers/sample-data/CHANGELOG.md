@@ -1,5 +1,24 @@
 # Changelog — sample-data
 
+## 2.1.0
+
+The demo catalogue reads as a catalogue. `catalog.sql` seeded 20 products literally named
+"Fixture House Blend" / "Fixture Single Origin" / "Fixture Decaf" / "Fixture Cold Brew"
+into groups "Fixture Beverages" / "Fixture Equipment" / "Fixture Accessories", with no
+description column in the INSERT at all — a coffee-shop test fixture standing in for the
+storefront of a B2B parts distributor on every edition that sets `sampleData: true`.
+
+- Three groups and fourteen masters renamed to neutral parts-distribution names.
+- `ProductShortDescription` added to the master INSERT and carried through the six
+  variant `SELECT` inserts, so the PDP/PLP description lane is no longer blank.
+- The RMA demo order line's `OrderLineProductName` follows the master it references.
+
+Unchanged on purpose: every reserved key (`FIXT*` / `FIXTGRP*` / `FIXT-PRICE-*`), every
+product number, every price, and every row count — `EcomProducts = 20` /
+`EcomGroups = 3` still holds, so no edition's derived row-count contract moves and
+`surface-swift`'s newsletter product rail (which cites `FIXT0002/0004/0006/0010` by id)
+is unaffected. Minor bump: data content changes, shape does not.
+
 ## 2.0.2
 
 RMA demo interplay (P3, RUN-DISTRIBUTION-QUALITY item E). `catalog.sql` gains a section 5

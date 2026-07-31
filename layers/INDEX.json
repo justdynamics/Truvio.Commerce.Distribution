@@ -67,7 +67,7 @@
     {
       "name": "sample-data",
       "kind": "sample-data",
-      "version": "2.0.2",
+      "version": "2.1.0",
       "status": "active"
     },
     {
@@ -85,7 +85,7 @@
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.3.0",
+      "version": "1.4.0",
       "status": "active"
     },
     {
