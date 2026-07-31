@@ -1,5 +1,38 @@
 # Changelog — feature-b2b-comms
 
+## 1.0.2
+
+Neutralization sweep (completes the pass that shipped `surface-swift` 1.4.0,
+`sample-data` 2.1.0 and `surface-dap-portal` 1.0.4). The dealer email pack spoke in an
+invented company voice: every email's `EmailHeader` and `EmailFooter` carried the sender
+brand **"Dealer Services"**, and the article bodies made commitments on that company's
+behalf ("Our seasonal program is open", "Stocked lines ordered before the daily cut-off
+ship the same day", "your account manager will take it from there").
+
+Neutralized onto the convention:
+
+- sender brand -> `Placeholder — sender name` in all five headers, and
+  `Placeholder — sender name. You can unsubscribe from these emails at any time.` in
+  all five footers (the unsubscribe sentence is functional and stays)
+- all five article headings and bodies -> `Placeholder — article heading|body (<what
+  this email is for>)`
+- all five product-rail headings -> `Placeholder — product rail heading (<what this
+  rail shows>)`
+- "Your parts counter, online" -> `Placeholder — email heading (how to place an
+  order)`; it was a slogan and it carried a product domain
+
+Kept, because they are already function-descriptive rather than branding: the page names
+(`Cart reminder`, `Dealer welcome`, `How to order`, `Product compliance notice`,
+`Seasonal promotion`), the flow name `Dealer onboarding`, the four remaining `<h1>`s that
+name the email's trigger ("Your order is waiting", "Welcome to the dealer network",
+"Product compliance notice", "Seasonal promotion — pre-order now"), and the five button
+labels, which describe the action they perform. The
+`{{UserManagement:User.Name}}` personalization token is retained inside the welcome
+email's placeholder body so the merge-tag capability is still demonstrable.
+
+Patch bump: 26 field values across 20 paragraphs; no page, row, id, flow step or
+manifest entry changes.
+
 ## 1.0.1
 
 Fix the `SqlTable` flow predicates so they deserialize against the live DW 10.28.1 physical

@@ -12,6 +12,6 @@
   "Id": "100307"
   "ItemInstanceType": ""
   "Sort": 0
-  "Title": "Your partner account is ready"
-  "Text": "<p>Welcome, {{UserManagement:User.Name}}. Your dealer account gives you catalog access with your contract pricing, online ordering, and your full order history in one place.</p><p>Sign in to set your password, browse the catalog, and place your first order. Your account manager is one reply away.</p>"
+  "Title": "Placeholder — article heading (new-dealer welcome)"
+  "Text": "<p>Placeholder — article body (what the new account gives them and how to get started; two short paragraphs). Personalization token retained: {{UserManagement:User.Name}}</p>"
 "columnId": 1
