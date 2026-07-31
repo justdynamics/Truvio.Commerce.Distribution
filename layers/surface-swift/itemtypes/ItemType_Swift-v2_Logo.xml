@@ -2,7 +2,7 @@
 <items>
   <item category="Swift-v2/Paragraphs/Standard" name="Logo" systemName="Swift-v2_Logo" description="" icon="FileImageO" iconColor="None" image="" includeInUrlIndex="False" pageDefaultView="item" paragraphDefaultModule="" fieldForTitle="LogoName" title="" inherits="">
     <fields>
-      <field name="Logo name" systemName="LogoName" description="Logo name is used if no logo image is selected" type="System.String, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-GB" defaultValue="Swift">
+      <field name="Logo name" systemName="LogoName" description="Logo name is used if no logo image is selected" type="System.String, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-GB" defaultValue="">
         <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
           <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
         </editor>

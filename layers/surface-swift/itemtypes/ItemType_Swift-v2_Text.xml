@@ -2,17 +2,17 @@
 <items>
   <item category="Swift-v2/Paragraphs/Standard" name="Text" systemName="Swift-v2_Text" description="" icon="AlignLeft" iconColor="None" image="" includeInUrlIndex="False" pageDefaultView="item" paragraphDefaultModule="" fieldForTitle="Title" title="" inherits="">
     <fields>
-      <field name="Title" systemName="Title" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-DK" defaultValue="Celebrate the beauty of our planet">
+      <field name="Title" systemName="Title" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-DK" defaultValue="">
         <editor type="Dynamicweb.Content.Items.Editors.RichTextEditorLight, Dynamicweb">
           <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight"><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="DefaultFontStyle" value="dw-h2" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="DefaultTag" value="h2" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="ShowToggle" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="ShowTagSelector" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="ShowStyleSelector" value="True" /></Parameters></editorConfuguration>
         </editor>
       </field>
-      <field name="Subtitle" systemName="Subtitle" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-DK" defaultValue="Nurturing nature">
+      <field name="Subtitle" systemName="Subtitle" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-DK" defaultValue="">
         <editor type="Dynamicweb.Content.Items.Editors.RichTextEditorLight, Dynamicweb">
           <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight"><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="DefaultFontStyle" value="dw-paragraph-1" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="DefaultTag" value="p" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="ShowToggle" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="ShowTagSelector" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditorLight" name="ShowStyleSelector" value="True" /></Parameters></editorConfuguration>
         </editor>
       </field>
-      <field name="Text" systemName="Text" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-DK" defaultValue="Imagine a world where nature thrives and every corner of the Earth is vibrant with life. By embracing sustainable habits and caring for our environment, we can create a brighter, greener future. ">
+      <field name="Text" systemName="Text" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-DK" defaultValue="">
         <editor type="Dynamicweb.Content.Items.Editors.RichTextEditor, Dynamicweb">
           <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.RichTextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditor" name="DefaultFontStyle" value="dw-paragraph" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditor" name="ShowToggle" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditor" name="ShowTagSelector" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.RichTextEditor" name="ShowStyleSelector" value="True" /></Parameters></editorConfuguration>
         </editor>
