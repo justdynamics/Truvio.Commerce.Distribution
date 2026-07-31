@@ -2,7 +2,7 @@
 "sourceParagraphId": 188
 "sortOrder": 4
 "itemType": "Swift-v2_Text"
-"header": "The Advantage of Partnering with Us"
+"header": "Placeholder — feature-row heading"
 "template": "TextCenter.cshtml"
 "colorSchemeId": ""
 "moduleSystemName": ""
@@ -14,5 +14,5 @@
   "Sort": 0
   "Subtitle": ""
   "Text": ""
-  "Title": "<h2 class=\"dw-h4\" style=\"text-align: center;\">The Advantage of Partnering with Us</h2>"
+  "Title": "<h2 class=\"dw-h4\" style=\"text-align: center;\">Placeholder — feature-row heading (why buy from us)</h2>"
 "columnId": 1

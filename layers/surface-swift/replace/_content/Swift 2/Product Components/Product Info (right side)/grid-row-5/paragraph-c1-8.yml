@@ -10,7 +10,7 @@
 "fields":
   "CustomizeLayouts": false
   "FieldDisplayGroupLayoutSelector": 0
-  "FieldDisplayGroups": "[\"MainFeatures\",\"All_specs\",\"Engine\",\"Battery\",\"Equipment\",\"Bike_spec\",\"Clothing_spec\",\"Short_clothes_info\"]"
+  "FieldDisplayGroups": "[\\\"MainFeatures\\\",\\\"All_specs\\\"]"
   "GlobalRecordPageGuid": "fb23f239-6758-47a7-ae31-fbed98fdedfa"
   "HideFieldLabels": false
   "HideFieldsWithZeroValue": false

@@ -2,22 +2,29 @@
 
 ## 2.1.0
 
-The demo catalogue reads as a catalogue. `catalog.sql` seeded 20 products literally named
-"Fixture House Blend" / "Fixture Single Origin" / "Fixture Decaf" / "Fixture Cold Brew"
-into groups "Fixture Beverages" / "Fixture Equipment" / "Fixture Accessories", with no
-description column in the INSERT at all — a coffee-shop test fixture standing in for the
-storefront of a B2B parts distributor on every edition that sets `sampleData: true`.
+The demo catalogue carries no real-world product domain. `catalog.sql` seeded 20 products
+literally named "Fixture House Blend" / "Fixture Single Origin" / "Fixture Decaf" into
+groups "Fixture Beverages" / "Fixture Equipment" / "Fixture Accessories", with no
+description column in the INSERT at all - a coffee-shop test fixture standing in for the
+storefront on every edition that sets `sampleData: true`.
 
-- Three groups and fourteen masters renamed to neutral parts-distribution names.
+Every demo-facing value is now a **function-descriptive placeholder** naming what the row
+exists to demonstrate, so the build replaces it per customer:
+
+- Products are `Sample Product NN — <role>` (`Master`, `Qty Tiers`, `Contract Price`,
+  `Size Variants`); groups are `Sample Group N — <function>`.
 - `ProductShortDescription` added to the master INSERT and carried through the six
-  variant `SELECT` inserts, so the PDP/PLP description lane is no longer blank.
+  variant `SELECT` inserts, so the PDP/PLP description lane is no longer blank. Each one
+  opens with the literal word `Placeholder`, the machine-detectable marker a design gate
+  scans for (`/placeholder/i`).
 - The RMA demo order line's `OrderLineProductName` follows the master it references.
 
-Unchanged on purpose: every reserved key (`FIXT*` / `FIXTGRP*` / `FIXT-PRICE-*`), every
-product number, every price, and every row count — `EcomProducts = 20` /
-`EcomGroups = 3` still holds, so no edition's derived row-count contract moves and
-`surface-swift`'s newsletter product rail (which cites `FIXT0002/0004/0006/0010` by id)
-is unaffected. Minor bump: data content changes, shape does not.
+Unchanged on purpose - this is the layer's determinism contract: every reserved key
+(`FIXT*` / `FIXTGRP*` / `FIXT-PRICE-*`), every product number, every price, the variant
+structure, and every row count. `EcomProducts = 20` / `EcomGroups = 3` still holds, so no
+edition's derived row-count contract moves and `surface-swift`'s newsletter product rail
+(which cites `FIXT0002/0004/0006/0010` by id) is unaffected. Minor bump: data content
+changes, shape does not.
 
 ## 2.0.2
 

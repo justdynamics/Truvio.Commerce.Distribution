@@ -2,7 +2,7 @@
 "sourceParagraphId": 39
 "sortOrder": 2
 "itemType": "Swift-v2_Text"
-"header": "Our products"
+"header": "Placeholder — product-slider heading"
 "template": ""
 "colorSchemeId": ""
 "moduleSystemName": ""
@@ -12,7 +12,7 @@
   "Id": "7"
   "ItemInstanceType": ""
   "Sort": 0
-  "Subtitle": "<p class=\"dw-paragraph-1\">Quality products and accessories for your business</p>"
+  "Subtitle": "<p class=\"dw-paragraph-1\">Placeholder — product-slider subtitle</p>"
   "Text": ""
-  "Title": "<h2 class=\"dw-h4\">Our products</h2>"
+  "Title": "<h2 class=\"dw-h4\">Placeholder — product-slider heading (what this rail shows)</h2>"
 "columnId": 1

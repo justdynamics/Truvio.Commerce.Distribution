@@ -8,7 +8,7 @@
 "moduleSystemName": ""
 "moduleSettings": ""
 "fields":
-  "FirstButton": "{\r\n  \"SelectedValue\": \"171\",\r\n  \"Label\": \"Click here to see all Travel guides, Reviews and Buying guides\",\r\n  \"Link\": \"Default.aspx?ID=171\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"link\"\r\n}"
+  "FirstButton": "{\r\n  \"SelectedValue\": \"171\",\r\n  \"Label\": \"Placeholder — see-all-posts link\",\r\n  \"Link\": \"Default.aspx?ID=171\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"link\"\r\n}"
   "GlobalRecordPageGuid": "5c47a52a-4a24-449e-8df9-563f03afe297"
   "Id": "2"
   "ItemInstanceType": ""

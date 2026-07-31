@@ -2,7 +2,7 @@
 "sourceParagraphId": 297
 "sortOrder": 63
 "itemType": "Swift-v2_Feature"
-"header": "Customer Focus"
+"header": "Placeholder — about value 3 heading"
 "template": "IconBoxTop.cshtml"
 "colorSchemeId": "lightgrey1"
 "moduleSystemName": ""
@@ -14,6 +14,6 @@
   "Id": "27"
   "ItemInstanceType": ""
   "Sort": 0
-  "Text": "<p>Our customers are at the heart of everything we do. We strive to understand their needs and provide tailored solutions that enhance their business operations.<br></p>"
-  "Title": "<h3 class=\"dw-h5\">Customer Focus</h3>"
+  "Text": "<p>Placeholder — about value 3 body (one sentence)</p>"
+  "Title": "<h3 class=\"dw-h5\">Placeholder — about value 3 heading</h3>"
 "columnId": 3

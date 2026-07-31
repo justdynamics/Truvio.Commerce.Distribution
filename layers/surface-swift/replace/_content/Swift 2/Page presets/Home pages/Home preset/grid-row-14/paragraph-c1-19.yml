@@ -2,7 +2,7 @@
 "sourceParagraphId": 37
 "sortOrder": 19
 "itemType": "Swift-v2_Text"
-"header": "Frequently asked questions"
+"header": "Placeholder — FAQ heading"
 "template": ""
 "colorSchemeId": "light"
 "moduleSystemName": ""
@@ -12,7 +12,7 @@
   "Id": "6"
   "ItemInstanceType": ""
   "Sort": 0
-  "Subtitle": "<p>Here you'll find answers to the most common questions.</p>"
+  "Subtitle": "<p>Placeholder — FAQ subtitle</p>"
   "Text": ""
-  "Title": "<h2 class=\"dw-h4\">Frequently asked questions</h2>"
+  "Title": "<h2 class=\"dw-h4\">Placeholder — FAQ heading</h2>"
 "columnId": 1

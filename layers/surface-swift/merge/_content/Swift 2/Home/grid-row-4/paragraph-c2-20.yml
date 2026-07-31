@@ -2,18 +2,18 @@
 "sourceParagraphId": 187
 "sortOrder": 20
 "itemType": "Swift-v2_Text"
-"header": "Do you want to go faster and further?"
+"header": "Placeholder — section heading"
 "template": "TextCenter.cshtml"
 "colorSchemeId": "lightgrey2"
 "moduleSystemName": ""
 "moduleSettings": ""
 "fields":
-  "FirstButton": "{\r\n  \"SelectedValue\": \"50\",\r\n  \"Label\": \"Discover more\",\r\n  \"Link\": \"Default.aspx?ID=50\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "FirstButton": "{\r\n  \"SelectedValue\": \"50\",\r\n  \"Label\": \"Placeholder — section CTA\",\r\n  \"Link\": \"Default.aspx?ID=50\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
   "GlobalRecordPageGuid": "febabe52-c9a6-4983-b857-6c6c022d88fb"
   "Id": "42"
   "ItemInstanceType": ""
   "Sort": 0
-  "Subtitle": "<p class=\"dw-paragraph-1\">Innovative products are here to stay, and their popularity is through the roof.</p>"
+  "Subtitle": "<p class=\"dw-paragraph-1\">Placeholder — section subtitle (supporting sentence)</p>"
   "Text": ""
-  "Title": "<h2 class=\"dw-h3\">Do you want to go faster and further?</h2>"
+  "Title": "<h2 class=\"dw-h3\">Placeholder — section headline (product-range pitch)</h2>"
 "columnId": 2

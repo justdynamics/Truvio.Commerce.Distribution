@@ -43,6 +43,31 @@ clean composition of this surface, and all of it lived in the layer source.
   shipped `HideGroupDescription: true`, so group merchandising copy rendered nowhere
   site-wide; the sibling instance under `Product Components` already shipped `false`.
 
+- **Every demo-facing string is now a function-descriptive placeholder.** The surface
+  shipped a full B2B-distributor storyline (hero headline, feature copy, vanity stats,
+  About-page mission and values, Contact copy, employee intro) plus leftover
+  mountain-bike editorial in the mega-menu ("Lost Lake starts at its namesake
+  trailhead", "the classic Downieville downhill route", two Merida press photos), the
+  literal word "Swift" as the header/footer wordmark, and a "DynamicWeb Inc." copyright
+  line. All of it is replaced with `Placeholder — <function>` copy naming the slot it
+  fills, e.g. `Placeholder — hero headline (customer value proposition)`. The literal
+  word `Placeholder` is deliberate: it is the machine-detectable marker a design gate
+  scans for (`/placeholder/i`), so anything left un-replaced at build time fails
+  loudly instead of shipping. 143 field writes across 58 files.
+- **`Page presets/` neutralized too - it is the reinfection vector.** The Home preset is
+  a full mirror of the Home page, so a builder cloning it re-creates every string the
+  live page just had removed. Same failure class as the item-type `defaultValue`s above:
+  fix the live instance only and the copy walks straight back in.
+- **Image references that resolve nowhere are blanked** rather than left as broken
+  `<img>`: `environment-2.jpg` (the home hero), `details-8.jpg`, both Merida press
+  photos and `video-1.mp4` on the About page ship in no layer `files/` payload and are
+  absent from the gate host too. Alt text carries the slot description.
+- **PDP spec accordion display groups pruned.** `FieldDisplayGroups` listed `Engine`,
+  `Battery`, `Equipment`, `Bike_spec`, `Clothing_spec` and `Short_clothes_info` - a bike
+  and apparel data model. Reduced to the two generic names, `MainFeatures` and
+  `All_specs`. (No layer in the distribution ships an `EcomFieldDisplayGroup` table, so
+  none of the eight ever resolved; a customer data model has to supply them.)
+
 Minor bump: item-type XMLs change and shipped rows are removed, but no page, item type
 or field is added or renamed, and no consumer-facing id moves. Both fragment manifests'
 `files` lists are updated in lockstep with the removals. Deep deserialize proof

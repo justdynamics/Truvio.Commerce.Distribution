@@ -2,7 +2,7 @@
 "sourceParagraphId": 296
 "sortOrder": 62
 "itemType": "Swift-v2_Feature"
-"header": "Sustainability"
+"header": "Placeholder — about value 2 heading"
 "template": "IconBoxTop.cshtml"
 "colorSchemeId": "lightgrey1"
 "moduleSystemName": ""
@@ -14,6 +14,6 @@
   "Id": "26"
   "ItemInstanceType": ""
   "Sort": 0
-  "Text": "<p>We are committed to promoting environmentally friendly practices, from sourcing materials to packaging.</p><p><br></p>"
-  "Title": "<h3 class=\"dw-h5\">Sustainability</h3>"
+  "Text": "<p>Placeholder — about value 2 body (one sentence)</p>"
+  "Title": "<h3 class=\"dw-h5\">Placeholder — about value 2 heading</h3>"
 "columnId": 2

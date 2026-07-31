@@ -2,7 +2,7 @@
 "sourceParagraphId": 189
 "sortOrder": 5
 "itemType": "Swift-v2_Feature"
-"header": "Bulk ordering made easy"
+"header": "Placeholder — feature 1 heading"
 "template": "IconLeft.cshtml"
 "colorSchemeId": ""
 "moduleSystemName": ""
@@ -13,6 +13,6 @@
   "Id": "13"
   "ItemInstanceType": ""
   "Sort": 0
-  "Text": "<p>Order at volume in a few clicks - saved lists, a quick-order pad and one-click repeats from your full purchase history.<br></p>"
-  "Title": "<h3 class=\"dw-h6\">Bulk ordering made easy</h3>"
+  "Text": "<p>Placeholder — feature 1 body (one sentence explaining the benefit)<br></p>"
+  "Title": "<h3 class=\"dw-h6\">Placeholder — feature 1 heading (benefit)</h3>"
 "columnId": 1
