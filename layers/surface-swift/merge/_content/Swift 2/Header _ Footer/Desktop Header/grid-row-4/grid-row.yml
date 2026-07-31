@@ -9,7 +9,7 @@
 "gapX": 3
 "gapY": 3
 "verticalAlignment": "Center"
-"flexibleColumns": "0,0"
+"flexibleColumns": "1,0"
 "fields":
   "Id": "28"
   "Sort": 0
