@@ -12,8 +12,8 @@
   "HeaderMobile": "159"
   "FooterDesktop": "156"
   "FooterMobile": "158"
-  "PrivacyPolicyLink": "/swift-2/privacy-policy"
-  "CookiePolicyLink": "/swift-2/cookie-notice"
+  "PrivacyPolicyLink": "Default.aspx?ID=224"
+  "CookiePolicyLink": "Default.aspx?ID=232"
   "CookieLayout": "modal"
   "MediaQueryLimit": ""
 "properties":
@@ -34,7 +34,7 @@
   "AreaActive": true
   "AreaMasterAreaId": 0
   "AreaUserManagementPermissions": ""
-  "AreaUrlName": ""
+  "AreaUrlName": "swift-2"
   "AreaCopyOf": 1
   "AreaLayout": "Designs/Swift-v2/Swift-v2_Page.cshtml"
   "AreaNotFound": ""
