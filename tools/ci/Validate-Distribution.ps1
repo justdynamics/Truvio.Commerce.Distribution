@@ -32,7 +32,8 @@ Checks (all fail-closed; any failure -> exit 1):
 
 Usage: pwsh tools/ci/Validate-Distribution.ps1  (run from repo root; exits 0 pass / 1 fail)
        pwsh tools/ci/Validate-Distribution.ps1 -RegenerateIndex  (rewrite the layers/INDEX.json
-       `layers` array from the live tree, preserving `retired` + `gateProven`; then validate)
+       `layers` array from the live tree, preserving `retired` + `gateProven` + operator-authored
+       entry fields such as `note`; then validate)
 #>
 [CmdletBinding()]
 param(
@@ -185,17 +186,35 @@ $expected = @(Get-ExpectedLiveEntries -Manifests $manifests)
 
 # -RegenerateIndex: rewrite INDEX.layers from the live tree, PRESERVING retired + gateProven
 # (retired tombstones are authored on retirement; gateProven is stamped by the Foundry publish
-# flow — neither is derivable from the tree, so regeneration never clobbers them).
+# flow — neither is derivable from the tree, so regeneration never clobbers them) AND any
+# operator-authored fields on a layers[] entry (e.g. a tombstone `note` on a deprecated entry) —
+# only the deterministic projection {name, kind, version, status, supersededBy} is regenerated;
+# every other property on an existing entry of the same name is carried through (#28).
 if ($RegenerateIndex) {
     $existing = $null
     if (Test-Path $indexPath) { try { $existing = Get-Content -LiteralPath $indexPath -Raw -Encoding utf8 | ConvertFrom-Json } catch { $existing = $null } }
     $doc = [ordered]@{}
     if ($existing -and $existing.PSObject.Properties.Name -contains '_comment') { $doc._comment = $existing._comment }
     if ($existing -and $existing.PSObject.Properties.Name -contains 'gateProven') { $doc.gateProven = $existing.gateProven }
+    $regenerated = @('name', 'kind', 'version', 'status', 'supersededBy')
+    $existingByName = @{}
+    foreach ($e in @($existing.layers)) { if ($e -and $e.name) { $existingByName["$($e.name)"] = $e } }
+    $carried = @()
+    foreach ($entry in $expected) {
+        $prev = $existingByName["$($entry.name)"]
+        if ($prev) {
+            foreach ($p in $prev.PSObject.Properties) {
+                if ($p.Name -notin $regenerated) {
+                    $entry | Add-Member -NotePropertyName $p.Name -NotePropertyValue $p.Value -Force
+                    $carried += "$($entry.name).$($p.Name)"
+                }
+            }
+        }
+    }
     $doc.layers = $expected
     if ($existing -and $existing.PSObject.Properties.Name -contains 'retired') { $doc.retired = $existing.retired }
     $doc | ConvertTo-Json -Depth 12 | Out-File -Encoding utf8 -LiteralPath $indexPath
-    Write-Host "  [regen] INDEX.json layers[] rewritten from live tree ($($expected.Count) entries; retired + gateProven preserved)" -ForegroundColor Yellow
+    Write-Host "  [regen] INDEX.json layers[] rewritten from live tree ($($expected.Count) entries; retired + gateProven preserved$(if ($carried.Count) { '; carried operator-authored: ' + ($carried -join ', ') }))" -ForegroundColor Yellow
 }
 
 $index = $null
