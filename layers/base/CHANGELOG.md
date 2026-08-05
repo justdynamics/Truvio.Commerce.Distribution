@@ -1,5 +1,14 @@
 # Changelog — base
 
+## 3.1.3
+
+`EcomCountries` CA / NO / SE carried `CountryCurrencyCode` values (CAD, NOK, SEK) that no
+shipped `EcomCurrencies` row backs. A country row pointing at a missing currency throws the
+same opaque `DivideByZeroException` ('Error processing prices') as a zero rate does, during
+every product index build. The three codes are now blank (the valid no-currency state the
+province rows already use); the countries stay selectable for addresses. Ship the currency
+row first if a demo ever needs CAD/NOK/SEK pricing.
+
 ## 3.1.2
 
 `EcomCurrencies` **revert of the 3.1.1 single-default change** — restores
