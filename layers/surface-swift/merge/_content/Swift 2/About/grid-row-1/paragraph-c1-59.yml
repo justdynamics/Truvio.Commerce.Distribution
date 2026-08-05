@@ -2,7 +2,7 @@
 "sourceParagraphId": 293
 "sortOrder": 59
 "itemType": "Swift-v2_Text"
-"header": "Your Trusted Partner in Commerce"
+"header": "Placeholder — about intro heading"
 "template": "TextLeft.cshtml"
 "colorSchemeId": ""
 "moduleSystemName": ""
@@ -13,6 +13,6 @@
   "ItemInstanceType": ""
   "Sort": 0
   "Subtitle": ""
-  "Text": "<p class=\"dw-paragraph-1\">We are passionate about commerce and committed to providing businesses with high-quality products and equipment. Our mission is to empower retailers, distributors, and industry professionals with the best products in the industry.</p>"
-  "Title": "<h2 class=\"dw-h2\">Your Trusted Partner in Commerce</h2>"
+  "Text": "<p class=\"dw-paragraph-1\">Placeholder — about intro body (mission statement)</p>"
+  "Title": "<h2 class=\"dw-h2\">Placeholder — about intro heading (who this company is)</h2>"
 "columnId": 1

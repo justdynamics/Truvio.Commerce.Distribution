@@ -2,15 +2,16 @@
 "sourceParagraphId": 25
 "sortOrder": 3
 "itemType": "Swift-v2_Image"
-"header": "Share the fun"
+"header": "Placeholder — mega-menu image 1"
 "template": ""
 "colorSchemeId": ""
 "moduleSystemName": ""
 "moduleSettings": ""
 "fields":
+  "AltText": "Placeholder — mega-menu promo image 1 (replaced per customer)"
   "GlobalRecordPageGuid": "4f3d48a7-8635-48a7-8d48-660bbfbe4678"
   "Id": "1"
-  "Image": "/Files/Images/Merida2021_eOneSixty8000_KAbelleira-6301567.jpg?x=14&y=-6&r=16/9"
+  "Image": ""
   "ItemInstanceType": ""
   "Sort": 0
 "columnId": 1

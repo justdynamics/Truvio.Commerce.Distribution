@@ -2,7 +2,7 @@
 "sourceParagraphId": 48
 "sortOrder": 11
 "itemType": "Swift-v2_Text"
-"header": "Become partner today"
+"header": "Placeholder — call-to-action heading"
 "template": "TextCenter.cshtml"
 "colorSchemeId": ""
 "moduleSystemName": ""
@@ -14,6 +14,6 @@
   "ItemInstanceType": ""
   "SecondButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"primary\"\r\n}"
   "Sort": 0
-  "Subtitle": "<p class=\"dw-paragraph-1\">Join our network of trusted dealers and distributors. Enjoy special pricing, marketing, resources and priority support."
-  "Title": "<h2 class=\"dw-h3\">Become partner today</h2>"
+  "Subtitle": "<p class=\"dw-paragraph-1\">Placeholder — call-to-action body (what the visitor gets by signing up)</p>"
+  "Title": "<h2 class=\"dw-h3\">Placeholder — call-to-action heading</h2>"
 "columnId": 1

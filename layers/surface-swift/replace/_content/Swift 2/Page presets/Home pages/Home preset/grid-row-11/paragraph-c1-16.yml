@@ -2,7 +2,7 @@
 "sourceParagraphId": 34
 "sortOrder": 16
 "itemType": "Swift-v2_Text"
-"header": "Latest travel guides"
+"header": "Placeholder — post-list heading"
 "template": ""
 "colorSchemeId": ""
 "moduleSystemName": ""
@@ -12,7 +12,7 @@
   "Id": "5"
   "ItemInstanceType": ""
   "Sort": 0
-  "Subtitle": "<p class=\"dw-paragraph-1\">Explore the World One Pedal at a Time</p>"
+  "Subtitle": "<p class=\"dw-paragraph-1\">Placeholder — post-list subtitle</p>"
   "Text": ""
-  "Title": "<h2 class=\"dw-h4\">Latest travel guides</h2>"
+  "Title": "<h2 class=\"dw-h4\">Placeholder — post-list heading (what these posts are)</h2>"
 "columnId": 1

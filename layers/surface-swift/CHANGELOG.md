@@ -1,5 +1,78 @@
 # Changelog — surface-swift
 
+## 1.4.0
+
+Fresh-deserialize presentability pass. Everything below was visible to a prospect on a
+clean composition of this surface, and all of it lived in the layer source.
+
+- **Swift eco-lorem removed from item-type defaults.** Ten of the most-used item types
+  (`Text`, `Poster`, `VideoPoster`, `TextAndImage`, `Card`, `Feature`, `Blockquote`,
+  `Accordion_Item`, `Slider_Item`, `Logo`) carried Swift's upstream nature/eco demo copy
+  in their field `defaultValue` attributes, so every paragraph a demo builder created
+  arrived pre-filled with it — and it returned after every re-save. Prose and branding
+  defaults blanked (`Logo.LogoName` shipped the literal string "Swift"); generic
+  scaffolding defaults kept (button labels, `Poster.Height`, `Logo.LogoWidth`).
+- **Home `grid-row-6` authored.** Three side-by-side `Swift-v2_Feature` paragraphs
+  ("Bulk ordering made easy" / "Competitive wholesale pricing" / "Dedicated account
+  support") all carried the verbatim `Feature` default body, so three different B2B
+  promises were each explained by the same sentence about caring for the planet.
+- **Footer policy links are page references.** `PrivacyPolicyLink` /
+  `CookiePolicyLink` were literal `/swift-2/...` paths while `AreaUrlName` shipped
+  empty, so the segment was host-derived and both links 404 wherever culture drives the
+  prefix. Now `Default.aspx?ID=224` / `Default.aspx?ID=232`, the link form the rest of
+  the surface already uses. `AreaUrlName` is pinned to `swift-2` so the segment is
+  deterministic on every consumer host — which is what makes the edition's
+  `criticalPaths` a claim this layer can keep. (Foundry #439)
+- **Desktop header stops overflowing the viewport.** `Desktop Header/grid-row-4` is a
+  `2ColumnsFlex` row with `flexibleColumns: "0,0"` — flex-basis 0 on both columns, so
+  the mega-menu and the search field both sized to content and neither could shrink.
+  Now `"1,0"`. (Foundry #438)
+- **Three empty home-page bands removed**, each of which sat under a live heading: the
+  "Our products" slider (`Items: 323`), the "Latest travel guides" post list plus its
+  button, and the "Frequently asked questions" accordion (`Accordion_Items: 324`). No
+  `Slider_Item` / `Accordion_Item` child rows exist in any layer and none can be
+  authored here — the serializer's fragment manifests carry only `Content` and
+  `SqlTable` provider entries, and no layer ships a serialized ItemList table.
+- **PDP "Similar styles" band removed.** Its `ProductComponentSlider` used
+  `RelationType: "most-sold"`, which is empty on a host with no order history, and an
+  empty relation makes the component render its whole source page inline. Its heading
+  ("Similar styles") also disagreed with its own title ("Others also bought").
+- **Alt text authored** on all six content-bearing image paragraphs. The surface
+  previously shipped `AltText` set on zero paragraphs.
+- **Category description copy is no longer hidden.** `Shop/Product List/grid-row-2`
+  shipped `HideGroupDescription: true`, so group merchandising copy rendered nowhere
+  site-wide; the sibling instance under `Product Components` already shipped `false`.
+
+- **Every demo-facing string is now a function-descriptive placeholder.** The surface
+  shipped a full B2B-distributor storyline (hero headline, feature copy, vanity stats,
+  About-page mission and values, Contact copy, employee intro) plus leftover
+  mountain-bike editorial in the mega-menu ("Lost Lake starts at its namesake
+  trailhead", "the classic Downieville downhill route", two Merida press photos), the
+  literal word "Swift" as the header/footer wordmark, and a "DynamicWeb Inc." copyright
+  line. All of it is replaced with `Placeholder — <function>` copy naming the slot it
+  fills, e.g. `Placeholder — hero headline (customer value proposition)`. The literal
+  word `Placeholder` is deliberate: it is the machine-detectable marker a design gate
+  scans for (`/placeholder/i`), so anything left un-replaced at build time fails
+  loudly instead of shipping. 143 field writes across 58 files.
+- **`Page presets/` neutralized too - it is the reinfection vector.** The Home preset is
+  a full mirror of the Home page, so a builder cloning it re-creates every string the
+  live page just had removed. Same failure class as the item-type `defaultValue`s above:
+  fix the live instance only and the copy walks straight back in.
+- **Image references that resolve nowhere are blanked** rather than left as broken
+  `<img>`: `environment-2.jpg` (the home hero), `details-8.jpg`, both Merida press
+  photos and `video-1.mp4` on the About page ship in no layer `files/` payload and are
+  absent from the gate host too. Alt text carries the slot description.
+- **PDP spec accordion display groups pruned.** `FieldDisplayGroups` listed `Engine`,
+  `Battery`, `Equipment`, `Bike_spec`, `Clothing_spec` and `Short_clothes_info` - a bike
+  and apparel data model. Reduced to the two generic names, `MainFeatures` and
+  `All_specs`. (No layer in the distribution ships an `EcomFieldDisplayGroup` table, so
+  none of the eight ever resolved; a customer data model has to supply them.)
+
+Minor bump: item-type XMLs change and shipped rows are removed, but no page, item type
+or field is added or renamed, and no consumer-facing id moves. Both fragment manifests'
+`files` lists are updated in lockstep with the removals. Deep deserialize proof
+(row-count parity, strict-mode) runs in the Foundry gate — see the PR body.
+
 ## 1.3.0
 
 Newsletter-email shells fix (P18 B2B email-pack fold, marine-demo evidence 2026-07-18).

@@ -1,5 +1,18 @@
 # Changelog — digital-asset-portal/1.0
 
+## 1.0.4
+
+Neutralization sweep (same pass as `surface-swift` 1.4.0 / `sample-data` 2.1.0). The DAP
+header and footer shipped real-world data: the literal word **"Swift"** as the wordmark
+on all four logo paragraphs and in the mobile footer nav heading ("About Swift"), a real
+postal address, phone number and e-mail address in the footer contact block, and a
+"Copyright (c) Dynamicweb 2026" line. All replaced with `Placeholder — <function>` copy
+naming the slot, e.g. `Placeholder — footer address line 1`. The literal word
+`Placeholder` is the machine-detectable marker a design gate scans for
+(`/placeholder/i`).
+
+Patch bump: nine field values, no structural change.
+
 ## 1.0.3
 
 Area style-id migration to the `default` scheme (LRN-uipass-03), mirroring the surface-swift

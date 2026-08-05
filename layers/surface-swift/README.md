@@ -39,9 +39,15 @@ title integrity) bind to this layer's trees.
 
 ## Provenance
 
-- Content: the curated, brand-neutral commerce content trees (bike-era copy neutralized)
-  carried forward from base 2.4.1 and re-proven on
-  Swift 2.4 / DW 10.28.1-PreRelease by the gate.
+- Content: the curated commerce content trees carried forward from base 2.4.1 and
+  re-proven on Swift 2.4 / DW 10.28.1-PreRelease by the gate. **Every demo-facing
+  string is a function-descriptive placeholder** (1.4.0): visible copy reads
+  `Placeholder — <function>`, e.g. `Placeholder — hero headline (customer value
+  proposition)`. The literal word `Placeholder` is the machine-detectable marker a
+  design gate scans for (`/placeholder/i`), so copy left un-replaced at build time
+  fails loudly rather than shipping to a prospect. `Page presets/` follows the same
+  convention: a preset is the reinfection vector — a builder clones it to make a page,
+  so any real-world copy left there comes back on every page built from it.
 - Item types: official Swift v2.4.0 design package (`Swift_v2.4.0_Files.zip`,
   github.com/dynamicweb/Swift release v2.4.0).
 - **PreRelease attestation:** proven on DW **10.28.1-PreRelease** (operator-approved

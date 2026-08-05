@@ -10,7 +10,7 @@
 "fields":
   "DescriptionFontSize": "fs-5"
   "GlobalRecordPageGuid": "39a2ca01-0400-4ff2-9213-7f5c942da6ed"
-  "HideGroupDescription": true
+  "HideGroupDescription": false
   "HideGroupTitle": false
   "Id": "2"
   "ItemInstanceType": ""

@@ -2,7 +2,7 @@
 "sourceParagraphId": 49
 "sortOrder": 12
 "itemType": "Swift-v2_Text"
-"header": "Partners"
+"header": "Placeholder — stat 1"
 "template": "TextCenter.cshtml"
 "colorSchemeId": ""
 "moduleSystemName": ""
@@ -14,6 +14,6 @@
   "ItemInstanceType": ""
   "SecondButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"primary\"\r\n}"
   "Sort": 0
-  "Subtitle": "<p class=\"dw-h3\">500+"
-  "Title": "<p class=\"dw-paragraph-1\">Partners"
+  "Subtitle": "<p class=\"dw-h3\">Placeholder — stat 1 value</p>"
+  "Title": "<p class=\"dw-paragraph-1\">Placeholder — stat 1 label</p>"
 "columnId": 1

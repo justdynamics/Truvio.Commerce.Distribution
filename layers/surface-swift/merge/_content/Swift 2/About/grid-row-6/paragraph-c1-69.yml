@@ -2,7 +2,7 @@
 "sourceParagraphId": 303
 "sortOrder": 69
 "itemType": "Swift-v2_Text"
-"header": "Our Management"
+"header": "Placeholder — management section heading"
 "template": "TextCenter.cshtml"
 "colorSchemeId": ""
 "moduleSystemName": ""
@@ -14,5 +14,5 @@
   "Sort": 0
   "Subtitle": ""
   "Text": ""
-  "Title": "<h3 class=\"dw-h4\">Our Management</h3>"
+  "Title": "<h3 class=\"dw-h4\">Placeholder — management section heading</h3>"
 "columnId": 1
