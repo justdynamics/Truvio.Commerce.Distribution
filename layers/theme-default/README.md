@@ -59,6 +59,13 @@ dropdowns.
 | `--dw-color-accent` (+ `-rgb` / `-contrast`) per scheme | The brand accent slot consumed by `.text-accent` / `.bg-accent` / `.dw-eyebrow` |
 | class `td-header-overlay` on any element inside the page header | Turns the sticky bar into a floating/transparent overlay header with a hero-behind composition (block #16): fixed bar, one rounded pill painted by `::before` with **no** `overflow:hidden`, DOM-keyed clearance, top-anchored first-row poster crop. Tune with `--td-bar-top` / `--td-bar-inset` / `--td-bar-h` / `--td-bar-h-phone` / `--td-bar-radius` / `--td-bar-bg` / `--td-container-cap`. |
 | class `td-visually-hidden` on a label | The sanctioned visually-hidden idiom (`clip` + `clip-path`, no `overflow`) — safe inside the header, keeps the accessible name |
+| `data-td-full-bleed` on a grid row or any ancestor of one | Opts a width-4 row OUT of the main-scoped gutter restore (block #21), returning `--dw-container-gutter` to `0rem`. For rows that are meant to touch the viewport edge: posters, full-width image bands, maps. |
+
+Block #21 also applies without any opt-in: in stock Swift, ContainerWidth 4 sets
+`--dw-container-gutter: 0rem` and re-adds `calc(2rem)` only under the header and footer, so a
+width-4 Text or product-list row in `main` renders at x=0. The block restores `calc(2rem)` in
+`main`, excluding nested containers and anything marked `data-td-full-bleed`. It restores the
+gutter, never the width.
 
 ## Not fixable from a theme — upstream asks
 

@@ -123,6 +123,76 @@
       },
       "description": "OPTIONAL declared content footprint - the fragmentTables analog for pages (WR-03 philosophy: declared footprint gates what may land). Every providerType=Content entry in a shipped fragment manifest must match a declared entry (areaId + path) or activation fails before any POST. Layers shipping no _content omit this field."
     },
+    "sql": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "mode", "phase", "order", "description"],
+        "properties": {
+          "file": {
+            "type": "string",
+            "pattern": "^_sql/[a-zA-Z0-9._-]+\\.sql$",
+            "description": "Path to the script relative to the layer's mode tree (<layer>/<mode>/). Charset-constrained; traversal sequences ('..') are rejected by the pattern."
+          },
+          "mode": {
+            "enum": ["replace", "merge"],
+            "description": "Which mode tree the script is staged under. It selects the staging directory only: a loose script is executed by the applier, never by the serializer's manifest-driven deserialize."
+          },
+          "phase": {
+            "enum": ["before-host-start", "after-replace-deserialize", "after-merge-deserialize"],
+            "description": "When the applier must execute the script relative to the composition run. before-host-start = the rows must exist before Dynamicweb caches state at startup (identity/permission rows). after-replace-deserialize = the script FKs against framework rows the base replace tree lands (shop, currency, country). after-merge-deserialize = the script depends on merge-tree rows."
+          },
+          "order": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Execution order within a phase, ascending. Distinct per phase within a layer."
+          },
+          "description": {
+            "type": "string",
+            "description": "What the script inserts, in one line. Read by a human deciding whether the layer belongs in an edition."
+          },
+          "idempotent": {
+            "type": "boolean",
+            "description": "The script is safe to re-run against an already-seeded database (IF NOT EXISTS upserts or DELETE+INSERT on its own reserved keys). An applier may refuse to re-run a script that does not declare this."
+          },
+          "transactional": {
+            "type": "boolean",
+            "description": "The script wraps its work in a transaction with SET XACT_ABORT ON, so a mid-script failure leaves no partial seed."
+          },
+          "requiresHostRestart": {
+            "type": "boolean",
+            "description": "The host must be restarted after the script runs for the rows to become first-class (Dynamicweb's startup catalog/identity caches do not see rows inserted underneath a running host)."
+          },
+          "sqlcmdVariables": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["name", "description"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_]*$",
+                  "description": "sqlcmd variable name the script references as $(Name)."
+                },
+                "secret": {
+                  "type": "boolean",
+                  "description": "The value is a credential the caller supplies at apply time. Secret values are never repo content and are never logged."
+                },
+                "description": {
+                  "type": "string",
+                  "description": "What the caller must supply."
+                }
+              }
+            },
+            "description": "sqlcmd variables the script requires. An applier that cannot supply every declared variable must fail before executing the script, not substitute a blank."
+          }
+        }
+      },
+      "description": "OPTIONAL declared loose T-SQL scripts the layer ships under <mode>/_sql/*.sql, and the discovery contract for them. The serializer manifest has NO provider for a whole script: its only providerTypes are 'Content' and 'SqlTable', and SqlTable is row-per-YAML under _sql/<Table>/<key>.yml. A loose .sql therefore carries no <mode>-manifest.json entry and the manifest-driven deserialize never executes it, so a composer that reads only the manifests stages the file and silently runs nothing. This array is what a composer reads instead: it names each script, when to execute it, in what order, and what the caller must supply. A layer that ships a loose .sql under a mode tree MUST declare it here. The fragmentTables/fragmentContent/files analog for executable scripts.",
+      "minItems": 1
+    },
     "files": {
       "type": "array",
       "items": {

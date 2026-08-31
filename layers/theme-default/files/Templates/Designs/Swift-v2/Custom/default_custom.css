@@ -1076,3 +1076,66 @@ body:has([data-swift-page-header] .td-header-overlay) main > section:first-child
  *     ships a product carrying a gallery video to prove it against.
  *     --- */
 [data-td-block="20"] { --td-block: 20; }
+
+/* =============================================================================
+ * #21 CONTAINER WIDTH 4 IN MAIN — full width and edge-to-edge are the SAME
+ * setting in stock Swift, so restore the gutter (Foundry #545).
+ *
+ * Stock swift.css declares
+ *   [data-dw-container-width="4"]{--dw-container-width:100% !important;
+ *                                 --dw-container-gutter:0rem}
+ * and then re-adds the gutter ONLY under the header and footer landmarks:
+ *   :is(header,[data-dw-itemtype=swift-v2_header],
+ *       footer,[data-dw-itemtype=swift-v2_footer])
+ *     [data-dw-container-width="4"]{--dw-container-gutter: calc(2rem)}
+ *
+ * Width 4 is designed for a row whose PARAGRAPH supplies its own inset — a poster
+ * carries --swift-poster-padding. A Text, Feature or product-list row at width 4
+ * has none, and Swift's other padding mechanism, --swift-content-padding, only
+ * applies to grid columns carrying a colour scheme. So a site-wide "make it full
+ * width" pass puts main content at x=0: measured on /en-ca/about, the H1 and body
+ * copy went from a 24px edge gap to 0px at 1440, and at 390 the breadcrumb,
+ * product titles and the primary CTA all went from 16px to 0px.
+ *
+ * RESTORE THE GUTTER, NEVER THE WIDTH. Narrowing --dw-container-width back would
+ * cancel the setting the author chose; re-adding --dw-container-gutter keeps the
+ * band full-bleed while the content inside it breathes. The value is calc(2rem),
+ * Swift's own header/footer value, so main matches the chrome instead of
+ * introducing a third measure.
+ *
+ * Two exclusions, both deliberate:
+ *   - NESTED containers. A width-4 container inside another width-4 container
+ *     would add a second gutter on top of the inherited one and double the inset.
+ *     Custom properties inherit, so the nested container already receives the
+ *     ancestor's value; its own stock 0rem then wins for its own box, which is
+ *     the correct outcome.
+ *   - DELIBERATE full-bleed rows. A poster, a full-width image band or a map is
+ *     supposed to touch the viewport edge. Mark the row (or any ancestor of it)
+ *     with data-td-full-bleed — the CSS-class/attribute field of the grid row in
+ *     the Visual Editor is enough, no template edit and no serialized DB content
+ *     of ours — and the opt-out rule below returns it to zero.
+ *
+ * Header and footer are untouched: they already carry Swift's own calc(2rem)
+ * re-add, and nothing here is scoped outside main.
+ *
+ * Validation is measured, never eyeballed: record edgeGap per container per
+ * viewport before and after (Foundry scripts/b9-measure.mjs), and assert
+ * main, header and footer all report a 16px edge gap at 1440/1920/2512/390 with
+ * body overflow 0.
+ *
+ * Rejected: shipping zero gutter as "what stock Swift does" — it is measurably
+ * broken on mobile and on left-aligned desktop copy. Also rejected: giving every
+ * row a colour scheme to trigger --swift-content-padding, which paints
+ * backgrounds nobody asked for.
+ * ========================================================================== */
+[data-td-block="21"] { --td-block: 21; }
+
+main [data-dw-container-width="4"]:not([data-dw-container-width="4"] [data-dw-container-width="4"]) {
+  --dw-container-gutter: calc(2rem);
+}
+
+/* Opt-out: a row that is MEANT to bleed to the edge. */
+main [data-dw-container-width="4"][data-td-full-bleed],
+main [data-td-full-bleed] [data-dw-container-width="4"] {
+  --dw-container-gutter: 0rem;
+}

@@ -1,7 +1,54 @@
 {
   "name": "sample-data",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
-  "repositoryName": "Products"
+  "repositoryName": "Products",
+  "sql": [
+    {
+      "file": "_sql/identities.sql",
+      "mode": "merge",
+      "phase": "before-host-start",
+      "order": 1,
+      "description": "Permission groups 1325 Customers / 1270 Account Admin / 1292 CSR, buyer 1328 (customer number 98745621), CSR 1326 (customer number 7789765), and their group memberships.",
+      "idempotent": true,
+      "transactional": true,
+      "requiresHostRestart": false,
+      "sqlcmdVariables": [
+        { "name": "BuyerUserName", "secret": false, "description": "Frontend buyer login name (canonical: IMCUser)." },
+        { "name": "BuyerPassword", "secret": true, "description": "Buyer demo password. Never repo content, never logged." },
+        { "name": "CsrPassword", "secret": true, "description": "CSR demo password. Never repo content, never logged." }
+      ]
+    },
+    {
+      "file": "_sql/catalog.sql",
+      "mode": "merge",
+      "phase": "after-replace-deserialize",
+      "order": 1,
+      "description": "Demo shop catalogue for SHOP1/ENU/EUR: 3 groups, 20 products (14 masters + 6 Size variants), the qty-tier ladder, the buyer contract price FIXT-PRICE-CONTRACT, and the delivered order FIXT-ORDER-RMA1 the RMA flow returns against.",
+      "idempotent": true,
+      "transactional": true,
+      "requiresHostRestart": true
+    },
+    {
+      "file": "_sql/email-stats.sql",
+      "mode": "merge",
+      "phase": "after-replace-deserialize",
+      "order": 2,
+      "description": "Email-marketing statistics backfill: per campaign email a send-log message, 24 recipients (2 bounced), 3 tracked links and 13 clicks, so the backend Marketing dashboards do not read 0 sent / 0 clicked. Discovery-driven, and a clean no-op when the composition ships no campaign emails.",
+      "idempotent": true,
+      "transactional": true,
+      "requiresHostRestart": false
+    },
+    {
+      "file": "_sql/demo-clock.sql",
+      "mode": "merge",
+      "phase": "after-replace-deserialize",
+      "order": 3,
+      "description": "The demo clock: the _demoClock anchor table, the exclusion and per-column guard tables, usp_DemoClockShift (discovers every operational date column from sys.columns and shifts it by whole days), and the daily RunSql scheduled task that runs it. Keeps every seeded date anchored to today after idle days.",
+      "idempotent": true,
+      "transactional": true,
+      "requiresHostRestart": true
+    }
+  ]
 }

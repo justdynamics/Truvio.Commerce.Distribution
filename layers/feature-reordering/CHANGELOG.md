@@ -1,5 +1,33 @@
 # Changelog — feature-reordering
 
+## 1.0.2
+
+**Fix: the Quick Order pad binds `ProductsFrontend`, the repository that is actually on disk
+(Foundry #576).** The pad's `eCom_ProductCatalog` paragraph shipped
+`<IndexQuery>/Files/System/Repositories/Products/Products.query</IndexQuery>`, and no install
+provisions a `Products` repository. A query file that is not on disk returns HTTP 200 with an EMPTY
+body rather than an error, so the pad's own validation feed
+(`GET <padPage>?feed=true&q=<sku>`) matched nothing and every typed or pasted SKU, including
+baseline ones, read "Unknown SKU — excluded from cart". The pad could never fill a cart.
+
+- **Change.** `merge/_content/Swift 2/Navigation/Secondary Navigation/Quick Order/grid-row-1/paragraph-c1-1.yml`
+  now names `/Files/System/Repositories/ProductsFrontend/Products.query`, byte-for-byte the binding
+  every working sibling already uses: `surface-swift`'s Express Buy and Shop PLP, and
+  `feature-bom-configurator`'s Kit Configurator.
+- **`repositoryName` corrected** to `ProductsFrontend` in `layer.json` so the declaration matches the
+  binding the layer ships. The `sku-validation` probe exercises this feed.
+- **Why the gate missed it.** The 1.0.x probes asserted that `/swift-2/quick-order` emits
+  `name="cartcmd" value="addmulti"`, which stayed true for the whole time the pad was dead. The
+  `sku-validation` probe is the one that reads the feed body; it is the composition-failure detector
+  for this class of defect.
+- **Verification on any install:** `SELECT ParagraphId, ParagraphModuleSettings FROM Paragraph WHERE
+  ParagraphModuleSystemName = 'eCom_ProductCatalog'`, then confirm every `<IndexQuery>` names a
+  repository that is on disk. Probe the feed with `curl -L` (the `/Default.aspx?ID=` form
+  301-redirects to the friendly URL and returns 0 bytes without it).
+- **`feature-reordering-pricing` deliberately NOT touched.** It carries the identical defect but is
+  tombstoned at `1.2.1` and pinned by no edition; its deprecation entry holds the version unchanged
+  for one release.
+
 ## 1.0.1
 
 **Investigation + ledger entry: the Quick Order `Template file not found` log line is stock-Swift

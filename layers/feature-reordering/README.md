@@ -22,8 +22,11 @@ whatever user-scoped price the index feed returns and posts to the cart unchange
 
 ## Catalog dependency (sample-data)
 
-The pad validates SKUs against the gate-provisioned **Products** repository feed (the same feed Express
-Buy uses). The `sku-validation` probe resolves the sample-data catalog SKU **`FIXT-0001`**, so the
+The pad validates SKUs against the **ProductsFrontend** repository feed (the same feed Express Buy, the
+Shop PLP and the Kit Configurator use). `ProductsFrontend/Products.query` is what the Swift files
+overlay deploys and what every working sibling `eCom_ProductCatalog` paragraph binds; a
+`<IndexQuery>` naming a repository that is not on disk yields an empty feed body with HTTP 200 and no
+error, so every SKU reads "Unknown SKU". The `sku-validation` probe resolves the sample-data catalog SKU **`FIXT-0001`**, so the
 layer's live probes require an edition with `sampleData: true` (e.g. `swift-demo`). The **content
 fragment deserialize is isolated** (the Quick Order pages attach only to base-provided structural
 ancestors — area, Navigation, Secondary Navigation — never re-shipping them, per the base-contract
