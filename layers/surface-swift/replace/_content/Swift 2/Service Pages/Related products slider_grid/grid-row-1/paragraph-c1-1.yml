@@ -1,0 +1,42 @@
+﻿"paragraphUniqueId": 32f2087f-6b69-4745-9639-dfa1ffccbb64
+"sourceParagraphId": 90004
+"sortOrder": 1
+"itemType": "Swift-v2_App"
+"header": "App"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": "eCom_ProductCatalog"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <IndexQuery>/Files/System/Repositories/ProductsFrontend/Products.query</IndexQuery>
+    <TrackQueries>0</TrackQueries>
+    <FacetGroups></FacetGroups>
+    <ShowFacetOptionsWithNoResults>0</ShowFacetOptionsWithNoResults>
+    <QueryConditions>[]</QueryConditions>
+    <QuerySortByParams>[]</QuerySortByParams>
+    <UseGroupSortInGroupContext>0</UseGroupSortInGroupContext>
+    <FieldToSpellCheck></FieldToSpellCheck>
+    <ParameterToSpellCheck></ParameterToSpellCheck>
+    <PageSize>30</PageSize>
+    <ProductListTemplate>ProductSlider.cshtml</ProductListTemplate>
+    <ProductTemplate></ProductTemplate>
+    <CompareTemplate></CompareTemplate>
+    <FeedTemplate></FeedTemplate>
+    <SelectedPriceProperties></SelectedPriceProperties>
+    <SelectedProductProperties></SelectedProductProperties>
+    <SelectedProductListProperties></SelectedProductListProperties>
+    <SelectedAssetCategories></SelectedAssetCategories>
+    <SelectedAssets></SelectedAssets>
+    <SelectedVariantInfo></SelectedVariantInfo>
+    <SelectedStockUnits></SelectedStockUnits>
+    <SelectedProductFields></SelectedProductFields>
+    <SelectedProductCategoryFields></SelectedProductCategoryFields>
+  </Settings>
+"fields":
+  "GlobalRecordPageGuid": "5bca251c-fd8b-4801-85c6-79a54d352b5b"
+  "Id": "100701"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": ""
+"columnId": 1
