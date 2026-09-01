@@ -1,5 +1,13 @@
 # Changelog — base
 
+## 3.2.1
+
+Patch: the serializer config `swift-2.4.json` renames its output-subfolder keys onto the
+0.9.0 engine names (`replaceOutputSubfolder` / `mergeOutputSubfolder`). The 0.8.x names
+(`deployOutputSubfolder` / `seedOutputSubfolder`) are dead keys the loader ignores while
+silently defaulting both values, so the config declared intent the engine never read.
+Output paths are unchanged (the defaults matched). Foundry #561.
+
 ## 3.2.0
 
 `base.contract.json` `repositories` now names the repository the composition actually binds:

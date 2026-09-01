@@ -1,5 +1,12 @@
 # Changelog — surface-swift
 
+## 1.5.1
+
+Patch: the serializer config `swift-content-2.4.json` renames its output-subfolder keys onto
+the 0.9.0 engine names (`replaceOutputSubfolder` / `mergeOutputSubfolder`); the 0.8.x names
+are dead keys the loader ignores while silently defaulting both values. Output paths are
+unchanged (the defaults matched). Foundry #561.
+
 ## 1.5.0
 
 Four defects the layer shipped since the base split: a dead PDP band, an open CSR gate, two
