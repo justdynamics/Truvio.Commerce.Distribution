@@ -1,9 +1,9 @@
 {
   "name": "feature-reordering",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "kind": "feature",
   "swiftVersion": "2.4.0",
-  "repositoryName": "Products",
+  "repositoryName": "ProductsFrontend",
   "fragmentModes": [
     "merge"
   ],

@@ -9,7 +9,7 @@
 "moduleSettings": |-
   <?xml version="1.0" encoding="utf-8"?>
   <Settings>
-    <IndexQuery>/Files/System/Repositories/Products/Products.query</IndexQuery>
+    <IndexQuery>/Files/System/Repositories/ProductsFrontend/Products.query</IndexQuery>
     <TrackQueries>0</TrackQueries>
     <FacetGroups></FacetGroups>
     <ShowFacetOptionsWithNoResults>0</ShowFacetOptionsWithNoResults>

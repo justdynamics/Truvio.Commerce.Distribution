@@ -1,5 +1,85 @@
 # Changelog — sample-data
 
+## 2.2.0
+
+Two things this layer promised and never delivered: a composer could not FIND its SQL, and
+what the SQL seeded went stale the week after it landed.
+
+**The loose scripts are now declared and discoverable (Foundry #427).** `merge/_sql/*.sql`
+carried no `merge-manifest.json` entry, so a `sampleData: true` composition staged the
+files and executed nothing: DemoAgent's `Compose-Edition` reported `{replace:0, merge:0},
+files 3`, the storefront came up with 8 products (all feature-layer fixtures) and no
+sample-data catalogue, and the flag lied end to end. The Foundry gate never saw it because
+it seeds both scripts by explicit path.
+
+The serializer manifest has no shape for a loose script. Its only `providerType`s are
+`Content` and `SqlTable`, and `SqlTable` is row-per-YAML under `_sql/<Table>/<key>.yml`, so
+there was nothing to add an entry to. The fix is a new **`sql[]` declaration in
+`layer.json`**, added to `layers/layer.schema.json` alongside `fragmentTables` /
+`fragmentContent` / `files`: per script the file, the mode tree, the phase
+(`before-host-start` / `after-replace-deserialize` / `after-merge-deserialize`), the order
+within that phase, whether the host must be restarted afterwards, and every `sqlcmd`
+variable the caller must supply. A layer shipping a loose `.sql` under a mode tree must now
+declare it there.
+
+**The demo clock ships (Foundry #25).** `demo-clock.sql` creates the `_demoClock(Id,
+AnchoredTo)` anchor table, `usp_DemoClockShift`, and the daily `Truvio demo clock` task on
+the stock `RunSqlScheduledTaskAddIn`.
+
+- The shift is **whole-day and uniform**: every operational date column moves by
+  `DATEDIFF(day, AnchoredTo, today)`, which preserves intra-day ordering and every relative
+  gap, then the shifter re-anchors its own row. Idempotent (`+1` then `-1` nets zero) and
+  catch-up safe after idle days.
+- Date columns are **discovered from `sys.columns` on every run**, never hardcoded: a
+  reference build shifted 142 columns across 49 tables, every commerce feature spells its
+  timestamps differently, and discovery is what keeps the shifter correct across a platform
+  upgrade.
+- Config and logging tables are excluded through `dbo._demoClockExclusion`, `ScheduledTask`
+  first among them: `TaskNextRun` is what the scheduler reads, and the clock's own run
+  history must stay readable. Sentinel values outside `[1900-01-02, 2900-01-01)` are left
+  alone, so a `9999-12-31` never overflows `DATEADD` and aborts the batch.
+- State-marker columns carry a guard in `dbo._demoClockGuard`. `GiftCardCancel` writes no
+  reversing transaction and sets no status flag: it cancels by rewriting
+  `GiftCardExpiryDate` to now and keeping the balance, so on a cancelled card that column is
+  a cancellation timestamp. The shipped guard shifts only cards still in the future, and a
+  cancelled card still reads inactive after a run.
+- The task's `TaskAddInSettings` value is `EXEC dbo.usp_DemoClockShift;` — the shift SQL
+  lives in the procedure precisely so the literal XML carries no metacharacter to escape.
+
+**The email-marketing statistics backfill ships (Foundry #25).** `email-stats.sql` seeds,
+per campaign email, one `EmailMessage` send-log row, 24 `EmailRecipient` sends of which 2
+carry a delivery error, 3 tracked `OMCLink` rows and 13 `OMCLinkClick` clicks split 5/4/4
+across the links, so the backend Marketing dashboards read as a real campaign instead of 0
+sent / 0 clicked.
+
+- The grid joins are the whole difficulty and are now carried in the script:
+  `RecipientStatisticsByEmail` resolves recipients through
+  `EmailMarketingEmail.EmailOriginalMessageId` = `EmailRecipient.RecipientMessageId` (NOT
+  `EmailMessageId`), and per-recipient clicked is a count over `OMCLinkClick` joined to
+  `OMCLink` where `LinkReferenceKey` is the message id as a string, `LinkReferenceType` is
+  `EmailMessaging`, and `LinkClickClickerKey` is the recipient id as a string. Either key
+  alone yields 0.
+- **Opened is pixel-only and is not attempted.** The per-recipient opened column and the
+  `EmailById` aggregates are materialized by the live open-tracking pixel handler and are
+  not reproducible from raw SQL.
+- The backfill is **discovery-driven**: it seeds every `EmailMarketingEmail` row with no
+  send history and is a clean no-op on a composition that ships none. sample-data authors no
+  campaign emails of its own, and an addition binds to the base contract, never to another
+  layer's rows.
+- Idempotent through a marker: every row it writes carries
+  `EmailMessage.MessageDomainUrl = 'https://sample-data.example.invalid'`, and the script
+  deletes its own marked rows before re-seeding. An email whose send history points at an
+  unmarked message is left alone, so a real send is never overwritten.
+
+Unchanged: every reserved key (`FIXT*` / `FIXTGRP*` / `FIXT-PRICE-*`), every product number,
+every price, the variant structure, and the `EcomProducts = 20` / `EcomGroups = 3`
+determinism contract. Minor bump: two new scripts and a new declaration, no existing shape
+moved.
+
+New reserved names owned by this layer: `dbo._demoClock`, `dbo._demoClockExclusion`,
+`dbo._demoClockGuard`, `dbo.usp_DemoClockShift`, the `ScheduledTask` row named
+`Truvio demo clock`, and the `FIXT-RCPT-*` recipient key prefix.
+
 ## 2.1.0
 
 The demo catalogue carries no real-world product domain. `catalog.sql` seeded 20 products

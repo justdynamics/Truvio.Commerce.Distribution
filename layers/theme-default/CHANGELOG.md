@@ -1,5 +1,36 @@
 # theme-default changelog
 
+## 1.3.3
+
+**ContainerWidth 4 keeps a gutter in main (Foundry #545).** In stock Swift, full width and
+edge-to-edge are the same setting: `swift.css` declares
+`[data-dw-container-width="4"]{--dw-container-width:100% !important;--dw-container-gutter:0rem}`
+and re-adds `calc(2rem)` only under the header and footer landmarks. Width 4 is designed for
+rows whose paragraph supplies its own inset (a poster has `--swift-poster-padding`); a Text,
+Feature or product-list row at width 4 has none, and `--swift-content-padding` only applies
+to grid columns carrying a colour scheme. A site-wide "make it full width" pass therefore put
+main content at x=0: measured on `/en-ca/about`, the H1 and body copy went from a 24px edge
+gap to 0px at 1440, and at 390 the breadcrumb, product titles and the primary CTA all went
+from 16px to 0px.
+
+New block #21 restores the gutter in `main` only, at `calc(2rem)` — Swift's own header/footer
+value, so main matches the chrome instead of introducing a third measure. The width is left
+alone: narrowing `--dw-container-width` back would cancel the setting the author chose.
+
+- **Nested containers are excluded.** A width-4 container inside another would add a second
+  gutter on top of the inherited custom property and double the inset.
+- **Deliberate full-bleed rows opt out** with `data-td-full-bleed` on the row or any ancestor
+  (the CSS-class/attribute field of the grid row in the Visual Editor is enough). Posters,
+  full-width image bands and maps are supposed to touch the edge.
+- Header and footer are untouched: nothing in the block is scoped outside `main`, and they
+  already carry Swift's own `calc(2rem)` re-add.
+
+Disk-overlay only (SPEC-06): one block appended to `default_custom.css`, no template edit and
+no serialized DB content. P4 button `:not()` chains, P5 footer scoping and P10 nav scoping
+untouched. Validate by measuring, not by eye: record edgeGap per container per viewport before
+and after and assert main, header and footer all report a 16px edge gap at 1440/1920/2512/390
+with body overflow 0.
+
 ## 1.3.2
 
 **Breadcrumb contrast — the theme's own alpha stacking (Foundry #145's class,
