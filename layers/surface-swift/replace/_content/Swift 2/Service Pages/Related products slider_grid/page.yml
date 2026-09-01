@@ -5,6 +5,7 @@
 "sortOrder": 6
 "isActive": false
 "itemType": "Swift-v2_Page"
+"layout": "Swift-v2_PageClean.cshtml"
 "layoutApplyToSubPages": false
 "isFolder": false
 "isTemplate": false

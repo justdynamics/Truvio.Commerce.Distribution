@@ -38,6 +38,8 @@
   - Navigation
   - Express Buy
   - Home preset
+  - Related products list
+  - Related products slider/grid
 - path: 1ColumnFlex
   kind: grid-row
   referencedBy:
@@ -91,6 +93,8 @@
   - Shop
   - Add credit card
   - Search result page
+  - Related products list
+  - Related products slider/grid
 - path: Swift-v2_BreadcrumbNavigation
   kind: item-type
   referencedBy:
@@ -233,10 +237,6 @@
   kind: item-type
   referencedBy:
   - Product Details
-- path: Swift-v2_ProductFieldDisplayGroupsAccordion
-  kind: item-type
-  referencedBy:
-  - Product Info (right side)
 - path: Swift-v2_ProductHeader
   kind: item-type
   referencedBy:
@@ -323,6 +323,8 @@
   - Search result page
   - Express Buy
   - Home preset
+  - Related products list
+  - Related products slider/grid
 - path: Swift-v2_RowFlex
   kind: item-type
   referencedBy:
@@ -367,3 +369,5 @@
   referencedBy:
   - Content search results
   - Product and content search results
+  - Related products list
+  - Related products slider/grid

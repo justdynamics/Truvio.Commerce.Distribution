@@ -1,0 +1,157 @@
+@inherits ViewModelTemplate<FavoriteListViewModel>
+@using Dynamicweb.Frontend
+@using Dynamicweb.Rendering
+@using Dynamicweb.Ecommerce.Frontend
+@using Dynamicweb.Ecommerce.ProductCatalog
+@using Dynamicweb.Ecommerce.CustomerExperienceCenter.Favorites
+@using System.Globalization
+
+@{
+	string baseUrl = SearchEngineFriendlyURLs.GetFriendlyUrl($"default.aspx?ID={Pageview?.Page?.ID}");
+}
+
+<nav aria-label="breadcrumb">
+	<ol class="breadcrumb mb-4">
+		<li class="breadcrumb-item"><a href="@(baseUrl)">@(Pageview?.Page?.GetDisplayName())</a></li>
+		<li class="breadcrumb-item active" aria-current="page">@(!string.IsNullOrEmpty(Model?.Name) ? Model.Name : (Translate("Untitled") + " #" + Model?.Id))</li>
+	</ol>
+</nav>
+
+<div class="card mb-4" data-swift-favorite-list>
+	<div class="card-body">
+		<div class="hstack justify-content-between">
+
+			<div class="vstack flex-grow-0">
+
+				<div class="hstack gap-2 mb-2" data-swift-rename-favorite-list>
+					<h1 class="h5 m-0">@(!string.IsNullOrEmpty(Model?.Name) ? Model.Name : (Translate("Untitled") + " #" + Model?.Id))</h1>
+					<button class="btn btn-icon rounded-circle"
+						hx-get="/dwapi/ecommerce/favorites/lists/@(Model?.Id)"
+						hx-headers='{"x-dw-template": "/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RenameFavoriteListModal.cshtml", "x-dw-culture": "@(Pageview?.Area?.CultureInfo?.Name)", "accept": "text/html"}'
+						hx-target="main"
+						hx-swap="beforeend"
+						hx-ext="swift-auth"
+						data-bs-toggle="tooltip"
+						data-bs-title="@Translate("Edit favorite list")"
+					>
+						<span class="icon">
+							@ReadFile("/Files/Images/Icons/pen.svg")
+						</span>
+					</button>
+				</div>
+
+				<div class="vstack">
+					@if (!string.IsNullOrEmpty(Model?.Description))
+					{
+						<p class="dw-h6 lh-1 mb-2">@(Model.Description)</p>
+					}
+					<small class="hstack gap-2 text-muted lh-1 mb-0">
+						<span>@(Model?.ProductList?.TotalProductsCount) @Translate(Model?.ProductList?.TotalProductsCount == 1 ? "product" : "products")</span>
+						@if (Model?.Created is not null)
+						{
+							<span>·</span><span>@(Model?.Created?.ToString(Pageview?.Area?.CultureInfo?.DateTimeFormat?.ShortDatePattern) ?? "-")</span>
+						}
+					</small>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+	<hr class="text-muted mx-4 my-0">
+	
+	<div class="card-body table-responsive">
+		<table class="table">
+			<thead>
+				<tr>
+					<th>@Translate("Item")</th>
+					<th class="text-center">@Translate("Unit")</th>
+					<th class="text-end">@Translate("Qty")</th>
+					<th class="text-end">@Translate("Price")</th>
+					<th class="text-end">@Translate("Actions")</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if (Model?.GetFavoriteProducts() is not null && Model.GetFavoriteProducts()?.Any() is true)
+				{
+					foreach (var favoriteProduct in Model?.GetFavoriteProducts())
+					{
+						var product = favoriteProduct?.GetProduct();
+						<tr>
+							<td>
+								<div class="hstack gap-3">
+									@if(product?.DefaultImage.TryGetImageFileViewModel(out var image) is true)
+									{
+										<div class="img-thumbnail">
+											<img src="@(image?.ToGetImage(new(){Height = 30, Width = 30, Ratio = "1/1", Crop = Dynamicweb.Imaging.ImageHandling.CropMode.KeepAspectRatio }))" alt="@(product.Name)">
+										</div>
+									}
+									
+									<div class="vstack my-auto">
+										<span class="text-wrap-nowrap fw-bold">@(product?.Name)</span>
+										<div class="text-muted">
+											<span>@(product?.Number)</span>
+											@if (!string.IsNullOrEmpty(product?.VariantName))
+											{
+												<span>- @(product?.VariantName)</span>
+											}
+										</div>
+									</div>
+								</div>
+							</td>
+
+							<td class="text-center">@(favoriteProduct?.UnitId)</td>
+							<td class="text-end">@(favoriteProduct?.Quantity)</td>
+							
+							<td class="text-end text-price">@(product?.Price.PriceFormatted)</td>
+							
+							<td class="">
+								<div class="hstack gap-2 justify-content-end">
+									<button type="button" class="btn btn-sm btn-outline-secondary border-0 text-reset hstack gap-2 p-2" data-dw-button
+										hx-get
+										hx-vals='{"cartcmd": "add", "productid": "@(favoriteProduct?.ProductId)", "variantid": "@(favoriteProduct?.ProductVariantId)"}'
+										hx-swap="none"
+										hx-replace-url="false"
+									>
+										<span class="icon">
+											@ReadFile("/Files/Images/Icons/cart-shopping.svg")
+										</span>
+									</button>
+									
+									<button type="button" class="btn btn-sm btn-outline-secondary border-0 text-reset hstack gap-2 p-2" data-dw-button
+										hx-get="/dwapi/ecommerce/favorites/lists/@(Model?.Id)"
+										hx-vals='{"userId": @(Pageview?.User?.ID), "productName": "@(product?.Name)", "productid": "@(favoriteProduct?.ProductId)", "variantid": "@(favoriteProduct?.ProductVariantId)"}'
+										hx-headers='{"x-dw-template": "/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RemoveFavoriteProductModal.cshtml", "x-dw-culture": "@Pageview?.Area?.CultureInfo?.Name", "accept": "text/html"}'
+										hx-target="main"
+										hx-swap="beforeend"
+										hx-ext="swift-auth"
+                                        hx-replace-url="false"
+									>
+										<span class="icon">
+                                            @ReadFile("/Files/Images/Icons/heart-filled.svg")
+                                        </span>
+									</button>
+								</div>
+							</td>
+						</tr>
+					}
+				}
+				else 
+				{
+					<tr>
+						<td class="text-center py-5" colspan="5">
+							<div data-swift-empty-state>
+								<div data-swift-empty-state-icon>
+									<span class="icon">
+										@ReadFile("/Files/Images/Icons/file-contract.svg")
+									</span>
+								</div>
+								<div>@Translate("No items")</div>
+							</div>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

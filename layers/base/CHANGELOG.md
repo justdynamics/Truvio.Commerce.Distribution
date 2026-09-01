@@ -1,5 +1,35 @@
 # Changelog — base
 
+## 3.2.0
+
+`base.contract.json` `repositories` now names the repository the composition actually binds:
+**`ProductsFrontend`**, at `wwwroot/Files/System/Repositories/ProductsFrontend/`, carrying
+`Products.index` / `Products.query` / `Products.facets`. `provisionedByGate` drops to `false`
+because no layer in this Distribution ships the repository at all: it arrives with the host's
+Swift design package. Minor bump, not patch, because the contract every addition binds to
+changes what it names.
+
+Evidence:
+
+- The Swift 2.4.0 design package ships `Files/System/Repositories/ProductsFrontend/` (with
+  `Products.query`, `Products.facets`, `Products.index`) and `ProductsBackend/`. It ships no
+  `Products` repository. Verified against the `v2.4.0` tag of `dynamicweb/Swift` and against a
+  local `v2.4.0` Files overlay.
+- No layer here ships `Files/System/Repositories/**` for the storefront. The only repository
+  definition in the tree is `surface-headless/repositories/Headless/`, a different repository.
+- Six shipped `eCom_ProductCatalog` surfaces bind `ProductsFrontend` by path: `surface-swift`
+  Shop PLP (`IndexQuery` + `FacetGroups`), desktop header search, Express Buy;
+  `surface-dap-portal` Product Assets and Search results; `feature-bom-configurator` Kit
+  Configurator.
+- Field runs on two hosts (`daye`, `agrihub`) found no `Products` repository on either, and a
+  `/shop` that returned HTTP 200 with an in-page Lucene `numHits must be > 0` error until
+  `ProductsFrontend` was built.
+
+`layers/base/layer.json` `repositoryName` follows the contract (`Products` -> `ProductsFrontend`),
+`BASE.md` restates the same shape, and `layers/layer.schema.json` documents the field against the
+contract instead of asserting a `Products` default. The `feature-reordering` Quick Order pad still
+binds a bare `Products` repository; that leg is tracked separately and is not changed here.
+
 ## 3.1.3
 
 `EcomCountries` CA / NO / SE carried `CountryCurrencyCode` values (CAD, NOK, SEK) that no

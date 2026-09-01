@@ -1,5 +1,63 @@
 # Changelog — surface-swift
 
+## 1.5.0
+
+Four defects the layer shipped since the base split: a dead PDP band, an open CSR gate, two
+service pages with no renderer, and no design-template overlay at all.
+
+- **The PDP field-display-group band is gone.** `Product Components/Product Info (right side)/`
+  `grid-row-5` held one `Swift-v2_ProductFieldDisplayGroupsAccordion` paragraph naming
+  `FieldDisplayGroups: ["MainFeatures","All_specs"]`. No layer in this Distribution ships an
+  `EcomFieldDisplayGroup` table, so neither group has ever resolved and the band rendered empty
+  on every fresh deserialize, in every edition. The paragraph was the row's only occupant, so
+  the row goes with it rather than leaving an empty band under a live heading. Wiring display
+  groups to a customer data model is a re-skin step, not something the shipped PDP asserts.
+  `templates.manifest.yml` drops the now-unreferenced
+  `Swift-v2_ProductFieldDisplayGroupsAccordion` entry.
+- **The CSR customer-center subtree is gated, not deny-listed.** `Customer center/CSR/page.yml`
+  denied three named groups (Account Admin, Customers, Anonymous) and granted the CSR group,
+  with no `AuthenticatedFrontend` entry, while the parent `Customer center` grants
+  `AuthenticatedFrontend` read. A signed-in user in none of the denied groups matched no rule,
+  inherited the blanket read, and could open `/csr/accounts` and see another company's account
+  grid. Deny-listing named groups does not gate a page. The CSR page now carries an explicit
+  `AuthenticatedFrontend -> none` alongside its `CSR -> all` grant, and the four CSR-only child
+  pages (`Accounts`, `Carts`, `Orders`, `Users`), which previously carried no permission block
+  at all, carry the same explicit pair instead of inheriting.
+- **The two related-product service pages have a renderer.** `Service Pages/Related products list`
+  (tag `RelatedProductsListService`) and `Service Pages/Related products slider_grid` (tag
+  `ProductSliderService`) shipped as bare `page.yml` records with zero grid rows and zero
+  paragraphs, so the POST `swift.PageUpdater` sends them returned HTTP 200 and 0 bytes and every
+  `Swift-v2_ProductComponentSlider` on the site painted nothing, including the stock "Others also
+  bought" slider. Each page now carries a `1Column` grid row and one `Swift-v2_App` paragraph
+  running `eCom_ProductCatalog` against
+  `/Files/System/Repositories/ProductsFrontend/Products.query`, with `ProductListTemplate` set to
+  the template the injector expects: `ProductSlider.cshtml` on the slider page (it dispatches on
+  the `ProductListPartial` request parameter to `ProductSliderComponent` / `ProductGridComponent`)
+  and `RelatedProductsList.cshtml` on the list page. Both pages also gain
+  `layout: Swift-v2_PageClean.cshtml`, matching the sibling service pages that already work and
+  matching the `LayoutTemplate` the injector posts. `FacetGroups` and `QueryConditions` are left
+  empty so the posted `SourceType` / `MainProductId` / `ProductVariantId` / `isVariant`
+  parameters govern the result; `PageSize` is 30, the service-page ceiling a consuming
+  paragraph's own count overrides. New ids follow the layer convention: fresh GUIDs,
+  `sourceParagraphId` 90004 / 90005 in the reserved 90000+ band, item-instance ids 100700-100703
+  above the base contract's `intIdentityFloor`.
+- **The layer ships a `files/` overlay: the 32 design templates Swift added between v2.3.0 and
+  v2.4.0.** surface-swift shipped 128 Swift v2.4.0 item-type XMLs, four of them
+  `Swift-v2_Dashboard_{Chart,List,Number,Product}`, and no design templates whatsoever, so a host
+  whose Swift design package is v2.3-vintage resolved no template for the four Dashboard item
+  types and rendered the v2.4 sign-in user picker, the customer-center Favorites set and the post
+  pagination as missing regions behind an HTTP 200. The overlay is the exact v2.3.0 -> v2.4.0
+  added-file set, computed by diffing the two tags' `Files/Templates/Designs/Swift-v2/` trees and
+  fetched blob by blob from `v2.4.0`, each one verified by recomputing its git blob SHA-1 from
+  the bytes and matching it to the tag's tree entry. Declared path by path in `layer.json`
+  `files[]`, the convention `theme-default` already uses. Nothing under `Custom/` is touched, so
+  the theme layer's disk footprint stays disjoint.
+
+  Known gap: 66 further templates changed content between v2.3.0 and v2.4.0 and are **not**
+  overlaid. A v2.3-vintage host keeps its older copies of those. The layer ships only what was
+  added, because a missing template is the failure this closes and overwriting a template a
+  customer may have edited is not something this layer has a mandate to do.
+
 ## 1.4.0
 
 Fresh-deserialize presentability pass. Everything below was visible to a prospect on a

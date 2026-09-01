@@ -34,7 +34,7 @@
     "repositoryName": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9._-]+$",
-      "description": "Convention: the storefront search repository the layer's eCom_ProductCatalog surfaces (e.g. the Quick Order validation feed) query. Default 'Products' - the repository the gate provisions (Products.index + Products.query + Products.facets, base contract). The sku-validation probe exercises this feed."
+      "description": "Convention: the storefront search repository the layer's eCom_ProductCatalog surfaces (e.g. the Quick Order validation feed) query. The authority is base.contract.json 'repositories': 'ProductsFrontend' (Products.index + Products.query + Products.facets), which the host's Swift design package supplies - no layer here ships it. A layer declaring a repository the host does not carry renders HTTP 200 with an in-page Lucene 'numHits must be > 0' error, so the sku-validation probe (which exercises this feed) is what catches the mismatch, never an HTTP-status check."
     },
     "csLedger": {
       "type": "array",
