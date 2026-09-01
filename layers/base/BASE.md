@@ -33,7 +33,7 @@ The base ships **zero catalog** — `EcomGroups/EcomProducts/EcomPrices/EcomDisc
 
 **Contract price:** `EcomPrices` row `FIXT-PRICE-CONTRACT` on `FIXT0001` (customer `98745621`, list × 0.8) — ships in the sample-data layer's `catalog.sql`, present when an edition activates `sampleData: true`.
 
-**Repository:** `Products` / `Products.index` / `Products.query` / `Products.facets`, provisioned by the gate into `wwwroot/Files/System/Repositories/Products/`. (`ProductsFrontend` is dead/removed — never provisioned.)
+**Repository:** `ProductsFrontend` / `Products.index` / `Products.query` / `Products.facets`, at `wwwroot/Files/System/Repositories/ProductsFrontend/`. It ships with the host's Swift design package (present at the Swift 2.4.0 tag next to `ProductsBackend`), not with any layer in this Distribution, so `provisionedByGate` is `false`: the composition references it, the host supplies it. Every `eCom_ProductCatalog` surface the Distribution ships binds it by path (surface-swift Shop PLP, header search and Express Buy; surface-dap-portal Product Assets and Search results; feature-bom-configurator Kit Configurator).
 
 ## Base-owned tables
 

@@ -104,13 +104,13 @@
     "note": "Content anchors (area 3, langPrefix /swift-2) moved to surface-swift (base 3.0.0 ships zero content areas)."
   },
   "repositories": {
-    "provisionedByGate": true,
-    "name": "Products",
+    "provisionedByGate": false,
+    "name": "ProductsFrontend",
     "index": "Products.index",
     "query": "Products.query",
     "facets": "Products.facets",
-    "installPath": "wwwroot/Files/System/Repositories/Products/",
-    "note": "The base guarantees the Products repository/index/query/facets are provisioned by the gate. 'ProductsFrontend' is dead/removed - never provisioned by the clean-room.",
+    "installPath": "wwwroot/Files/System/Repositories/ProductsFrontend/",
+    "note": "ProductsFrontend is the storefront search repository the Swift design package ships (Files/System/Repositories/ProductsFrontend/ at the Swift 2.4.0 tag, alongside ProductsBackend). No layer in this Distribution ships it: it arrives with the host's Swift Files overlay, which is why provisionedByGate is false. Every eCom_ProductCatalog surface this Distribution ships binds it by path - surface-swift Shop PLP (IndexQuery + FacetGroups), surface-swift desktop header search, surface-swift Express Buy, surface-dap-portal Product Assets and Search results, feature-bom-configurator Kit Configurator. A consumer whose host has no ProductsFrontend gets HTTP 200 with an in-page Lucene 'numHits must be > 0' error, never a 500, so gate the PLP on a product count and dw-error == 0, never on HTTP status.",
     "consumingApp": "eCom_ProductCatalog"
   },
   "baseOwnedTables": {
