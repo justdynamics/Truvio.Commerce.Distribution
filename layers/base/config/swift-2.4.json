@@ -1,7 +1,7 @@
 {
   "outputDirectory": "Serializer",
-  "deployOutputSubfolder": "replace",
-  "seedOutputSubfolder": "merge",
+  "replaceOutputSubfolder": "replace",
+  "mergeOutputSubfolder": "merge",
   "predicates": [
     {
       "name": "EcomCountries",
