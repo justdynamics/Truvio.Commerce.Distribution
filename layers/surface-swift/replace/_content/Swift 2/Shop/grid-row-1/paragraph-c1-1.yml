@@ -9,9 +9,9 @@
 "moduleSettings": |-
   <?xml version="1.0" encoding="utf-8"?>
   <Settings>
-    <IndexQuery>/Files/System/Repositories/ProductsFrontend/Products.query</IndexQuery>
+    <IndexQuery>/Files/System/Repositories/TruvioCommerce/Products.query</IndexQuery>
     <TrackQueries>0</TrackQueries>
-    <FacetGroups>/Files/System/Repositories/ProductsFrontend/Products.facets</FacetGroups>
+    <FacetGroups>/Files/System/Repositories/TruvioCommerce/Products.facets</FacetGroups>
     <ShowFacetOptionsWithNoResults>0</ShowFacetOptionsWithNoResults>
     <QueryConditions>[{&amp;quot;Name&amp;quot;:&amp;quot;IsVariant&amp;quot;,&amp;quot;TypeName&amp;quot;:&amp;quot;System.Boolean[]&amp;quot;,&amp;quot;DefaultValue&amp;quot;:&amp;quot;False&amp;quot;}]</QueryConditions>
     <QuerySortByParams>[]</QuerySortByParams>

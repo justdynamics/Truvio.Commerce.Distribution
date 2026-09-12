@@ -23,7 +23,14 @@
       "description": "Semver release version; component of the layers/<name>/<version> annotated tag."
     },
     "kind": {
-      "enum": ["base", "catalog", "feature", "theme", "sample-data", "surface"],
+      "enum": [
+        "base",
+        "catalog",
+        "feature",
+        "theme",
+        "sample-data",
+        "surface"
+      ],
       "description": "Layer classification (prefix = kind; the layer dir name carries the kind as its prefix — catalog-*, feature-*, surface-*, theme-*; base and sample-data are singletons). base = the one privileged layer every edition builds on (ships the base contract). catalog = shop catalog content (groups/products/prices). feature = a customization tier bundle (may carry src/ .cs). theme = disk-overlay-only presentation (files/ mirroring System/Styles per SPEC-06; no DB data), applied via themes[] — the distribution ships ONE default theme (theme-default: the neutral starting point every customer re-skin overwrites). sample-data = optional demo content (orders/users/contract prices). surface = what a frontend leg needs (e.g. headless content + itemtypes + repositories)."
     },
     "swiftVersion": {
@@ -41,7 +48,11 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["file", "classification", "registration"],
+        "required": [
+          "file",
+          "classification",
+          "registration"
+        ],
         "properties": {
           "file": {
             "type": "string",
@@ -68,7 +79,11 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["table", "where", "description"],
+        "required": [
+          "table",
+          "where",
+          "description"
+        ],
         "properties": {
           "table": {
             "type": "string",
@@ -91,7 +106,10 @@
     "fragmentModes": {
       "type": "array",
       "items": {
-        "enum": ["replace", "merge"]
+        "enum": [
+          "replace",
+          "merge"
+        ]
       },
       "description": "Which SerializeRoot mode trees the layer ships. replace = source-wins (was 'deploy'), merge = destination-wins field-level (was 'seed'). Only listed modes are POSTed at activation. Theme layers (files/ only, no DB data) omit the field."
     },
@@ -108,7 +126,10 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["areaId", "path"],
+        "required": [
+          "areaId",
+          "path"
+        ],
         "properties": {
           "areaId": {
             "type": "integer",
@@ -128,7 +149,13 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["file", "mode", "phase", "order", "description"],
+        "required": [
+          "file",
+          "mode",
+          "phase",
+          "order",
+          "description"
+        ],
         "properties": {
           "file": {
             "type": "string",
@@ -136,11 +163,18 @@
             "description": "Path to the script relative to the layer's mode tree (<layer>/<mode>/). Charset-constrained; traversal sequences ('..') are rejected by the pattern."
           },
           "mode": {
-            "enum": ["replace", "merge"],
+            "enum": [
+              "replace",
+              "merge"
+            ],
             "description": "Which mode tree the script is staged under. It selects the staging directory only: a loose script is executed by the applier, never by the serializer's manifest-driven deserialize."
           },
           "phase": {
-            "enum": ["before-host-start", "after-replace-deserialize", "after-merge-deserialize"],
+            "enum": [
+              "before-host-start",
+              "after-replace-deserialize",
+              "after-merge-deserialize"
+            ],
             "description": "When the applier must execute the script relative to the composition run. before-host-start = the rows must exist before Dynamicweb caches state at startup (identity/permission rows). after-replace-deserialize = the script FKs against framework rows the base replace tree lands (shop, currency, country). after-merge-deserialize = the script depends on merge-tree rows."
           },
           "order": {
@@ -169,7 +203,10 @@
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": ["name", "description"],
+              "required": [
+                "name",
+                "description"
+              ],
               "properties": {
                 "name": {
                   "type": "string",
@@ -201,17 +238,57 @@
       },
       "description": "OPTIONAL declared disk-overlay footprint - DW-filesystem-rooted paths the layer's files/ tree overlays (e.g. System/Styles/ColorSchemes/..., Templates/Designs/Swift-v2/Assets/..., Files/Images/Icons/...). The files/ analog of fragmentTables/fragmentContent: theme (SPEC-06) and surface layers declare here what disk paths they own. Charset-constrained (no quote characters); traversal sequences ('..') rejected at activation. Disk FKs stay on disk; DB bindings stay in the serializer (SPEC-06 boundary)."
     },
+    "placeholders": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "kind",
+          "why"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9 ._/-]+$",
+            "description": "The placeholder's path inside the layer, relative to the layer root (e.g. files/Templates/Designs/Swift-v2/Custom/default_custom.js, repositories/TruvioCommerce/Products.query, itemtypes/ItemType_TC_AnchorNav.xml). Charset-constrained, traversal sequences ('..') rejected - same discipline as files[]."
+          },
+          "kind": {
+            "enum": [
+              "css",
+              "js",
+              "template",
+              "repository",
+              "asset",
+              "itemtype"
+            ],
+            "description": "What the gate must do to prove it. css -> lint + served-200; js -> served-200 + parses; template -> a real GET of a page that renders it, asserted on body content and never on status (a Razor error is an HTTP-200 compile dump); repository -> XML parse + Type= resolution on the STAGED artefact; asset -> present + served-200; itemtype -> the registration leg (parsed fields on the host, not bytes - activation rewrites the XML)."
+          },
+          "why": {
+            "type": "string",
+            "description": "One line: what a consumer fills this in for. Read by the person deciding whether to edit it or create something new - the whole point of a placeholder is that a re-skin is an edit, never a create."
+          }
+        }
+      },
+      "description": "OPTIONAL declared PLACEHOLDER footprint - present-but-inert hooks the layer ships so a re-skin is an edit and never a create. A placeholder is (a) present on disk, (b) neutral - no brand, no lorem, (c) documented in-file with its fill-in recipe, (d) inert - it adds nothing to render output until a consumer opts in, and (e) replaceable by a brand overlay without editing anything else. Declaring the footprint here is what lets the gate assert present / parsed / inert / neutral over the set instead of over a hand-maintained list. Every entry must also appear in files[] when it lives under files/."
+    },
     "asserts": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["behaviorProbes"],
+      "required": [
+        "behaviorProbes"
+      ],
       "properties": {
         "behaviorProbes": {
           "type": "array",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["kind", "path"],
+            "required": [
+              "kind",
+              "path"
+            ],
             "properties": {
               "kind": {
                 "type": "string",
@@ -260,7 +337,10 @@
                 "items": {
                   "type": "object",
                   "additionalProperties": false,
-                  "required": ["group", "product"],
+                  "required": [
+                    "group",
+                    "product"
+                  ],
                   "properties": {
                     "group": {
                       "type": "string",
@@ -316,7 +396,12 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["probe", "path", "phase", "reason"],
+        "required": [
+          "probe",
+          "path",
+          "phase",
+          "reason"
+        ],
         "properties": {
           "probe": {
             "enum": [
@@ -336,7 +421,9 @@
             "description": "The frontend path of the exempted assert (matches the asserts.behaviorProbes[].path). Rooted, conservative charset - no query characters."
           },
           "phase": {
-            "enum": ["behavior-cycle"],
+            "enum": [
+              "behavior-cycle"
+            ],
             "description": "The gate phase in which the exemption applies. ONLY 'behavior-cycle' (the deactivate->reactivate cycle leg) is honored - a first-activation FAIL, a config-row-cycle FAIL, or any other cycle assert is NEVER exempted."
           },
           "reason": {
@@ -350,7 +437,10 @@
     "provenOn": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["swiftVersion", "gateRunId"],
+      "required": [
+        "swiftVersion",
+        "gateRunId"
+      ],
       "properties": {
         "swiftVersion": {
           "type": "string",
@@ -372,7 +462,11 @@
     "customCode": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["compileOptional", "withoutCompile", "withCompile"],
+      "required": [
+        "compileOptional",
+        "withoutCompile",
+        "withCompile"
+      ],
       "properties": {
         "compileOptional": {
           "type": "boolean",

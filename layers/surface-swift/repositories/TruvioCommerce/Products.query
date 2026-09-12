@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  TruvioCommerce/Products.query — the storefront product query the Shop paragraph binds.
+
+  PARAMETER SET, and why each one is here. These are the parameters Swift's product
+  catalogue app actually passes; dropping one does not simplify the query, it breaks the
+  surface that passes it:
+    eq, q                  the two search inputs (header search, in-page search)
+    GroupID                the PLP's group context
+    MainProductID          variant lookups from a detail page
+    IsVariant              the Shop paragraph's QueryConditions default (False) so a PLP
+                           lists masters and not every variant row
+    ProductvariantId       a specific variant combination
+    ProductIds             explicit id lists (related products, favourites, feeds)
+    sku                    product-number lookups
+    PriceRange, Manufacturer
+                           the two facets the base schema can populate without category fields
+
+  STRUCTURE. A top-level And of three groups: the prunable filter group, an Or group for
+  search, and the sku group. A parameter expression the engine PRUNES when its parameter
+  is empty is what keeps an empty call meaning "all active products in this shop" instead
+  of matching nothing; the ecommerce-context macros (LanguageID, ShopID) resolve on a
+  server-rendered storefront request, which is why they are safe here and are NOT safe in
+  the headless surface's own query.
+
+  FILL-IN RECIPE for a category facet: add <Parameter Name="MyField" Type="System.String[]"
+  DefaultValue="" /> above, a MatchAny BinaryExpression on FieldExpression MyField inside
+  the first group, the matching Field in Products.index, and the Facet in Products.facets.
+-->
+<Query ID="3f2c8a10-6d51-4f0b-9a6e-2b7c41d9e5a4" Name="Products.query">
+  <Meta />
+  <Settings />
+  <Parameters>
+    <Parameter Name="eq" Type="System.String" DefaultValue="" />
+    <Parameter Name="q" Type="System.String" DefaultValue="" />
+    <Parameter Name="MainProductID" Type="System.String[]" DefaultValue="" />
+    <Parameter Name="IsVariant" Type="System.Boolean[]" DefaultValue="" />
+    <Parameter Name="sku" Type="System.String[]" DefaultValue="" />
+    <Parameter Name="ProductvariantId" Type="System.String[]" DefaultValue="" />
+    <Parameter Name="GroupID" Type="System.String[]" DefaultValue="" />
+    <Parameter Name="ProductIds" Type="System.String[]" DefaultValue="" />
+    <Parameter Name="PriceRange" Type="System.String[]" DefaultValue="" />
+    <Parameter Name="Manufacturer" Type="System.String[]" DefaultValue="" />
+  </Parameters>
+  <Source Repository="TruvioCommerce" Item="Products.index" Type="Dynamicweb.Indexing.Queries.IndexQueryProvider, Dynamicweb.Core" />
+  <SortOrder>
+    <Sort Field="NameForSort" Direction="Ascending" />
+  </SortOrder>
+  <Expressions>
+    <GroupExpression Operator="And">
+      <GroupExpression Operator="And">
+        <BinaryExpression Operator="Equal" Disabled="false">
+          <Left>
+            <FieldExpression Field="LanguageID" />
+          </Left>
+          <Right>
+            <MacroExpression Lookup="Dynamicweb.Ecommerce.Context:LanguageID" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="MatchAny" Disabled="false">
+          <Left>
+            <FieldExpression Field="ShopIDs" />
+          </Left>
+          <Right>
+            <MacroExpression Lookup="Dynamicweb.Ecommerce.Context:ShopID" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="Equal" Disabled="false">
+          <Left>
+            <FieldExpression Field="Active" />
+          </Left>
+          <Right>
+            <ConstantExpression Value="True" Type="System.Boolean" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="MatchAny" Disabled="false">
+          <Left>
+            <FieldExpression Field="ParentGroupIDs" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="GroupID" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="In" Disabled="false">
+          <Left>
+            <FieldExpression Field="ProductKey" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="MainProductID" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="MatchAny" Disabled="false">
+          <Left>
+            <FieldExpression Field="IsVariant" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="IsVariant" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="In" Disabled="false">
+          <Left>
+            <FieldExpression Field="ProductVariantIdCombination" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="ProductvariantId" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="MatchAny" Disabled="false">
+          <Left>
+            <FieldExpression Field="PriceRange" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="PriceRange" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="MatchAny" Disabled="false">
+          <Left>
+            <FieldExpression Field="Manufacturer_Facet" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="Manufacturer" />
+          </Right>
+        </BinaryExpression>
+      </GroupExpression>
+      <GroupExpression Operator="Or">
+        <BinaryExpression Operator="Equal" Disabled="false">
+          <Left>
+            <FieldExpression Field="ProductName_Search" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="eq" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="Equal" Disabled="false">
+          <Left>
+            <FieldExpression Field="ProductNumber_Search" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="eq" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="Contains" Disabled="false">
+          <Left>
+            <FieldExpression Field="freetext" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="eq" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="Equal" Disabled="false">
+          <Left>
+            <FieldExpression Field="ProductName_Search" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="q" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="Equal" Disabled="false">
+          <Left>
+            <FieldExpression Field="ProductNumber_Search" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="q" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="Contains" Disabled="false">
+          <Left>
+            <FieldExpression Field="freetext" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="q" />
+          </Right>
+        </BinaryExpression>
+      </GroupExpression>
+      <GroupExpression Operator="And">
+        <BinaryExpression Operator="In" Disabled="false">
+          <Left>
+            <FieldExpression Field="ProductNumber_Search" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="sku" />
+          </Right>
+        </BinaryExpression>
+      </GroupExpression>
+      <BinaryExpression Operator="In" Disabled="false">
+        <Left>
+          <FieldExpression Field="ID" Source="ID" />
+        </Left>
+        <Right>
+          <ParameterExpression Name="ProductIds" />
+        </Right>
+      </BinaryExpression>
+    </GroupExpression>
+  </Expressions>
+  <ViewFields />
+  <ViewLanguages />
+  <Meta />
+  <CompletionRules />
+  <CompletionLanguages />
+  <ListViewFields />
+</Query>

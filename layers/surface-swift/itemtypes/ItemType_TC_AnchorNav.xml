@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+  TC_AnchorNav — an in-page jump strip, as an ITEM TYPE. Ships UNUSED: no page or paragraph
+  in this surface instantiates it, so it adds nothing to any rendered page until a consumer
+  drops it onto a row. It exists because the alternative a site reaches for is a Text
+  paragraph holding hand-authored <nav> markup plus an inline <script>, which is content
+  no serializer can round-trip and no editor can safely edit.
+
+  Swift ships NO tabs item type, so there is nothing stock to switch to; this pair is
+  modelled on ItemType_Swift-v2_Accordion.xml, which is the closest shipped parent/child
+  repeater.
+
+  THE REPEATER CHILD gets NO defaultValue on either field, deliberately. The stock accordion
+  child ships realistic prose as defaults, so a field missing from a payload renders the
+  default and looks like a success. An empty default renders empty, which is visible.
+
+  TWO THINGS TO KNOW BEFORE USING IT
+  1. Dynamicweb emits a sitewide <base href>, so a bare "#overview" href navigates to the
+     front page instead of scrolling. The strip's links must be repointed at runtime — that
+     is one of the three jobs the theme's default_custom.js entry point exists for.
+  2. Dropping this XML on disk does not make the type writable. The sequence is
+     ItemTypeDelete, then ItemTypeNew + Save (which creates the table), then ItemFieldNew +
+     Save per field, then re-upload this XML — child type first.
+-->
+<items>
+  <item category="Truvio/Paragraphs" name="Anchor navigation" systemName="TC_AnchorNav" description="A row of in-page jump links to the sections of a page." icon="FormatListNumbered" iconColor="None" image="" includeInUrlIndex="False" pageDefaultView="item" paragraphDefaultModule="" fieldForTitle="" title="" inherits="">
+    <fields>
+      <field name="Links" systemName="AnchorNav_Items" description="One row per section to link to. Order here is the order on the page." type="System.Int32, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-US" defaultValue="0">
+        <editor type="Dynamicweb.Content.Items.Editors.ItemRelationListEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.ItemRelationListEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.ItemRelationListEditor" name="Item type" value="TC_AnchorNav_Item" /><Parameter addin="Dynamicweb.Content.Items.Editors.ItemRelationListEditor" name="Sort by" value="" /><Parameter addin="Dynamicweb.Content.Items.Editors.ItemRelationListEditor" name="Sort order" value="DESC" /><Parameter addin="Dynamicweb.Content.Items.Editors.ItemRelationListEditor" name="Item source" value="ListItem" /><Parameter addin="Dynamicweb.Content.Items.Editors.ItemRelationListEditor" name="Minumum number of items" value="" /><Parameter addin="Dynamicweb.Content.Items.Editors.ItemRelationListEditor" name="Maximum number of items" value="" /></Parameters></editorConfuguration>
+        </editor>
+        <options sourceType="Static">
+          <Static>
+            <option name="Label" value="Label" icon="" />
+            <option name="AnchorId" value="AnchorId" icon="" />
+          </Static>
+        </options>
+      </field>
+      <field name="Aria label" systemName="AriaLabel" description="Accessible name for the nav landmark." type="System.String, System.Private.CoreLib" excludeFromSearch="True" defaultValueCulture="en-US" defaultValue="Jump to a section">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor" /></editorConfuguration>
+        </editor>
+      </field>
+    </fields>
+    <rules>
+      <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
+      <rule name="" type="Dynamicweb.Content.Items.Activation.ChildItemTypeRestrictionRule, Dynamicweb" value="" />
+      <rule name="Allowed children" type="Dynamicweb.Content.Items.Activation.ChildRestrictionRule, Dynamicweb" value="" />
+      <rule name="Allowed parents" type="Dynamicweb.Content.Items.Activation.ParentItemTypeRestrictionRule, Dynamicweb" value="Swift-v2_Page,Swift-v2_Row" />
+      <rule name="Allowed parent types" type="Dynamicweb.Content.Items.Activation.ParentRestrictionRule, Dynamicweb" value="" />
+      <rule name="Allow in tree sections" type="Dynamicweb.Content.Items.Activation.SectionRestrictionRule, Dynamicweb" value="" />
+      <rule name="" type="Dynamicweb.Content.Items.Activation.ColorSchemeRestrictionRule, Dynamicweb" value="true" />
+      <rule name="Enable item type for" type="Dynamicweb.Content.Items.Activation.StructureRestrictionRule, Dynamicweb" value="Paragraphs" />
+    </rules>
+    <layout>
+      <groups>
+        <group name="Anchor navigation" systemName="General" sectionName="" collapsibleState="None" visibilityField="" visibilityCondition="" visibilityConditionValueType="" visibilityConditionValue="">
+          <fields>
+            <field systemName="AnchorNav_Items" />
+            <field systemName="AriaLabel" />
+          </fields>
+        </group>
+      </groups>
+    </layout>
+  </item>
+</items>

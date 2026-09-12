@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  logo.svg — the neutral wordmark PLACEHOLDER.
+
+  Not a logo. A correctly-sized, correctly-named, neutral-grey text mark that occupies
+  the slot a real wordmark goes into, so a re-skin REPLACES a file instead of creating
+  one and then hunting for every field that should point at it.
+
+  Fill-in recipe: overwrite this file in place with the brand's own SVG, keeping the path
+  and the 320x48 viewBox (or adjust the viewBox and re-check the header rail height — the
+  theme caps the header at 170px and the logo is what usually breaks that budget). Keep
+  currentColor if you want the mark to follow the colour scheme; hard-code a fill if the
+  brand requires an exact colour on every ground.
+
+  Deliberately: no <title>, no marker string in any rendered text node, one flat colour,
+  no gradients, no embedded fonts (the text is drawn with the system stack so it renders
+  identically without a webfont round-trip).
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 48" width="320" height="48" role="img" aria-label="Truvio Commerce">
+  <text x="0" y="34"
+        font-family="Inter, 'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif"
+        font-size="28" font-weight="700" letter-spacing="4.2" fill="#52606D">TRUVIO</text>
+  <text x="146" y="34"
+        font-family="Inter, 'Segoe UI', system-ui, -apple-system, Helvetica, Arial, sans-serif"
+        font-size="28" font-weight="300" letter-spacing="4.2" fill="#CBD2D9">COMMERCE</text>
+</svg>

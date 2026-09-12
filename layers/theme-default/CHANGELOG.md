@@ -1,5 +1,38 @@
 # theme-default changelog
 
+
+## 1.4.0
+
+**The placeholder footprint, declared and shipped (V5-PLAN 2.4).** A placeholder is a file that
+already exists, is already wired and is already served, so a re-skin is an edit and never a create
+followed by a hunt for the field that should have pointed at it. Four of them were missing; this
+release ships them and `layer.json` `placeholders[]` now declares the whole set, each entry naming
+its path, the kind of proof the gate owes it, and what a consumer fills it in for.
+
+**`Custom/default_custom.js` plus its `AddJavascript` line.** There was no JavaScript entry point
+in this theme at all. Everything a re-skin has needed so far falls into three shapes a stylesheet
+cannot express: naming a platform-generated landmark for accessibility, repointing in-page anchors
+at runtime (Dynamicweb emits a sitewide `<base href>`, so a bare `#section` navigates to the front
+page), and stripping a hard-coded media attribute. The file ships empty, registered with `defer`
+from `DefaultHeadInclude.cshtml`, and carries the fill-in recipe plus the **no-marker rule** in its
+header: it must never write a marker string into the page, not even a console banner or a
+`data-` attribute proving it ran. The design gate scans rendered text for placeholder markers and a
+placeholder that announces itself is not inert, it is content.
+
+**Three paragraph layout variants** — `Swift-v2_Poster/TextMiddleLeftLcp.cshtml`,
+`Swift-v2_Image/Responsive.cshtml`, `Swift-v2_VideoPlayer/PosterLazy.cshtml`. Each is net-new, each
+leaves the standard template untouched, and each renders nothing until a paragraph's Template field
+names it. They exist because a layout variant is the only place a theme can reach the attributes
+that decide media weight: `srcset`, `sizes`, `fetchpriority`, image quality, `loading`, and the
+`preload="auto"` the video component hard-codes. The README has recorded those as "not fixable from
+a theme" since 1.0.0; this is the fix. `Responsive.cshtml` ships its intrinsic-ratio map **empty**
+rather than guessing a ratio, because a wrong width/height pair is worse than none.
+
+**Two neutral brand assets**, `Images/Brand/logo.svg` and `wave.svg` — the first image files this
+layer has ever shipped. The logo is a grey wordmark occupying the slot, not a logo. `wave.svg` is
+the motif's readable source: one cubic path on a 1440x75 viewBox with **no fill attribute**, because
+the shape is used as a mask and the fill comes from a token.
+
 ## 1.3.3
 
 **ContainerWidth 4 keeps a gutter in main (Foundry #545).** In stock Swift, full width and

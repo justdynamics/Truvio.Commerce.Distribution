@@ -2,6 +2,11 @@
 @using Dynamicweb.Frontend
 @{
     AddStylesheet("/Files/Templates/Designs/Swift-v2/Custom/default_custom.css", "all");
+    // The theme's JavaScript entry point. It ships EMPTY and registering it changes
+    // nothing about the rendered page — that is the point: a consumer adding behaviour
+    // edits a file that is already served instead of creating one and wiring it up.
+    // "defer" keeps it after the design package's own scripts and after parse.
+    AddJavascript("/Files/Templates/Designs/Swift-v2/Custom/default_custom.js", "defer");
 }
 <style>
     /* Render-critical neutral tokens — inline to avoid cache-buster staleness (Pitfall 7).

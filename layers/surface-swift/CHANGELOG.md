@@ -1,5 +1,37 @@
 # Changelog — surface-swift
 
+
+## 1.6.0
+
+**A repository this distribution owns, and the Shop paragraph bound to it (V5-PLAN 2.4).**
+`repositories/TruvioCommerce/{Products.index, Products.query, Products.facets}`, staged before host
+start the way `surface-headless` stages its own `Headless/` set, and the Shop page's
+`Swift-v2_App` repointed from `/Files/System/Repositories/ProductsFrontend/` to it on both the
+`IndexQuery` and the `FacetGroups` path.
+
+Why not keep binding `ProductsFrontend`: it is host-supplied — the base contract records it as
+`provisionedByGate: false`, no layer ships it — and its facet file still declares facets for the
+design package's own demo catalogue, which are dead on any catalogue this distribution composes. A
+facet whose field has no values is worse than a missing facet: it renders, takes a slot in the rail
+and filters nothing. The host's files are **not** overwritten; the base contract carries no
+file-path ownership rule, so two layers on one path would be an unguarded seam.
+
+The three files are deliberately minimal and base-schema only — group, price range and manufacturer,
+no category-field bindings, because the base ships no category fields. Each carries the fill-in
+recipe for adding one, and the recipe names all three files, because a facet added to one of them
+and not the other two is decorative. `Products.facets` also records the failure mode worth knowing:
+a repository that is missing at request time returns **HTTP 200** with an in-page Lucene error, so a
+repository is never asserted by status code.
+
+**`TC_AnchorNav` and `TC_AnchorNav_Item`** join `itemtypes/`: an in-page jump strip as a real item
+type, unused until a row adds it. It exists because the thing a site reaches for instead is a Text
+paragraph holding hand-authored `<nav>` markup and an inline `<script>` — content no serializer
+round-trips and no editor can safely edit. The child ships no field defaults on purpose: an empty
+default renders visibly empty, where a realistic one renders plausible content for a field that
+never arrived.
+
+`layer.json` `placeholders[]` declares all five.
+
 ## 1.5.2
 
 Patch: the layer ships the Swift version stamp — `files/System/Truvio/swift.stamp.json`,

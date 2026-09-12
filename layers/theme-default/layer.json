@@ -1,9 +1,11 @@
 {
   "name": "theme-default",
-  "version": "1.3.3",
+  "version": "1.4.0",
   "kind": "theme",
   "swiftVersion": "2.4.0",
   "files": [
+    "Images/Brand/logo.svg",
+    "Images/Brand/wave.svg",
     "System/Styles/Buttons/default.css",
     "System/Styles/Buttons/default.json",
     "System/Styles/ColorSchemes/default.css",
@@ -11,6 +13,52 @@
     "System/Styles/Typography/default.css",
     "System/Styles/Typography/default.json",
     "Templates/Designs/Swift-v2/Custom/default_custom.css",
-    "Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml"
+    "Templates/Designs/Swift-v2/Custom/default_custom.js",
+    "Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml",
+    "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Image/Responsive.cshtml",
+    "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Poster/TextMiddleLeftLcp.cshtml",
+    "Templates/Designs/Swift-v2/Paragraph/Swift-v2_VideoPlayer/PosterLazy.cshtml"
+  ],
+  "placeholders": [
+    {
+      "path": "files/Templates/Designs/Swift-v2/Custom/default_custom.css",
+      "kind": "css",
+      "why": "The theme's stylesheet and token block: the first thing a re-skin overrides, and the file every customer sheet loads after."
+    },
+    {
+      "path": "files/Templates/Designs/Swift-v2/Custom/default_custom.js",
+      "kind": "js",
+      "why": "The theme's JavaScript entry point. Ships empty and registered, so adding behaviour is an edit and never a create plus a wiring hunt."
+    },
+    {
+      "path": "files/Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml",
+      "kind": "template",
+      "why": "The raw head-injection point. The Swift master's CustomHeadInclude field HTML-encodes, so JSON-LD and meta can only be emitted from here."
+    },
+    {
+      "path": "files/Templates/Designs/Swift-v2/Paragraph/Swift-v2_Poster/TextMiddleLeftLcp.cshtml",
+      "kind": "template",
+      "why": "The only place a theme can set srcset, fetchpriority and image quality on the page's largest paint. Inert until a paragraph's Template field names it."
+    },
+    {
+      "path": "files/Templates/Designs/Swift-v2/Paragraph/Swift-v2_Image/Responsive.cshtml",
+      "kind": "template",
+      "why": "Responsive srcset, lazy loading and reserved geometry for a content image. Inert until a paragraph's Template field names it."
+    },
+    {
+      "path": "files/Templates/Designs/Swift-v2/Paragraph/Swift-v2_VideoPlayer/PosterLazy.cshtml",
+      "kind": "template",
+      "why": "Overrides the component's hard-coded preload=auto so a page carrying video does not download it on load. Inert until a paragraph's Template field names it."
+    },
+    {
+      "path": "files/Images/Brand/logo.svg",
+      "kind": "asset",
+      "why": "The wordmark slot, neutral grey. A re-skin overwrites this file in place instead of adding an asset and repointing every field that should have named it."
+    },
+    {
+      "path": "files/Images/Brand/wave.svg",
+      "kind": "asset",
+      "why": "The wave motif as a readable single-path source. The CSS utility carries the same path inline as a mask data-URI; this file is what you edit when the curve changes."
+    }
   ]
 }
