@@ -1,0 +1,50 @@
+{
+  "name": "truvio-demo",
+  "version": "1.0.0",
+  "kind": "sample-data",
+  "swiftVersion": "2.4.0",
+  "repositoryName": "Products",
+  "sql": [
+    {
+      "file": "_sql/truvio-catalog.sql",
+      "mode": "merge",
+      "phase": "after-replace-deserialize",
+      "order": 5,
+      "description": "The Truvio Commerce brand catalogue for SHOP1/ENU/EUR: 4 top groups x 3 subgroups (16 EcomGroups), 60 masters TCPROD0001..0060 with SKU TC-<CONCEPT>-<nnnn>, the Tier and Mode variant axes on 6 masters (36 combination rows, each with its own EcomPrices row), 1 BOM kit with 2 slots, 2 services, a 3-step quantity-tier ladder, one contract price scoped to customer number TC-100200, and 4 product categories x 7 category fields with 180 populated values. Every name is drawn from PIM/Commerce/CMS vocabulary (owner decision D-B); every key is TC*-prefixed and disjoint from sample-data's FIXT* and the feature families' PACK*.",
+      "idempotent": true,
+      "transactional": true,
+      "requiresHostRestart": true
+    }
+  ],
+  "costHints": {
+    "reservedKeyPrefixes": [
+      "TCGRP-*",
+      "TCPROD*",
+      "TCVG-*",
+      "TCVO-*",
+      "TC-PRICE-*",
+      "TC-BOM-*",
+      "TCO-*",
+      "tc_*"
+    ],
+    "reservedKeyNote": "The TC* family this layer owns, disjoint from sample-data's FIXT* / FIXTGRP* / FIXT-PRICE-* (base.contract.json idRules.reservedFixtureKeys) and from the feature families' PACK-<NAME>-* prefix. Recorded here until the next base release adds it to idRules.reservedFixtureKeys.",
+    "expectedRows": {
+      "EcomGroups": 16,
+      "EcomShopGroupRelation": 4,
+      "EcomGroupRelations": 12,
+      "EcomProducts": 96,
+      "EcomGroupProductRelation": 120,
+      "EcomVariantGroups": 2,
+      "EcomVariantsOptions": 5,
+      "EcomVariantOptionsProductRelation": 30,
+      "EcomPrices": 40,
+      "EcomProductItems": 2,
+      "EcomProductCategory": 4,
+      "EcomProductCategoryTranslation": 4,
+      "EcomProductCategoryField": 28,
+      "EcomProductCategoryFieldTranslation": 28,
+      "EcomProductCategoryFieldValue": 180
+    },
+    "expectedRowsNote": "What truvio-catalog.sql lands on top of whatever sample-data seeds. Advisory: the gate derives its own counts from the composition, this is the layer's own statement of what it ships."
+  }
+}
