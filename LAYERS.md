@@ -31,6 +31,7 @@ and every layer traces to a lane of the ecosystem workflow (the Foundry's
 | `feature-pricing` | feature | 1.0.0 | Quantity-break tiers + customer-contract pricing; carries the compile-optional `ReorderingPricingQtyBreakProvider`. Split from `feature-reordering-pricing`. |
 | `feature-rma` | feature | 1.0.0 | Data-only RMA seed (`EcomRmas`); the My-returns page + RMA state machine are OOTB (surface-swift + platform). |
 | `feature-b2b-comms` | feature | 1.0.2 | Data-only B2B dealer email pack (5 dealer emails under `/Newsletter Emails/Dealer Emails/`) + the email-marketing onboarding flow serialized via `SqlTable` predicates (`EmailMarketingFlow` + `EmailMarketingFlowStep`). Composes on `surface-swift`. 1.0.2 neutralizes the invented sender brand and the fictional company voice in the article bodies onto the placeholder convention; trigger-naming headings and action-naming button labels stay. |
+| `feature-baseline-guide` | feature | 1.0.0 | Content-only agent-facing guide to the Swift 2 baseline: the `/Baseline guide` page tree (root + 14 pages: one per feature area, the branding path, the customer-context convention), pure Swift-v2_Text on 1Column rows, zero SQL, zero catalogue rows. Composes on `surface-swift` (area 3). Authored and serialized on foundry.mydwsite4.com (DW 10.28.10, Serializer 0.9.0-beta). |
 | `feature-reordering-pricing` | feature | 1.2.1 | **DEPRECATED / tombstoned** (superseded by `feature-reordering@1.0.0` + `feature-pricing@1.0.0`). Retained one release for consumers still pinning 1.2.1; no edition composes it. Do not add to new editions. |
 | `feature-subscription-orders` | feature | 1.1.1 | Subscriptions + recurring-order scheduled task. |
 | `feature-bom-configurator` | feature | 1.1.1 | Kit / BOM configurator. |
@@ -45,7 +46,7 @@ A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampl
 | Edition | Composition | Status |
 |---------|-------------|--------|
 | `base-only` | base 3.1.1 alone — framework-only, no theme (nothing to skin) | **Proven on DW 10.28.1-PreRelease** — API/DB-level proof (framework row-count contract + /Admin/; zero pages by design). |
-| `swift-demo` | base + `surface-swift` + six feature layers (`feature-reordering` + `feature-pricing` + `feature-rma` + `feature-subscription-orders` + `feature-bom-configurator` + `feature-b2b-comms`) + sample data + theme `default` | **Proven on DW 10.28.1-PreRelease** — the full Swift 2.4 storefront (20 / 3 / 96). |
+| `swift-demo` | base + `surface-swift` + seven feature layers (`feature-reordering` + `feature-pricing` + `feature-rma` + `feature-subscription-orders` + `feature-bom-configurator` + `feature-b2b-comms` + `feature-baseline-guide`) + sample data + theme `default` | **Proven on DW 10.28.1-PreRelease** — the full Swift 2.4 storefront (20 / 3 / 96). |
 | `headless-demo` | base + `surface-headless` + sample data | **Proven on DW 10.28.1-PreRelease** — headless Delivery-API (A1–A9), ZERO Swift design-package dependency. |
 | `dap-portal` | base + `surface-dap-portal` + sample data | **Proven on DW 10.28.1-PreRelease** — the DAP content surface (area 26). |
 
