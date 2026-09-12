@@ -1,5 +1,67 @@
 # Changelog — truvio-demo
 
+## 1.1.1
+
+**The spec group existed, was flagged for the frontend, carried 28 members — and resolved to
+nothing.** 1.1.0 closed the missing-half finding by seeding `EcomFieldDisplayGroups.tc_specs`
+and 28 relation rows, and the closing v5 measurement on DW 10.28.10 found the band rendering a
+heading over an empty `.table-responsive`: `1408 × 52`, `dw-error` 0, every row count in the
+database correct. `GetProductDisplayGroupFieldsByGroupSystemNames(["tc_specs"])` returned no
+fields at all.
+
+The cause is the member NAME. A display-group member is not a field id, it is a *reference* to a
+field, and the two field families are referenced differently. A **global** product field
+(`EcomProductField`, which also owns its own column on `EcomProducts`) is referenced bare, by
+system name. A **category** field is referenced in a qualified, pipe-delimited form:
+
+```
+ProductCategory|<FieldCategoryId>|<FieldId>
+```
+
+1.1.0 wrote the bare `EcomProductCategoryField.FieldId`, which sends the resolver at
+`EcomProductField` — empty on the e2e host, and empty on any host this layer composes, because
+this layer ships category fields and no global ones. Nothing matched, and nothing said so.
+
+The form was not guessed. It was read off six unrelated DW 10 solutions on the same SQL instance,
+every one of which uses it and no other prefix: `marine-demo` 65 of 65 member rows,
+`momar` 1264, `burco` 121, `gerflor` 111, `dw10-demo` 91, `sapporo` 91. In `dw10-demo`, 75 of the
+91 qualified names join cleanly to a live `EcomProductCategoryField` row and **zero** bare names
+do. `burco`, the one solution that also fills the denormalised `FieldDisplayGroupFieldIds`
+column, fills it with the same qualified names, comma-joined — most solutions leave that column
+`NULL`, which is the second half of the same lesson: the relation table is what resolves, the
+denormalised list is a convenience beside it.
+
+Then it was proved on the host rather than argued. Group 18's 28 members were rewritten to the
+qualified form, the pool recycled, and the same PDP fetched anonymously: `dw-error` 0 and a
+populated table — *Facet: Group*, *Variant Axis: Tier*, *Completeness Score: 40* — where the
+identical request had rendered an empty `<tbody>`. Three rows because `TCPROD0001` carries three
+of its category's seven values; a product carries what section 7 gave it, and the band shows
+exactly that.
+
+Two earlier hypotheses are recorded as disproven, because a reader will have them too: binding
+the group to `SHOP1` through `EcomFieldDisplayGroupShops` (probe W-E — `dw10-demo` binds 8 of its
+13 groups and leaves 5 unbound, so the binding is not what gates resolution), and a dot-qualified
+`tc_data_models.tcFacet` (probe W-F — the separator is a pipe and the `ProductCategory` segment
+is not optional). Both left the table empty and both were reverted.
+
+**The 7c guard now asserts that the group RESOLVES, not that its columns exist.** The shape guard
+introduced in 1.1.0 checks `sys.columns` and it was green on the run that shipped an empty band —
+column shape was never the thing that was wrong, and a guard that can only pass is not a guard.
+The new one counts values reached along the platform's own join path, member name →
+`EcomProductCategoryField` → `EcomProductCategoryFieldValue` on a `TCPROD%` product, and raises
+severity 16 at zero. Measured both ways on the host inside a rolled-back transaction: **180**
+resolving values with the qualified names, **0** with the bare names 1.1.0 shipped. It would have
+failed the 1.1.0 apply.
+
+**A host seeded by 1.1.0 converges rather than doubling.** The INSERT is guarded on the qualified
+name, so a re-run on a 1.1.0 host would otherwise leave 56 rows of which 28 resolve. The section
+now rewrites each bare member to its qualified form in place and deletes any bare row left over,
+then rebuilds the denormalised list from the relation as before. Exercised on the e2e host in a
+rolled-back transaction: 28 bare → 28 qualified, total unchanged at 28, guard green at 180.
+
+These fixes are authored against measured schema and worked-around host state; their rendered
+proof on a clean deserialize is one re-run away.
+
 ## 1.1.0
 
 Four measurements from the v5 end-to-end session on DW 10.28.10, each one a thing the

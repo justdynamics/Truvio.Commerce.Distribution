@@ -1556,10 +1556,24 @@ IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0060' AND Product
 --    beside it, and it is written from the relation rather than typed, so the two
 --    can never disagree.
 --
+--    A GROUP THAT EXISTS IS NOT A GROUP THAT RESOLVES. 1.1.0 seeded this group
+--    correctly and the v5 e2e still measured an empty table: the members were
+--    written as bare category FieldIds, and a bare member name resolves against
+--    GLOBAL product fields (EcomProductField, which is empty on this host and on
+--    any host this layer composes) rather than against category fields. A category
+--    field is referenced in the qualified pipe form
+--    ProductCategory|<FieldCategoryId>|<FieldId>, stated and evidenced at the
+--    INSERT below. The band rendered a heading over nothing, silently, with zero
+--    dw-errors and every row count correct - which is why this section now ends in
+--    a RESOLUTION guard that counts values reached through the platform's own join
+--    path, not only the column-shape guard that was green throughout.
+--
 --    Idempotent: the group, its translation and each field relation are
 --    IF NOT EXISTS-guarded on their own key, and the frontend flag and the
 --    denormalised list are existence-guarded UPDATEs so a host seeded before this
---    section converges instead of keeping a half-wired group.
+--    section converges instead of keeping a half-wired group. A host carrying the
+--    1.1.0 bare names is rewritten to the qualified form in place, so it converges
+--    rather than accumulating a second set of members that do not resolve.
 -- ---------------------------------------------------------------------------
 IF OBJECT_ID(N'dbo.EcomFieldDisplayGroups', N'U') IS NULL
    OR OBJECT_ID(N'dbo.EcomFieldDisplayGroupTranslation', N'U') IS NULL
@@ -1599,18 +1613,58 @@ IF NOT EXISTS (SELECT 1 FROM EcomFieldDisplayGroupTranslation WHERE FieldDisplay
 
 -- The relation is derived from the category fields themselves, so the two can only
 -- ever list the same 28 names and a field added above joins the group on the next run.
+--
+-- THE MEMBER NAME IS QUALIFIED, NOT BARE. A display-group member is not a field id:
+-- it is a REFERENCE to a field, and a category field's reference form is
+--     ProductCategory|<FieldCategoryId>|<FieldId>
+-- pipe-delimited, with the literal segment `ProductCategory` in front. 1.1.0 wrote
+-- the bare `FieldId` and the band rendered an empty table on every product, because
+-- nothing resolved. The form above was read off six unrelated DW 10 solutions on the
+-- same SQL instance, every one of which uses it and no other: their display-group
+-- member rows are 100 % `ProductCategory|...|...` wherever the member is a category
+-- field (marine-demo 65/65, momar 1264, burco 121, gerflor 111, dw10-demo 91,
+-- sapporo 91), and in dw10-demo 75 of the 91 qualified names resolve against a live
+-- EcomProductCategoryField row while ZERO bare names do. A GLOBAL product field
+-- (EcomProductField + its own column on EcomProducts) is named bare; a CATEGORY field
+-- is named qualified. This layer ships category fields, so it names them qualified.
 INSERT INTO EcomFieldDisplayGroupFields (FieldDisplayGroupFieldSystemName, FieldDisplayGroupFieldGroupId, FieldDisplayGroupFieldSortOrder)
-SELECT f.FieldId, @TcSpecsGroupId, f.FieldSortOrder
+SELECT 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId, @TcSpecsGroupId, f.FieldSortOrder
   FROM EcomProductCategoryField f
  WHERE f.FieldCategoryId LIKE 'tc[_]%'
    AND NOT EXISTS (SELECT 1 FROM EcomFieldDisplayGroupFields r
                     WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId
-                      AND r.FieldDisplayGroupFieldSystemName = f.FieldId);
+                      AND r.FieldDisplayGroupFieldSystemName = 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId);
+
+-- A host seeded by 1.1.0 carries the 28 BARE names. Converge it in place rather than
+-- leaving 56 rows of which half resolve: rewrite a bare row to its qualified form
+-- where that row's name is exactly a tc_* category field id, then drop any bare row
+-- left over (a duplicate, because the qualified row was inserted above).
+UPDATE r
+   SET r.FieldDisplayGroupFieldSystemName = 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId
+  FROM EcomFieldDisplayGroupFields r
+  JOIN EcomProductCategoryField f
+    ON f.FieldId = r.FieldDisplayGroupFieldSystemName
+   AND f.FieldCategoryId LIKE 'tc[_]%'
+ WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId
+   AND NOT EXISTS (SELECT 1 FROM EcomFieldDisplayGroupFields d
+                    WHERE d.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId
+                      AND d.FieldDisplayGroupFieldSystemName = 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId);
+
+DELETE r
+  FROM EcomFieldDisplayGroupFields r
+ WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId
+   AND EXISTS (SELECT 1 FROM EcomProductCategoryField f
+                WHERE f.FieldId = r.FieldDisplayGroupFieldSystemName
+                  AND f.FieldCategoryId LIKE 'tc[_]%');
 
 -- The denormalised list, written from the relation, never typed. STRING_AGG rather
 -- than the FOR XML idiom on purpose: the XML value() method needs QUOTED_IDENTIFIER ON
 -- and sqlcmd runs these scripts with it OFF, so the XML form fails with Msg 1934 on a
--- real apply. Measured on the DW 10.28.10 host.
+-- real apply. Measured on the DW 10.28.10 host. The list carries the same qualified
+-- names as the relation - burco's seven groups write theirs exactly this way, a
+-- comma-joined list of `ProductCategory|cat|field` - and most solutions leave the
+-- column NULL entirely, so it is a convenience beside the relation and never the
+-- thing the frontend resolves against.
 DECLARE @TcSpecsFieldIds NVARCHAR(MAX);
 SELECT @TcSpecsFieldIds = STRING_AGG(r.FieldDisplayGroupFieldSystemName, ',')
                             WITHIN GROUP (ORDER BY r.FieldDisplayGroupFieldSortOrder, r.FieldDisplayGroupFieldSystemName)
@@ -1618,6 +1672,28 @@ SELECT @TcSpecsFieldIds = STRING_AGG(r.FieldDisplayGroupFieldSystemName, ',')
  WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId;
 IF EXISTS (SELECT 1 FROM EcomFieldDisplayGroups WHERE FieldDisplayGroupSystemName = 'tc_specs' AND ISNULL(FieldDisplayGroupFieldIds, N'') <> ISNULL(@TcSpecsFieldIds, N''))
     UPDATE EcomFieldDisplayGroups SET FieldDisplayGroupFieldIds = ISNULL(@TcSpecsFieldIds, N'') WHERE FieldDisplayGroupSystemName = 'tc_specs';
+
+-- THE RESOLUTION GUARD. The shape guard above asserts COLUMNS; it passed on the run
+-- that shipped a band with no rows, because column shape was never the thing that was
+-- wrong. This one asserts the thing the page needs: that a member of tc_specs joins
+-- through to a VALUE on a real product, along the same path the platform walks when
+-- Swift calls GetProductDisplayGroupFieldsByGroupSystemNames(['tc_specs']) - member
+-- name -> category field -> that field's value on a product. A group that resolves to
+-- nothing renders a heading over an empty table, which is worse than no band at all,
+-- and it is silent: no exception, no dw-error, correct row counts everywhere.
+DECLARE @TcSpecsResolved INT = (
+    SELECT COUNT(*)
+      FROM EcomFieldDisplayGroupFields r
+      JOIN EcomProductCategoryField f
+        ON r.FieldDisplayGroupFieldSystemName = 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId
+      JOIN EcomProductCategoryFieldValue v
+        ON v.FieldValueFieldCategoryId = f.FieldCategoryId
+       AND v.FieldValueFieldId = f.FieldId
+     WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId
+       AND v.FieldValueProductId LIKE 'TCPROD%'
+       AND ISNULL(v.FieldValueValue, N'') <> N'');
+IF @TcSpecsResolved = 0
+    RAISERROR(N'truvio-catalog.sql: the tc_specs display group resolves to ZERO field values on any TCPROD product. The PDP spec band will render a heading over an empty table. Members must be written in the category-field reference form ProductCategory|<FieldCategoryId>|<FieldId>; a bare FieldId resolves against GLOBAL product fields (EcomProductField) only, and this layer ships none.', 16, 1);
 
 -- ---------------------------------------------------------------------------
 -- 8. Currency rates: every currency row, not just the default.
@@ -1659,4 +1735,4 @@ IF EXISTS (SELECT 1 FROM EcomCurrencies WHERE CurrencyRate = 1)
     UPDATE EcomCurrencies SET CurrencyRate = 100 WHERE CurrencyRate = 1;
 
 COMMIT TRAN;
-PRINT 'Done - truvio-demo catalogue: 16 groups (4 top + 12 sub), 60 masters + 36 variant rows, 40 prices, 2 BOM slots, 4 categories / 28 fields / 180 values in SHOP1; 60 long descriptions and the tc_specs field display group the PDP spec table reads.';
+PRINT 'Done - truvio-demo catalogue: 16 groups (4 top + 12 sub), 60 masters + 36 variant rows, 40 prices, 2 BOM slots, 4 categories / 28 fields / 180 values in SHOP1; 60 long descriptions and the tc_specs field display group the PDP spec table reads, its 28 members in the ProductCategory|<category>|<field> reference form and proven to resolve.';

@@ -1,6 +1,6 @@
 {
   "name": "truvio-demo",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -10,7 +10,7 @@
       "mode": "merge",
       "phase": "after-replace-deserialize",
       "order": 5,
-      "description": "The Truvio Commerce brand catalogue for SHOP1/ENU/EUR: 4 top groups x 3 subgroups (16 EcomGroups), 60 masters TCPROD0001..0060 with SKU TC-<CONCEPT>-<nnnn>, the Tier and Mode variant axes on 6 masters (36 combination rows, each with its own EcomPrices row), 1 BOM kit with 2 slots, 2 services, a 3-step quantity-tier ladder, one contract price scoped to customer number TC-100200, 4 product categories x 7 category fields with 180 populated values, a long description on every master (the PDP Overview band reads ProductLongDescription), and the tc_specs field display group over all 28 category fields, which is what surface-swift's PDP spec table binds to. It also moves every currency row still carrying the placeholder rate 1 to 100. Every name is drawn from PIM/Commerce/CMS vocabulary (owner decision D-B); every key is TC*-prefixed and disjoint from sample-data's FIXT* and the feature families' PACK*.",
+      "description": "The Truvio Commerce brand catalogue for SHOP1/ENU/EUR: 4 top groups x 3 subgroups (16 EcomGroups), 60 masters TCPROD0001..0060 with SKU TC-<CONCEPT>-<nnnn>, the Tier and Mode variant axes on 6 masters (36 combination rows, each with its own EcomPrices row), 1 BOM kit with 2 slots, 2 services, a 3-step quantity-tier ladder, one contract price scoped to customer number TC-100200, 4 product categories x 7 category fields with 180 populated values, a long description on every master (the PDP Overview band reads ProductLongDescription), and the tc_specs field display group over all 28 category fields, each named in the category-field reference form ProductCategory|<FieldCategoryId>|<FieldId> so the group actually resolves, which is what surface-swift's PDP spec table binds to. It also moves every currency row still carrying the placeholder rate 1 to 100. Every name is drawn from PIM/Commerce/CMS vocabulary (owner decision D-B); every key is TC*-prefixed and disjoint from sample-data's FIXT* and the feature families' PACK*.",
       "idempotent": true,
       "transactional": true,
       "requiresHostRestart": true
