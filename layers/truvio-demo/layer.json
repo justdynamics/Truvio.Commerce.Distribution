@@ -14,6 +14,33 @@
       "idempotent": true,
       "transactional": true,
       "requiresHostRestart": true
+    },
+    {
+      "file": "_sql/truvio-identities.sql",
+      "mode": "merge",
+      "phase": "after-replace-deserialize",
+      "order": 6,
+      "description": "The brand identities and their order history: the B2B account 100100 'Truvio Demo Account' (customer number TC-100200), the three personas 100101 buyer@ / 100102 csr@ / 100103 admin@ on the fictional truvio-demo domain, their memberships into the account and into the base-contract permission groups 1325 / 1292 / 1270, and 12 orders TCO-0001..TCO-0012 (20 lines) across the OrderFlowId 1 states New / Completed / Rejected. Runs after the deserialize rather than before host start because the orders FK the shop, currency and catalogue rows; the personas become first-class on the host restart the catalogue already requires.",
+      "idempotent": true,
+      "transactional": true,
+      "requiresHostRestart": true,
+      "sqlcmdVariables": [
+        {
+          "name": "TruvioBuyerPassword",
+          "secret": true,
+          "description": "Password for buyer@truvio-demo.example (persona 100101). Demo credential, never repo content, never logged."
+        },
+        {
+          "name": "TruvioCsrPassword",
+          "secret": true,
+          "description": "Password for csr@truvio-demo.example (persona 100102). Demo credential, never repo content, never logged."
+        },
+        {
+          "name": "TruvioAdminPassword",
+          "secret": true,
+          "description": "Password for admin@truvio-demo.example (persona 100103). Demo credential, never repo content, never logged."
+        }
+      ]
     }
   ],
   "costHints": {
@@ -43,8 +70,12 @@
       "EcomProductCategoryTranslation": 4,
       "EcomProductCategoryField": 28,
       "EcomProductCategoryFieldTranslation": 28,
-      "EcomProductCategoryFieldValue": 180
+      "EcomProductCategoryFieldValue": 180,
+      "AccessUser": 4,
+      "AccessUserGroupRelation": 6,
+      "EcomOrders": 12,
+      "EcomOrderLines": 20
     },
-    "expectedRowsNote": "What truvio-catalog.sql lands on top of whatever sample-data seeds. Advisory: the gate derives its own counts from the composition, this is the layer's own statement of what it ships."
+    "expectedRowsNote": "What this layer's two scripts land on top of whatever sample-data seeds. Advisory: the gate derives its own counts from the composition, this is the layer's own statement of what it ships."
   }
 }

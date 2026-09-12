@@ -44,9 +44,31 @@ README for the full account of that trap).
 | Script | Phase / order | What it lands |
 |---|---|---|
 | `truvio-catalog.sql` | `after-replace-deserialize` / 5 | 16 groups, 60 masters + 36 variant rows, 40 prices, 1 BOM kit (2 slots), 2 services, 4 categories × 7 category fields, 180 field values |
+| `truvio-identities.sql` | `after-replace-deserialize` / 6 | The B2B account `100100`, the three personas `100101`/`100102`/`100103`, 6 memberships, 12 orders `TCO-0001`…`TCO-0012` with 20 lines |
 
 Phases and orders sit **after** `sample-data`'s (which occupies 1–4 in the same phase),
 so on an edition carrying both, the brand rows land last and the two never interleave.
+
+## Identities
+
+Three personas on the fictional `truvio-demo` domain — `buyer@`, `csr@`, `admin@` — all
+members of one B2B account (`Truvio Demo Account`, customer number `TC-100200`, the number
+the contract price resolves against) and each joined to the base-contract permission group
+its role maps to: `1325 Customers`, `1292 CSR`, `1270 Account Admin`. The contract's
+`guaranteedRows` are untouched — these are new rows above the `100000` int-identity floor,
+and they join the contract groups rather than inventing a fourth. Passwords arrive as
+`sqlcmd` variables (`TruvioBuyerPassword`, `TruvioCsrPassword`, `TruvioAdminPassword`), so
+no credential is repo content.
+
+Their history is 12 orders across the `OrderFlowId 1` states — `OS1 New`, `OS2 Completed`,
+`OS3 Rejected`. States from another flow (`OS12`/`OS13`/`OS14`) are deliberately unused: an
+order carrying one reads as a broken record in the Commerce grids. `OrderCompletedDate` is
+set only on a Completed order.
+
+`truvio-identities.sql` runs `after-replace-deserialize` rather than `before-host-start`
+(where `sample-data`'s identities live) because its orders FK the shop, currency and
+catalogue rows. DW caches identity state at startup, so the personas become first-class on
+the host restart the catalogue already requires — one restart covers both scripts.
 
 ## Key families
 
