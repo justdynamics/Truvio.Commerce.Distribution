@@ -1,6 +1,26 @@
 # Changelog — sample-data
 
 
+## 2.3.2
+
+**The PLP facet sidebar rendered mojibake where the layer has an em dash (Foundry #1095).**
+Measured on the branded v5 e2e host: 3 `FIXTGRP*` group names and 20 `FIXT*` product names
+carried `U+00E2 U+20AC U+201D` in place of `U+2014`. The layer file was never wrong - it is
+clean UTF-8 - but a UTF-8 em dash is the three bytes `E2 80 94`, and an applier that runs
+`sqlcmd` without `-f 65001` reads them in the machine's ANSI code page and stores three
+characters instead of one. The file cannot control how it is read, so it stops depending on
+it: every separator is now written as its code point, `N'...' + NCHAR(8212) + N'...'`, and
+no name literal in `catalog.sql` carries a non-ASCII byte. The displayed value is unchanged,
+and the script now seeds the identical em dash under either code page - verified by applying
+it twice on the 10.28.10 host, once with `-f 65001` and once without.
+
+New section 6 repairs a host that was already seeded. It rewrites the CP1252 misdecode
+signature back to `U+2014` across `EcomGroups.GroupName`, `EcomProducts.ProductName` /
+`ProductShortDescription` and the `EcomOrderLines` name snapshot on the `FIXT-ORDER-%` keys,
+existence-guarded so a clean host is never written to. Section 0's DELETE-then-INSERT already
+converges the rows this file owns; section 6 states the convergence rather than leaving it
+implicit, and reaches the snapshot columns a reset does not.
+
 ## 2.3.1
 
 **`demo-clock.sql` did not compile on SQL Server (Foundry v5 e2e, DW 10.28.10).** Three
