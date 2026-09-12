@@ -61,6 +61,10 @@
       },
       "description": "OPTIONAL version axes this edition CLAIMS, and therefore accepts a hard failure on. The compat floors every layer inherits from base.contract.json are otherwise advisory: an unmet floor is a WARN, because a floor is a claim nobody measured. Naming an axis here escalates it to FAIL for this edition - the gate observes the host on that axis (dw: the platform version and ring off the deployed assembly; apps: the installed AddIn versions read from the Files/System/AddIns/Installed/<id>.<version> directory names; swift: the tag in files/System/Truvio/swift.stamp.json cross-checked against the shipped item-type set) and refuses to pass when the floor is not met. Same shape as the index-builder check's existing escalation, where a condition is a warning until an edition declares the promise it contradicts. Naming an axis the gate cannot observe on the target host is a configuration error, not a pass: an unnamed axis is exactly how a sideways failure gets through."
     },
+    "comment": {
+      "type": "string",
+      "description": "OPTIONAL operator note about a NON-OBVIOUS choice in this edition - most often a path deliberately absent from criticalPaths, or a count deliberately pinned. Unlike description (what the edition IS, read by a consumer choosing one), comment is addressed to whoever would otherwise 'fix' the omission, so it must state what was removed, what breaks if it returns, and where the underlying rule is written down."
+    },
     "criticalPaths": {
       "type": "array",
       "items": {

@@ -17,9 +17,9 @@
   "criticalPaths": [
     "/",
     "/en-us/home",
-    "/en-us/shop",
     "/en-us/sign-in/sign-in"
   ],
+  "comment": "/en-us/shop is DELIBERATELY not a criticalPath here, and adding it back re-breaks the gate. base-swift is content-free (expectedCounts pins EcomProducts 0 and EcomGroups 0), so the Shop PLP has nothing to list: with the TruvioCommerce repository built over an empty catalogue the page answers HTTP 200 carrying an in-page Lucene 'numHits must be > 0' error, and with no repository at all it answers HTTP 200 carrying an empty div. criticalPaths is a 2xx assert, so both states PASS a status check while the page is visibly broken - the exact trap base.contract.json records in repositories.note (gate the PLP on a product count and dw-error == 0, never on HTTP status). The shop path is therefore proven by swift-demo, the edition that carries sample data and a built index, and base-swift proves only what a content-free composition can honestly prove. Measured on DW 10.28.10, v5 e2e.",
   "expectedCounts": {
     "EcomProducts": 0,
     "EcomGroups": 0,
