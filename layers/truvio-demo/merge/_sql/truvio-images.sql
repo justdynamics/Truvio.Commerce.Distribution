@@ -60,7 +60,11 @@ INSERT INTO #TcTile (GroupId, TilePath) VALUES
 --    columns (language, sorting, type) differ across platform builds, and an
 --    INSERT naming a column the build does not have fails the whole script.
 -- ---------------------------------------------------------------------------
-DECLARE @cols nvarchar(max) = N'DetailId, DetailProductId, DetailProductVariantId, DetailValue, DetailIsDefault';
+-- EcomDetails names the variant column DetailVariantId, NOT DetailProductVariantId
+-- (sys.columns, DW 10.28.10). The wrong spelling is a compile-time Msg 207 inside
+-- sp_executesql, so it survives every COL_LENGTH guard above it.
+DECLARE @inserted int = 0, @updated int = 0, @attached int = 0;
+DECLARE @cols nvarchar(max) = N'DetailId, DetailProductId, DetailVariantId, DetailValue, DetailIsDefault';
 -- The detail id is DERIVED from the product key, never from a ROW_NUMBER: a
 -- re-run that attaches only the missing rows would restart the counter at 1 and
 -- collide with the ids the first run wrote.
@@ -84,9 +88,10 @@ JOIN #TcTile t ON t.GroupId = r.GroupProductRelationGroupId
 WHERE p.ProductId LIKE ''TCPROD%''
   AND NOT EXISTS (SELECT 1 FROM EcomDetails d
                   WHERE d.DetailProductId = p.ProductId
-                    AND d.DetailProductVariantId = p.ProductVariantId
+                    AND d.DetailVariantId = p.ProductVariantId
                     AND d.DetailValue = t.TilePath);';
 EXEC sp_executesql @sql;
+SET @inserted = @@ROWCOUNT;
 
 -- ---------------------------------------------------------------------------
 -- 2. The legacy EcomProducts image columns, where the build still has them.
@@ -108,9 +113,33 @@ JOIN EcomGroupProductRelation r ON r.GroupProductRelationProductId = p.ProductId
 JOIN #TcTile t ON t.GroupId = r.GroupProductRelationGroupId
 WHERE p.ProductId LIKE ''TCPROD%'';';
     EXEC sp_executesql @upd;
+    SET @updated = @@ROWCOUNT;
 END
+
+-- ---------------------------------------------------------------------------
+-- 3. Report what was MEASURED, and fail when nothing was attached.
+--    The tail used to PRINT a fixed success line naming 12 tiles and 96 rows
+--    whether or not a single row moved - which is precisely the "seeds no image
+--    and reports success" failure the header says this file exists to prevent.
+--    @inserted is legitimately 0 on a re-run (the attach is idempotent), so the
+--    pass/fail assertion is the ATTACHED TOTAL, not the insert count.
+-- ---------------------------------------------------------------------------
+SELECT @attached = COUNT(*)
+FROM EcomDetails d
+JOIN #TcTile t ON t.TilePath = d.DetailValue
+WHERE d.DetailProductId LIKE 'TCPROD%';
 
 DROP TABLE #TcTile;
 
-COMMIT TRAN;
-PRINT 'Done - truvio-demo imagery: 12 concept tiles attached as the default image of all 96 TCPROD rows.';
+IF @attached = 0
+BEGIN
+    ROLLBACK TRAN;
+    RAISERROR(N'truvio-images.sql: 0 TCPROD rows carry a concept tile after the attach. The PLP and PDP probes will measure empty grey boxes. Check that the catalogue seeded (truvio-catalog.sql ran) and that the primary group relations point at the TCGRP-* ids this file maps.', 16, 1);
+END
+ELSE
+BEGIN
+    COMMIT TRAN;
+    PRINT CONCAT(N'truvio-demo imagery: ', @inserted, N' EcomDetails row(s) inserted, ',
+                 @updated, N' EcomProducts row(s) given the legacy image columns, ',
+                 @attached, N' TCPROD row(s) now carry a concept tile.');
+END
