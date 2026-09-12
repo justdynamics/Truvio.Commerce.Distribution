@@ -44,27 +44,27 @@
   ],
   "placeholders": [
     {
-      "path": "repositories/TruvioCommerce/Products.index",
+      "path": "System/Repositories/TruvioCommerce/Products.index",
       "kind": "repository",
       "why": "The storefront product index this distribution owns, so the facet set matches the catalogue it ships instead of the host design package's stock one."
     },
     {
-      "path": "repositories/TruvioCommerce/Products.query",
+      "path": "System/Repositories/TruvioCommerce/Products.query",
       "kind": "repository",
       "why": "The query the Shop paragraph binds. Carries the full Swift parameter set, so no surface that passes a parameter silently filters to nothing."
     },
     {
-      "path": "repositories/TruvioCommerce/Products.facets",
+      "path": "System/Repositories/TruvioCommerce/Products.facets",
       "kind": "repository",
       "why": "Three base-schema facets and a commented recipe for a category-field and a Range facet. A facet bound to a field with no values renders and filters nothing."
     },
     {
-      "path": "itemtypes/ItemType_TC_AnchorNav.xml",
+      "path": "System/Items/ItemType_TC_AnchorNav.xml",
       "kind": "itemtype",
       "why": "An in-page jump strip as a real item type, so a site does not author one as raw markup inside a Text paragraph. Unused until a row adds it."
     },
     {
-      "path": "itemtypes/ItemType_TC_AnchorNav_Item.xml",
+      "path": "System/Items/ItemType_TC_AnchorNav_Item.xml",
       "kind": "itemtype",
       "why": "The repeater child of TC_AnchorNav: label plus anchor id, no defaults, so a missing field renders visibly empty."
     }

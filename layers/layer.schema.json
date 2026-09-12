@@ -252,7 +252,7 @@
           "path": {
             "type": "string",
             "pattern": "^[a-zA-Z0-9 ._/-]+$",
-            "description": "The placeholder's path inside the layer, relative to the layer root (e.g. files/Templates/Designs/Swift-v2/Custom/default_custom.js, repositories/TruvioCommerce/Products.query, itemtypes/ItemType_TC_AnchorNav.xml). Charset-constrained, traversal sequences ('..') rejected - same discipline as files[]."
+            "description": "The placeholder's path FILES-RELATIVE ON THE COMPOSED SITE - where the composer stages the artefact under the host's wwwroot/Files/, which is the same path the gate asserts, and NOT the path inside the layer directory. So a repositories/ artefact declares System/Repositories/TruvioCommerce/Products.query, an itemtypes/ XML declares System/Items/ItemType_TC_AnchorNav.xml, and a files/ overlay declares Templates/Designs/Swift-v2/Custom/default_custom.js with no files/ prefix - identical in form to files[]. A layer-relative path does not resolve and the gate reports the entry ABSENT (v5 e2e, DW 10.28.10). Charset-constrained, traversal sequences ('..') rejected - same discipline as files[]."
           },
           "kind": {
             "enum": [
@@ -271,7 +271,7 @@
           }
         }
       },
-      "description": "OPTIONAL declared PLACEHOLDER footprint - present-but-inert hooks the layer ships so a re-skin is an edit and never a create. A placeholder is (a) present on disk, (b) neutral - no brand, no lorem, (c) documented in-file with its fill-in recipe, (d) inert - it adds nothing to render output until a consumer opts in, and (e) replaceable by a brand overlay without editing anything else. Declaring the footprint here is what lets the gate assert present / parsed / inert / neutral over the set instead of over a hand-maintained list. Every entry must also appear in files[] when it lives under files/."
+      "description": "OPTIONAL declared PLACEHOLDER footprint - present-but-inert hooks the layer ships so a re-skin is an edit and never a create. A placeholder is (a) present on disk, (b) neutral - no brand, no lorem, (c) documented in-file with its fill-in recipe, (d) inert - it adds nothing to render output until a consumer opts in, and (e) replaceable by a brand overlay without editing anything else. Declaring the footprint here is what lets the gate assert present / parsed / inert / neutral over the set instead of over a hand-maintained list. Every entry that comes from the layer's files/ tree must also appear in files[], with the identical Files-relative spelling."
     },
     "asserts": {
       "type": "object",
