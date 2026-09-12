@@ -1,0 +1,31 @@
+{
+  "name": "base-swift",
+  "from": "base@3.3.0",
+  "add": [],
+  "surfaces": [
+    "surface-swift@1.6.0"
+  ],
+  "sampleData": false,
+  "themes": [
+    "default"
+  ],
+  "compatAxes": [
+    "dw",
+    "apps",
+    "swift"
+  ],
+  "criticalPaths": [
+    "/",
+    "/en-us/home",
+    "/en-us/shop",
+    "/en-us/sign-in/sign-in"
+  ],
+  "expectedCounts": {
+    "EcomProducts": 0,
+    "EcomGroups": 0,
+    "EcomCountries": 96,
+    "EcomShops": 1,
+    "Area": 1
+  },
+  "description": "The foundational baseline: the one thing to clone that boots a Swift site. base + surface-swift + theme default, NO sample data and NO feature layers - an empty shop with a complete, themed storefront around it, and the declared placeholder footprint of both layers present, parsed and inert. An EDITION and never a merged layer (V5-PLAN D-C): collapsing base and surface-swift into one would force every headless and DAP consumer to carry the Swift design surface, break base.contract.json as the content-free contract additions bind to, and make base-only unprovable. criticalPaths are expressed under the CULTURE segment, not AreaUrlName: on a single-area host Dynamicweb serves /en-us/ and the decorative AreaUrlName 404s (Foundry 965, 1005). compatAxes names all three axes, so an unmet floor fails this edition instead of warning."
+}
