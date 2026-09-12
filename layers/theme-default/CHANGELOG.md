@@ -45,7 +45,7 @@ followed by a hunt for the field that should have pointed at it. Four of them we
 release ships them and `layer.json` `placeholders[]` now declares the whole set, each entry naming
 its path, the kind of proof the gate owes it, and what a consumer fills it in for.
 
-**`Custom/default_custom.js` plus its `AddJavascript` line.** There was no JavaScript entry point
+**`Custom/default_custom.js` plus its `AddScript` line.** There was no JavaScript entry point
 in this theme at all. Everything a re-skin has needed so far falls into three shapes a stylesheet
 cannot express: naming a platform-generated landmark for accessibility, repointing in-page anchors
 at runtime (Dynamicweb emits a sitewide `<base href>`, so a bare `#section` navigates to the front

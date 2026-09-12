@@ -5,8 +5,11 @@
     // The theme's JavaScript entry point. It ships EMPTY and registering it changes
     // nothing about the rendered page — that is the point: a consumer adding behaviour
     // edits a file that is already served instead of creating one and wiring it up.
-    // "defer" keeps it after the design package's own scripts and after parse.
-    AddJavascript("/Files/Templates/Designs/Swift-v2/Custom/default_custom.js", "defer");
+    // defer: true keeps it after the design package's own scripts and after parse.
+    // The platform helper is AddScript(path, defer:bool) - there is no AddJavascript
+    // on DW 10.28.10, and calling one does not compile: every page renders a dw-error
+    // dump instead of the site (e2e v5, DW 10.28.10).
+    AddScript("/Files/Templates/Designs/Swift-v2/Custom/default_custom.js", true);
 }
 <style>
     /* Render-critical neutral tokens — inline to avoid cache-buster staleness (Pitfall 7).

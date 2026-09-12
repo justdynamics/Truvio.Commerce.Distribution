@@ -4,7 +4,7 @@
  * The counterpart of default_custom.css: a file that already exists, is already
  * registered, and is already served, so adding behaviour to a Swift site is an edit
  * and never a create. It is registered from DefaultHeadInclude.cshtml with
- * AddJavascript(..., "defer"), which puts it after the design package's own scripts
+ * AddScript(..., true), which puts it after the design package's own scripts
  * and after the document has parsed.
  *
  * WHY IT EXISTS AS A PLACEHOLDER
