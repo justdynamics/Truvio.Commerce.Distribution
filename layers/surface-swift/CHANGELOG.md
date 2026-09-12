@@ -2,6 +2,51 @@
 
 
 
+## 1.7.0
+
+**The PLP row had no SKU, because the paragraph that renders it was never deployed.** The
+branded PLP renders five rows and the design leg's `PLPROW-01` found no product number on any
+of them. The cause is not a template gap and not an app setting: Swift 2.4 composes the PLP
+card out of paragraphs on a component page, the card already carries a
+`Swift-v2_ProductNumber` paragraph (`header: SKU`, `sourceParagraphId 22301`) on disk, and the
+stock `Swift-v2_ProductNumber.cshtml` already emits `itemprop="sku"`. The file was simply
+absent from `replace/replace-manifest.json`, so the deserializer never created it - and
+reported `979 created, 0 failed` while not creating it. The paragraph-id gap in the rendered
+page says the same thing: 22305, 22306, *22308*.
+
+`Product List Card/grid-row-2/paragraph-c1-2.yml` is now registered, and so are the two
+`grid-row-4` files (the row and its `Swift-v2_ProductAddToCart` paragraph) that had drifted out
+of the manifest with it. No template ships and no content changes - the three files were
+already authored.
+
+**The PDP spec band is back, with the data it needs behind it.** 1.5.0 removed the
+`Swift-v2_ProductFieldDisplayGroupsAccordion` band because no layer shipped an
+`EcomFieldDisplayGroups` row, so it rendered empty on every deserialize. That was the right
+call for the composition as it stood; it is no longer the composition. `truvio-demo` now seeds
+the `tc_specs` display group over its 28 category fields, so the band has something to name.
+
+It comes back as the always-visible variant rather than the accordion:
+`Swift-v2_ProductFieldDisplayGroups` with `Layout: table`, titled *Specifications*, on a new
+full-width row (`grid-row-6`, sortOrder 4) under the Overview band on `Shop/Product Details`.
+`HideFieldsWithZeroValue` and `HideGroupHeaders` are on, so a product renders only the fields
+it carries a value for and one group serves all four product categories. The accordion item
+type stays available and unused; it depends on
+`Swift-v2_ProductFieldDisplayGroupsLayoutSelector`, which this layer does not ship.
+
+A composition without `truvio-demo` seeds no display group and the band renders empty, exactly
+as it did before 1.5.0 - but `base-swift`, the only such composition that carries this page,
+pins `EcomProducts 0`, so there is no product to open it on.
+
+**`replace/_content/templates.manifest.yml` had drifted.** It declared neither
+`Swift-v2_ProductNumber` nor `Swift-v2_ProductLongDescription`, and listed
+`Swift-v2_ProductAddToCart` against `Product Info (right side)` only. All three now match the
+content tree, alongside the new `Swift-v2_ProductFieldDisplayGroups` entry.
+
+Known remaining drift, not touched here: `replace-manifest.json` still omits six
+`Customer center/Overview` files and `Product Info (right side)/grid-row-2/paragraph-c1-3.yml`,
+and still lists nine paths that no longer exist. A regeneration is the clean fix and is a
+change of its own.
+
 ## 1.6.1
 
 **The area now carries its own head include (Foundry 1031).** On a freshly deserialized site the
