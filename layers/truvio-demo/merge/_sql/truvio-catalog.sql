@@ -581,12 +581,18 @@ IF NOT EXISTS (SELECT 1 FROM EcomVariantsOptions WHERE VariantOptionId = 'TCVO-M
 --    dot-joined option ids - that string IS the variant key the storefront
 --    resolves, so it is written literally and never derived at read time.
 --
---    EcomPrices.PriceVariantId is what scopes a price row to ONE combination.
+--    EcomPrices.PriceProductVariantId is what scopes a price row to ONE combination.
 --    Without it the 36 rows would all price the master and the tier ladder would
 --    read as a single price - so the column is asserted before it is used.
+--
+--    The column is PriceProductVariantId, measured off sys.columns on DW 10.28.10.
+--    This section once spelled it PriceVariantId in both the inserts AND the
+--    guard, which taught the lesson the guard exists to teach: a COL_LENGTH guard
+--    is a RUNTIME check and the batch dies at COMPILE time with Msg 207, so a
+--    guard spelled from the same wrong guess as the insert never gets to fire.
 -- ---------------------------------------------------------------------------
-IF COL_LENGTH('EcomPrices', 'PriceVariantId') IS NULL
-    RAISERROR(N'truvio-catalog.sql: EcomPrices has no PriceVariantId column on this platform build. Per-variant prices cannot be scoped; read the live column names off sys.columns before seeding.', 16, 1);
+IF COL_LENGTH('EcomPrices', 'PriceProductVariantId') IS NULL
+    RAISERROR(N'truvio-catalog.sql: EcomPrices has no PriceProductVariantId column on this platform build. Per-variant prices cannot be scoped; read the live column names off sys.columns before seeding.', 16, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0001' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-STD')
     INSERT INTO EcomVariantOptionsProductRelation (VariantOptionsProductRelationProductId, VariantOptionsProductRelationVariantId) VALUES ('TCPROD0001', 'TCVO-TIER-STD');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0001' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-ADV')
@@ -601,32 +607,32 @@ IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND Pro
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-DRAFT', ProductNumber + '-STD-DRAFT', ProductName, ProductShortDescription, 45.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0001')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0001', 'TCPROD0001', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0001', 'TCPROD0001', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = 'TCVO-TIER-STD.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-PUB', ProductNumber + '-STD-PUB', ProductName, ProductShortDescription, 49.50, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0002')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0002', 'TCPROD0001', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0002', 'TCPROD0001', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', ProductNumber + '-ADV-DRAFT', ProductName, ProductShortDescription, 56.25, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0003')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0003', 'TCPROD0001', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0003', 'TCPROD0001', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-PUB', ProductNumber + '-ADV-PUB', ProductName, ProductShortDescription, 61.88, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0004')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0004', 'TCPROD0001', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0004', 'TCPROD0001', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', ProductNumber + '-ENT-DRAFT', ProductName, ProductShortDescription, 72.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0005')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0005', 'TCPROD0001', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0005', 'TCPROD0001', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-PUB', ProductNumber + '-ENT-PUB', ProductName, ProductShortDescription, 79.20, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0006')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0006', 'TCPROD0001', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0006', 'TCPROD0001', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0011' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-STD')
     INSERT INTO EcomVariantOptionsProductRelation (VariantOptionsProductRelationProductId, VariantOptionsProductRelationVariantId) VALUES ('TCPROD0011', 'TCVO-TIER-STD');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0011' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-ADV')
@@ -641,32 +647,32 @@ IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND Pro
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-DRAFT', ProductNumber + '-STD-DRAFT', ProductName, ProductShortDescription, 45.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0007')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0007', 'TCPROD0011', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0007', 'TCPROD0011', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = 'TCVO-TIER-STD.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-PUB', ProductNumber + '-STD-PUB', ProductName, ProductShortDescription, 49.50, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0008')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0008', 'TCPROD0011', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0008', 'TCPROD0011', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', ProductNumber + '-ADV-DRAFT', ProductName, ProductShortDescription, 56.25, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0009')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0009', 'TCPROD0011', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0009', 'TCPROD0011', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-PUB', ProductNumber + '-ADV-PUB', ProductName, ProductShortDescription, 61.88, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0010')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0010', 'TCPROD0011', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0010', 'TCPROD0011', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', ProductNumber + '-ENT-DRAFT', ProductName, ProductShortDescription, 72.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0011')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0011', 'TCPROD0011', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0011', 'TCPROD0011', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-PUB', ProductNumber + '-ENT-PUB', ProductName, ProductShortDescription, 79.20, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0012')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0012', 'TCPROD0011', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0012', 'TCPROD0011', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0016' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-STD')
     INSERT INTO EcomVariantOptionsProductRelation (VariantOptionsProductRelationProductId, VariantOptionsProductRelationVariantId) VALUES ('TCPROD0016', 'TCVO-TIER-STD');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0016' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-ADV')
@@ -681,32 +687,32 @@ IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND Pro
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-DRAFT', ProductNumber + '-STD-DRAFT', ProductName, ProductShortDescription, 45.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0013')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0013', 'TCPROD0016', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0013', 'TCPROD0016', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = 'TCVO-TIER-STD.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-PUB', ProductNumber + '-STD-PUB', ProductName, ProductShortDescription, 49.50, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0014')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0014', 'TCPROD0016', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0014', 'TCPROD0016', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', ProductNumber + '-ADV-DRAFT', ProductName, ProductShortDescription, 56.25, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0015')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0015', 'TCPROD0016', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0015', 'TCPROD0016', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-PUB', ProductNumber + '-ADV-PUB', ProductName, ProductShortDescription, 61.88, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0016')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0016', 'TCPROD0016', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0016', 'TCPROD0016', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', ProductNumber + '-ENT-DRAFT', ProductName, ProductShortDescription, 72.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0017')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0017', 'TCPROD0016', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0017', 'TCPROD0016', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-PUB', ProductNumber + '-ENT-PUB', ProductName, ProductShortDescription, 79.20, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0018')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0018', 'TCPROD0016', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0018', 'TCPROD0016', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0031' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-STD')
     INSERT INTO EcomVariantOptionsProductRelation (VariantOptionsProductRelationProductId, VariantOptionsProductRelationVariantId) VALUES ('TCPROD0031', 'TCVO-TIER-STD');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0031' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-ADV')
@@ -721,32 +727,32 @@ IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND Pro
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-DRAFT', ProductNumber + '-STD-DRAFT', ProductName, ProductShortDescription, 45.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0019')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0019', 'TCPROD0031', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0019', 'TCPROD0031', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = 'TCVO-TIER-STD.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-PUB', ProductNumber + '-STD-PUB', ProductName, ProductShortDescription, 49.50, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0020')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0020', 'TCPROD0031', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0020', 'TCPROD0031', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', ProductNumber + '-ADV-DRAFT', ProductName, ProductShortDescription, 56.25, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0021')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0021', 'TCPROD0031', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0021', 'TCPROD0031', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-PUB', ProductNumber + '-ADV-PUB', ProductName, ProductShortDescription, 61.88, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0022')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0022', 'TCPROD0031', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0022', 'TCPROD0031', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', ProductNumber + '-ENT-DRAFT', ProductName, ProductShortDescription, 72.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0023')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0023', 'TCPROD0031', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0023', 'TCPROD0031', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-PUB', ProductNumber + '-ENT-PUB', ProductName, ProductShortDescription, 79.20, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0031' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0024')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0024', 'TCPROD0031', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0024', 'TCPROD0031', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0041' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-STD')
     INSERT INTO EcomVariantOptionsProductRelation (VariantOptionsProductRelationProductId, VariantOptionsProductRelationVariantId) VALUES ('TCPROD0041', 'TCVO-TIER-STD');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0041' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-ADV')
@@ -761,32 +767,32 @@ IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND Pro
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-DRAFT', ProductNumber + '-STD-DRAFT', ProductName, ProductShortDescription, 45.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0025')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0025', 'TCPROD0041', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0025', 'TCPROD0041', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = 'TCVO-TIER-STD.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-PUB', ProductNumber + '-STD-PUB', ProductName, ProductShortDescription, 49.50, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0026')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0026', 'TCPROD0041', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0026', 'TCPROD0041', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', ProductNumber + '-ADV-DRAFT', ProductName, ProductShortDescription, 56.25, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0027')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0027', 'TCPROD0041', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0027', 'TCPROD0041', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-PUB', ProductNumber + '-ADV-PUB', ProductName, ProductShortDescription, 61.88, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0028')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0028', 'TCPROD0041', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0028', 'TCPROD0041', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', ProductNumber + '-ENT-DRAFT', ProductName, ProductShortDescription, 72.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0029')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0029', 'TCPROD0041', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0029', 'TCPROD0041', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-PUB', ProductNumber + '-ENT-PUB', ProductName, ProductShortDescription, 79.20, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0041' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0030')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0030', 'TCPROD0041', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0030', 'TCPROD0041', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0051' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-STD')
     INSERT INTO EcomVariantOptionsProductRelation (VariantOptionsProductRelationProductId, VariantOptionsProductRelationVariantId) VALUES ('TCPROD0051', 'TCVO-TIER-STD');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0051' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-ADV')
@@ -801,32 +807,32 @@ IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND Pro
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-DRAFT', ProductNumber + '-STD-DRAFT', ProductName, ProductShortDescription, 45.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0031')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0031', 'TCPROD0051', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0031', 'TCPROD0051', 'TCVO-TIER-STD.TCVO-MODE-DRAFT', 'EUR', 1, 45.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = 'TCVO-TIER-STD.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-STD.TCVO-MODE-PUB', ProductNumber + '-STD-PUB', ProductName, ProductShortDescription, 49.50, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0032')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0032', 'TCPROD0051', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0032', 'TCPROD0051', 'TCVO-TIER-STD.TCVO-MODE-PUB', 'EUR', 1, 49.50, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', ProductNumber + '-ADV-DRAFT', ProductName, ProductShortDescription, 56.25, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0033')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0033', 'TCPROD0051', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0033', 'TCPROD0051', 'TCVO-TIER-ADV.TCVO-MODE-DRAFT', 'EUR', 1, 56.25, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = 'TCVO-TIER-ADV.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ADV.TCVO-MODE-PUB', ProductNumber + '-ADV-PUB', ProductName, ProductShortDescription, 61.88, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0034')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0034', 'TCPROD0051', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0034', 'TCPROD0051', 'TCVO-TIER-ADV.TCVO-MODE-PUB', 'EUR', 1, 61.88, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-DRAFT')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', ProductNumber + '-ENT-DRAFT', ProductName, ProductShortDescription, 72.00, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0035')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0035', 'TCPROD0051', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0035', 'TCPROD0051', 'TCVO-TIER-ENT.TCVO-MODE-DRAFT', 'EUR', 1, 72.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-PUB')
     INSERT INTO EcomProducts (ProductId, ProductLanguageId, ProductVariantId, ProductNumber, ProductName, ProductShortDescription, ProductPrice, ProductActive, ProductNeverOutOfStock, ProductStock, ProductType, ProductDefaultShopId, ProductCreated, ProductUpdated)
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-PUB', ProductNumber + '-ENT-PUB', ProductName, ProductShortDescription, 79.20, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0036')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0036', 'TCPROD0051', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0036', 'TCPROD0051', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
 
 -- ---------------------------------------------------------------------------
 -- 5. The BOM kit. Each slot binds a GROUP and names a default child, which is
@@ -845,13 +851,13 @@ IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0002
 --    PriceCustomerGroupId - the group columns stay empty.
 -- ---------------------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-T05')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-T05', 'TCPROD0006', '', 'EUR', 5, 40.50, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-T05', 'TCPROD0006', '', 'EUR', 5, 40.50, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-T10')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-T10', 'TCPROD0006', '', 'EUR', 10, 36.00, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-T10', 'TCPROD0006', '', 'EUR', 10, 36.00, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-T25')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-T25', 'TCPROD0006', '', 'EUR', 25, 31.50, '', '');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-T25', 'TCPROD0006', '', 'EUR', 25, 31.50, '', '');
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-CONTRACT')
-    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-CONTRACT', 'TCPROD0002', '', 'EUR', 1, 48.00, '', 'TC-100200');
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-CONTRACT', 'TCPROD0002', '', 'EUR', 1, 48.00, '', 'TC-100200');
 
 -- ---------------------------------------------------------------------------
 -- 7. Product categories and their fields - one category per TOP group, seven
@@ -859,12 +865,20 @@ IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-CONTRACT')
 --    values are ROW-BACKED (EcomProductCategoryFieldValue): no DDL, no schema
 --    change, which is why a demo catalogue can ship them as plain inserts.
 --
---    The column names below are the shape this distribution has observed
---    (EcomProductCategory / EcomProductCategoryTranslation are the exact columns
---    the harness's reference_category seed uses; the Field / FieldTranslation /
---    FieldValue tables follow the same Translation* and FieldValue* convention).
+--    The column names below are READ OFF sys.columns on a DW 10.28.10 host, not
+--    inferred from the naming convention. Inferring them is exactly what went
+--    wrong once: EcomProductCategoryField is FieldType (not FieldTypeId) and
+--    FieldSortOrder (not FieldSort), it carries NO locked column at all, and
+--    FieldTemplateTag is NOT NULL. The platform sets FieldTemplateTag to the
+--    field's own system name verbatim (every row on every reference seed
+--    measured: FieldTemplateTag = FieldId), so each insert supplies the FieldId
+--    twice rather than deriving anything at read time.
+--
 --    A platform whose columns differ must FAIL HERE, loudly, rather than seed a
---    catalogue with no attributes on it - so the shape is asserted first.
+--    catalogue with no attributes on it - so the shape is asserted first, and the
+--    guard asserts the REAL names: a guard spelled from the same wrong guess as
+--    the insert passes and then the insert fails at compile time with Msg 207,
+--    which is what happened before this fix.
 -- ---------------------------------------------------------------------------
 IF OBJECT_ID(N'dbo.EcomProductCategory', N'U') IS NULL
    OR OBJECT_ID(N'dbo.EcomProductCategoryTranslation', N'U') IS NULL
@@ -874,42 +888,44 @@ IF OBJECT_ID(N'dbo.EcomProductCategory', N'U') IS NULL
     RAISERROR(N'truvio-catalog.sql: a product-category table is missing. The brand catalogue ships category fields; this platform build does not carry the category schema.', 16, 1);
 IF COL_LENGTH('EcomProductCategoryField', 'FieldId') IS NULL
    OR COL_LENGTH('EcomProductCategoryField', 'FieldCategoryId') IS NULL
-   OR COL_LENGTH('EcomProductCategoryField', 'FieldTypeId') IS NULL
+   OR COL_LENGTH('EcomProductCategoryField', 'FieldTemplateTag') IS NULL
+   OR COL_LENGTH('EcomProductCategoryField', 'FieldType') IS NULL
+   OR COL_LENGTH('EcomProductCategoryField', 'FieldSortOrder') IS NULL
    OR COL_LENGTH('EcomProductCategoryFieldTranslation', 'FieldTranslationFieldId') IS NULL
    OR COL_LENGTH('EcomProductCategoryFieldValue', 'FieldValueFieldId') IS NULL
    OR COL_LENGTH('EcomProductCategoryFieldValue', 'FieldValueValue') IS NULL
-    RAISERROR(N'truvio-catalog.sql: the product-category FIELD columns are not the expected shape (FieldId / FieldCategoryId / FieldTypeId / FieldTranslationFieldId / FieldValueFieldId / FieldValueValue). Read the live column names off sys.columns and update this section - do NOT let it seed a catalogue with no attributes.', 16, 1);
+    RAISERROR(N'truvio-catalog.sql: the product-category FIELD columns are not the expected shape (FieldId / FieldCategoryId / FieldTemplateTag / FieldType / FieldSortOrder / FieldTranslationFieldId / FieldValueFieldId / FieldValueValue). Read the live column names off sys.columns and update this section - do NOT let it seed a catalogue with no attributes.', 16, 1);
 
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategory WHERE CategoryId = 'tc_data_models')
     INSERT INTO EcomProductCategory (CategoryId, CategoryProductProperties, CategoryType) VALUES ('tc_data_models', 0, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryTranslation WHERE CategoryTranslationCategoryId = 'tc_data_models' AND CategoryTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryTranslation (CategoryTranslationCategoryId, CategoryTranslationLanguageId, CategoryTranslationCategoryName) VALUES ('tc_data_models', 'ENU', N'Data Models');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcFacet' AND FieldCategoryId = 'tc_data_models')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcFacet', 'tc_data_models', 1, 1, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcFacet', 'tc_data_models', 'tcFacet', 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcFacet' AND FieldTranslationFieldCategoryId = 'tc_data_models' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcFacet', 'tc_data_models', 'ENU', N'Facet');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcVariantAxis' AND FieldCategoryId = 'tc_data_models')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcVariantAxis', 'tc_data_models', 1, 2, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcVariantAxis', 'tc_data_models', 'tcVariantAxis', 1, 2);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcVariantAxis' AND FieldTranslationFieldCategoryId = 'tc_data_models' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcVariantAxis', 'tc_data_models', 'ENU', N'Variant Axis');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcCompletenessScore' AND FieldCategoryId = 'tc_data_models')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcCompletenessScore', 'tc_data_models', 6, 3, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcCompletenessScore', 'tc_data_models', 'tcCompletenessScore', 6, 3);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcCompletenessScore' AND FieldTranslationFieldCategoryId = 'tc_data_models' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcCompletenessScore', 'tc_data_models', 'ENU', N'Completeness Score');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcWorkflowState' AND FieldCategoryId = 'tc_data_models')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcWorkflowState', 'tc_data_models', 1, 4, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcWorkflowState', 'tc_data_models', 'tcWorkflowState', 1, 4);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcWorkflowState' AND FieldTranslationFieldCategoryId = 'tc_data_models' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcWorkflowState', 'tc_data_models', 'ENU', N'Workflow State');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcDataModel' AND FieldCategoryId = 'tc_data_models')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcDataModel', 'tc_data_models', 1, 5, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcDataModel', 'tc_data_models', 'tcDataModel', 1, 5);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcDataModel' AND FieldTranslationFieldCategoryId = 'tc_data_models' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcDataModel', 'tc_data_models', 'ENU', N'Data Model');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcFieldGroup' AND FieldCategoryId = 'tc_data_models')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcFieldGroup', 'tc_data_models', 1, 6, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcFieldGroup', 'tc_data_models', 'tcFieldGroup', 1, 6);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcFieldGroup' AND FieldTranslationFieldCategoryId = 'tc_data_models' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcFieldGroup', 'tc_data_models', 'ENU', N'Field Group');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcInheritance' AND FieldCategoryId = 'tc_data_models')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcInheritance', 'tc_data_models', 3, 7, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcInheritance', 'tc_data_models', 'tcInheritance', 3, 7);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcInheritance' AND FieldTranslationFieldCategoryId = 'tc_data_models' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcInheritance', 'tc_data_models', 'ENU', N'Inheritance');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategory WHERE CategoryId = 'tc_commerce')
@@ -917,31 +933,31 @@ IF NOT EXISTS (SELECT 1 FROM EcomProductCategory WHERE CategoryId = 'tc_commerce
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryTranslation WHERE CategoryTranslationCategoryId = 'tc_commerce' AND CategoryTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryTranslation (CategoryTranslationCategoryId, CategoryTranslationLanguageId, CategoryTranslationCategoryName) VALUES ('tc_commerce', 'ENU', N'Commerce');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcPriceMatrix' AND FieldCategoryId = 'tc_commerce')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcPriceMatrix', 'tc_commerce', 1, 1, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcPriceMatrix', 'tc_commerce', 'tcPriceMatrix', 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcPriceMatrix' AND FieldTranslationFieldCategoryId = 'tc_commerce' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcPriceMatrix', 'tc_commerce', 'ENU', N'Price Matrix');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcQuantityTier' AND FieldCategoryId = 'tc_commerce')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcQuantityTier', 'tc_commerce', 6, 2, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcQuantityTier', 'tc_commerce', 'tcQuantityTier', 6, 2);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcQuantityTier' AND FieldTranslationFieldCategoryId = 'tc_commerce' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcQuantityTier', 'tc_commerce', 'ENU', N'Quantity Tier');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcAssortmentScope' AND FieldCategoryId = 'tc_commerce')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcAssortmentScope', 'tc_commerce', 1, 3, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcAssortmentScope', 'tc_commerce', 'tcAssortmentScope', 1, 3);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcAssortmentScope' AND FieldTranslationFieldCategoryId = 'tc_commerce' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcAssortmentScope', 'tc_commerce', 'ENU', N'Assortment Scope');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcDiscountLadder' AND FieldCategoryId = 'tc_commerce')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcDiscountLadder', 'tc_commerce', 1, 4, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcDiscountLadder', 'tc_commerce', 'tcDiscountLadder', 1, 4);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcDiscountLadder' AND FieldTranslationFieldCategoryId = 'tc_commerce' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcDiscountLadder', 'tc_commerce', 'ENU', N'Discount Ladder');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcCurrencyScope' AND FieldCategoryId = 'tc_commerce')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcCurrencyScope', 'tc_commerce', 1, 5, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcCurrencyScope', 'tc_commerce', 'tcCurrencyScope', 1, 5);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcCurrencyScope' AND FieldTranslationFieldCategoryId = 'tc_commerce' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcCurrencyScope', 'tc_commerce', 'ENU', N'Currency Scope');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcVatGroup' AND FieldCategoryId = 'tc_commerce')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcVatGroup', 'tc_commerce', 1, 6, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcVatGroup', 'tc_commerce', 'tcVatGroup', 1, 6);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcVatGroup' AND FieldTranslationFieldCategoryId = 'tc_commerce' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcVatGroup', 'tc_commerce', 'ENU', N'VAT Group');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcContractScope' AND FieldCategoryId = 'tc_commerce')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcContractScope', 'tc_commerce', 1, 7, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcContractScope', 'tc_commerce', 'tcContractScope', 1, 7);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcContractScope' AND FieldTranslationFieldCategoryId = 'tc_commerce' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcContractScope', 'tc_commerce', 'ENU', N'Contract Scope');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategory WHERE CategoryId = 'tc_content')
@@ -949,31 +965,31 @@ IF NOT EXISTS (SELECT 1 FROM EcomProductCategory WHERE CategoryId = 'tc_content'
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryTranslation WHERE CategoryTranslationCategoryId = 'tc_content' AND CategoryTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryTranslation (CategoryTranslationCategoryId, CategoryTranslationLanguageId, CategoryTranslationCategoryName) VALUES ('tc_content', 'ENU', N'Content');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcPageNode' AND FieldCategoryId = 'tc_content')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcPageNode', 'tc_content', 1, 1, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcPageNode', 'tc_content', 'tcPageNode', 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcPageNode' AND FieldTranslationFieldCategoryId = 'tc_content' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcPageNode', 'tc_content', 'ENU', N'Page Node');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcParagraphBlock' AND FieldCategoryId = 'tc_content')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcParagraphBlock', 'tc_content', 1, 2, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcParagraphBlock', 'tc_content', 'tcParagraphBlock', 1, 2);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcParagraphBlock' AND FieldTranslationFieldCategoryId = 'tc_content' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcParagraphBlock', 'tc_content', 'ENU', N'Paragraph Block');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcItemType' AND FieldCategoryId = 'tc_content')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcItemType', 'tc_content', 1, 3, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcItemType', 'tc_content', 'tcItemType', 1, 3);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcItemType' AND FieldTranslationFieldCategoryId = 'tc_content' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcItemType', 'tc_content', 'ENU', N'Item Type');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcGridRow' AND FieldCategoryId = 'tc_content')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcGridRow', 'tc_content', 1, 4, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcGridRow', 'tc_content', 'tcGridRow', 1, 4);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcGridRow' AND FieldTranslationFieldCategoryId = 'tc_content' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcGridRow', 'tc_content', 'ENU', N'Grid Row');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcColorScheme' AND FieldCategoryId = 'tc_content')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcColorScheme', 'tc_content', 1, 5, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcColorScheme', 'tc_content', 'tcColorScheme', 1, 5);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcColorScheme' AND FieldTranslationFieldCategoryId = 'tc_content' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcColorScheme', 'tc_content', 'ENU', N'Color Scheme');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcNavigationTag' AND FieldCategoryId = 'tc_content')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcNavigationTag', 'tc_content', 1, 6, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcNavigationTag', 'tc_content', 'tcNavigationTag', 1, 6);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcNavigationTag' AND FieldTranslationFieldCategoryId = 'tc_content' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcNavigationTag', 'tc_content', 'ENU', N'Navigation Tag');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcTemplateTag' AND FieldCategoryId = 'tc_content')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcTemplateTag', 'tc_content', 1, 7, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcTemplateTag', 'tc_content', 'tcTemplateTag', 1, 7);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcTemplateTag' AND FieldTranslationFieldCategoryId = 'tc_content' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcTemplateTag', 'tc_content', 'ENU', N'Template Tag');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategory WHERE CategoryId = 'tc_users')
@@ -981,31 +997,31 @@ IF NOT EXISTS (SELECT 1 FROM EcomProductCategory WHERE CategoryId = 'tc_users')
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryTranslation WHERE CategoryTranslationCategoryId = 'tc_users' AND CategoryTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryTranslation (CategoryTranslationCategoryId, CategoryTranslationLanguageId, CategoryTranslationCategoryName) VALUES ('tc_users', 'ENU', N'Users');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcUserGroup' AND FieldCategoryId = 'tc_users')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcUserGroup', 'tc_users', 1, 1, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcUserGroup', 'tc_users', 'tcUserGroup', 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcUserGroup' AND FieldTranslationFieldCategoryId = 'tc_users' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcUserGroup', 'tc_users', 'ENU', N'User Group');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcPermissionGrant' AND FieldCategoryId = 'tc_users')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcPermissionGrant', 'tc_users', 1, 2, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcPermissionGrant', 'tc_users', 'tcPermissionGrant', 1, 2);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcPermissionGrant' AND FieldTranslationFieldCategoryId = 'tc_users' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcPermissionGrant', 'tc_users', 'ENU', N'Permission Grant');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcImpersonationScope' AND FieldCategoryId = 'tc_users')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcImpersonationScope', 'tc_users', 1, 3, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcImpersonationScope', 'tc_users', 'tcImpersonationScope', 1, 3);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcImpersonationScope' AND FieldTranslationFieldCategoryId = 'tc_users' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcImpersonationScope', 'tc_users', 'ENU', N'Impersonation Scope');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcCustomerNumber' AND FieldCategoryId = 'tc_users')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcCustomerNumber', 'tc_users', 1, 4, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcCustomerNumber', 'tc_users', 'tcCustomerNumber', 1, 4);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcCustomerNumber' AND FieldTranslationFieldCategoryId = 'tc_users' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcCustomerNumber', 'tc_users', 'ENU', N'Customer Number');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcAccessLevel' AND FieldCategoryId = 'tc_users')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcAccessLevel', 'tc_users', 1, 5, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcAccessLevel', 'tc_users', 'tcAccessLevel', 1, 5);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcAccessLevel' AND FieldTranslationFieldCategoryId = 'tc_users' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcAccessLevel', 'tc_users', 'ENU', N'Access Level');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcSecondaryUser' AND FieldCategoryId = 'tc_users')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcSecondaryUser', 'tc_users', 3, 6, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcSecondaryUser', 'tc_users', 'tcSecondaryUser', 3, 6);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcSecondaryUser' AND FieldTranslationFieldCategoryId = 'tc_users' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcSecondaryUser', 'tc_users', 'ENU', N'Secondary User');
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryField WHERE FieldId = 'tcLoginProfile' AND FieldCategoryId = 'tc_users')
-    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTypeId, FieldSort, FieldLocked) VALUES ('tcLoginProfile', 'tc_users', 1, 7, 0);
+    INSERT INTO EcomProductCategoryField (FieldId, FieldCategoryId, FieldTemplateTag, FieldType, FieldSortOrder) VALUES ('tcLoginProfile', 'tc_users', 'tcLoginProfile', 1, 7);
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldTranslation WHERE FieldTranslationFieldId = 'tcLoginProfile' AND FieldTranslationFieldCategoryId = 'tc_users' AND FieldTranslationLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldTranslation (FieldTranslationFieldId, FieldTranslationFieldCategoryId, FieldTranslationLanguageId, FieldTranslationFieldLabel) VALUES ('tcLoginProfile', 'tc_users', 'ENU', N'Login Profile');
 
