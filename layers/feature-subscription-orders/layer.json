@@ -1,15 +1,10 @@
 {
   "name": "feature-subscription-orders",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "csLedger": [],
   "configRows": [
-    {
-      "table": "EcomProducts",
-      "where": "ProductId = 'PACK-SUB-PROD1' AND ProductLanguageId = 'ENU'",
-      "description": "pack-owned recurring/subscription product (SUB-PLAN-01) — self-sufficiency proof"
-    },
     {
       "table": "EcomPayments",
       "where": "PaymentId = 'PAY2' AND PaymentLanguageId = 'ENU'",
@@ -31,10 +26,6 @@
     "replace"
   ],
   "fragmentTables": [
-    "EcomGroups",
-    "EcomProducts",
-    "EcomGroupProductRelation",
-    "EcomShopGroupRelation",
     "ScheduledTask"
   ],
   "fragmentContent": [

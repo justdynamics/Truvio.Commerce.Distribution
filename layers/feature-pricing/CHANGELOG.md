@@ -1,5 +1,21 @@
 # Changelog — feature-pricing
 
+
+## 1.1.0
+
+**Zero catalogue rows (Foundry 960).** The two demo products (`PACK-RPP-PROD1/2`), their group
+(`PACK-RPP-GRP1`), the group and shop relations and all four `EcomPrices` rows moved to the
+`sample-data` layer (`merge/_sql/feature-fixtures.sql`), ids unchanged. This layer's whole merge
+tree went with them, so `fragmentModes`, `fragmentTables` and the six catalogue `configRows` are
+gone from `layer.json`: what remains is the compile-optional price provider and the two `cart-price`
+probes, which address the same product ids as before.
+
+Why the rows could not stay: `sampleData: false` is the distribution's statement that the shop is
+empty, and a layer that ships catalogue rows outside that toggle makes the statement false without
+the gate being able to say which layer did it. Self-sufficiency was a real argument — the base
+ships no catalogue — but it bought a per-layer catalogue at the cost of the one invariant every
+consumer reads.
+
 ## 1.0.0
 
 Initial release. Split out of `feature-reordering-pricing@1.2.1` (P3 feature surgery,

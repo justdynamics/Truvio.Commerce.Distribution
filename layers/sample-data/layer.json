@@ -1,6 +1,6 @@
 {
   "name": "sample-data",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -15,9 +15,21 @@
       "transactional": true,
       "requiresHostRestart": false,
       "sqlcmdVariables": [
-        { "name": "BuyerUserName", "secret": false, "description": "Frontend buyer login name (canonical: IMCUser)." },
-        { "name": "BuyerPassword", "secret": true, "description": "Buyer demo password. Never repo content, never logged." },
-        { "name": "CsrPassword", "secret": true, "description": "CSR demo password. Never repo content, never logged." }
+        {
+          "name": "BuyerUserName",
+          "secret": false,
+          "description": "Frontend buyer login name (canonical: IMCUser)."
+        },
+        {
+          "name": "BuyerPassword",
+          "secret": true,
+          "description": "Buyer demo password. Never repo content, never logged."
+        },
+        {
+          "name": "CsrPassword",
+          "secret": true,
+          "description": "CSR demo password. Never repo content, never logged."
+        }
       ]
     },
     {
@@ -31,10 +43,20 @@
       "requiresHostRestart": true
     },
     {
-      "file": "_sql/email-stats.sql",
+      "file": "_sql/feature-fixtures.sql",
       "mode": "merge",
       "phase": "after-replace-deserialize",
       "order": 2,
+      "description": "Feature demo fixtures moved out of the feature layers (Foundry 960): the 5 groups, 8 products, 4 prices and 2 BOM slots that feature-pricing, feature-bom-configurator and feature-subscription-orders used to ship themselves, keys unchanged. Keeps the whole catalogue on the single sampleData toggle.",
+      "idempotent": true,
+      "transactional": true,
+      "requiresHostRestart": true
+    },
+    {
+      "file": "_sql/email-stats.sql",
+      "mode": "merge",
+      "phase": "after-replace-deserialize",
+      "order": 3,
       "description": "Email-marketing statistics backfill: per campaign email a send-log message, 24 recipients (2 bounced), 3 tracked links and 13 clicks, so the backend Marketing dashboards do not read 0 sent / 0 clicked. Discovery-driven, and a clean no-op when the composition ships no campaign emails.",
       "idempotent": true,
       "transactional": true,
@@ -44,7 +66,7 @@
       "file": "_sql/demo-clock.sql",
       "mode": "merge",
       "phase": "after-replace-deserialize",
-      "order": 3,
+      "order": 4,
       "description": "The demo clock: the _demoClock anchor table, the exclusion and per-column guard tables, usp_DemoClockShift (discovers every operational date column from sys.columns and shifts it by whole days), and the daily RunSql scheduled task that runs it. Keeps every seeded date anchored to today after idle days.",
       "idempotent": true,
       "transactional": true,

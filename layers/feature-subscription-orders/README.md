@@ -22,10 +22,10 @@ the invoice path (any payment method with `PaymentAddInType != Checkout` resolve
 `RecurringSupported` returns true), the CartV2 frontend parses the recurring POST fields natively,
 and the platform's own scheduled task generates follow-up orders. PAY2/SHIP9/ScheduledTask are
 **declared configRow dependencies, not fragment rows** — the layer inserts nothing into those
-tables. **1.1.0 self-sufficiency:** the base layer is scaffolding-only, so the layer now ships its
-own recurring product `PACK-SUB-PROD1` + group `PACK-SUB-GRP1` + group/shop relations
-(`fragmentTables`: EcomGroups, EcomProducts, EcomGroupProductRelation, EcomShopGroupRelation) —
-the checkout-recurring probe rides the layer product, never a base catalog row.
+tables. **1.2.0 (Foundry 960):** the recurring product `PACK-SUB-PROD1`, its group `PACK-SUB-GRP1` and
+their group/shop relations moved to `sample-data` `merge/_sql/feature-fixtures.sql` with their ids
+unchanged. This layer ships zero catalogue rows; the checkout-recurring probe rides the same
+product id, now seeded by the sampleData toggle.
 
 ## Morning admin step: enable scheduled generation
 
@@ -123,3 +123,10 @@ Account nav, and confirm the placed subscription renders with its `End subscript
 This was previously a `/swift-2/subscriptions` (public, Secondary-Nav) gate probe; moving the
 page into the Account nav tree (its correct home, beside Orders) trades that in-gate render
 proof for this real-host UAT — the same trade the BOM configurator render makes.
+
+> **Where the catalogue rows live (Foundry 960, this release).** This layer ships **zero**
+> catalogue rows. The products, groups, relations and prices it demonstrates against are seeded by
+> the `sample-data` layer (`merge/_sql/feature-fixtures.sql`), with every id unchanged, so they ride
+> the single `sampleData` edition toggle like the rest of the catalogue. Composed with
+> `sampleData: false` this layer now adds no products and no groups; its behaviour probes are
+> meaningful only on an edition that also carries sample data.

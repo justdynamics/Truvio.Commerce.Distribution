@@ -1,5 +1,29 @@
 # Changelog — sample-data
 
+
+## 2.3.0
+
+**The feature layers' catalogue rows moved here (Foundry 960).** Composed with `sampleData: false`
+the distribution was supposed to have an empty catalogue, and the acceptance criterion said so; the
+e2e host measured `EcomProducts = 8`, `EcomGroups = 5`, `EcomPrices = 4` on exactly that run. The
+rows were not smuggled — they were shipped openly by three feature layers, each README calling it
+catalog self-sufficiency, because the base is scaffolding-only. The reason the gate could not name
+the owner is that `Set-ConfigFromEdition` *derives* `EcomProducts = 0` from the toggle instead of
+measuring what the composed layers insert, so eight products arriving looked like a count mismatch
+rather than a finding with an address.
+
+The fix is the plain invariant, restored: the catalogue rides the single `sampleData` toggle and
+nothing else. `merge/_sql/feature-fixtures.sql` (declared, phase `after-replace-deserialize`,
+order 2) now seeds the 5 groups, 8 products, 4 prices and 2 BOM slots that `feature-pricing`,
+`feature-bom-configurator` and `feature-subscription-orders` used to ship in their own mode trees.
+**Every id is unchanged** — `PACK-RPP-*`, `PACK-BOM-*`, `PACK-SUB-*` — because each layer's
+`behaviorProbes` and demo pages address these products by id; only the owner moved. `email-stats`
+and `demo-clock` shift to order 3 and 4.
+
+Consequence worth stating out loud: a feature layer's behaviour probe is now meaningful only on an
+edition that also carries sample data. `swift-demo` does; `base-swift` composes no feature layers
+at all, which is the composition the emptiness claim was always about.
+
 ## 2.2.0
 
 Two things this layer promised and never delivered: a composer could not FIND its SQL, and

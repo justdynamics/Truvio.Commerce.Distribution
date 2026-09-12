@@ -8,62 +8,6 @@
   "entries": [
     {
       "providerType": "SqlTable",
-      "table": "EcomGroups",
-      "nameColumn": null,
-      "compareColumns": null,
-      "xmlColumns": [],
-      "resolveLinksInColumns": [],
-      "serviceCaches": [],
-      "schemaSync": null,
-      "entryId": "sql/EcomGroups",
-      "files": [
-        "_sql/EcomGroups/PACK-SUB-GRP1.yml"
-      ]
-    },
-    {
-      "providerType": "SqlTable",
-      "table": "EcomProducts",
-      "nameColumn": null,
-      "compareColumns": null,
-      "xmlColumns": [],
-      "resolveLinksInColumns": [],
-      "serviceCaches": [],
-      "schemaSync": null,
-      "entryId": "sql/EcomProducts",
-      "files": [
-        "_sql/EcomProducts/PACK-SUB-PROD1.yml"
-      ]
-    },
-    {
-      "providerType": "SqlTable",
-      "table": "EcomGroupProductRelation",
-      "nameColumn": null,
-      "compareColumns": null,
-      "xmlColumns": [],
-      "resolveLinksInColumns": [],
-      "serviceCaches": [],
-      "schemaSync": null,
-      "entryId": "sql/EcomGroupProductRelation",
-      "files": [
-        "_sql/EcomGroupProductRelation/PACK-SUB-GRP1$$PACK-SUB-PROD1.yml"
-      ]
-    },
-    {
-      "providerType": "SqlTable",
-      "table": "EcomShopGroupRelation",
-      "nameColumn": null,
-      "compareColumns": null,
-      "xmlColumns": [],
-      "resolveLinksInColumns": [],
-      "serviceCaches": [],
-      "schemaSync": null,
-      "entryId": "sql/EcomShopGroupRelation",
-      "files": [
-        "_sql/EcomShopGroupRelation/PACK-SUB-GRP1$$SHOP1.yml"
-      ]
-    },
-    {
-      "providerType": "SqlTable",
       "table": "ScheduledTask",
       "nameColumn": null,
       "compareColumns": null,

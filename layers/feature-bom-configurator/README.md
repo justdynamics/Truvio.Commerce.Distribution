@@ -37,6 +37,14 @@ accept this equivalence (recorded here and in 09-02-SUMMARY.md per orchestrator 
 | `merge/_content/.../Kit Configurator Detail` | page B — hidden detail grid (stock BOM + AddToCart paragraphs) |
 | `templates/Designs/Swift-v2/eCom/ProductCatalog/PackBomDetailRenderGrid.cshtml` | layer Z-copy render-grid (new path only) |
 
+
+> **Where the catalogue rows live (Foundry 960, this release).** This layer ships **zero**
+> catalogue rows. The products, groups, relations and prices it demonstrates against are seeded by
+> the `sample-data` layer (`merge/_sql/feature-fixtures.sql`), with every id unchanged, so they ride
+> the single `sampleData` edition toggle like the rest of the catalogue. Composed with
+> `sampleData: false` this layer now adds no products and no groups; its behaviour probes are
+> meaningful only on an edition that also carries sample data.
+
 ## BOM data (LRN-BASE-07 recipe)
 
 Each slot is one `EcomProductItems` row: `ProductItemBomGroupId` = a **real** `EcomGroups`
@@ -48,12 +56,13 @@ id (that group's products become the radio options), `ProductItemDefaultProductI
 | PACK-BOM3-0002 | `PACK-BOM-0001` | `PACK-BOM-FORKS` | `PACK-BOM-FORK-1` | `PACK-BOM-FORK-2` |
 | PACK-BOM3-0003 | `PACK-BOM-0001` | `PACK-BOM-RACKS` | `PACK-BOM-RACK-1` | `PACK-BOM-RACK-2` |
 
-- **Catalog-self-sufficient (1.1.0).** The base layer is scaffolding-only, so this layer ships
-  **all** of its own catalog: the Rule-B parent `PACK-BOM-0001` (`ProductNumber 10004kit`,
-  `ProductType=2`), two child groups (`PACK-BOM-FORKS`, `PACK-BOM-RACKS`) each with two
-  layer-owned child products, and the parent's own group `PACK-BOM-GRP1` — all bound to
-  `SHOP1` via `EcomShopGroupRelation`. No base products/groups (PROD290/GROUP49/GROUP161/
-  10028/10119) are referenced.
+- **The catalogue is sample-data's, not this layer's (1.2.0, Foundry 960).** The Rule-B parent
+  `PACK-BOM-0001` (`ProductNumber 10004kit`, `ProductType=2`), the two child groups
+  (`PACK-BOM-FORKS`, `PACK-BOM-RACKS`) with two child products each, the parent's group
+  `PACK-BOM-GRP1` and their `EcomShopGroupRelation` bindings all moved to
+  `sample-data` `merge/_sql/feature-fixtures.sql` with their ids unchanged. This layer ships
+  zero catalogue rows, so an edition with `sampleData: false` gets zero products from it. No
+  base products/groups (PROD290/GROUP49/GROUP161/10028/10119) are referenced either.
 - **PK3-02** rides `PACK-BOM-0001` with two slots in the two layer-owned groups; the
   `bom-cart-lines` probe selects the non-default child in each slot to prove per-child
   native disambiguation (`OrderLineBOMItemId` = slot id, `OrderLineProductId` = the chosen
