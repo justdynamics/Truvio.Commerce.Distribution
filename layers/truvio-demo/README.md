@@ -45,6 +45,7 @@ README for the full account of that trap).
 |---|---|---|
 | `truvio-catalog.sql` | `after-replace-deserialize` / 5 | 16 groups, 60 masters + 36 variant rows, 40 prices, 1 BOM kit (2 slots), 2 services, 4 categories × 7 category fields, 180 field values |
 | `truvio-identities.sql` | `after-replace-deserialize` / 6 | The B2B account `100100`, the three personas `100101`/`100102`/`100103`, 6 memberships, 12 orders `TCO-0001`…`TCO-0012` with 20 lines |
+| `truvio-images.sql` | `after-replace-deserialize` / 7 | The 12 concept tiles attached as the default image of all 96 `TCPROD` rows |
 
 Phases and orders sit **after** `sample-data`'s (which occupies 1–4 in the same phase),
 so on an edition carrying both, the brand rows land last and the two never interleave.
@@ -69,6 +70,28 @@ set only on a Completed order.
 (where `sample-data`'s identities live) because its orders FK the shop, currency and
 catalogue rows. DW caches identity state at startup, so the personas become first-class on
 the host restart the catalogue already requires — one restart covers both scripts.
+
+## Imagery
+
+Every product carries an image, because a PLP card and a PDP with no image are an empty
+grey box on the two pages the design gate measures. The tiles are this layer's own neutral
+SVGs — a flat industrial-green plate with the concept word and the `TRUVIO` wordmark, a few
+hundred bytes each — one per concept subgroup, shipped under
+`files/Images/TruvioCommerce/products/tc-tile-<concept>.svg` and served from
+`/Files/Images/TruvioCommerce/products/`. They are **data**: a product row points at a
+file. Presentation is still `theme-default`'s.
+
+The photographic brand assets stay in the Distribution's
+[`brand/brand-assets.manifest.json`](../../brand/brand-assets.manifest.json), fetched at
+brand time and sha256-pinned. They are deliberately **not** committed here.
+
+Attachment writes two surfaces: `EcomDetails` (the attachment the storefront reads —
+`DetailValue` + `DetailIsDefault`, the shape observed on a live DW 10.28 host) with its
+column list resolved from `sys.columns`, and the legacy `EcomProducts.ProductImage*`
+columns where a build still has them, with the same value. A missing `EcomDetails` table
+is a loud failure, never a skip. Each tile lands on at most 11 product rows and is default
+on every one of them, so it can never become the un-audited extra gallery slot the
+bulk-attach-tail check (#125) looks for.
 
 ## Key families
 

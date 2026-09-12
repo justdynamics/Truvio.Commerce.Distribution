@@ -41,7 +41,31 @@
           "description": "Password for admin@truvio-demo.example (persona 100103). Demo credential, never repo content, never logged."
         }
       ]
+    },
+    {
+      "file": "_sql/truvio-images.sql",
+      "mode": "merge",
+      "phase": "after-replace-deserialize",
+      "order": 7,
+      "description": "Product imagery: the 12 neutral concept tiles this layer ships under files/Images/TruvioCommerce/products/ become the default image of all 96 TCPROD rows, attached through EcomDetails (column set resolved from sys.columns, since the optional language/sorting/type columns differ across platform builds) and mirrored onto the legacy EcomProducts.ProductImage* columns where the build still has them. A missing EcomDetails table is a loud failure, never a skip: a demo that seeds no image and reports success is the failure this script exists to prevent.",
+      "idempotent": true,
+      "transactional": true,
+      "requiresHostRestart": true
     }
+  ],
+  "files": [
+    "Images/TruvioCommerce/products/tc-tile-assortments.svg",
+    "Images/TruvioCommerce/products/tc-tile-completeness.svg",
+    "Images/TruvioCommerce/products/tc-tile-discounts.svg",
+    "Images/TruvioCommerce/products/tc-tile-groups.svg",
+    "Images/TruvioCommerce/products/tc-tile-impersonation.svg",
+    "Images/TruvioCommerce/products/tc-tile-item-types.svg",
+    "Images/TruvioCommerce/products/tc-tile-pages.svg",
+    "Images/TruvioCommerce/products/tc-tile-paragraphs.svg",
+    "Images/TruvioCommerce/products/tc-tile-permissions.svg",
+    "Images/TruvioCommerce/products/tc-tile-price-structures.svg",
+    "Images/TruvioCommerce/products/tc-tile-variants.svg",
+    "Images/TruvioCommerce/products/tc-tile-workflows.svg"
   ],
   "costHints": {
     "reservedKeyPrefixes": [
@@ -74,7 +98,8 @@
       "AccessUser": 4,
       "AccessUserGroupRelation": 6,
       "EcomOrders": 12,
-      "EcomOrderLines": 20
+      "EcomOrderLines": 20,
+      "EcomDetails": 96
     },
     "expectedRowsNote": "What this layer's two scripts land on top of whatever sample-data seeds. Advisory: the gate derives its own counts from the composition, this is the layer's own statement of what it ships."
   }

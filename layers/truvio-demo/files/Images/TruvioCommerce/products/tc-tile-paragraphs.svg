@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" width="480" height="480" role="img" aria-label="Truvio PARAGRAPHS tile">
+  <title>Truvio PARAGRAPHS</title>
+  <rect width="480" height="480" fill="#E8F1EC"/>
+  <rect x="40" y="40" width="400" height="400" rx="16" fill="#2E7D5B"/>
+  <rect x="40" y="40" width="400" height="8" fill="#1C4C38"/>
+  <text x="240" y="238" text-anchor="middle" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="34" font-weight="600" letter-spacing="1.5" fill="#FFFFFF">PARAGRAPHS</text>
+  <text x="240" y="396" text-anchor="middle" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="6" fill="#E8F1EC">TRUVIO</text>
+</svg>
