@@ -1388,5 +1388,18 @@ IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldValue WHERE FieldValueField
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldValue WHERE FieldValueFieldId = 'tcLoginProfile' AND FieldValueFieldCategoryId = 'tc_users' AND FieldValueProductId = 'TCPROD0060' AND FieldValueProductVariantId = '' AND FieldValueProductLanguageId = 'ENU')
     INSERT INTO EcomProductCategoryFieldValue (FieldValueFieldId, FieldValueFieldCategoryId, FieldValueProductId, FieldValueProductVariantId, FieldValueProductLanguageId, FieldValueValue) VALUES ('tcLoginProfile', 'tc_users', 'TCPROD0060', '', 'ENU', N'Elevated');
 
+-- ---------------------------------------------------------------------------
+-- 8. The default currency's rate.
+--    EcomCurrencies.CurrencyRate is hundredths: the platform's own seed ships
+--    the default currency at 100, meaning 1.00. A host whose default currency
+--    carries rate 1 renders every price a hundred times over - the v5 e2e on
+--    DW 10.28.10 measured a 60.00 EUR line rendering as 6000.00 USD on the PDP.
+--    Existence-guarded so a host that is already correct is not written to.
+--    The DURABLE home for this is the base layer's currency seed (queued for the
+--    next base release); this row keeps the demo edition readable until then.
+-- ---------------------------------------------------------------------------
+IF EXISTS (SELECT 1 FROM EcomCurrencies WHERE CurrencyIsDefault = 1 AND CurrencyRate <> 100)
+    UPDATE EcomCurrencies SET CurrencyRate = 100 WHERE CurrencyIsDefault = 1 AND CurrencyRate <> 100;
+
 COMMIT TRAN;
 PRINT 'Done - truvio-demo catalogue: 16 groups (4 top + 12 sub), 60 masters + 36 variant rows, 40 prices, 2 BOM slots, 4 categories / 28 fields / 180 values in SHOP1.';

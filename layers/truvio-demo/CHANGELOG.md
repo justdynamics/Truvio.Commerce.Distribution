@@ -1,5 +1,41 @@
 # Changelog — truvio-demo
 
+## 1.0.1
+
+Everything below was measured on a live DW 10.28.10 host (SQL Server) during the Foundry v5
+end-to-end session. Nothing here is a design change; it is the layer doing what 1.0.0 said
+it did.
+
+**Three scripts did not compile.** `truvio-catalog.sql` addressed `EcomPrices.PriceVariantId`
+(the column is `PriceProductVariantId`) and wrote the category fields as `FieldTypeId` /
+`FieldSort` / `FieldLocked` (the columns are `FieldType` / `FieldSortOrder`, there is no
+locked column, and `FieldTemplateTag` is `NOT NULL` and was never supplied). The platform
+writes `FieldTemplateTag` as the field's own system name verbatim — `FieldTemplateTag` =
+`FieldId` on every row of every reference seed measured — so the inserts now supply it.
+`truvio-images.sql` addressed `EcomDetails.DetailProductVariantId`; the column is
+`DetailVariantId`. Each of these is a compile-time Msg 207, which is why the scripts' own
+`COL_LENGTH` shape guards — a runtime check — never fired; the guards now assert the real
+column names.
+
+**`truvio-images.sql` claimed success unconditionally.** Its tail PRINTed a fixed line
+naming 12 tiles and 96 rows whether or not a row moved. It now reports the measured
+`@@ROWCOUNT` of each write plus the attached total, and raises with a rollback when the
+attached total is zero. The attached total, not the insert count, is the assertion: the
+attach is idempotent, so 0 inserted on a re-run is correct and 0 attached never is.
+
+**Four of the twelve orders were invisible.** The customer-centre page grants group `1325`
+and the *My orders* scope and nothing else, so the orders stamped with the CSR (`100102`)
+or the admin (`100103`) reached no persona that can open the page — the order list rendered
+eight of twelve. All twelve now carry the buyer (`100101`). CSR and admin reach a buyer's
+orders through impersonation, the platform's own path, rather than through widened page
+grants; the layer README states this.
+
+**60.00 EUR rendered as 6000.00 USD.** `EcomCurrencies.CurrencyRate` is hundredths and the
+platform's own seed ships the default currency at `100`; the host carried `1`.
+`truvio-catalog.sql` now ships an existence-guarded UPDATE setting the default currency's
+rate to 100. This is a stopgap in the right place for now and the wrong place forever: the
+durable home is the base layer's currency seed, queued for the next base release.
+
 ## 1.0.0
 
 The first release of the **Truvio Commerce brand data** as its own layer (V5-PLAN §2.4,

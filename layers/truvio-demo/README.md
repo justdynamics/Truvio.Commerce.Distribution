@@ -66,6 +66,15 @@ Their history is 12 orders across the `OrderFlowId 1` states — `OS1 New`, `OS2
 order carrying one reads as a broken record in the Commerce grids. `OrderCompletedDate` is
 set only on a Completed order.
 
+**All twelve orders belong to the buyer** (`OrderCustomerAccessUserId` = `100101`). This is
+not a simplification, it is what the page permits: the customer-centre page grants group
+`1325` and the *My orders* scope and nothing else, measured on DW 10.28.10, so the four
+orders once stamped with the CSR (`100102`) or the admin (`100103`) were invisible to every
+persona that can open the page — the order list rendered eight of twelve. **CSR and admin
+reach a buyer's orders by impersonating the buyer**, which is the platform's own path for
+it. Widening the page grants instead would demo a permission model Dynamicweb does not use,
+and would put a second account's orders in a list the page labels *My orders*.
+
 `truvio-identities.sql` runs `after-replace-deserialize` rather than `before-host-start`
 (where `sample-data`'s identities live) because its orders FK the shop, currency and
 catalogue rows. DW caches identity state at startup, so the personas become first-class on
