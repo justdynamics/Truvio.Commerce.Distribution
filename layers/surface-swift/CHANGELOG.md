@@ -1,5 +1,25 @@
 # Changelog — surface-swift
 
+## 1.5.2
+
+Patch: the layer ships the Swift version stamp — `files/System/Truvio/swift.stamp.json`,
+overlaid to `wwwroot/Files/System/Truvio/swift.stamp.json`:
+
+```json
+{ "tag": "v2.4.0", "version": "2.4.0" }
+```
+
+A running site has had **no Swift marker at all**: the design package leaves nothing on disk
+that names the release it came from, so a session (or a gate) could read the DW version and the
+installed AppStore app versions off the host but had to *ask* which Swift it was looking at.
+That is the one version axis of the v5 spine (V5-PLAN §2.2) with no observable artifact, and
+this file is it. The preflight reads it by path; `tag` is the `dynamicweb/Swift` release tag,
+`version` the same release in the 3-digit form this layer's `swiftVersion` already carries.
+
+Declared in `layer.json` `files[]` like every other disk-overlay path this layer owns, so the
+activation overlay copies and MD5-verifies it with the 32 design templates. Patch bump: no
+content, no SQL, no item type and no template changes — one new inert file on disk.
+
 ## 1.5.1
 
 Patch: the serializer config `swift-content-2.4.json` renames its output-subfolder keys onto

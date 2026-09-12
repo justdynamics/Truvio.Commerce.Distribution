@@ -9,7 +9,7 @@ commit messages, issues).
 | **layer** | One versioned unit: a `layer.json` manifest + its content (mode trees `replace/`+`merge/`) and/or a `files/` disk overlay. |
 | **kind** | Layer classification (the dir-name prefix equals the kind): `base`, `catalog`, `feature`, `theme`, `sample-data`, `surface`. |
 | **base** | The one privileged layer every edition builds on. FRAMEWORK-ONLY since 3.0.0 (Swift 2.4 base split): the framework SQL sets + the base contract; zero catalog, zero content areas. |
-| **base contract** | `layers/base/base.contract.json` — the machine-readable guarantees the base makes to additions (reserved ID prefixes, base-owned tables, anchors). Additions bind ONLY to it, never to each other. |
+| **base contract** | `layers/base/base.contract.json` — the machine-readable guarantees the base makes to additions (reserved ID prefixes, base-owned tables, anchors) plus `compat`, the compatibility floor (DW, Swift tag, AppStore apps) every addition inherits. Additions bind ONLY to it, never to each other. |
 | **edition** | A named, gate-proven **composition**: `from` a base + an ordered `add` of layers (+ `surfaces`, `sampleData`, `themes`). See `editions/`. |
 | **addition** | A non-base layer listed in an edition's `add` (feature layers). |
 | **surface** | A layer carrying what a frontend needs — the Swift storefront content (`surface-swift`: both areas + UrlPath + own item types), headless content + Delivery-API probes (`surface-headless`), or a content area (`surface-dap-portal`). |

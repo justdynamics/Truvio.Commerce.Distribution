@@ -1,8 +1,32 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "2.0.0",
+  "baseContractVersion": "2.1.0",
   "swiftVersion": "2.4.0",
+  "compat": {
+    "dw": {
+      "min": "10.28.1",
+      "tfm": "net10.0"
+    },
+    "swift": {
+      "tag": "v2.4.0",
+      "version": "2.4.0"
+    },
+    "apps": [
+      {
+        "id": "Truvio.Commerce.Serializer",
+        "min": "0.9.0-beta",
+        "required": true
+      },
+      {
+        "id": "Truvio.Commerce.MCP",
+        "min": "0.4.4",
+        "required": false
+      }
+    ]
+  },
+  "compatNote": "COMPATIBILITY FLOOR the base states and every addition inherits (v5 version spine, V5-PLAN 2.2). Floors plus a single proven point, never a support matrix: rolling latest-only means the gate proves exactly one (dw, apps, swift tag) triple per run, and what it proved is recorded upward in layers/INDEX.json gateProven - written by the Foundry, never by hand. `dw.min` is the platform floor, `dw.tfm` the single target framework the host must build against, `swift.tag` the dynamicweb/Swift release tag (the 3-digit `swiftVersion` above is the same release without the tag form). `apps[].required: false` is an optional companion app: absent is fine, present below `min` is not. An addition MAY restate `compat` in its own layer.json to raise a floor; it may never lower one.",
   "minSerializerVersion": "0.8.1-beta",
+  "minSerializerVersionDeprecated": "DEPRECATED ALIAS of compat.apps[id=Truvio.Commerce.Serializer].min - kept one release for consumers still reading this field; new readers use compat.apps.",
   "minSerializerVersionNote": "ENGINE FLOOR (base >= 3.0.0): Truvio.Commerce.Serializer >= 0.8.1-beta — the first engine retargeted to DW 10.28.1-PreRelease (Swift 2.4 roll-forward). Carries everything the 0.8.0-beta floor guaranteed (render-time page/grid-row/paragraph permission blocks + deferred permission re-apply + user-group cache refresh). Proven on DW 10.28.1-PreRelease; stable re-prove due when DW 10.28 lands stable on NuGet.",
   "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution, base 3.0.0 FRAMEWORK-ONLY). The Swift 2.4 base split moved ALL content (both mode trees) and UrlPath to the surface-swift layer; the base now ships only the framework SQL sets + this contract + SQL-predicate config. Additions (feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Content-scoped contract bits (content areas, langPrefix, navDepth, page anchors, title rules, per-environment Area exclusions, protected Swift item types) moved to layers/surface-swift/surface.contract-notes.json. The gate reads this file for the base-contract collision check.",
   "idRules": {

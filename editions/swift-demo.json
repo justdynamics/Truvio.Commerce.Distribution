@@ -1,6 +1,6 @@
 {
   "name": "swift-demo",
-  "from": "base@3.2.1",
+  "from": "base@3.3.0",
   "add": [
     "feature-reordering@1.0.2",
     "feature-pricing@1.0.0",
@@ -11,7 +11,7 @@
     "feature-baseline-guide@1.0.0"
   ],
   "surfaces": [
-    "surface-swift@1.5.1"
+    "surface-swift@1.5.2"
   ],
   "sampleData": true,
   "themes": [

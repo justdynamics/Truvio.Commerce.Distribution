@@ -1,5 +1,42 @@
 # Changelog — base
 
+## 3.3.0
+
+`base.contract.json` gains `compat` — the compatibility floor every addition inherits (v5
+version spine, V5-PLAN §2.2). Minor bump, not patch, because the contract additions bind to
+gained a block.
+
+```jsonc
+"compat": {
+  "dw":    { "min": "10.28.1", "tfm": "net10.0" },
+  "swift": { "tag": "v2.4.0", "version": "2.4.0" },
+  "apps":  [ { "id": "Truvio.Commerce.Serializer", "min": "0.9.0-beta", "required": true },
+             { "id": "Truvio.Commerce.MCP",        "min": "0.4.4",     "required": false } ]
+}
+```
+
+Why it exists: the three version roots a consumer must match — the DW platform, the AppStore
+apps, the Swift release — had no machine-readable home. `dwPlatformVersion` lived only in the
+Foundry's hand-pinned gate config, there was no field for a Swift **tag** anywhere (only the
+3-digit `swiftVersion`), and the engine floor was prose. A layer could claim nothing a reader
+or a validator could check.
+
+What it is and is not. `compat` states **floors plus one proven point**, never a support
+matrix: rolling latest-only means the gate proves exactly one (dw, apps, swift tag) triple per
+run, and what it proved is recorded upward in `layers/INDEX.json` `gateProven` — written by the
+Foundry publish flow, never by hand. The dependency points **up**: this file states a floor, the
+gate states what it proved. `apps[].required: false` marks an optional companion app (absent is
+fine, present below `min` is not). An addition MAY restate `compat` in its own `layer.json` to
+raise a floor; it may never lower one.
+
+`minSerializerVersion` stays exactly where it is and keeps its value, now carrying a
+`minSerializerVersionDeprecated` line that names it a deprecated alias of
+`compat.apps[id=Truvio.Commerce.Serializer].min`. It is retained one release for consumers
+still reading it; new readers use `compat.apps`. `baseContractVersion` moves 2.0.0 -> 2.1.0
+(additive).
+
+No SQL, no content and no row counts change: this release is the contract file only.
+
 ## 3.2.1
 
 Patch: the serializer config `swift-2.4.json` renames its output-subfolder keys onto the
