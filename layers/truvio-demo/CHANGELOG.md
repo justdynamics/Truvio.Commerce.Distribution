@@ -1,5 +1,59 @@
 # Changelog — truvio-demo
 
+## 1.1.0
+
+Four measurements from the v5 end-to-end session on DW 10.28.10, each one a thing the
+layer claimed and did not do.
+
+**The reassignment seeded but never repaired.** 1.0.1 moved all twelve orders onto the
+buyer, and the host still measured 8 on the buyer, 3 on the CSR and 1 on the admin after a
+clean re-run: every order insert in `truvio-identities.sql` is `IF NOT EXISTS`-guarded, so on
+a host seeded by 1.0.0 not one of the twelve was written and nothing else touched them. The
+buyer's *My orders* rendered 8 of 12. New section 4 states the reassignment a second time as
+an existence-guarded UPDATE over the whole `TCO-%` range, covering the customer identity block
+as a unit - the access-user id the my-orders scope filters on, and the customer number, name
+and email the order grids and the receipt render. Guarded on the rows that DIFFER, so a
+converged host is not written to. Applied against the e2e host inside a rolled-back
+transaction: 8/3/1 before, 12/0/0 after.
+
+**The rate fix moved the wrong currency.** 1.0.1 moved the DEFAULT currency to rate 100 and
+the e2e measured the hundredfold intact and merely relabelled: the storefront serves USD,
+whose rate was still 1, so a stored 45.00 rendered as `$4,500.00`. The guard now reads the
+placeholder rate rather than the default flag - every currency row still at 1 moves to 100.
+Measured on the host, only USD is at 1; EUR is at 100 and the other eight (HUF 2, DKK 15,
+CZK 29, GBP 86, HRK 99, RON 150, PLN 163, BGN 380) already carry real rates relative to the
+default and are left alone, which is why the guard is `= 1` and not `<> 100`. USD becoming
+1:1 with EUR is deliberate demo semantics, stated in the script: the catalogue carries one
+set of round numbers and they stay readable on the currency the storefront actually serves,
+and inventing an FX rate would put wrong money on a prospect's screen. The durable home is
+still the base layer's currency seed.
+
+**No product had a long description, so the PDP had no body.** The detail page carries a
+full-width Overview band and it rendered at height 0 on every product; the probe measured the
+whole PDP collapsing to 84 characters of main text. New section 7b gives all 60 masters two or
+three sentences in the same platform-vocabulary voice the names use - what the concept is,
+what that row demonstrates, what a prospect can do with it on the page - in
+`EcomProducts.ProductLongDescription`, guarded on absence so an edited copy survives and a
+1.0.x host is filled. Variant rows inherit the master's body.
+
+**The spec table had nothing to bind to.** The PDP spec paragraph does not name a product
+category: Swift's `Swift-v2_ProductFieldDisplayGroups` takes field-display-group system names,
+resolved against `EcomFieldDisplayGroups`. This layer shipped 28 category fields and 180 values
+and no display group, which is why `surface-swift` 1.5.0 removed the band as permanently empty
+and why the e2e found no spec element on the page at all. New section 7c seeds the `tc_specs`
+group, its translation and a relation row per `tc_*` category field, derived from the fields
+themselves so the two lists cannot disagree; `surface-swift` 1.7.0 brings the band back and
+names it. Column names read off `sys.columns` on the 10.28.10 host in this file's own
+discipline - `FieldDisplayGroupId` is an `INT IDENTITY`, so the group is addressed by system
+name everywhere and the id is looked up. The denormalised `FieldDisplayGroupFieldIds` column is
+written from the relation with `STRING_AGG` rather than the `FOR XML` idiom, because the XML
+`value()` method needs `QUOTED_IDENTIFIER ON` and `sqlcmd` runs these scripts with it off - the
+`FOR XML` form fails Msg 1934 on a real apply, measured.
+
+The whole amended `truvio-catalog.sql` was applied to the e2e host inside a rolled-back
+transaction: clean compile, 60 long descriptions written, 28 display-group relations, USD moved
+to 100, nothing left behind.
+
 ## 1.0.1
 
 Everything below was measured on a live DW 10.28.10 host (SQL Server) during the Foundry v5

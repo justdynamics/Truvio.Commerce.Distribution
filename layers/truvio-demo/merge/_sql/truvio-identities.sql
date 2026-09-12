@@ -206,5 +206,39 @@ BEGIN
     VALUES ('TCO-0012-2', 'TCO-0012', 'TCPROD0018', 'TC-PRC-0018', N'Truvio Price Matrix 18', 1, 75.00, 75.00, '0', DATEADD(day, -1, GETDATE()));
 END
 
+-- ---------------------------------------------------------------------------
+-- 4. Ownership convergence. Section 3 guards every order on IF NOT EXISTS, which
+--    seeds correctly and repairs nothing: a host seeded before the reassignment
+--    above still carries the SPLIT ownership 1.0.0 shipped - three orders on the
+--    CSR (100102) and one on the admin (100103) - and the buyer's
+--    /customer-center/my-orders renders 8 of 12. Measured exactly that way on
+--    DW 10.28.10 after a clean re-run of this script.
+--
+--    So the reassignment is stated a second time as an UPDATE over the whole
+--    TCO-% range, covering the customer identity block as a unit: the access-user
+--    id the my-orders scope filters on, and the customer number / name / email the
+--    order grids and the receipt render. Existence-guarded in this script's own
+--    idiom - the guard reads the rows that DIFFER, so a host already converged is
+--    not written to, and a re-run is a no-op rather than a no-change UPDATE.
+-- ---------------------------------------------------------------------------
+IF EXISTS (
+    SELECT 1 FROM EcomOrders
+     WHERE OrderId LIKE 'TCO-%'
+       AND (   ISNULL(OrderCustomerAccessUserId, 0) <> 100101
+            OR ISNULL(OrderCustomerNumber, '')      <> 'TC-100200'
+            OR ISNULL(OrderCustomerName, '')        <> N'Truvio Buyer'
+            OR ISNULL(OrderCustomerEmail, '')       <> 'buyer@truvio-demo.example')
+)
+    UPDATE EcomOrders
+       SET OrderCustomerAccessUserId = 100101,
+           OrderCustomerNumber       = 'TC-100200',
+           OrderCustomerName         = N'Truvio Buyer',
+           OrderCustomerEmail        = 'buyer@truvio-demo.example'
+     WHERE OrderId LIKE 'TCO-%'
+       AND (   ISNULL(OrderCustomerAccessUserId, 0) <> 100101
+            OR ISNULL(OrderCustomerNumber, '')      <> 'TC-100200'
+            OR ISNULL(OrderCustomerName, '')        <> N'Truvio Buyer'
+            OR ISNULL(OrderCustomerEmail, '')       <> 'buyer@truvio-demo.example');
+
 COMMIT TRAN;
 PRINT 'Done - truvio-demo identities: account 100100, personas 100101/100102/100103, 6 memberships, 12 orders TCO-0001..TCO-0012 with 20 lines.';
