@@ -2,6 +2,40 @@
 
 
 
+## 2.1.0
+
+**Block #23 - the laptop band.** Home and the PLP overflowed horizontally by exactly 66px at
+1366, and the header search field computed `0 x 58`, both at 1366 only. The sheet has three
+breakpoints - 767.98, 991.98 and 992 - so 1366 and 1440 were one tier to every rule in it, and
+nothing between 992 and infinity could tell them apart.
+
+The header lays the logo lockup, the megamenu nav row, the icon cluster and the search field on
+one flex line, and that line's min-content width is a fixed budget: a 210px inline-hardcoded
+logo figure, the gap / `padding-inline` / caret this sheet adds to every nav item, and the stock
+header container gap. None of it shrinks. At 1440 it fits with a few pixels of slack; at 1366 it
+is 66px over. The identical 66px on two structurally unrelated page bodies is the proof that the
+source is the header they share.
+
+The search field was the casualty, not the cause. The relaxation in the header-affordance
+section zeroes the 260px minimum Swift ships on the field's inner wrapper and supplies no basis
+in its place, which makes it the one item on the line that can absorb the overcommit - so it
+absorbed all of it and collapsed to zero while the line still overflowed.
+
+Block #23 fixes the budget. Between 768 and 1440 the four contributions sized for 1440 close to
+values the mobile tier already proves usable - logo figure to 170px, header container gap to
+.5rem, nav gap to .1rem, nav-link `padding-inline` to .1rem and the caret to .34em with no
+margin - and the search field is given a flex basis so it grows into what that frees. At the
+seven-item bar `HEADER-01` measured: 40 + 14.4 + 44.8 + 14.6 = 113.8px returned against a 66px
+overcommit, and every term but the logo is per-item, so the margin widens as the bar does.
+
+The field keeps its `min-width: 0`. A hard floor would be a new fixed budget on the same line,
+which is the shape of the bug. Nothing in the block sets `overflow` on a header element - an
+overflow context there clips the megamenu and offcanvas panels, which at this width still open.
+
+Authoring-time proof on the amended sheet: a string-aware comment and brace scan reports clean,
+and a comment-stripped parse resolves 112 top-level rules with 16 block markers present and
+contiguous (#8 through #23).
+
 ## 2.0.0
 
 **The wave (V5-PLAN 2.5, decision D-E).** Block 22 of `default_custom.css`: one cubic path on a

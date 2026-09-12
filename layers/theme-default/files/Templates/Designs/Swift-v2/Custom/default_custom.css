@@ -1283,3 +1283,75 @@ body > footer.td-wave-top,
 [data-swift-page-footer].td-wave-top {
   padding-block-start: calc(var(--td-wave-h) + 14px);
 }
+
+/* =============================================================================
+ * #23 THE LAPTOP BAND - the header line has to fit between 992 and 1440 as well
+ * The sheet carries three breakpoints - 767.98, 991.98 and 992 - so as far as
+ * every rule above is concerned a 1366 laptop and a 1440 desktop are one tier.
+ * They are not. The header lays the logo lockup, the megamenu nav row, the icon
+ * cluster and the search field out on one flex line, and that line's min-content
+ * width is a fixed budget: the logo figure is inline-hardcoded at 210px, the
+ * nav decorations this sheet adds above (gap, padding-inline, caret) are sized
+ * in rem and em, and the header container keeps its stock gap. None of it
+ * shrinks. At 1440 the budget fits with a few pixels to spare. At 1366 it does
+ * not, and the page is pushed wider than the viewport - measured at 1432 against
+ * a 1366 viewport on /home AND on the PLP, the same 66px on two unrelated page
+ * bodies, which is the proof that the source is the header they share and not
+ * either body.
+ *
+ * The search field is the casualty, not the cause. The relaxation above zeroes
+ * the 260px minimum Swift ships on its inner wrapper and supplies no basis in
+ * its place, so the field is the one item on the line that can absorb the
+ * overcommit - and it absorbs all of it, collapsing to a measured 0 x 58 while
+ * the line still overflows. Removing the victim floor was never going to fix an
+ * overcommitted line.
+ *
+ * So this block fixes the budget instead. Between 768 and 1440 the four
+ * contributions that are sized for 1440 and refuse to shrink are closed to
+ * values the mobile tier already proves usable, and the search field is given a
+ * basis so it grows into whatever that frees. The arithmetic, at the 7-item bar
+ * HEADER-01 measured: the logo returns 40px, the nav gap 2.4px per gap, the
+ * per-item inline padding 6.4px, the caret 2.1px, which is 40 + 14.4 + 44.8 +
+ * 14.6 = 113.8px against a 66px overcommit. Every term except the logo is
+ * per-item, so the margin widens as the bar does - the direction a fix has to
+ * fail safe in.
+ *
+ * The field keeps the min-width: 0 the relaxation gave it. That is deliberate:
+ * a hard floor here would be a new fixed budget on the same line, which is the
+ * bug this block exists to remove. It is given a flex basis and allowed to
+ * shrink, so it can never be the thing that pushes the document again.
+ *
+ * Nothing here sets overflow on any header element - the standing guard: an
+ * overflow context on the header subtree clips the megamenu and offcanvas
+ * panels, which at this width still have to open.
+ * ========================================================================== */
+[data-td-block="23"] { --td-block: 23; }
+
+@media (min-width: 768px) and (max-width: 1439.98px) {
+  /* No header child keeps an automatic minimum size it is not willing to give up. */
+  [data-swift-page-header] [data-swift-container] > * { min-width: 0; }
+
+  /* The logo lockup. Block #13 clamps the figure below 768 because the icon
+   * cluster needs the room; between 768 and 1440 the line needs it just as much,
+   * and the SVG scales inside whatever the figure is given. */
+  header [data-dw-itemtype="swift-v2_logo"] figure { width: 170px !important; }
+  header [data-dw-itemtype="swift-v2_logo"] svg { width: 100%; height: auto; }
+
+  /* The header container's own gap, tightened the way block #13 tightens it below
+   * 768 - the stock gap is sized for a line that has slack. */
+  [data-swift-page-header] [data-swift-container] { gap: .5rem !important; }
+
+  /* The nav row's own decorations, which are what this sheet adds to the budget. */
+  .megamenu-wrapper > nav.d-flex { gap: .1rem; }
+  .megamenu-wrapper > nav > .nav-item > .nav-link { gap: .2rem; padding-inline: .1rem; }
+  .megamenu-wrapper > nav > .nav-item.dropdown > .nav-link::after {
+    width: .34em;
+    height: .34em;
+    margin-left: 0;
+  }
+
+  /* The search field grows into the space the four rules above return. Basis, not
+   * floor: it still shrinks before the line does. */
+  [data-dw-itemtype="swift-v2_searchfield"] { flex: 1 1 16.25rem !important; }
+  [data-dw-itemtype="swift-v2_searchfield"] .js-async-fetch-placeholder { width: 100%; }
+}
