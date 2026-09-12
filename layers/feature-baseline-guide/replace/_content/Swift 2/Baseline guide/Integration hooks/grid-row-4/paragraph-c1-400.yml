@@ -1,0 +1,44 @@
+﻿"paragraphUniqueId": 84557403-b733-4294-b058-5a157e0a4d6e
+"sourceParagraphId": 22528
+"sortOrder": 400
+"itemType": "Swift-v2_Text"
+"header": "Which MCP tools brand it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "749b418f-893c-408e-a5a0-c1ddcd823777"
+  "Id": "1557"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">** Read this before planning tool calls. ** dw-integration-framework prescribes, in order
+    (SKILL.md:144-174):
+      save_integration_endpoint -&gt; test_integration_endpoint
+      -&gt; create_integration_activity
+      -&gt; get_integration_provider_schema -&gt; save_integration_activity_mapping
+      -&gt; run_integration_activity -&gt; get_integration_activity_status
+      -&gt; get_integration_activity_logs
+      (+ get_integration_providers, get_integration_provider_parameters,
+         get_integration_activities, get_integration_activity, get_integration_activity_mappings,
+         get_integration_endpoints, schedule_integration_activity)
+
+    ** None of those 15 tools exists in the Dynamicweb MCP add-in 0.4.4 tool set on this site. **
+    There is no tool whose name matches /integration/ at all. The MCP-expressible neighbours are:
+      create_or_update_feeds, get_feeds, get_feed_providers, get_feed_queries   (outbound feeds)
+      save_field_value_conversion_rules, get_field_value_conversions            (mapping tables)
+      create_datasets / patch_datasets                                          (staged data)
+    Everything else is the admin UI (Settings &gt; Integration &gt; Activities) or the Management API.
+    Per the dynamo rule dw-integration-framework itself opens with, the correct move is to STOP
+    and name the admin screen — not to substitute a guessed HTTP call.
+
+    Job files are served anonymously and can carry credentials in &lt;Password&gt; elements. An install
+    destined for anything beyond a demo asserts zero occurrences of `Password=` under the decoded
+    job folder.</pre>
+  "Title": "<h2 class=\"dw-h2\">Which MCP tools brand it</h2>"
+"columnId": 1
+"permissions": []

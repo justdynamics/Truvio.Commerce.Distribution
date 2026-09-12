@@ -1,0 +1,27 @@
+﻿"paragraphUniqueId": 9af6b37f-a364-4a6c-8faf-9833eabccdd4
+"sourceParagraphId": 22482
+"sortOrder": 300
+"itemType": "Swift-v2_Text"
+"header": "Which skill covers it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "4bf37f38-b473-4e43-ab8e-895e8d804d40"
+  "Id": "1511"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">dw-swift-building (dynamo: true) — SKILL.md:75-86 names the eight tags Swift expects:
+    homepage, shop, cart, checkout, orderconfirmation, myaccount, login, register.
+    dw-content-modelling (dynamo: true) — references/page-paragraph-writes.md:191-224 owns both
+    navigation failure modes.
+    dw-demo-swift (dynamo: false) — references/header-menu.md (332 lines): why the nav is flat,
+    nav visibility is not access control, and the four interaction probes.</pre>
+  "Title": "<h2 class=\"dw-h2\">Which skill covers it</h2>"
+"columnId": 1
+"permissions": []

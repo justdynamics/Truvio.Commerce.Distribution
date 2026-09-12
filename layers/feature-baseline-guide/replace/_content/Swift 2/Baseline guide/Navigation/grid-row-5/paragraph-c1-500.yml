@@ -1,0 +1,36 @@
+﻿"paragraphUniqueId": 93b03bcd-ab36-442b-a51b-bb953a8728ed
+"sourceParagraphId": 22484
+"sortOrder": 500
+"itemType": "Swift-v2_Text"
+"header": "Verify"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "4bf37f38-b473-4e43-ab8e-895e8d804d40"
+  "Id": "1513"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">MCP, two-part, because a re-parent is cached:
+    1. get_navigation_structure lists the page at its new parent.
+    2. fetch_frontend_page_html on &lt;site-root&gt;/home contains the link text.
+    If 1 passes and 2 fails it is the page-tree cache, not permissions — restart the host
+    (dw-content-modelling/references/page-paragraph-writes.md:204-224).
+
+    Second assert: get_page_by_id on the Shop page returns navigationTag "Shop" (non-empty).
+    `save_pages` has no navigationTag member and drops the key silently
+    (page-paragraph-writes.md:191-202). Assert the value, never the call status; a template link
+    rendering as `#` is the same finding seen from the frontend.
+
+    Third assert, the one a markup check cannot make (dw-demo-swift/references/header-menu.md:
+    317-332): the caret's DOM border-right is non-zero, `elementFromPoint` mid-gap resolves inside
+    the panel, the open-state caret is static, and `menu.right &gt;= link.right`. A synthetic click
+    masks the vertical-reach bug.</pre>
+  "Title": "<h2 class=\"dw-h2\">Verify</h2>"
+"columnId": 1
+"permissions": []

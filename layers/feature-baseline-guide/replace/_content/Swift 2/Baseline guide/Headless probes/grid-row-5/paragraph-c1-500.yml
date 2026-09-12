@@ -1,0 +1,32 @@
+﻿"paragraphUniqueId": 78743f0a-c03c-413e-8e2b-aeeb4c4fc731
+"sourceParagraphId": 22534
+"sortOrder": 500
+"itemType": "Swift-v2_Text"
+"header": "Verify"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "d24ba477-2130-4285-993d-fb5db76a6624"
+  "Id": "1563"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">The backend gate, in order (dw-demo-headless/references/headless-backend.md:181-195):
+      GET /dwapi/api.json                                            -&gt; 200
+      GET /dwapi/ecommerce/products/{knownId}                        -&gt; 200 with a full model
+      admin token on /dwapi/ecommerce/products                       -&gt; 401
+      anonymous  on /dwapi/ecommerce/products                        -&gt; 200
+      GET /dwapi/ecommerce/products/search?...&amp;LanguageId=ENU&amp;ShopId=SHOP1
+                                                                     -&gt; 200, totalProductsCount&gt;0
+    GET /dwapi/content/rows/&lt;home page id&gt;/Desktop returns the 8 Home grid rows in render order.
+    MCP: get_frontend_health returns healthy.
+    Negative assert that proves this is NOT a headless build: get_item_types returns no name
+    starting `Headless_`.</pre>
+  "Title": "<h2 class=\"dw-h2\">Verify</h2>"
+"columnId": 1
+"permissions": []

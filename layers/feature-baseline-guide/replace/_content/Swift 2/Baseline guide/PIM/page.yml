@@ -1,0 +1,44 @@
+﻿"pageUniqueId": 4d86bfa3-e0c1-493f-9550-ee9647f6a627
+"sourcePageId": 8568
+"name": "PIM"
+"menuText": "PIM"
+"sortOrder": 3
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-09-12T14:26:13.0830000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "metaTitle": "PIM"
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1184"
+  "ItemInstanceType": ""
+  "Sort": 3
+  "Title": "PIM"
+"propertyFields":
+  "Id": "2867"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "Icon": ""
+  "SubmenuType": "auto"

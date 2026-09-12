@@ -1,0 +1,13 @@
+﻿"id": 73e33799-35af-49f2-8493-7a6ea425d454
+"sortOrder": 5
+"definitionId": "1Column"
+"itemType": "Swift-v2_Row"
+"container": "Grid"
+"containerWidth": 3
+"colorSchemeId": "light"
+"topSpacing": 5
+"bottomSpacing": 5
+"verticalAlignment": "None"
+"columns":
+- "id": 1
+  "width": 0

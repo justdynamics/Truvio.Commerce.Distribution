@@ -1,0 +1,25 @@
+﻿"paragraphUniqueId": 0562cf7a-255e-496b-b7f7-7c25c00013bc
+"sourceParagraphId": 22479
+"sortOrder": 500
+"itemType": "Swift-v2_Text"
+"header": "Verify"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "52c5ad3d-f658-4f99-81c9-22046cf07e43"
+  "Id": "1508"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">Storefront: GET &lt;site-root&gt;/home returns 200 and the body contains
+    zero occurrences of the string "Placeholder" once branding is done. Before branding it
+    contains many — that is the intended fail-loud signal.
+    MCP equivalent: fetch_frontend_page_html on &lt;site-root&gt;/home, grep for /placeholder/i.</pre>
+  "Title": "<h2 class=\"dw-h2\">Verify</h2>"
+"columnId": 1
+"permissions": []

@@ -1,0 +1,34 @@
+﻿"paragraphUniqueId": 7cf6e6b7-5a4a-460f-913e-697c8e5f9d5c
+"sourceParagraphId": 22503
+"sortOrder": 400
+"itemType": "Swift-v2_Text"
+"header": "Which MCP tools brand it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "4f0712b9-d1a4-40c8-bea4-b0ef18444212"
+  "Id": "1532"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">save_user_groups -&gt; create_users -&gt; assign_users_to_group / assign_groups_to_user
+    -&gt; save_user_addresses
+    -&gt; save_assortments -&gt; assign_groups_to_assortment -&gt; assign_products_to_assortment
+       -&gt; assign_shops_to_assortment -&gt; assign_permissions_to_assortment
+    -&gt; flag_assortments_for_rebuild -&gt; build_assortments
+    -&gt; check_assortment_product_access (the read-back)
+
+    Two ceilings to say out loud rather than work around:
+    - Impersonation (a CSR acting on behalf of an account) has NO MCP tool at all. Name the
+      admin screen (Edit user &gt; Impersonation tab) and stop.
+    - create_order_field errors on every call on this platform line: its MERGE into
+      EcomOrderField passes an OrderFieldTypeID not present in EcomFieldType. A custom checkout
+      field is an admin-screen operation.</pre>
+  "Title": "<h2 class=\"dw-h2\">Which MCP tools brand it</h2>"
+"columnId": 1
+"permissions": []

@@ -1,0 +1,45 @@
+﻿"paragraphUniqueId": 7d012b8f-24d0-41be-b396-31c1eebacd41
+"sourceParagraphId": 22481
+"sortOrder": 200
+"itemType": "Swift-v2_Text"
+"header": "What the baseline guarantees"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "4bf37f38-b473-4e43-ab8e-895e8d804d40"
+  "Id": "1510"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">Layer: surface-swift 1.5.1.
+
+    Menu anchors under area 3:
+      Navigation/Secondary Navigation/  Express Buy (feature-reordering), Find dealers,
+                                        Quick Order (feature-reordering),
+                                        Subscribe (feature-subscription-orders),
+                                        Kit Configurator + Kit Configurator Detail
+                                        (feature-bom-configurator)
+      Navigation/Footer Navigation/     About the shop, Help and info, Languages
+
+    Header/footer pages are page ids 156 (Desktop Footer), 157 (Desktop Header),
+    158 (Mobile Footer), 159 (Mobile Header), wired on the area's Swift-v2_Master item fields
+    (area.yml itemFields HeaderDesktop/HeaderMobile/FooterDesktop/FooterMobile).
+
+    Navigation tags the Swift templates resolve by name: `Shop` is set on the Shop page
+    (replace/_content/Swift 2/Shop/page.yml `navigationTag: "Shop"`). Templates call
+    GetPageIdByNavigationTag("&lt;tag&gt;"); an unresolved tag falls back to 0 and renders href="#".
+
+    navDepth obligation (surface.contract-notes.json `navDepth`): the header nav needs at least
+    one menu-visible child relation or the theme's dropdown affordance has nothing to open.
+
+    Not present by design: no mega-menu content beyond what the Shop group tree produces. This
+    composition has only the five PACK-* groups the feature layers ship, so the shop mega-menu is
+    near-empty until you author a group tree.</pre>
+  "Title": "<h2 class=\"dw-h2\">What the baseline guarantees</h2>"
+"columnId": 1
+"permissions": []

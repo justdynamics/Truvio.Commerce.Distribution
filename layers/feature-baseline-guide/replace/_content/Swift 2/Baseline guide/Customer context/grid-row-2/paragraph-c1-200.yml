@@ -1,0 +1,63 @@
+﻿"paragraphUniqueId": fd85068b-24ac-4b33-b758-54ba168f865a
+"sourceParagraphId": 22547
+"sortOrder": 200
+"itemType": "Swift-v2_Text"
+"header": "What the baseline guarantees"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "cd560e76-63e3-4208-9202-13a23594a00a"
+  "Id": "1576"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">`&lt;demo&gt;\customer-context\` is a read-only folder in the demo root; it does not exist yet on this solution; create it
+    and put the customer material in it before branding starts.
+
+    It holds what the customer or sales prep handed over verbatim: intro-call notes and transcript
+    exports, project-alignment decks, sample customer-of-customer files (per-account product
+    portfolios, pricing extracts), email-thread exports (.msg / .eml), and any other supplied
+    artefact. Exact filenames are project-specific.
+
+    Reading it is expected — that is the point. Reading it through a byte-stream tool is still
+    reading; the rule is about writes only.
+
+    Writing to ANY path containing `customer-context` (case-insensitive, both separators) is a
+    HARD ABORT. There is no approve-and-log branch, because a customer-context write is never
+    necessary. Transformed output goes to `&lt;demo&gt;\notes\` (your own working notes) or
+    `&lt;demo&gt;\extracts\` (data derived FROM customer-context).
+
+    The canonical abort message, not to be paraphrased:
+      "ABORT -- this would write to a read-only customer-context folder. The `customer-context\`
+       directory holds intro-call materials, call summaries, and customer-supplied artefacts that
+       must not be modified by demo-build automation. Did you mean `&lt;demo&gt;\notes\` (your own
+       working notes) or `&lt;demo&gt;\extracts\` (transformed/derived data extracted FROM
+       customer-context)?"
+
+    The rule deliberately over-matches: `notes/customer-context-summary.md` aborts too. That is
+    intentional friction. `&lt;demo&gt;\customer-contextx\foo.md` does NOT match (no separator).
+
+    Why it exists: if any of those files shows as modified in `git status` after a demo build, the
+    customer's read is "they got our material and modified it without asking" — a bigger signal
+    than any technical bug.
+
+    Sister contract, same mental model, three branches instead of one: the customisations ledger at
+    `&lt;demo&gt;\CUSTOMISATIONS.md`. A write to `Dynamicweb.Host.Suite/Controllers/**/*.cs`,
+    `Providers/**`, or any `*Controller.cs` prompts Approve+log / Refactor instead / Cancel. What
+    does NOT count as a customisation and ships unprompted: NotificationSubscriber subclasses,
+    static helpers, custom item-type XMLs, Razor template edits (.cshtml is explicitly outside the
+    glob), custom fields on AccessUser / EcomProducts / ProductGroup, read-only SQL helpers.
+    Projects routinely over-read the rule and bar notification subscribers, which then forces SQL
+    backfills that should have been runtime subscribers.
+
+    Never put a password, API key or bearer token in CUSTOMISATIONS.md — it is git-tracked.
+    Passwords live in the gitignored notes/credentials.local.md and are referenced by pointer.
+    A plaintext password in the tracked ledger is an audit finding.</pre>
+  "Title": "<h2 class=\"dw-h2\">What the baseline guarantees</h2>"
+"columnId": 1
+"permissions": []

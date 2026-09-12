@@ -1,0 +1,82 @@
+﻿"paragraphUniqueId": 891f2d00-c33d-41b3-b06f-e6f3fec3f961
+"sourceParagraphId": 22476
+"sortOrder": 200
+"itemType": "Swift-v2_Text"
+"header": "What the baseline guarantees"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "52c5ad3d-f658-4f99-81c9-22046cf07e43"
+  "Id": "1505"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">Layer: surface-swift 1.5.1. Two mode trees.
+
+    replace/_content (source-wins — the structural skeleton; a re-deserialize replaces it):
+      Swift 2/area.yml            the area record itself
+      Customer center/            Account (Addresses, Carts, Favorites, Orders, Quotes, Users),
+                                  CSR (Accounts, Carts, Orders, Users), Customer center
+                                  (Change password, My addresses, My carts, My favorites,
+                                  My orders, My profile &gt; Edit profile, My quotes, My returns,
+                                  My wallet), Overview
+      Navigation/                 Footer Navigation, Secondary Navigation
+      Newsletter Emails/          Unsubscribe confirmation page
+      Page presets/Home pages/    Home preset
+      Product Components/         Product Info (right side), Product List, Product List Card
+      Search result page/
+      Service Pages/              CartService, CartSummary, Content search results,
+                                  Favorites list service, Product and content search results,
+                                  Related products list, Related products slider_grid,
+                                  Variant Selector Service
+      Shop/                       Product Details, Product List
+      Shopping cart/              Add credit card, Cart (Checkout anonymous, Checkout user,
+                                  Empty cart, Quote checkout user)
+      Sign in/                    Create user profile (User profile confirmed, User profile
+                                  created), Forgot password, Sign in
+      System emails/              Checkout Emails, Form Emails, Stock notification Email,
+                                  User Management Emails
+
+    merge/_content (field-level merge — the editorial surface; your edits survive a
+    re-deserialize):
+      Home/                       8 grid rows (1, 4, 5, 6, 7, 8, 9, 10)
+      Header _ Footer/            Desktop Header, Desktop Footer, Mobile Header, Mobile Footer
+      About/                      8 grid rows + Contact &gt; Thank you
+      Posts/                      Buying guides, Reviews, Travel guides
+      Navigation/Footer Navigation/  About the shop (About us, Employees, Privacy policy, Terms),
+                                     Help and info (Cookie notice, Delivery, Frequently asked),
+                                     Languages (Preferences)
+      Navigation/Secondary Navigation/ Find dealers
+      Newsletter Emails/          Swift Newsletters - Dark/Light (Announcement, Sale)
+
+    Area record (layers/surface-swift (replace tree) _content/Swift 2/area.yml), values you will change:
+      AreaUrlName            swift-2
+      AreaCulture            en-US
+      AreaLayout             Designs/Swift-v2/Swift-v2_Page.cshtml
+      AreaColorSchemeGroupId default        AreaColorSchemeId  light
+      AreaTypographyId       default        AreaButtonStyleId  default
+      AnonymousUsers         cart-price     (hides prices + add-to-cart for anonymous)
+      HeaderDesktop 157 / HeaderMobile 159 / FooterDesktop 156 / FooterMobile 158
+
+    Values the layer deliberately does NOT serialize, which you MUST bind after deserialize
+    (surface.contract-notes.json `perEnvironmentAreaExclusions`):
+      AreaFrontpage, AreaEcomShopId, AreaEcomLanguageId, AreaEcomCurrencyId, AreaEcomCountryCode,
+      AreaStockLocationID, AreaCdnHost, AreaDomain, AreaNoindex/Nofollow/RobotsTxt.
+      Then restart the host — Area routing, frontpage resolution and shop resolution are cached
+      at host startup.
+
+    Placeholder convention: 56 YAML files carry the literal string `Placeholder — &lt;function&gt;`,
+    e.g. `Placeholder — about intro heading (who this company is)`. `Placeholder` is the
+    machine-detectable marker a design gate greps for (/placeholder/i). Copy left un-replaced at
+    build time fails loudly rather than shipping.
+
+    Not present by design: no bike/lorem sample content anywhere in the tree; no
+    EcomFieldDisplayGroup rows (surface-swift 1.5.0 removed the dead PDP band).</pre>
+  "Title": "<h2 class=\"dw-h2\">What the baseline guarantees</h2>"
+"columnId": 1
+"permissions": []

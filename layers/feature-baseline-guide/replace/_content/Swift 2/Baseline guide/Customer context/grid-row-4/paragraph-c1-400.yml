@@ -1,0 +1,23 @@
+﻿"paragraphUniqueId": 213bdd55-63bc-42e8-bd36-1753af9a11b2
+"sourceParagraphId": 22549
+"sortOrder": 400
+"itemType": "Swift-v2_Text"
+"header": "Which MCP tools brand it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "cd560e76-63e3-4208-9202-13a23594a00a"
+  "Id": "1578"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">None. This is a filesystem contract on the demo solution folder, not on the DW instance.
+    No MCP tool reaches it and none should.</pre>
+  "Title": "<h2 class=\"dw-h2\">Which MCP tools brand it</h2>"
+"columnId": 1
+"permissions": []

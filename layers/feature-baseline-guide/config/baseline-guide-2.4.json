@@ -1,0 +1,31 @@
+{
+  "outputDirectory": "Serializer",
+  "replaceOutputSubfolder": "replace",
+  "mergeOutputSubfolder": "merge",
+  "predicates": [
+    {
+      "name": "Baseline guide",
+      "mode": "Replace",
+      "providerType": "Content",
+      "areaId": 3,
+      "includeLanguageLayers": true,
+      "path": "/Baseline guide",
+      "excludes": [],
+      "excludeFields": [],
+      "excludeXmlElements": [],
+      "excludeAreaColumns": [
+        "AreaCdnHost",
+        "AreaCookieWarningTemplate",
+        "AreaFrontpage",
+        "AreaEcomShopId",
+        "AreaEcomCountryCode",
+        "AreaEcomLanguageId",
+        "AreaEcomCurrencyId",
+        "AreaStockLocationID",
+        "AreaCreatedDate",
+        "AreaUpdatedDate"
+      ],
+      "acknowledgedOrphanPageIds": []
+    }
+  ]
+}

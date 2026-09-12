@@ -24,6 +24,12 @@
       "status": "active"
     },
     {
+      "name": "feature-baseline-guide",
+      "kind": "feature",
+      "version": "1.0.0",
+      "status": "active"
+    },
+    {
       "name": "feature-bom-configurator",
       "kind": "feature",
       "version": "1.1.1",

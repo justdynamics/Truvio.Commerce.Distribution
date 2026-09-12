@@ -1,0 +1,31 @@
+﻿"paragraphUniqueId": d2aef911-b560-41ed-b2c7-6b2f9d2fe7cc
+"sourceParagraphId": 22494
+"sortOrder": 500
+"itemType": "Swift-v2_Text"
+"header": "Verify"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "2f3e09d9-55a8-4891-add8-15273a043039"
+  "Id": "1523"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">Storefront: GET &lt;site-root&gt;/shop — assert 200 AND a non-zero
+    product-card count AND zero occurrences of `dw-error` and of `numHits must be &gt; 0`.
+    Rendered-rows rule (dw-commerce-catalog/SKILL.md:241): assert rendered product rows EQUAL the
+    listing's own header count. A header count that exceeds the rows it renders is the standing
+    signal that the index counts something the entity fetch drops.
+    MCP: get_products_by_query against the ProductsFrontend query returns &gt; 0, and
+    verify_product_visibility on one known ProductId reports it visible in SHOP1.
+    File-level: read_file on /Files/System/Repositories/ProductsFrontend/Products.query must
+    succeed. If it 404s, the host's Swift design-package overlay never landed and no amount of
+    index rebuilding will fix the PLP.</pre>
+  "Title": "<h2 class=\"dw-h2\">Verify</h2>"
+"columnId": 1
+"permissions": []

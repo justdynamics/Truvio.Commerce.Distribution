@@ -1,0 +1,24 @@
+﻿"paragraphUniqueId": aaeb55d7-b677-4ba8-a42b-10ae0226300d
+"sourceParagraphId": 22507
+"sortOrder": 300
+"itemType": "Swift-v2_Text"
+"header": "Which skill covers it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "df770d71-19f6-4b86-af89-fe324cbf10d0"
+  "Id": "1536"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">dw-users-permissions (dynamo: true) — references/permission-layers.md (the three storage
+    tables and the CapabilityControlFeature flag), references/grant-mechanics.md,
+    references/page-gating.md, references/user-group-operations.md.</pre>
+  "Title": "<h2 class=\"dw-h2\">Which skill covers it</h2>"
+"columnId": 1
+"permissions": []

@@ -1,0 +1,44 @@
+﻿"pageUniqueId": ba96ddfa-4aea-4799-bc26-f990ed8da992
+"sourcePageId": 8578
+"name": "Branding path"
+"menuText": "Branding path"
+"sortOrder": 13
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-09-12T14:26:26.0830000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "metaTitle": "Branding path"
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1194"
+  "ItemInstanceType": ""
+  "Sort": 13
+  "Title": "Branding path"
+"propertyFields":
+  "Id": "2877"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "Icon": ""
+  "SubmenuType": "auto"

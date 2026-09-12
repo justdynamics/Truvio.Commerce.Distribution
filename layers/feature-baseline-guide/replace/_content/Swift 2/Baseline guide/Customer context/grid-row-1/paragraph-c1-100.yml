@@ -1,0 +1,21 @@
+﻿"paragraphUniqueId": c0df043c-e4d3-40c8-af9a-04c6786e569d
+"sourceParagraphId": 22546
+"sortOrder": 100
+"itemType": "Swift-v2_Text"
+"header": "Customer context"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "cd560e76-63e3-4208-9202-13a23594a00a"
+  "Id": "1575"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": "<p class=\"dw-paragraph-1\">Where the brand facts come from, and the one folder an agent may never write.</p>"
+  "Title": "<h1 class=\"dw-h1\">Customer context</h1>"
+"columnId": 1
+"permissions": []

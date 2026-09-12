@@ -1,0 +1,30 @@
+﻿"paragraphUniqueId": a73a4e48-240e-4a00-998e-2f18183395fa
+"sourceParagraphId": 22487
+"sortOrder": 300
+"itemType": "Swift-v2_Text"
+"header": "Which skill covers it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "4d86bfa3-e0c1-493f-9550-ee9647f6a627"
+  "Id": "1516"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">dw-demo-pim (dynamo: false) — references/canonical-setup-order.md is the spine. Pick
+    Variant A (Storefront-first, §1, lines 61-90): this site HAS a Swift storefront.
+    dw-pim-modelling (dynamo: true) — references/structural-model.md (505 lines) for shop types
+    (§2.1), group types (§2.2), the 3-table variant shape (§2.5), BOM (§2.6), and the
+    reference_category four-row mechanic (§2.8).
+    dw-pim-completeness (dynamo: true) — references/rules-and-dashboards.md.
+    dw-pim-workflow (dynamo: true) — references/workflow-engine.md,
+    references/completeness-and-workflows.md.
+    dw-pim-localization (dynamo: true) — references/translation-mechanics.md.</pre>
+  "Title": "<h2 class=\"dw-h2\">Which skill covers it</h2>"
+"columnId": 1
+"permissions": []

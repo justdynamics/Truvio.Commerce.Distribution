@@ -1,0 +1,21 @@
+﻿"paragraphUniqueId": 21a84f42-2de7-44e9-b9b1-1f04279d1e27
+"sourceParagraphId": 22525
+"sortOrder": 100
+"itemType": "Swift-v2_Text"
+"header": "Integration hooks"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "749b418f-893c-408e-a5a0-c1ddcd823777"
+  "Id": "1554"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": "<p class=\"dw-paragraph-1\">Say plainly that this baseline ships no integration, name the one scheduled task it does ship, and route the reader to the right skill before they invent a connector.</p>"
+  "Title": "<h1 class=\"dw-h1\">Integration hooks</h1>"
+"columnId": 1
+"permissions": []

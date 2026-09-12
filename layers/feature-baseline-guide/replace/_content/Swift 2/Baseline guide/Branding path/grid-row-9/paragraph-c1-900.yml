@@ -1,0 +1,33 @@
+﻿"paragraphUniqueId": 68c327f5-74ed-4815-a0ef-4ea436b83ec1
+"sourceParagraphId": 22543
+"sortOrder": 900
+"itemType": "Swift-v2_Text"
+"header": "Step 6 — Pricing and assortments"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "ba96ddfa-4aea-4799-bc26-f990ed8da992"
+  "Id": "1572"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <table class="table" style="width:100%"><tr><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)"><strong>Skill</strong></td><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)">dw-commerce-catalog (dynamo: true); dw-commerce-b2b (dynamo: true) references/dc-scoping.md; dw-data-write-effects (dynamo: true)</td></tr><tr><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)"><strong>Input</strong></td><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)">the customer's price logic — list vs contract, quantity breaks, per-account catalogue scoping — from the pricing extracts in <code>customer-context/</code></td></tr></table><pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">save_currencies      set the new default currency to Rate 100 BEFORE anything else; every
+                         other rate is relative to it. The shipped USD$$ENU row is Rate 1 against
+                         a default EUR of 100 — copy that shape and every USD price is 100x wrong.
+                         Changing the default currency owes a host restart BEFORE seeding.
+    save_prices          customer-number-scoped contract rows are charged end-to-end by the stock
+                         DefaultPriceProvider with zero custom code. A customer-GROUP-scoped price
+                         (PriceUserGroupId) is NOT reachable from save_prices — say so.
+    force_price_recalculation
+    save_assortments -&gt; assign_groups_to_assortment -&gt; assign_products_to_assortment
+                     -&gt; assign_shops_to_assortment -&gt; assign_permissions_to_assortment
+    flag_assortments_for_rebuild -&gt; build_assortments -&gt; get_assortments_for_build (confirm empty)
+    check_assortment_product_access</pre><p class="dw-paragraph-1"><strong>Assert:</strong> <code>get_prices_by_product_id</code> returns the contract row; the cart line for the contract customer, signed in, shows the contract amount — <code>force_price_recalculation</code> recomputes without a frontend user price context, so it can never prove a customer-scoped price. <code>check_assortment_product_access</code> reports access for an in-scope user and none for an out-of-scope one. An assortment write not followed by <code>flag_assortments_for_rebuild</code> + <code>build_assortments</code> leaves the customer seeing the old catalogue. Before switching an assortment Active on, assert its item count is non-zero: activating an empty assortment takes the whole catalogue away from everyone who holds it.</p>
+  "Title": "<h2 class=\"dw-h2\">Step 6 — Pricing and assortments</h2>"
+"columnId": 1
+"permissions": []

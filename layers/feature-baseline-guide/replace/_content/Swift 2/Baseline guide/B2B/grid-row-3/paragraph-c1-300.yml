@@ -1,0 +1,25 @@
+﻿"paragraphUniqueId": 223de11e-d945-4728-ab00-95b107214427
+"sourceParagraphId": 22502
+"sortOrder": 300
+"itemType": "Swift-v2_Text"
+"header": "Which skill covers it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "4f0712b9-d1a4-40c8-bea4-b0ef18444212"
+  "Id": "1531"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">dw-commerce-b2b (dynamo: true) — references/account-shape.md (the customer number as the
+    account key), references/dc-scoping.md (DC-as-user-group).
+    dw-demo-swift (dynamo: false) — references/customer-center.md (529 lines) for the
+    customer-center playbook, sign-in profiles, impersonation and checkout order fields.</pre>
+  "Title": "<h2 class=\"dw-h2\">Which skill covers it</h2>"
+"columnId": 1
+"permissions": []

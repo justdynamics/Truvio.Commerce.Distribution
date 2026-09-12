@@ -1,3 +1,4 @@
+| eature-baseline-guide | feature | 1.0.0 | Content-only agent-facing guide to the Swift 2 baseline: the /Baseline guide page tree (root + 14 pages: one per feature area, the branding path, the customer-context convention), pure Swift-v2_Text on 1Column rows, zero SQL, zero catalogue rows. Composes on surface-swift (area 3). Authored and serialized on foundry.mydwsite4.com (DW 10.28.10, Serializer 0.9.0-beta). |
 # Layers & Editions catalog
 
 Everything this Distribution ships, proven on **Swift 2.4** / **DW 10.28.1-PreRelease** (rolling latest-only; the stable re-prove sweep runs when DW 10.28 reaches NuGet stable). See
