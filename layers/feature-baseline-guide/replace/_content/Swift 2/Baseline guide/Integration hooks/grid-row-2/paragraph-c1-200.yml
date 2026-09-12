@@ -1,0 +1,43 @@
+﻿"paragraphUniqueId": 3b5c81ca-2166-4a3e-a064-5c98626dfbe6
+"sourceParagraphId": 22526
+"sortOrder": 200
+"itemType": "Swift-v2_Text"
+"header": "What the baseline guarantees"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "749b418f-893c-408e-a5a0-c1ddcd823777"
+  "Id": "1555"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">NOTHING integration-shaped ships in this composition. Zero integration activities, zero
+    endpoints, zero providers, zero job files, zero field-value conversion rules.
+
+    The only scheduled task any layer ships: feature-subscription-orders 1.1.1 writes ONE
+    ScheduledTask row, "Place recurring orders", bound to the DW-native
+    RecurringOrdersScheduledTask add-in, ** TaskEnabled = false **. DW registers the add-in TYPE
+    only; the row is layer-owned. Enable it to demo renewals.
+
+    The load-bearing architectural rule, before anyone models one: in DW10 an ERP is a SOURCE and
+    a TARGET in the Integration Framework. It is never a `ShopType=3` channel and never an
+    `EcomFeed`. Modelling it as a channel produces a demo that cannot show the thing the customer
+    is buying. Assert the rule as part of the gate: ZERO EcomShops rows and ZERO EcomFeed rows
+    for the ERP.
+
+    Three flavours exist (dw-demo-erp/SKILL.md:62 — note its own frontmatter says two):
+    a DB-staged one-direction mock (post-sync state pre-staged in the database plus a built-in
+    RESET scheduled task, no JSON files on disk), a two-directional mock built from four shipped
+    provider activities, and a live Business Central connector. Pick before building; they share
+    almost nothing.
+
+    One measured trap that will otherwise eat an hour: RunSqlScheduledTaskAddIn reports success
+    and silence identically. Never treat its run result as evidence — assert the effect.</pre>
+  "Title": "<h2 class=\"dw-h2\">What the baseline guarantees</h2>"
+"columnId": 1
+"permissions": []

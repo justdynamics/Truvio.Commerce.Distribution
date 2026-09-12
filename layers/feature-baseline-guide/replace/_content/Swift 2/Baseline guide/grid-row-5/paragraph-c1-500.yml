@@ -1,0 +1,24 @@
+﻿"paragraphUniqueId": 3481196f-1030-4ed9-b322-662ad9fd84ab
+"sourceParagraphId": 22474
+"sortOrder": 500
+"itemType": "Swift-v2_Text"
+"header": "Verify"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "c68305d0-4dc1-4ca9-a9df-86a8f2f32108"
+  "Id": "1503"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">MCP: get_areas returns exactly one area, Name "Swift 2"; get_pages_by_area_id returns the
+    Swift 2 tree. If a second area appears, a surface layer was activated that this composition
+    does not name.</pre>
+  "Title": "<h2 class=\"dw-h2\">Verify</h2>"
+"columnId": 1
+"permissions": []

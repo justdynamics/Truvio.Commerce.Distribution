@@ -1,0 +1,44 @@
+﻿"pageUniqueId": 4bf37f38-b473-4e43-ab8e-895e8d804d40
+"sourcePageId": 8567
+"name": "Navigation"
+"menuText": "Navigation"
+"sortOrder": 2
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-09-12T14:26:11.4330000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "metaTitle": "Navigation"
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1183"
+  "ItemInstanceType": ""
+  "Sort": 2
+  "Title": "Navigation"
+"propertyFields":
+  "Id": "2866"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "Icon": ""
+  "SubmenuType": "auto"

@@ -1,0 +1,47 @@
+﻿"paragraphUniqueId": 2dab154f-1217-418f-a7ae-7adb02686916
+"sourceParagraphId": 22536
+"sortOrder": 200
+"itemType": "Swift-v2_Text"
+"header": "The two standing rules"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "ba96ddfa-4aea-4799-bc26-f990ed8da992"
+  "Id": "1565"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">RULE 1 — branding never edits a layer.
+    F:\code\Truvio.Commerce.Distribution is the source of the baseline, not a working tree. A
+    layer is a versioned unit that a gate proved. Editing layers\* to brand a demo means the next
+    `git pull --ff-only` either clobbers your work or refuses to fast-forward, and the edition you
+    claim to have composed is no longer the edition you ran. Brand through MCP writes against the
+    running instance and through files under `Files/`. If something genuinely belongs in the
+    Distribution, that is a Foundry PR (dw-demo-foldback), not an in-place edit.
+
+    The concrete forms of this rule as the skills state them:
+      "Customer overrides go in `&lt;customer&gt;_custom.css`, never by editing `theme-default`'s own
+       files."                       — dw-demo-swift/references/re-skin.md:46
+      "editing `theme-default`'s `default.*` Style assets in place … the re-skin hard rule forbids
+       and … the next layer update reverts."
+                                     — dw-demo-swift/references/styles-assets.md:104-105
+      "strip the offending column lines from the STAGED copy, never from the checked-out original
+       under `distribution\layers\base\`."
+                                     — dw-demo-swift/references/deserialize-flow.md:177
+
+    RULE 2 — customer-context is read-only.
+    `&lt;demo&gt;\customer-context\` holds what the customer handed over. Read it; never write it.
+    Transformed output goes to `&lt;demo&gt;\notes\` or `&lt;demo&gt;\extracts\`. A write to any path
+    containing `customer-context` is a hard abort with no approve branch. Detection signature at
+    end of phase: `git status --porcelain "customer-context/"` is empty.
+    Its sister is the customisations ledger: a write under Controllers/, Providers/, or any
+    *Controller.cs prompts Approve+log / Refactor instead / Cancel, and every approved row is a
+    deliberate trade-off you will show on the closing slide.</pre><blockquote class="dw-paragraph-1" style="border-left:3px solid currentColor;padding-left:1rem;opacity:.9"><strong>Note for the person filing issues from this plan.</strong> There is currently <strong>no guarded-write preflight on <code>distribution\layers\</strong></code> anywhere in the skill set.** The only enforced globs are the controller/provider set and <code>customer-context\</code> (<code>dw-demo-base/SKILL.md:149-163</code>). Rule 1 above is assembled from three scattered statements in <code>dw-demo-swift</code> references; it is not stated as a contract anywhere the way Rule 2 is. That gap is Finding F-G1.</blockquote>
+  "Title": "<h2 class=\"dw-h2\">The two standing rules</h2>"
+"columnId": 1
+"permissions": []

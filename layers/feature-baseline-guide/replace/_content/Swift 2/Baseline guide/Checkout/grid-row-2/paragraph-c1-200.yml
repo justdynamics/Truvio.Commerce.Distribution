@@ -1,0 +1,50 @@
+﻿"paragraphUniqueId": 04eeac65-a9ad-4138-9d7c-cc4e12f81716
+"sourceParagraphId": 22511
+"sortOrder": 200
+"itemType": "Swift-v2_Text"
+"header": "What the baseline guarantees"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "5358eb74-03d8-415e-b75e-5b8fc2ad874f"
+  "Id": "1540"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">Layer: base 3.2.1 (whole-table replace) + surface-swift 1.5.1 (the pages).
+
+    EcomPayments (5): Creditcard, Faktura, Invoice, Kreditkort, MobilePay.
+      PAY2 = Invoice — no gateway, resolves to DefaultCheckoutHandler and implements IRecurring;
+      it is the method feature-subscription-orders' checkout probe uses.
+    EcomShippings (17): Bring/DAO Parcelshop (+ DAO), Business delivery, Click &amp; Collect,
+      Firmalevering, GLS Parcelshop / GLS Privat, Hjemmelevering, Home delivery (SHIP9),
+      PostNord Parcelshop / Privat, UPS.
+    EcomMethodCountryRelation ties methods to countries.
+    EcomOrderFlow (4): Default cart flow, Default order flow, Default Quote flow,
+      Default ledger flow. SHOP1.ShopOrderFlowId = 1.
+    EcomOrderStates (14): New, Draft, Approved, Rejected, Completed, Cancelled, Deleted, Paid,
+      Partial-paid, Price given (+ suffixed duplicates).
+    EcomOrderStateRules ships the transitions.
+    EcomCountries / EcomCountryText / EcomVatCountryRelations ship the full country set.
+
+    Checkout pages (surface-swift replace/_content/Swift 2/Shopping cart/):
+      Cart, Cart/Checkout anonymous, Cart/Checkout user, Cart/Quote checkout user,
+      Cart/Empty cart, Add credit card.
+    Service pages: Service Pages/CartService, Service Pages/CartSummary.
+    Emails: System emails/Checkout Emails/Order Confirmation Email.
+
+    Two of the payment names and four of the shipping names are Danish (Faktura, Kreditkort,
+    Firmalevering, Hjemmelevering). These are stock DW rows the base carries verbatim, not demo
+    content. They are visible in the backend method lists and should be deactivated or renamed for
+    an English-language customer.
+
+    NOT present by design: zero orders, zero carts, zero track-and-trace rows, zero validation
+    rules.</pre>
+  "Title": "<h2 class=\"dw-h2\">What the baseline guarantees</h2>"
+"columnId": 1
+"permissions": []

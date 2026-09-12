@@ -1,0 +1,25 @@
+﻿"paragraphUniqueId": 1b0cf0b4-a76d-4925-95f5-6fb8b7703518
+"sourceParagraphId": 22533
+"sortOrder": 400
+"itemType": "Swift-v2_Text"
+"header": "Which MCP tools brand it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "d24ba477-2130-4285-993d-fb5db76a6624"
+  "Id": "1562"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">No MCP tool writes the Delivery API — it is a read surface over what the other tools wrote.
+    The MCP equivalents for the same reads: get_areas, get_pages_by_area_id,
+    get_grid_rows_by_page_id, get_paragraphs_by_page_id, get_item_field_values.
+    get_frontend_health is the liveness probe.</pre>
+  "Title": "<h2 class=\"dw-h2\">Which MCP tools brand it</h2>"
+"columnId": 1
+"permissions": []

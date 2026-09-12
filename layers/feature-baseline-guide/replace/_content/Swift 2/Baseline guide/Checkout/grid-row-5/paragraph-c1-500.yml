@@ -1,0 +1,27 @@
+﻿"paragraphUniqueId": 7320db8a-e0e0-4fa0-b8d9-a561db2cee0a
+"sourceParagraphId": 22514
+"sortOrder": 500
+"itemType": "Swift-v2_Text"
+"header": "Verify"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "5358eb74-03d8-415e-b75e-5b8fc2ad874f"
+  "Id": "1543"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">MCP: get_payments returns 5 and get_shippings returns 17 on a clean baseline; after branding,
+    every ACTIVE method is one you deliberately kept.
+    Storefront: GET &lt;site-root&gt;/cart/ returns 200 (a declared criticalPath in
+    editions/swift-demo.json). Then drive a cart to &lt;site-root&gt;/cart/checkout-user and assert the
+    payment and shipping selectors render at least one option each — an all-inactive method list
+    still returns 200.</pre>
+  "Title": "<h2 class=\"dw-h2\">Verify</h2>"
+"columnId": 1
+"permissions": []

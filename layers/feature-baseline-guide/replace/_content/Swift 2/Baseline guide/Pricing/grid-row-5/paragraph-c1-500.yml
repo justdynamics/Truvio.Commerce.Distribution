@@ -1,0 +1,28 @@
+﻿"paragraphUniqueId": df0a32e0-d5a5-46b4-b04b-20134aa0c127
+"sourceParagraphId": 22499
+"sortOrder": 500
+"itemType": "Swift-v2_Text"
+"header": "Verify"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "29dabda1-5657-4b28-b28b-331abb51ecb1"
+  "Id": "1528"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">MCP: get_currencies -&gt; exactly one row per language context has IsDefault true, and its Rate
+    is 100. get_prices_by_product_id on PACK-RPP-PROD1 returns the three tier rows.
+    Storefront, and this is the assert that matters: add PACK-RPP-PROD2 qty 1 to a cart AS THE
+    SIGNED-IN CONTRACT CUSTOMER and assert the line amount is 1399, not 1599 (feature-pricing's
+    own behaviour probe). force_price_recalculation recomputes WITHOUT a frontend user price
+    context, so it can never prove a customer-scoped price — verify in the storefront cart as the
+    signed-in user (dw-commerce-catalog/references/catalog-publishing.md:189-191).</pre>
+  "Title": "<h2 class=\"dw-h2\">Verify</h2>"
+"columnId": 1
+"permissions": []

@@ -1,0 +1,21 @@
+﻿"paragraphUniqueId": 5573f037-3338-49ce-a03b-202932184395
+"sourceParagraphId": 22538
+"sortOrder": 400
+"itemType": "Swift-v2_Text"
+"header": "Step 1 — Customer context"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "ba96ddfa-4aea-4799-bc26-f990ed8da992"
+  "Id": "1567"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": "<table class=\"table\" style=\"width:100%\"><tr><td style=\"vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)\"><strong>Skill</strong></td><td style=\"vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)\">dw-demo-base (dynamo: false) — references/customer-context.md, references/demo-tactics.md</td></tr><tr><td style=\"vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)\"><strong>Tools</strong></td><td style=\"vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)\">none (filesystem)</td></tr><tr><td style=\"vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)\"><strong>Input</strong></td><td style=\"vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)\">the whole <code>customer-context/</code> folder</td></tr><tr><td style=\"vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)\"><strong>Do</strong></td><td style=\"vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)\">Read every artefact. Produce <code>notes/wording.md</code>: the customer's own words for their products, their customers, their roles, their processes. Decide the single deep storyline — one buyer persona, one CSR persona, one shop, one locale. Write <code>DEMO-PLAN.md</code> at the demo root.</td></tr><tr><td style=\"vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)\"><strong>Assert</strong></td><td style=\"vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)\"><code>git status --porcelain \"customer-context/\"</code> is empty, and <code>notes/wording.md</code> exists carrying at least the company name, the product noun, and the two persona role names.</td></tr></table><p class=\"dw-paragraph-1\">Demo philosophy that governs every later step: go deep, not wide. Personas floor of 2 (one buyer, one CSR, so impersonation has somewhere to land). Shops/channels 1 + 1. Locale: single home market. Customer-center sections: only the ones the storyline visits. <strong>The product catalogue is the deliberate exception — go deep AND wide there.</strong> Rich product data is cheap over MCP and makes the demo feel real; a product family does not have to justify itself against demo minutes, but every login, channel, locale and customer-center section does.</p>"
+  "Title": "<h2 class=\"dw-h2\">Step 1 — Customer context</h2>"
+"columnId": 1
+"permissions": []

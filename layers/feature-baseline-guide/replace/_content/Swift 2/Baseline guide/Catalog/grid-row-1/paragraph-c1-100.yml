@@ -1,0 +1,21 @@
+﻿"paragraphUniqueId": 7448255d-f680-43b4-8409-de3c2f1c4f35
+"sourceParagraphId": 22490
+"sortOrder": 100
+"itemType": "Swift-v2_Text"
+"header": "Catalog"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "2f3e09d9-55a8-4891-add8-15273a043039"
+  "Id": "1519"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": "<p class=\"dw-paragraph-1\">What renders a product list and a product detail page on this baseline, and the single missing artefact that makes both render empty.</p>"
+  "Title": "<h1 class=\"dw-h1\">Catalog</h1>"
+"columnId": 1
+"permissions": []

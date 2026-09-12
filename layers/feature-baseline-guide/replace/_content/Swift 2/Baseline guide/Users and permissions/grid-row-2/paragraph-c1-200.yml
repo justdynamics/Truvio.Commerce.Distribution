@@ -1,0 +1,57 @@
+﻿"paragraphUniqueId": b29ecf14-6f74-41a7-807e-410f747ec726
+"sourceParagraphId": 22506
+"sortOrder": 200
+"itemType": "Swift-v2_Text"
+"header": "What the baseline guarantees"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "df770d71-19f6-4b86-af89-fe324cbf10d0"
+  "Id": "1535"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">Layer: base 3.2.1 (the groups) + surface-swift 1.5.1 (the page blocks).
+
+    Groups (AccessUser rows of type 2 — DW10 has no AccessUserGroup table):
+      1325  Customers
+      1270  Account Admin
+      1292  CSR
+    These are base-owned under a FILTERED replace:
+    `AccessUser WHERE AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')`.
+    Only the groups are base-owned; user rows are NOT serialized into the base.
+
+    Users: ZERO. base.contract.json `guaranteedRows.users` lists IMCUser (1328, customer number
+    98745621) and IMCSalesrep (1326, 7789765) — but those rows ship in the sample-data layer's
+    merge/_sql/identities.sql, which this composition does not activate. Read that contract
+    section as "guaranteed when sampleData is true", not "guaranteed".
+
+    Page permission blocks (surface-swift replace/_content):
+      Customer center (root)      Anonymous -&gt; none (levelValue 1)
+                                  AuthenticatedFrontend -&gt; read (levelValue 4)
+      Customer center/CSR         Account Admin 1270 -&gt; none
+      and each of its 4 children  CSR 1292 -&gt; all (levelValue 1364)
+                                  Customers 1325 -&gt; none
+                                  Anonymous -&gt; none
+                                  AuthenticatedFrontend -&gt; none   &lt;-- added in 1.5.0
+
+    The explicit AuthenticatedFrontend -&gt; none on the CSR subtree is the fix for a real exposure:
+    before 1.5.0 the subtree denied three groups but had no AuthenticatedFrontend entry while the
+    parent granted authenticated read, so ANY signed-in non-denied user reached /csr/accounts.
+    Permission resolution takes the HIGHEST level across the identities a user carries — a group
+    grant with no matching deny is an exposure, not a gap.
+
+    The permission model is cached in-process. Recycle before believing a negative check.
+
+    One ceiling: MCP reaches exactly one corner of the permission store —
+    assign_permissions_to_assortment. There is no page, paragraph, section or user-group
+    equivalent. A page gate on this Distribution ships in the layer YAML's `permissions:` block
+    (which is a serializer concern, not an MCP one), or it is an admin-screen edit.</pre>
+  "Title": "<h2 class=\"dw-h2\">What the baseline guarantees</h2>"
+"columnId": 1
+"permissions": []

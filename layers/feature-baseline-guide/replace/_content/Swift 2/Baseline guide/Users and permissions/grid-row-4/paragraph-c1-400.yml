@@ -1,0 +1,31 @@
+﻿"paragraphUniqueId": 8bac72fa-5e56-4d66-8019-429c93cd5805
+"sourceParagraphId": 22508
+"sortOrder": 400
+"itemType": "Swift-v2_Text"
+"header": "Which MCP tools brand it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "df770d71-19f6-4b86-af89-fe324cbf10d0"
+  "Id": "1537"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">save_user_groups -&gt; get_user_groups_by_system_name (capture ids) -&gt; create_users
+    -&gt; assign_users_to_group -&gt; save_user_addresses
+    Reads: get_user_by_username, get_user_by_id, get_users_by_group_id, search_users.
+
+    Two things the tool set does not do, and the guide must say so rather than route around it:
+    - There is NO MCP password tool. create_users makes a login with no usable password. Setting
+      it is an admin-screen operation (Users &gt; the user &gt; the password field).
+    - save_user_groups and update_users are WHOLE-ENTITY saves against the CACHE. Read the entity
+      first and send the complete model, or the omitted columns are re-saved from the cached
+      model and a prior SQL-level change is silently undone.</pre>
+  "Title": "<h2 class=\"dw-h2\">Which MCP tools brand it</h2>"
+"columnId": 1
+"permissions": []

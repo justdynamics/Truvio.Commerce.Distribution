@@ -1,0 +1,21 @@
+﻿"paragraphUniqueId": 6c526380-23c4-42c9-94b1-8b0655239d77
+"sourceParagraphId": 22500
+"sortOrder": 100
+"itemType": "Swift-v2_Text"
+"header": "B2B"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "4f0712b9-d1a4-40c8-bea4-b0ef18444212"
+  "Id": "1529"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": "<p class=\"dw-paragraph-1\">The B2B surfaces this baseline actually ships — account, CSR, quotes, reordering, kits, subscriptions — and which of them are inert without identities.</p>"
+  "Title": "<h1 class=\"dw-h1\">B2B</h1>"
+"columnId": 1
+"permissions": []

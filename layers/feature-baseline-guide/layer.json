@@ -1,0 +1,32 @@
+{
+  "name": "feature-baseline-guide",
+  "version": "1.0.0",
+  "kind": "feature",
+  "swiftVersion": "2.4.0",
+  "fragmentModes": [
+    "replace"
+  ],
+  "fragmentContent": [
+    {
+      "areaId": 3,
+      "path": "/Baseline guide"
+    }
+  ],
+  "asserts": {
+    "behaviorProbes": [
+      {
+        "kind": "body-contains",
+        "path": "/en-us/baseline-guide",
+        "pattern": "Baseline guide"
+      }
+    ],
+    "criticalPaths": [
+      "/en-us/baseline-guide",
+      "/en-us/baseline-guide/branding-path"
+    ]
+  },
+  "costHints": {
+    "dependsOn": "surface-swift (area 3 'Swift 2' must exist before this fragment deserializes)",
+    "authoredOn": "foundry.mydwsite4.com, DW 10.28.10, Serializer 0.9.0-beta, 2026-09-12"
+  }
+}

@@ -1,0 +1,50 @@
+﻿"paragraphUniqueId": 893dac98-2fa8-4219-a963-f7b22782b549
+"sourceParagraphId": 22471
+"sortOrder": 200
+"itemType": "Swift-v2_Text"
+"header": "What the baseline guarantees"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "c68305d0-4dc1-4ca9-a9df-86a8f2f32108"
+  "Id": "1500"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">This site is a composition, not a hand-built demo. Its content came from
+    Truvio.Commerce.Distribution edition `swift-demo` (editions/swift-demo.json), minus the
+    `sample-data` layer.
+
+    Shipped by the composition:
+    - base 3.2.1 — framework only. 16 SQL sets under layers/base (replace tree) _sql: EcomCountries,
+      EcomCountryText, EcomCurrencies (170 rows), EcomLanguages (20 rows),
+      EcomMethodCountryRelation, EcomOrderFlow (4), EcomOrderStateRules, EcomOrderStates (14),
+      EcomPayments (5), EcomShippings (17), EcomShopGroupRelation, EcomShopLanguageRelation (3),
+      EcomShops (1: SHOP1 "B2B Commerce Store"), EcomVatCountryRelations, EcomVatGroups (2),
+      AccessUser (3 group rows).
+    - surface-swift 1.5.1 — content area 3 "Swift 2", AreaUrlName `swift-2`, AreaCulture `en-US`,
+      ~105 pages, its own 128 Swift v2.4.0 item-type XMLs, UrlPath, 32 design templates.
+    - six feature layers, each data-only except feature-pricing's compile-optional provider.
+    - theme-default 1.3.3 — disk overlay only, no database rows.
+
+    NOT present by design:
+    - No `sample-data` layer. No demo identities (IMCUser / IMCSalesrep), no FIXT* catalogue,
+      no demo clock, no email-statistics backfill.
+    - No `surface-headless`. No `Headless_*` item types, no headless repository.
+    - No `surface-dap-portal`. Area 26 does not exist.
+    - No `Swift 2 Nederlands` area — surface-swift 1.2.0 removed it.
+    - No integration activities, endpoints or jobs. No layer ships any.
+    - No Data Models, no product categories beyond `reference_category`, no completeness rules,
+      no workflows, no assortments, no dashboards.
+
+    Version pins are the reproducibility stamp: record the resolved Distribution commit SHA in
+    CUSTOMISATIONS.md (dw-demo-base/SKILL.md:77). Pin origin/main and assert INDEX.gateProven is
+    present; tags are provenance-only audit history, never a consumption pin.</pre>
+  "Title": "<h2 class=\"dw-h2\">What the baseline guarantees</h2>"
+"columnId": 1
+"permissions": []

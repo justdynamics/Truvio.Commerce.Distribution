@@ -1,0 +1,21 @@
+﻿"paragraphUniqueId": 18d24e01-76bc-4f74-8b46-c530942b2a52
+"sourceParagraphId": 22535
+"sortOrder": 100
+"itemType": "Swift-v2_Text"
+"header": "Branding path"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "ba96ddfa-4aea-4799-bc26-f990ed8da992"
+  "Id": "1564"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": "<p class=\"dw-paragraph-1\">The repeatable order in which an agent turns this baseline into a specific customer's B2B shop, using only skills and content changes. Each step names its skill, its tools, the input it needs from <code>customer-context/</code>, and the assert that proves it.</p>"
+  "Title": "<h1 class=\"dw-h1\">Branding path</h1>"
+"columnId": 1
+"permissions": []

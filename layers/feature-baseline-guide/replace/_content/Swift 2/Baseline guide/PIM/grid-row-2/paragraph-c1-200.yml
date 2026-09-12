@@ -1,0 +1,55 @@
+﻿"paragraphUniqueId": 797f0600-0cba-4a0a-8eb4-4d5d14cd83a6
+"sourceParagraphId": 22486
+"sortOrder": 200
+"itemType": "Swift-v2_Text"
+"header": "What the baseline guarantees"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "4d86bfa3-e0c1-493f-9550-ee9647f6a627"
+  "Id": "1515"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">Layer: base 3.2.1 only. base.contract.json `idRules.baseCatalog: "empty"`.
+
+    Present:
+    - One shop: SHOP1 "B2B Commerce Store", ShopType 1, ShopAutoBuildIndex true,
+      ShopImageFolder /Images/Products, ShopOrderFlowId 1, ShopDefault FALSE.
+    - Three shop languages (EcomShopLanguageRelation): ENU en-US (IsDefault true), ESM es-MX,
+      FRC fr-CA. EcomLanguages carries 20 rows; only these three are attached to SHOP1.
+    - One hidden template category: `reference_category` (EcomProductCategory, CategoryType 2)
+      plus its LANG1 translation. This row is load-bearing: every completeness rule and every
+      category field is plumbed through it, and a missing one is the #1 cause of
+      "rule defined and assigned but no panel renders".
+    - Five product groups and eight products, all from feature layers, all PACK-* keyed:
+        PACK-RPP-GRP1  -&gt; PACK-RPP-PROD1, PACK-RPP-PROD2      (feature-pricing)
+        PACK-SUB-GRP1  -&gt; PACK-SUB-PROD1                      (feature-subscription-orders)
+        PACK-BOM-GRP1  -&gt; PACK-BOM-0001 (ProductType 2, kit)  (feature-bom-configurator)
+        PACK-BOM-FORKS -&gt; PACK-BOM-FORK-1, PACK-BOM-FORK-2
+        PACK-BOM-RACKS -&gt; PACK-BOM-RACK-1, PACK-BOM-RACK-2
+      Each group carries an EcomShopGroupRelation row to SHOP1.
+    - Two EcomProductItems rows (PACK-BOM3-0002, PACK-BOM3-0003) — the BOM slots on
+      PACK-BOM-0001.
+
+    NOT present by design:
+    - Zero Data Models (no EcomGroups GroupType 2), zero DataModelFolders, zero DataStructure
+      shop (ShopType 4).
+    - Zero category fields beyond whatever `reference_category` holds.
+    - Zero completeness rules, zero workflows, zero Dynamic Workspaces, zero dashboards.
+    - Zero variant groups, options or combinations.
+    - Zero manufacturers, zero units.
+
+    ID rules you MUST honour when you add rows (base.contract.json idRules): nvarchar PKs on
+    base-owned tables get a `PACK-&lt;NAME&gt;-` prefix; int-identity PKs (including
+    ItemType_&lt;systemName&gt; item ids) start at 100000. `FIXT*`, `FIXTGRP*`, `FIXT-PRICE-*` are
+    reserved by sample-data — do not use them even though sample-data is not activated here.
+    There is deliberately NO per-itemType numeric range table; the contract is prefix-based.</pre>
+  "Title": "<h2 class=\"dw-h2\">What the baseline guarantees</h2>"
+"columnId": 1
+"permissions": []

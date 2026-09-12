@@ -1,0 +1,33 @@
+﻿"paragraphUniqueId": 35f52541-f3b1-402a-8a55-ccbab793d9d5
+"sourceParagraphId": 22539
+"sortOrder": 500
+"itemType": "Swift-v2_Text"
+"header": "Step 2 — Theme overlay"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "ba96ddfa-4aea-4799-bc26-f990ed8da992"
+  "Id": "1568"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <table class="table" style="width:100%"><tr><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)"><strong>Skill</strong></td><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)">dw-swift-page-blocks (dynamo: true) "Color schemes &amp; the design system"; dw-demo-swift (dynamo: false) references/styles-assets.md, references/re-skin.md</td></tr><tr><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)"><strong>Tools</strong></td><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)"><code>get_color_schemes</code> -&gt; <code>save_color_schemes</code> -&gt; <code>get_typographies</code> -&gt; <code>save_typographies</code> -&gt; <code>get_button_styles</code> -&gt; <code>save_button_styles</code> -&gt; <code>get_fonts</code></td></tr><tr><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)"><strong>Input</strong></td><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)">the customer's palette, logo and typeface from the alignment deck in <code>customer-context/</code></td></tr><tr><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)"><strong>Do</strong></td><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)">Read first, then write. Style writes are <strong>not patch-safe</strong>: a color-scheme save fully overwrites the submitted scheme's colors (omitted colors nulled, custom colors cleared) while sibling schemes in the group survive; typography, button and font saves replace the WHOLE object.</td></tr><tr><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)"><strong>Assert</strong></td><td style="vertical-align:top;padding:.35rem .6rem;border-bottom:1px solid rgba(0,0,0,.1)"><code>get_color_schemes</code> returns your new values on the scheme ids the rows actually reference, and a rendered page shows the new palette. A CSS deploy asserts CSSOM rule presence, not byte presence — a rewriter cannot prove its own rule identity; re-parse with a parser that shares no code with it.</td></tr></table><p class="dw-paragraph-1">What this site actually ships, and it is <strong>not</strong> what dw-swift-page-blocks' illustrative list says:</p><pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">Group id:      default        (NOT `swift`)
+    Scheme ids:    light        #FFFFFF / #1F2933
+                   lightgrey1   #F5F7FA / #1F2933
+                   lightgrey2   #E4E7EB / #1F2933
+                   dark         #1F2933 / #F5F7FA
+                   darksubtle   #323F4B / #CBD2D9
+                   primary      #1F2933 / #F5F7FA     (NOT #004fff)
+                   secondary    #3E4C59 / #F5F7FA
+    Typography id: default       Inter, base 16, scale 1.2, headings Inter 600 / -0.02 tracking
+    Button id:     default       Shape 2, BorderSize 1, PaddingY 0.55, PaddingX 1.4
+    Area binds:    AreaColorSchemeGroupId default, AreaColorSchemeId light,
+                   AreaTypographyId default, AreaButtonStyleId default</pre><p class="dw-paragraph-1">Tier 1 of the re-skin ladder is <code>Files/Templates/Designs/Swift-v2/Custom/default_custom.css</code>, loaded by <code>DefaultHeadInclude.cshtml</code> AFTER swift.css and the Style asset sheets. Its <code>:root</code> tokens (<code>--td-ink</code>, <code>--td-accent</code>, …) are what a customer re-skin overrides first. The hard rule: the customer's own sheet is <code>&lt;customer&gt;_custom.css</code>; <code>git diff --name-only -- '*custom.css'</code> must never show any other path ending in <code>custom.css</code>.</p><p class="dw-paragraph-1">Do a Step-0 zero-state pass before styling: the frontpage title and meta title carry the customer's own words (<code>save_pages</code> with the real <code>metaTitle</code>), so nothing generic survives the first screenshot.</p>
+  "Title": "<h2 class=\"dw-h2\">Step 2 — Theme overlay</h2>"
+"columnId": 1
+"permissions": []

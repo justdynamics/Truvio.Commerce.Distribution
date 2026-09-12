@@ -1,0 +1,44 @@
+﻿"pageUniqueId": 29dabda1-5657-4b28-b28b-331abb51ecb1
+"sourcePageId": 8570
+"name": "Pricing"
+"menuText": "Pricing"
+"sortOrder": 5
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-09-12T14:26:15.8500000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "metaTitle": "Pricing"
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "1186"
+  "ItemInstanceType": ""
+  "Sort": 5
+  "Title": "Pricing"
+"propertyFields":
+  "Id": "2869"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "Icon": ""
+  "SubmenuType": "auto"

@@ -1,0 +1,60 @@
+﻿"paragraphUniqueId": e20bbfa4-5d41-4f45-b372-183843c5033e
+"sourceParagraphId": 22501
+"sortOrder": 200
+"itemType": "Swift-v2_Text"
+"header": "What the baseline guarantees"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "4f0712b9-d1a4-40c8-bea4-b0ef18444212"
+  "Id": "1530"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">Layers: surface-swift 1.5.1 + feature-reordering + feature-subscription-orders +
+    feature-bom-configurator + feature-b2b-comms.
+
+    Account surfaces (surface-swift, replace/_content/Swift 2/Customer center/Account/):
+      Addresses, Carts, Favorites, Orders, Quotes, Users
+      plus Subscriptions (feature-subscription-orders)
+    CSR surfaces (Customer center/CSR/): Accounts, Carts, Orders, Users
+    Personal surfaces (Customer center/Customer center/): Change password, My addresses,
+      My carts, My favorites, My orders, My profile &gt; Edit profile, My quotes, My returns,
+      My wallet
+    Overview (Customer center/Overview) — the dashboard shell. From Swift 2.4 this is a
+      per-role tile dashboard on ONE shared page; the separate CSR tile dashboard was retired.
+
+    Quote flow: base ships EcomOrderFlow "Default Quote flow" and the order states "Price given",
+    "Approved", "Rejected". Shopping cart/Cart/Quote checkout user is the quote checkout page.
+
+    Reordering (feature-reordering 1.0.2, data-only, zero customCode):
+      &lt;site-root&gt;/quick-order    — the pad; the form carries cartcmd=addmulti
+      &lt;site-root&gt;/express-buy    — id="ExpressBuySearchForm"
+      Both bind ProductsFrontend/Products.query (1.0.2 fixed this; it previously named a
+      `Products` repository no install provisions, so every SKU read "Unknown SKU").
+      Known cycle limitation: the 2-page Quick Order fragment does not fully re-bind after a
+      deactivate/reactivate cycle (the page 404s). First activation is unaffected; a full
+      re-deserialize restores it.
+
+    Kits (feature-bom-configurator 1.1.1): &lt;site-root&gt;/kit-configurator and its Detail page;
+      PACK-BOM-0001 is ProductType 2 with two BOM slots.
+    Subscriptions (feature-subscription-orders 1.1.1): &lt;site-root&gt;/subscribe,
+      &lt;site-root&gt;/account/subscriptions, PACK-SUB-PROD1, PAY2 (Invoice, resolves to
+      DefaultCheckoutHandler, IRecurring), SHIP9 (Home delivery), and a ScheduledTask row
+      "Place recurring orders" bound to the DW-native RecurringOrdersScheduledTask,
+      ** TaskEnabled = false ** — the demo enables it to show renewals.
+    Dealer comms (feature-b2b-comms 1.0.2): 5 emails under /Newsletter Emails/Dealer Emails/
+      (Cart reminder, Dealer welcome, How to order, Product compliance notice, Seasonal
+      promotion) + EmailMarketingFlow 100500 with 3 steps.
+
+    NOT present by design: zero users. Every one of these pages renders its signed-out state
+    until you author identities. feature-rma's seeded return and feature-pricing's contract price
+    both key off customer number 98745621, which no user on this site holds.</pre>
+  "Title": "<h2 class=\"dw-h2\">What the baseline guarantees</h2>"
+"columnId": 1
+"permissions": []

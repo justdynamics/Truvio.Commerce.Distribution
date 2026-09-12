@@ -1,0 +1,25 @@
+﻿"paragraphUniqueId": c45b6bc7-fbea-495c-acd2-f2f06dbfa9ba
+"sourceParagraphId": 22472
+"sortOrder": 300
+"itemType": "Swift-v2_Text"
+"header": "Which skill covers it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "c68305d0-4dc1-4ca9-a9df-86a8f2f32108"
+  "Id": "1501"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">dw-demo-base (dynamo: false) — the foundation skill. Read references/scaffold.md §5 for the
+    Distribution clone/checkout model and references/customer-context.md for the read-only
+    contract that governs branding input. Use FIRST; every sister skill is Use AFTER
+    (dw-demo-base/SKILL.md:24, :212-221).</pre>
+  "Title": "<h2 class=\"dw-h2\">Which skill covers it</h2>"
+"columnId": 1
+"permissions": []

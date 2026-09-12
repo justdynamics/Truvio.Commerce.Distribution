@@ -1,0 +1,30 @@
+﻿"paragraphUniqueId": 7ffe00b7-fdf7-46a1-8d1c-c302e00a089a
+"sourceParagraphId": 22478
+"sortOrder": 400
+"itemType": "Swift-v2_Text"
+"header": "Which MCP tools brand it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "52c5ad3d-f658-4f99-81c9-22046cf07e43"
+  "Id": "1507"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">In the order dw-swift-building/SKILL.md:48-51 and :55-124 prescribe:
+      get_areas, get_pages_by_area_id, get_pages_by_parent_id, get_navigation_structure
+      get_page_item_field_values, get_item_field_values
+      save_areas
+      set_page_item_fields  -&gt;  save_pages          (this order, always: save_pages re-derives
+                                                     MenuText from the item's Title field)
+      reorder_pages
+      set_item_field_values (batched; it spans different items in one call)
+      fetch_frontend_page_html</pre>
+  "Title": "<h2 class=\"dw-h2\">Which MCP tools brand it</h2>"
+"columnId": 1
+"permissions": []

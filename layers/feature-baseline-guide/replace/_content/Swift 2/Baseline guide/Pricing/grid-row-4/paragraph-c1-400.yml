@@ -1,0 +1,26 @@
+﻿"paragraphUniqueId": dbfb27b1-5ae3-4624-8c90-838c6e84ffe2
+"sourceParagraphId": 22498
+"sortOrder": 400
+"itemType": "Swift-v2_Text"
+"header": "Which MCP tools brand it"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": ""
+  "GlobalRecordPageGuid": "29dabda1-5657-4b28-b28b-331abb51ecb1"
+  "Id": "1527"
+  "ItemInstanceType": ""
+  "SecondButton": ""
+  "Sort": 0
+  "Subtitle": ""
+  "Text": |-
+    <pre class="dw-paragraph-2" style="white-space:pre-wrap;word-break:break-word;overflow-x:auto;margin:0">save_currencies (set the new default to rate 100 FIRST) -&gt; save_vat_group /
+    save_vat_group_country_relation -&gt; save_prices -&gt; force_price_recalculation
+    Discounts: get_discount_condition_types + get_discount_reward_types -&gt;
+    create_adjustment_discounts -&gt; save_conditions_to_discounts -&gt; save_rewards_to_discounts
+    -&gt; recalculate_discounts.</pre>
+  "Title": "<h2 class=\"dw-h2\">Which MCP tools brand it</h2>"
+"columnId": 1
+"permissions": []
