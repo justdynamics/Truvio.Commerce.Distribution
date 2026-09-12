@@ -1,0 +1,143 @@
+{
+ "$comment": "Brand-asset download manifest for the Truvio Commerce demo brand (the Foundry's V5 plan, 2.4). A consumer's brand step fetches these at brand time; binaries are never committed. All assets are Truvio's own from truvio.com; customer and partner logos on that site are third-party brands and are deliberately excluded. Verify sha256 after download; a mismatch means the site changed and the entry needs re-capture.",
+ "source": "https://truvio.com/",
+ "capturedAt": "2026-09-12",
+ "targetRoot": "wwwroot/",
+ "assets": [
+  {
+   "id": "logo-primary",
+   "role": "logo",
+   "source": "https://truvio.com/hubfs/logo.svg",
+   "contentType": "image/svg+xml",
+   "bytes": 3482,
+   "sha256": "6508a38c1c5d0d0c84764ef2056d1078c01ac9fa4d18c3077907f7f3531912ae",
+   "target": "Files/Images/TruvioCommerce/brand/truvio-logo.svg"
+  },
+  {
+   "id": "logo-alt",
+   "role": "logo",
+   "source": "https://truvio.com/hubfs/logo-2.svg",
+   "contentType": "image/svg+xml",
+   "bytes": 4082,
+   "sha256": "69b48d21c292fec99998b703447edae28da89e1dbaf194a2db634f9b28b35bc5",
+   "target": "Files/Images/TruvioCommerce/brand/truvio-logo-alt.svg"
+  },
+  {
+   "id": "logo-footer",
+   "role": "logo",
+   "source": "https://truvio.com/hubfs/Truvio%20Logos/logo%20(1).svg",
+   "contentType": "image/svg+xml",
+   "bytes": 3807,
+   "sha256": "1c4a2d18664ad0fe626073045d4c8e8d4a411a26c7473213ea77c582d38704b6",
+   "target": "Files/Images/TruvioCommerce/brand/truvio-logo-footer.svg"
+  },
+  {
+   "id": "symbol",
+   "role": "symbol",
+   "source": "https://truvio.com/hubfs/Truvio_symbol_color_rgb_pos.png",
+   "contentType": "image/png",
+   "bytes": 31084,
+   "sha256": "c76e8527c4c3bc371bb31a261dbff8fe2ac803f3c0021c5909e9c656a92492f9",
+   "target": "Files/Images/TruvioCommerce/brand/truvio-symbol.png"
+  },
+  {
+   "id": "og-card",
+   "role": "social",
+   "source": "https://truvio.com/hubfs/Frame%204094.png",
+   "contentType": "image/png",
+   "bytes": 122713,
+   "sha256": "fd685dfd6c2d7eb99e8154c1b3419e268ca1105e7ec755bef75f7719727ad7fa",
+   "target": "Files/Images/TruvioCommerce/brand/truvio-og-card.png"
+  },
+  {
+   "id": "abstract-hero",
+   "role": "scenic",
+   "source": "https://truvio.com/hubfs/Blue%20and%20white%20abstract%20patterns.jpeg",
+   "contentType": "image/jpeg",
+   "bytes": 151798,
+   "sha256": "3e9edaad3066dbfc40446202df2782df03eb715dbc5935942ff1b0d7426310fa",
+   "target": "Files/Images/TruvioCommerce/scenic/abstract-patterns.jpeg"
+  },
+  {
+   "id": "product-visual",
+   "role": "scenic",
+   "source": "https://truvio.com/hubfs/Group%204075.png",
+   "contentType": "image/png",
+   "bytes": 978248,
+   "sha256": "2d41877337fa6f1f2ba8b0272e6a4f24f479851e6f96af89bdf72ea2d55bed9b",
+   "target": "Files/Images/TruvioCommerce/scenic/product-visual.png"
+  },
+  {
+   "id": "ui-composite",
+   "role": "scenic",
+   "source": "https://truvio.com/hubfs/Group%204091.webp",
+   "contentType": "image/webp",
+   "bytes": 106920,
+   "sha256": "76ced095a30cd71ac54c9e87f693d71715d0b9491a57f81854d0f880fcaa00a4",
+   "target": "Files/Images/TruvioCommerce/scenic/ui-composite.webp"
+  },
+  {
+   "id": "export-visual",
+   "role": "scenic",
+   "source": "https://truvio.com/hubfs/export_2x.webp",
+   "contentType": "image/webp",
+   "bytes": 31116,
+   "sha256": "ed7997c18d5517910a9adb8eb50cbd72fa5aa0b0e8fe48925677f55f43f6c1e9",
+   "target": "Files/Images/TruvioCommerce/scenic/export-visual.webp"
+  },
+  {
+   "id": "office-collab",
+   "role": "people",
+   "source": "https://truvio.com/hubfs/Stock%20Images/office-colleagues-collaborating-at-desktop.webp",
+   "contentType": "image/webp",
+   "bytes": 104670,
+   "sha256": "c6f881abebe4b931da6aca53b293ccd009b31daf3df5fbf3e02d01fa42467ce5",
+   "target": "Files/Images/TruvioCommerce/people/office-collaboration.webp"
+  },
+  {
+   "id": "business-talk",
+   "role": "people",
+   "source": "https://truvio.com/hubfs/Stock%20Images/business-conversation-between-colleagues.webp",
+   "contentType": "image/webp",
+   "bytes": 49978,
+   "sha256": "48ef2c0bf55a5ed836455fda8bd37827c1c956d8858d9547dc6efdc19028e0aa",
+   "target": "Files/Images/TruvioCommerce/people/business-conversation.webp"
+  },
+  {
+   "id": "finance-desk",
+   "role": "people",
+   "source": "https://truvio.com/hubfs/Stock%20Images/Finance%20Man%20with%20Bills.webp",
+   "contentType": "image/webp",
+   "bytes": 19978,
+   "sha256": "7a081d08a3aa7e67be0f3a243a87b6f78829c3202f8fe6bee799931b79abcfb3",
+   "target": "Files/Images/TruvioCommerce/people/finance-desk.webp"
+  },
+  {
+   "id": "product-shot-1",
+   "role": "scenic",
+   "source": "https://truvio.com/hubfs/42a51f77228f42849c6940a838a548f803eb579b.webp",
+   "contentType": "image/webp",
+   "bytes": 464894,
+   "sha256": "c20b0ae85735cba4e1a9cea6bf66f955ba4c0e9b6422562b636bb2acc460b164",
+   "target": "Files/Images/TruvioCommerce/scenic/product-shot-1.webp"
+  },
+  {
+   "id": "product-shot-2",
+   "role": "scenic",
+   "source": "https://truvio.com/hubfs/a580cef577965bbd4dda609587959c53ef517458.webp",
+   "contentType": "image/webp",
+   "bytes": 550362,
+   "sha256": "2865487b0fe494f390ecbd96cb135dfa9cc25ad4abdcdc5fc88790f89da6d01e",
+   "target": "Files/Images/TruvioCommerce/scenic/product-shot-2.webp"
+  },
+  {
+   "id": "product-shot-3",
+   "role": "scenic",
+   "source": "https://truvio.com/hubfs/ec2f17554ba7d88246e9265519f34430076aa2d7-1.webp",
+   "contentType": "image/webp",
+   "bytes": 264318,
+   "sha256": "a7e9adc0423371b280c6b608b16bc34592d7dadc4f35e661fcefc80e041f12b2",
+   "target": "Files/Images/TruvioCommerce/scenic/product-shot-3.webp"
+  }
+ ]
+}
