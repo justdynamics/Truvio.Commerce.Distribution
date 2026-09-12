@@ -1,6 +1,35 @@
 # Changelog — feature-pricing
 
 
+
+## 1.1.1
+
+**The discount engine is shipped switched on (Foundry 1048).**
+`files/System/Truvio/globalsettings.commerce.fragment.config` carries the New Discount Experience
+activation block verbatim, with its apply and proof steps in-file.
+
+Two discount engines coexist. The legacy one reads `EcomDiscount`; the new one — the engine the
+admin Discounts screen renders and every adjustment verb writes — reads `EcomDiscounts`, and only
+once the feature is activated. The baseline shipped no activation block, so three group net tiers
+were created, conditioned on the right user groups, rewarded with the right percentages, active in
+the database and correct on read-back, and the signed-in cart charged full list price for every one
+of them. A customer-number contract price in the same cart resolved correctly, which makes the
+failure look like a discount configured wrong rather than an engine switched off.
+
+It ships as a **fragment**, not as a settings file: a layer's `files/` overlay is overwrite-wins with
+no merge step, so shipping a whole `GlobalSettings.config` would replace the host's database
+connection, mail server and licence configuration. The file's only job is to be copied out of, into
+the host's own `<Features>` element, followed by a restart.
+
+The base was the first candidate and was rejected: it ships no GlobalSettings fragments at all, so
+there is no shape to follow there, and inventing one on the privileged content-free singleton for a
+single feature flag is the wrong trade. This is the layer whose subject is price and discount
+resolution, so the precondition travels with it.
+
+Recorded for anyone validating it: a read-back of the discount, its conditions and its rewards is
+not evidence — it passes on a dormant engine. The only proof is the discounted amount in a rendered
+cart.
+
 ## 1.1.0
 
 **Zero catalogue rows (Foundry 960).** The two demo products (`PACK-RPP-PROD1/2`), their group

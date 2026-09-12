@@ -398,7 +398,7 @@ table {
 
 /* =============================================================================
  * FRESH PASS — close the design gap to a modern headless storefront.
- * A structural version of the marine-demo re-skin, generalized to the neutral
+ * A structural version of the reference re-skin, generalized to the neutral
  * theme: shape + elevation system, muted secondary-text tier, calmer motion,
  * a slim two-row header, rounded imagery. Disk-overlay only (SPEC-06): no
  * template edit, no serialized DB content. Everything paints with the --td-*
@@ -525,7 +525,7 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
 }
 
 /* =============================================================================
- * MOBILE PASS — structural version of the marine-demo second pass (2026-07-18,
+ * MOBILE PASS — structural version of the reference second pass (2026-07-18,
  * brief Part B addendum #8-13). Kills the small-viewport layout blowout, wraps
  * flex rows below md, gives the list-mode PLP real column discipline, and opens
  * the spec accordion into a readable two-column table. Disk-overlay only
@@ -539,13 +539,13 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  * Probe lesson (record it, don't just trust it): `overflow-x:hidden` on <body>
  * MASKS a horizontal blowout from `document.documentElement.scrollWidth` — the
  * fresh canvas measured clean while the content still overflowed. Measure
- * `document.body.scrollWidth` at 390px. (marine: 390px canvas read 1356px with
+ * `document.body.scrollWidth` at 390px. (measured: 390px canvas read 1356px with
  * the mega-menu present, footer alone stretched it to 704px.)
  * ========================================================================== */
 
 /* --- #8  THE mobile bug: the desktop mega-menu never collapses. Swift-v2's
  *     MenuRelatedContent renders a fixed-width `.nav-wrapper` megamenu bar
- *     (~1282px on marine) at EVERY viewport; at 390px it stretched the document
+ *     (~1282px as measured) at EVERY viewport; at 390px it stretched the document
  *     canvas to 1356px — content squeezed into a left column, giant blank right
  *     margin, and broken lazy-image paint that reads as "missing PLP images".
  *     Constrain the bar to a swipeable, horizontally-scrollable category strip
@@ -584,7 +584,7 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
 }
 
 /* --- #9  Footer columns wrap too — the footer sits OUTSIDE <main> and still
- *     stretched the mobile canvas (marine: to ~704px). Scoped to the footer
+ *     stretched the mobile canvas (measured: to ~704px). Scoped to the footer
  *     landmark only (P5). --- */
 @media (max-width: 767.98px) {
   [data-swift-page-footer] [data-swift-gridrow] > [data-swift-container],

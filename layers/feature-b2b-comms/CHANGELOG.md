@@ -1,5 +1,14 @@
 # Changelog — feature-b2b-comms
 
+
+## 1.0.3
+
+**Sanitization.** The README still named the source demo solution it was generalized from, in four
+places. The layer's shipped content was already neutral; the prose around it was not, and a layer
+README is repo content a consumer reads. Names replaced with what they actually mean - the source
+solution, the source incentive email, the source recall email. No content, schema or behaviour
+change.
+
 ## 1.0.2
 
 Neutralization sweep (completes the pass that shipped `surface-swift` 1.4.0,

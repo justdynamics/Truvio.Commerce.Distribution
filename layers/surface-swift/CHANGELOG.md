@@ -1,6 +1,28 @@
 # Changelog — surface-swift
 
 
+
+## 1.6.1
+
+**The area now carries its own head include (Foundry 1031).** On a freshly deserialized site the
+area item field `Swift-v2_Master.CustomHeadInclude` measured as the empty string, so
+`default_custom.css` and its render-critical token block were absent from every rendered page while
+the three Style-asset sheets linked normally. Nothing failed and the one-shot proof reported green,
+because a missing stylesheet is not an error — it is a site that looks slightly wrong.
+
+The field was in this layer's `excludeFieldsByItemType` for `Swift-v2_Master`, sitting in a list of
+genuinely per-solution values (tag-manager id, favicon, verification meta, social ids). It does not
+belong there: those are a customer's own values and this one is a path into a file the distribution
+itself ships. While it was excluded, no serialized content could carry it and there was nowhere else
+for the binding to live. It is removed from the exclusion list in the layer config and both mode
+manifests, and both `area.yml` files now set
+`/Files/Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml`.
+
+The second half of the finding is a warning for anyone repointing this field: it holds **one** path,
+and `default_custom.css` is registered from *inside* `DefaultHeadInclude.cshtml`. Pointing the field
+at a customer head include therefore unloads the theme's first tier silently — the customer include
+must call `AddStylesheet` on `default_custom.css` first and its own sheet second.
+
 ## 1.6.0
 
 **A repository this distribution owns, and the Shop paragraph bound to it (V5-PLAN 2.4).**
