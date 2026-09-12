@@ -1,6 +1,27 @@
 # Changelog — sample-data
 
 
+## 2.3.1
+
+**`demo-clock.sql` did not compile on SQL Server (Foundry v5 e2e, DW 10.28.10).** Three
+compile-time and insert-time faults, all measured on a live apply, none of them reachable by the
+script's own shape guards because the batch never got that far.
+
+`usp_DemoClockShift` joins its own `dbo._demoClockExclusion` / `dbo._demoClockGuard` sysname
+columns against `sys.tables.name` and `sys.columns.name`. The catalog carries
+`Latin1_General_100_CI_AS_KS_WS_SC`; the layer's tables take the database default
+`Latin1_General_100_CI_AS`. The two compares (the exclusion `NOT EXISTS`, and the guard
+`LEFT JOIN`) raised a collation conflict at compile time, so the procedure never ran. Both now
+carry `COLLATE DATABASE_DEFAULT`, which follows whatever collation the target database was
+created with rather than hardcoding one.
+
+The `ScheduledTask` registration then failed with Msg 2628: `TaskComment` is `NVARCHAR(255)` and
+the literal was 364 characters. Shortened to 251, meaning kept — what it shifts, by what delta,
+that the shift is whole-day and uniform, and where the exclusions and guards live.
+
+No behaviour change beyond the script now executing: the shift semantics, the anchor mechanic and
+the task recurrence are untouched.
+
 ## 2.3.0
 
 **The feature layers' catalogue rows moved here (Foundry 960).** Composed with `sampleData: false`
