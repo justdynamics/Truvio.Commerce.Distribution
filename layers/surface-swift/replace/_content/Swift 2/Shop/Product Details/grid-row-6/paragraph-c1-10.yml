@@ -8,7 +8,7 @@
 "moduleSystemName": ""
 "moduleSettings": ""
 "fields":
-  "DisplayGroups": "[\\\"tc_specs\\\"]"
+  "DisplayGroups": "[\"tc_specs\"]"
   "GlobalRecordPageGuid": "15e4ab2a-a10e-4959-8c9f-67293f8afa30"
   "HideFieldLabels": false
   "HideFieldsWithZeroValue": true

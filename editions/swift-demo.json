@@ -11,7 +11,7 @@
     "feature-baseline-guide@1.0.0"
   ],
   "surfaces": [
-    "surface-swift@1.7.0"
+    "surface-swift@1.7.1"
   ],
   "sampleData": true,
   "themes": [

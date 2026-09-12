@@ -24,6 +24,11 @@
           <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.CheckboxEditor" /></editorConfuguration>
         </editor>
       </field>
+      <field name="Hide stock state" systemName="HideStockState" description="" type="System.Boolean, System.Private.CoreLib" excludeFromSearch="True" defaultValueCulture="en-GB" defaultValue="False">
+        <editor type="Dynamicweb.Content.Items.Editors.CheckboxEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.CheckboxEditor" /></editorConfuguration>
+        </editor>
+      </field>
     </fields>
     <rules>
       <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
@@ -41,6 +46,7 @@
             <field systemName="Title" />
             <field systemName="HorizontalAlignment" />
             <field systemName="HideInventory" />
+            <field systemName="HideStockState" />
           </fields>
         </group>
       </groups>

@@ -67,6 +67,16 @@
           </Static>
         </options>
       </field>
+      <field name="Default image fallback" systemName="DefaultImageFallback" description="If there is no assets or image pattern images, render the default image." type="System.Boolean, System.Private.CoreLib" excludeFromSearch="True" defaultValueCulture="en-GB" defaultValue="False">
+        <editor type="Dynamicweb.Content.Items.Editors.CheckboxEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.CheckboxEditor" /></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Show only primary image" systemName="ShowOnlyPrimaryImage" description="Ignores the assets and deliver only the product primary image" type="System.Boolean, System.Private.CoreLib" excludeFromSearch="True" defaultValueCulture="en-GB" defaultValue="False">
+        <editor type="Dynamicweb.Content.Items.Editors.CheckboxEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.CheckboxEditor" /></editorConfuguration>
+        </editor>
+      </field>
     </fields>
     <rules>
       <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
@@ -87,6 +97,8 @@
             <field systemName="ImagePatternImages" />
             <field systemName="ImageAspectRatio" />
             <field systemName="HideThumbnails" />
+            <field systemName="DefaultImageFallback" />
+            <field systemName="ShowOnlyPrimaryImage" />
           </fields>
         </group>
         <group name="Styling" systemName="Layout" sectionName="" collapsibleState="Collapsed" visibilityField="" visibilityCondition="" visibilityConditionValueType="" visibilityConditionValue="">

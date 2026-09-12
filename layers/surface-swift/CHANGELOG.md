@@ -2,6 +2,74 @@
 
 
 
+## 1.7.1
+
+Two measurements from the closing round of the v5 end-to-end on DW 10.28.10, both of the same
+family: a value that is one escape level too deep, and a gate that reads a field nobody declared.
+
+**The PDP spec band threw on every product, because `DisplayGroups` carried three backslashes.**
+`Shop/Product Details/grid-row-6/paragraph-c1-10.yml` wrote the field as
+`"[\\\"tc_specs\\\"]"`. YAML resolves `\\` to one backslash and `\"` to one quote, so what
+landed in the item table was `[\"tc_specs\"]` — a literal backslash where JSON expects a quote —
+and Swift's parse of the field raised
+`System.Text.Json.JsonException: "'\' is an invalid start of a value"` into a `dw-error` on the
+detail page of every product in the catalogue. The band rendered nothing and the exception rendered
+instead.
+
+The value is now `"[\"tc_specs\"]"`, which lands as `["tc_specs"]`. That is the encoding the other
+JSON-array fields in this content tree already use and always used —
+`Product Details/grid-row-2/paragraph-c1-7.yml` writes `"ImageAssets": "[\"Images\",\"Product_details\"]"`
+and both checkout pages write `"DisabledWeekdays": "[\"6\",\"0\"]"`. This paragraph was the only
+file in the tree carrying the deeper form, which is why nothing else on the site threw.
+
+**Five gates across four item types read fields nobody declared, so five shipped paragraphs
+rendered nothing and said nothing.** The PLP renders five product rows and none of them carried a SKU
+(Foundry 1115). The `Swift-v2_ProductNumber` paragraph on the Product List Card is present, active,
+bound to a real grid column and pointed at a product whose `ProductNumber` is populated; the stock
+template emits `itemprop="sku"`. The only gate past `product is object` is
+`Model.Item.GetBoolean("HideProductNumber")` — and `ItemType_Swift-v2_ProductNumber.xml` declared
+`Title` and `HorizontalAlignment` and nothing else, which the host item table confirms column for
+column. No exception, no `dw-error`: the cell simply did not render and Swift dropped the empty grid
+column.
+
+`HideProductNumber` is now declared on the item type, `System.Boolean` with a `CheckboxEditor` and
+`defaultValue="False"`, copied verbatim from `ItemType_Swift-v2_EmailProductCatalog.xml`, which has
+carried the identical declaration all along — the two templates read the same field and only one
+half of the pair was ever declared.
+
+A sweep of the whole surface then asked whether anything else gates the same way. Every
+`Item.GetBoolean("…")` call site in the Swift 2.4 design tree — 222 in all, of which 148 read the
+current paragraph's own item and the rest read runtime loop objects no item type governs — was
+mapped to its owning item type and checked against this layer's XML. Four more were undeclared, and
+all four are the same silent shape:
+
+| item type | field | what did not render |
+|---|---|---|
+| `Swift-v2_ProductStock` | `HideStockState` | the stock state band (`!hideStock`) |
+| `Swift-v2_ProductMediaTable` | `DefaultImageFallback` | the default-image fallback path |
+| `Swift-v2_ProductMediaTable` | `ShowOnlyPrimaryImage` | the primary-image-only asset path |
+| `Swift-v2_ProductComponentSlider` | `Autoplay` | slider autoplay, on the shared `ProductSliderComponent` partial |
+
+All four are declared now, each copied verbatim from the sibling item type in this layer that
+already declares it — the label, description, editor and default are not authored here, they are the
+ones the surface already ships. `AutoplayInterval` comes with `Autoplay` because autoplay without
+its interval is half a feature and `ProductSliderComponent.cshtml` reads both. The sweep is clean at
+zero: no template in the tree gates on a field its own item type does not declare.
+
+The shared partials needed their caller traced rather than their path parsed.
+`Components/Specifications/*` renders on `Model` from `Swift-v2_ProductFieldDisplayGroups` and its
+accordion sibling; `ProductListFacets/*` on the facets paragraph; `OrderDeliveryDate.cshtml` on the
+`Swift-v2_CheckoutApp` paragraph; and `ProductSliderComponent.cshtml` on whichever paragraph posted
+its own `Model.ID` as the `ParagraphId` form field — which is how `Autoplay` was found: the partial is
+shared with `Swift-v2_ProductGroupSlider`, which declares the field, and the naive path-to-item-type
+mapping reads the call site as satisfied because *some* item type declares it. Two call sites in
+`Components/VariantSelector.cshtml` pass a variable rather than a literal field name and cannot be
+checked statically at all; they are recorded here rather than silently counted as clean.
+
+Both fixes are authored against measured host state — the item tables read off `sys.columns` on the
+10.28.10 e2e host, the escape levels read off the landed item row — and their rendered proof is one
+re-run away.
+
 ## 1.7.0
 
 **The PLP row had no SKU, because the paragraph that renders it was never deployed.** The
