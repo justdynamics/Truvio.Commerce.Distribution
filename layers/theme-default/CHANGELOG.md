@@ -1,6 +1,42 @@
 # theme-default changelog
 
 
+
+## 2.0.0
+
+**The wave (V5-PLAN 2.5, decision D-E).** Block 22 of `default_custom.css`: one cubic path on a
+1440x75 viewBox applied as a CSS mask to a pseudo-element carrying a flat background-color. The mask
+carves the shape and a token supplies the colour, which is why one asset serves every colour scheme
+and a brand changes the motif by changing a variable. Three knobs: `--td-wave-fill` (defaults to the
+neutral page ground, so an un-themed wave reads as a carved edge and not as a stripe), `--td-wave-h`
+(`clamp(40px, 5vw, 75px)`) and `--td-wave-mask`.
+
+**It is inert.** Nothing in the block paints until `.td-wave-bottom` or `.td-wave-top` is applied,
+and no element in a Swift document carries either, so a page that has not opted in gains exactly
+zero pixels. Opting in is one entry in a grid row's CSS-class field in the Visual Editor: no
+template edit and no serialized content from this layer, which keeps the theme disk-overlay-only.
+
+**The clearance rules are the larger half of the block, and they are the point.** A top wave sits at
+`top: 0` flipped, and a pseudo-element with a negative offset paints above its owner's border box.
+Either way the crest paints over content while every box-model measurement reads healthy — the
+element genuinely does not overlap, so a geometry probe finds nothing and the text is still sliced.
+The fix is spacing, never stacking: the owner reserves padding sized off the wave's own clamp, so
+the reservation tracks the wave at every viewport with nothing to re-tune per breakpoint. Raising
+`z-index` on the content is the tempting fix and the wrong one — it repaints the text above the
+crest and leaves the motif looking like a mistake. Rules ship for the sending row, the receiving
+row, `main` when its last row carries a bottom wave, and the footer, which is the common sitewide
+case and the easiest to get wrong.
+
+`.td-wave-alt` flips on X as well, because two adjacent top waves otherwise read as one repeated
+stamp.
+
+Gate note recorded in the block: pseudo-element paint is invisible to every probe but the painted-
+clearance one, so every wave instance a site ships needs its own `paintClearance` entry naming its
+owner selector. A footer wave and a band boundary are two entries, not one.
+
+Major, not minor: `:root` gains three tokens and the sheet gains a utility a consuming theme is
+expected to build on.
+
 ## 1.4.0
 
 **The placeholder footprint, declared and shipped (V5-PLAN 2.4).** A placeholder is a file that

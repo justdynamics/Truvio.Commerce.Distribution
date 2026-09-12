@@ -1139,3 +1139,147 @@ main [data-dw-container-width="4"][data-td-full-bleed],
 main [data-td-full-bleed] [data-dw-container-width="4"] {
   --dw-container-gutter: 0rem;
 }
+
+/* ==========================================================================
+ * BLOCK 22 — THE WAVE. An opt-in boundary motif, and the clearance that makes
+ * it safe.
+ *
+ * WHAT IT IS. One cubic path on a 1440x75 viewBox, applied as a CSS mask to a
+ * pseudo-element that carries a flat background-color. The mask carves the
+ * shape; the colour comes from a token. That is why one asset serves every
+ * colour scheme and a brand changes the motif by changing a variable. The same
+ * path ships as a readable file at Images/Brand/wave.svg — edit both together,
+ * exactly as the token block here and the copy in DefaultHeadInclude.cshtml are
+ * edited together.
+ *
+ * IT IS INERT. Nothing below paints until a class is applied. No element in a
+ * Swift document carries td-wave-bottom or td-wave-top, so this block adds
+ * exactly zero pixels to a page that has not opted in. Opting in is one entry
+ * in a grid row's CSS-class field in the Visual Editor — no template edit and no
+ * serialized content of ours.
+ *
+ * THE CLEARANCE RULE, which is the whole reason this block is longer than the
+ * mask. A wave at the TOP of a section sits at top 0 and is flipped, and a
+ * pseudo-element with a negative offset paints ABOVE its owner's border box.
+ * Both mean the crest paints over content while every box-model measurement
+ * reads healthy — the element genuinely does not overlap, so a geometry probe
+ * finds nothing and the text is still sliced. The fix is SPACING, never
+ * stacking: the owner reserves padding sized off the wave's own clamp, so the
+ * reservation tracks the wave at every viewport automatically. Raising z-index
+ * on the content instead is the tempting fix and the wrong one: it repaints the
+ * text above the crest and leaves the design looking like a mistake rather than
+ * a motif.
+ *
+ * ONE TOKEN, THREE KNOBS.
+ *   --td-wave-fill  the painted colour. Defaults to the neutral page ground, so
+ *                   an un-themed wave reads as a carved edge, not as a stripe.
+ *                   Set it to the colour of the section the wave points INTO.
+ *   --td-wave-h     the height. clamp(40px, 5vw, 75px) — 72px at 1440, 40px at
+ *                   390, and the same expression drives every clearance below,
+ *                   which is what keeps the two in step.
+ *   --td-wave-mask  the shape. Swap it for a different silhouette without
+ *                   touching any rule here.
+ *
+ * GATE NOTE. Pseudo-element paint is invisible to every probe except the
+ * painted-clearance one, so every wave instance a site ships needs its own
+ * paintClearance entry naming its owner selector. A sitewide footer wave and a
+ * single band boundary are two entries, not one.
+ * ========================================================================== */
+[data-td-block="22"] { --td-block: 22; }
+
+:root {
+  --td-wave-h:    clamp(40px, 5vw, 75px);
+  --td-wave-fill: var(--td-white);
+  --td-wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 75' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C240,74 480,8 720,32 C960,56 1200,14 1440,44 L1440,75 L0,75 Z'/%3E%3C/svg%3E");
+}
+
+/* The shared pseudo-element. Full-bleed horizontally, clamped vertically,
+ * pointer-transparent, and masked to the path. No fallback is declared: a
+ * browser without mask support simply does not paint it, which is the correct
+ * degradation for a decorative shape. */
+.td-wave-bottom::after,
+.td-wave-top::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--td-wave-h);
+  background-color: var(--td-wave-fill);
+  -webkit-mask-image: var(--td-wave-mask);
+          mask-image: var(--td-wave-mask);
+  -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* An owner must establish a containing block for the absolutely-positioned
+ * pseudo-element, and must not clip it. */
+.td-wave-bottom,
+.td-wave-top {
+  position: relative;
+  overflow: visible;
+}
+
+/* BOTTOM: the wave sits on the owner's own bottom edge and points down into
+ * whatever follows. bottom -1px closes the sub-pixel seam that fractional
+ * layout heights open between the mask and the edge. */
+.td-wave-bottom::after {
+  bottom: -1px;
+}
+
+/* TOP: the wave sits at the owner's top edge, flipped vertically so the crest
+ * points up into the PREVIOUS section. top 0 and a flip, never a negative top:
+ * a negative offset paints the shape inside the previous element's box, where
+ * it is that element's problem and nobody's clearance. */
+.td-wave-top::before {
+  top: 0;
+  transform: scaleY(-1);
+}
+
+/* A second top wave adjacent to the first would read as one repeated stamp, so
+ * the alternate flips on X as well. Apply it to the second of two consecutive
+ * boundaries. */
+.td-wave-top.td-wave-alt::before {
+  transform: scaleY(-1) scaleX(-1);
+}
+
+/* --------------------------------------------------------------------------
+ * CLEARANCE. Mandatory whenever the motif is on. Every value is sized off the
+ * same clamp as the wave, so nothing has to be re-tuned per breakpoint.
+ * -------------------------------------------------------------------------- */
+
+/* The owner of a TOP wave reserves room above its own content for the crest,
+ * plus 14px of breathing room. Expressed on Swift's own row-space variable, so
+ * an editor changing the admin spacing step still lands on a cleared row. */
+.td-wave-top {
+  --dw-row-space-top: calc(var(--td-wave-h) + 14px);
+}
+
+/* The owner of a BOTTOM wave keeps a small floor under its last line, so the
+ * trough does not graze descenders. The wave itself overhangs the following
+ * section, which is why this is 16px and not another full clamp. */
+.td-wave-bottom {
+  --dw-row-space-bottom: 16px;
+}
+
+/* A section that RECEIVES a bottom wave from the element above it gets the
+ * clamp, since that wave is painting into its top edge. */
+.td-wave-bottom + * {
+  padding-block-start: calc(var(--td-wave-h) + 14px);
+}
+
+/* main itself, when the last row carries a bottom wave: the page's own end
+ * padding has to clear the overhang or the wave crosses into the footer. */
+main:has(> .td-wave-bottom:last-child) {
+  padding-block-end: calc(var(--td-wave-h) - 22px);
+}
+
+/* The footer instance. A footer wave is the common sitewide case and the one
+ * that is easiest to get wrong, because the footer's own top padding is the
+ * only thing between the crest and the last ink in main. */
+body > footer.td-wave-top,
+[data-swift-page-footer].td-wave-top {
+  padding-block-start: calc(var(--td-wave-h) + 14px);
+}
