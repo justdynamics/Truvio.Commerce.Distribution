@@ -2,6 +2,41 @@
 
 
 
+## 2.3.0
+
+### The signed-in PLP row gets a width budget (Foundry #1156)
+
+Blocks #10 and #15 sized the list card for the ANONYMOUS column set: five of the
+seven columns carry non-shrinkable bases, only the header has `min-width: 0`, and
+the row does not wrap. Signed in the row gains a real price figure and a real cart
+control and nothing can give the width back, so the line overcommits and picks a
+victim.
+
+Measured, legs run 20260913-111100, both roots: `1454 / 1440` (14px) at desktop and
+`1469 / 1366` (103px) at laptop, AUTHENTICATED only, with five
+`swift-v2_productshortdescription` cells at `0 x 136 px` still carrying 77-89
+characters. Anonymous measures `overflowX 0` at both widths and mobile passes in
+both identities - the columns do not exist anonymously and the row stacks on mobile,
+which is why five rounds of anonymous design runs never saw it. The 14-vs-103 spread
+is the finding: the wrap point sits between the two widths.
+
+New block **#27** fixes the budget rather than the victim, the same discipline as
+block #23 and the search field. The non-shrinkable floor goes from
+`72 + 150 + 280 + 100 + price + cart` to `72 + stock + price + cart`; number, header
+and description become shrinkable against stated floors; the description wraps
+instead of carrying block #10's nowrap + overflow + ellipsis trio, which is what
+turned a too-narrow cell into a zero-height line; and the row wraps, so the cart
+drops to a second line of the same card before the line can push the document.
+Between 992 and 1440 the budget is tightened again - that is the band the 103px was
+measured in.
+
+No `overflow` is set on the row, the card or either root: the probe measures both
+roots precisely to catch a theme hiding the scrollbar a human would have seen.
+
+**The after-widths are a computed floor, not a measurement.** The session that wrote
+this was read-only on the host, so the sheet has not been staged. Validation is the
+e2e design leg with `-PersonaUser TruvioBuyer`; `-SkipPersona` cannot validate it.
+
 ## 2.2.2
 
 Two live-measured defects from the v5 design leg, run 20260913-101914, both of

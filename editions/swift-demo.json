@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "swift-demo",
   "from": "base@3.3.0",
   "add": [
@@ -11,7 +11,7 @@
     "feature-baseline-guide@1.0.0"
   ],
   "surfaces": [
-    "surface-swift@1.9.0"
+    "surface-swift@1.10.0"
   ],
   "sampleData": true,
   "themes": [

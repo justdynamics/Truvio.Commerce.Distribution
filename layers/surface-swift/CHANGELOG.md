@@ -2,6 +2,126 @@
 
 
 
+## 1.10.0
+
+Four composition defects from the v5 round-two census, all the same shape: a
+paragraph or a repository file naming something that does not exist, or omitting
+something a template dereferences. None raised an error and every row count
+around them was correct.
+
+### The gallery named two asset categories and got neither (Foundry #1145)
+
+The PDP hero gallery set `ImageAssets ["Images","Product_details"]` with
+`DefaultImageFallback 0`. Both names are stock Swift's, where `Images` is a system
+asset category and `Product_details` sits beside it; the Distribution's base ships
+neither, so on a composed host `EcomDetailsGroup` holds one row - `Manuals`,
+created by the data layer for its pdf rows - and both names filtered to nothing at
+`Swift-v2_ProductMedia.cshtml:129`. The default-image fallback at `:145` could not
+fire either: it requires `selectedAssetCategories.Count() == 0` and the count was
+2. The component emitted its wrapper and no children - childCount 0, innerHTML
+length 0, `358 x 0 px` at 390, 0 `img` page-wide at 1440, on both measured products
+in both identities.
+
+The paragraph now names one category, `Images`, and sets `DefaultImageFallback 1`.
+truvio-demo creates that category and puts its 180 image rows in it - the data half
+of contract (a) in the issue. `Product_details` is dropped rather than also created:
+a second category holding the same rows is a second thing to keep true, and the
+gallery reads one strip. The fallback flag matters independently - with it at 0 the
+failure mode is an empty wrapper that paints non-zero at desktop and zero at mobile
+from identical DOM, which is what made a paint-judged presence assert flip by
+viewport.
+
+surface-swift still ships no asset category of its own. A surface NAMES categories;
+a data layer creates them.
+
+### Related products shipped Fields NULL into an unguarded Count (Foundry #1146)
+
+`Swift-v2_RelatedProductsList.cshtml` reads
+`Model.Item.GetList("Fields")?.GetRawValue().OfType<string>().ToList()` and then
+calls `.Count()` on it with no null guard. `GetList` returns null for a field never
+written, the `?.` short-circuits the chain, and the `.Count()` after it dereferences
+null. The yml carried fourteen of the item type's fifteen fields and omitted this
+one, so the component emitted nothing at all -
+`[data-dw-itemtype='swift-v2_relatedproductslist']` matched 0 on both PDPs, in both
+identities, at both viewports - while `EcomProductsRelated` held 324 rows, 6 of them
+on TCPROD0001 and 5 on TCPROD0051.
+
+`Fields` now ships as `"[]"`, the empty list the stock composition writes for an
+unselected checkbox list. Empty and not populated: `Fields` on this item type is a
+DISPLAY-GROUP picker, so naming a group would bind the surface to something only a
+data layer creates. Same class as #1129.
+
+### The spec band states what the group it names must contain (Foundry #1147)
+
+The PDP Specifications paragraph binds `DisplayGroups ["tc_specs"]`, and the group
+was landing with 28 members in `EcomFieldDisplayGroupFields` against 6 names in the
+denormalised `FieldDisplayGroupFieldIds` column, one of which -
+`ProductCategory|tc_content|tcMedia` - is not a field on any host; the real system
+name is `tcMediaSet`. No yml, item-type XML or repository file in this layer carries
+that string, and no `ItemType_*` row on the measured host does either. It exists in
+that one column only, residue of a seed that typed the list beside the member table
+instead of deriving it. The row half is truvio-demo's.
+
+What this layer owns is the naming, so `surface.contract-notes.json` records the
+guarantees a composing data layer has to keep for the band to draw anything: the
+frontend flag the paragraph's own option query filters on, the
+`ProductCategory|<FieldCategoryId>|<FieldId>` reference form, the rule that the
+denormalised column is WRITTEN FROM the relation rather than typed beside it, that
+every name in it must resolve to a live `EcomProductCategoryField` row, and
+`tcMedia -> tcMediaSet` as a known wrong name. The scope note is the part that is
+easy to get backwards: `tc_specs` spans four categories and a product renders only
+the fields it holds a value for, so seven of twenty-eight on one product is correct
+behaviour - the remedy is spreading values, never shortening the group.
+
+### The PLP rail gets attribute facets (Foundry #1149)
+
+`Products.index` set `SkipCategoryFields True`, so the index carried no
+`ProductCategory|...` field while the database held 28 category fields with 420
+values, and no attribute facet could be added at all. The rail rendered Group (24
+values) and Price (2 of its 4 declared bands) against marine's three, the third
+being a real attribute facet.
+
+Four changes, and they only work together - a facet is decorative unless the Field
+is a SystemName in the index, the QueryParameter is a Parameter in the query with a
+`MatchAny` expression in the prunable group, and the Facet is declared in the facets
+file:
+
+- `SkipCategoryFields` **True -> False**, or every `ProductCategory|` Source resolves
+  empty.
+- `SkipDetailImages` **True -> False**: an asset-category gallery and a hover
+  alternative image are detail-image rows, and an index that skips them cannot serve
+  either to a list surface. This is the index leg of #1145.
+- **Four attribute fields**, sourced in the qualified form -
+  `tc_data_models|tcMaterialClass`, `tc_commerce|tcDeliveryLeadTime`,
+  `tc_content|tcLanguageCoverage`, `tc_users|tcAccountTerms` - measured at 5, 5, 5
+  and 4 distinct values over the fifteen products each category owns.
+- **The Manufacturer facet is dropped.** It bound a field that resolves and indexes
+  nothing: `EcomManufacturers` is empty and `ProductManufacturerId` is NULL on every
+  row. `Condition HasValue` suppressed it, so the file declared three facets and the
+  rail drew two. The index field and the query parameter STAY - a passed parameter
+  with no expression filters to nothing - so a catalogue that ships manufacturers
+  restores the facet in four lines.
+
+Four attribute facets and not one because this catalogue PARTITIONS its products
+across its four field categories: each owns fifteen products and has no value on the
+other forty-five. `Condition HasValue` then does the honest work per listing. A
+catalogue with catalogue-wide attributes ships one facet here; the count follows the
+data, never the file.
+
+### The replace manifest lists what is on disk, exactly
+
+`replace-manifest.json` carried 294 files for `content/area-3` while 292 exist: eight
+entries under `Customer center/CSR/grid-row-1|2|3` with no file behind them, and six
+files under `Customer center/Overview/grid-row-6|7` named nowhere. Paragraph numbers
+21-24 match across the two spellings and the grid-row indices shift by five, so this
+is rename residue - two rows moved pages, the manifest kept the old names and never
+learned the new ones. The manifest is the deploy inventory, so eight entries pointed
+at nothing and six files were never staged, silently, in both directions at once.
+
+**The two Overview rows have never been staged by any deploy of this layer**, so the
+next run is the first on which they render. That is composition which has not been
+seen, not composition that regressed, and it wants one look.
+
 ## 1.9.0
 
 Five PDP sections rendered a head over nothing. `Swift-v2_ProductLongDescription`,
