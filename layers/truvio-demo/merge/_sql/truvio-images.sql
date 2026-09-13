@@ -42,17 +42,17 @@ IF OBJECT_ID('tempdb..#TcTile') IS NOT NULL DROP TABLE #TcTile;
 CREATE TABLE #TcTile (GroupId nvarchar(255) NOT NULL PRIMARY KEY, TilePath nvarchar(510) NOT NULL);
 INSERT INTO #TcTile (GroupId, TilePath) VALUES
     ('TCGRP-VARIANTS', '/Files/Images/TruvioCommerce/products/tc-tile-variants.svg'),
-    ('TCGRP-COMPLETENESS', '/Files/Images/TruvioCommerce/products/tc-tile-completeness.svg'),
-    ('TCGRP-WORKFLOWS', '/Files/Images/TruvioCommerce/products/tc-tile-workflows.svg'),
+    ('TCGRP-STOCK-DELIVERY', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg'),
+    ('TCGRP-UNITS', '/Files/Images/TruvioCommerce/products/tc-tile-units.svg'),
     ('TCGRP-PRICE-STRUCTURES', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg'),
     ('TCGRP-ASSORTMENTS', '/Files/Images/TruvioCommerce/products/tc-tile-assortments.svg'),
     ('TCGRP-DISCOUNTS', '/Files/Images/TruvioCommerce/products/tc-tile-discounts.svg'),
-    ('TCGRP-PAGES', '/Files/Images/TruvioCommerce/products/tc-tile-pages.svg'),
-    ('TCGRP-PARAGRAPHS', '/Files/Images/TruvioCommerce/products/tc-tile-paragraphs.svg'),
-    ('TCGRP-ITEM-TYPES', '/Files/Images/TruvioCommerce/products/tc-tile-item-types.svg'),
-    ('TCGRP-GROUPS', '/Files/Images/TruvioCommerce/products/tc-tile-groups.svg'),
-    ('TCGRP-PERMISSIONS', '/Files/Images/TruvioCommerce/products/tc-tile-permissions.svg'),
-    ('TCGRP-IMPERSONATION', '/Files/Images/TruvioCommerce/products/tc-tile-impersonation.svg');
+    ('TCGRP-MEDIA', '/Files/Images/TruvioCommerce/products/tc-tile-media.svg'),
+    ('TCGRP-CURRENCIES', '/Files/Images/TruvioCommerce/products/tc-tile-currencies.svg'),
+    ('TCGRP-BUNDLES', '/Files/Images/TruvioCommerce/products/tc-tile-bundles.svg'),
+    ('TCGRP-CONTRACT-PRICING', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing.svg'),
+    ('TCGRP-DOCUMENTS', '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg'),
+    ('TCGRP-RELATIONS', '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg');
 
 -- ---------------------------------------------------------------------------
 -- 1. EcomDetails: the attachment the storefront reads.

@@ -55,17 +55,17 @@
   ],
   "files": [
     "Images/TruvioCommerce/products/tc-tile-assortments.svg",
-    "Images/TruvioCommerce/products/tc-tile-completeness.svg",
+    "Images/TruvioCommerce/products/tc-tile-bundles.svg",
+    "Images/TruvioCommerce/products/tc-tile-contract-pricing.svg",
+    "Images/TruvioCommerce/products/tc-tile-currencies.svg",
     "Images/TruvioCommerce/products/tc-tile-discounts.svg",
-    "Images/TruvioCommerce/products/tc-tile-groups.svg",
-    "Images/TruvioCommerce/products/tc-tile-impersonation.svg",
-    "Images/TruvioCommerce/products/tc-tile-item-types.svg",
-    "Images/TruvioCommerce/products/tc-tile-pages.svg",
-    "Images/TruvioCommerce/products/tc-tile-paragraphs.svg",
-    "Images/TruvioCommerce/products/tc-tile-permissions.svg",
+    "Images/TruvioCommerce/products/tc-tile-documents.svg",
+    "Images/TruvioCommerce/products/tc-tile-media.svg",
     "Images/TruvioCommerce/products/tc-tile-price-structures.svg",
-    "Images/TruvioCommerce/products/tc-tile-variants.svg",
-    "Images/TruvioCommerce/products/tc-tile-workflows.svg"
+    "Images/TruvioCommerce/products/tc-tile-relations.svg",
+    "Images/TruvioCommerce/products/tc-tile-stock-delivery.svg",
+    "Images/TruvioCommerce/products/tc-tile-units.svg",
+    "Images/TruvioCommerce/products/tc-tile-variants.svg"
   ],
   "costHints": {
     "reservedKeyPrefixes": [

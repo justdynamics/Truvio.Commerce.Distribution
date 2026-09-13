@@ -112,14 +112,14 @@ BEGIN
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
     VALUES ('TCO-0001-1', 'TCO-0001', 'TCPROD0002', 'TC-VAR-0002', N'Truvio Variant Master 02', 2, 60.00, 120.00, '0', DATEADD(day, -62, GETDATE()));
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0001-2', 'TCO-0001', 'TCPROD0007', 'TC-CMP-0007', N'Truvio Completeness Score 07', 1, 75.00, 75.00, '0', DATEADD(day, -62, GETDATE()));
+    VALUES ('TCO-0001-2', 'TCO-0001', 'TCPROD0007', 'TC-STK-0007', N'Truvio Stock Item 07', 1, 75.00, 75.00, '0', DATEADD(day, -62, GETDATE()));
 END
 IF NOT EXISTS (SELECT 1 FROM EcomOrders WHERE OrderId = 'TCO-0002')
 BEGIN
     INSERT INTO EcomOrders (OrderId, OrderComplete, OrderCart, OrderStateId, OrderShopId, OrderLanguageId, OrderCurrencyCode, OrderCustomerNumber, OrderCustomerAccessUserId, OrderCustomerName, OrderCustomerEmail, OrderCustomerCompany, OrderCustomerCountryCode, OrderDate, OrderCompletedDate, OrderTotalPrice)
     VALUES ('TCO-0002', 1, 0, 'OS2', 'SHOP1', 'ENU', 'EUR', 'TC-100200', 100101, 'Truvio Buyer', 'buyer@truvio-demo.example', 'Truvio Demo Account', 'NL', DATEADD(day, -55, GETDATE()), DATEADD(day, -53, GETDATE()), 202.50);
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0002-1', 'TCO-0002', 'TCPROD0006', 'TC-CMP-0006', N'Truvio Completeness Score 06', 5, 40.50, 202.50, '0', DATEADD(day, -55, GETDATE()));
+    VALUES ('TCO-0002-1', 'TCO-0002', 'TCPROD0006', 'TC-STK-0006', N'Truvio Stock Item 06', 5, 40.50, 202.50, '0', DATEADD(day, -55, GETDATE()));
 END
 IF NOT EXISTS (SELECT 1 FROM EcomOrders WHERE OrderId = 'TCO-0003')
 BEGIN
@@ -130,55 +130,55 @@ BEGIN
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
     VALUES ('TCO-0003-2', 'TCO-0003', 'TCPROD0021', 'TC-ASM-0021', N'Truvio Assortment Kit 21', 1, 0.00, 0.00, '0', DATEADD(day, -48, GETDATE()));
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0003-3', 'TCO-0003', 'TCPROD0042', 'TC-ITM-0042', N'Truvio Item Type Schema 42', 3, 60.00, 180.00, '0', DATEADD(day, -48, GETDATE()));
+    VALUES ('TCO-0003-3', 'TCO-0003', 'TCPROD0042', 'TC-BDL-0042', N'Truvio Bundle Kit 42', 3, 60.00, 180.00, '0', DATEADD(day, -48, GETDATE()));
 END
 IF NOT EXISTS (SELECT 1 FROM EcomOrders WHERE OrderId = 'TCO-0004')
 BEGIN
     INSERT INTO EcomOrders (OrderId, OrderComplete, OrderCart, OrderStateId, OrderShopId, OrderLanguageId, OrderCurrencyCode, OrderCustomerNumber, OrderCustomerAccessUserId, OrderCustomerName, OrderCustomerEmail, OrderCustomerCompany, OrderCustomerCountryCode, OrderDate, OrderCompletedDate, OrderTotalPrice)
     VALUES ('TCO-0004', 1, 0, 'OS2', 'SHOP1', 'ENU', 'EUR', 'TC-100200', 100101, 'Truvio Buyer', 'buyer@truvio-demo.example', 'Truvio Demo Account', 'NL', DATEADD(day, -41, GETDATE()), DATEADD(day, -39, GETDATE()), 45.00);
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0004-1', 'TCO-0004', 'TCPROD0031', 'TC-PAG-0031', N'Truvio Page Node 31', 1, 45.00, 45.00, '0', DATEADD(day, -41, GETDATE()));
+    VALUES ('TCO-0004-1', 'TCO-0004', 'TCPROD0031', 'TC-MED-0031', N'Truvio Media Set 31', 1, 45.00, 45.00, '0', DATEADD(day, -41, GETDATE()));
 END
 IF NOT EXISTS (SELECT 1 FROM EcomOrders WHERE OrderId = 'TCO-0005')
 BEGIN
     INSERT INTO EcomOrders (OrderId, OrderComplete, OrderCart, OrderStateId, OrderShopId, OrderLanguageId, OrderCurrencyCode, OrderCustomerNumber, OrderCustomerAccessUserId, OrderCustomerName, OrderCustomerEmail, OrderCustomerCompany, OrderCustomerCountryCode, OrderDate, OrderCompletedDate, OrderTotalPrice)
     VALUES ('TCO-0005', 1, 0, 'OS3', 'SHOP1', 'ENU', 'EUR', 'TC-100200', 100101, 'Truvio Buyer', 'buyer@truvio-demo.example', 'Truvio Demo Account', 'NL', DATEADD(day, -34, GETDATE()), NULL, 75.00);
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0005-1', 'TCO-0005', 'TCPROD0013', 'TC-WFL-0013', N'Truvio Workflow Service 13', 1, 75.00, 75.00, '0', DATEADD(day, -34, GETDATE()));
+    VALUES ('TCO-0005-1', 'TCO-0005', 'TCPROD0013', 'TC-UOM-0013', N'Truvio Unit Conversion Service 13', 1, 75.00, 75.00, '0', DATEADD(day, -34, GETDATE()));
 END
 IF NOT EXISTS (SELECT 1 FROM EcomOrders WHERE OrderId = 'TCO-0006')
 BEGIN
     INSERT INTO EcomOrders (OrderId, OrderComplete, OrderCart, OrderStateId, OrderShopId, OrderLanguageId, OrderCurrencyCode, OrderCustomerNumber, OrderCustomerAccessUserId, OrderCustomerName, OrderCustomerEmail, OrderCustomerCompany, OrderCustomerCountryCode, OrderDate, OrderCompletedDate, OrderTotalPrice)
     VALUES ('TCO-0006', 1, 0, 'OS2', 'SHOP1', 'ENU', 'EUR', 'TC-100200', 100101, 'Truvio Buyer', 'buyer@truvio-demo.example', 'Truvio Demo Account', 'NL', DATEADD(day, -27, GETDATE()), DATEADD(day, -25, GETDATE()), 300.00);
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0006-1', 'TCO-0006', 'TCPROD0046', 'TC-GRP-0046', N'Truvio Group Segment 46', 2, 90.00, 180.00, '0', DATEADD(day, -27, GETDATE()));
+    VALUES ('TCO-0006-1', 'TCO-0006', 'TCPROD0046', 'TC-CTR-0046', N'Truvio Contract Price 46', 2, 90.00, 180.00, '0', DATEADD(day, -27, GETDATE()));
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0006-2', 'TCO-0006', 'TCPROD0047', 'TC-GRP-0047', N'Truvio Group Segment 47', 1, 120.00, 120.00, '0', DATEADD(day, -27, GETDATE()));
+    VALUES ('TCO-0006-2', 'TCO-0006', 'TCPROD0047', 'TC-CTR-0047', N'Truvio Contract Price 47', 1, 120.00, 120.00, '0', DATEADD(day, -27, GETDATE()));
 END
 IF NOT EXISTS (SELECT 1 FROM EcomOrders WHERE OrderId = 'TCO-0007')
 BEGIN
     INSERT INTO EcomOrders (OrderId, OrderComplete, OrderCart, OrderStateId, OrderShopId, OrderLanguageId, OrderCurrencyCode, OrderCustomerNumber, OrderCustomerAccessUserId, OrderCustomerName, OrderCustomerEmail, OrderCustomerCompany, OrderCustomerCountryCode, OrderDate, OrderCompletedDate, OrderTotalPrice)
     VALUES ('TCO-0007', 1, 0, 'OS2', 'SHOP1', 'ENU', 'EUR', 'TC-100200', 100101, 'Truvio Buyer', 'buyer@truvio-demo.example', 'Truvio Demo Account', 'NL', DATEADD(day, -21, GETDATE()), DATEADD(day, -19, GETDATE()), 120.00);
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0007-1', 'TCO-0007', 'TCPROD0051', 'TC-PRM-0051', N'Truvio Permission Grant 51', 1, 45.00, 45.00, '0', DATEADD(day, -21, GETDATE()));
+    VALUES ('TCO-0007-1', 'TCO-0007', 'TCPROD0051', 'TC-DOC-0051', N'Truvio Document Set 51', 1, 45.00, 45.00, '0', DATEADD(day, -21, GETDATE()));
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0007-2', 'TCO-0007', 'TCPROD0053', 'TC-PRM-0053', N'Truvio Permission Service 53', 1, 75.00, 75.00, '0', DATEADD(day, -21, GETDATE()));
+    VALUES ('TCO-0007-2', 'TCO-0007', 'TCPROD0053', 'TC-DOC-0053', N'Truvio Document Service 53', 1, 75.00, 75.00, '0', DATEADD(day, -21, GETDATE()));
 END
 IF NOT EXISTS (SELECT 1 FROM EcomOrders WHERE OrderId = 'TCO-0008')
 BEGIN
     INSERT INTO EcomOrders (OrderId, OrderComplete, OrderCart, OrderStateId, OrderShopId, OrderLanguageId, OrderCurrencyCode, OrderCustomerNumber, OrderCustomerAccessUserId, OrderCustomerName, OrderCustomerEmail, OrderCustomerCompany, OrderCustomerCountryCode, OrderDate, OrderCompletedDate, OrderTotalPrice)
     VALUES ('TCO-0008', 1, 0, 'OS2', 'SHOP1', 'ENU', 'EUR', 'TC-100200', 100101, 'Truvio Buyer', 'buyer@truvio-demo.example', 'Truvio Demo Account', 'NL', DATEADD(day, -16, GETDATE()), DATEADD(day, -14, GETDATE()), 240.00);
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0008-1', 'TCO-0008', 'TCPROD0036', 'TC-PAR-0036', N'Truvio Paragraph Block 36', 4, 60.00, 240.00, '0', DATEADD(day, -16, GETDATE()));
+    VALUES ('TCO-0008-1', 'TCO-0008', 'TCPROD0036', 'TC-CUR-0036', N'Truvio Currency Matrix 36', 4, 60.00, 240.00, '0', DATEADD(day, -16, GETDATE()));
 END
 IF NOT EXISTS (SELECT 1 FROM EcomOrders WHERE OrderId = 'TCO-0009')
 BEGIN
     INSERT INTO EcomOrders (OrderId, OrderComplete, OrderCart, OrderStateId, OrderShopId, OrderLanguageId, OrderCurrencyCode, OrderCustomerNumber, OrderCustomerAccessUserId, OrderCustomerName, OrderCustomerEmail, OrderCustomerCompany, OrderCustomerCountryCode, OrderDate, OrderCompletedDate, OrderTotalPrice)
     VALUES ('TCO-0009', 1, 0, 'OS1', 'SHOP1', 'ENU', 'EUR', 'TC-100200', 100101, 'Truvio Buyer', 'buyer@truvio-demo.example', 'Truvio Demo Account', 'NL', DATEADD(day, -11, GETDATE()), NULL, 165.00);
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0009-1', 'TCO-0009', 'TCPROD0056', 'TC-IMP-0056', N'Truvio Impersonation Token 56', 1, 45.00, 45.00, '0', DATEADD(day, -11, GETDATE()));
+    VALUES ('TCO-0009-1', 'TCO-0009', 'TCPROD0056', 'TC-REL-0056', N'Truvio Relation Set 56', 1, 45.00, 45.00, '0', DATEADD(day, -11, GETDATE()));
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0009-2', 'TCO-0009', 'TCPROD0057', 'TC-IMP-0057', N'Truvio Impersonation Token 57', 2, 60.00, 120.00, '0', DATEADD(day, -11, GETDATE()));
+    VALUES ('TCO-0009-2', 'TCO-0009', 'TCPROD0057', 'TC-REL-0057', N'Truvio Relation Set 57', 2, 60.00, 120.00, '0', DATEADD(day, -11, GETDATE()));
 END
 IF NOT EXISTS (SELECT 1 FROM EcomOrders WHERE OrderId = 'TCO-0010')
 BEGIN
@@ -192,7 +192,7 @@ BEGIN
     INSERT INTO EcomOrders (OrderId, OrderComplete, OrderCart, OrderStateId, OrderShopId, OrderLanguageId, OrderCurrencyCode, OrderCustomerNumber, OrderCustomerAccessUserId, OrderCustomerName, OrderCustomerEmail, OrderCustomerCompany, OrderCustomerCountryCode, OrderDate, OrderCompletedDate, OrderTotalPrice)
     VALUES ('TCO-0011', 1, 0, 'OS1', 'SHOP1', 'ENU', 'EUR', 'TC-100200', 100101, 'Truvio Buyer', 'buyer@truvio-demo.example', 'Truvio Demo Account', 'NL', DATEADD(day, -4, GETDATE()), NULL, 195.00);
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
-    VALUES ('TCO-0011-1', 'TCO-0011', 'TCPROD0011', 'TC-WFL-0011', N'Truvio Workflow State 11', 3, 45.00, 135.00, '0', DATEADD(day, -4, GETDATE()));
+    VALUES ('TCO-0011-1', 'TCO-0011', 'TCPROD0011', 'TC-UOM-0011', N'Truvio Unit Measure 11', 3, 45.00, 135.00, '0', DATEADD(day, -4, GETDATE()));
     INSERT INTO EcomOrderLines (OrderLineId, OrderLineOrderId, OrderLineProductId, OrderLineProductNumber, OrderLineProductName, OrderLineQuantity, OrderLineUnitPrice, OrderLinePriceWithVAT, OrderLineType, OrderLineDate)
     VALUES ('TCO-0011-2', 'TCO-0011', 'TCPROD0002', 'TC-VAR-0002', N'Truvio Variant Master 02', 1, 60.00, 60.00, '0', DATEADD(day, -4, GETDATE()));
 END

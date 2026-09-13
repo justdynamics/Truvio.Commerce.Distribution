@@ -19,10 +19,37 @@ vocabulary**, so the catalogue doubles as a platform-terminology tour and can ne
 mistaken for a real business. `Size` and `Finish` are worldly, so they are *not* the
 variant axes — `Tier` and `Mode` are.
 
+**And the frontend filter (round two, 2026-09-13) is binding on top of it: an example
+ships only if Swift SHOWS it.** A quantity price renders on the page, so it belongs; a PIM
+workflow is backend-only, so it does not. Eight subgroups named a concept the storefront
+cannot draw — Workflows, Completeness, Permissions, Impersonation, Item Types, Pages,
+Paragraphs, Groups — and every one was replaced by vocabulary a Swift page renders. Each of
+the twelve now points at a component:
+
+| Top group | Subgroup | What Swift shows |
+|---|---|---|
+| Data Models | `Variants` | the variant selector |
+| Data Models | `Units & Measures` | the unit selector on add-to-cart |
+| Data Models | `Bundles & BOM` | the package-contents list |
+| Commerce | `Price Structures` | the quantity price table |
+| Commerce | `Discounts` | the price-before-discount line |
+| Commerce | `Stock & Delivery` | the stock count, status and delivery line |
+| Content | `Documents` | the documents table |
+| Content | `Media & Galleries` | the gallery and its thumbnails |
+| Content | `Relations` | the related-products strip |
+| Users | `Assortments` | which rows a signed-in persona sees |
+| Users | `Contract Pricing` | your price against list |
+| Users | `Currencies & VAT` | the figure itself |
+
+The category fields followed the same filter: all 28 are now things a buyer reads — a
+dimension in the platform's own unit vocabulary, a material class, a rating, a
+compatibility note, a commercial term. `Completeness Score`, which rendered as a
+shopper-facing spec row, is gone along with every other backend concept beside it.
+
 | Shape | Example |
 |---|---|
 | Top group | `Data Models`, `Commerce`, `Content`, `Users` |
-| Subgroup | `Variants`, `Completeness`, `Workflows`, `Price Structures`, `Assortments`, `Discounts`, `Pages`, `Paragraphs`, `Item Types`, `Groups`, `Permissions`, `Impersonation` |
+| Subgroup | `Variants`, `Units & Measures`, `Bundles & BOM`, `Price Structures`, `Discounts`, `Stock & Delivery`, `Documents`, `Media & Galleries`, `Relations`, `Assortments`, `Contract Pricing`, `Currencies & VAT` |
 | Product name | `Truvio <Concept> <Unit> <NN>` — `Truvio Variant Master 01`, `Truvio Price Matrix 16` |
 | SKU | `TC-<CONCEPT>-<nnnn>` — `TC-VAR-0001`, `TC-PRC-0016` |
 | Product id | `TCPROD0001` … `TCPROD0060` |
