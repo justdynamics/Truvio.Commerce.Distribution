@@ -635,6 +635,13 @@ IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-RELATIONS')
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-RELATIONS' AND GroupRelationsParentId = 'TCGRP-CONTENT')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-RELATIONS', 'TCGRP-CONTENT', 3, 1, 0);
 
+GO
+-- A BATCH OF ITS OWN. This block only ASSERTS; it writes nothing. Until now the
+-- file was one 2550-line batch with no GO, so a COMPILE error anywhere in a guard
+-- took every insert in the file with it - nothing ran, no row was written, and the
+-- host stayed empty. A guard must never be able to stop the writes it checks, so
+-- each pure-guard block is separated by GO. Variables, table variables and #temps
+-- do not cross GO; every block below therefore declares its own.
 -- THE TAXONOMY GUARD. The names above are the re-screened ones, seeded as
 -- literals, because the converge UPDATE in section 0 renames only rows that
 -- already exist: on a clean install there is nothing to converge, the predicate
@@ -665,6 +672,7 @@ BEGIN
     DECLARE @TcBadTaxonomy NVARCHAR(2000) = STUFF((SELECT N', ' + GroupId + N'=' + GroupName FROM @TcRetiredNames FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, N'');
     RAISERROR(N'truvio-catalog.sql: a subgroup carries a name the re-screen retired: %s. The final GroupName belongs in the INSERT literal; the section-0 UPDATE converges an already-seeded host and does nothing on a clean one, so a rename that lives only there ships the retired word to the shop navigation and the PLP facet rail while every row count stays green.', 16, 1, @TcBadTaxonomy);
 END
+GO
 
 -- ---------------------------------------------------------------------------
 -- 2. The 60 masters. ProductType 0 = stock item, 1 = service, 2 = BOM parent.
@@ -1438,6 +1446,9 @@ IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND Pro
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0036')
     INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0036', 'TCPROD0051', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
 
+GO
+-- A BATCH OF ITS OWN, for the reason set out at the taxonomy guard: this block only
+-- ASSERTS, and a compile error in a guard must never take the writes above with it.
 -- THE SELECTOR GUARD, and it sits HERE - after the last option relation and
 -- the last combination row - because it asserts exactly those. Upstream of
 -- them it measured an empty table on any host seeding for the first time, and
@@ -1473,6 +1484,7 @@ BEGIN
         N' of 6 required variant masters can actually render a selector. A master needs a row in EcomVariantGroupProductRelation per axis AND at least two of that axis options on itself; without both the PDP draws an empty div and the product copy telling the reader to open the selector is a lie on the page. The catalogue ships exactly 6, so this is a count of what survived, not a shortfall against a generous target.');
     RAISERROR(@TcSelectorMsg, 16, 1);
 END
+GO
 
 -- ---------------------------------------------------------------------------
 -- 5. The BOM kit. Each slot binds a GROUP and names a default child, which is
@@ -1556,6 +1568,9 @@ IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0045
     INSERT INTO EcomProductItems (ProductItemId, ProductItemProductId, ProductItemBomProductId, ProductItemBomGroupId, ProductItemQuantity, ProductItemName, ProductItemRequired, ProductItemDefaultProductId, ProductItemBomNoProductText, ProductItemSortOrder, ProductItemBomVariantId, ProductItemDefaultVariantId, ProductItemDefaultUnitId, ProductItemBomUnitId)
     VALUES ('TC-BOM-0045-2', 'TCPROD0045', '', 'TCGRP-DOCUMENTS', 1, N'Documentation component', 1, 'TCPROD0054', '', 2, '', '', '', '');
 
+GO
+-- A BATCH OF ITS OWN, for the reason set out at the taxonomy guard: this block only
+-- ASSERTS, and a compile error in a guard must never take the writes above with it.
 -- THE BOM GUARD. A row count over the whole table was green on the state this
 -- section fixes - four rows existed, none of them in the band that advertises the
 -- capability. So the assertion is per GROUP: the bundling band must own at least
@@ -1583,6 +1598,7 @@ DECLARE @TcThinKits INT = (
         HAVING COUNT(*) < 2) x);
 IF @TcThinKits > 0
     RAISERROR(N'truvio-demo: a BOM parent carries fewer than two slots. A one-slot kit is a product with an accessory, not a configurator, and the Package contents table reads as a mistake.', 16, 1);
+GO
 
 -- ---------------------------------------------------------------------------
 -- 6. Prices: the quantity-tier ladder and the one contract row.
@@ -2413,6 +2429,15 @@ SELECT @TcSpecsFieldIds = STRING_AGG(r.FieldDisplayGroupFieldSystemName, ',')
 IF EXISTS (SELECT 1 FROM EcomFieldDisplayGroups WHERE FieldDisplayGroupSystemName = 'tc_specs' AND ISNULL(FieldDisplayGroupFieldIds, N'') <> ISNULL(@TcSpecsFieldIds, N''))
     UPDATE EcomFieldDisplayGroups SET FieldDisplayGroupFieldIds = ISNULL(@TcSpecsFieldIds, N'') WHERE FieldDisplayGroupSystemName = 'tc_specs';
 
+GO
+-- A BATCH OF ITS OWN, for the reason set out at the taxonomy guard: this block only
+-- ASSERTS, and a compile error in a guard must never take the writes above with it.
+-- The two values the spec guards read are re-derived here from the same rows the
+-- section above wrote them from: the group id, and the denormalised column, which
+-- the UPDATE above has just made equal to the STRING_AGG over the relation.
+DECLARE @TcSpecsGroupId INT = (SELECT TOP 1 FieldDisplayGroupId FROM EcomFieldDisplayGroups WHERE FieldDisplayGroupSystemName = 'tc_specs');
+DECLARE @TcSpecsFieldIds NVARCHAR(MAX) = (SELECT TOP 1 FieldDisplayGroupFieldIds FROM EcomFieldDisplayGroups WHERE FieldDisplayGroupSystemName = 'tc_specs');
+
 -- THE COMPLETENESS GUARDS, and they come before the resolution guard because a
 -- group can resolve and still be short. The measured failure was exactly that:
 -- EcomFieldDisplayGroupFields held 28 members for group 14 while the denormalised
@@ -2442,19 +2467,30 @@ BEGIN
     RAISERROR(@TcSpecsMsg, 16, 1);
 END
 
+-- THE PER-CATEGORY RESOLUTION IS PRE-COMPUTED, one row per field, because counting
+-- it inline is not legal T-SQL: SUM(CASE WHEN EXISTS (...)) in a SELECT list and in
+-- a HAVING is Msg 130, "cannot perform an aggregate function on an expression
+-- containing an aggregate or a subquery", and it is a COMPILE error - measured on
+-- SQL Server 2022 at these exact two lines. In a file that was one batch that meant
+-- the whole catalogue never ran. The membership flag is resolved here, so the
+-- aggregates below sum a plain INT column. The assertion is unchanged: a category
+-- whose field count differs from its member count is named and raised.
+IF OBJECT_ID('tempdb..#TcSpecsFieldMembership') IS NOT NULL DROP TABLE #TcSpecsFieldMembership;
+SELECT f.FieldCategoryId,
+       f.FieldId,
+       CAST(CASE WHEN EXISTS (SELECT 1 FROM EcomFieldDisplayGroupFields r
+                               WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId
+                                 AND r.FieldDisplayGroupFieldSystemName = 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId)
+                 THEN 1 ELSE 0 END AS INT) AS IsMember
+  INTO #TcSpecsFieldMembership
+  FROM EcomProductCategoryField f
+ WHERE f.FieldCategoryId LIKE 'tc[_]%';
+
 DECLARE @TcSpecsShortCategory NVARCHAR(400) = (
-    SELECT TOP 1 CONCAT(f.FieldCategoryId, N' (', COUNT(*), N' field(s), ',
-                        SUM(CASE WHEN EXISTS (SELECT 1 FROM EcomFieldDisplayGroupFields r
-                                               WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId
-                                                 AND r.FieldDisplayGroupFieldSystemName = 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId)
-                                 THEN 1 ELSE 0 END), N' member(s))')
-      FROM EcomProductCategoryField f
-     WHERE f.FieldCategoryId LIKE 'tc[_]%'
-     GROUP BY f.FieldCategoryId
-    HAVING COUNT(*) <> SUM(CASE WHEN EXISTS (SELECT 1 FROM EcomFieldDisplayGroupFields r
-                                              WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId
-                                                AND r.FieldDisplayGroupFieldSystemName = 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId)
-                                THEN 1 ELSE 0 END));
+    SELECT TOP 1 CONCAT(m.FieldCategoryId, N' (', COUNT(*), N' field(s), ', SUM(m.IsMember), N' member(s))')
+      FROM #TcSpecsFieldMembership m
+     GROUP BY m.FieldCategoryId
+    HAVING COUNT(*) <> SUM(m.IsMember));
 IF @TcSpecsShortCategory IS NOT NULL
 BEGIN
     SET @TcSpecsMsg = CONCAT(N'truvio-catalog.sql: a whole field category is under-represented in tc_specs - ', @TcSpecsShortCategory,
@@ -2506,6 +2542,9 @@ DECLARE @TcSpecsResolved INT = (
        AND ISNULL(v.FieldValueValue, N'') <> N'');
 IF @TcSpecsResolved = 0
     RAISERROR(N'truvio-catalog.sql: the tc_specs display group resolves to ZERO field values on any TCPROD product. The PDP spec band will render a heading over an empty table. Members must be written in the category-field reference form ProductCategory|<FieldCategoryId>|<FieldId>; a bare FieldId resolves against GLOBAL product fields (EcomProductField) only, and this layer ships none.', 16, 1);
+
+IF OBJECT_ID('tempdb..#TcSpecsFieldMembership') IS NOT NULL DROP TABLE #TcSpecsFieldMembership;
+GO
 
 -- ---------------------------------------------------------------------------
 -- 8. Currency rates: every currency row, not just the default.
