@@ -1,0 +1,6 @@
+# The documents under files/Documents/ are binary. Without this they are text to
+# git, and a checkout on a machine with core.autocrlf=true rewrites every LF in
+# the PDF byte stream - the xref offsets then point past the objects they name
+# and the file no longer opens. Marked here rather than repo-wide so the rule
+# sits beside the files it protects.
+*.pdf -text -diff

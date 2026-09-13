@@ -61,9 +61,27 @@
       "idempotent": true,
       "transactional": true,
       "requiresHostRestart": true
+    },
+    {
+      "file": "_sql/truvio-pdp.sql",
+      "mode": "merge",
+      "phase": "after-replace-deserialize",
+      "order": 9,
+      "description": "What fills the product detail page, which the parity report measured at 84 characters of main text with four empty sections. A gallery of two to four images per master (the concept tile plus the photographic frame its top group is branded with, from the Distribution's own brand/brand-assets.manifest.json targets, plus a detail shot on two rows in five). The Manuals ASSET CATEGORY - one EcomDetailsGroup with extensions pdf, InheritanceType 3 and ControlType 0, the shape Swift's ProductMediaTable binds to when configured ImageAssets=[\"Manuals\"] - carrying 120 document rows over the eight one-page PDFs this layer ships in files/Documents/TruvioCommerce/ and regenerates with tools/make-documents.py. 324 related-product rows in three groups (Related products, Accessories, Spare parts), with the kit story written BOTH ways so a member points back at its kit. And the remaining four category-field values per master, taking every specification table from three rows to seven. Ends in four resolution guards that assert what the page needs - two images, two documents, two relations, exactly seven specification values on every master - rather than what was inserted.",
+      "idempotent": true,
+      "transactional": true,
+      "requiresHostRestart": true
     }
   ],
   "files": [
+    "Documents/TruvioCommerce/tc-datasheet-commerce.pdf",
+    "Documents/TruvioCommerce/tc-datasheet-content.pdf",
+    "Documents/TruvioCommerce/tc-datasheet-data-models.pdf",
+    "Documents/TruvioCommerce/tc-datasheet-users.pdf",
+    "Documents/TruvioCommerce/tc-install-guide-commerce.pdf",
+    "Documents/TruvioCommerce/tc-install-guide-content.pdf",
+    "Documents/TruvioCommerce/tc-install-guide-data-models.pdf",
+    "Documents/TruvioCommerce/tc-install-guide-users.pdf",
     "Images/TruvioCommerce/products/tc-tile-assortments.svg",
     "Images/TruvioCommerce/products/tc-tile-bundles.svg",
     "Images/TruvioCommerce/products/tc-tile-contract-pricing.svg",
@@ -104,16 +122,19 @@
       "EcomProductCategoryTranslation": 4,
       "EcomProductCategoryField": 28,
       "EcomProductCategoryFieldTranslation": 28,
-      "EcomProductCategoryFieldValue": 180,
+      "EcomProductCategoryFieldValue": 420,
       "AccessUser": 4,
       "AccessUserGroupRelation": 6,
       "EcomOrders": 12,
       "EcomOrderLines": 20,
-      "EcomDetails": 96,
+      "EcomDetails": 300,
       "EcomFieldDisplayGroups": 1,
       "EcomFieldDisplayGroupTranslation": 1,
       "EcomFieldDisplayGroupFields": 28,
-      "EcomStockUnit": 60
+      "EcomStockUnit": 60,
+      "EcomDetailsGroup": 1,
+      "EcomProductsRelated": 324,
+      "EcomProductsRelatedGroups": 3
     },
     "expectedRowsNote": "What this layer's two scripts land on top of whatever sample-data seeds. Advisory: the gate derives its own counts from the composition, this is the layer's own statement of what it ships."
   }
