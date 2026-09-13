@@ -285,7 +285,7 @@ Runner `gate-headless.ps1` on Swift 2.3, clean-room shared-catalog:
 
 | # | Gate step (analog) | Assert | Level | Notes |
 |---|---|---|---|---|
-| A1 | Deploy deserialize (Step 10) | `deploy/` + `seed/` POST `SerializerDeserialize` return HTTP 200, zero escalations | Deserialize | Same assertion depth as the Swift baseline. Requires the `Headless_*` itemtype definitions present on the host (disk overlay) before deserialize. |
+| A1 | Deploy deserialize (Step 10) | `deploy/` + `seed/` POST `Deserialize` return HTTP 200, zero escalations | Deserialize | Same assertion depth as the Swift baseline. Requires the `Headless_*` itemtype definitions present on the host (disk overlay) before deserialize. |
 | A2 | Post-deserialize SQL | Both areas exist: `SELECT COUNT(*) FROM Area WHERE AreaName IN ('Headless','Headless Nederlands')` = 2 | SQL | Area-level parity check. |
 | A3 | Post-deserialize SQL | Each `ItemType_Headless_*` table has the expected `(Id)` rows in the `200000–209999` band; EN+NL counts match per page | SQL | Item-instance landing proof; no `Swift-v2_*` row touched. |
 | A4 | Content round-trip | Page count per area parity (EN == NL) for the authored tree | SQL | Mirrors Swift's "123 each" page-parity assertion. |
