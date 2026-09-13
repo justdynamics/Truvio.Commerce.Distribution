@@ -1476,6 +1476,105 @@ IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0002
     VALUES ('TC-BOM-0002', 'TCPROD0021', '', 'TCGRP-BUNDLES', 1, N'Item type component', 1, 'TCPROD0042', '', 2, '', '', '', '');
 
 -- ---------------------------------------------------------------------------
+-- 5b. The Bundles & BOM band owns kits that actually have contents.
+--     The ProductBom component is on the PDP and renders zero rows on every
+--     product the demo visits, under a visible Package contents heading - so the
+--     #1136 fix turned an absent section into an empty one (Foundry #1161).
+--
+--     The reason is arithmetic: EcomProductItems held FOUR rows in the whole
+--     database, two owned by TCPROD0021 and two by sample-data's PACK-BOM-0001.
+--     TCPROD0021 is not in the bundling band, and every product in TCGRP-BUNDLES -
+--     the group the #1134 re-screening renamed `Bundles & BOM` precisely to
+--     demonstrate this capability - owned zero. The section whose purpose is to
+--     show bundling was empty on the five products in the bundling group.
+--
+--     Four of the five Bundle Kit masters become real BOM parents (ProductType 2)
+--     with two slots each. TCPROD0041 is deliberately left alone: it is one of the
+--     six VARIANT masters, and a product that is both a variant master and a BOM
+--     parent is a shape this catalogue does not claim to demonstrate and the gate
+--     has never proven.
+--
+--     Each slot binds a GROUP and names a default child, which is what makes the
+--     configurator a picker rather than a fixed kit - the same shape TC-BOM-0001
+--     and TC-BOM-0002 already prove on TCPROD0021, column for column. The two
+--     slots are chosen so the kit reaches the products the demo path actually
+--     visits: a Variants component defaulting into TCGRP-VARIANTS, and a
+--     Documentation component defaulting into TCGRP-DOCUMENTS, which is where
+--     TCPROD0051 lives.
+--
+--     WHAT THIS DOES NOT DO, stated so the next census does not read it as a
+--     regression: the Package contents band stays EMPTY on TCPROD0001 and
+--     TCPROD0051. Neither is a kit, and giving a variant master bill-of-materials
+--     rows to make a section non-empty would be seeding for the assert rather than
+--     for the demo. The band is proven on the products whose band it is, and the
+--     PDP pointer moves to a bundle master when that section is what is being
+--     measured.
+--
+--     Idempotent: the ProductType move is existence-guarded and each slot is
+--     guarded on its own ProductItemId.
+-- ---------------------------------------------------------------------------
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0042' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ProductType <> 2)
+    UPDATE EcomProducts SET ProductType = 2 WHERE ProductId = 'TCPROD0042' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0042-1')
+    INSERT INTO EcomProductItems (ProductItemId, ProductItemProductId, ProductItemBomProductId, ProductItemBomGroupId, ProductItemQuantity, ProductItemName, ProductItemRequired, ProductItemDefaultProductId, ProductItemBomNoProductText, ProductItemSortOrder, ProductItemBomVariantId, ProductItemDefaultVariantId, ProductItemDefaultUnitId, ProductItemBomUnitId)
+    VALUES ('TC-BOM-0042-1', 'TCPROD0042', '', 'TCGRP-VARIANTS', 1, N'Variant component', 1, 'TCPROD0002', '', 1, '', '', '', '');
+IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0042-2')
+    INSERT INTO EcomProductItems (ProductItemId, ProductItemProductId, ProductItemBomProductId, ProductItemBomGroupId, ProductItemQuantity, ProductItemName, ProductItemRequired, ProductItemDefaultProductId, ProductItemBomNoProductText, ProductItemSortOrder, ProductItemBomVariantId, ProductItemDefaultVariantId, ProductItemDefaultUnitId, ProductItemBomUnitId)
+    VALUES ('TC-BOM-0042-2', 'TCPROD0042', '', 'TCGRP-DOCUMENTS', 1, N'Documentation component', 1, 'TCPROD0051', '', 2, '', '', '', '');
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0043' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ProductType <> 2)
+    UPDATE EcomProducts SET ProductType = 2 WHERE ProductId = 'TCPROD0043' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0043-1')
+    INSERT INTO EcomProductItems (ProductItemId, ProductItemProductId, ProductItemBomProductId, ProductItemBomGroupId, ProductItemQuantity, ProductItemName, ProductItemRequired, ProductItemDefaultProductId, ProductItemBomNoProductText, ProductItemSortOrder, ProductItemBomVariantId, ProductItemDefaultVariantId, ProductItemDefaultUnitId, ProductItemBomUnitId)
+    VALUES ('TC-BOM-0043-1', 'TCPROD0043', '', 'TCGRP-VARIANTS', 1, N'Variant component', 1, 'TCPROD0003', '', 1, '', '', '', '');
+IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0043-2')
+    INSERT INTO EcomProductItems (ProductItemId, ProductItemProductId, ProductItemBomProductId, ProductItemBomGroupId, ProductItemQuantity, ProductItemName, ProductItemRequired, ProductItemDefaultProductId, ProductItemBomNoProductText, ProductItemSortOrder, ProductItemBomVariantId, ProductItemDefaultVariantId, ProductItemDefaultUnitId, ProductItemBomUnitId)
+    VALUES ('TC-BOM-0043-2', 'TCPROD0043', '', 'TCGRP-DOCUMENTS', 1, N'Documentation component', 1, 'TCPROD0052', '', 2, '', '', '', '');
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0044' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ProductType <> 2)
+    UPDATE EcomProducts SET ProductType = 2 WHERE ProductId = 'TCPROD0044' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0044-1')
+    INSERT INTO EcomProductItems (ProductItemId, ProductItemProductId, ProductItemBomProductId, ProductItemBomGroupId, ProductItemQuantity, ProductItemName, ProductItemRequired, ProductItemDefaultProductId, ProductItemBomNoProductText, ProductItemSortOrder, ProductItemBomVariantId, ProductItemDefaultVariantId, ProductItemDefaultUnitId, ProductItemBomUnitId)
+    VALUES ('TC-BOM-0044-1', 'TCPROD0044', '', 'TCGRP-VARIANTS', 1, N'Variant component', 1, 'TCPROD0004', '', 1, '', '', '', '');
+IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0044-2')
+    INSERT INTO EcomProductItems (ProductItemId, ProductItemProductId, ProductItemBomProductId, ProductItemBomGroupId, ProductItemQuantity, ProductItemName, ProductItemRequired, ProductItemDefaultProductId, ProductItemBomNoProductText, ProductItemSortOrder, ProductItemBomVariantId, ProductItemDefaultVariantId, ProductItemDefaultUnitId, ProductItemBomUnitId)
+    VALUES ('TC-BOM-0044-2', 'TCPROD0044', '', 'TCGRP-DOCUMENTS', 1, N'Documentation component', 1, 'TCPROD0053', '', 2, '', '', '', '');
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0045' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ProductType <> 2)
+    UPDATE EcomProducts SET ProductType = 2 WHERE ProductId = 'TCPROD0045' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0045-1')
+    INSERT INTO EcomProductItems (ProductItemId, ProductItemProductId, ProductItemBomProductId, ProductItemBomGroupId, ProductItemQuantity, ProductItemName, ProductItemRequired, ProductItemDefaultProductId, ProductItemBomNoProductText, ProductItemSortOrder, ProductItemBomVariantId, ProductItemDefaultVariantId, ProductItemDefaultUnitId, ProductItemBomUnitId)
+    VALUES ('TC-BOM-0045-1', 'TCPROD0045', '', 'TCGRP-VARIANTS', 1, N'Variant component', 1, 'TCPROD0005', '', 1, '', '', '', '');
+IF NOT EXISTS (SELECT 1 FROM EcomProductItems WHERE ProductItemId = 'TC-BOM-0045-2')
+    INSERT INTO EcomProductItems (ProductItemId, ProductItemProductId, ProductItemBomProductId, ProductItemBomGroupId, ProductItemQuantity, ProductItemName, ProductItemRequired, ProductItemDefaultProductId, ProductItemBomNoProductText, ProductItemSortOrder, ProductItemBomVariantId, ProductItemDefaultVariantId, ProductItemDefaultUnitId, ProductItemBomUnitId)
+    VALUES ('TC-BOM-0045-2', 'TCPROD0045', '', 'TCGRP-DOCUMENTS', 1, N'Documentation component', 1, 'TCPROD0054', '', 2, '', '', '', '');
+
+-- THE BOM GUARD. A row count over the whole table was green on the state this
+-- section fixes - four rows existed, none of them in the band that advertises the
+-- capability. So the assertion is per GROUP: the bundling band must own at least
+-- four BOM parents, and no BOM parent anywhere may carry fewer than two slots.
+DECLARE @TcBundleKits INT = (
+    SELECT COUNT(DISTINCT p.ProductId)
+      FROM EcomProducts p
+      JOIN EcomGroupProductRelation g ON g.GroupProductRelationProductId = p.ProductId
+     WHERE g.GroupProductRelationGroupId = 'TCGRP-BUNDLES'
+       AND p.ProductVariantId = '' AND p.ProductLanguageId = 'ENU'
+       AND (SELECT COUNT(*) FROM EcomProductItems i WHERE i.ProductItemProductId = p.ProductId) >= 2);
+IF @TcBundleKits < 4
+BEGIN
+    DECLARE @TcBomMsg NVARCHAR(600) = CONCAT(N'truvio-catalog.sql: only ', @TcBundleKits,
+        N' product(s) in TCGRP-BUNDLES carry two or more BOM slots, against 4 required. The Bundles & BOM band exists to demonstrate bundling, and the PDP Package contents section renders a heading over an empty table on every product in it - which is worse than the section being absent, and just as silent.');
+    RAISERROR(@TcBomMsg, 16, 1);
+END
+
+DECLARE @TcThinKits INT = (
+    SELECT COUNT(*) FROM (
+        SELECT i.ProductItemProductId
+          FROM EcomProductItems i
+         WHERE i.ProductItemProductId LIKE 'TCPROD%'
+         GROUP BY i.ProductItemProductId
+        HAVING COUNT(*) < 2) x);
+IF @TcThinKits > 0
+    RAISERROR(N'truvio-demo: a BOM parent carries fewer than two slots. A one-slot kit is a product with an accessory, not a configurator, and the Package contents table reads as a mistake.', 16, 1);
+
+-- ---------------------------------------------------------------------------
 -- 6. Prices: the quantity-tier ladder and the one contract row.
 --    Contract pricing resolves by PriceUserCustomerNumber, never by
 --    PriceCustomerGroupId - the group columns stay empty.
