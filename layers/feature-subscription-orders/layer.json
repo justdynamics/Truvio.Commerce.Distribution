@@ -1,6 +1,6 @@
 {
   "name": "feature-subscription-orders",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "csLedger": [],
@@ -43,7 +43,7 @@
     "behaviorProbes": [
       {
         "kind": "checkout-recurring",
-        "path": "/swift-2/subscribe",
+        "path": "/en-us/subscribe",
         "productId": "PACK-SUB-PROD1",
         "quantity": 1,
         "paymentMethodId": "PAY2",
@@ -53,7 +53,7 @@
       }
     ],
     "criticalPaths": [
-      "/swift-2/account/subscriptions"
+      "/en-us/account/subscriptions"
     ]
   }
 }

@@ -34,19 +34,19 @@
     {
       "name": "feature-bom-configurator",
       "kind": "feature",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "status": "active"
     },
     {
       "name": "feature-pricing",
       "kind": "feature",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "status": "active"
     },
     {
       "name": "feature-reordering",
       "kind": "feature",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "status": "active"
     },
     {
@@ -63,13 +63,13 @@
     {
       "name": "feature-rma",
       "kind": "feature",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "status": "active"
     },
     {
       "name": "feature-subscription-orders",
       "kind": "feature",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "status": "active"
     },
     {

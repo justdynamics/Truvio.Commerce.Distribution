@@ -10,7 +10,7 @@ native DW 10.26.9 engine does all the work; the layer is pure exposure wiring.
 
 | Capability | How | Artifact |
 |------------|-----|----------|
-| Invoice recurring checkout (PK2-01) | Layer-owned Subscribe page with a minimized 3-step `eCom_CartV2` paragraph; the layer step template renders the native recurring panel (`EcomRecurringOrderCreate` + interval fields — decompile-verified names). The engine's `DefaultCheckoutHandler` (auto-resolved for the gateway-less PAY2 Invoice method) implements `IRecurring`, so checkout completion places the base order AND the `EcomRecurringOrder` template row | Subscribe page fragment (`/swift-2/subscribe`), `templates/Designs/Swift-v2/eCom7/CartV2/Step/PackSubscribeCheckout.cshtml` |
+| Invoice recurring checkout (PK2-01) | Layer-owned Subscribe page with a minimized 3-step `eCom_CartV2` paragraph; the layer step template renders the native recurring panel (`EcomRecurringOrderCreate` + interval fields — decompile-verified names). The engine's `DefaultCheckoutHandler` (auto-resolved for the gateway-less PAY2 Invoice method) implements `IRecurring`, so checkout completion places the base order AND the `EcomRecurringOrder` template row | Subscribe page fragment (`/en-us/subscribe`), `templates/Designs/Swift-v2/eCom7/CartV2/Step/PackSubscribeCheckout.cshtml` |
 | Customer-center subscriptions list + manage (PK2-02) | Layer-owned Subscriptions page using the stock `eCom_CustomerExperienceCenter` app with `<OrderType>Recurringorder</OrderType>` (mandatory — the standard Orders list SQL excludes recurring templates) and a layer list template with interval/next-delivery detail and an ownership-guarded end-subscription action. The page sits under the base **Customer center → Account** nav tree (beside Orders/Favorites/etc., navigationTag `PackSubscriptionsPage`); because `Account` is base **replace**-owned content, this page ships as a **replace** fragment (`fragmentModes: ["merge","replace"]`) so the base Account parent is staged at deserialize | Subscriptions page fragment under `/Customer center/Account/Subscriptions`, `templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Orders/List/PackSubscriptions_List.cshtml` |
 | Declared config dependencies (PK2-03) | SQL EXISTS probes on the base layer rows the layer rides on: `EcomPayments` PAY2 (Invoice, ENU), `EcomShippings` SHIP9 (Home delivery, ENU), and the native `ScheduledTask` row "Place recurring orders" | `layer.json` configRows |
 
@@ -102,8 +102,8 @@ ownership split.
 
 | Probe | Expectation |
 |-------|-------------|
-| `checkout-recurring` on `/swift-2/subscribe` (product PACK-SUB-PROD1 × 1, PAY2/SHIP9, GotoStep1 — `CartV2.GotoStep{i}` is 0-BASED, so index 1 targets the second step, the `IsCheckout=true` Checkout step) | Authenticated multi-step checkout completes; IMCUser's count of `EcomRecurringOrder` rows with a non-empty `RecurringOrderBaseOrderID` **increases across the checkout POST** (before/after delta, Phase 8 WR-01 — pre-existing rows never satisfy the proof) |
-| criticalPath `/swift-2/account/subscriptions` | 2xx via the account-gated sign-in redirect (302→sign-in 200, like base Orders — the page lives under Customer center/Account). The Subscribe page is deliberately NOT a criticalPath: anonymous + empty cart hits `EmptyCartRadioRedirect` with unverified target semantics (RESEARCH A4) |
+| `checkout-recurring` on `/en-us/subscribe` (product PACK-SUB-PROD1 × 1, PAY2/SHIP9, GotoStep1 — `CartV2.GotoStep{i}` is 0-BASED, so index 1 targets the second step, the `IsCheckout=true` Checkout step) | Authenticated multi-step checkout completes; IMCUser's count of `EcomRecurringOrder` rows with a non-empty `RecurringOrderBaseOrderID` **increases across the checkout POST** (before/after delta, Phase 8 WR-01 — pre-existing rows never satisfy the proof) |
+| criticalPath `/en-us/account/subscriptions` | 2xx via the account-gated sign-in redirect (302→sign-in 200, like base Orders — the page lives under Customer center/Account). The Subscribe page is deliberately NOT a criticalPath: anonymous + empty cart hits `EmptyCartRadioRedirect` with unverified target semantics (RESEARCH A4) |
 
 ## Authenticated list-render — real-host UAT (LRN-HARNESS-03)
 
@@ -118,9 +118,9 @@ permission-tier analog of the storefront-index gap (LRN-HARNESS-01).
 
 **Gate-proven here:** the subscription is *created* (`checkout-recurring` SQL delta) and the
 Account-nested URL resolves + auth-gates (`criticalPath` 302→sign-in). **Verify on a real
-Swift 2.3 host:** sign in as the buyer, open `/swift-2/account/subscriptions` under the
+Swift 2.3 host:** sign in as the buyer, open `/en-us/account/subscriptions` under the
 Account nav, and confirm the placed subscription renders with its `End subscription` action.
-This was previously a `/swift-2/subscriptions` (public, Secondary-Nav) gate probe; moving the
+This was previously a `/en-us/subscriptions` (public, Secondary-Nav) gate probe; moving the
 page into the Account nav tree (its correct home, beside Orders) trades that in-gate render
 proof for this real-host UAT — the same trade the BOM configurator render makes.
 

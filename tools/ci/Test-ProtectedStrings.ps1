@@ -6,7 +6,8 @@ identifier or a YAML value / DW filesystem path. Ported verbatim from the harnes
 (tools/harness/Invoke-ProtectedStringCheck.ps1) so the Distribution CI is self-contained.
 
 Fails closed on (A) mangled anchors ("Replace 2 Nederlands", "Swift-v2_Merge", ...),
-(B) a mode word as a DW path segment inside a value ("/replace/", "\merge\"), and
+(B) a mode word as a DW path segment inside a value ("/replace/", "\merge\"), except inside a
+token that starts with "layers/" (a Distribution layer path cited as prose, never a DW path), and
 (C) missing positive anchors ("Swift 2" + "Swift-v2_" must survive in the content-carrying layer: surface-swift since the Swift 2.4 base split).
 #>
 function Test-ProtectedStrings {
@@ -33,13 +34,22 @@ function Test-ProtectedStrings {
 
     $pathLeakRx = '[\\/](replace|merge)[\\/]'
 
+    # A Distribution layer path cited in prose (a guide page naming 'layers/base/replace/_sql')
+    # is not a leaked DW/Swift path: DW never serves a path that starts at the layers/ folder.
+    # Such tokens are removed from the line before MODE-IN-PATH is judged, so the same line
+    # still fails when it ALSO carries a mode word in a real template/asset path.
+    $layerPathRx = '(?<![\w.-])layers[\\/][^\s"''<>|,;()]*'
+
     $violations = @()
     foreach ($f in $contentFiles) {
         try {
             $hitsA = Select-String -LiteralPath $f.FullName -Pattern $mangledRx -AllMatches -ErrorAction Stop
             foreach ($h in $hitsA) { $violations += "MANGLED-ANCHOR $($f.FullName):$($h.LineNumber): $($h.Line.Trim())" }
             $hitsB = Select-String -LiteralPath $f.FullName -Pattern $pathLeakRx -AllMatches -ErrorAction Stop
-            foreach ($h in $hitsB) { $violations += "MODE-IN-PATH $($f.FullName):$($h.LineNumber): $($h.Line.Trim())" }
+            foreach ($h in $hitsB) {
+                if (([regex]::Replace($h.Line, $layerPathRx, '')) -notmatch $pathLeakRx) { continue }
+                $violations += "MODE-IN-PATH $($f.FullName):$($h.LineNumber): $($h.Line.Trim())"
+            }
         } catch {
             $violations += "SCAN-ERROR $($f.FullName): $_"
         }

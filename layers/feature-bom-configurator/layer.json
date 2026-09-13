@@ -1,6 +1,6 @@
 {
   "name": "feature-bom-configurator",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "csLedger": [],
@@ -22,9 +22,9 @@
     "behaviorProbes": [
       {
         "kind": "bom-cart-lines",
-        "path": "/swift-2/kit-configurator",
+        "path": "/en-us/kit-configurator",
         "productId": "PACK-BOM-0001",
-        "cartPath": "/swift-2/cart/",
+        "cartPath": "/en-us/cart/",
         "selections": [
           {
             "group": "PACK-BOM3-0002",
@@ -41,7 +41,7 @@
       }
     ],
     "criticalPaths": [
-      "/swift-2/kit-configurator"
+      "/en-us/kit-configurator"
     ]
   }
 }

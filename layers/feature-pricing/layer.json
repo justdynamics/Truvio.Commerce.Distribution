@@ -1,6 +1,6 @@
 {
   "name": "feature-pricing",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "files": [
@@ -34,8 +34,8 @@
     "behaviorProbes": [
       {
         "kind": "cart-price",
-        "path": "/swift-2/express-buy",
-        "cartPath": "/swift-2/cart/",
+        "path": "/en-us/express-buy",
+        "cartPath": "/en-us/cart/",
         "productId": "PACK-RPP-PROD2",
         "quantity": 1,
         "expectedAmount": 1399,
@@ -43,8 +43,8 @@
       },
       {
         "kind": "cart-price",
-        "path": "/swift-2/express-buy",
-        "cartPath": "/swift-2/cart/",
+        "path": "/en-us/express-buy",
+        "cartPath": "/en-us/cart/",
         "productId": "PACK-RPP-PROD1",
         "quantity": 5,
         "expectedAmount": 4500,

@@ -2,11 +2,11 @@
   "name": "gate-fixtures",
   "from": "base@3.4.0",
   "add": [
-    "feature-reordering@1.0.2",
-    "feature-pricing@1.1.1",
-    "feature-rma@1.0.0",
-    "feature-subscription-orders@1.2.0",
-    "feature-bom-configurator@1.2.0",
+    "feature-reordering@1.0.3",
+    "feature-pricing@1.1.2",
+    "feature-rma@1.0.1",
+    "feature-subscription-orders@1.2.1",
+    "feature-bom-configurator@1.2.1",
     "feature-b2b-comms@1.0.3",
     "feature-baseline-guide@1.0.1"
   ],
@@ -23,11 +23,11 @@
     "swift"
   ],
   "criticalPaths": [
-    "/swift-2/home",
-    "/swift-2/shop",
-    "/swift-2/cart/",
-    "/swift-2/customer-center",
-    "/swift-2/sign-in/sign-in"
+    "/en-us/home",
+    "/en-us/shop",
+    "/en-us/cart/",
+    "/en-us/customer-center",
+    "/en-us/sign-in/sign-in"
   ],
   "comment": "THIS EDITION IS NOT A DEMO AND MUST NEVER BE SHOWN TO A PROSPECT. It exists so the gate has somewhere to prove the FIXT*/PACK-* marker fixtures, and it is the ONLY composition that sets sampleData: true on the Swift surface. behaviorProbes are LAYER asserts - they run for every edition composing the layer - so the five legs that name a fixture id resolve here and nowhere else: feature-reordering sku-validation FIXT-0001, feature-pricing cart-price PACK-RPP-PROD1/PROD2, feature-bom-configurator bom-cart-lines PACK-BOM-0001 (+ PACK-BOM-FORK-2 / PACK-BOM-RACK-2), feature-subscription-orders checkout-recurring PACK-SUB-PROD1, and feature-rma's authenticated /my-returns probe, which needs the sample-data buyer 1328 and the delivered order FIXT-ORDER-RMA1. That is why the seven feature layers stay composed HERE at the pins swift-demo carried before this change, rather than being dropped from the estate. What breaks if you set sampleData:false here: all five legs go red with no other composition able to prove them. What breaks if you set it true anywhere else on the Swift surface: the fixtures re-enter a browsable storefront and the 12 bare 'Placeholder product.' strings (Foundry #1174) and the 6 STOCKCOPY-01 facet rows (#1127, rail re-screened in #1134) come back - the exact defect the owner decision on #1074 closed. truvio-demo is deliberately NOT composed: a gate composition carrying the brand catalogue would make the fixture legs pass for the wrong reason.",
   "description": "The gate's fixture composition: base + surface-swift + the seven feature layers + sample data on the default theme. Identical in shape to the pre-v5 swift-demo, kept as its own edition so the gate can keep proving the layer-declared fixture probes after the owner decision on Foundry #1074 (2026-09-13) took sample-data out of the demo edition. The FIXT*/PACK-* rows are GATE FIXTURES, not browsable demo content - the browsable catalogue is the truvio-demo layer, composed by swift-demo. Every FIXT/PACK id is unchanged. Proven on DW 10.28.1-PreRelease."

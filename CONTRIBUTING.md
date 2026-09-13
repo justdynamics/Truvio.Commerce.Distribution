@@ -21,6 +21,10 @@ A change to `layers/` or `editions/` is mergeable only when both hold:
      `_sql/<Table>/<key>.yml` (silent-collision guard);
    - the protected-string guard passes (the layer/mode vocabulary never leaked into a
      DW/Swift identifier or path); theme layers carry no serialized content (SPEC-06).
+     A mode word between slashes (`/replace/`, `\merge\`) fails the guard, except inside
+     a token that starts with `layers/`: a guide page may cite `layers/base/replace/_sql`
+     as prose, while a template, layout, image or file value carrying `/replace/` still
+     fails;
 
 2. **The clean-room roundtrip is attested (operator step).** The deep proof — a layer or
    edition deserializes cleanly on the current latest Swift with row-count parity and zero

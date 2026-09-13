@@ -1,6 +1,10 @@
 # Changelog — feature-bom-configurator
 
 
+## 1.2.1
+
+Every probe and criticalPath moves from the `/swift-2/` area segment to the `/en-us/` culture root (Foundry #965). `AreaUrlName` `swift-2` is decorative on a single-area host: Dynamicweb prefixes the area segment only when more than one area competes for the host and otherwise serves the culture segment, so every `/swift-2/` path answered 404 on a healthy, fully deserialized site while the same pages answered under `/en-us/`. Page targets are unchanged; only the prefix moves. The cart target is `/en-us/cart/`: `Shopping cart` is a non-clickable folder with `urlIgnoreForChildren`, so its `Cart` page resolves without the folder segment.
+
 ## 1.2.0
 
 **Zero catalogue rows (Foundry 960).** The BOM parent `PACK-BOM-0001`, its four child products, the

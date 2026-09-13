@@ -1,6 +1,6 @@
 {
   "name": "feature-rma",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -26,13 +26,13 @@
     "behaviorProbes": [
       {
         "kind": "authenticated-body-contains",
-        "path": "/swift-2/customer-center/my-returns",
+        "path": "/en-us/customer-center/my-returns",
         "pattern": "Add new request",
         "requiresFixtures": [ "FIXT-ORDER-RMA1" ]
       }
     ],
     "criticalPaths": [
-      "/swift-2/customer-center/my-returns"
+      "/en-us/customer-center/my-returns"
     ]
   }
 }
