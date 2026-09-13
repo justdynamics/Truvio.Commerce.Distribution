@@ -1,5 +1,102 @@
 # Changelog — truvio-demo
 
+## 1.8.0
+
+### The commerce dataset ships as serialized SqlTable YAML (Foundry #1215)
+
+The five loose scripts (`truvio-catalog.sql`, `truvio-identities.sql`, `truvio-images.sql`,
+`truvio-b2b.sql`, `truvio-pdp.sql`) are gone, and so is `layer.json` `sql[]`. Their end state
+now ships as merge-mode SqlTable rows: `merge/_sql/<Table>/<key>.yml` for 28 tables (1,856 row
+files plus one `_meta.yml` per table), `merge/merge-manifest.json` (schemaVersion 2, complete),
+and the 28 merge predicates in `config/truvio-demo-2.4.json`. `layer.json` declares
+`fragmentModes: ["merge"]`, the 28 `fragmentTables` and five `configRows`. The same rows
+arrive through a new channel, so this is a minor release: an online build, which has no SQL
+surface, now delivers the whole layer through the ordinary merge deserialize, and
+`-SqlChannel online` no longer reports a truvio-demo script.
+
+**How the rows were produced.** On `foundry-sqlsrc.mydwsite4.com` (DW 10.28.10, Swift 2.4,
+Serializer 1.0.1-beta), `swift-demo` was composed from Distribution `d036eae7` with
+truvio-demo 1.7.2 and applied locally: replace deserialize 1190 / 10 / 33 / 0 failed, the five
+scripts Done, merge deserialize 279 / 17 / 0 / 0. After the rekey below, one scoped Serialize
+per predicate wrote the YAML (harvest completed 2026-09-13T22:55:41Z).
+
+**Row parity, SQL route against YAML, table by table:**
+
+| Table | SQL rows | YAML rows |
+|---|---:|---:|
+| `AccessUser` | 4 | 4 |
+| `AccessUserGroupRelation` | 6 | 6 |
+| `EcomGroups` | 16 | 16 |
+| `EcomShopGroupRelation` | 4 | 4 |
+| `EcomGroupRelations` | 12 | 12 |
+| `EcomVariantGroups` | 2 | 2 |
+| `EcomVariantsOptions` | 5 | 5 |
+| `EcomProducts` | 96 | 96 |
+| `EcomGroupProductRelation` | 120 | 120 |
+| `EcomVariantGroupProductRelation` | 12 | 12 |
+| `EcomVariantOptionsProductRelation` | 30 | 30 |
+| `EcomPrices` | 232 | 232 |
+| `EcomProductItems` | 10 | 10 |
+| `EcomProductCategory` | 4 | 4 |
+| `EcomProductCategoryTranslation` | 4 | 4 |
+| `EcomProductCategoryField` | 28 | 28 |
+| `EcomProductCategoryFieldTranslation` | 28 | 28 |
+| `EcomProductCategoryFieldValue` | 420 | 420 |
+| `EcomFieldDisplayGroups` | 1 | 1 |
+| `EcomFieldDisplayGroupTranslation` | 1 | 1 |
+| `EcomFieldDisplayGroupFields` | 28 | 28 |
+| `EcomDetailsGroup` | 2 | 2 |
+| `EcomDetails` | 372 | 372 |
+| `EcomProductsRelatedGroups` | 3 | 3 |
+| `EcomProductsRelated` | 324 | 324 |
+| `EcomStockUnit` | 60 | 60 |
+| `EcomOrders` | 12 | 12 |
+| `EcomOrderLines` | 20 | 20 |
+| **Total** | **1,856** | **1,856** |
+
+**Rekeyed before harvest.** The serializer writes int-identity keys verbatim and never remaps
+them, and the base contract requires such rows at or above `100000`. Three row sets were
+moved to reserved ids on the harvest host, with every referencing column repointed:
+`EcomDetailsGroup` `Images` 7 to `100110` and `Manuals` 8 to `100111` (`EcomDetails` and the
+group translations follow); `EcomFieldDisplayGroups` `tc_specs` 14 to `100120` (28 display
+group fields repointed); `EcomStockUnit` TC rows 5..64 to `100201`..`100260`. The storefront
+re-smoke after the rekey was identical: PLP Variants 5 products; PDP TCPROD0001 with 5 variant
+selectors, 7 spec rows, 6 document rows, 9 gallery images, 5 related rows, 0 `dw-error`.
+The reserved ids and the new key prefixes (`TC-DETAIL-*`, `TC-HOVER-*`, `TC-GAL-*`,
+`TC-DOC-*`, `TCREL-*`, `TCVGR-*`) are recorded in `costHints`.
+
+**Persona passwords move online.** The `AccessUser` predicate excludes `AccessUserPassword`
+and the runtime login columns; no row file carries a password or a hash. The three
+`sqlcmdVariables` (`TruvioBuyerPassword`, `TruvioCsrPassword`, `TruvioAdminPassword`) and
+their `valueShape` declarations went with `sql[]`. Set each persona's password after the
+deserialize with Foundry `tools/secrets/Set-DemoCredential.ps1` (Management API
+`UserSetPassword`) for `100101`, `100102` and `100103`, locally and online alike.
+
+**Dropped, because merge carries the end state only.** The currency UPDATE that moved rate-1
+rows to 100 (the base replace tree already carries none), and every converge UPDATE and
+DELETE for hosts seeded by older versions (renames, re-homing, retired fields, image and
+price converges). Hosts seeded before 1.5 are out of scope.
+
+**Frozen at harvest.** Values the scripts derived at run time are literals now: group, list,
+ladder and contract prices derived from `ProductPrice`, relative order and delivery dates,
+variant counters and the `tc_specs` field list. The YAML is the source of truth; re-harvest
+only from a host deserialized from it.
+
+**costHints corrected from the measurement.** `EcomVariantOptionsProductRelation` is 30
+(6 masters x 5 options), not 36. `EcomPrices` is 232, not 233: `TCPROD0021` "Truvio Assortment
+Kit 21" is ProductType 2 with ProductPrice 0, and the 1.7.2 list-price insert derived
+`TC-PRICE-LIST-*` from ProductPrice, so no list row ever existed for it.
+
+**Follow-up, not changed here.** `TC-PRICE-GRPV-<n>` ids were built from the harvest host's
+`PriceAutoId`, so they are host-derived. A later release should rekey them to a
+product-derived id. Renaming them now would break parity with the proven harvest.
+
+**Not yet proven.** The online round trip on a second keyed clone (compose with
+`-SqlChannel online`, deserialize, Set-DemoCredential, re-serialize and compare byte for byte)
+has not run. The storefront on such a clone also needs `surface-swift`'s `TruvioCommerce`
+repository staged, which no delivery path does yet (Foundry #1218); that is a verification
+prerequisite, not a defect in this layer.
+
 ## 1.7.2
 
 ### The password variables declare their value shape (Foundry #1104, password half)
