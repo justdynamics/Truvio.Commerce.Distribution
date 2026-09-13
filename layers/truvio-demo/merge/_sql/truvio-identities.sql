@@ -15,10 +15,23 @@
 --   group to join, which is why swift-demo composes both layers.
 --
 -- CREDENTIALS
---   Passwords arrive as sqlcmd variables, exactly as sample-data's identities.sql
---   does: they are never repo content and never logged. An applier that cannot
---   supply a declared variable must fail before executing this script, never
---   substitute a blank.
+--   TruvioBuyerPassword, TruvioCsrPassword and TruvioAdminPassword arrive as sqlcmd
+--   variables: never repo content, never logged. Each one carries the PLATFORM
+--   HASH of the persona's password, not the password: AccessUserPassword stores
+--   what the host compares against, which on a host with password encryption on
+--   is a 128-character hex SHA512 string. A plaintext value is written verbatim
+--   and yields a persona that cannot sign in, with no error in SQL, in any log or
+--   on the sign-in page. Hash first, then pass the hash. The shape guard below
+--   refuses any value that is not 128 hex characters, naming the variable, before
+--   a single row is written. An applier that cannot supply a declared variable
+--   must fail before executing this script, never substitute a blank.
+--
+-- CUSTOMER NUMBER
+--   The account and all three contacts carry ONE customer number, TC-100200.
+--   Contract prices, account-wide favourites and the CSR account listing compare
+--   that string exactly, so a per-contact suffix silently limits all three to the
+--   one contact whose number matches. A per-contact identifier, if a story needs
+--   one, belongs in AccessUserExternalId, never in the customer number.
 --
 -- TIMING
 --   Unlike sample-data's identities.sql this script runs
@@ -37,6 +50,27 @@
 -- ===========================================================================
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
+
+-- ---------------------------------------------------------------------------
+-- 0. The password shape guard. Runs before BEGIN TRAN and ends the batch with
+--    RETURN, so a refused value writes nothing whether or not the runner passes
+--    sqlcmd -b; with -b the non-zero exit stops the apply as well. DATALENGTH
+--    rather than LEN, which ignores trailing spaces; a binary collation so the
+--    hex class means exactly 0-9, A-F and a-f.
+-- ---------------------------------------------------------------------------
+DECLARE @TcPasswordShape NVARCHAR(200) = N'';
+IF DATALENGTH(N'$(TruvioBuyerPassword)') <> 256 OR N'$(TruvioBuyerPassword)' COLLATE Latin1_General_BIN LIKE N'%[^0-9A-Fa-f]%'
+    SET @TcPasswordShape = @TcPasswordShape + N' TruvioBuyerPassword';
+IF DATALENGTH(N'$(TruvioCsrPassword)') <> 256 OR N'$(TruvioCsrPassword)' COLLATE Latin1_General_BIN LIKE N'%[^0-9A-Fa-f]%'
+    SET @TcPasswordShape = @TcPasswordShape + N' TruvioCsrPassword';
+IF DATALENGTH(N'$(TruvioAdminPassword)') <> 256 OR N'$(TruvioAdminPassword)' COLLATE Latin1_General_BIN LIKE N'%[^0-9A-Fa-f]%'
+    SET @TcPasswordShape = @TcPasswordShape + N' TruvioAdminPassword';
+IF @TcPasswordShape <> N''
+BEGIN
+    RAISERROR(N'truvio-identities.sql: sqlcmd variable(s)%s must carry the platform password hash, a 128-character hex string, and do not. AccessUserPassword stores the value verbatim; a plaintext value creates a persona that can never sign in. Hash the password first and pass the hash. Nothing was written.', 16, 1, @TcPasswordShape);
+    RETURN;
+END
+
 BEGIN TRAN;
 
 -- ---------------------------------------------------------------------------
@@ -60,15 +94,23 @@ IF NOT EXISTS (SELECT 1 FROM AccessUser WHERE AccessUserId = 100102)
     INSERT INTO AccessUser (AccessUserId, AccessUserType, AccessUserName, AccessUserUserName,
                             AccessUserEmail, AccessUserPassword, AccessUserCustomerNumber,
                             AccessUserCompany, AccessUserAddress, AccessUserZip, AccessUserCity, AccessUserActive)
-    VALUES (100102, 5, 'Truvio CSR', 'TruvioCsr', 'csr@truvio-demo.example', '$(TruvioCsrPassword)', 'TC-100201', 'Truvio Demo Account', '1 Placeholder Way', '0000 TC', 'Truvio Demo', 1);
+    VALUES (100102, 5, 'Truvio CSR', 'TruvioCsr', 'csr@truvio-demo.example', '$(TruvioCsrPassword)', 'TC-100200', 'Truvio Demo Account', '1 Placeholder Way', '0000 TC', 'Truvio Demo', 1);
 -- admin persona 100103 (admin@truvio-demo.example)
 IF NOT EXISTS (SELECT 1 FROM AccessUser WHERE AccessUserId = 100103)
     INSERT INTO AccessUser (AccessUserId, AccessUserType, AccessUserName, AccessUserUserName,
                             AccessUserEmail, AccessUserPassword, AccessUserCustomerNumber,
                             AccessUserCompany, AccessUserAddress, AccessUserZip, AccessUserCity, AccessUserActive)
-    VALUES (100103, 5, 'Truvio Admin', 'TruvioAdmin', 'admin@truvio-demo.example', '$(TruvioAdminPassword)', 'TC-100202', 'Truvio Demo Account', '1 Placeholder Way', '0000 TC', 'Truvio Demo', 1);
+    VALUES (100103, 5, 'Truvio Admin', 'TruvioAdmin', 'admin@truvio-demo.example', '$(TruvioAdminPassword)', 'TC-100200', 'Truvio Demo Account', '1 Placeholder Way', '0000 TC', 'Truvio Demo', 1);
 
 SET IDENTITY_INSERT AccessUser OFF;
+
+-- Converge a host seeded when the CSR and the admin carried TC-100201 / TC-100202.
+-- The inserts above are IF NOT EXISTS, so they never touch an existing row; this
+-- UPDATE is what moves both contacts onto the account's number. Guarded on the
+-- difference, so a converged host is a no-op.
+IF EXISTS (SELECT 1 FROM AccessUser WHERE AccessUserId IN (100102, 100103) AND ISNULL(AccessUserCustomerNumber, '') <> 'TC-100200')
+    UPDATE AccessUser SET AccessUserCustomerNumber = 'TC-100200'
+     WHERE AccessUserId IN (100102, 100103) AND ISNULL(AccessUserCustomerNumber, '') <> 'TC-100200';
 
 -- ---------------------------------------------------------------------------
 -- 2. Membership: each persona joins the B2B account AND the base-contract

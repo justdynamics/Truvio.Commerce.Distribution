@@ -50,6 +50,12 @@ SET NOCOUNT ON;
 SET XACT_ABORT ON;
 BEGIN TRAN;
 
+-- COLUMN-SHAPE GUARD, A BATCH OF ITS OWN: the GO below ends it ahead of the writes.
+-- SQL Server binds column names when it compiles a batch, before any statement in
+-- it runs, so a guard sharing a batch with a statement that names a missing column
+-- never fires: the batch dies with a bare Msg 207 first. COL_LENGTH takes its names
+-- as strings, so this batch compiles on any shape, runs, and RAISERRORs naming the
+-- script and the column; under sqlcmd -b that ends the apply before the next batch.
 IF OBJECT_ID(N'dbo.EcomDetailsGroup', N'U') IS NULL
    OR OBJECT_ID(N'dbo.EcomProductsRelated', N'U') IS NULL
    OR OBJECT_ID(N'dbo.EcomProductsRelatedGroups', N'U') IS NULL
@@ -60,6 +66,7 @@ IF COL_LENGTH('EcomDetails', 'DetailsGroupId') IS NULL
    OR COL_LENGTH('EcomDetailsGroup', 'DetailsGroupExtensions') IS NULL
    OR COL_LENGTH('EcomProductsRelated', 'ProductRelatedProductRelVariantID') IS NULL
     RAISERROR(N'truvio-pdp.sql: the asset-category or relation columns are not the expected shape. Read the live column names off sys.columns and update this file - do NOT let it seed a documents table the PDP cannot resolve.', 16, 1);
+GO
 
 -- ---------------------------------------------------------------------------
 -- 0. The Images asset category, and why a gallery row is nothing without it.

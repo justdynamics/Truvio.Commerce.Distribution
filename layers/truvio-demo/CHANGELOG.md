@@ -1,5 +1,48 @@
 # Changelog — truvio-demo
 
+## 1.7.1
+
+### Column-shape guards run in a batch of their own (Foundry #1100)
+
+SQL Server binds column names when it compiles a batch, before any statement in the batch
+runs. A `COL_LENGTH ... RAISERROR` guard written in the same batch as the writes it guards is
+therefore dead code: a mismatch kills the batch at compile time with a bare `Msg 207 ...
+Invalid column name` that names no layer, no script and no intent, and the guard above it
+never executes. The three named column faults were fixed in earlier releases; the structure
+that hid them was not.
+
+Every column-shape guard now sits in its own `GO` batch ahead of the writes: the four in
+`truvio-catalog.sql` (per-variant prices and the axis binding, the product-category fields,
+`ProductLongDescription`, the field display groups), the one in `truvio-pdp.sql` and the one
+in `truvio-b2b.sql`. `COL_LENGTH` takes its names as strings, so the guard batch compiles on
+any shape, runs, and names the column; under `sqlcmd -b` that ends the apply before the batch
+that would have failed. No variable crosses a new `GO`, and every write is byte-identical.
+`truvio-images.sql` already reaches its column set through `sp_executesql` and is unchanged.
+
+### Persona password variables carry the platform hash (Foundry #1104)
+
+`truvio-identities.sql` writes `TruvioBuyerPassword`, `TruvioCsrPassword` and
+`TruvioAdminPassword` verbatim into `AccessUserPassword`, and the host stores a 128-character
+hex SHA512 string there. Nothing stated which of the two the variables mean, and a plaintext
+value produces personas that cannot sign in with no error anywhere.
+
+The script header, the README and the three `sqlcmdVariables` descriptions now state that
+each variable is the platform hash. A shape guard runs before `BEGIN TRAN`: any value that is
+not 128 hex characters raises an error naming the variable and `RETURN`s, so nothing is
+written with or without `sqlcmd -b`. Computing the hash from a plaintext secret is the
+applier's job.
+
+### The CSR and the account admin carry the account's customer number (Foundry #1110)
+
+The README, `layer.json` and the baseline guide's Step 5 all state that the three personas
+share customer number `TC-100200`; the SQL gave the CSR `TC-100201` and the admin
+`TC-100202`. `get_users_by_customer_numbers(["TC-100200"])` returned one user, and the
+contract price `TC-PRICE-CONTRACT` resolved for the buyer alone.
+
+Both contacts now insert with `TC-100200`. Because the inserts are `IF NOT EXISTS`, a host
+seeded before this release is converged by an UPDATE guarded on the difference. Row counts
+are unchanged.
+
 ## 1.7.0
 
 ### Every product image is raster, because the handler cannot decode a vector (Foundry #1171)

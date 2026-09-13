@@ -82,11 +82,19 @@ so on an edition carrying both, the brand rows land last and the two never inter
 Three personas on the fictional `truvio-demo` domain — `buyer@`, `csr@`, `admin@` — all
 members of one B2B account (`Truvio Demo Account`, customer number `TC-100200`, the number
 the contract price resolves against) and each joined to the base-contract permission group
-its role maps to: `1325 Customers`, `1292 CSR`, `1270 Account Admin`. The contract's
-`guaranteedRows` are untouched — these are new rows above the `100000` int-identity floor,
-and they join the contract groups rather than inventing a fourth. Passwords arrive as
-`sqlcmd` variables (`TruvioBuyerPassword`, `TruvioCsrPassword`, `TruvioAdminPassword`), so
-no credential is repo content.
+its role maps to: `1325 Customers`, `1292 CSR`, `1270 Account Admin`. All three contacts
+carry the account's own customer number: contract prices, account-wide favourites and the
+CSR account listing compare that string exactly, so a per-contact suffix would limit them to
+one contact. The contract's `guaranteedRows` are untouched: these are new rows above the
+`100000` int-identity floor, and they join the contract groups rather than inventing a fourth.
+
+Passwords arrive as `sqlcmd` variables (`TruvioBuyerPassword`, `TruvioCsrPassword`,
+`TruvioAdminPassword`), so no credential is repo content. **Each variable carries the
+platform hash of the password, not the password**: `AccessUserPassword` stores what the host
+compares against, a 128-character hex SHA512 string on a host with password encryption on,
+and the script writes the value verbatim. Hash first, then pass the hash, and run with
+`sqlcmd -b`. `truvio-identities.sql` refuses any value that is not 128 hex characters,
+naming the variable, and writes nothing.
 
 Their history is 12 orders across the `OrderFlowId 1` states — `OS1 New`, `OS2 Completed`,
 `OS3 Rejected`. States from another flow (`OS12`/`OS13`/`OS14`) are deliberately unused: an
