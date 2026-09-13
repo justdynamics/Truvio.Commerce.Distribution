@@ -1,6 +1,6 @@
 {
   "name": "truvio-demo",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -111,7 +111,7 @@
       "AccessUser": 4,
       "AccessUserGroupRelation": 6,
       "EcomDetails": 300,
-      "EcomDetailsGroup": 1,
+      "EcomDetailsGroup": 2,
       "EcomFieldDisplayGroupFields": 28,
       "EcomFieldDisplayGroupTranslation": 1,
       "EcomFieldDisplayGroups": 1,
@@ -120,13 +120,13 @@
       "EcomGroups": 16,
       "EcomOrderLines": 20,
       "EcomOrders": 12,
-      "EcomPrices": 171,
+      "EcomPrices": 233,
       "EcomProductCategory": 4,
       "EcomProductCategoryField": 28,
       "EcomProductCategoryFieldTranslation": 28,
       "EcomProductCategoryFieldValue": 420,
       "EcomProductCategoryTranslation": 4,
-      "EcomProductItems": 2,
+      "EcomProductItems": 10,
       "EcomProducts": 96,
       "EcomProductsRelated": 324,
       "EcomProductsRelatedGroups": 3,
@@ -134,9 +134,9 @@
       "EcomStockUnit": 60,
       "EcomVariantGroupProductRelation": 12,
       "EcomVariantGroups": 2,
-      "EcomVariantOptionsProductRelation": 30,
+      "EcomVariantOptionsProductRelation": 36,
       "EcomVariantsOptions": 5
     },
-    "expectedRowsNote": "What this layer's two scripts land on top of whatever sample-data seeds. Advisory: the gate derives its own counts from the composition, this is the layer's own statement of what it ships."
+    "expectedRowsNote": "What this layer's scripts land on top of whatever sample-data seeds. Advisory: the gate derives its own counts from the composition, this is the layer's own statement of what it ships. EcomPrices 233 = 171 as at 1.3.0 + 60 master quantity-1 list rows (one per master, Foundry #1150) + 2 contract rows on TCPROD0001 and TCPROD0051. EcomProductItems 10 = TCPROD0021's 2 slots + 8 across the four Bundles-band kits (#1161). EcomDetailsGroup 2 = Manuals + Images (#1145)."
   }
 }

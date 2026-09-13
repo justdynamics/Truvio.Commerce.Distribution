@@ -1,5 +1,115 @@
 # Changelog — truvio-demo
 
+## 1.4.0
+
+Six data defects from the v5 round-two census, and every one of them was green on
+some count while the page it fills showed nothing.
+
+### The images join an asset category (Foundry #1145)
+
+Swift's ProductMedia component reads the ASSET CATEGORIES its paragraph names and
+then the rows that belong to them. `EcomDetailsGroup` held one row on the composed
+host - `Manuals`, which this layer creates for its pdf rows - and all 180 image rows
+carried `DetailsGroupId NULL`. Not one image in the database belonged to any asset
+category, so no category-filtered component could have seen them whatever the
+paragraph named.
+
+`truvio-pdp.sql` now creates the `Images` category and puts every image row this
+layer owns into it. The column set is marine-demo's own `Images` row read off this
+SQL instance rather than guessed - InheritanceType 1, ControlType 0,
+IsSystemGroup 1, HasPrimaryImageRule 1 - with one stated deviation: the extension
+list gains `svg` and `webp`, because this layer's tiles are SVG and two of the five
+brand photographs are WebP. The rows are assigned by PATH, so the default-image rows
+`truvio-images.sql` writes and the gallery rows this file writes are both covered by
+one statement; the pdf rows live under `/Files/Documents/` and stay with `Manuals`
+without being named. The guard asserts what the page needs - zero image rows outside
+the category - rather than a row count, which is what measured green over 180 rows
+in no category at all.
+
+surface-swift 1.10.0 is the other half: it names `Images` and nothing else.
+
+### The gallery converges instead of skipping (Foundry #1137)
+
+The 1.3.0 tile repoint was insert-only. Every gallery row is guarded
+`IF NOT EXISTS` on `DetailId`, and the DetailIds did not change between 26bb0a06 and
+4a4cd05b - only `DetailValue` did - so a host seeded at 1.2.0 already had all 84 rows
+and nothing was written. Measured there: 45 + 24 + 15 = **84 scenic gallery rows and
+zero tile gallery rows**, while the script closed with "all of them concept tiles this
+layer ships" and exit 0, because the resolution guard accepted both prefixes.
+
+Each of the 84 rows now carries an `ELSE` beside its `INSERT` that converges
+`DetailValue` onto the shipped value, and a new guard fails on a scenic path with no
+opt-in stamp.
+
+**The stamp.** `tools/truvio-gallery-photos.sql` stamps every row it swaps
+`DetailsName = 'brand-photograph'`, and the convergence skips a stamped row, so a
+Replace cannot silently undo a swap a brand step chose to make. The stamp is the only
+thing that can distinguish the two states - 1.2.0's residue and the opt-in's result
+point at the same five files - which is also why the opt-in's own "rows swapped > 0"
+guard was green on a run that swapped nothing. It counts stamped rows now. Its header
+is corrected too: the "what the default is without it" paragraph described 1.3.0's
+seed and was false of exactly the hosts it was most likely to run against.
+
+### The spec group proves it is complete (Foundry #1147)
+
+`EcomFieldDisplayGroups` id 14 carried six names in `FieldDisplayGroupFieldIds`
+against 28 members in `EcomFieldDisplayGroupFields`, and the sixth name -
+`ProductCategory|tc_content|tcMedia` - is not a field on any host; the real system
+name is `tcMediaSet`. The seed already derives both stores from
+`EcomProductCategoryField`, so it cannot type a name; what it could not do was notice
+that a host disagreed with it.
+
+Four guards, each naming its own numbers: the relation holds every `tc_*` category
+field; it holds every one of them PER CATEGORY (a missing category is invisible on
+three products in four, because each product carries values in exactly one); every
+name in the denormalised column resolves to a live category field - the assertion
+that would have caught `tcMedia`; and the column's element count equals the
+relation's. The existing resolution guard still runs last: completeness is not
+resolution.
+
+### The Bundles band owns kits that have contents (Foundry #1161)
+
+`EcomProductItems` held four rows in the whole database - two on TCPROD0021, two on
+sample-data's PACK-BOM-0001 - and every product in `TCGRP-BUNDLES` owned zero. With
+the ProductBom component now present on the PDP, the Package contents section
+rendered a visible heading over zero rows.
+
+TCPROD0042-0045 become real BOM parents with two slots each, in the shape TC-BOM-0001
+and TC-BOM-0002 already prove: each slot binds a GROUP and names a default child,
+which is what makes the configurator a picker. The slots reach the products the demo
+path visits - a Variants component into `TCGRP-VARIANTS`, a Documentation component
+into `TCGRP-DOCUMENTS`, where TCPROD0051 lives. TCPROD0041 is left alone: it is a
+variant master, and variant-master-plus-BOM-parent is a shape this catalogue does not
+claim and the gate has never proven.
+
+**The band stays empty on TCPROD0001 and TCPROD0051.** Neither is a kit, and giving a
+variant master BOM rows to make a section non-empty would be seeding for the assert
+rather than for the demo.
+
+### Every master carries a list price (Foundry #1150)
+
+TCPROD0001 carried 16 `EcomPrices` rows and not one master-level quantity-1 row with
+`PriceUserGroupId` NULL; TCPROD0051 the same sixteen and the same gap.
+`ProductDefaultVariantComboId` is NULL on every product, so the PDP resolves to the
+MASTER and looked up a row shape only ever written for the children. Both of the
+demo's price stories were therefore unreachable from the products it points at.
+`EcomProducts.ProductPrice` is not that row - it is a field on the product, not a
+price the engine resolves.
+
+Rung one of the ladder now exists on every master, read from `ProductPrice` rather
+than typed, with a converging UPDATE if it drifts. The quantity breaks at 5, 10 and
+25 were rungs two, three and four of a ladder that began part way up. Contract rows
+at TC-100200 land on TCPROD0001 and TCPROD0051 - the products the design profile and
+the PDP pointer name - beside the five the layer already had. `EcomCurrencies` is
+untouched: EUR rate 100 IsDefault 1 is correct here.
+
+### The selector guard says what it measured (Foundry #1133)
+
+#1133 is fixed and verified; the census recorded that its subject is EXACTLY six
+against a threshold of six, so the margin is zero. The RAISERROR now builds its
+message with the measured count in it and states that six is the whole catalogue,
+so a 5 reads as one master that lost an axis rather than as an unmet quota.
+
 ## 1.3.0
 
 Three defects the round-two e2e measured on a PRISTINE host, every one of them invisible
