@@ -1,6 +1,7 @@
 @inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.ParagraphViewModel>
 @using Dynamicweb.Ecommerce.ProductCatalog
 @using Dynamicweb.Ecommerce.Products
+@using Dynamicweb.Content
 
 @*
 	PriceWithSignIn - a layout variant of Swift-v2_ProductPrice.
@@ -30,9 +31,13 @@
 	two strings through the translation table, not by editing this file.
 
 	THE SIGN-IN HREF is resolved the way Swift resolves it everywhere else -
-	Dynamicweb.Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")
+	Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")
 	through SearchEngineFriendlyURLs, the identical two lines the stock
-	Swift-v2_MyAccount/UserAvatarDropdown.cshtml uses. A hard-coded path is wrong the
+	Swift-v2_MyAccount/UserAvatarDropdown.cshtml uses. The bare Services is what the
+	using Dynamicweb.Content directive above brings into scope, exactly as that stock file does
+	it: there is no such namespace as Dynamicweb.Services on 10.28.10, the service
+	class is Dynamicweb.Content.Services, so the qualified spelling that reads right
+	does not compile. A hard-coded path is wrong the
 	first time a site renames its sign-in page or serves a second culture. On an area
 	with no UserAuthentication page the anchor is omitted and the badge still renders,
 	which is visible rather than broken.
@@ -96,7 +101,7 @@
 	string signInUrl = string.Empty;
 	if (!inProductList)
 	{
-		int signInPageId = Dynamicweb.Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")?.ID ?? 0;
+		int signInPageId = Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")?.ID ?? 0;
 		signInUrl = signInPageId != 0 ? Dynamicweb.Frontend.SearchEngineFriendlyURLs.GetFriendlyUrl(signInPageId) : string.Empty;
 	}
 

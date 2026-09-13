@@ -51,6 +51,36 @@ The neutral-bevel default, the three-knob token contract and the brand-time
 one-declaration mask swap are all unchanged. Nothing was fixed with `z-index` and
 nothing was shrunk to fit.
 
+### `PriceWithSignIn.cshtml` still did not compile after 2.2.1 (Foundry #1135)
+
+2.2.1 resolved the `PriceViewModel` ambiguity and introduced a different compile
+error in the same file, so the observable symptom did not move: a `dw-error` dump
+in the price column of every PLP card and both PDPs, `.td-price-lock` rendering
+nowhere in either identity, and a PLP card 9,013px tall against marine's 124px.
+
+```
+Line 71: The type or namespace name 'Services' does not exist in the namespace
+         'Dynamicweb'
+```
+
+There is no `Dynamicweb.Services` on 10.28.10. The service class is
+`Dynamicweb.Content.Services`, and the bare `Services.Pages.…` form the file used
+before 2.2.1 was correct - only the `@using` that brought it into scope was
+removed alongside the ambiguity fix. Both the call and the directive are now the
+verbatim stock forms, each verified present in a stock template on this host:
+
+- `@using Dynamicweb.Content` - `Paragraph/Swift-v2_MyAccount/UserAvatarDropdown.cshtml:4`
+- `Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")` -
+  `Paragraph/Swift-v2_MyAccount/UserAvatarDropdown.cshtml:108`
+- `Dynamicweb.Frontend.SearchEngineFriendlyURLs.GetFriendlyUrl(…)` -
+  `Components/VariantSelector.cshtml:160`
+- the three `Dynamicweb.Ecommerce.ProductCatalog.PriceViewModel` sites 2.2.1
+  qualified are kept as they are; that is what removed the ambiguity, and
+  `@using Dynamicweb.Content` does not reintroduce it.
+
+Compiled against 10.28.10 on the host before release this time, which is the
+standing lesson of two releases in a row shipping this file uncompiled.
+
 ### The signed-in Add to cart label at 1.62 contrast (Foundry #1153)
 
 CONTRAST-01 failed six times, the variants PLP and the flagship PDP at all three
