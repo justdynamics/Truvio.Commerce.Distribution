@@ -1,4 +1,4 @@
--- ===========================================================================
+﻿-- ===========================================================================
 -- truvio-demo layer - the row-level B2B data
 -- ===========================================================================
 -- What a marine PLP row shows and a truvio row did not: a short description, a
@@ -599,6 +599,97 @@ IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-CTR-0050')
     SELECT 'TC-PRICE-CTR-0050', 'TCPROD0050', '', 'EUR', 1, ROUND(ProductPrice * 0.85, 2), '', 'TC-100200', '' FROM EcomProducts WHERE ProductId = 'TCPROD0050' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-CONTRACT')
     RAISERROR(N'truvio-b2b.sql: the original contract price TC-PRICE-CONTRACT is gone. It is the row the signed-in proof has always cited; it is kept, never replaced.', 16, 1);
+
+-- ---------------------------------------------------------------------------
+-- THE MASTER LIST PRICE, quantity 1, no user group. The row the whole price
+-- story rests on, and the one row the layer did not have (Foundry #1150).
+--
+-- MEASURED on the composed host: TCPROD0001 carried 16 EcomPrices rows - six
+-- variant list rows at quantity 1, three master quantity breaks at 5/10/25, and
+-- seven group-1325 rows over the master and all six combinations - and NOT ONE
+-- master-level quantity-1 row with PriceUserGroupId NULL. TCPROD0051 had the same
+-- sixteen and the same gap. ProductDefaultVariantComboId is NULL on every product,
+-- so the PDP resolves to the MASTER and looks up a row shape that was only ever
+-- written for the children.
+--
+-- The consequence is the demo's two price stories both being unreachable from the
+-- products the demo points at: sign-in-to-see-your-price has no list price to hide,
+-- and your-contract-price-is-different-from-list has nothing to sit beside.
+-- EcomProducts.ProductPrice is not that row - it is a field on the product, not a
+-- price the pricing engine resolves, which is why 45.00 was visible in SQL and
+-- absent on the page.
+--
+-- THE LADDER STARTS AT 1. The quantity breaks at 5, 10 and 25 are rungs 2, 3 and 4
+-- of a ladder whose first rung was missing, so the table they render began part way
+-- up. Every master gets rung one at its own ProductPrice, not only the six variant
+-- masters: a quantity-break table and an anonymous price gate are both master-level
+-- surfaces, and a catalogue where some masters resolve and some do not is worse to
+-- demo than one where none do.
+--
+-- Idempotent on its own PriceId, and the amount is READ from the product rather
+-- than typed, so a master whose ProductPrice changes does not acquire a list price
+-- that contradicts it.
+-- ---------------------------------------------------------------------------
+INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber, PriceUserGroupId)
+SELECT 'TC-PRICE-LIST-' + RIGHT(p.ProductId, 4), p.ProductId, '', 'EUR', 1, p.ProductPrice, '', '', ''
+  FROM EcomProducts p
+ WHERE p.ProductId LIKE 'TCPROD%'
+   AND p.ProductVariantId = ''
+   AND p.ProductLanguageId = 'ENU'
+   AND p.ProductPrice > 0
+   AND NOT EXISTS (SELECT 1 FROM EcomPrices x WHERE x.PriceId = 'TC-PRICE-LIST-' + RIGHT(p.ProductId, 4));
+
+-- Converge a host whose master list row drifted from the product it prices.
+UPDATE g
+   SET g.PriceAmount = p.ProductPrice
+  FROM EcomPrices g
+  JOIN EcomProducts p ON p.ProductId = g.PriceProductId AND p.ProductVariantId = '' AND p.ProductLanguageId = 'ENU'
+ WHERE g.PriceId LIKE 'TC-PRICE-LIST-%'
+   AND g.PriceAmount <> p.ProductPrice;
+
+-- ---------------------------------------------------------------------------
+-- THE CONTRACT PRICE ON THE PRODUCTS THE DEMO VISITS. The five TC-100200 rows
+-- this file already writes went to TCPROD0002 and TCPROD0046-0050, none of which
+-- is in a group the demo path visits. TCPROD0001 is the product the design profile
+-- and the round-two PDP pointer both name, and TCPROD0051 is the second census
+-- product; neither carried a PriceUserCustomerNumber row, so the signed-in buyer
+-- had no your-price-versus-list contrast on the page that was actually on screen.
+--
+-- Contract pricing resolves by PriceUserCustomerNumber, never by
+-- PriceCustomerGroupId - the group columns stay empty, as section 6 of
+-- truvio-catalog.sql states.
+-- ---------------------------------------------------------------------------
+IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-CTR-0001')
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber, PriceUserGroupId)
+    SELECT 'TC-PRICE-CTR-0001', 'TCPROD0001', '', 'EUR', 1, ROUND(ProductPrice * 0.82, 2), '', 'TC-100200', '' FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-CTR-0051')
+    INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber, PriceUserGroupId)
+    SELECT 'TC-PRICE-CTR-0051', 'TCPROD0051', '', 'EUR', 1, ROUND(ProductPrice * 0.78, 2), '', 'TC-100200', '' FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+
+-- ---------------------------------------------------------------------------
+-- THE LIST-PRICE GUARDS. Both assert the SHAPE the PDP resolves against, not a
+-- row count: 16 rows on TCPROD0001 was a correct count over a product with no
+-- price the page could show.
+-- ---------------------------------------------------------------------------
+DECLARE @TcMastersWithoutList INT = (
+    SELECT COUNT(*) FROM EcomProducts p
+     WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = '' AND p.ProductLanguageId = 'ENU'
+       AND EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation r WHERE r.VariantGroupProductRelationProductId = p.ProductId)
+       AND NOT EXISTS (SELECT 1 FROM EcomPrices x
+                        WHERE x.PriceProductId = p.ProductId
+                          AND x.PriceProductVariantId = ''
+                          AND x.PriceQuantity = 1
+                          AND ISNULL(x.PriceUserGroupId, '') = ''
+                          AND ISNULL(x.PriceUserCustomerNumber, '') = ''));
+IF @TcMastersWithoutList > 0
+BEGIN
+    DECLARE @TcListMsg NVARCHAR(600) = CONCAT(N'truvio-b2b.sql: ', @TcMastersWithoutList,
+        N' variant master(s) carry no quantity-1, no-user-group list price of their own. ProductDefaultVariantComboId is NULL on every product, so the PDP resolves to the MASTER: without this row the anonymous gate has no figure to hide and the signed-in buyer has nothing to compare against, while EcomPrices row counts stay high and correct.');
+    RAISERROR(@TcListMsg, 16, 1);
+END
+
+IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceProductId = 'TCPROD0001' AND PriceUserCustomerNumber = 'TC-100200')
+    RAISERROR(N'truvio-b2b.sql: TCPROD0001 carries no TC-100200 contract price. It is the product the design profile and the PDP pointer both name, and the contract-price story is the one thing the signed-in pass exists to show.', 16, 1);
 
 -- ---------------------------------------------------------------------------
 -- THE RESOLUTION GUARD. Counting rows proves nothing: the question is whether a
