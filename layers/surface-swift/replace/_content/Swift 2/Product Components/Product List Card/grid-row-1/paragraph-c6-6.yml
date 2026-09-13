@@ -1,6 +1,6 @@
-﻿"paragraphUniqueId": ab3b3d7a-6da3-4e21-9380-205d2c5ba8be
+"paragraphUniqueId": ab3b3d7a-6da3-4e21-9380-205d2c5ba8be
 "sourceParagraphId": 62
-"sortOrder": 4
+"sortOrder": 6
 "itemType": "Swift-v2_ProductPrice"
 "header": "Price"
 "template": ""
@@ -11,11 +11,11 @@
   "DoNotShowPriceIfProductIsDiscontinued": false
   "GlobalRecordPageGuid": "041cd1f0-1117-4ffc-9100-71a11d6f7ac2"
   "HorizontalAlignment": "start"
-  "Id": "2"
+  "Id": "6"
   "ItemInstanceType": ""
   "Layout": "vertical"
   "PriceSize": "fs-6"
   "ShowInformativePrice": false
   "Sort": 0
   "Title": ""
-"columnId": 1
+"columnId": 6
