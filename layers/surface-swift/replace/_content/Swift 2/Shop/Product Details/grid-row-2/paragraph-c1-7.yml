@@ -8,13 +8,13 @@
 "moduleSystemName": ""
 "moduleSettings": ""
 "fields":
-  "DefaultImageFallback": false
+  "DefaultImageFallback": true
   "DisableGetImage": false
   "DisableLazyLoading": false
   "GlobalRecordPageGuid": "15e4ab2a-a10e-4959-8c9f-67293f8afa30"
   "Id": "1"
   "ImageAspectRatio": "75%"
-  "ImageAssets": "[\"Images\",\"Product_details\"]"
+  "ImageAssets": "[\"Images\"]"
   "ImagePatternImages": true
   "InvertModalArrowsColor": false
   "ItemInstanceType": ""
