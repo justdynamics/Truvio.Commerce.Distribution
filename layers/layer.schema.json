@@ -238,6 +238,22 @@
       },
       "description": "OPTIONAL declared disk-overlay footprint - DW-filesystem-rooted paths the layer's files/ tree overlays (e.g. System/Styles/ColorSchemes/..., Templates/Designs/Swift-v2/Assets/..., Files/Images/Icons/...). The files/ analog of fragmentTables/fragmentContent: theme (SPEC-06) and surface layers declare here what disk paths they own. Charset-constrained (no quote characters); traversal sequences ('..') rejected at activation. Disk FKs stay on disk; DB bindings stay in the serializer (SPEC-06 boundary)."
     },
+    "repositories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9 ._/-]+$"
+      },
+      "description": "OPTIONAL declared REPOSITORY footprint - the repositories/ analog of files[], in the identical vocabulary: composed-site Files-relative paths (System/Repositories/<Repo>/<Name>.index, .query, .facets), never layer-relative ones. The layer stages repositories/<Repo>/<Name>.ext to System/Repositories/<Repo>/<Name>.ext. Declared so the staging set is DERIVABLE rather than a folder convention a consumer is expected to walk: a consumer that stages from the declared arrays stages these too, a manifest audit can see them, and a definition retired from the tree is detectable as retired because there is a previous declaration to diff against. Required whenever the layer ships a non-empty repositories/ tree; declare [] to state positively that it ships none. .gitkeep is never listed. Charset-constrained, traversal sequences ('..') rejected - same discipline as files[]."
+    },
+    "itemtypes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z0-9 ._/-]+$"
+      },
+      "description": "OPTIONAL declared ITEM TYPE footprint - the itemtypes/ analog of files[], in the identical vocabulary: composed-site Files-relative paths (System/Items/ItemType_<Name>.xml), never layer-relative ones. The layer stages itemtypes/ItemType_<Name>.xml to System/Items/ItemType_<Name>.xml. Same reason as repositories[]: without it an item type exists only as a folder convention, no manifest check can see it, and a retired one cannot be detected. Note that an itemtype placeholder is proven by the REGISTRATION leg, not by bytes - activation rewrites the XML on the host - so this array declares what is STAGED, which is what a staging audit compares against disk. Required whenever the layer ships a non-empty itemtypes/ tree; declare [] to state positively that it ships none. .gitkeep is never listed. Charset-constrained, traversal sequences ('..') rejected - same discipline as files[]."
+    },
     "placeholders": {
       "type": "array",
       "items": {

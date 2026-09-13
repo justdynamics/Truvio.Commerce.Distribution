@@ -68,6 +68,9 @@
       "path": "/Navigation/Secondary Navigation/Quick Order"
     }
   ],
+  "itemtypes": [
+    "System/Items/ItemType_PackQuickOrderPad.xml"
+  ],
   "asserts": {
     "behaviorProbes": [
       {

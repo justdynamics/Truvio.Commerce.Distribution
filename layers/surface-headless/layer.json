@@ -7,5 +7,23 @@
   "fragmentModes": [
     "replace",
     "merge"
+  ],
+  "repositories": [
+    "System/Repositories/Headless/Products.facets",
+    "System/Repositories/Headless/Products.index",
+    "System/Repositories/Headless/Products.query",
+    "System/Repositories/README.md"
+  ],
+  "itemtypes": [
+    "System/Items/Headless_AccountSection.json",
+    "System/Items/Headless_ContentPage.json",
+    "System/Items/Headless_CustomerCenter.json",
+    "System/Items/Headless_DownloadableAsset.json",
+    "System/Items/Headless_Master.json",
+    "System/Items/Headless_Menu.json",
+    "System/Items/Headless_MenuItem.json",
+    "System/Items/Headless_Page.json",
+    "System/Items/Headless_PageProperties.json",
+    "System/Items/Headless_SpecSheet.json"
   ]
 }

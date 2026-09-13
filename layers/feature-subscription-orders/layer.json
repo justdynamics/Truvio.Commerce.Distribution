@@ -38,6 +38,7 @@
       "path": "/Customer center/Account/Subscriptions"
     }
   ],
+  "itemtypes": [],
   "asserts": {
     "behaviorProbes": [
       {
