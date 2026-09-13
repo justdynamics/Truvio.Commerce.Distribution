@@ -12,11 +12,12 @@
     "System/Styles/ColorSchemes/default.json",
     "System/Styles/Typography/default.css",
     "System/Styles/Typography/default.json",
+    "Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml",
     "Templates/Designs/Swift-v2/Custom/default_custom.css",
     "Templates/Designs/Swift-v2/Custom/default_custom.js",
-    "Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Image/Responsive.cshtml",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Poster/TextMiddleLeftLcp.cshtml",
+    "Templates/Designs/Swift-v2/Paragraph/Swift-v2_ProductPrice/PriceWithSignIn.cshtml",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_VideoPlayer/PosterLazy.cshtml"
   ],
   "placeholders": [
@@ -44,6 +45,11 @@
       "path": "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Image/Responsive.cshtml",
       "kind": "template",
       "why": "Responsive srcset, lazy loading and reserved geometry for a content image. Inert until a paragraph's Template field names it."
+    },
+    {
+      "path": "Templates/Designs/Swift-v2/Paragraph/Swift-v2_ProductPrice/PriceWithSignIn.cshtml",
+      "kind": "template",
+      "why": "The signed-out price affordance. Stock Swift renders an empty div where the price would be when the area's AnonymousUsers field gates prices, so an anonymous shopper sees a blank column with no call to action; this variant renders a neutral lock badge there, and a sign-in anchor on the detail page. Inert until a paragraph's Template field names it, and inert again on any area that does not gate prices."
     },
     {
       "path": "Templates/Designs/Swift-v2/Paragraph/Swift-v2_VideoPlayer/PosterLazy.cshtml",

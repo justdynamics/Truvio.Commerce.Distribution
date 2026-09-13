@@ -3,7 +3,7 @@
 "sortOrder": 6
 "itemType": "Swift-v2_ProductPrice"
 "header": "Price"
-"template": ""
+"template": "PriceWithSignIn.cshtml"
 "colorSchemeId": ""
 "moduleSystemName": ""
 "moduleSettings": ""

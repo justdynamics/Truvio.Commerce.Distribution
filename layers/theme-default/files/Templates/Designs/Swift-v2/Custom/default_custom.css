@@ -1355,3 +1355,76 @@ body > footer.td-wave-top,
   [data-dw-itemtype="swift-v2_searchfield"] { flex: 1 1 16.25rem !important; }
   [data-dw-itemtype="swift-v2_searchfield"] .js-async-fetch-placeholder { width: 100%; }
 }
+
+/* ==========================================================================
+ * BLOCK 24 - THE PRICE LOCK. The signed-out affordance where a price would be.
+ *
+ * WHAT IT DRESSES. The markup emitted by the theme's own
+ * Paragraph/Swift-v2_ProductPrice/PriceWithSignIn.cshtml variant, and nothing
+ * else. Three elements: a padlock glyph, a label, and - on a detail page only -
+ * a sign-in anchor. Stock Swift renders an empty div in this state, so a shopper
+ * who is not signed in currently sees a blank column where the price belongs.
+ *
+ * IT IS INERT TWICE OVER. Nothing here paints unless (a) a paragraph's Template
+ * field names the variant AND (b) the area's AnonymousUsers field carries
+ * "price" and the visitor is anonymous. On a site that shows prices to everyone
+ * the variant never emits .td-price-lock, so this block costs zero pixels.
+ *
+ * THE NAMESPACE IS td-, like every other class this sheet owns. A lock badge is
+ * theme surface, not content: a re-skin restyles it by overriding these four
+ * rules and never by editing the template that emits it.
+ *
+ * LIST VS DETAIL. The list badge is a chip and no more - a sign-in call to
+ * action repeated once per row is noise, and the row already carries a stretched
+ * link. td-price-lock--pdp is the detail-page modifier: it stacks, and it is the
+ * only state in which the anchor exists at all.
+ *
+ * NO COLOUR OF ITS OWN. Everything below resolves through the --td-* tokens and
+ * currentColor, so a palette swap carries the badge with it and a dark colour
+ * scheme does not have to be special-cased.
+ * ========================================================================== */
+[data-td-block="24"] { --td-block: 24; }
+
+.td-price-lock {
+  display: inline-flex;
+  align-items: center;
+  gap: .375rem;
+  padding: .25rem .5rem;
+  border: 1px solid var(--td-hairline);
+  border-radius: var(--td-radius-sm);
+  background-color: var(--td-accent-soft);
+  color: var(--td-slate-mid);
+  font-size: .8125rem;
+  line-height: 1.25;
+}
+
+.td-price-lock__icon {
+  flex: 0 0 auto;
+  opacity: .8;
+}
+
+.td-price-lock__label {
+  white-space: nowrap;
+}
+
+/* The detail-page instance carries the anchor, so it stops being a chip: it
+ * stacks, aligns to the start of its column, and the anchor gets its own line
+ * rather than fighting the label for the row. */
+.td-price-lock--pdp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .5rem;
+  padding: .5rem .75rem;
+}
+
+.td-price-lock--pdp .td-price-lock__icon,
+.td-price-lock--pdp .td-price-lock__label {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.td-price-lock__action {
+  align-self: stretch;
+  text-align: center;
+}

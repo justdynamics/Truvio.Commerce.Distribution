@@ -1,0 +1,192 @@
+@inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.ParagraphViewModel>
+@using Dynamicweb.Ecommerce.ProductCatalog
+@using Dynamicweb.Ecommerce.Products
+@using Dynamicweb.Frontend
+
+@*
+	PriceWithSignIn - a layout variant of Swift-v2_ProductPrice.
+
+	WHAT IT ADDS. Exactly one thing: when the area hides prices from anonymous
+	visitors, the component renders a LOCK AFFORDANCE instead of nothing. Stock Swift
+	renders an empty div in that state, so a shopper who is not signed in sees a blank
+	column with no explanation and no call to action, and a presence-only design assert
+	passes vacuously over it. Everything below the lock block is the stock 2.4 price
+	rendering, unchanged.
+
+	THE GATE IS ONE AREA FIELD, not a user group and not an assortment.
+	Pageview.AreaSettings.GetRawValueString("AnonymousUsers", "") is a comma list; the
+	substring "price" in it, plus Pageview.User == null, is the whole condition. An area
+	that does not carry "price" never reaches the lock branch, so this variant on a site
+	that shows prices to everyone changes nothing at all. That is what makes it safe to
+	name from a distribution-shipped paragraph rather than from a customer's own theme.
+
+	LIST CONTEXT VS DETAIL CONTEXT. Dynamicweb.Context.Current.Items["ProductList"] is
+	set by the product-list render grid. In a list row the lock is a badge only - a
+	sign-in anchor repeated once per row is noise, and the row already carries a
+	stretched link to the detail page. On the detail page the badge gains the anchor,
+	and td-price-lock--pdp is the hook for that difference.
+
+	THE COPY IS GENERIC on purpose. "Account price" describes what any B2B area gates;
+	a distribution ships no customer's word for its own buyers. A re-skin changes the
+	two strings through the translation table, not by editing this file.
+
+	THE SIGN-IN HREF is resolved the way Swift resolves it everywhere else -
+	Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")
+	through SearchEngineFriendlyURLs, the identical two lines the stock
+	Swift-v2_MyAccount/UserAvatarDropdown.cshtml uses. A hard-coded path is wrong the
+	first time a site renames its sign-in page or serves a second culture. On an area
+	with no UserAuthentication page the anchor is omitted and the badge still renders,
+	which is visible rather than broken.
+
+	INERT UNTIL NAMED. Being a variant rather than an overlay of
+	Paragraph/Swift-v2_ProductPrice.cshtml, this file changes no page until a
+	paragraph's Template field names it, and it never masks a Swift upgrade of the stock
+	component on any paragraph that does not.
+*@
+
+@{
+	ProductViewModel product = null;
+	if (Dynamicweb.Context.Current.Items.Contains("ProductDetails"))
+	{
+		product = (ProductViewModel)Dynamicweb.Context.Current.Items["ProductDetails"];
+	} else if (Pageview.IsVisualEditorMode) {
+		product = new ProductViewModel();
+		product.Price = new PriceViewModel() {
+			Price = 99,
+			PriceFormatted = "99 " + Pageview.Area.EcomCurrencyId,
+			PriceWithoutVat = 99,
+			PriceWithoutVatFormatted = "99 " + Pageview.Area.EcomCurrencyId,
+			PriceWithVat = 99,
+			PriceWithVatFormatted = "99 " + Pageview.Area.EcomCurrencyId
+		};
+		product.PriceInformative = new PriceViewModel() {
+			Price = 49,
+			PriceFormatted = "49 " + Pageview.Area.EcomCurrencyId,
+			PriceWithoutVat = 49,
+			PriceWithoutVatFormatted = "49 " + Pageview.Area.EcomCurrencyId,
+			PriceWithVat = 49,
+			PriceWithVatFormatted = "49 " + Pageview.Area.EcomCurrencyId
+		};
+		product.PriceBeforeDiscount = new PriceViewModel() {
+			Price = 199,
+			PriceFormatted = "199 " + Pageview.Area.EcomCurrencyId,
+			PriceWithoutVat = 199,
+			PriceWithoutVatFormatted = "199 " + Pageview.Area.EcomCurrencyId,
+			PriceWithVat = 199,
+			PriceWithVatFormatted = "99 " + Pageview.Area.EcomCurrencyId
+		};
+	}
+
+	string anonymousUsersLimitations = Pageview.AreaSettings.GetRawValueString("AnonymousUsers", "");
+	bool anonymousUser = Pageview.User == null;
+	bool hidePrice = anonymousUsersLimitations.Contains("price") && anonymousUser;
+
+	bool productIsDiscontinued = product is object  && product.Discontinued;
+	bool doNotShowPriceIfProductIsDiscontinued = Model.Item.GetBoolean("DoNotShowPriceIfProductIsDiscontinued");
+	var isDiscontinued = productIsDiscontinued && doNotShowPriceIfProductIsDiscontinued;
+
+	string priceType = string.Empty;
+	if (Dynamicweb.Context.Current.Items.Contains("PriceType"))
+	{
+		priceType = Dynamicweb.Context.Current.Items["PriceType"].ToString().ToLower();
+	}
+}
+
+@if (product is object && hidePrice) {
+	bool inProductList = Dynamicweb.Context.Current?.Items.Contains("ProductList") ?? false;
+	string signInUrl = string.Empty;
+	if (!inProductList)
+	{
+		int signInPageId = Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")?.ID ?? 0;
+		signInUrl = signInPageId != 0 ? SearchEngineFriendlyURLs.GetFriendlyUrl(signInPageId) : string.Empty;
+	}
+
+	<div class="td-price-lock@(inProductList ? "" : " td-price-lock--pdp")" data-td-price-lock="1">
+		<svg class="td-price-lock__icon" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M17 9V7a5 5 0 0 0-10 0v2H5v13h14V9h-2Zm-8-2a3 3 0 0 1 6 0v2H9V7Z"/></svg>
+		<span class="td-price-lock__label">@Translate("Account price")</span>
+		@if (!string.IsNullOrEmpty(signInUrl))
+		{
+			<a href="@signInUrl" class="td-price-lock__action btn btn-sm btn-outline-primary" data-dw-button="outline">@Translate("Sign in for account pricing")</a>
+		}
+	</div>
+}
+
+@if (product is object && !hidePrice && !isDiscontinued && priceType != "fixedprice") {
+	bool showInformativePrice = Model.Item.GetBoolean("ShowInformativePrice");
+	string unitId = !string.IsNullOrEmpty(Dynamicweb.Context.Current.Request.Form.Get("UnitId")) ? Dynamicweb.Context.Current.Request.Form.Get("UnitId") : string.Empty;
+
+	string priceFontSize = Model.Item.GetRawValueString("PriceSize", "fs-2");
+	string horizontalAlign = Model.Item.GetRawValueString("HorizontalAlignment", "");
+	string layout = Model.Item.GetRawValueString("Layout", "horizontal");
+	string textAlign = horizontalAlign == "center" ? "text-center" : string.Empty;
+	textAlign = horizontalAlign == "end" ? "text-end" : textAlign;
+
+	horizontalAlign = horizontalAlign == "center" && layout == "horizontal" ? "justify-content-center" : horizontalAlign;
+	horizontalAlign = horizontalAlign == "end" && layout == "horizontal" ? "justify-content-end" : horizontalAlign;
+	horizontalAlign = horizontalAlign == "center" && layout == "vertical" ? "align-items-center" : horizontalAlign;
+	horizontalAlign = horizontalAlign == "end" && layout == "vertical" ? "align-items-end" : horizontalAlign;
+
+	string flexDirection = layout == "horizontal" ? "align-items-end" : "flex-column";
+	string flexGap = layout == "horizontal" ? "gap-3" : string.Empty;
+	string order = layout == "horizontal" ? string.Empty : "order-2";
+
+	string? priceMin = product?.VariantInfo?.PriceMin?.PriceFormatted;
+	string? priceMax = product?.VariantInfo?.PriceMax?.PriceFormatted;
+	string price = !string.IsNullOrEmpty(unitId) ? product.GetPrice(unitId).Price.PriceFormatted : product?.Price.PriceFormatted;
+	price = !string.IsNullOrEmpty(priceMin) ? (priceMin != priceMax ? priceMin + " - " + priceMax : priceMin) : price;
+
+	string beforePrice = !string.IsNullOrEmpty(unitId) ? product.GetPrice(unitId).PriceBeforeDiscount.PriceFormatted : product?.PriceBeforeDiscount.PriceFormatted;
+
+	Uri url = Dynamicweb.Context.Current.Request.Url;
+	bool IsNeverOutOfStock = product.NeverOutOfstock;
+
+
+	<div class="@textAlign item_@Model.Item?.SystemName?.ToLower()" data-product-id="@product?.Id" data-variant-id="@product?.VariantId">
+		@if (showInformativePrice && product?.PriceInformative.Price != 0)
+		{
+			<div class="opacity-50">
+				<span>@Translate("RRP") </span>
+				<span class="text-decoration-line-through text-price">@product?.PriceInformative.PriceFormatted</span>
+			</div>
+		}
+		<div class="@priceFontSize m-0 d-flex flex-wrap @flexDirection @flexGap @horizontalAlign" style="row-gap: 0 !important" itemprop="offers" itemscope itemtype="https://schema.org/Offer">
+			<span itemprop="priceCurrency" content="@product?.Price.CurrencyCode" class="d-none"></span>
+			<span itemprop="price" content="@product?.Price.Price" class="d-none"></span>
+
+			@if (product.HasDiscount())
+			{
+				<span class="text-decoration-line-through opacity-75 @order">
+					<span class="text-price">@beforePrice</span>
+				</span>
+			}
+
+			<span class="text-price">@price</span>
+			@if (product.Price.TryGetVatLabel(out string vatLabel)) {
+				<small class="opacity-85 fst-normal order-3">@Translate(vatLabel)</small>
+			}
+
+			@* Stock state for Schema.org, start *@
+			<link itemprop="url" href="@url">
+
+			@if (IsNeverOutOfStock)
+			{
+				<span itemprop="availability" class="d-none">@Translate("Available in stock")</span>
+			}
+			else if (product.StockLevel > 0)
+			{
+				<span itemprop="availability" class="d-none">@Translate("In stock")</span>
+			}
+			else
+			{
+				<span itemprop="availability" class="d-none">@Translate("Out of stock")</span>
+			}
+			@* Stock state for Schema.org, stop *@
+		</div>
+	</div>
+}
+else if (Pageview.IsVisualEditorMode)
+{
+	<div class="alert alert-dark m-0" role="alert">
+		<span>@Translate("No products available")</span>
+	</div>
+}
