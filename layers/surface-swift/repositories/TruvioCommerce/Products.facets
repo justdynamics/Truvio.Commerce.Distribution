@@ -1,9 +1,24 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   TruvioCommerce/Products.facets — the storefront facet set.
 
-  THREE FACETS, and no more, on purpose. Every facet here binds a BASE-SCHEMA field, so it
-  populates on any catalogue the distribution ships. The host's own ProductsFrontend facet
+  SIX FACETS: two base-schema (Group, Price) and four category-field attribute facets, one
+  per field category the distribution's catalogue uses.
+
+  THE MANUFACTURER FACET IS GONE, deliberately. It bound Manufacturer_Facet, which the index
+  does declare and which resolves - but EcomManufacturers is empty and ProductManufacturerId
+  is NULL on every row, so the field indexes nothing and the facet could only ever be empty
+  (Foundry #1149). Condition HasValue suppressed it, so the rail rendered two groups where
+  three were declared: a facet that is invisible in practice and present in the file is a
+  claim nobody can check. The index field and the query parameter stay, so a catalogue that
+  ships manufacturers restores the facet in four lines.
+
+  FOUR ATTRIBUTE FACETS, because this catalogue PARTITIONS its products across its four field
+  categories - each category owns a quarter of the products and has no value on the rest. No
+  single attribute field spans the catalogue, so one facet would be dead on three PLPs out of
+  four. Condition HasValue then does the honest work per listing: the facets with no subject
+  on that group do not render, and the one that owns those products does. A catalogue with
+  catalogue-wide attributes ships ONE facet here; the count follows the data. The host's own ProductsFrontend facet
   file still declares more than a dozen facets bound to the stock demo catalogue's category
   fields; on any other catalogue those render as empty rails, which is the failure this
   file exists to avoid. A facet whose field has no values is worse than a missing facet:
@@ -43,7 +58,19 @@
     <RenderType Name="Checkboxes" SystemName="Checkboxes" />
     <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
   </Facet>
-  <Facet Name="Manufacturer" Type="Field" Field="Manufacturer_Facet" QueryParameter="Manufacturer">
+  <Facet Name="Material class" Type="Field" Field="MaterialClass_Facet" QueryParameter="MaterialClass">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+  <Facet Name="Lead time" Type="Field" Field="LeadTime_Facet" QueryParameter="LeadTime">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+  <Facet Name="Language coverage" Type="Field" Field="LanguageCoverage_Facet" QueryParameter="LanguageCoverage">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+  <Facet Name="Account terms" Type="Field" Field="AccountTerms_Facet" QueryParameter="AccountTerms">
     <RenderType Name="Checkboxes" SystemName="Checkboxes" />
     <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
   </Facet>

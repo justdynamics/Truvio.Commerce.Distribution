@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   TruvioCommerce/Products.index — the storefront product index this surface owns.
 
@@ -22,8 +22,20 @@
   and facet files can name, then add the matching parameter to Products.query and the
   facet to Products.facets. All three, or the facet renders and filters nothing.
 
-  SkipCategoryFields is True here for the same reason: nothing to index yet. Flip it to
-  False in the same pass that adds the first category field, or the Source resolves empty.
+  SkipCategoryFields is False since 1.10.0, in the same pass that added the first four
+  category-field bindings below - the two move together or the Source resolves empty.
+  SkipDetailImages is False for the same reason: an asset-category gallery and a hover
+  alternative image are detail-image rows, and an index that skips them cannot serve
+  either to a list surface.
+
+  FOUR ATTRIBUTE FACETS, ONE PER CATEGORY, AND WHY IT IS FOUR. The catalogue this
+  distribution ships PARTITIONS its products across its four field categories - each
+  category carries values for a quarter of the catalogue and none for the rest - so no
+  single attribute field has a value on every product, and one facet would be dead on
+  three quarters of the PLPs. Each facet keeps Condition HasValue in Products.facets, so
+  on any one listing the ones with no subject do not render and the one that owns those
+  products does. A catalogue whose attributes are catalogue-wide should ship ONE facet
+  here, not four; the count follows the data, never the file.
 -->
 <Index Type="Dynamicweb.Indexing.Index, Dynamicweb.Core" Name="Products.index">
   <Settings />
@@ -34,7 +46,7 @@
     <Build Name="Full" Action="Full">
       <Setting Name="SkipGroupSorting">False</Setting>
       <Setting Name="SkipPrices">False</Setting>
-      <Setting Name="SkipDetailImages">True</Setting>
+      <Setting Name="SkipDetailImages">False</Setting>
       <Setting Name="SkipImagePatternImages">True</Setting>
       <Setting Name="BulkSize">500</Setting>
       <Setting Name="OnlyIndexActiveProducts">False</Setting>
@@ -43,7 +55,7 @@
       <Setting Name="SkipRelatedProducts">True</Setting>
       <Setting Name="SkipExtenders">False</Setting>
       <Setting Name="SkipAllExtendedFields">False</Setting>
-      <Setting Name="SkipCategoryFields">True</Setting>
+      <Setting Name="SkipCategoryFields">False</Setting>
       <Setting Name="DoNotStoreDefaultFields">False</Setting>
       <Setting Name="DoNotAnalyzeDefaultFields">False</Setting>
       <Setting Name="EmptyStringReplacement"></Setting>
@@ -70,6 +82,10 @@
         <Group Name="1500 +" From="1500" To="1000000" />
       </Grouping>
       <Field Source="ManufacturerName" Name="Manufacturer_Facet" SystemName="Manufacturer_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
+      <Field Source="ProductCategory|tc_data_models|tcMaterialClass" Name="MaterialClass_Facet" SystemName="MaterialClass_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
+      <Field Source="ProductCategory|tc_commerce|tcDeliveryLeadTime" Name="LeadTime_Facet" SystemName="LeadTime_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
+      <Field Source="ProductCategory|tc_content|tcLanguageCoverage" Name="LanguageCoverage_Facet" SystemName="LanguageCoverage_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
+      <Field Source="ProductCategory|tc_users|tcAccountTerms" Name="AccountTerms_Facet" SystemName="AccountTerms_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
       <Field Source="ProductName" Name="ProductName_Search" SystemName="ProductName_Search" Type="System.String" Boost="5" Stored="false" Analyzed="true" Indexed="true" />
       <Field Source="ProductNumber" Name="ProductNumber_Search" SystemName="ProductNumber_Search" Type="System.String" Boost="10" Stored="false" Analyzed="false" Indexed="true" />
       <Field Source="ProductName" Name="NameForSort" SystemName="NameForSort" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />

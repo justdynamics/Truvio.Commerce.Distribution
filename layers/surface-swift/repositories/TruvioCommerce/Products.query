@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!--
   TruvioCommerce/Products.query — the storefront product query the Shop paragraph binds.
 
@@ -14,7 +14,13 @@
     ProductIds             explicit id lists (related products, favourites, feeds)
     sku                    product-number lookups
     PriceRange, Manufacturer
-                           the two facets the base schema can populate without category fields
+                           the two base-schema facet parameters. Manufacturer stays
+                           declared although Products.facets no longer renders a
+                           Manufacturer facet: the parameter is what a surface passes,
+                           and a passed parameter with no expression filters to nothing.
+    MaterialClass, LeadTime, LanguageCoverage, AccountTerms
+                           the four category-field facets added in 1.10.0, one per field
+                           category, each pruned when empty like every parameter above
 
   STRUCTURE. A top-level And of three groups: the prunable filter group, an Or group for
   search, and the sku group. A parameter expression the engine PRUNES when its parameter
@@ -41,6 +47,10 @@
     <Parameter Name="ProductIds" Type="System.String[]" DefaultValue="" />
     <Parameter Name="PriceRange" Type="System.String[]" DefaultValue="" />
     <Parameter Name="Manufacturer" Type="System.String[]" DefaultValue="" />
+    <Parameter Name="MaterialClass" Type="System.String[]" DefaultValue="" />
+    <Parameter Name="LeadTime" Type="System.String[]" DefaultValue="" />
+    <Parameter Name="LanguageCoverage" Type="System.String[]" DefaultValue="" />
+    <Parameter Name="AccountTerms" Type="System.String[]" DefaultValue="" />
   </Parameters>
   <Source Repository="TruvioCommerce" Item="Products.index" Type="Dynamicweb.Indexing.Queries.IndexQueryProvider, Dynamicweb.Core" />
   <SortOrder>
@@ -119,6 +129,38 @@
           </Left>
           <Right>
             <ParameterExpression Name="Manufacturer" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="MatchAny" Disabled="false">
+          <Left>
+            <FieldExpression Field="MaterialClass_Facet" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="MaterialClass" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="MatchAny" Disabled="false">
+          <Left>
+            <FieldExpression Field="LeadTime_Facet" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="LeadTime" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="MatchAny" Disabled="false">
+          <Left>
+            <FieldExpression Field="LanguageCoverage_Facet" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="LanguageCoverage" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="MatchAny" Disabled="false">
+          <Left>
+            <FieldExpression Field="AccountTerms_Facet" />
+          </Left>
+          <Right>
+            <ParameterExpression Name="AccountTerms" />
           </Right>
         </BinaryExpression>
       </GroupExpression>
