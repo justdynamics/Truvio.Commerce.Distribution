@@ -114,6 +114,58 @@
   transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease;
 }
 
+/* === The inactive control tier - a flat pair, never a text opacity ===
+ * Foundry #1153. The signed-in "Add to cart" label measured 1.62 against a 4.5
+ * floor on the variants PLP and the flagship PDP, at every viewport, and only in
+ * the authenticated pass - the control is hidden from anonymous visitors, so no
+ * design run before the persona step could see it at all.
+ *
+ * WHERE THE 0.65 COMES FROM, since it is in none of this theme's sheets. Swift's
+ * Paragraph/Swift-v2_ProductAddToCart.cshtml writes a `disabled` attribute onto
+ * the button whenever the product is a variant master with no variant chosen
+ * (`whenVariantsExist == "disable"`), out of stock, or discontinued - which is
+ * EVERY card on a variants PLP and the master PDP. Bootstrap then dims the whole
+ * control with `opacity: var(--bs-btn-disabled-opacity)`, 0.65.
+ *
+ * WHY THAT LANDS AT 1.62 AND NOT SOMEWHERE HARMLESS. The opacity is on the
+ * BUTTON, so it multiplies the label's own alpha: declared white at alpha 1 x
+ * 0.65 composites to #dbe8e2 over the painted fill. The fill is pale to begin
+ * with - Swift builds it as `rgba(var(--dw-color-button-primary-rgb), 0.8)`, so
+ * the measured ground is #97bead rather than the token itself - and white on
+ * #97bead is only 2.04 even at full alpha. Two translucencies stacked, and the
+ * failing colour is in no stylesheet: grepping the palette for #dbe8e2 finds
+ * nothing, which is the whole reason the gate measures effective alpha.
+ *
+ * THE FIX. An inactive control states its state with a FLAT, opaque pair and
+ * keeps its label at full alpha. Darkening the label instead is the trap in this
+ * class: the same 0.65 multiplies whatever is put there, so a darker declared ink
+ * lands LOWER than the value it was meant to fix.
+ *
+ * MEASURED: --td-slate #3E4C59 on --td-hairline #E4E7EB = 7.10:1. The label is
+ * 16px / 600, which is not large text by either threshold (24px, or 18.66px at
+ * 700), so the floor that applies is 4.5 and not 3.0. Both values are existing
+ * theme tokens, so a brand palette carries the tier without a new declaration. */
+.btn:disabled,
+.btn.disabled,
+.btn[disabled],
+fieldset:disabled .btn,
+.btn-check[disabled] + .btn,
+.btn-check:disabled + .btn {
+  opacity: 1;
+  background-color: var(--td-hairline);
+  border-color: var(--td-slate-light);
+  color: var(--td-slate);
+}
+
+/* The quantity stepper beside it is dimmed the same way and by the same rule
+ * class, so it gets the same treatment rather than a second convention. */
+.form-control[type="number"][data-qty]:disabled {
+  opacity: 1;
+  background-color: var(--td-hairline);
+  border-color: var(--td-slate-light);
+  color: var(--td-slate);
+}
+
 /* === Page-level site footer — scoped to landmark only (P5) === */
 body > footer,
 [data-swift-page-footer] {

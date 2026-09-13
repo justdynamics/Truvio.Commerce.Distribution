@@ -2,6 +2,78 @@
 
 
 
+## 2.2.2
+
+Two live-measured defects from the v5 design leg, run 20260913-101914, both of
+them invisible to every check except the one that measures what actually paints.
+
+### The three edge instances painted into the content above them (Foundry #1152)
+
+All three declared `.td-edge` instances failed PAINT-01 on every page and viewport
+they appeared on - 21 FAIL rows - while every box-model number read healthy at the
+same moment. The measured painted clearance: `footer::before` 0.00px sitewide in
+both identities, `main .td-edge-top::before` -1700.11px on the home page,
+`main .td-edge-bottom::after` -71.00px. Three separate causes, one doctrine error
+behind all of them: the clearance was reserved on the element that DECLARES the
+motif rather than on the element whose ink the band covers.
+
+- **The footer crest, 0.00px.** The crest is sitewide, and the only rule that gave
+  `main` any end padding was `main:has(> .td-edge-bottom:last-child)`, which
+  matches no served page - the home page's last row is not the hero, and the PLP
+  and PDP carry no bottom edge at all. So the band began exactly where the last
+  ink in `main` ended. The reservation now sits on `main`, keyed on the footer
+  actually carrying the crest, and the crest is anchored `bottom: 100%` so it
+  rises out of the footer into that reserved gap instead of over the footer's own
+  first rows. The footer's own `padding-block-start` rule is gone: it padded the
+  owner, below the band, where nothing was ever at risk.
+- **The bottom poster edge, -71.00px.** The owner's floor was expressed as
+  `.td-edge-bottom { --dw-row-space-bottom: 16px }`, and Swift resolves a row's
+  padding from `[data-swift-gridrow][data-dw-row-space-bottom="0"]`, whose (0,2,0)
+  out-specifies a (0,1,0) class. Every poster hero is authored at spacing step 0,
+  so the floor was discarded and the owner's last ink sat exactly on its own box
+  bottom. It is now a padding PROPERTY sized off `--td-edge-h`, with the variable
+  restated at attribute specificity so Swift's own declaration computes the same
+  number.
+- **The top boundary edge, -1700.11px.** Not underspacing: the instance was
+  arranged so that it could never be cleared. A top-anchored band is judged
+  against the ink of the scope it paints into, and for an owner inside `<main>`
+  that scope includes every row BELOW the owner, so a boundary row halfway down
+  the page measures against ink 1700px underneath it and is negative by
+  construction at any padding value. A top anchor is sound only when its owner
+  terminates the ink it threatens, which on a page is the footer and nothing else.
+  Block 26 therefore draws an in-main boundary as a bottom edge on the row ABOVE
+  it - the same band in the same place, with the ink it covers owned by the
+  element that reserves it - and `.td-edge-top` stays the footer utility. The
+  receiver rule for a hand-applied in-main top edge is kept so the utility is safe
+  either way.
+
+The neutral-bevel default, the three-knob token contract and the brand-time
+one-declaration mask swap are all unchanged. Nothing was fixed with `z-index` and
+nothing was shrunk to fit.
+
+### The signed-in Add to cart label at 1.62 contrast (Foundry #1153)
+
+CONTRAST-01 failed six times, the variants PLP and the flagship PDP at all three
+viewports, in the authenticated pass only - the control is hidden from anonymous
+visitors, so the defect was structurally invisible until the persona step existed.
+
+The 0.65 is Bootstrap's, not this theme's, and the control is genuinely disabled:
+`Swift-v2_ProductAddToCart.cshtml` writes `disabled` whenever the product is a
+variant master with no variant chosen, which is every card on a variants PLP and
+the master PDP. Bootstrap dims the whole control with
+`opacity: var(--bs-btn-disabled-opacity)`, and because the opacity is on the
+button it multiplies the label's own alpha: white at alpha 1 x 0.65 composites to
+`#dbe8e2` over a fill that is already pale, Swift building it as
+`rgba(var(--dw-color-button-primary-rgb), 0.8)` and painting `#97bead`. 1.62
+against a 4.5 floor, and the failing colour appears in no stylesheet.
+
+An inactive control now states its state with a flat, opaque pair and keeps its
+label at full alpha: `--td-slate` on `--td-hairline`, measured 7.10:1. The label
+is 16px / 600, which is not large text by either threshold, so the floor that
+applies is 4.5 and not 3.0. Darkening the label instead is the trap in this class
+- the same 0.65 multiplies whatever is put there. Both values are existing theme
+tokens, so a brand palette carries the tier with no new declaration.
+
 ## 2.2.1
 
 `PriceWithSignIn.cshtml` did not compile on 10.28.10, so every paragraph that named
