@@ -23,6 +23,10 @@
   frontpage meta description, which `og:description` repeats, joins the title and meta title,
   with the admin page settings named as the write surface (no MCP tool writes it) and a
   served-head assert that the vendor sentence is gone.
+- **Step 2 prints the button shape as a name (Foundry #1108).** The "What this site actually
+  ships" block read `Shape 2`, an ordinal that is Rounded under one reading and Pill under the
+  other. It now prints `Shape Pill`, the value `get_button_styles` returns, with the rule that a
+  shape is `Squared`, `Rounded` or `Pill`, never an integer.
 
 ## 1.0.1
 
