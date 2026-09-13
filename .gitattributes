@@ -1,0 +1,8 @@
+# The generated concept and per-product SVG tiles (layers/truvio-demo/tools/make-tiles.py)
+# regenerate byte-identical, but a clone with core.autocrlf=true materialises them CRLF
+# while the generator and the committed blob are LF. A retest that diffs a fresh generator
+# run against the WORKING TREE then reports 120 of 120 files "different" on a line-ending
+# delta alone, while the same diff against the committed blobs is 120 of 120 identical
+# (Foundry #1157 retest). Pinning the working-tree form to LF makes the two diffs agree, so
+# a determinism check measures the generator rather than the checkout.
+*.svg -text

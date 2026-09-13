@@ -112,8 +112,9 @@ the host restart the catalogue already requires — one restart covers both scri
 Every product carries an image, because a PLP card and a PDP with no image are an empty
 grey box on the two pages the design gate measures. The tiles are this layer's own neutral
 SVGs — a flat industrial-green plate with the concept word and the `TRUVIO` wordmark, a few
-hundred bytes each — one per concept subgroup, shipped under
-`files/Images/TruvioCommerce/products/tc-tile-<concept>.svg` and served from
+hundred bytes each — one per concept subgroup, plus the per-product pair `tc-tile-<concept>-<nnnn>.svg` and
+`tc-detail-<concept>-<nnnn>.svg` that #1157 generates, all shipped under
+`files/Images/TruvioCommerce/products/` and served from
 `/Files/Images/TruvioCommerce/products/`. They are **data**: a product row points at a
 file. Presentation is still `theme-default`'s.
 
@@ -123,13 +124,36 @@ brand time and sha256-pinned. They are deliberately **not** committed here.
 
 ### The PDP gallery, and the optional photographic upgrade
 
-**The committed default is self-contained.** Every one of the 84 gallery rows
-`truvio-pdp.sql` seeds points at one of the twelve concept tiles above, converged so no
-master's strip repeats a picture, and `truvio-pdp.sql`'s gallery guard now asserts the
-PATH as well as the row count — a data layer references no asset outside its own `files[]`.
-The 1.2.0 gallery pointed at five photographs under
-`Images/TruvioCommerce/scenic/` that no layer ships, so a clean install seeded 84 rows of
-404 while every count stayed green (Foundry #1137).
+**The committed default is self-contained.** Each of the 60 gallery rows
+`truvio-pdp.sql` seeds points at the concept tile of **its own master's band**, and it is
+DERIVED rather than assigned: the band and the index are read off that master's own
+`TC-DETAIL-*` default row, so a row cannot name another band's picture. A master therefore
+carries three distinct pictures — its own tile at sort 0, its own detail image at sort 1
+(both from #1157), and its band's concept tile at sort 2 — and three is the ceiling this
+layer can ship, which is why the second gallery row was retired rather than repointed: a
+fourth slide could only repeat one of the three.
+
+Two earlier states this replaced, both of which counted green throughout. The 1.2.0 gallery
+pointed at five photographs under `Images/TruvioCommerce/scenic/` that no layer ships, so a
+clean install seeded 84 rows of 404 (Foundry #1137). The 1.5.x gallery pointed at shipped,
+categorised, correctly-served tiles drawn from a twelve-tile ring by seed position — 84 of
+the 276 rows in asset category `Images` put another band's illustration on the product, a
+Price-structures tile on a Bundles kit among them. `truvio-pdp.sql` now guards the band
+itself, not just the path and the count.
+
+### Linking to a PDP
+
+A demo link to a product detail page carries **both** ids:
+
+```
+/en-us/shop?GroupID=TCGRP-BUNDLES&ProductID=TCPROD0042
+```
+
+`/en-us/shop?ProductID=...` on its own **404s** for a bundle master. The shop page resolves
+a product through the group context, so a `ProductID` with no `GroupID` beside it has no
+group to resolve in and the request never reaches a product. Every demo link, probe and
+assert in this layer's documentation therefore carries the pair, and a link that drops the
+`GroupID` is a broken link rather than a slower one.
 
 **The photographs are an optional upgrade, run by hand after the brand step.** The brand
 step already downloads the manifest's five `scenic/` targets into the host `Files` tree;
