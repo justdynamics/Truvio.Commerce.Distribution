@@ -1,15 +1,37 @@
 -- ===========================================================================
 -- truvio-demo layer - product imagery
 -- ===========================================================================
--- Every product gets an image, because a PLP card and a PDP with no image are
--- an empty grey box on the two pages the design gate measures. The tiles are
--- the layer's own neutral SVGs, one per concept subgroup, shipped under
--- files/Images/TruvioCommerce/products/ and served from
--- /Files/Images/TruvioCommerce/products/tc-tile-<concept>.svg. They are DATA,
--- not theme: the file is what a product row points at, not a style. The
--- photographic brand assets stay in the Distribution's
--- brand/brand-assets.manifest.json and are fetched at brand time - they are
--- deliberately NOT committed here.
+-- Every product gets its OWN image, and a second one to hover onto. A PLP card
+-- and a PDP with no image are an empty grey box on the two pages the design gate
+-- measures; five cards carrying the same picture are the same failure one step
+-- later, because the row a buyer scans in order to choose between products is
+-- showing one product five times.
+--
+-- WHAT CHANGED AT 1.5.0 (#1157). Until 1.4.0 this file mapped a tile per
+-- SUBGROUP - twelve pictures over ninety-six product rows, five or six products
+-- per picture - and nominated no second image at all, so the PLP card's
+-- ShowAlternativeImageOnHover had nothing to swap to. It now maps a tile per
+-- PRODUCT and attaches a second, differently-composed image beside it. The
+-- twelve concept tiles stay on disk and stay in files[]: the PDP gallery strip
+-- in truvio-pdp.sql still draws them, and a picture a product does not own is
+-- exactly what a strip is for.
+--
+-- THE TILES ARE DATA, not theme: the file is what a product row points at, never
+-- a style. They are generated, deterministically and self-contained, by
+-- tools/make-tiles.py - 120 files, two per master, each carrying the product's
+-- own index at a size that survives a 120px card. The photographic brand assets
+-- stay in the Distribution's brand/brand-assets.manifest.json and are fetched at
+-- brand time; they are deliberately NOT committed here.
+--
+-- THE HOVER ROW IS THE SECOND-LOWEST-SORTED IMAGE, and that is load-bearing.
+-- Swift-v2_ProductDefaultImage.cshtml builds its alternative from
+-- product.AssetCategories filtered to the ONE category the paragraph's
+-- GetAlternativeImageFrom radio names (Images), removes the default image from
+-- what that yields, and takes the FIRST of what is left. So the second image has
+-- to be (a) in the Images asset category - truvio-pdp.sql's path-scoped UPDATE
+-- puts it there, which is why this file does not name the category itself - and
+-- (b) sorted ahead of the PDP gallery rows, which sit at 2 and 3. Default 0,
+-- hover 1, gallery 2 and 3.
 --
 -- TWO ATTACHMENT SURFACES, BOTH WRITTEN
 --   EcomDetails is the asset attachment the storefront reads (DetailValue +
@@ -22,12 +44,16 @@
 --   skip. A demo that seeds no image and reports success is the exact failure
 --   this file exists to prevent.
 --
--- BULK-ATTACH TAIL (#125): each tile lands on at most 11 product rows (5
---   masters plus one master's 6 variant rows) and is DEFAULT on every one of
---   them, so it can never become the un-audited additional gallery slot that
---   check looks for.
+-- BULK-ATTACH TAIL (#125): each tile now lands on at most 7 product rows (one
+--   master plus, on the six masters that have them, its 6 variant rows) and is
+--   DEFAULT on every one of them, so it can never become the un-audited
+--   additional gallery slot that check looks for. The hover row is default on
+--   none of them, and is the only non-default row this file writes.
 --
--- Idempotent: a product row that already carries this exact tile is skipped.
+-- Idempotent, and CONVERGING: a host seeded at 1.4.0 carries TC-DETAIL-* rows
+-- pointing at the old subgroup tiles. The ids are derived from the product key
+-- and are therefore stable, so the same ids are updated in place rather than a
+-- second set being inserted beside them.
 -- ===========================================================================
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
@@ -36,23 +62,72 @@ BEGIN TRAN;
 IF OBJECT_ID(N'dbo.EcomDetails', N'U') IS NULL
     RAISERROR(N'truvio-images.sql: EcomDetails is missing. Product imagery cannot be attached on this platform build; resolve before composing an edition whose PLP/PDP probes require an image.', 16, 1);
 
--- The concept tile each subgroup's products carry. Joined through the PRIMARY
--- group relation, so a variant row inherits its master's tile automatically.
+-- The tile and the hover image each MASTER carries. Variant rows join on
+-- ProductId and therefore inherit their master's pair, which is what a variant
+-- combination should show: the same product in another configuration.
 IF OBJECT_ID('tempdb..#TcTile') IS NOT NULL DROP TABLE #TcTile;
-CREATE TABLE #TcTile (GroupId nvarchar(255) NOT NULL PRIMARY KEY, TilePath nvarchar(510) NOT NULL);
-INSERT INTO #TcTile (GroupId, TilePath) VALUES
-    ('TCGRP-VARIANTS', '/Files/Images/TruvioCommerce/products/tc-tile-variants.svg'),
-    ('TCGRP-STOCK-DELIVERY', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg'),
-    ('TCGRP-UNITS', '/Files/Images/TruvioCommerce/products/tc-tile-units.svg'),
-    ('TCGRP-PRICE-STRUCTURES', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg'),
-    ('TCGRP-ASSORTMENTS', '/Files/Images/TruvioCommerce/products/tc-tile-assortments.svg'),
-    ('TCGRP-DISCOUNTS', '/Files/Images/TruvioCommerce/products/tc-tile-discounts.svg'),
-    ('TCGRP-MEDIA', '/Files/Images/TruvioCommerce/products/tc-tile-media.svg'),
-    ('TCGRP-CURRENCIES', '/Files/Images/TruvioCommerce/products/tc-tile-currencies.svg'),
-    ('TCGRP-BUNDLES', '/Files/Images/TruvioCommerce/products/tc-tile-bundles.svg'),
-    ('TCGRP-CONTRACT-PRICING', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing.svg'),
-    ('TCGRP-DOCUMENTS', '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg'),
-    ('TCGRP-RELATIONS', '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg');
+CREATE TABLE #TcTile (ProductId nvarchar(255) NOT NULL PRIMARY KEY, TilePath nvarchar(510) NOT NULL, DetailPath nvarchar(510) NOT NULL);
+INSERT INTO #TcTile (ProductId, TilePath, DetailPath) VALUES
+    ('TCPROD0001', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0001.svg', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0001.svg'),
+    ('TCPROD0002', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0002.svg', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0002.svg'),
+    ('TCPROD0003', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0003.svg', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0003.svg'),
+    ('TCPROD0004', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0004.svg', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0004.svg'),
+    ('TCPROD0005', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0005.svg', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0005.svg'),
+    ('TCPROD0006', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0006.svg', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0006.svg'),
+    ('TCPROD0007', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0007.svg', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0007.svg'),
+    ('TCPROD0008', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0008.svg', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0008.svg'),
+    ('TCPROD0009', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0009.svg', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0009.svg'),
+    ('TCPROD0010', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0010.svg', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0010.svg'),
+    ('TCPROD0011', '/Files/Images/TruvioCommerce/products/tc-tile-units-0011.svg', '/Files/Images/TruvioCommerce/products/tc-detail-units-0011.svg'),
+    ('TCPROD0012', '/Files/Images/TruvioCommerce/products/tc-tile-units-0012.svg', '/Files/Images/TruvioCommerce/products/tc-detail-units-0012.svg'),
+    ('TCPROD0013', '/Files/Images/TruvioCommerce/products/tc-tile-units-0013.svg', '/Files/Images/TruvioCommerce/products/tc-detail-units-0013.svg'),
+    ('TCPROD0014', '/Files/Images/TruvioCommerce/products/tc-tile-units-0014.svg', '/Files/Images/TruvioCommerce/products/tc-detail-units-0014.svg'),
+    ('TCPROD0015', '/Files/Images/TruvioCommerce/products/tc-tile-units-0015.svg', '/Files/Images/TruvioCommerce/products/tc-detail-units-0015.svg'),
+    ('TCPROD0016', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0016.svg', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0016.svg'),
+    ('TCPROD0017', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0017.svg', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0017.svg'),
+    ('TCPROD0018', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0018.svg', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0018.svg'),
+    ('TCPROD0019', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0019.svg', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0019.svg'),
+    ('TCPROD0020', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0020.svg', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0020.svg'),
+    ('TCPROD0021', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0021.svg', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0021.svg'),
+    ('TCPROD0022', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0022.svg', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0022.svg'),
+    ('TCPROD0023', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0023.svg', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0023.svg'),
+    ('TCPROD0024', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0024.svg', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0024.svg'),
+    ('TCPROD0025', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0025.svg', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0025.svg'),
+    ('TCPROD0026', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0026.svg', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0026.svg'),
+    ('TCPROD0027', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0027.svg', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0027.svg'),
+    ('TCPROD0028', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0028.svg', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0028.svg'),
+    ('TCPROD0029', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0029.svg', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0029.svg'),
+    ('TCPROD0030', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0030.svg', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0030.svg'),
+    ('TCPROD0031', '/Files/Images/TruvioCommerce/products/tc-tile-media-0031.svg', '/Files/Images/TruvioCommerce/products/tc-detail-media-0031.svg'),
+    ('TCPROD0032', '/Files/Images/TruvioCommerce/products/tc-tile-media-0032.svg', '/Files/Images/TruvioCommerce/products/tc-detail-media-0032.svg'),
+    ('TCPROD0033', '/Files/Images/TruvioCommerce/products/tc-tile-media-0033.svg', '/Files/Images/TruvioCommerce/products/tc-detail-media-0033.svg'),
+    ('TCPROD0034', '/Files/Images/TruvioCommerce/products/tc-tile-media-0034.svg', '/Files/Images/TruvioCommerce/products/tc-detail-media-0034.svg'),
+    ('TCPROD0035', '/Files/Images/TruvioCommerce/products/tc-tile-media-0035.svg', '/Files/Images/TruvioCommerce/products/tc-detail-media-0035.svg'),
+    ('TCPROD0036', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0036.svg', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0036.svg'),
+    ('TCPROD0037', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0037.svg', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0037.svg'),
+    ('TCPROD0038', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0038.svg', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0038.svg'),
+    ('TCPROD0039', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0039.svg', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0039.svg'),
+    ('TCPROD0040', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0040.svg', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0040.svg'),
+    ('TCPROD0041', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0041.svg', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0041.svg'),
+    ('TCPROD0042', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0042.svg', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0042.svg'),
+    ('TCPROD0043', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0043.svg', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0043.svg'),
+    ('TCPROD0044', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0044.svg', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0044.svg'),
+    ('TCPROD0045', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0045.svg', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0045.svg'),
+    ('TCPROD0046', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0046.svg', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0046.svg'),
+    ('TCPROD0047', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0047.svg', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0047.svg'),
+    ('TCPROD0048', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0048.svg', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0048.svg'),
+    ('TCPROD0049', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0049.svg', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0049.svg'),
+    ('TCPROD0050', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0050.svg', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0050.svg'),
+    ('TCPROD0051', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0051.svg', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0051.svg'),
+    ('TCPROD0052', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0052.svg', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0052.svg'),
+    ('TCPROD0053', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0053.svg', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0053.svg'),
+    ('TCPROD0054', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0054.svg', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0054.svg'),
+    ('TCPROD0055', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0055.svg', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0055.svg'),
+    ('TCPROD0056', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0056.svg', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0056.svg'),
+    ('TCPROD0057', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0057.svg', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0057.svg'),
+    ('TCPROD0058', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0058.svg', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0058.svg'),
+    ('TCPROD0059', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0059.svg', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0059.svg'),
+    ('TCPROD0060', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0060.svg', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0060.svg');
 
 -- ---------------------------------------------------------------------------
 -- 1. EcomDetails: the attachment the storefront reads.
@@ -63,40 +138,64 @@ INSERT INTO #TcTile (GroupId, TilePath) VALUES
 -- EcomDetails names the variant column DetailVariantId, NOT DetailProductVariantId
 -- (sys.columns, DW 10.28.10). The wrong spelling is a compile-time Msg 207 inside
 -- sp_executesql, so it survives every COL_LENGTH guard above it.
-DECLARE @inserted int = 0, @updated int = 0, @attached int = 0;
+DECLARE @inserted int = 0, @hovered int = 0, @converged int = 0, @updated int = 0, @attached int = 0, @hoverRows int = 0;
 DECLARE @cols nvarchar(max) = N'DetailId, DetailProductId, DetailVariantId, DetailValue, DetailIsDefault';
 -- The detail id is DERIVED from the product key, never from a ROW_NUMBER: a
 -- re-run that attaches only the missing rows would restart the counter at 1 and
--- collide with the ids the first run wrote.
-DECLARE @sel  nvarchar(max) = N'''TC-DETAIL-'' + p.ProductId + CASE WHEN p.ProductVariantId = '''' THEN '''' ELSE ''-'' + p.ProductVariantId END, p.ProductId, p.ProductVariantId, t.TilePath, 1';
+-- collide with the ids the first run wrote. It is also what lets the 1.4.0
+-- convergence below be a targeted UPDATE rather than a delete and a reseed.
+DECLARE @key nvarchar(max) = N'p.ProductId + CASE WHEN p.ProductVariantId = '''' THEN '''' ELSE ''-'' + p.ProductVariantId END';
+DECLARE @tailDefault nvarchar(max) = N'', @tailHover nvarchar(max) = N'';
 
 IF COL_LENGTH('EcomDetails', 'DetailLanguageId') IS NOT NULL
-    SELECT @cols = @cols + N', DetailLanguageId', @sel = @sel + N', p.ProductLanguageId';
+    SELECT @cols = @cols + N', DetailLanguageId', @tailDefault = @tailDefault + N', p.ProductLanguageId', @tailHover = @tailHover + N', p.ProductLanguageId';
 IF COL_LENGTH('EcomDetails', 'DetailProductLanguageId') IS NOT NULL
-    SELECT @cols = @cols + N', DetailProductLanguageId', @sel = @sel + N', p.ProductLanguageId';
+    SELECT @cols = @cols + N', DetailProductLanguageId', @tailDefault = @tailDefault + N', p.ProductLanguageId', @tailHover = @tailHover + N', p.ProductLanguageId';
 IF COL_LENGTH('EcomDetails', 'DetailSorting') IS NOT NULL
-    SELECT @cols = @cols + N', DetailSorting', @sel = @sel + N', 1';
+    SELECT @cols = @cols + N', DetailSorting', @tailDefault = @tailDefault + N', 0', @tailHover = @tailHover + N', 1';
+IF COL_LENGTH('EcomDetails', 'DetailSortOrder') IS NOT NULL
+    SELECT @cols = @cols + N', DetailSortOrder', @tailDefault = @tailDefault + N', 0', @tailHover = @tailHover + N', 1';
 IF COL_LENGTH('EcomDetails', 'DetailType') IS NOT NULL
-    SELECT @cols = @cols + N', DetailType', @sel = @sel + N', 0';
+    SELECT @cols = @cols + N', DetailType', @tailDefault = @tailDefault + N', 0', @tailHover = @tailHover + N', 0';
 
+-- 1a. The default image - what the card shows and what the PDP opens on.
 DECLARE @sql nvarchar(max) = N'
 INSERT INTO EcomDetails (' + @cols + N')
-SELECT ' + @sel + N'
+SELECT ''TC-DETAIL-'' + ' + @key + N', p.ProductId, p.ProductVariantId, t.TilePath, 1' + @tailDefault + N'
 FROM EcomProducts p
-JOIN EcomGroupProductRelation r ON r.GroupProductRelationProductId = p.ProductId AND r.GroupProductRelationIsPrimary = 1
-JOIN #TcTile t ON t.GroupId = r.GroupProductRelationGroupId
+JOIN #TcTile t ON t.ProductId = p.ProductId
 WHERE p.ProductId LIKE ''TCPROD%''
-  AND NOT EXISTS (SELECT 1 FROM EcomDetails d
-                  WHERE d.DetailProductId = p.ProductId
-                    AND d.DetailVariantId = p.ProductVariantId
-                    AND d.DetailValue = t.TilePath);';
+  AND NOT EXISTS (SELECT 1 FROM EcomDetails d WHERE d.DetailId = ''TC-DETAIL-'' + ' + @key + N');';
 EXEC sp_executesql @sql;
 SET @inserted = @@ROWCOUNT;
 
+-- 1b. The hover image - the second, non-default row the card swaps to.
+DECLARE @sqlHover nvarchar(max) = N'
+INSERT INTO EcomDetails (' + @cols + N')
+SELECT ''TC-HOVER-'' + ' + @key + N', p.ProductId, p.ProductVariantId, t.DetailPath, 0' + @tailHover + N'
+FROM EcomProducts p
+JOIN #TcTile t ON t.ProductId = p.ProductId
+WHERE p.ProductId LIKE ''TCPROD%''
+  AND NOT EXISTS (SELECT 1 FROM EcomDetails d WHERE d.DetailId = ''TC-HOVER-'' + ' + @key + N');';
+EXEC sp_executesql @sqlHover;
+SET @hovered = @@ROWCOUNT;
+
+-- 1c. Convergence. A host seeded at 1.4.0 or earlier carries TC-DETAIL-* rows
+--     pointing at the twelve subgroup tiles. Same ids, new value.
+UPDATE d
+   SET d.DetailValue = t.TilePath
+  FROM EcomDetails d
+  JOIN EcomProducts p ON p.ProductId = d.DetailProductId AND p.ProductVariantId = d.DetailVariantId
+  JOIN #TcTile t ON t.ProductId = p.ProductId
+ WHERE d.DetailId = 'TC-DETAIL-' + p.ProductId + CASE WHEN p.ProductVariantId = '' THEN '' ELSE '-' + p.ProductVariantId END
+   AND d.DetailValue <> t.TilePath
+   AND ISNULL(d.DetailsName, N'') <> N'brand-photograph';
+SET @converged = @@ROWCOUNT;
+
 -- ---------------------------------------------------------------------------
 -- 2. The legacy EcomProducts image columns, where the build still has them.
---    Same value, so the two surfaces can never disagree about which file a
---    product shows.
+--    Same value as the default row, so the two surfaces can never disagree
+--    about which file a product shows.
 -- ---------------------------------------------------------------------------
 DECLARE @imgSet nvarchar(max) = N'';
 IF COL_LENGTH('EcomProducts', 'ProductImageSmall') IS NOT NULL SET @imgSet = @imgSet + N'ProductImageSmall = t.TilePath, ';
@@ -109,37 +208,80 @@ BEGIN
     DECLARE @upd nvarchar(max) = N'
 UPDATE p SET ' + @imgSet + N'
 FROM EcomProducts p
-JOIN EcomGroupProductRelation r ON r.GroupProductRelationProductId = p.ProductId AND r.GroupProductRelationIsPrimary = 1
-JOIN #TcTile t ON t.GroupId = r.GroupProductRelationGroupId
+JOIN #TcTile t ON t.ProductId = p.ProductId
 WHERE p.ProductId LIKE ''TCPROD%'';';
     EXEC sp_executesql @upd;
     SET @updated = @@ROWCOUNT;
 END
 
 -- ---------------------------------------------------------------------------
--- 3. Report what was MEASURED, and fail when nothing was attached.
---    The tail used to PRINT a fixed success line naming 12 tiles and 96 rows
---    whether or not a single row moved - which is precisely the "seeds no image
---    and reports success" failure the header says this file exists to prevent.
---    @inserted is legitimately 0 on a re-run (the attach is idempotent), so the
---    pass/fail assertion is the ATTACHED TOTAL, not the insert count.
+-- 3. Report what was MEASURED, and fail when the page would not show what this
+--    file claims. The tail used to PRINT a fixed success line naming 12 tiles
+--    and 96 rows whether or not a single row moved - which is precisely the
+--    "seeds no image and reports success" failure the header says this file
+--    exists to prevent. @inserted is legitimately 0 on a re-run (the attach is
+--    idempotent), so every assertion below is a MEASUREMENT of the end state.
 -- ---------------------------------------------------------------------------
 SELECT @attached = COUNT(*)
 FROM EcomDetails d
 JOIN #TcTile t ON t.TilePath = d.DetailValue
-WHERE d.DetailProductId LIKE 'TCPROD%';
+WHERE d.DetailProductId LIKE 'TCPROD%' AND d.DetailIsDefault = 1;
+
+SELECT @hoverRows = COUNT(*)
+FROM EcomDetails d
+JOIN #TcTile t ON t.DetailPath = d.DetailValue
+WHERE d.DetailProductId LIKE 'TCPROD%' AND d.DetailIsDefault = 0;
+
+-- 3a. THE SHARING GUARD, and it is the one that would have caught 1.4.0. Two
+--     products in the same group showing the same default picture is the defect
+--     #1157 names, and a row count cannot see it: 96 rows over 12 pictures
+--     counts exactly as well as 96 rows over 96.
+DECLARE @TcSharedDefaults INT = (
+    SELECT COUNT(*) FROM (
+        SELECT r.GroupProductRelationGroupId, d.DetailValue
+          FROM EcomDetails d
+          JOIN EcomGroupProductRelation r ON r.GroupProductRelationProductId = d.DetailProductId AND r.GroupProductRelationIsPrimary = 1
+         WHERE d.DetailProductId LIKE 'TCPROD%' AND d.DetailIsDefault = 1 AND d.DetailVariantId = ''
+         GROUP BY r.GroupProductRelationGroupId, d.DetailValue
+        HAVING COUNT(DISTINCT d.DetailProductId) > 1) shared);
+
+-- 3b. THE SECOND-IMAGE GUARD. A master with one image has nothing to hover to,
+--     and the card component fails that silently: no error, no empty element,
+--     just a swap that never happens.
+DECLARE @TcMastersWithoutSecond INT = (
+    SELECT COUNT(*) FROM EcomProducts p
+     WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = ''
+       AND (SELECT COUNT(DISTINCT d.DetailValue) FROM EcomDetails d
+             WHERE d.DetailProductId = p.ProductId AND d.DetailVariantId = ''
+               AND d.DetailValue LIKE '/Files/Images/%') < 2);
 
 DROP TABLE #TcTile;
 
 IF @attached = 0
 BEGIN
     ROLLBACK TRAN;
-    RAISERROR(N'truvio-images.sql: 0 TCPROD rows carry a concept tile after the attach. The PLP and PDP probes will measure empty grey boxes. Check that the catalogue seeded (truvio-catalog.sql ran) and that the primary group relations point at the TCGRP-* ids this file maps.', 16, 1);
+    RAISERROR(N'truvio-images.sql: 0 TCPROD rows carry a per-product tile after the attach. The PLP and PDP probes will measure empty grey boxes. Check that the catalogue seeded (truvio-catalog.sql ran) and that the TCPROD ids this file maps exist.', 16, 1);
+END
+ELSE IF @hoverRows = 0
+BEGIN
+    ROLLBACK TRAN;
+    RAISERROR(N'truvio-images.sql: no product carries a second image. The PLP card sets ShowAlternativeImageOnHover, and with one image per product the hover is a swap to nothing - no error, no change, which is the failure mode this guard exists for.', 16, 1);
+END
+ELSE IF @TcSharedDefaults > 0
+BEGIN
+    ROLLBACK TRAN;
+    RAISERROR(N'truvio-images.sql: two or more products in one group share a default image. That is the 1.4.0 state this release replaces: every row count correct, and a PLP band showing one product five times.', 16, 1);
+END
+ELSE IF @TcMastersWithoutSecond > 0
+BEGIN
+    ROLLBACK TRAN;
+    RAISERROR(N'truvio-images.sql: a master carries fewer than two distinct images. The hover swap has no subject on that card.', 16, 1);
 END
 ELSE
 BEGIN
     COMMIT TRAN;
-    PRINT CONCAT(N'truvio-demo imagery: ', @inserted, N' EcomDetails row(s) inserted, ',
+    PRINT CONCAT(N'truvio-demo imagery: ', @inserted, N' default row(s) inserted, ',
+                 @hovered, N' hover row(s) inserted, ', @converged, N' row(s) converged off the subgroup tiles, ',
                  @updated, N' EcomProducts row(s) given the legacy image columns, ',
-                 @attached, N' TCPROD row(s) now carry a concept tile.');
+                 @attached, N' TCPROD row(s) carry their own tile and ', @hoverRows, N' carry a second image.');
 END

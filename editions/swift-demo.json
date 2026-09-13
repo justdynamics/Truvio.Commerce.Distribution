@@ -9,7 +9,7 @@
     "feature-bom-configurator@1.2.0",
     "feature-b2b-comms@1.0.3",
     "feature-baseline-guide@1.0.0",
-    "truvio-demo@1.4.0"
+    "truvio-demo@1.5.0"
   ],
   "surfaces": [
     "surface-swift@1.12.0"
@@ -25,5 +25,5 @@
     "/swift-2/customer-center",
     "/swift-2/sign-in/sign-in"
   ],
-  "description": "Full Swift storefront demo on the split composition (Swift 2.4): framework-only base + the surface-swift content surface (en-US area + UrlPath + own item types) + six feature layers (feature-reordering + feature-pricing — the P3 split of the retired feature-reordering-pricing — plus feature-rma, feature-subscription-orders, feature-bom-configurator, and feature-b2b-comms — the B2B dealer email pack + onboarding flow) + sample data, proven on the default theme. From the v5 phase-2 baseline it also composes truvio-demo@1.4.0, the Truvio Commerce brand catalogue re-screened against what Swift actually shows (12 frontend-demonstrable subgroups under 4 top groups, 60 masters + 36 variant rows bound to their axes, 96 customer-group prices, the Images and Manuals asset categories, 324 relations, 12 orders, three personas): sample-data keeps the gate's marker-string fixtures and rides the sampleData toggle, truvio-demo carries the rows a prospect sees and is named in add[] like any other addition. base-swift composes neither. Proven on DW 10.28.1-PreRelease."
+  "description": "Full Swift storefront demo on the split composition (Swift 2.4): framework-only base + the surface-swift content surface (en-US area + UrlPath + own item types) + six feature layers (feature-reordering + feature-pricing — the P3 split of the retired feature-reordering-pricing — plus feature-rma, feature-subscription-orders, feature-bom-configurator, and feature-b2b-comms — the B2B dealer email pack + onboarding flow) + sample data, proven on the default theme. From the v5 phase-2 baseline it also composes truvio-demo@1.5.0, the Truvio Commerce brand catalogue re-screened against what Swift actually shows (12 frontend-demonstrable subgroups under 4 top groups, 60 masters + 36 variant rows bound to their axes, 96 customer-group prices, the Images and Manuals asset categories, 324 relations, 12 orders, three personas): sample-data keeps the gate's marker-string fixtures and rides the sampleData toggle, truvio-demo carries the rows a prospect sees and is named in add[] like any other addition. base-swift composes neither. Proven on DW 10.28.1-PreRelease."
 }

@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" width="480" height="480" role="img" aria-label="Truvio CURRENCIES 39 tile">
+  <title>Truvio CURRENCIES 39</title>
+  <rect width="480" height="480" fill="#F5EAEC"/>
+  <rect x="40" y="40" width="400" height="400" rx="16" fill="#8A4551"/>
+  <rect x="40" y="40" width="400" height="8" fill="#552930"/>
+  <g transform="translate(400 96) rotate(216)"><path d="M0 -30 L30 0 L0 30 Z" fill="#F5EAEC" opacity="0.30"/></g>
+  <text x="72" y="118" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="600" letter-spacing="2.5" fill="#F5EAEC" opacity="0.85">CURRENCIES</text>
+  <text x="240" y="300" text-anchor="middle" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="184" font-weight="700" letter-spacing="-4" fill="#FFFFFF">39</text>
+  <rect x="72" y="340" width="22" height="22" rx="5" fill="#F5EAEC" opacity="0.85"/>
+  <rect x="106" y="340" width="22" height="22" rx="5" fill="#F5EAEC" opacity="0.85"/>
+  <rect x="140" y="340" width="22" height="22" rx="5" fill="#F5EAEC" opacity="0.85"/>
+  <rect x="174" y="340" width="22" height="22" rx="5" fill="#F5EAEC" opacity="0.85"/>
+  <text x="240" y="412" text-anchor="middle" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="6" fill="#F5EAEC">TRUVIO</text>
+</svg>
