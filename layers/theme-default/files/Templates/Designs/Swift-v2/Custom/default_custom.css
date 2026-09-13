@@ -431,15 +431,42 @@ body > footer a:hover,
  * The cover card carries an INLINE `min-height:25rem` (≈400px) and the swiffy
  * item width tops out at 25rem, so each slide reads as a tall near-square tile
  * dominating the fold. Cap the card to a viewport-relative band height (inline
- * min-height must be beaten with !important) and keep the cover image cropped. */
-[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .card {
+ * min-height must be beaten with !important) and keep the cover image cropped.
+ *
+ * SCOPED TO THE TILE LAYOUTS (Foundry #947). All four Swift-v2_Slider layouts
+ * render `.card.h-100`, and only CardCoverFull writes
+ * `--swiffy-slider-item-width: 100%` on its slider container and an inline
+ * min-height:55vh on its card - the full-width hero's only height source. An
+ * unscoped cap zeroed that min-height, and the clamp (no !important) lost to
+ * Bootstrap's `.h-100 { height: 100% !important }`, so the hero collapsed to a
+ * 2px card inside a 58px strip. The cap therefore skips the container that
+ * carries the 100% item width. */
+[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .slider-container:not([style*="--swiffy-slider-item-width: 100%"]) .card {
   min-height: 0 !important;
   height: clamp(15rem, 34vh, 21rem);
   aspect-ratio: auto;
 }
-[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .card > .card-img {
+[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .slider-container:not([style*="--swiffy-slider-item-width: 100%"]) .card > .card-img {
   height: 100% !important;
   object-fit: cover;
+}
+
+/* --- Swift-v2_Slider CardCoverFull hero: the band keeps its height and grows
+ * with its copy (Foundry #947). The card holds the template's 55vh floor against
+ * `.h-100` (height:100% of an auto-height chain resolves to 0), and the
+ * `.card-img-overlay`, absolute in the template, joins the flow, so long copy
+ * grows the card instead of running past it where the card's overflow:hidden
+ * clips the call to action at 390. The cover image stays absolute behind it.
+ * Measured with the same two rules in a Tier 1 sheet: card 502px at 1400x900,
+ * 557px at 390x844, CTA inside the card at both, no horizontal overflow. */
+[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .slider-container[style*="--swiffy-slider-item-width: 100%"] > li > .card {
+  min-height: 55vh !important;
+  height: auto !important;
+}
+[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .slider-container[style*="--swiffy-slider-item-width: 100%"] > li > .card > .card-img-overlay {
+  position: relative;
+  inset: auto;
+  min-height: inherit;
 }
 
 /* === Utility: table data density === */
@@ -1248,10 +1275,21 @@ main [data-td-full-bleed] [data-dw-container-width="4"] {
  * its owner, so the receiver is whatever precedes it - and for the footer crest
  * that is <main>, whose end padding is the only thing the band can rise into.
  *
- * ONE TOKEN, THREE KNOBS.
- *   --td-edge-fill  the painted colour. Defaults to the neutral page ground, so
- *                   an un-themed edge reads as a carved boundary, not a stripe.
- *                   Set it to the colour of the section the edge points INTO.
+ * THREE KNOBS, AND ONE FILL PER EDGE.
+ *   --td-edge-fill  the last-resort colour, the neutral page ground. It paints
+ *                   only where no per-edge token is set and no adjoining scheme
+ *                   resolves.
+ *   --td-edge-fill-hero, --td-edge-fill-alt, --td-edge-fill-footer
+ *                   the colour of each of the three instances block 26 applies.
+ *                   Unset, each one follows the scheme the band belongs to: the
+ *                   two bottom edges take the --dw-color-background of the row
+ *                   BELOW their owner (block 26 copies it onto the owner as
+ *                   --td-edge-adjoin), and the footer crest takes the footer's
+ *                   own --dw-color-background. A single fill for all three read
+ *                   only against a dark hero; on white or near-white grounds the
+ *                   mask was present and nothing painted. Where the grounds on
+ *                   both sides of an edge are the same colour, no default can
+ *                   make it visible, and the brand sets that edge's token.
  *   --td-edge-h     the height. clamp(40px, 5vw, 75px) - 72px at 1440, 40px at
  *                   390, and the same expression drives every clearance below,
  *                   which is what keeps the two in step.
@@ -1282,7 +1320,7 @@ main [data-td-full-bleed] [data-dw-container-width="4"] {
   left: 0;
   right: 0;
   height: var(--td-edge-h);
-  background-color: var(--td-edge-fill);
+  background-color: var(--td-edge-adjoin, var(--td-edge-fill));
   -webkit-mask-image: var(--td-edge-mask);
           mask-image: var(--td-edge-mask);
   -webkit-mask-size: 100% 100%;
@@ -1305,6 +1343,22 @@ main [data-td-full-bleed] [data-dw-container-width="4"] {
  * layout heights open between the mask and the edge. */
 .td-edge-bottom::after {
   bottom: -1px;
+}
+
+/* THE PER-EDGE FILLS. Each token is read at the pseudo-element and never
+ * declared on :root, because a custom property holding var() resolves where it
+ * is declared: a :root default would resolve --td-edge-adjoin before any owner
+ * carried it, and every edge would paint the last-resort colour again. The alt
+ * rule comes second so the alternate row, which is also a bottom edge, reads its
+ * own token. */
+main .td-edge-bottom::after {
+  background-color: var(--td-edge-fill-hero, var(--td-edge-adjoin, var(--td-edge-fill)));
+}
+main .td-edge-bottom.td-edge-alt::after {
+  background-color: var(--td-edge-fill-alt, var(--td-edge-adjoin, var(--td-edge-fill)));
+}
+footer.td-edge-top::before {
+  background-color: var(--td-edge-fill-footer, var(--dw-color-background, var(--td-edge-fill)));
 }
 
 /* TOP: the motif sits ABOVE the owner's border box and rises into the section
@@ -1747,5 +1801,40 @@ main:has(+ footer.td-edge-top) {
   .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] {
     flex: 1 1 8rem !important;
     min-width: 5rem;
+  }
+}
+
+/* =============================================================================
+ * #28 THE SIGNED-IN ACCOUNT NAME - capped at phone widths
+ * Swift's MyAccount avatar dropdown renders the signed-in title in a
+ * div.text-nowrap inside button.nav-link.hstack (id SignInDropdown_<paragraph>),
+ * with no max-width and no ellipsis, so the name sets the width of the header
+ * line. At 390 a 12-character name fits; an 18-character one renders 145px wide
+ * and pushes the document 10px past the viewport, signed in only. Any B2B
+ * contact name of ordinary length does the same on a phone.
+ *
+ * The cap is on the name, never on the line: the button gives up its automatic
+ * minimum (min-width 0) and the name block shrinks to a stated ceiling and ends
+ * in an ellipsis. The avatar initials beside it are untouched and stay visible,
+ * and the full name still reads in the open dropdown panel, which renders
+ * outside the button.
+ *
+ * The overflow context is on the name block alone. It has no descendants but its
+ * own text, so it clips nothing but that text; the standing guard of block #23 -
+ * no overflow on any header element that contains a megamenu or offcanvas panel -
+ * is unaffected.
+ * ========================================================================== */
+[data-td-block="28"] { --td-block: 28; }
+
+@media (max-width: 767.98px) {
+  [data-swift-page-header] [id^="SignInDropdown_"].hstack {
+    min-width: 0;
+    max-width: 100%;
+  }
+  [data-swift-page-header] [id^="SignInDropdown_"] .text-nowrap {
+    min-width: 0;
+    max-width: 6.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }

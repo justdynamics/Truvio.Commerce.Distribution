@@ -157,9 +157,26 @@
      * token in its own sheet and all three instances change at once. Nothing
      * below knows or cares which path is in the token.
      *
-     * IDEMPOTENT and marker-free: classList.add twice is once, and the classes
-     * are function, not proof-of-run.
+     * THE FILL FOLLOWS THE ADJOINING SCHEME. A bottom edge points down into the
+     * row below its owner, so the owner is given that row's
+     * --dw-color-background as --td-edge-adjoin, which block 22 paints unless
+     * the brand has set the instance's own --td-edge-fill-hero or
+     * --td-edge-fill-alt. The footer crest needs nothing here: it inherits the
+     * footer's own scheme. A row with no scheme of its own inherits main's, and
+     * a value that does not resolve leaves the token unset, so block 22 falls
+     * back to --td-edge-fill.
+     *
+     * IDEMPOTENT and marker-free: classList.add twice is once, setting the same
+     * property twice is once, and the classes are function, not proof-of-run.
      * -------------------------------------------------------------------- */
+    function adjoin(owner, next) {
+        if (!next) { return; }
+        var fill = window.getComputedStyle(next).getPropertyValue("--dw-color-background").trim();
+        if (fill) {
+            owner.style.setProperty("--td-edge-adjoin", fill);
+        }
+    }
+
     function edgeMotif() {
         var footer = document.querySelector("footer[data-swift-page-footer]");
         if (footer) {
@@ -179,6 +196,7 @@
         if (heroIndex === -1) { return; }
 
         rows[heroIndex].classList.add("td-edge-bottom");
+        adjoin(rows[heroIndex], rows[heroIndex + 1]);
 
         var previousScheme = rows[heroIndex].getAttribute("data-dw-colorscheme") || "";
         for (var j = heroIndex + 1; j < rows.length; j++) {
@@ -191,6 +209,7 @@
                 if (j - 1 > heroIndex) {
                     rows[j - 1].classList.add("td-edge-bottom");
                     rows[j - 1].classList.add("td-edge-alt");
+                    adjoin(rows[j - 1], rows[j]);
                 }
                 return;
             }
