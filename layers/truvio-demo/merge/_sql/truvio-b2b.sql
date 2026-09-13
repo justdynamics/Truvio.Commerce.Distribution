@@ -57,16 +57,16 @@ IF NOT EXISTS (SELECT 1 FROM AccessUser WHERE AccessUserId = 1325)
 -- ---------------------------------------------------------------------------
 -- 1. Short descriptions. One sentence, buyer-facing, distinct per row.
 -- ---------------------------------------------------------------------------
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Two axes and six combinations, each with its own number, its own stock and its own price.')
-    UPDATE EcomProducts SET ProductShortDescription = N'Two axes and six combinations, each with its own number, its own stock and its own price.' WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Two axes and six combinations, each with its own number, stock and price.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Two axes and six combinations, each with its own number, stock and price.' WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0002' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'The row a signed-in account sees at an agreed price rather than the list one.')
     UPDATE EcomProducts SET ProductShortDescription = N'The row a signed-in account sees at an agreed price rather than the list one.' WHERE ProductId = 'TCPROD0002' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0003' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Price steps with the tier and holds across the mode, the usual shape of an option matrix.')
-    UPDATE EcomProducts SET ProductShortDescription = N'Price steps with the tier and holds across the mode, the usual shape of an option matrix.' WHERE ProductId = 'TCPROD0003' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0003' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Price steps with the tier and holds across the mode, the usual option matrix.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Price steps with the tier and holds across the mode, the usual option matrix.' WHERE ProductId = 'TCPROD0003' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0004' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A tier grid where only the top tier changes the delivery position.')
     UPDATE EcomProducts SET ProductShortDescription = N'A tier grid where only the top tier changes the delivery position.' WHERE ProductId = 'TCPROD0004' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0005' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'The widest grid in the band: every combination priced, none of them inherited.')
-    UPDATE EcomProducts SET ProductShortDescription = N'The widest grid in the band: every combination priced, none of them inherited.' WHERE ProductId = 'TCPROD0005' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0005' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Widest grid in the band: every combination priced, none of them inherited.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Widest grid in the band: every combination priced, none of them inherited.' WHERE ProductId = 'TCPROD0005' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0006' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Healthy stock on the default location and out of the door the same day.')
     UPDATE EcomProducts SET ProductShortDescription = N'Healthy stock on the default location and out of the door the same day.' WHERE ProductId = 'TCPROD0006' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0007' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Deliberately low, so the card shows a count rather than a reassuring word.')
@@ -75,28 +75,28 @@ IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0008' AND Product
     UPDATE EcomProducts SET ProductShortDescription = N'At zero and still orderable, against a delivery date the row carries itself.' WHERE ProductId = 'TCPROD0008' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0009' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Stock split across three locations, which is what a multi-warehouse read looks like.')
     UPDATE EcomProducts SET ProductShortDescription = N'Stock split across three locations, which is what a multi-warehouse read looks like.' WHERE ProductId = 'TCPROD0009' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0010' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A long lead time, so the delivery line rather than the count is the thing to read.')
-    UPDATE EcomProducts SET ProductShortDescription = N'A long lead time, so the delivery line rather than the count is the thing to read.' WHERE ProductId = 'TCPROD0010' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0010' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A long lead time, so the delivery line rather than the count is what matters.')
+    UPDATE EcomProducts SET ProductShortDescription = N'A long lead time, so the delivery line rather than the count is what matters.' WHERE ProductId = 'TCPROD0010' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0011' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Priced per piece and ordered in single units, the plain case.')
     UPDATE EcomProducts SET ProductShortDescription = N'Priced per piece and ordered in single units, the plain case.' WHERE ProductId = 'TCPROD0011' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0012' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Priced per metre, so the quantity box and the line total both read in length.')
-    UPDATE EcomProducts SET ProductShortDescription = N'Priced per metre, so the quantity box and the line total both read in length.' WHERE ProductId = 'TCPROD0012' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0012' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Length is the unit, so the quantity box and the line total both read in metres.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Length is the unit, so the quantity box and the line total both read in metres.' WHERE ProductId = 'TCPROD0012' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0013' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A conversion service: one price, two ways of buying it.')
     UPDATE EcomProducts SET ProductShortDescription = N'A conversion service: one price, two ways of buying it.' WHERE ProductId = 'TCPROD0013' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0014' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Sold in a pack, so pack quantity and unit price are different numbers on one card.')
     UPDATE EcomProducts SET ProductShortDescription = N'Sold in a pack, so pack quantity and unit price are different numbers on one card.' WHERE ProductId = 'TCPROD0014' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0015' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Priced per kilogram against the net weight in the specification table.')
-    UPDATE EcomProducts SET ProductShortDescription = N'Priced per kilogram against the net weight in the specification table.' WHERE ProductId = 'TCPROD0015' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0015' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Weighed, and priced against the net weight in the specification table.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Weighed, and priced against the net weight in the specification table.' WHERE ProductId = 'TCPROD0015' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0016' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A three-step quantity ladder: the price falls at five, at ten and at twenty-five.')
     UPDATE EcomProducts SET ProductShortDescription = N'A three-step quantity ladder: the price falls at five, at ten and at twenty-five.' WHERE ProductId = 'TCPROD0016' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0017' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'The same ladder with a steeper last step, for a buyer who orders by the pallet.')
     UPDATE EcomProducts SET ProductShortDescription = N'The same ladder with a steeper last step, for a buyer who orders by the pallet.' WHERE ProductId = 'TCPROD0017' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0018' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A ladder that starts at ten, so small orders all pay the same.')
-    UPDATE EcomProducts SET ProductShortDescription = N'A ladder that starts at ten, so small orders all pay the same.' WHERE ProductId = 'TCPROD0018' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0019' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A flat price with no break at all, the control the other four are read against.')
-    UPDATE EcomProducts SET ProductShortDescription = N'A flat price with no break at all, the control the other four are read against.' WHERE ProductId = 'TCPROD0019' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0020' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A ladder and an account price at once, so the narrower of the two wins.')
-    UPDATE EcomProducts SET ProductShortDescription = N'A ladder and an account price at once, so the narrower of the two wins.' WHERE ProductId = 'TCPROD0020' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0018' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Its first step is at ten, so small orders all pay the same.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Its first step is at ten, so small orders all pay the same.' WHERE ProductId = 'TCPROD0018' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0019' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Flat priced with no break at all, the control the other four are read against.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Flat priced with no break at all, the control the other four are read against.' WHERE ProductId = 'TCPROD0019' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0020' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Ladder and account price at once, so the narrower of the two wins.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Ladder and account price at once, so the narrower of the two wins.' WHERE ProductId = 'TCPROD0020' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0021' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A configurable kit: pick one component from each slot and the price follows.')
     UPDATE EcomProducts SET ProductShortDescription = N'A configurable kit: pick one component from each slot and the price follows.' WHERE ProductId = 'TCPROD0021' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0022' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Inside the account assortment, so a signed-in buyer sees it and an anonymous one does not.')
@@ -105,8 +105,8 @@ IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0023' AND Product
     UPDATE EcomProducts SET ProductShortDescription = N'In the open catalogue, visible to everyone, the comparison row for the band.' WHERE ProductId = 'TCPROD0023' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0024' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Scoped to one named account, the narrowest assortment the platform allows.')
     UPDATE EcomProducts SET ProductShortDescription = N'Scoped to one named account, the narrowest assortment the platform allows.' WHERE ProductId = 'TCPROD0024' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0025' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'In two assortments at once, which is how overlapping scopes resolve.')
-    UPDATE EcomProducts SET ProductShortDescription = N'In two assortments at once, which is how overlapping scopes resolve.' WHERE ProductId = 'TCPROD0025' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0025' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Sits in two assortments at once, which is how overlapping scopes resolve.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Sits in two assortments at once, which is how overlapping scopes resolve.' WHERE ProductId = 'TCPROD0025' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0026' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Carries an account discount off list, so the page shows both numbers.')
     UPDATE EcomProducts SET ProductShortDescription = N'Carries an account discount off list, so the page shows both numbers.' WHERE ProductId = 'TCPROD0026' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0027' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Discounted to a round figure rather than by a percentage.')
@@ -153,30 +153,57 @@ IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0047' AND Product
     UPDATE EcomProducts SET ProductShortDescription = N'Priced by customer group, which is how a whole dealer tier gets one rate.' WHERE ProductId = 'TCPROD0047' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0048' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Carries both, so the narrower customer-number price wins.')
     UPDATE EcomProducts SET ProductShortDescription = N'Carries both, so the narrower customer-number price wins.' WHERE ProductId = 'TCPROD0048' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0049' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'An agreement with a validity window, the shape of a seasonal rate.')
-    UPDATE EcomProducts SET ProductShortDescription = N'An agreement with a validity window, the shape of a seasonal rate.' WHERE ProductId = 'TCPROD0049' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0049' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Agreed for a validity window only, the shape of a seasonal rate.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Agreed for a validity window only, the shape of a seasonal rate.' WHERE ProductId = 'TCPROD0049' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0050' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'No agreement: list price signed in and signed out, the control row.')
     UPDATE EcomProducts SET ProductShortDescription = N'No agreement: list price signed in and signed out, the control row.' WHERE ProductId = 'TCPROD0050' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Datasheet and install guide, both downloadable from the page.')
     UPDATE EcomProducts SET ProductShortDescription = N'Datasheet and install guide, both downloadable from the page.' WHERE ProductId = 'TCPROD0051' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0052' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Datasheet held at a named revision, which is what the revision column is for.')
-    UPDATE EcomProducts SET ProductShortDescription = N'Datasheet held at a named revision, which is what the revision column is for.' WHERE ProductId = 'TCPROD0052' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0052' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Held at a named revision, which is what the revision column is for.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Held at a named revision, which is what the revision column is for.' WHERE ProductId = 'TCPROD0052' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0053' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A documented procedure rather than an object, rendered in the same table.')
     UPDATE EcomProducts SET ProductShortDescription = N'A documented procedure rather than an object, rendered in the same table.' WHERE ProductId = 'TCPROD0053' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0054' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Shares its install guide with the band, the way a range documents a common fitting.')
     UPDATE EcomProducts SET ProductShortDescription = N'Shares its install guide with the band, the way a range documents a common fitting.' WHERE ProductId = 'TCPROD0054' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0055' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A certificate beside the datasheet, so compliance is answered on the page.')
-    UPDATE EcomProducts SET ProductShortDescription = N'A certificate beside the datasheet, so compliance is answered on the page.' WHERE ProductId = 'TCPROD0055' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0055' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Compliance answered on the page: a certificate sits beside the datasheet.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Compliance answered on the page: a certificate sits beside the datasheet.' WHERE ProductId = 'TCPROD0055' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0056' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Related to three accessories, which is what the you-will-also-need strip is built from.')
     UPDATE EcomProducts SET ProductShortDescription = N'Related to three accessories, which is what the you-will-also-need strip is built from.' WHERE ProductId = 'TCPROD0056' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0057' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Related to its spares, so an owner can reorder a part without searching.')
-    UPDATE EcomProducts SET ProductShortDescription = N'Related to its spares, so an owner can reorder a part without searching.' WHERE ProductId = 'TCPROD0057' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
-IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0058' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Related to an alternative in the same band, the substitute a catalogue offers.')
-    UPDATE EcomProducts SET ProductShortDescription = N'Related to an alternative in the same band, the substitute a catalogue offers.' WHERE ProductId = 'TCPROD0058' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0057' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Names its spares, so an owner can reorder a part without searching.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Names its spares, so an owner can reorder a part without searching.' WHERE ProductId = 'TCPROD0057' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0058' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Carries an alternative in the same band, the substitute a catalogue offers.')
+    UPDATE EcomProducts SET ProductShortDescription = N'Carries an alternative in the same band, the substitute a catalogue offers.' WHERE ProductId = 'TCPROD0058' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0059' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'A kit member that points back at its kit, so the relation reads from both ends.')
     UPDATE EcomProducts SET ProductShortDescription = N'A kit member that points back at its kit, so the relation reads from both ends.' WHERE ProductId = 'TCPROD0059' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0060' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductShortDescription, N'') <> N'Relations in two groups at once, so the page draws two strips rather than one.')
     UPDATE EcomProducts SET ProductShortDescription = N'Relations in two groups at once, so the page draws two strips rather than one.' WHERE ProductId = 'TCPROD0060' AND ProductVariantId = '' AND ProductLanguageId = 'ENU';
+
+-- THE DISTINCTNESS GUARD, and it is the one #1158 asked for. Sixty rows, sixty
+-- sentences and every presence assert green is exactly what the templated state
+-- looked like: the component rendered on 5 of 5 PLP rows, the column was
+-- populated, the count was right, and the band read as filler because the five
+-- sentences differed only by a trailing index. A row count cannot see that. What
+-- can is a per-group DISTINCT: a band of five products must carry five different
+-- sentences, and the moment a template is reintroduced this drops below the
+-- product count and the seed stops rather than shipping placeholder prose.
+DECLARE @TcTemplatedBands INT = (
+    SELECT COUNT(*) FROM (
+        SELECT r.GroupProductRelationGroupId
+          FROM EcomProducts p
+          JOIN EcomGroupProductRelation r ON r.GroupProductRelationProductId = p.ProductId AND r.GroupProductRelationIsPrimary = 1
+         WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = '' AND p.ProductLanguageId = 'ENU'
+         GROUP BY r.GroupProductRelationGroupId
+        HAVING COUNT(DISTINCT ISNULL(p.ProductShortDescription, N'')) < COUNT(*)) bands);
+IF @TcTemplatedBands > 0
+    RAISERROR(N'truvio-b2b.sql: a product band carries fewer distinct short descriptions than it has products. Two neighbouring cards on the PLP would read as the same product, which is the one surface a buyer scans in order to tell them apart - and every row count, every presence assert and every byte length would still be green.', 16, 1);
+
+-- The same measurement one level down: an EMPTY description satisfies the
+-- distinctness test exactly once per band, so it is asserted separately.
+DECLARE @TcEmptyDescriptions INT = (
+    SELECT COUNT(*) FROM EcomProducts WHERE ProductId LIKE 'TCPROD%' AND ProductVariantId = ''
+       AND ProductLanguageId = 'ENU' AND LEN(LTRIM(RTRIM(ISNULL(ProductShortDescription, N'')))) = 0);
+IF @TcEmptyDescriptions > 0
+    RAISERROR(N'truvio-b2b.sql: a master carries no short description. The PLP row renders the component and paints nothing in it.', 16, 1);
 
 -- ---------------------------------------------------------------------------
 -- 2. Stock. A five-step profile, so the component has every state to draw.

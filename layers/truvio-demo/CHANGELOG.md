@@ -1,5 +1,39 @@
 # Changelog — truvio-demo
 
+## 1.5.1
+
+### The short descriptions stop sharing a stem, and a guard stops them starting again (Foundry #1158)
+
+The census measured one templated sentence per subgroup: 60 `ProductShortDescription`
+values, the component rendering on 5 of 5 PLP rows, every presence assert green, and five
+neighbouring cards differing only by a trailing index on the one surface a buyer scans in
+order to tell products apart. 1.3.0 replaced the template with sixty written sentences and
+closed most of that. What it did not close is what this release measures:
+
+- three sentences ran to **17 words** (`TCPROD0001`, `0003`, `0010`), past the band where
+  a PLP cell reads without truncating;
+- seven bands opened two or three of their five sentences on the **same stem** - three
+  "Priced per" in Units, three "Related to" in Relations, two "Datasheet" in Documents, and
+  four bands repeating an article. Five cards that all begin with the same two words scan
+  as one card however different their endings are;
+- and **nothing asserted any of it**. The file counted no descriptions at all.
+
+Fifteen sentences are rewritten - the three over-length ones trimmed, twelve re-opened on a
+distinct stem - and all sixty now sit at 8 to 16 words with sixty distinct values and no
+two in a band sharing their first three words. The rewrites are converging `UPDATE`s like
+every other row in this file: the predicate names the OLD text, so a host seeded at 1.5.0
+moves to the new sentence and a host that never had the old one is untouched.
+
+TWO GUARDS are added at the end of section 1, and both judge what the page would show:
+
+| guard | what it catches |
+|---|---|
+| `@TcTemplatedBands > 0` | a band whose distinct description count is below its product count - **the state #1158 names**, and the one a row count reads as perfect |
+| `@TcEmptyDescriptions > 0` | a master with no description at all, which satisfies the distinctness test exactly once per band and paints an empty component |
+
+No data shape changes: 60 rows before, 60 after. `truvio-b2b.sql` passes `SET PARSEONLY`
+on SQL Server 2022.
+
 ## 1.5.0
 
 ### Every product gets its own picture, and a second one to hover onto (Foundry #1157)

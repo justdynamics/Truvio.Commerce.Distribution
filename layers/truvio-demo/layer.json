@@ -1,6 +1,6 @@
 {
   "name": "truvio-demo",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -57,7 +57,7 @@
       "mode": "merge",
       "phase": "after-replace-deserialize",
       "order": 8,
-      "description": "The row-level B2B data the PLP and PDP need in order to say anything: a distinct one-sentence short description on all 60 masters, a five-step stock profile (healthy / low / zero-but-orderable / mid / deep) with expected-delivery dates and the matching per-location stock-unit rows, 96 REAL customer-group prices scoped to the buyer persona's own AccessUser group so a signed-in figure is visibly below list (marine fakes this: 22 price rows, zero with a user group), a three-step quantity ladder on ten masters rather than the one 1.1.x shipped, and five new contract prices on customer number TC-100200 beside the one the layer already had. Ends in a resolution guard that counts masters priced BELOW list for the persona, because a row count proves nothing about what the page shows.",
+      "description": "The row-level B2B data the PLP and PDP need in order to say anything: a distinct one-sentence short description on all 60 masters, eight to sixteen words, no two in a band opening on the same stem, each naming what THAT product demonstrates rather than what its band does (#1158), guarded by a per-band DISTINCT count and an empty-string count rather than by a row count, a five-step stock profile (healthy / low / zero-but-orderable / mid / deep) with expected-delivery dates and the matching per-location stock-unit rows, 96 REAL customer-group prices scoped to the buyer persona's own AccessUser group so a signed-in figure is visibly below list (marine fakes this: 22 price rows, zero with a user group), a three-step quantity ladder on ten masters rather than the one 1.1.x shipped, and five new contract prices on customer number TC-100200 beside the one the layer already had. Ends in a resolution guard that counts masters priced BELOW list for the persona, because a row count proves nothing about what the page shows.",
       "idempotent": true,
       "transactional": true,
       "requiresHostRestart": true
