@@ -1461,8 +1461,18 @@ DECLARE @TcRenderableSelectors INT = (
                                   AND vp.VariantOptionsProductRelationVariantId = o.VariantOptionId)) >= 2
          GROUP BY r.VariantGroupProductRelationProductId
         HAVING COUNT(*) >= 2) s);
+-- THE THRESHOLD IS SIX AND THE SUBJECT IS SIX, so the margin is zero: any master
+-- losing an axis puts this back into failure (Foundry #1133, verified at 4a4cd05b -
+-- TCPROD0001, 0011, 0016, 0031, 0041 and 0051, each bound to both TCVG-MODE and
+-- TCVG-TIER). A guard with no margin has to SAY what it measured, or the next run
+-- to trip it reports a threshold and leaves the reader to go and count.
+DECLARE @TcSelectorMsg NVARCHAR(800);
 IF @TcRenderableSelectors < 6
-    RAISERROR(N'truvio-catalog.sql: fewer than 6 variant masters can actually render a selector. A master needs a row in EcomVariantGroupProductRelation per axis AND at least two of that axis options on itself; without both the PDP draws an empty div and the product copy telling the reader to open the selector is a lie on the page.', 16, 1);
+BEGIN
+    SET @TcSelectorMsg = CONCAT(N'truvio-catalog.sql: ', @TcRenderableSelectors,
+        N' of 6 required variant masters can actually render a selector. A master needs a row in EcomVariantGroupProductRelation per axis AND at least two of that axis options on itself; without both the PDP draws an empty div and the product copy telling the reader to open the selector is a lie on the page. The catalogue ships exactly 6, so this is a count of what survived, not a shortfall against a generous target.');
+    RAISERROR(@TcSelectorMsg, 16, 1);
+END
 
 -- ---------------------------------------------------------------------------
 -- 5. The BOM kit. Each slot binds a GROUP and names a default child, which is
