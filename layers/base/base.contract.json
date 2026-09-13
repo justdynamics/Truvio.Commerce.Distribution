@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "2.2.0",
+  "baseContractVersion": "2.2.1",
   "swiftVersion": "2.4.0",
   "compat": {
     "dw": {
@@ -25,9 +25,8 @@
     ]
   },
   "compatNote": "COMPATIBILITY FLOOR the base states and every addition inherits (v5 version spine, V5-PLAN 2.2). Floors plus a single proven point, never a support matrix: rolling latest-only means the gate proves exactly one (dw, apps, swift tag) triple per run, and what it proved is recorded upward in layers/INDEX.json gateProven - written by the Foundry, never by hand. `dw.min` is the platform floor, `dw.tfm` the single target framework the host must build against, `swift.tag` the dynamicweb/Swift release tag (the 3-digit `swiftVersion` above is the same release without the tag form). `apps[].required: false` is an optional companion app: absent is fine, present below `min` is not. An addition MAY restate `compat` in its own layer.json to raise a floor; it may never lower one.",
-  "minSerializerVersion": "0.8.1-beta",
-  "minSerializerVersionDeprecated": "DEPRECATED ALIAS of compat.apps[id=Truvio.Commerce.Serializer].min - kept one release for consumers still reading this field; new readers use compat.apps.",
-  "minSerializerVersionNote": "ENGINE FLOOR (base >= 3.0.0): Truvio.Commerce.Serializer >= 0.8.1-beta — the first engine retargeted to DW 10.28.1-PreRelease (Swift 2.4 roll-forward). Carries everything the 0.8.0-beta floor guaranteed (render-time page/grid-row/paragraph permission blocks + deferred permission re-apply + user-group cache refresh). Proven on DW 10.28.1-PreRelease; stable re-prove due when DW 10.28 lands stable on NuGet.",
+  "minSerializerVersion": "0.9.0-beta",
+  "minSerializerVersionDeprecated": "DEPRECATED ALIAS, not a second floor. The one serializer floor is compat.apps[id=Truvio.Commerce.Serializer].min: the Foundry compat leg (Test-CompatFloors) and the dw-demo-base install step read that key and nothing else. This field repeats the same value for prose readers that still name it (dynamicweb/skills dw-users-permissions page-gating.md); tools/ci/Validate-Distribution.ps1 fails when it disagrees with compat.apps, so it can never state a different number. Raise compat.apps and this field together; remove this field once no reader names it.",
   "serializerTaughtSurfaceNote": "TAUGHT SURFACE vs FLOOR — deliberately different, and the floor is the one that binds. The engine's current release is 1.0.0-beta, whose routes (Serialize / Deserialize / PackageDownload), inline Scope and per-document YAML ownership header are what the skills corpus teaches and what the Foundry harness calls. The FLOOR here STAYS at 0.9.0-beta because no layer in this Distribution authors an ownership header yet, and a document without one deserializes under the pass mode — so every layer still deserializes correctly on 0.9.0-beta and the floor has no reason to rise. It RISES to >=1.0.0-beta in the same commit that introduces the first ownership header in any layer's YAML: a 0.9.x engine reading 1.0-written rows fails strict on the unknown ownership column, so the floor and the first header must move together. Raise compat.apps[id=Truvio.Commerce.Serializer].min, not this note.",
   "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution, base 3.0.0 FRAMEWORK-ONLY). The Swift 2.4 base split moved ALL content (both mode trees) and UrlPath to the surface-swift layer; the base now ships only the framework SQL sets + this contract + SQL-predicate config. Additions (feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Content-scoped contract bits (content areas, langPrefix, navDepth, page anchors, title rules, per-environment Area exclusions, protected Swift item types) moved to layers/surface-swift/surface.contract-notes.json. The gate reads this file for the base-contract collision check.",
   "idRules": {
