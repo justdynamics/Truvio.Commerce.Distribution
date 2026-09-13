@@ -1082,8 +1082,9 @@ IF NOT EXISTS (SELECT 1 FROM EcomVariantsOptions WHERE VariantOptionId = 'TCVO-M
     INSERT INTO EcomVariantsOptions (VariantOptionId, VariantOptionLanguageId, VariantOptionGroupId, VariantOptionName, VariantOptionSortOrder) VALUES ('TCVO-MODE-PUB', 'ENU', 'TCVG-MODE', 'Published', 2);
 
 -- ---------------------------------------------------------------------------
--- 4. The 6 variant masters: option relations, the 36 combination rows, and the
---    explicit per-variant price. A combination row's ProductVariantId is the
+-- 4. The 6 variant masters: the AXIS BINDING, option relations, the 36
+--    combination rows, and the explicit per-variant price. A combination row's
+--    ProductVariantId is the
 --    dot-joined option ids - that string IS the variant key the storefront
 --    resolves, so it is written literally and never derived at read time.
 --
@@ -1099,6 +1100,92 @@ IF NOT EXISTS (SELECT 1 FROM EcomVariantsOptions WHERE VariantOptionId = 'TCVO-M
 -- ---------------------------------------------------------------------------
 IF COL_LENGTH('EcomPrices', 'PriceProductVariantId') IS NULL
     RAISERROR(N'truvio-catalog.sql: EcomPrices has no PriceProductVariantId column on this platform build. Per-variant prices cannot be scoped; read the live column names off sys.columns before seeding.', 16, 1);
+
+-- THE SELECTOR RENDERS OFF THE AXIS BINDING, NOT OFF THE COMBINATIONS.
+-- 1.1.x seeded the axes (EcomVariantGroups), the options (EcomVariantsOptions),
+-- the per-master option relations (EcomVariantOptionsProductRelation) and all 36
+-- combination rows with their own prices - and the PDP variant selector still
+-- rendered EMPTY, signed in and signed out, on the very product whose own
+-- Overview copy tells the reader to open it. Every count was right and nothing
+-- showed.
+--
+-- Diagnosed on the live DW 10.28.10 host: EcomVariantGroupProductRelation held
+-- ZERO rows, for this layer and for the whole database. That table is the one
+-- that says WHICH AXES A PRODUCT USES. The option relations say which values on
+-- an axis a product offers, and the combination rows say what each intersection
+-- costs, but neither answers the selector's first question - and with no answer
+-- it has nothing to draw a control for, so it draws nothing at all and reports
+-- no error. The master carried ProductVariantGroupCounter = 0 beside it, which
+-- is the same fact stated a second way.
+--
+-- Proven in a rolled-back transaction before it was written here: with the 12
+-- rows below present, TCPROD0001 resolves two axes - Tier with 3 options and
+-- Mode with 2 - and all 6 of its dot-joined combination keys carry exactly one
+-- separator, so every key names a point on the grid the two axes describe.
+--
+-- VariantGroupProductRelationId is NOT an identity: it is a NOT NULL nvarchar
+-- key, so each row is named deterministically rather than left to the platform.
+-- Measured off sys.columns, in this file's own idiom.
+IF COL_LENGTH('EcomVariantGroupProductRelation', 'VariantGroupProductRelationId') IS NULL
+    RAISERROR(N'truvio-catalog.sql: EcomVariantGroupProductRelation is missing its id column on this platform build. The variant selector reads this table to learn which axes a product uses; without it every variant master renders an empty selector, silently.', 16, 1);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0001' AND VariantGroupProductRelationVariantGroupId = 'TCVG-TIER')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0001-TIER', 'TCPROD0001', 'TCVG-TIER', 1, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0001' AND VariantGroupProductRelationVariantGroupId = 'TCVG-MODE')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0001-MODE', 'TCPROD0001', 'TCVG-MODE', 2, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0011' AND VariantGroupProductRelationVariantGroupId = 'TCVG-TIER')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0011-TIER', 'TCPROD0011', 'TCVG-TIER', 1, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0011' AND VariantGroupProductRelationVariantGroupId = 'TCVG-MODE')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0011-MODE', 'TCPROD0011', 'TCVG-MODE', 2, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0016' AND VariantGroupProductRelationVariantGroupId = 'TCVG-TIER')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0016-TIER', 'TCPROD0016', 'TCVG-TIER', 1, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0016' AND VariantGroupProductRelationVariantGroupId = 'TCVG-MODE')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0016-MODE', 'TCPROD0016', 'TCVG-MODE', 2, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0031' AND VariantGroupProductRelationVariantGroupId = 'TCVG-TIER')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0031-TIER', 'TCPROD0031', 'TCVG-TIER', 1, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0031' AND VariantGroupProductRelationVariantGroupId = 'TCVG-MODE')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0031-MODE', 'TCPROD0031', 'TCVG-MODE', 2, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0041' AND VariantGroupProductRelationVariantGroupId = 'TCVG-TIER')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0041-TIER', 'TCPROD0041', 'TCVG-TIER', 1, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0041' AND VariantGroupProductRelationVariantGroupId = 'TCVG-MODE')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0041-MODE', 'TCPROD0041', 'TCVG-MODE', 2, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0051' AND VariantGroupProductRelationVariantGroupId = 'TCVG-TIER')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0051-TIER', 'TCPROD0051', 'TCVG-TIER', 1, 0);
+IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0051' AND VariantGroupProductRelationVariantGroupId = 'TCVG-MODE')
+    INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0051-MODE', 'TCPROD0051', 'TCVG-MODE', 2, 0);
+
+-- The counters the backend keeps beside the relations, derived from the rows
+-- rather than typed, so they cannot drift from what was actually seeded.
+UPDATE p
+   SET p.ProductVariantGroupCounter = x.axes,
+       p.ProductVariantCounter      = x.combos,
+       p.ProductVariantProdCounter  = x.combos
+  FROM EcomProducts p
+  CROSS APPLY (SELECT
+        (SELECT COUNT(*) FROM EcomVariantGroupProductRelation r WHERE r.VariantGroupProductRelationProductId = p.ProductId) AS axes,
+        (SELECT COUNT(*) FROM EcomProducts v WHERE v.ProductId = p.ProductId AND v.ProductVariantId <> '' AND v.ProductLanguageId = p.ProductLanguageId) AS combos) x
+ WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = ''
+   AND (p.ProductVariantGroupCounter <> x.axes OR p.ProductVariantCounter <> x.combos OR p.ProductVariantProdCounter <> x.combos);
+
+-- THE SELECTOR GUARD. A row count would have been green on every run that
+-- shipped an empty selector, so this asserts the thing the control needs: a
+-- master bound to at least two axes, each of which offers at least two options
+-- THAT MASTER actually carries. Anything less is a selector with nothing to
+-- choose between, which renders as an empty div and says nothing about why.
+DECLARE @TcRenderableSelectors INT = (
+    SELECT COUNT(*) FROM (
+        SELECT r.VariantGroupProductRelationProductId AS prod
+          FROM EcomVariantGroupProductRelation r
+         WHERE r.VariantGroupProductRelationProductId LIKE 'TCPROD%'
+           AND (SELECT COUNT(*) FROM EcomVariantsOptions o
+                 WHERE o.VariantOptionGroupId = r.VariantGroupProductRelationVariantGroupId
+                   AND o.VariantOptionLanguageId = 'ENU'
+                   AND EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation vp
+                                WHERE vp.VariantOptionsProductRelationProductId = r.VariantGroupProductRelationProductId
+                                  AND vp.VariantOptionsProductRelationVariantId = o.VariantOptionId)) >= 2
+         GROUP BY r.VariantGroupProductRelationProductId
+        HAVING COUNT(*) >= 2) s);
+IF @TcRenderableSelectors < 6
+    RAISERROR(N'truvio-catalog.sql: fewer than 6 variant masters can actually render a selector. A master needs a row in EcomVariantGroupProductRelation per axis AND at least two of that axis options on itself; without both the PDP draws an empty div and the product copy telling the reader to open the selector is a lie on the page.', 16, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0001' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-STD')
     INSERT INTO EcomVariantOptionsProductRelation (VariantOptionsProductRelationProductId, VariantOptionsProductRelationVariantId) VALUES ('TCPROD0001', 'TCVO-TIER-STD');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0001' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-ADV')
@@ -2242,4 +2329,4 @@ IF EXISTS (SELECT 1 FROM EcomCurrencies WHERE CurrencyRate = 1)
     UPDATE EcomCurrencies SET CurrencyRate = 100 WHERE CurrencyRate = 1;
 
 COMMIT TRAN;
-PRINT 'Done - truvio-demo catalogue: 16 groups (4 top + 12 re-screened sub), 60 masters + 36 variant rows, 40 prices, 2 BOM slots, 4 categories / 28 buyer-readable fields / 180 values in SHOP1; 60 long descriptions and the tc_specs field display group the PDP spec table reads, its 28 members in the ProductCategory|<category>|<field> reference form and proven to resolve.';
+PRINT 'Done - truvio-demo catalogue: 16 groups (4 top + 12 re-screened sub), 60 masters + 36 variant rows bound to their 2 axes and proven renderable, 40 prices, 2 BOM slots, 4 categories / 28 buyer-readable fields / 180 values in SHOP1; 60 long descriptions and the tc_specs field display group the PDP spec table reads, its 28 members in the ProductCategory|<category>|<field> reference form and proven to resolve.';
