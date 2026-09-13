@@ -2,6 +2,60 @@
 
 
 
+## 1.10.1
+
+### The related-products table served the prices the padlock withholds (Foundry #1154)
+
+A DATA LEAK, and the only defect in this round that is not a cosmetic one. Area 3
+ships `AnonymousUsers = cart-price`. The gate demonstrably works for the two PDP
+components that read it - the price column renders the sign-in lock and the
+add-to-cart column measures `0 px` anonymous, `60 px` signed in. The related-products
+list does not read it. Measured anonymously on both PDPs at Distribution 4a4cd05b:
+`main [itemprop='price']` totals **5**, all five inside
+`[data-dw-itemtype='swift-v2_relatedproductslist']`, each with a matching
+`.text-price` and an `itemprop='priceCurrency'` content of `USD`. Signed in the total
+is 6 - the same five plus the one the price column is allowed to show. So the exact
+figures the padlock exists to withhold are in the served HTML of the same page,
+machine-readable, and scraping a gated B2B price list needs no session: it needs the
+PDP of one product that relates to others.
+
+The render path is `Swift-v2_RelatedProductsList.cshtml` -> a ServicePage ->
+`eCom/ProductCatalog/RelatedProductsList.cshtml`, and the stock 2.4 file of that path
+is where the row is built. This layer now ships an OVERRIDE of it. That is a different
+kind of file from everything else the layer carries: a layout variant is inert until a
+paragraph's `Template` field names it, whereas a file at a stock render path takes
+effect the moment the layer is on disk. The override is therefore kept byte-minimal -
+**seven inserted lines and zero modified stock lines**, verified by diff against the
+2.4 tree:
+
+- two booleans beside the two the stock file already computes and then never uses -
+  `hidePrice` and `hideAddToCart`, spelled exactly as `Swift-v2_ProductPrice.cshtml`
+  and `Swift-v2_ProductAddToCart.cshtml` spell them, so the three files read as one
+  idiom;
+- `@if (!hidePrice)` around the contents of the price cell;
+- `@if (!hideAddToCart)` around the cart form, because the same gate's other half is
+  the third copy of the figure - the form's hidden `ProductPrice` input - and the PDP
+  buy panel already hides its cart anonymously, so the row now matches it.
+
+Both cells KEEP their `<td>`. The table's header row is unconditional, and a dropped
+cell shifts every column after it. Suppressing contents and not the cell is what the
+stock slider card (`eCom/ProductCatalog/ProductSliderStandard/Product.cshtml`) does in
+the same situation, and it is the whole of the pattern being copied.
+
+No lock badge is rendered here. The affordance is the theme's
+`Swift-v2_ProductPrice/PriceWithSignIn` variant and it is deliberately the one place
+on the page that states the gate; a badge per related row would be noise and would
+break the assert that counts `.td-price-lock` as exactly 1.
+
+On an area whose `AnonymousUsers` value does not contain `price`, neither branch is
+reached and the file renders byte-identical output to the stock one.
+
+VALIDATION is the mirror, not the absence: anonymously `main [itemprop='price']` and
+`main .text-price` must both be 0 on both PDPs while `.td-price-lock` and its
+`__action` anchor stay at 1, and signed in both counts must be 6. A selector that
+matches nothing reads the same as a subject correctly hidden, so the control is
+flipping the area's `AnonymousUsers` value off and watching the anonymous count rise.
+
 ## 1.10.0
 
 Four composition defects from the v5 round-two census, all the same shape: a
