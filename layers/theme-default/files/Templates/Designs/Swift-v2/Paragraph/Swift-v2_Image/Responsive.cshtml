@@ -1,0 +1,70 @@
+@inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.ParagraphViewModel>
+@using Dynamicweb.Frontend
+@using System.Collections.Generic
+
+@* Responsive.cshtml — a layout VARIANT of Swift-v2_Image. NET-NEW and INERT: the standard
+   Plain.cshtml is untouched and stays the default, and this file renders nothing until a
+   paragraph's Template field names it.
+
+   WHY IT EXISTS
+   Plain.cshtml emits one fixed 1680px-wide GetImage request for every viewport, so a
+   350px-wide slot on a phone still downloads the full-width render. This variant adds
+   srcset and sizes so the browser picks a width, drops quality to 80, marks the image
+   lazy with async decoding, and reserves the box with explicit width/height so the
+   surrounding layout does not shift when the bytes land. None of that is reachable from a
+   stylesheet — they are attributes on the img the template emits.
+
+   sizes is "100vw", which is correct for a full-bleed band and slightly over-requests for
+   an image placed in a narrower column. Over-requesting renders sharp; under-requesting
+   renders soft, so the default errs the safe way. Change it per placement if you care.
+
+   FILL-IN RECIPE
+   1. Set the paragraph's Template field to Responsive.cshtml.
+   2. Add your own images to the `intrinsic` map below, keyed by the exact file path, so
+      the width/height attributes are emitted. An image that is NOT listed renders without
+      width/height rather than with a wrong ratio — which is the safe failure, and the
+      reason this map ships empty instead of guessing.
+   3. If the image is the page's largest paint, use the Poster variant
+      TextMiddleLeftLcp.cshtml instead: this one is deliberately lazy. *@
+
+@{
+    // ImageFileViewModel exposes no intrinsic size (only Path / Name / Ratio / ToGetImage),
+    // so an aspect ratio has to be declared per asset to emit width and height. This map
+    // ships EMPTY: the theme owns no images, and a wrong ratio here is worse than no
+    // attributes at all. A brand overlay fills it in with its own paths.
+    var intrinsic = new Dictionary<string, int[]>(StringComparer.OrdinalIgnoreCase) {
+        // { "/Files/Images/<YourBrand>/hero.jpg", new[] { 4333, 2889 } },
+    };
+}
+
+@if (Model.Item.TryGetImageFile("Image", out ImageFileViewModel image))
+{
+    <figure class="d-flex align-items-center justify-content-center position-relative m-0">
+        @if (image.IsSvg())
+        {
+            @ReadFile(image.Path)
+        }
+        else
+        {
+            string enc = Dynamicweb.Context.Current.Server.UrlEncode(image.Path);
+            Func<int, string> u = w => $"/Admin/Public/GetImage.ashx?image={enc}&width={w}&format=webp&quality=80";
+            object attrW = null, attrH = null;
+            int[] dims;
+            if (intrinsic.TryGetValue(image.Path, out dims))
+            {
+                attrW = 1280;
+                attrH = (int)Math.Round(1280.0 * dims[1] / dims[0]);
+            }
+            <img src="@u(1280)"
+                 srcset="@u(480) 480w, @u(768) 768w, @u(1024) 1024w, @u(1280) 1280w, @u(1600) 1600w"
+                 sizes="100vw"
+                 width="@attrW" height="@attrH"
+                 loading="lazy" decoding="async"
+                 class="img-fluid" alt="@Model.Item?.GetString("AltText")" />
+        }
+        @if (Model.Item.TryGetLink("Link", out LinkViewModel link))
+        {
+            <a href="@link.Url" class="stretched-link" title="@link.Url"></a>
+        }
+    </figure>
+}

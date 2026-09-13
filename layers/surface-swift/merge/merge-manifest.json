@@ -17,8 +17,7 @@
       "Twitter_Site",
       "MetaSiteName",
       "MetaImage",
-      "MetaImageALT",
-      "CustomHeadInclude"
+      "MetaImageALT"
     ]
   },
   "excludeXmlElementsByType": {

@@ -218,7 +218,13 @@ BEGIN
           AND t.is_ms_shipped = 0
           AND c.is_computed = 0
           AND ty.name IN (N'date', N'datetime', N'datetime2', N'smalldatetime')
-          AND NOT EXISTS (SELECT 1 FROM dbo._demoClockExclusion e WHERE e.TableName = t.name)
+          -- sys.tables/sys.columns name is sysname in the catalog collation
+          -- (Latin1_General_100_CI_AS_KS_WS_SC); the layer's own sysname columns take
+          -- the database default (Latin1_General_100_CI_AS). COLLATE DATABASE_DEFAULT
+          -- on the compare, or the batch fails to compile with Msg 468 before the
+          -- procedure's own shape guards ever run.
+          AND NOT EXISTS (SELECT 1 FROM dbo._demoClockExclusion e
+                          WHERE e.TableName = t.name COLLATE DATABASE_DEFAULT)
           AND t.name NOT LIKE N'%[_]BAK[_]%'      -- hand-taken backup snapshots
           AND t.name NOT LIKE N'%Log'             -- logging tables
           AND EXISTS (SELECT 1 FROM sys.partitions p
@@ -237,7 +243,8 @@ BEGIN
                 CAST(QUOTENAME(dc.ColumnName) + N' IS NOT NULL' AS NVARCHAR(MAX)) AS WhereExpr
         FROM dateCols dc
         LEFT JOIN dbo._demoClockGuard g
-               ON g.TableName = dc.TableName AND g.ColumnName = dc.ColumnName
+               ON g.TableName  = dc.TableName  COLLATE DATABASE_DEFAULT
+              AND g.ColumnName = dc.ColumnName COLLATE DATABASE_DEFAULT
     ),
     perTable AS (
         SELECT  ce.TableName,
@@ -327,7 +334,9 @@ BEGIN
          GETDATE(), '9999-12-31', '2000-01-01', DATEADD(minute, 1440, GETDATE()), 1, 0,
          1440, -1, -1, -1,
          @addin, @settings,
-         N'Keeps the sample-data fixtures anchored to today. Shifts every operational date column by DATEDIFF(day, _demoClock.AnchoredTo, today), then re-anchors. Whole-day and uniform, so intra-day ordering and every relative gap survive. Config and logging tables are excluded (dbo._demoClockExclusion); state-marker columns carry their own guard (dbo._demoClockGuard).',
+         -- TaskComment is NVARCHAR(255): a longer literal fails the INSERT with
+         -- Msg 2628 (String or binary data would be truncated).
+         N'Keeps sample-data fixtures anchored to today: shifts every operational date column by DATEDIFF(day, _demoClock.AnchoredTo, today), then re-anchors. Whole-day and uniform, so ordering and gaps survive. Skips _demoClockExclusion; guards _demoClockGuard.',
          0, 0, 1, 1);
 END
 GO

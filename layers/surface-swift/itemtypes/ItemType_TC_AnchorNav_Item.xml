@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<!--
+  TC_AnchorNav_Item — one jump link. Repeater child of TC_AnchorNav.
+
+  Two plain string fields, so an editor renames a link or repoints it without seeing HTML.
+  fieldForTitle="Label" makes the editor list read as the link labels.
+
+  NO defaultValue on either field, deliberately: an empty default renders empty and is
+  visible, where a realistic default renders plausible content for a field that never
+  arrived and reads as a success.
+-->
+<items>
+  <item category="Truvio/Paragraphs/ListItems" name="Anchor link" systemName="TC_AnchorNav_Item" description="" icon="Link" iconColor="None" image="" includeInUrlIndex="False" pageDefaultView="item" paragraphDefaultModule="" fieldForTitle="Label" title="" inherits="">
+    <fields>
+      <field name="Label" systemName="Label" description="The visible link text." type="System.String, System.Private.CoreLib" excludeFromSearch="False" defaultValueCulture="en-US" defaultValue="">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor" /></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Anchor id" systemName="AnchorId" description="The id of the section heading to jump to, with NO leading hash. e.g. overview" type="System.String, System.Private.CoreLib" excludeFromSearch="True" defaultValueCulture="en-US" defaultValue="">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor" /></editorConfuguration>
+        </editor>
+      </field>
+    </fields>
+    <rules>
+      <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
+      <rule name="" type="Dynamicweb.Content.Items.Activation.ChildItemTypeRestrictionRule, Dynamicweb" value="" />
+      <rule name="Allowed children" type="Dynamicweb.Content.Items.Activation.ChildRestrictionRule, Dynamicweb" value="" />
+      <rule name="Allowed parents" type="Dynamicweb.Content.Items.Activation.ParentItemTypeRestrictionRule, Dynamicweb" value="TC_AnchorNav" />
+      <rule name="Allowed parent types" type="Dynamicweb.Content.Items.Activation.ParentRestrictionRule, Dynamicweb" value="" />
+    </rules>
+    <layout>
+      <groups>
+        <group name="Anchor link settings" systemName="General" sectionName="" collapsibleState="None" visibilityField="" visibilityCondition="" visibilityConditionValueType="" visibilityConditionValue="">
+          <fields>
+            <field systemName="Label" />
+            <field systemName="AnchorId" />
+          </fields>
+        </group>
+      </groups>
+    </layout>
+  </item>
+</items>

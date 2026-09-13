@@ -30,6 +30,14 @@ Checks (all fail-closed; any failure -> exit 1):
                          prose; CHANGELOG history + names that are substrings of a live
                          identifier are out of scope).
 
+ 10. Staging arrays   — (Foundry #1167) files[] / repositories[] / itemtypes[] are the
+                        layer's declared staging surface; each is diffed against the tree
+                        it describes, BOTH directions (declared-not-on-disk and
+                        disk-not-declared both FAIL). A non-empty tree with no declaration
+                        FAILs; [] is how a layer states it ships none. .gitkeep excluded.
+                        Every placeholders[].path must appear in one of the three arrays,
+                        so the placeholder assert has a declared universe.
+
 Usage: pwsh tools/ci/Validate-Distribution.ps1  (run from repo root; exits 0 pass / 1 fail)
        pwsh tools/ci/Validate-Distribution.ps1 -RegenerateIndex  (rewrite the layers/INDEX.json
        `layers` array from the live tree, preserving `retired` + `gateProven` + operator-authored
@@ -152,6 +160,72 @@ foreach ($d in $layerDirs) {
     $bad = @(Get-ChildItem -LiteralPath $d.FullName -Recurse -File -ErrorAction SilentlyContinue |
         Where-Object { $_.Extension -in '.yml', '.yaml', '.sql', '.bacpac', '.bak', '.mdf', '.ldf' })
     & $log ($bad.Count -eq 0) "$k '$($d.Name)': SPEC-06 disk-overlay-only ($($bad.Count) forbidden file(s))"
+}
+
+# ---------------------------------------------------------------------------
+# 10. Declared staging arrays vs disk (Foundry #1167).
+#     files[] / repositories[] / itemtypes[] are the layer's DECLARED staging surface.
+#     Each is compared with the tree it describes, BOTH directions:
+#       declared-not-on-disk -> a stale, renamed or retired path still promised;
+#       disk-not-declared    -> a path that stages onto a host and that no manifest
+#                               check can see (41% of this distribution's host writes
+#                               before this check existed).
+#     The arrays are Files-relative on the COMPOSED SITE, not layer-relative, which is
+#     the same vocabulary placeholders[].path uses - so declaring them also gives the
+#     placeholder assert a declared universe to resolve against.
+#     A tree that exists and is non-empty MUST be declared; declaring [] is how a layer
+#     states positively that it ships none. .gitkeep is never listed.
+# ---------------------------------------------------------------------------
+$stagingTrees = @(
+    @{ key = 'files';        dir = 'files';        prefix = '' }
+    @{ key = 'repositories'; dir = 'repositories'; prefix = 'System/Repositories/' }
+    @{ key = 'itemtypes';    dir = 'itemtypes';    prefix = 'System/Items/' }
+)
+foreach ($d in $layerDirs) {
+    if (-not $manifests.ContainsKey($d.Name)) { continue }
+    $m = $manifests[$d.Name]
+    foreach ($t in $stagingTrees) {
+        $treePath = Join-Path $d.FullName $t.dir
+        $hasTree  = Test-Path -LiteralPath $treePath
+        $declared = $null
+        if ($m.PSObject.Properties.Name -contains $t.key) { $declared = @($m.($t.key) | ForEach-Object { "$_" }) }
+
+        $onDisk = @()
+        if ($hasTree) {
+            $onDisk = @(Get-ChildItem -LiteralPath $treePath -Recurse -File -ErrorAction SilentlyContinue |
+                Where-Object { $_.Name -ne '.gitkeep' } |
+                ForEach-Object { $t.prefix + ($_.FullName.Substring($treePath.Length + 1) -replace '\\', '/') })
+        }
+
+        if ($null -eq $declared) {
+            # Absent key is only acceptable when there is nothing to declare.
+            & $log ($onDisk.Count -eq 0) "layer '$($d.Name)': $($t.key)[] not declared; $($t.dir)/ ships $($onDisk.Count) path(s)$(if($onDisk.Count){' - DECLARED NOWHERE'})"
+            continue
+        }
+
+        $declSet = @{}; foreach ($x in $declared) { $declSet[$x] = $true }
+        $diskSet = @{}; foreach ($x in $onDisk)   { $diskSet[$x] = $true }
+        $notOnDisk   = @($declared | Where-Object { -not $diskSet.ContainsKey($_) })
+        $notDeclared = @($onDisk   | Where-Object { -not $declSet.ContainsKey($_) })
+        $ok = ($notOnDisk.Count -eq 0 -and $notDeclared.Count -eq 0)
+        $detail = "$($declared.Count) declared / $($onDisk.Count) on disk"
+        if (-not $ok) {
+            $detail += " — declared-not-on-disk $($notOnDisk.Count)$(if($notOnDisk.Count){' (' + (($notOnDisk | Select-Object -First 3) -join ', ') + ')'})"
+            $detail += ", disk-not-declared $($notDeclared.Count)$(if($notDeclared.Count){' (' + (($notDeclared | Select-Object -First 3) -join ', ') + ')'})"
+        }
+        & $log $ok "layer '$($d.Name)': $($t.key)[] vs $($t.dir)/ — $detail"
+    }
+
+    # Every placeholder must resolve to a path the layer actually declares somewhere.
+    foreach ($ph in @($m.placeholders)) {
+        if (-not $ph) { continue }
+        $path = "$($ph.path)"
+        $universe = @()
+        foreach ($t in $stagingTrees) {
+            if ($m.PSObject.Properties.Name -contains $t.key) { $universe += @($m.($t.key) | ForEach-Object { "$_" }) }
+        }
+        & $log ($universe -contains $path) "layer '$($d.Name)': placeholder '$path' is declared in files[]/repositories[]/itemtypes[]"
+    }
 }
 
 # ---------------------------------------------------------------------------

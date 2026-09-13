@@ -1,0 +1,61 @@
+@inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.ParagraphViewModel>
+@using System.IO
+@using Dynamicweb.Frontend
+
+@*
+	PosterLazy.cshtml — a layout VARIANT of Swift-v2_VideoPlayer. NET-NEW and INERT: the
+	standard Plain.cshtml and Components/VideoPlayer.cshtml are untouched, and this file
+	renders nothing until a paragraph's Template field names it.
+
+	WHY IT EXISTS
+	Components/VideoPlayer.cshtml hard-codes preload="auto", so every page carrying a video
+	downloads the whole file on load — several megabytes before the visitor has decided to
+	watch anything. That attribute cannot be reached from a stylesheet and rewriting it at
+	runtime costs a MutationObserver on every page; a layout variant fixes it server-side
+	for nothing.
+
+	DIFFERENCES FROM Plain.cshtml
+	  preload="none"           zero video bytes until the visitor presses play
+	  poster="<sibling>.jpg"   a real still paints immediately instead of a black box
+	  native controls          swift.js only reveals its custom play button on the video's
+	                           `loadeddata` event, which preload="none" never fires, so the
+	                           native control is what keeps play reachable. Dropping
+	                           `controls` here is the one edit that silently breaks it.
+	  16x9 ratio box           explicit geometry, so the box is reserved before bytes land
+
+	FILL-IN RECIPE
+	Set the paragraph's Template field to PosterLazy.cshtml, and upload a poster still
+	beside the video with the same base name and a .jpg extension (or set the video's own
+	Thumbnail, which wins). Without a poster the element paints an empty box until play.
+*@
+
+@if (Model.Item.TryGetVideo("VideoSource", out VideoViewModel video) && !string.IsNullOrEmpty(video.Path))
+{
+	var videoName = Model.Item.GetString("VideoName");
+	if (string.IsNullOrEmpty(videoName)) { videoName = video.Name; }
+	var videoDescription = Model.Item.GetString("VideoDescription");
+
+	var poster = !string.IsNullOrEmpty(video.Thumbnail)
+		? video.Thumbnail
+		: Path.ChangeExtension(video.Path, ".jpg");
+
+	<swift-video-player itemscope itemtype="https://schema.org/VideoObject">
+		<figure class="m-0 ratio ratio-16x9">
+			<meta itemprop="name" content="@videoName" />
+			<meta itemprop="description" content="@videoDescription" />
+			<meta itemprop="contentUrl" content="@video.Path" />
+			<meta itemprop="thumbnailUrl" content="@poster" />
+
+			@if (video.IsExternalLink())
+			{
+				<iframe src="@video.ToEmbedUrl()" loading="lazy" title="@videoName" frameborder="0" allow="fullscreen; picture-in-picture; autoplay; clipboard-write; encrypted-media; web-share"></iframe>
+			}
+			else
+			{
+				<video preload="none" controls playsinline poster="@poster" title="@videoName" data-td-video-lazy>
+					<source src="@video.Path" type="@video.GetVideoType()">
+				</video>
+			}
+		</figure>
+	</swift-video-player>
+}

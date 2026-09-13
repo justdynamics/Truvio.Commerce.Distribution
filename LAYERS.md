@@ -45,6 +45,7 @@ A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampl
 
 | Edition | Composition | Status |
 |---------|-------------|--------|
+| `base-swift` | base + `surface-swift` + theme `default`, NO sample data and NO feature layers | **Awaiting its first gate run** — the foundational baseline (V5-PLAN 2.4): an empty shop with a complete themed storefront and the declared placeholder footprint of both layers present and inert. `compatAxes` names dw + apps + swift, so an unmet floor fails instead of warning; `criticalPaths` are under the culture segment, because `AreaUrlName` is decorative on a single-area host (Foundry 965, 1005). |
 | `base-only` | base 3.1.1 alone — framework-only, no theme (nothing to skin) | **Proven on DW 10.28.1-PreRelease** — API/DB-level proof (framework row-count contract + /Admin/; zero pages by design). |
 | `swift-demo` | base + `surface-swift` + seven feature layers (`feature-reordering` + `feature-pricing` + `feature-rma` + `feature-subscription-orders` + `feature-bom-configurator` + `feature-b2b-comms` + `feature-baseline-guide`) + sample data + theme `default` | **Proven on DW 10.28.1-PreRelease** — the full Swift 2.4 storefront (20 / 3 / 96). |
 | `headless-demo` | base + `surface-headless` + sample data | **Proven on DW 10.28.1-PreRelease** — headless Delivery-API (A1–A9), ZERO Swift design-package dependency. |

@@ -1,0 +1,65 @@
+@inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.ParagraphViewModel>
+@using Dynamicweb.Frontend
+
+@*
+	TC_AnchorNav - the renderer for the in-page jump strip item type this layer ships.
+
+	WHY IT EXISTS AS A TEMPLATE AND NOT AS MARKUP IN A TEXT PARAGRAPH. The strip a site
+	reaches for otherwise is hand-authored <nav> markup plus an inline <script> inside a
+	rich-text field: content no serializer can round-trip and no editor can safely edit.
+	The item type made the strip data; this file makes it render.
+
+	TWO WAYS IT FILLS. Declared links come from the TC_AnchorNav_Items repeater, in the
+	order the editor put them. When that repeater is EMPTY, the strip emits its shell and
+	nothing inside it, and the theme's default_custom.js builds the links from the
+	section headings the page actually renders (main h2[id]). That is deliberate: a
+	section skeleton and its jump strip drift apart the moment they are maintained as two
+	independent lists, and the repeater cannot be authored from a serialized content tree
+	at all - Swift stores a repeater as an item-list id, so a layer can ship the
+	paragraph but not its children. Discovery keeps the shipped skeleton honest; the
+	repeater overrides it the moment an editor wants a different order or different words.
+
+	THE BASE-HREF TRAP. Dynamicweb emits a sitewide <base href>, so a bare "#overview"
+	href resolves against the FRONT PAGE and navigates away instead of scrolling. The
+	links below are therefore emitted with the current path already in front of the
+	fragment, and the theme's JS re-points them again after any client-side URL change.
+	A raw fragment here would look correct in the markup and be wrong in the browser.
+
+	THE SHELL ALWAYS RENDERS, even with no links, because an element that disappears when
+	its data is missing is a section that cannot be measured, and a design assert bound to
+	it reads as a pass when there is nothing there at all.
+*@
+
+@{
+	string ariaLabel = Model.Item.GetString("AriaLabel");
+	if (string.IsNullOrWhiteSpace(ariaLabel))
+	{
+		ariaLabel = Translate("Jump to a section");
+	}
+
+	string basePath = Dynamicweb.Context.Current?.Request?.Url?.AbsolutePath ?? string.Empty;
+}
+
+<nav class="td-anchornav" data-td-anchornav="@Model.ID" aria-label="@ariaLabel">
+	<ul class="td-anchornav__list list-unstyled d-flex flex-wrap gap-3 mb-0">
+		@if (Model.Item.TryGetItems("AnchorNav_Items", out var anchorItems))
+		{
+			foreach (var item in anchorItems)
+			{
+				string anchorId = item.GetString("AnchorId");
+				string label = item.GetString("Label");
+
+				if (string.IsNullOrWhiteSpace(anchorId) || string.IsNullOrWhiteSpace(label))
+				{
+					continue;
+				}
+
+				anchorId = anchorId.TrimStart('#');
+
+				<li class="td-anchornav__item">
+					<a class="td-anchornav__link" href="@(basePath)#@(anchorId)" data-td-anchor="@anchorId">@label</a>
+				</li>
+			}
+		}
+	</ul>
+</nav>

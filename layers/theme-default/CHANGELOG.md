@@ -1,5 +1,403 @@
 # theme-default changelog
 
+
+
+## 2.3.1
+
+### The PLP price lock gains the action the PDP lock has (Foundry #1159)
+
+Measured anonymously at 1440, the listing rendered `.td-price-lock` on all five rows
+with the text "Account price" and `.td-price-lock__action` **0 page-wide**. The same
+lock on the detail page rendered the anchor, reading "Sign in for account pricing".
+The two surfaces disagreed: the detail page invited the visitor to sign in, the listing
+stated a fact and offered no way to act on it. Signed in, both locks are 0 and the PLP
+column reads `$45.00 - $79.20 In stock`, so the swap itself was never the defect - only
+the anonymous call to action. This was the last live remnant of the marine "PLP anon
+price substitute" parity row.
+
+The variant resolved the sign-in URL inside `if (!inProductList)`, so in list context
+the href was `string.Empty` and the anchor's own emptiness guard dropped it. The
+resolution now happens once, unconditionally, through the identical two lines the stock
+`Swift-v2_MyAccount/UserAvatarDropdown.cshtml` uses -
+`Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")` then
+`SearchEngineFriendlyURLs.GetFriendlyUrl` - so both contexts point at the same page and
+a site that renames or re-cultures its sign-in page carries both. On an area with no
+`UserAuthentication` page the anchor is still omitted and the badge still renders.
+
+`inProductList` survives and keeps its only remaining job: the `td-price-lock--pdp`
+modifier. The two contexts now differ in SHAPE and not in capability - the detail
+instance stacks and stretches the anchor onto its own full-width line, the list instance
+stays a chip.
+
+Block **#24** is amended for that chip. `.td-price-lock` gains `flex-wrap: wrap` and
+`min-width: 0`, and the `align-self: stretch` on `.td-price-lock__action` is narrowed to
+the `--pdp` instance; the list anchor takes `max-width: 100%` and `white-space: nowrap`
+instead. The wrap is the point: the PLP price cell is `flex: 0 0 auto`, so anything it
+cannot wrap it charges to the row, and 2.3.0's whole subject was a row with no width
+left to give. The anchor drops under the label when the column is narrow rather than
+widening it.
+
+Block **#11** needed no change - it has dressed "the pill that renders INSIDE
+swift-v2_productprice" on the PLP since P4, and has been styling an element that never
+rendered.
+
+VALIDATION: anonymously, `main .td-price-lock__action` must be >= 1 on the PLP as well
+as the PDP, and 0 in both places signed in; the control is the identity flip, which
+before this changed the PDP count and not the PLP count. The width control is #1156's:
+`scrollWidth / clientWidth` on both roots, both identities, 1440 and 1366.
+
+## 2.3.0
+
+### The signed-in PLP row gets a width budget (Foundry #1156)
+
+Blocks #10 and #15 sized the list card for the ANONYMOUS column set: five of the
+seven columns carry non-shrinkable bases, only the header has `min-width: 0`, and
+the row does not wrap. Signed in the row gains a real price figure and a real cart
+control and nothing can give the width back, so the line overcommits and picks a
+victim.
+
+Measured, legs run 20260913-111100, both roots: `1454 / 1440` (14px) at desktop and
+`1469 / 1366` (103px) at laptop, AUTHENTICATED only, with five
+`swift-v2_productshortdescription` cells at `0 x 136 px` still carrying 77-89
+characters. Anonymous measures `overflowX 0` at both widths and mobile passes in
+both identities - the columns do not exist anonymously and the row stacks on mobile,
+which is why five rounds of anonymous design runs never saw it. The 14-vs-103 spread
+is the finding: the wrap point sits between the two widths.
+
+New block **#27** fixes the budget rather than the victim, the same discipline as
+block #23 and the search field. The non-shrinkable floor goes from
+`72 + 150 + 280 + 100 + price + cart` to `72 + stock + price + cart`; number, header
+and description become shrinkable against stated floors; the description wraps
+instead of carrying block #10's nowrap + overflow + ellipsis trio, which is what
+turned a too-narrow cell into a zero-height line; and the row wraps, so the cart
+drops to a second line of the same card before the line can push the document.
+Between 992 and 1440 the budget is tightened again - that is the band the 103px was
+measured in.
+
+No `overflow` is set on the row, the card or either root: the probe measures both
+roots precisely to catch a theme hiding the scrollbar a human would have seen.
+
+**The after-widths are a computed floor, not a measurement.** The session that wrote
+this was read-only on the host, so the sheet has not been staged. Validation is the
+e2e design leg with `-PersonaUser TruvioBuyer`; `-SkipPersona` cannot validate it.
+
+## 2.2.2
+
+Two live-measured defects from the v5 design leg, run 20260913-101914, both of
+them invisible to every check except the one that measures what actually paints.
+
+### The three edge instances painted into the content above them (Foundry #1152)
+
+All three declared `.td-edge` instances failed PAINT-01 on every page and viewport
+they appeared on - 21 FAIL rows - while every box-model number read healthy at the
+same moment. The measured painted clearance: `footer::before` 0.00px sitewide in
+both identities, `main .td-edge-top::before` -1700.11px on the home page,
+`main .td-edge-bottom::after` -71.00px. Three separate causes, one doctrine error
+behind all of them: the clearance was reserved on the element that DECLARES the
+motif rather than on the element whose ink the band covers.
+
+- **The footer crest, 0.00px.** The crest is sitewide, and the only rule that gave
+  `main` any end padding was `main:has(> .td-edge-bottom:last-child)`, which
+  matches no served page - the home page's last row is not the hero, and the PLP
+  and PDP carry no bottom edge at all. So the band began exactly where the last
+  ink in `main` ended. The reservation now sits on `main`, keyed on the footer
+  actually carrying the crest, and the crest is anchored `bottom: 100%` so it
+  rises out of the footer into that reserved gap instead of over the footer's own
+  first rows. The footer's own `padding-block-start` rule is gone: it padded the
+  owner, below the band, where nothing was ever at risk.
+- **The bottom poster edge, -71.00px.** The owner's floor was expressed as
+  `.td-edge-bottom { --dw-row-space-bottom: 16px }`, and Swift resolves a row's
+  padding from `[data-swift-gridrow][data-dw-row-space-bottom="0"]`, whose (0,2,0)
+  out-specifies a (0,1,0) class. Every poster hero is authored at spacing step 0,
+  so the floor was discarded and the owner's last ink sat exactly on its own box
+  bottom. It is now a padding PROPERTY sized off `--td-edge-h`, with the variable
+  restated at attribute specificity so Swift's own declaration computes the same
+  number.
+- **The top boundary edge, -1700.11px.** Not underspacing: the instance was
+  arranged so that it could never be cleared. A top-anchored band is judged
+  against the ink of the scope it paints into, and for an owner inside `<main>`
+  that scope includes every row BELOW the owner, so a boundary row halfway down
+  the page measures against ink 1700px underneath it and is negative by
+  construction at any padding value. A top anchor is sound only when its owner
+  terminates the ink it threatens, which on a page is the footer and nothing else.
+  Block 26 therefore draws an in-main boundary as a bottom edge on the row ABOVE
+  it - the same band in the same place, with the ink it covers owned by the
+  element that reserves it - and `.td-edge-top` stays the footer utility. The
+  receiver rule for a hand-applied in-main top edge is kept so the utility is safe
+  either way.
+
+The neutral-bevel default, the three-knob token contract and the brand-time
+one-declaration mask swap are all unchanged. Nothing was fixed with `z-index` and
+nothing was shrunk to fit.
+
+### `PriceWithSignIn.cshtml` still did not compile after 2.2.1 (Foundry #1135)
+
+2.2.1 resolved the `PriceViewModel` ambiguity and introduced a different compile
+error in the same file, so the observable symptom did not move: a `dw-error` dump
+in the price column of every PLP card and both PDPs, `.td-price-lock` rendering
+nowhere in either identity, and a PLP card 9,013px tall against marine's 124px.
+
+```
+Line 71: The type or namespace name 'Services' does not exist in the namespace
+         'Dynamicweb'
+```
+
+There is no `Dynamicweb.Services` on 10.28.10. The service class is
+`Dynamicweb.Content.Services`, and the bare `Services.Pages.…` form the file used
+before 2.2.1 was correct - only the `@using` that brought it into scope was
+removed alongside the ambiguity fix. Both the call and the directive are now the
+verbatim stock forms, each verified present in a stock template on this host:
+
+- `@using Dynamicweb.Content` - `Paragraph/Swift-v2_MyAccount/UserAvatarDropdown.cshtml:4`
+- `Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")` -
+  `Paragraph/Swift-v2_MyAccount/UserAvatarDropdown.cshtml:108`
+- `Dynamicweb.Frontend.SearchEngineFriendlyURLs.GetFriendlyUrl(…)` -
+  `Components/VariantSelector.cshtml:160`
+- the three `Dynamicweb.Ecommerce.ProductCatalog.PriceViewModel` sites 2.2.1
+  qualified are kept as they are; that is what removed the ambiguity, and
+  `@using Dynamicweb.Content` does not reintroduce it.
+
+Compiled against 10.28.10 on the host before release this time, which is the
+standing lesson of two releases in a row shipping this file uncompiled.
+
+### The signed-in Add to cart label at 1.62 contrast (Foundry #1153)
+
+CONTRAST-01 failed six times, the variants PLP and the flagship PDP at all three
+viewports, in the authenticated pass only - the control is hidden from anonymous
+visitors, so the defect was structurally invisible until the persona step existed.
+
+The 0.65 is Bootstrap's, not this theme's, and the control is genuinely disabled:
+`Swift-v2_ProductAddToCart.cshtml` writes `disabled` whenever the product is a
+variant master with no variant chosen, which is every card on a variants PLP and
+the master PDP. Bootstrap dims the whole control with
+`opacity: var(--bs-btn-disabled-opacity)`, and because the opacity is on the
+button it multiplies the label's own alpha: white at alpha 1 x 0.65 composites to
+`#dbe8e2` over a fill that is already pale, Swift building it as
+`rgba(var(--dw-color-button-primary-rgb), 0.8)` and painting `#97bead`. 1.62
+against a 4.5 floor, and the failing colour appears in no stylesheet.
+
+An inactive control now states its state with a flat, opaque pair and keeps its
+label at full alpha: `--td-slate` on `--td-hairline`, measured 7.10:1. The label
+is 16px / 600, which is not large text by either threshold, so the floor that
+applies is 4.5 and not 3.0. Darkening the label instead is the trap in this class
+- the same 0.65 multiplies whatever is put there. Both values are existing theme
+tokens, so a brand palette carries the tier with no new declaration.
+
+## 2.2.1
+
+`PriceWithSignIn.cshtml` did not compile on 10.28.10, so every paragraph that named
+it rendered a `dw-error` block where the price belongs: 12 on the shop list, 5 on the
+variants PLP, 1 on the flagship PDP. The lock affordance 2.2.0 exists to ship had
+therefore never rendered anywhere, and neither had the price it guards (Foundry #1135).
+
+Three compile faults, all in the file and none in the platform:
+
+- **`@using Dynamicweb.Frontend` made `PriceViewModel` ambiguous.** The Razor host on
+  10.28.10 resolves `Dynamicweb.Frontend.PriceViewModel` and
+  `Dynamicweb.Ecommerce.ProductCatalog.PriceViewModel` in the same unit, so the bare
+  name cannot bind. The using block is now exactly the stock
+  `Paragraph/Swift-v2_ProductPrice.cshtml` block - `Dynamicweb.Ecommerce.ProductCatalog`
+  and `Dynamicweb.Ecommerce.Products`, nothing else - and the three visual-editor
+  placeholders name the type in full anyway. `@inherits` already qualified
+  `Dynamicweb.Frontend.ParagraphViewModel`, which is the only thing the using bought.
+- **`Services` is not in scope** in a `ViewModelTemplate<ParagraphViewModel>`. The
+  sign-in lookup and the friendly-URL call are now
+  `Dynamicweb.Services.Pages.GetFirstModulePageForArea(...)` and
+  `Dynamicweb.Frontend.SearchEngineFriendlyURLs.GetFriendlyUrl(...)`.
+- **`string?` needs a `#nullable` context** a generated Razor class does not have, and
+  templates compile warnings-as-errors. `priceMin` / `priceMax` are plain `string`.
+
+The render is unchanged in both states: signed out the area still gets `.td-price-lock`
+with its sign-in anchor on the detail page, signed in it is the stock price rendering.
+A template variant this central is compiled against the target platform before release.
+
+## 2.2.0
+
+Two additions and one rename, all of them in service of the round-two density parity
+the surface layer ships alongside.
+
+### `td-wave-*` becomes `td-edge-*`
+
+Block 22 named its mechanism after one silhouette. A wave is a brand's fit, and this
+layer is brand-free, so the name made every other shape read as a misuse of the utility.
+The classes are `td-edge-bottom` / `td-edge-top` / `td-edge-alt` and the tokens
+`--td-edge-mask` / `--td-edge-fill` / `--td-edge-h`. Every clearance rule is unchanged and
+still sized off `--td-edge-h`. Nothing outside this branch referenced the old names.
+
+The shipped silhouette is now deliberately dull - a barely-perceptible shallow bevel -
+which is what a brand-free default should be. `Images/Brand/wave.svg` becomes
+`Images/Brand/edge.svg` carrying that path.
+
+`Images/Brand/edge-truvio.svg` lands beside it: the Truvio line, a softened zigzag with
+gently rounded peaks, vertices every 120px alternating y=58 and y=20 with each apex
+rounded over a 30px leg. Industrial rather than organic, and rounded so it does not read
+as a warning stripe at 40px on a phone. **Nothing paints it.** Block 22 carries one
+commented declaration showing the entire brand-time edit: set `--td-edge-mask` to that
+path as a data URI in the brand's own sheet, loaded after this one, and all three
+instances change at once.
+
+**A Truvio-branded site must perform that flip.** The standing e2e site is branded
+Truvio; until its branding step sets `--td-edge-mask` to the `edge-truvio.svg` path, the
+three instances below paint the neutral bevel - correct, inert-looking, and not the brand.
+
+### The motif is applied, so the paint asserts have subjects
+
+All three `PAINT-01` entries SKIPped for want of a subject. Block 26 of
+`default_custom.js` supplies three: the home hero row takes `td-edge-bottom`, the first
+colour-scheme boundary after it takes `td-edge-top`, and the site footer takes
+`td-edge-top` for the sitewide crest.
+
+Owner selectors, one gate entry each: `main .td-edge-bottom::after`,
+`main .td-edge-top::before`, `footer::before`.
+
+It is applied from JavaScript because a Swift grid row cannot carry a class. The stock
+`Grid/Page/RowTemplates/Swift-v2_Row.cshtml` emits `data-swift-gridrow`, a colour-scheme
+attribute and spacing attributes, and no class authored from content; grid-row
+serialization has no `cssClass` key either. The 2.0.0 note claiming the opt-in is "one
+entry in a grid row's CSS-class field in the Visual Editor" was wrong, and is corrected
+here.
+
+Hanging the pseudo-elements straight off colour-scheme adjacency and the footer landmark
+is the other available route and is rejected: the classes ARE the contract that block
+22's clearance rules and a `paintClearance` gate entry both key on, and a site adding a
+fourth instance should be adding one class rather than a fourth bespoke structural
+selector nobody can find later.
+
+Scope comes from content, not from a page id. The hero is the first direct child section
+of `main` containing a Swift poster, so a PLP, a PDP or the cart gets neither main-side
+instance and this file never learns a page number.
+
+### The signed-out price column gets an affordance
+
+`Paragraph/Swift-v2_ProductPrice/PriceWithSignIn.cshtml`: the stock Swift 2.4 price
+component with one block ahead of it. When the area's `AnonymousUsers` field gates prices
+and the visitor is anonymous, stock Swift renders an empty div - a blank column with no
+explanation, which also lets a presence-only price assert pass vacuously. The variant
+renders a neutral lock badge there instead, and on a detail page a sign-in anchor with it.
+
+The copy is generic - "Account price", "Sign in for account pricing" - and both strings
+go through `@Translate`, so a re-skin changes them in the translation table. Classes are
+`td-price-lock`, `__icon`, `__label`, `__action` and the `--pdp` modifier. The href
+resolves through `Services.Pages.GetFirstModulePageForArea(Pageview.AreaID,
+"UserAuthentication")` and `SearchEngineFriendlyURLs`, the same two lines stock
+`Swift-v2_MyAccount/UserAvatarDropdown.cshtml` uses, so it survives a renamed sign-in page
+and a second culture.
+
+It is a VARIANT, not an overlay of the stock file. Marine edits the default in place,
+which makes price rendering a permanent customisation and masks the next Swift upgrade of
+the component. A variant is inert until a paragraph's `Template` field names it, and inert
+again on any area that does not gate prices.
+
+Block 24 dresses it; block 25 dresses the surface layer's anchor strip
+(`nav.td-anchornav`), sticky from 768 up only, with `scroll-margin-block-start` on
+`main h2[id]` sized off the same variable as the strip's own height so a jump cannot land
+a heading underneath it. Block 26 of `default_custom.js` also carries the strip's
+base-href repointing and its empty-list fallback.
+
+Everything above resolves through the `--td-*` tokens and `currentColor`, so a palette
+swap carries it and no colour scheme is special-cased.
+
+## 2.1.0
+
+**Block #23 - the laptop band.** Home and the PLP overflowed horizontally by exactly 66px at
+1366, and the header search field computed `0 x 58`, both at 1366 only. The sheet has three
+breakpoints - 767.98, 991.98 and 992 - so 1366 and 1440 were one tier to every rule in it, and
+nothing between 992 and infinity could tell them apart.
+
+The header lays the logo lockup, the megamenu nav row, the icon cluster and the search field on
+one flex line, and that line's min-content width is a fixed budget: a 210px inline-hardcoded
+logo figure, the gap / `padding-inline` / caret this sheet adds to every nav item, and the stock
+header container gap. None of it shrinks. At 1440 it fits with a few pixels of slack; at 1366 it
+is 66px over. The identical 66px on two structurally unrelated page bodies is the proof that the
+source is the header they share.
+
+The search field was the casualty, not the cause. The relaxation in the header-affordance
+section zeroes the 260px minimum Swift ships on the field's inner wrapper and supplies no basis
+in its place, which makes it the one item on the line that can absorb the overcommit - so it
+absorbed all of it and collapsed to zero while the line still overflowed.
+
+Block #23 fixes the budget. Between 768 and 1440 the four contributions sized for 1440 close to
+values the mobile tier already proves usable - logo figure to 170px, header container gap to
+.5rem, nav gap to .1rem, nav-link `padding-inline` to .1rem and the caret to .34em with no
+margin - and the search field is given a flex basis so it grows into what that frees. At the
+seven-item bar `HEADER-01` measured: 40 + 14.4 + 44.8 + 14.6 = 113.8px returned against a 66px
+overcommit, and every term but the logo is per-item, so the margin widens as the bar does.
+
+The field keeps its `min-width: 0`. A hard floor would be a new fixed budget on the same line,
+which is the shape of the bug. Nothing in the block sets `overflow` on a header element - an
+overflow context there clips the megamenu and offcanvas panels, which at this width still open.
+
+Authoring-time proof on the amended sheet: a string-aware comment and brace scan reports clean,
+and a comment-stripped parse resolves 112 top-level rules with 16 block markers present and
+contiguous (#8 through #23).
+
+## 2.0.0
+
+**The wave (V5-PLAN 2.5, decision D-E).** Block 22 of `default_custom.css`: one cubic path on a
+1440x75 viewBox applied as a CSS mask to a pseudo-element carrying a flat background-color. The mask
+carves the shape and a token supplies the colour, which is why one asset serves every colour scheme
+and a brand changes the motif by changing a variable. Three knobs: `--td-wave-fill` (defaults to the
+neutral page ground, so an un-themed wave reads as a carved edge and not as a stripe), `--td-wave-h`
+(`clamp(40px, 5vw, 75px)`) and `--td-wave-mask`.
+
+**It is inert.** Nothing in the block paints until `.td-wave-bottom` or `.td-wave-top` is applied,
+and no element in a Swift document carries either, so a page that has not opted in gains exactly
+zero pixels. Opting in is one entry in a grid row's CSS-class field in the Visual Editor: no
+template edit and no serialized content from this layer, which keeps the theme disk-overlay-only.
+
+**The clearance rules are the larger half of the block, and they are the point.** A top wave sits at
+`top: 0` flipped, and a pseudo-element with a negative offset paints above its owner's border box.
+Either way the crest paints over content while every box-model measurement reads healthy — the
+element genuinely does not overlap, so a geometry probe finds nothing and the text is still sliced.
+The fix is spacing, never stacking: the owner reserves padding sized off the wave's own clamp, so
+the reservation tracks the wave at every viewport with nothing to re-tune per breakpoint. Raising
+`z-index` on the content is the tempting fix and the wrong one — it repaints the text above the
+crest and leaves the motif looking like a mistake. Rules ship for the sending row, the receiving
+row, `main` when its last row carries a bottom wave, and the footer, which is the common sitewide
+case and the easiest to get wrong.
+
+`.td-wave-alt` flips on X as well, because two adjacent top waves otherwise read as one repeated
+stamp.
+
+Gate note recorded in the block: pseudo-element paint is invisible to every probe but the painted-
+clearance one, so every wave instance a site ships needs its own `paintClearance` entry naming its
+owner selector. A footer wave and a band boundary are two entries, not one.
+
+Major, not minor: `:root` gains three tokens and the sheet gains a utility a consuming theme is
+expected to build on.
+
+## 1.4.0
+
+**The placeholder footprint, declared and shipped (V5-PLAN 2.4).** A placeholder is a file that
+already exists, is already wired and is already served, so a re-skin is an edit and never a create
+followed by a hunt for the field that should have pointed at it. Four of them were missing; this
+release ships them and `layer.json` `placeholders[]` now declares the whole set, each entry naming
+its path, the kind of proof the gate owes it, and what a consumer fills it in for.
+
+**`Custom/default_custom.js` plus its `AddScript` line.** There was no JavaScript entry point
+in this theme at all. Everything a re-skin has needed so far falls into three shapes a stylesheet
+cannot express: naming a platform-generated landmark for accessibility, repointing in-page anchors
+at runtime (Dynamicweb emits a sitewide `<base href>`, so a bare `#section` navigates to the front
+page), and stripping a hard-coded media attribute. The file ships empty, registered with `defer`
+from `DefaultHeadInclude.cshtml`, and carries the fill-in recipe plus the **no-marker rule** in its
+header: it must never write a marker string into the page, not even a console banner or a
+`data-` attribute proving it ran. The design gate scans rendered text for placeholder markers and a
+placeholder that announces itself is not inert, it is content.
+
+**Three paragraph layout variants** — `Swift-v2_Poster/TextMiddleLeftLcp.cshtml`,
+`Swift-v2_Image/Responsive.cshtml`, `Swift-v2_VideoPlayer/PosterLazy.cshtml`. Each is net-new, each
+leaves the standard template untouched, and each renders nothing until a paragraph's Template field
+names it. They exist because a layout variant is the only place a theme can reach the attributes
+that decide media weight: `srcset`, `sizes`, `fetchpriority`, image quality, `loading`, and the
+`preload="auto"` the video component hard-codes. The README has recorded those as "not fixable from
+a theme" since 1.0.0; this is the fix. `Responsive.cshtml` ships its intrinsic-ratio map **empty**
+rather than guessing a ratio, because a wrong width/height pair is worse than none.
+
+**Two neutral brand assets**, `Images/Brand/logo.svg` and `wave.svg` — the first image files this
+layer has ever shipped. The logo is a grey wordmark occupying the slot, not a logo. `wave.svg` is
+the motif's readable source: one cubic path on a 1440x75 viewBox with **no fill attribute**, because
+the shape is used as a mask and the fill comes from a token.
+
 ## 1.3.3
 
 **ContainerWidth 4 keeps a gutter in main (Foundry #545).** In stock Swift, full width and

@@ -213,6 +213,16 @@
           <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.LinkEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnablePageSelection" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableParagraphSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="SelectOnlyID" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableFileSelection" value="False" /></Parameters></editorConfuguration>
         </editor>
       </field>
+      <field name="Autoplay" systemName="Autoplay" description="" type="System.Boolean, System.Private.CoreLib" excludeFromSearch="True" defaultValueCulture="en-GB" defaultValue="False">
+        <editor type="Dynamicweb.Content.Items.Editors.CheckboxEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.CheckboxEditor" /></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Autoplay interval" systemName="AutoplayInterval" description="Timeout interval in miliseconds" type="System.String, System.Private.CoreLib" excludeFromSearch="True" defaultValueCulture="en-GB" defaultValue="3500">
+        <editor type="Dynamicweb.Content.Items.Editors.InputHTML5Editor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor"><Parameter addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor" name="Type" value="number" /><Parameter addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor" name="Pattern" value="" /><Parameter addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor" name="Placeholder" value="3500" /><Parameter addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor" name="Size" value="" /><Parameter addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor" name="Min" value="750" /><Parameter addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor" name="Max" value="" /><Parameter addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor" name="Step" value="250" /><Parameter addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor" name="Autocomplete" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor" name="Required" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.InputHTML5Editor" name="Type" value="number" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
     </fields>
     <rules>
       <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
@@ -277,6 +287,8 @@
             <field systemName="IndicatorsHighlightActive" />
             <field systemName="IndicatorsInvertedColors" />
             <field systemName="IndicatorsVisibleOnSmallDevices" />
+            <field systemName="Autoplay" />
+            <field systemName="AutoplayInterval" />
           </fields>
         </group>
         <group name="Advanced" systemName="Advanced" sectionName="" collapsibleState="Collapsed" visibilityField="" visibilityCondition="0" visibilityConditionValueType="" visibilityConditionValue="">

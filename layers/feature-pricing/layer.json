@@ -1,8 +1,18 @@
 {
   "name": "feature-pricing",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "kind": "feature",
   "swiftVersion": "2.4.0",
+  "files": [
+    "System/Truvio/globalsettings.commerce.fragment.config"
+  ],
+  "placeholders": [
+    {
+      "path": "System/Truvio/globalsettings.commerce.fragment.config",
+      "kind": "asset",
+      "why": "The New Discount Experience activation block, verbatim, for merging into the host's Files/GlobalSettings.config. Without it EcomDiscounts rows are accepted, active, correct on read-back and never consulted at cart time (Foundry 1048). A layer cannot ship GlobalSettings.config itself - the files overlay is overwrite-wins and would replace the host's connection and licence configuration - so the block ships as a fragment with its apply and proof steps in-file."
+    }
+  ],
   "repositoryName": "Products",
   "csLedger": [
     {
@@ -20,48 +30,6 @@
     "withCompile": "Compiling ReorderingPricingQtyBreakProvider (PriceProvider, discovered by assembly-scan; non-exclusive, HandlePricesExclusively=false) ADDS cart-time enforcement of the quantity tiers: PACK-RPP-PROD1 prices 4500/4200/3900 at qty 5/10/25. The provider returns a price ONLY for real tiers (Quantity > 1); base and contract rows fall through to the default provider, so contract pricing is identical whether or not it is compiled.",
     "compileStep": "Opt-in per the dynamicweb-skills feature-layer compile recipe (D3): add src/*.cs to the Swift solution's custom-code project and build; the provider self-registers via assembly scan (no config row required)."
   },
-  "configRows": [
-    {
-      "table": "EcomProducts",
-      "where": "ProductId = 'PACK-RPP-PROD1' AND ProductLanguageId = 'ENU'",
-      "description": "layer-owned tier product (RPP-TIER-01) — self-sufficiency proof"
-    },
-    {
-      "table": "EcomProducts",
-      "where": "ProductId = 'PACK-RPP-PROD2' AND ProductLanguageId = 'ENU'",
-      "description": "layer-owned contract product (RPP-CTR-01) — self-sufficiency proof"
-    },
-    {
-      "table": "EcomPrices",
-      "where": "PriceId = 'PACK-RPP-0001'",
-      "description": "qty-break tier row (PACK-RPP-PROD1, qty 5, unit 4500 EUR — base 4995)"
-    },
-    {
-      "table": "EcomPrices",
-      "where": "PriceId = 'PACK-RPP-0002'",
-      "description": "qty-break tier row (PACK-RPP-PROD1, qty 10, unit 4200 EUR)"
-    },
-    {
-      "table": "EcomPrices",
-      "where": "PriceId = 'PACK-RPP-0003'",
-      "description": "qty-break tier row (PACK-RPP-PROD1, qty 25, unit 3900 EUR)"
-    },
-    {
-      "table": "EcomPrices",
-      "where": "PriceId = 'PACK-RPP-0004'",
-      "description": "contract row for buyer 98745621 (PACK-RPP-PROD2, qty 1, unit 1399 EUR — base 1599; PriceUserCustomerNumber scoping only)"
-    }
-  ],
-  "fragmentModes": [
-    "merge"
-  ],
-  "fragmentTables": [
-    "EcomGroups",
-    "EcomProducts",
-    "EcomGroupProductRelation",
-    "EcomShopGroupRelation",
-    "EcomPrices"
-  ],
   "asserts": {
     "behaviorProbes": [
       {

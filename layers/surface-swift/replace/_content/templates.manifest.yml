@@ -215,6 +215,7 @@
 - path: Swift-v2_ProductAddToCart
   kind: item-type
   referencedBy:
+  - Product List Card
   - Product Info (right side)
 - path: Swift-v2_ProductComponent
   kind: item-type
@@ -234,6 +235,10 @@
   referencedBy:
   - Product List Card
 - path: Swift-v2_ProductDetails
+  kind: item-type
+  referencedBy:
+  - Product Details
+- path: Swift-v2_ProductFieldDisplayGroups
   kind: item-type
   referencedBy:
   - Product Details
@@ -270,10 +275,18 @@
   kind: item-type
   referencedBy:
   - Product List
+- path: Swift-v2_ProductLongDescription
+  kind: item-type
+  referencedBy:
+  - Product Details
 - path: Swift-v2_ProductMedia
   kind: item-type
   referencedBy:
   - Product Details
+- path: Swift-v2_ProductNumber
+  kind: item-type
+  referencedBy:
+  - Product List Card
 - path: Swift-v2_ProductPrice
   kind: item-type
   referencedBy:

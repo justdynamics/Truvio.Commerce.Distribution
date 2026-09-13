@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  TruvioCommerce/Products.facets — the storefront facet set.
+
+  SIX FACETS: two base-schema (Group, Price) and four category-field attribute facets, one
+  per field category the distribution's catalogue uses.
+
+  THE MANUFACTURER FACET IS GONE, deliberately. It bound Manufacturer_Facet, which the index
+  does declare and which resolves - but EcomManufacturers is empty and ProductManufacturerId
+  is NULL on every row, so the field indexes nothing and the facet could only ever be empty
+  (Foundry #1149). Condition HasValue suppressed it, so the rail rendered two groups where
+  three were declared: a facet that is invisible in practice and present in the file is a
+  claim nobody can check. The index field and the query parameter stay, so a catalogue that
+  ships manufacturers restores the facet in four lines.
+
+  FOUR ATTRIBUTE FACETS, because this catalogue PARTITIONS its products across its four field
+  categories - each category owns a quarter of the products and has no value on the rest. No
+  single attribute field spans the catalogue, so one facet would be dead on three PLPs out of
+  four. Condition HasValue then does the honest work per listing: the facets with no subject
+  on that group do not render, and the one that owns those products does. A catalogue with
+  catalogue-wide attributes ships ONE facet here; the count follows the data. The host's own ProductsFrontend facet
+  file still declares more than a dozen facets bound to the stock demo catalogue's category
+  fields; on any other catalogue those render as empty rails, which is the failure this
+  file exists to avoid. A facet whose field has no values is worse than a missing facet:
+  it renders, occupies the rail and filters nothing.
+
+  Each facet's QueryParameter must name a Parameter that exists in Products.query, and its
+  Field must name a SystemName that exists in Products.index. All three files move together
+  or the facet is decorative.
+
+  A NOTE ON THE MISSING REPOSITORY FAILURE MODE. If this repository is not staged before
+  host start, the storefront does not return 5xx — it returns HTTP 200 with an in-page
+  Lucene error ("numHits must be > 0"). Never assert a repository by status code.
+
+  FILL-IN RECIPE — a category-field facet (checkbox):
+    <Facet Name="Material" Type="Field" Field="PropMaterial" QueryParameter="PropMaterial">
+      <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+      <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+    </Facet>
+  and a RANGE facet, for a numeric category field (the render type that needs a numeric
+  index field, not a string one):
+    <Facet Name="Operating temperature" Type="Field" Field="OperatingTemp" QueryParameter="OperatingTemp">
+      <RenderType Name="Range" SystemName="Range" />
+      <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+    </Facet>
+  Each needs its Field in Products.index (Source ProductCategory|<Category>|<Field>,
+  SkipCategoryFields False) and its Parameter plus a MatchAny expression in Products.query.
+-->
+<Facets Name="Products.facets">
+  <Settings />
+  <Source Repository="TruvioCommerce" Item="Products.query" />
+  <Meta />
+  <Facet Name="Group" Type="Field" Field="ParentGroupIDs" QueryParameter="GroupID">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+  <Facet Name="Price" Type="Field" Field="PriceRange" QueryParameter="PriceRange">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+  <Facet Name="Material class" Type="Field" Field="MaterialClass_Facet" QueryParameter="MaterialClass">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+  <Facet Name="Lead time" Type="Field" Field="LeadTime_Facet" QueryParameter="LeadTime">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+  <Facet Name="Language coverage" Type="Field" Field="LanguageCoverage_Facet" QueryParameter="LanguageCoverage">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+  <Facet Name="Account terms" Type="Field" Field="AccountTerms_Facet" QueryParameter="AccountTerms">
+    <RenderType Name="Checkboxes" SystemName="Checkboxes" />
+    <Visibility Status="AlwaysVisible" QueryParameter="" Condition="HasValue" MatchValue="" />
+  </Facet>
+</Facets>

@@ -114,6 +114,58 @@
   transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease;
 }
 
+/* === The inactive control tier - a flat pair, never a text opacity ===
+ * Foundry #1153. The signed-in "Add to cart" label measured 1.62 against a 4.5
+ * floor on the variants PLP and the flagship PDP, at every viewport, and only in
+ * the authenticated pass - the control is hidden from anonymous visitors, so no
+ * design run before the persona step could see it at all.
+ *
+ * WHERE THE 0.65 COMES FROM, since it is in none of this theme's sheets. Swift's
+ * Paragraph/Swift-v2_ProductAddToCart.cshtml writes a `disabled` attribute onto
+ * the button whenever the product is a variant master with no variant chosen
+ * (`whenVariantsExist == "disable"`), out of stock, or discontinued - which is
+ * EVERY card on a variants PLP and the master PDP. Bootstrap then dims the whole
+ * control with `opacity: var(--bs-btn-disabled-opacity)`, 0.65.
+ *
+ * WHY THAT LANDS AT 1.62 AND NOT SOMEWHERE HARMLESS. The opacity is on the
+ * BUTTON, so it multiplies the label's own alpha: declared white at alpha 1 x
+ * 0.65 composites to #dbe8e2 over the painted fill. The fill is pale to begin
+ * with - Swift builds it as `rgba(var(--dw-color-button-primary-rgb), 0.8)`, so
+ * the measured ground is #97bead rather than the token itself - and white on
+ * #97bead is only 2.04 even at full alpha. Two translucencies stacked, and the
+ * failing colour is in no stylesheet: grepping the palette for #dbe8e2 finds
+ * nothing, which is the whole reason the gate measures effective alpha.
+ *
+ * THE FIX. An inactive control states its state with a FLAT, opaque pair and
+ * keeps its label at full alpha. Darkening the label instead is the trap in this
+ * class: the same 0.65 multiplies whatever is put there, so a darker declared ink
+ * lands LOWER than the value it was meant to fix.
+ *
+ * MEASURED: --td-slate #3E4C59 on --td-hairline #E4E7EB = 7.10:1. The label is
+ * 16px / 600, which is not large text by either threshold (24px, or 18.66px at
+ * 700), so the floor that applies is 4.5 and not 3.0. Both values are existing
+ * theme tokens, so a brand palette carries the tier without a new declaration. */
+.btn:disabled,
+.btn.disabled,
+.btn[disabled],
+fieldset:disabled .btn,
+.btn-check[disabled] + .btn,
+.btn-check:disabled + .btn {
+  opacity: 1;
+  background-color: var(--td-hairline);
+  border-color: var(--td-slate-light);
+  color: var(--td-slate);
+}
+
+/* The quantity stepper beside it is dimmed the same way and by the same rule
+ * class, so it gets the same treatment rather than a second convention. */
+.form-control[type="number"][data-qty]:disabled {
+  opacity: 1;
+  background-color: var(--td-hairline);
+  border-color: var(--td-slate-light);
+  color: var(--td-slate);
+}
+
 /* === Page-level site footer — scoped to landmark only (P5) === */
 body > footer,
 [data-swift-page-footer] {
@@ -398,7 +450,7 @@ table {
 
 /* =============================================================================
  * FRESH PASS — close the design gap to a modern headless storefront.
- * A structural version of the marine-demo re-skin, generalized to the neutral
+ * A structural version of the reference re-skin, generalized to the neutral
  * theme: shape + elevation system, muted secondary-text tier, calmer motion,
  * a slim two-row header, rounded imagery. Disk-overlay only (SPEC-06): no
  * template edit, no serialized DB content. Everything paints with the --td-*
@@ -525,7 +577,7 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
 }
 
 /* =============================================================================
- * MOBILE PASS — structural version of the marine-demo second pass (2026-07-18,
+ * MOBILE PASS — structural version of the reference second pass (2026-07-18,
  * brief Part B addendum #8-13). Kills the small-viewport layout blowout, wraps
  * flex rows below md, gives the list-mode PLP real column discipline, and opens
  * the spec accordion into a readable two-column table. Disk-overlay only
@@ -539,13 +591,13 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  * Probe lesson (record it, don't just trust it): `overflow-x:hidden` on <body>
  * MASKS a horizontal blowout from `document.documentElement.scrollWidth` — the
  * fresh canvas measured clean while the content still overflowed. Measure
- * `document.body.scrollWidth` at 390px. (marine: 390px canvas read 1356px with
+ * `document.body.scrollWidth` at 390px. (measured: 390px canvas read 1356px with
  * the mega-menu present, footer alone stretched it to 704px.)
  * ========================================================================== */
 
 /* --- #8  THE mobile bug: the desktop mega-menu never collapses. Swift-v2's
  *     MenuRelatedContent renders a fixed-width `.nav-wrapper` megamenu bar
- *     (~1282px on marine) at EVERY viewport; at 390px it stretched the document
+ *     (~1282px as measured) at EVERY viewport; at 390px it stretched the document
  *     canvas to 1356px — content squeezed into a left column, giant blank right
  *     margin, and broken lazy-image paint that reads as "missing PLP images".
  *     Constrain the bar to a swipeable, horizontally-scrollable category strip
@@ -584,7 +636,7 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
 }
 
 /* --- #9  Footer columns wrap too — the footer sits OUTSIDE <main> and still
- *     stretched the mobile canvas (marine: to ~704px). Scoped to the footer
+ *     stretched the mobile canvas (measured: to ~704px). Scoped to the footer
  *     landmark only (P5). --- */
 @media (max-width: 767.98px) {
   [data-swift-page-footer] [data-swift-gridrow] > [data-swift-container],
@@ -1138,4 +1190,562 @@ main [data-dw-container-width="4"]:not([data-dw-container-width="4"] [data-dw-co
 main [data-dw-container-width="4"][data-td-full-bleed],
 main [data-td-full-bleed] [data-dw-container-width="4"] {
   --dw-container-gutter: 0rem;
+}
+
+/* ==========================================================================
+ * BLOCK 22 - THE EDGE. An opt-in boundary motif, and the clearance that makes
+ * it safe.
+ *
+ * WHAT IT IS. One path on a 1440x75 viewBox, applied as a CSS mask to a
+ * pseudo-element that carries a flat background-color. The mask carves the
+ * shape; the colour comes from a token. That is why one asset serves every
+ * colour scheme, and why a brand changes the motif by changing a variable
+ * rather than by shipping a second image per scheme.
+ *
+ * THE SHAPE HERE IS A PLACEHOLDER, and deliberately the dullest one available:
+ * a barely-perceptible shallow bevel. This layer is brand-free, and a motif with
+ * a personality is a brand decision made in the wrong place - a theme that ships
+ * a signature silhouette hands every consuming site somebody else's signature.
+ * The same path ships as a readable file at Images/Brand/edge.svg; edit both
+ * together, exactly as the token block here and the copy in
+ * DefaultHeadInclude.cshtml are edited together.
+ *
+ * HOW A BRAND SETS ITS OWN. One declaration in the brand's own sheet, loaded
+ * after this one. Nothing else changes - not this block, not the clearance
+ * rules, not a template. Take the d= attribute out of the brand's SVG,
+ * percent-encode the commas, and:
+ *
+ *   :root { --td-edge-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 75' preserveAspectRatio='none'%3E%3Cpath d='M0%2C58%20L91.4%2C29.1%20Q120%2C20%20148.6%2C29.1%20L211.4%2C48.9%20Q240%2C58%20268.6%2C48.9%20L331.4%2C29.1%20Q360%2C20%20388.6%2C29.1%20L451.4%2C48.9%20Q480%2C58%20508.6%2C48.9%20L571.4%2C29.1%20Q600%2C20%20628.6%2C29.1%20L691.4%2C48.9%20Q720%2C58%20748.6%2C48.9%20L811.4%2C29.1%20Q840%2C20%20868.6%2C29.1%20L931.4%2C48.9%20Q960%2C58%20988.6%2C48.9%20L1051.4%2C29.1%20Q1080%2C20%201108.6%2C29.1%20L1171.4%2C48.9%20Q1200%2C58%201228.6%2C48.9%20L1291.4%2C29.1%20Q1320%2C20%201348.6%2C29.1%20L1440%2C58%20L1440%2C75%20L0%2C75%20Z'/%3E%3C/svg%3E"); }
+ *
+ * Images/Brand/edge-truvio.svg beside the placeholder is the worked example and
+ * the source of the line above: a softened zigzag with gently rounded peaks -
+ * industrial, not a sine wave - which is the Truvio edge. That swap is the whole
+ * of the brand-time edit, and it is what the branding step of an e2e run
+ * performs on a Truvio-branded site.
+ *
+ * IT IS INERT. Nothing below paints until a class is applied, and no Swift grid
+ * row can carry one: the stock row template emits no class attribute from
+ * content and grid-row serialization has no cssClass key. Block 26 of
+ * default_custom.js is what opts the standing pages in, and is where the three
+ * instances this theme applies are named.
+ *
+ * THE CLEARANCE RULE, which is the whole reason this block is longer than the
+ * mask. A pseudo-element paints wherever it is positioned, inside its owner's
+ * border box or outside it, and every box-model measurement reads healthy either
+ * way - the elements genuinely do not overlap, so a geometry probe finds nothing
+ * and the text is still sliced. The fix is SPACING, never stacking: padding sized
+ * off the motif's own clamp is reserved on the element whose INK the band would
+ * cover, so the reservation tracks the motif at every viewport automatically.
+ * Raising z-index on the content instead is the tempting fix and the wrong one:
+ * it repaints the text above the crest and leaves the design looking like a
+ * mistake rather than a motif.
+ *
+ * THE RECEIVER, not the owner (2.2.2, Foundry #1152). The element that declares
+ * the motif is not usually the element the motif paints over, and reserving the
+ * room on the declaring element is the defect that shipped three instances at
+ * 0.00px, -71px and -1700px of painted clearance at once. A bottom edge paints
+ * inside its owner, so there the owner IS the receiver; a top edge paints above
+ * its owner, so the receiver is whatever precedes it - and for the footer crest
+ * that is <main>, whose end padding is the only thing the band can rise into.
+ *
+ * ONE TOKEN, THREE KNOBS.
+ *   --td-edge-fill  the painted colour. Defaults to the neutral page ground, so
+ *                   an un-themed edge reads as a carved boundary, not a stripe.
+ *                   Set it to the colour of the section the edge points INTO.
+ *   --td-edge-h     the height. clamp(40px, 5vw, 75px) - 72px at 1440, 40px at
+ *                   390, and the same expression drives every clearance below,
+ *                   which is what keeps the two in step.
+ *   --td-edge-mask  the shape. Swap it for a different silhouette without
+ *                   touching any rule here.
+ *
+ * GATE NOTE. Pseudo-element paint is invisible to every probe except the
+ * painted-clearance one, so every edge instance a site ships needs its own
+ * paintClearance entry naming its owner selector. A sitewide footer crest and a
+ * single band boundary are two entries, not one.
+ * ========================================================================== */
+[data-td-block="22"] { --td-block: 22; }
+
+:root {
+  --td-edge-h:    clamp(40px, 5vw, 75px);
+  --td-edge-fill: var(--td-white);
+  --td-edge-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 75' preserveAspectRatio='none'%3E%3Cpath d='M0%2C66%20C480%2C74%20960%2C74%201440%2C66%20L1440%2C75%20L0%2C75%20Z'/%3E%3C/svg%3E");
+}
+
+/* The shared pseudo-element. Full-bleed horizontally, clamped vertically,
+ * pointer-transparent, and masked to the path. No fallback is declared: a
+ * browser without mask support simply does not paint it, which is the correct
+ * degradation for a decorative shape. */
+.td-edge-bottom::after,
+.td-edge-top::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: var(--td-edge-h);
+  background-color: var(--td-edge-fill);
+  -webkit-mask-image: var(--td-edge-mask);
+          mask-image: var(--td-edge-mask);
+  -webkit-mask-size: 100% 100%;
+          mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  pointer-events: none;
+}
+
+/* An owner must establish a containing block for the absolutely-positioned
+ * pseudo-element, and must not clip it. */
+.td-edge-bottom,
+.td-edge-top {
+  position: relative;
+  overflow: visible;
+}
+
+/* BOTTOM: the motif sits on the owner's own bottom edge and points down into
+ * whatever follows. bottom -1px closes the sub-pixel seam that fractional
+ * layout heights open between the mask and the edge. */
+.td-edge-bottom::after {
+  bottom: -1px;
+}
+
+/* TOP: the motif sits ABOVE the owner's border box and rises into the section
+ * before it - `bottom: 100%`, so the band is exactly [ownerTop - H, ownerTop] and
+ * its ink is flush with the owner's own top edge. `top: 0` was the defect: it put
+ * the band INSIDE the owner, where a vertical flip pointed the crest up while the
+ * ink still sat over the owner's own first H pixels of content. No flip is needed
+ * now - the mask's ink is flush with the band's bottom edge already, which is the
+ * edge that meets the owner.
+ *
+ * Painting above the owner is only safe because the RECEIVER below reserves the
+ * room (the clearance rules), which is the whole difference between this and the
+ * negative-offset failure class: a band above the owner's box is somebody's
+ * clearance, and that somebody is named. */
+.td-edge-top::before {
+  bottom: 100%;
+}
+
+/* A second top edge adjacent to the first would read as one repeated stamp, so
+ * the alternate flips on X. Apply it to the second of two consecutive
+ * boundaries. */
+.td-edge-top.td-edge-alt::before,
+.td-edge-bottom.td-edge-alt::after {
+  transform: scaleX(-1);
+}
+
+/* --------------------------------------------------------------------------
+ * CLEARANCE. Mandatory whenever the motif is on. Every value is sized off the
+ * same clamp as the motif, so nothing has to be re-tuned per breakpoint.
+ * -------------------------------------------------------------------------- */
+
+/* THE RULE. Padding goes on the element whose INK the band would cover - the
+ * RECEIVER - and never on the owner just because the owner declares the motif.
+ * Both of the shipped clearance rules got this wrong before 2.2.2 and both read
+ * healthy in every box-model check while the band sliced text.
+ *
+ * There are exactly two receivers, one per direction:
+ *   BOTTOM edge  the band is [ownerBottom + 1 - H, ownerBottom + 1], i.e. INSIDE
+ *                its owner. The ink it covers is the owner's OWN last line, so
+ *                the owner is the receiver and takes padding-block-end.
+ *   TOP edge     the band is [ownerTop - H, ownerTop], ABOVE its owner. The ink
+ *                it covers belongs to whatever precedes the owner, so THAT
+ *                element takes padding-block-end - never the owner.
+ *
+ * A padding PROPERTY, not --dw-row-space-*. Swift resolves a grid row's padding
+ * from an attribute rule, `[data-swift-gridrow][data-dw-row-space-bottom="0"]`,
+ * whose (0,2,0) out-specifies a (0,1,0) class, so a class that sets the variable
+ * is silently discarded on every row an editor has set to spacing step 0 - which
+ * is every poster hero. The variable is set too, at attribute specificity, so
+ * Swift's own padding declaration computes the same number and an editor reading
+ * the row's spacing sees no contradiction. */
+
+/* BOTTOM edge: the owner is the receiver. */
+.td-edge-bottom {
+  padding-block-end: calc(var(--td-edge-h) + 14px);
+}
+.td-edge-bottom[data-swift-gridrow] {
+  --dw-row-space-bottom: calc(var(--td-edge-h) + 14px);
+}
+
+/* TOP edge inside main: the element BEFORE the owner is the receiver. Block 26
+ * no longer creates one of these (see below), but the utility stays safe for any
+ * site that applies .td-edge-top to a row by hand. */
+main > *:has(+ .td-edge-top) {
+  padding-block-end: calc(var(--td-edge-h) + 14px);
+}
+main > [data-swift-gridrow]:has(+ .td-edge-top) {
+  --dw-row-space-bottom: calc(var(--td-edge-h) + 14px);
+}
+
+/* The footer crest, which is the sitewide instance and the one that was 0.00px
+ * clear in both identities on every page. Its receiver is MAIN: the band rises
+ * out of the footer into the gap at the end of the page, so the page's own end
+ * padding is the clearance and the footer's top padding is irrelevant to it. The
+ * old rule padded the footer - the owner - and reserved nothing at all where the
+ * band actually paints.
+ *
+ * Keyed on the footer carrying the crest, so the reservation appears only when
+ * block 26 has applied the class and the motif is inert without it. */
+main:has(+ footer.td-edge-top) {
+  padding-block-end: calc(var(--td-edge-h) + 14px);
+}
+
+/* WHY THERE IS NO TOP-EDGE INSTANCE INSIDE MAIN ANY MORE. A top-anchored band is
+ * measured against the ink of the scope it paints into, and for an owner inside
+ * <main> that scope is all of main - including every row BELOW the owner. A
+ * boundary row halfway down the page therefore measures its band against ink
+ * 1700px underneath it, and no padding value anywhere can close a gap that is
+ * negative by construction. The band is not the problem; the arrangement is. A
+ * top anchor is sound only when its owner terminates the ink it threatens, which
+ * is true of exactly one element on a page: the footer. Every boundary inside
+ * main is therefore drawn as a BOTTOM edge on the row above it - the same band in
+ * the same place, with the ink it covers owned by the element that reserves it. */
+
+/* =============================================================================
+ * #23 THE LAPTOP BAND - the header line has to fit between 992 and 1440 as well
+ * The sheet carries three breakpoints - 767.98, 991.98 and 992 - so as far as
+ * every rule above is concerned a 1366 laptop and a 1440 desktop are one tier.
+ * They are not. The header lays the logo lockup, the megamenu nav row, the icon
+ * cluster and the search field out on one flex line, and that line's min-content
+ * width is a fixed budget: the logo figure is inline-hardcoded at 210px, the
+ * nav decorations this sheet adds above (gap, padding-inline, caret) are sized
+ * in rem and em, and the header container keeps its stock gap. None of it
+ * shrinks. At 1440 the budget fits with a few pixels to spare. At 1366 it does
+ * not, and the page is pushed wider than the viewport - measured at 1432 against
+ * a 1366 viewport on /home AND on the PLP, the same 66px on two unrelated page
+ * bodies, which is the proof that the source is the header they share and not
+ * either body.
+ *
+ * The search field is the casualty, not the cause. The relaxation above zeroes
+ * the 260px minimum Swift ships on its inner wrapper and supplies no basis in
+ * its place, so the field is the one item on the line that can absorb the
+ * overcommit - and it absorbs all of it, collapsing to a measured 0 x 58 while
+ * the line still overflows. Removing the victim floor was never going to fix an
+ * overcommitted line.
+ *
+ * So this block fixes the budget instead. Between 768 and 1440 the four
+ * contributions that are sized for 1440 and refuse to shrink are closed to
+ * values the mobile tier already proves usable, and the search field is given a
+ * basis so it grows into whatever that frees. The arithmetic, at the 7-item bar
+ * HEADER-01 measured: the logo returns 40px, the nav gap 2.4px per gap, the
+ * per-item inline padding 6.4px, the caret 2.1px, which is 40 + 14.4 + 44.8 +
+ * 14.6 = 113.8px against a 66px overcommit. Every term except the logo is
+ * per-item, so the margin widens as the bar does - the direction a fix has to
+ * fail safe in.
+ *
+ * The field keeps the min-width: 0 the relaxation gave it. That is deliberate:
+ * a hard floor here would be a new fixed budget on the same line, which is the
+ * bug this block exists to remove. It is given a flex basis and allowed to
+ * shrink, so it can never be the thing that pushes the document again.
+ *
+ * Nothing here sets overflow on any header element - the standing guard: an
+ * overflow context on the header subtree clips the megamenu and offcanvas
+ * panels, which at this width still have to open.
+ * ========================================================================== */
+[data-td-block="23"] { --td-block: 23; }
+
+@media (min-width: 768px) and (max-width: 1439.98px) {
+  /* No header child keeps an automatic minimum size it is not willing to give up. */
+  [data-swift-page-header] [data-swift-container] > * { min-width: 0; }
+
+  /* The logo lockup. Block #13 clamps the figure below 768 because the icon
+   * cluster needs the room; between 768 and 1440 the line needs it just as much,
+   * and the SVG scales inside whatever the figure is given. */
+  header [data-dw-itemtype="swift-v2_logo"] figure { width: 170px !important; }
+  header [data-dw-itemtype="swift-v2_logo"] svg { width: 100%; height: auto; }
+
+  /* The header container's own gap, tightened the way block #13 tightens it below
+   * 768 - the stock gap is sized for a line that has slack. */
+  [data-swift-page-header] [data-swift-container] { gap: .5rem !important; }
+
+  /* The nav row's own decorations, which are what this sheet adds to the budget. */
+  .megamenu-wrapper > nav.d-flex { gap: .1rem; }
+  .megamenu-wrapper > nav > .nav-item > .nav-link { gap: .2rem; padding-inline: .1rem; }
+  .megamenu-wrapper > nav > .nav-item.dropdown > .nav-link::after {
+    width: .34em;
+    height: .34em;
+    margin-left: 0;
+  }
+
+  /* The search field grows into the space the four rules above return. Basis, not
+   * floor: it still shrinks before the line does. */
+  [data-dw-itemtype="swift-v2_searchfield"] { flex: 1 1 16.25rem !important; }
+  [data-dw-itemtype="swift-v2_searchfield"] .js-async-fetch-placeholder { width: 100%; }
+}
+
+/* ==========================================================================
+ * BLOCK 24 - THE PRICE LOCK. The signed-out affordance where a price would be.
+ *
+ * WHAT IT DRESSES. The markup emitted by the theme's own
+ * Paragraph/Swift-v2_ProductPrice/PriceWithSignIn.cshtml variant, and nothing
+ * else. Three elements: a padlock glyph, a label, and - on a detail page only -
+ * a sign-in anchor. Stock Swift renders an empty div in this state, so a shopper
+ * who is not signed in currently sees a blank column where the price belongs.
+ *
+ * IT IS INERT TWICE OVER. Nothing here paints unless (a) a paragraph's Template
+ * field names the variant AND (b) the area's AnonymousUsers field carries
+ * "price" and the visitor is anonymous. On a site that shows prices to everyone
+ * the variant never emits .td-price-lock, so this block costs zero pixels.
+ *
+ * THE NAMESPACE IS td-, like every other class this sheet owns. A lock badge is
+ * theme surface, not content: a re-skin restyles it by overriding these four
+ * rules and never by editing the template that emits it.
+ *
+ * LIST VS DETAIL. BOTH carry the anchor (#1159). A listing that names a gate and
+ * offers no way past it is a dead end on the one surface a buyer scans, and it was
+ * the last remnant of the marine "PLP anon price substitute" row. The two differ in
+ * SHAPE only: td-price-lock--pdp is the detail modifier and stacks the anchor onto
+ * its own full-width line, while the list instance stays a chip that WRAPS - the
+ * anchor drops under the label when the column is narrow instead of pushing the row
+ * wider. That wrap is what keeps #1156's width budget intact: the price cell is
+ * flex: 0 0 auto, so anything it cannot wrap it charges to the row.
+ *
+ * NO COLOUR OF ITS OWN. Everything below resolves through the --td-* tokens and
+ * currentColor, so a palette swap carries the badge with it and a dark colour
+ * scheme does not have to be special-cased.
+ * ========================================================================== */
+[data-td-block="24"] { --td-block: 24; }
+
+.td-price-lock {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  min-width: 0;
+  gap: .375rem;
+  padding: .25rem .5rem;
+  border: 1px solid var(--td-hairline);
+  border-radius: var(--td-radius-sm);
+  background-color: var(--td-accent-soft);
+  color: var(--td-slate-mid);
+  font-size: .8125rem;
+  line-height: 1.25;
+}
+
+.td-price-lock__icon {
+  flex: 0 0 auto;
+  opacity: .8;
+}
+
+.td-price-lock__label {
+  white-space: nowrap;
+}
+
+/* The detail-page instance carries the anchor, so it stops being a chip: it
+ * stacks, aligns to the start of its column, and the anchor gets its own line
+ * rather than fighting the label for the row. */
+.td-price-lock--pdp {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: .5rem;
+  padding: .5rem .75rem;
+}
+
+.td-price-lock--pdp .td-price-lock__icon,
+.td-price-lock--pdp .td-price-lock__label {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/* The list chip's anchor is a compact second line, never a stretched block: it
+ * wraps under the label rather than widening a column the row cannot spare. */
+.td-price-lock__action {
+  max-width: 100%;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.td-price-lock--pdp .td-price-lock__action {
+  align-self: stretch;
+}
+
+/* ==========================================================================
+ * BLOCK 25 - THE ANCHOR STRIP. Dressing for the TC_AnchorNav item type the
+ * surface layer ships.
+ *
+ * WHAT IT DRESSES. One <nav data-td-anchornav> holding a flat list of in-page
+ * jump links. The strip renders its shell even with no links in it - an element
+ * that vanishes when its data is missing is a section nobody can measure - so
+ * these rules have to look deliberate when the list is empty as well as full.
+ *
+ * STICKY, BUT ONLY WHERE THERE IS ROOM. Below 768 a sticky strip eats a third
+ * of a phone viewport on a page whose whole point is long-form content, so it
+ * sticks from the small-tablet tier up and scrolls away on a phone.
+ *
+ * SCROLL-MARGIN IS THE OTHER HALF. A sticky strip and an #id target collide by
+ * construction: the browser scrolls the heading to the viewport top and the
+ * strip is already sitting there. scroll-margin-block-start on the headings the
+ * strip points at is the fix, sized off the same variable the strip's own height
+ * is, so the two cannot drift.
+ *
+ * NO COLOUR OF ITS OWN - --td-* tokens and currentColor throughout.
+ * ========================================================================== */
+[data-td-block="25"] { --td-block: 25; }
+
+:root {
+  --td-anchornav-h: 3rem;
+}
+
+.td-anchornav {
+  border-block-end: 1px solid var(--td-hairline);
+  background-color: var(--td-white);
+}
+
+.td-anchornav__list {
+  min-height: var(--td-anchornav-h);
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.td-anchornav__list::-webkit-scrollbar { display: none; }
+
+.td-anchornav__link {
+  display: inline-block;
+  padding-block: .5rem;
+  color: var(--td-slate-mid);
+  text-decoration: none;
+  white-space: nowrap;
+  border-block-end: 2px solid transparent;
+}
+
+.td-anchornav__link:hover,
+.td-anchornav__link:focus-visible {
+  color: var(--td-accent);
+  border-block-end-color: var(--td-accent);
+}
+
+@media (min-width: 768px) {
+  .td-anchornav {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  /* The strip's own height, reserved above every heading it can jump to, so a
+   * jump does not land the heading underneath the strip. */
+  main h2[id] {
+    scroll-margin-block-start: calc(var(--td-anchornav-h) + 1rem);
+  }
+}
+
+/* =============================================================================
+ * #27 THE SIGNED-IN PLP ROW HAS A WIDTH BUDGET - blocks #10 and #15 sized the
+ * card for the ANONYMOUS column set
+ *
+ * Block #10's desktop discipline pins five of the seven card columns to fixed,
+ * NON-SHRINKABLE bases - image 72, number 150, short description 280 with a
+ * matching max-width, stock 100, and `flex: 0 0 auto` on price and cart - and
+ * gives only the header `min-width: 0`. Every one of those was measured on the
+ * ANONYMOUS card, where the price column is a small badge and the cart column is
+ * a stub. Signed in the same row gains a real price figure and a real cart
+ * control, and nothing in the row is allowed to give the width back: `flex-shrink`
+ * is 0 on five of seven, the row does not wrap, and the one column with a
+ * max-width equal to its basis cannot even absorb its own text.
+ *
+ * MEASURED, before (Foundry #1156, legs run 20260913-111100, both roots):
+ *   1440 authenticated   documentElement 1454 / 1440,  body 1454 / 1440   -> 14px
+ *   1366 authenticated   documentElement 1469 / 1366,  body 1469 / 1366   -> 103px
+ *   1440 anonymous       overflowX 0        1366 anonymous  overflowX 0
+ *   both viewports, both identities, mobile: overflowX 0
+ *   5 of 5 cards: swift-v2_productshortdescription display:flex 0 x 136 px,
+ *                 still carrying 77-89 characters
+ * The 14-vs-103 spread is the point: the wrap point sits BETWEEN the two widths,
+ * which is why one desktop measurement would have read as a rounding error.
+ *
+ * THE ZERO-WIDTH CELL IS THE SYMPTOM, NOT THE CAUSE - the same shape as block #23
+ * and the search field. A line that is overcommitted picks a victim, and the
+ * victim is whichever item the cascade lets collapse; removing the victim's floor
+ * or widening the victim moves the casualty, it does not close the overcommit.
+ * So this block fixes the BUDGET, and the description's floor is a consequence of
+ * that rather than the fix itself.
+ *
+ * THE BUDGET, at 992 and up. The non-shrinkable floor of the signed-in row was
+ * 72 + 150 + 280 + 100 + price + cart, with the header the only column able to
+ * give anything back and the description unable to give back even its own
+ * max-width. It is now 72 + stock + price + cart, and every other column is
+ * shrinkable against a stated floor:
+ *   image        0 0 72px      unchanged - the one genuinely fixed column
+ *   number       0 1 150px     shrinkable; SKU is the column a buyer scans, so it
+ *                              keeps its basis and gives width only under pressure
+ *   header       1 1 12rem     with min-width 0, as before
+ *   description  1 1 10rem     min-width 6rem, max-width none, and it WRAPS -
+ *                              block #10's nowrap/overflow/ellipsis trio is what
+ *                              turned a too-narrow cell into a zero-height line
+ *                              instead of a second line of text
+ *   stock        0 0 auto      min-width 5.5rem, still margin-left auto
+ *   price, cart  0 0 auto      min-width 0, so they contribute their content and
+ *                              not an automatic minimum on top of it
+ * and the row WRAPS. A row that wraps cannot push the document: the cart drops to
+ * a second line of the same card before the line overflows, which is the failure
+ * mode this page is allowed to have. Nothing here sets `overflow` on the row, the
+ * card or either root - the probe measures both roots precisely to catch a theme
+ * hiding the scrollbar that would have shown a human the same defect.
+ *
+ * BETWEEN 992 AND 1440 the budget is tightened again, the way block #23 tightens
+ * the header line over the same band: the image returns 16px and the number and
+ * description floors come down, because 1366 is where the measurement says the
+ * line actually breaks.
+ *
+ * NOT MEASURED AFTER, and this is stated rather than implied: this session is
+ * read-only on foundry.mydwsite4.com, so the sheet has not been staged and the
+ * after-widths are the computed floor above, not a measurement. The e2e session
+ * validates it with `pwsh runs\v5-prep\Invoke-V5Legs.ps1 -Legs design
+ * -PersonaUser TruvioBuyer` - the two COLLAPSE-01 and two VISIBLE-01
+ * AUTHENTICATED rows must print overflowX 0 on both roots while the anonymous
+ * rows stay PASS. A -SkipPersona run cannot validate it: the two columns that
+ * cause the overcommit do not exist there.
+ * ========================================================================== */
+[data-td-block="27"] { --td-block: 27; }
+
+@media (min-width: 992px) {
+  /* The row itself: it may wrap, and no child keeps an automatic minimum it is
+   * not willing to give up. */
+  .product-list article.product section > [data-swift-container] {
+    flex-wrap: wrap;
+    column-gap: .75rem;
+    row-gap: .35rem;
+  }
+  .product-list article.product section > [data-swift-container] > * { min-width: 0; }
+
+  .product-list article.product [data-dw-itemtype="swift-v2_productnumber"] {
+    flex: 0 1 150px !important;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] {
+    flex: 1 1 12rem !important;
+    min-width: 0;
+  }
+  /* The description shrinks and wraps instead of collapsing. The floor is a floor,
+   * not a basis: it is the width below which the cell stops being readable, and
+   * the row wraps rather than taking it below that. */
+  .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] {
+    flex: 1 1 10rem !important;
+    min-width: 6rem;
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productstock"] {
+    flex: 0 0 auto !important;
+    min-width: 5.5rem;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productprice"],
+  .product-list article.product [data-dw-itemtype="swift-v2_productaddtocart"] {
+    min-width: 0;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1439.98px) {
+  .product-list article.product [data-dw-itemtype="swift-v2_productdefaultimage"] {
+    flex: 0 0 56px !important;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productnumber"] {
+    flex: 0 1 8.75rem !important;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] {
+    flex: 1 1 9rem !important;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] {
+    flex: 1 1 8rem !important;
+    min-width: 5rem;
+  }
 }

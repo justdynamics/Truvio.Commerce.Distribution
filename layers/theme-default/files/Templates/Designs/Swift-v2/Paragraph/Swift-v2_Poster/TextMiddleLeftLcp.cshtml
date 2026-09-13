@@ -1,0 +1,68 @@
+@inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.ParagraphViewModel>
+@using Dynamicweb.Frontend
+
+@* TextMiddleLeftLcp.cshtml — a layout VARIANT of Swift-v2_Poster. NET-NEW and INERT:
+   the standard TextMiddleLeft.cshtml is untouched and stays the default, and this file
+   renders nothing until a paragraph's Template field names it. Byte-identical to the
+   standard template except for the <img> tag.
+
+   WHY IT EXISTS
+   A full-bleed poster at the top of a page is almost always the Largest Contentful Paint
+   element. The standard template asks GetImage for a single 1680px render at quality 95
+   and gives the browser no priority hint, so the largest paint on the page is discovered
+   late and arrives over-weight. None of that is fixable from a stylesheet: the request
+   width, the quality and the priority hint are all attributes on the img the template
+   emits. A layout variant is the only place in a theme where they can be changed.
+
+   THE THREE CHANGES, all confined to the img tag:
+     srcset / sizes   let the browser pick a width instead of always taking the largest
+     fetchpriority    marks the LCP candidate so it is not queued behind other subresources
+     quality 95 -> 80 webp at 80 is visually indistinguishable at these sizes; re-verify
+                      against the 95 render at your own breakpoints before shipping a brand
+
+   No width/height attributes: the figure is position-absolute inside a .ratio box, so its
+   geometry comes from CSS and it cannot shift layout.
+
+   FILL-IN RECIPE
+   Set the paragraph's Template field to TextMiddleLeftLcp.cshtml on the ONE poster that
+   is the page's LCP element — usually the first row of the front page. Applying it to
+   every poster on the site is wrong: fetchpriority="high" is a budget, and spending it on
+   images below the fold delays the one that is measured. *@
+
+<div data-swift-poster="middle-left" class="d-grid position-relative align-content-center text-start" data-swift-poster-height="@(Model.Item.GetString("Height"))">
+	@if (Model.Item.TryGetImageFile("Image", out ImageFileViewModel image))
+	{
+		string enc = Dynamicweb.Context.Current.Server.UrlEncode(image.Path);
+		Func<int, string> u = w => $"/Admin/Public/GetImage.ashx?image={enc}&width={w}&format=webp&quality=80";
+		<figure class="position-absolute top-0 bottom-0 end-0 start-0 m-0 pe-none ratio">
+			<img class="object-fit-cover"
+				 src="@u(1280)"
+				 srcset="@u(640) 640w, @u(960) 960w, @u(1280) 1280w, @u(1600) 1600w, @u(1920) 1920w"
+				 sizes="100vw"
+				 fetchpriority="high" decoding="async"
+				 style="object-position: @image.GetFocalPointPercentage()" alt="@Model.Item?.GetString("AltText")">
+		</figure>
+	}
+
+	<div data-swift-container class="position-relative z-1">
+		<div data-swift-text class="mb-0-last-child">
+			@if (Model.Item.TryGetString("Eyebrow", out string eyebrow)) {
+				@eyebrow
+			}
+			@if (Model.Item.TryGetString("Title", out string title)) {
+				@title
+			}
+			@if (Model.Item.TryGetString("Text", out string text)) {
+				@text
+			}
+		</div>
+		<div class="d-flex flex-wrap gap-2 align-items-center">
+			@if (Model.Item.TryGetButton("FirstButton", out ButtonViewModel firstButton)) {
+				<a href="@firstButton.Link.Url" class="btn btn-@firstButton.Style" data-dw-button="@firstButton.Style">@firstButton.Label</a>
+			}
+			@if (Model.Item.TryGetButton("SecondButton", out ButtonViewModel secondButton)) {
+				<a href="@secondButton.Link.Url" class="btn btn-@secondButton.Style" data-dw-button="@secondButton.Style">@secondButton.Label</a>
+			}
+		</div>
+	</div>
+</div>

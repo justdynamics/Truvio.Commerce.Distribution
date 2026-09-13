@@ -1,0 +1,23 @@
+"paragraphUniqueId": 3d9b6c14-2f7a-4e55-8c31-b0a9d4e27f68
+"sourceParagraphId": 90006
+"sortOrder": 10
+"itemType": "Swift-v2_ProductFieldDisplayGroups"
+"header": ""
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "DisplayGroups": "[\"tc_specs\"]"
+  "GlobalRecordPageGuid": "15e4ab2a-a10e-4959-8c9f-67293f8afa30"
+  "HideFieldLabels": false
+  "HideFieldsWithZeroValue": true
+  "HideGroupHeaders": true
+  "HideTitle": true
+  "Id": "1"
+  "ItemInstanceType": ""
+  "Layout": "table"
+  "Sort": 0
+  "Title": "Specifications"
+  "TitleFontSize": "h4"
+"columnId": 1

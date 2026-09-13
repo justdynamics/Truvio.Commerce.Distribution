@@ -1,5 +1,18 @@
 # Changelog — feature-bom-configurator
 
+
+## 1.2.0
+
+**Zero catalogue rows (Foundry 960).** The BOM parent `PACK-BOM-0001`, its four child products, the
+three groups (`PACK-BOM-GRP1`, `PACK-BOM-FORKS`, `PACK-BOM-RACKS`), their shop and group relations
+and both `EcomProductItems` slot rows moved to `sample-data` `merge/_sql/feature-fixtures.sql` with
+every id unchanged. `fragmentTables` keeps only what the layer still writes; the catalogue
+`configRows` are removed. The `bom-cart-lines` probe is untouched and still selects the non-default
+child in each slot.
+
+The layer keeps what actually makes it a BOM feature: the two content pages, the
+`PackBomDetailRenderGrid.cshtml` detail template and the slot wiring recipe in the README.
+
 ## 1.1.1
 
 Swift 2.4 roll-forward re-prove (RUN-SWIFT-24): `swiftVersion` claim rolls to **2.4.0**

@@ -63,5 +63,20 @@
       "Swift-v2_HelloUser",
       "Swift-v2_Text"
     ]
+  },
+  "fieldDisplayGroupsBound": {
+    "note": "The PDP Specifications band (replace/_content/Swift 2/Shop/Product Details/grid-row-13/paragraph-c1-10.yml) binds DisplayGroups [\"tc_specs\"]. surface-swift NAMES the group; it creates none. These are the guarantees a composing data layer must keep, because the band renders a heading over an empty table when any of them is broken and says nothing about which (Foundry #1147).",
+    "group": "tc_specs",
+    "boundBy": "replace/_content/Swift 2/Shop/Product Details/grid-row-13/paragraph-c1-10.yml -> fields.DisplayGroups",
+    "obligations": {
+      "availableInFrontend": "EcomFieldDisplayGroups.FieldDisplayGroupAvailableInFrontend = 1. The paragraph's own option query filters on it, so a group without it is invisible to the storefront AND to the backend picker.",
+      "memberReferenceForm": "A member of a display group is a REFERENCE to a field, not a field id. A category field is referenced as ProductCategory|<FieldCategoryId>|<FieldId>. A bare FieldId resolves against GLOBAL product fields (EcomProductField) only.",
+      "membershipIsComplete": "EcomFieldDisplayGroupFields must hold every field the group claims, and the denormalised EcomFieldDisplayGroups.FieldDisplayGroupFieldIds must be WRITTEN FROM that relation rather than typed beside it. The two stores disagreeing is the measured failure: 28 members in the relation against 6 names in the column.",
+      "everyNameResolves": "Every name in FieldDisplayGroupFieldIds must resolve to a live EcomProductCategoryField row. The measured column carried ProductCategory|tc_content|tcMedia, which is not a field on any host: the real system name is tcMediaSet. A typed name that resolves to nothing is silent - no exception, no dw-error, correct row counts everywhere."
+    },
+    "knownWrongNames": {
+      "tc_content|tcMedia": "tc_content|tcMediaSet"
+    },
+    "scopeNote": "tc_specs spans four categories (tc_commerce, tc_content, tc_data_models, tc_users) and a product renders only the fields it carries a value for, so a product whose values all sit in one category shows that category's fields and no others. A data layer that wants the band fuller spreads values across the categories the group spans; it does not shorten the group."
   }
 }

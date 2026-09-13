@@ -15,6 +15,7 @@
   "CookiePolicyLink": "Default.aspx?ID=232"
   "CookieLayout": "modal"
   "MediaQueryLimit": ""
+  "CustomHeadInclude": "/Files/Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml"
 "properties":
   "AreaStyleId": 0
   "AreaDomain": ""

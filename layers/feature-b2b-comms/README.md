@@ -14,8 +14,8 @@ Under a new `/Newsletter Emails/Dealer Emails/` folder:
 |---|---|
 | Dealer welcome | Partner-network welcome, `{{UserManagement:User.Name}}` greeting, catalog CTA |
 | How to order | SKU/facet search, reorder-from-history, same-day cut-off |
-| Seasonal promotion | Pre-order / allocation pitch (de-marined from the SPIFF email) |
-| Product compliance notice | Neutral compliance notice (de-marined from the recall email) |
+| Seasonal promotion | Pre-order / allocation pitch (neutralized from the source incentive email) |
+| Product compliance notice | Neutral compliance notice (neutralized from the source recall email) |
 | Cart reminder | Abandoned-cart nudge, held pricing/allocation |
 
 Each is a `Swift-v2_Email` page with `1ColumnEmail` rows: **Header / Heading / Article /
@@ -54,7 +54,7 @@ not serializable — the swift-demo Foundry gate run (deserialize + recycle) is 
 2. **Abandoned-cart provider** — `AbandonedCartRecipientProvider` XML (240 min / 14 days / require
    login; shop id = the serialized SHOP1) rides on the cart-reminder email row (deferred with #1).
 3. **Recipient-group binding** — the flow's `RecipientsIds` ("G1325") did not parse into
-   `recipientGroups` on marine (encoding unknown, report operator step); set in the admin UI.
+   `recipientGroups` on the source solution (encoding unknown, report operator step); set in the admin UI.
 4. **Delivery provider** — SMTP is host-blocked; demos default to the Save provider (emails to
    disk). A host/global-settings decision, not layer content.
 5. **"Email Marketing Flow Scheduler" scheduled task** — the exact `AddInTypeName` is not
@@ -62,6 +62,6 @@ not serializable — the swift-demo Foundry gate run (deserialize + recycle) is 
    the one remaining operator step (nothing sends until it exists).
 
 ## Recipient-group mapping note
-Marine used dealership user groups (1346/1354/1355). The Distribution's sample-data ships
+The source solution used its own dealer user groups (1346/1354/1355). The Distribution's sample-data ships
 `Customers` (1325) / `Account Admin` (1270) / `CSR` (1292); the B2B buyer (1328) is a member of
 `Customers`. This pack targets **group 1325 (Customers)** as the dealer-network recipient group.

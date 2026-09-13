@@ -14,7 +14,7 @@ on the current latest Swift release (**Swift 2.4**; rolling latest-only) — thi
 layers/            one versioned unit each (base, features, surfaces, themes, sample-data)
   layer.schema.json         the layer contract
   base/base.contract.json   guarantees the base makes to additions
-editions/          named compositions of layers (base-only, swift-demo, headless-demo, dap-portal)
+editions/          named compositions of layers (base-swift, base-only, swift-demo, headless-demo, dap-portal)
   edition.schema.json       the edition contract
 tools/ci/          the self-contained PR validator
 ```
@@ -33,8 +33,11 @@ says how it composes — the dir-name prefix equals the kind (`feature-*`,
 
 An **edition** is a composition — `from` a privileged base + an ordered `add` of layers,
 plus optional `surfaces`, `sampleData`, and `themes`. Additions bind ONLY to the
-[base contract](layers/base/base.contract.json), never to each other. All four editions
-(`base-only`, `swift-demo`, `headless-demo`, `dap-portal`) are gate-proven from their specs.
+[base contract](layers/base/base.contract.json), never to each other. Four editions
+(`base-only`, `swift-demo`, `headless-demo`, `dap-portal`) are gate-proven from their specs;
+`base-swift` — the foundational baseline, one thing to clone that boots a Swift site — is
+specified and awaiting its first gate run, and appears in `INDEX.gateProven` only once the
+Foundry publish flow stamps the run id.
 
 ## Consuming
 

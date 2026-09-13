@@ -1,5 +1,70 @@
 # Changelog — sample-data
 
+
+## 2.3.2
+
+**The PLP facet sidebar rendered mojibake where the layer has an em dash (Foundry #1095).**
+Measured on the branded v5 e2e host: 3 `FIXTGRP*` group names and 20 `FIXT*` product names
+carried `U+00E2 U+20AC U+201D` in place of `U+2014`. The layer file was never wrong - it is
+clean UTF-8 - but a UTF-8 em dash is the three bytes `E2 80 94`, and an applier that runs
+`sqlcmd` without `-f 65001` reads them in the machine's ANSI code page and stores three
+characters instead of one. The file cannot control how it is read, so it stops depending on
+it: every separator is now written as its code point, `N'...' + NCHAR(8212) + N'...'`, and
+no name literal in `catalog.sql` carries a non-ASCII byte. The displayed value is unchanged,
+and the script now seeds the identical em dash under either code page - verified by applying
+it twice on the 10.28.10 host, once with `-f 65001` and once without.
+
+New section 6 repairs a host that was already seeded. It rewrites the CP1252 misdecode
+signature back to `U+2014` across `EcomGroups.GroupName`, `EcomProducts.ProductName` /
+`ProductShortDescription` and the `EcomOrderLines` name snapshot on the `FIXT-ORDER-%` keys,
+existence-guarded so a clean host is never written to. Section 0's DELETE-then-INSERT already
+converges the rows this file owns; section 6 states the convergence rather than leaving it
+implicit, and reaches the snapshot columns a reset does not.
+
+## 2.3.1
+
+**`demo-clock.sql` did not compile on SQL Server (Foundry v5 e2e, DW 10.28.10).** Three
+compile-time and insert-time faults, all measured on a live apply, none of them reachable by the
+script's own shape guards because the batch never got that far.
+
+`usp_DemoClockShift` joins its own `dbo._demoClockExclusion` / `dbo._demoClockGuard` sysname
+columns against `sys.tables.name` and `sys.columns.name`. The catalog carries
+`Latin1_General_100_CI_AS_KS_WS_SC`; the layer's tables take the database default
+`Latin1_General_100_CI_AS`. The two compares (the exclusion `NOT EXISTS`, and the guard
+`LEFT JOIN`) raised a collation conflict at compile time, so the procedure never ran. Both now
+carry `COLLATE DATABASE_DEFAULT`, which follows whatever collation the target database was
+created with rather than hardcoding one.
+
+The `ScheduledTask` registration then failed with Msg 2628: `TaskComment` is `NVARCHAR(255)` and
+the literal was 364 characters. Shortened to 251, meaning kept — what it shifts, by what delta,
+that the shift is whole-day and uniform, and where the exclusions and guards live.
+
+No behaviour change beyond the script now executing: the shift semantics, the anchor mechanic and
+the task recurrence are untouched.
+
+## 2.3.0
+
+**The feature layers' catalogue rows moved here (Foundry 960).** Composed with `sampleData: false`
+the distribution was supposed to have an empty catalogue, and the acceptance criterion said so; the
+e2e host measured `EcomProducts = 8`, `EcomGroups = 5`, `EcomPrices = 4` on exactly that run. The
+rows were not smuggled — they were shipped openly by three feature layers, each README calling it
+catalog self-sufficiency, because the base is scaffolding-only. The reason the gate could not name
+the owner is that `Set-ConfigFromEdition` *derives* `EcomProducts = 0` from the toggle instead of
+measuring what the composed layers insert, so eight products arriving looked like a count mismatch
+rather than a finding with an address.
+
+The fix is the plain invariant, restored: the catalogue rides the single `sampleData` toggle and
+nothing else. `merge/_sql/feature-fixtures.sql` (declared, phase `after-replace-deserialize`,
+order 2) now seeds the 5 groups, 8 products, 4 prices and 2 BOM slots that `feature-pricing`,
+`feature-bom-configurator` and `feature-subscription-orders` used to ship in their own mode trees.
+**Every id is unchanged** — `PACK-RPP-*`, `PACK-BOM-*`, `PACK-SUB-*` — because each layer's
+`behaviorProbes` and demo pages address these products by id; only the owner moved. `email-stats`
+and `demo-clock` shift to order 3 and 4.
+
+Consequence worth stating out loud: a feature layer's behaviour probe is now meaningful only on an
+edition that also carries sample data. `swift-demo` does; `base-swift` composes no feature layers
+at all, which is the composition the emptiness claim was always about.
+
 ## 2.2.0
 
 Two things this layer promised and never delivered: a composer could not FIND its SQL, and

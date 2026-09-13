@@ -1,5 +1,651 @@
 # Changelog — surface-swift
 
+## 1.12.0
+
+### The buy panel gets a row per component, so nine paragraphs render nine (Foundry #1165)
+
+1.11.0 put the three missing components into rows that were already occupied, and the fix
+was inert by construction. `Product Info (right side)` carried NINE active paragraphs
+across FOUR `1ColumnFlex` rows and the PDP rendered FOUR - the lowest sort in each row,
+the rest emitted with no markup, no `dw-error` and no empty wrapper. Dropped: 22564 SKU,
+22565 Stock and 22566 Documents teaser, all three of 1.11.0's, plus 22379
+`ProductShortDescription` and 22381 `ProductPriceTable`, which were already being dropped
+before it. Those last two are what prove the renderer and not 1.11.0 is the cause.
+
+Same shape as #1136 on a ProductComponent page rather than the ProductDetails page, and
+the same fix: **one paragraph per grid row**. Four rows become nine, sequenced 1..9 in
+the order the panel reads.
+
+| row | paragraph | item type |
+|---:|---|---|
+| 1 | `paragraph-c1-1.yml` | `Swift-v2_ProductHeader` |
+| 2 | `paragraph-c1-7.yml` | `Swift-v2_ProductNumber` |
+| 3 | `paragraph-c1-9.yml` | `Swift-v2_ProductShortDescription` |
+| 4 | `paragraph-c1-2.yml` | `Swift-v2_ProductPrice` |
+| 5 | `paragraph-c1-3.yml` | `Swift-v2_ProductPriceTable` |
+| 6 | `paragraph-c1-4.yml` | `Swift-v2_ProductVariantSelector` |
+| 7 | `paragraph-c1-5.yml` | `Swift-v2_ProductStock` |
+| 8 | `paragraph-c1-6.yml` | `Swift-v2_ProductAddToCart` |
+| 9 | `paragraph-c1-10.yml` | `Swift-v2_ProductMediaTable` |
+
+No paragraph identity moves: every one keeps its `paragraphUniqueId`, `sourceParagraphId`,
+`sortOrder` and fields, and only the row it hangs off is new. Four rows keep their own id
+too, each staying with the occupant it was already rendering, so a seeded host converges
+by gaining five rows rather than by having its panel replaced. The rhythm is unchanged -
+the panel opens on `topSpacing` 5, the header block closes on 3, the variant selector
+keeps its 4/4 band, and the panel closes on `bottomSpacing` 5.
+
+All eighteen paths are in `replace-manifest.json`, replacing the thirteen that described
+the four-row shape.
+
+### The PDP gallery stops discarding the pictures it resolved (Foundry #1166)
+
+`swift-v2_productmedia` painted an EMPTY `carousel-inner` on every PDP - 0 `img` and 0
+`video` inside the block on three products, all 200 with `dw-error` 0, after a recycle and
+a full rebuild of both repositories. #1145 had already fixed the data and the symptom did
+not move.
+
+**It was never the data.** Read-only against the host's stock Swift 2.4
+`Paragraph/Swift-v2_ProductMedia.cshtml`, images resolve by asset-category **system name**:
+
+```csharp
+product.AssetCategories.Where(x => selectedAssetCategories.Contains(x.SystemName))
+```
+
+That is the `EcomDetailsGroupSystemName`, and nothing else - not `ProductAssetCategory`,
+not the media folder, not an id. Paragraph 22402 asks for `["Images"]`, `EcomDetailsGroup`
+8 is named `Images`, 276 rows carry it. The rows resolved.
+
+They were then thrown away by a **format allowlist** hardcoded in the template:
+
+```csharp
+supportedImageFormats = new string[] { ".jpg", ".jpeg", ".webp", ".png", ".gif", ".bmp", ".tiff" };
+```
+
+No `.svg`, while `EcomDetailsGroup` 8 itself declares svg among its
+`DetailsGroupExtensions`. Every image this distribution ships is an SVG.
+
+And that is why the symptom was an empty container rather than a missing one:
+`totalAssets` counts only what the allowlist accepts, so it was 0; with
+`DefaultImageFallback` true the next branch forces the list to the default image and
+`totalAssets` to 1, so the outer block renders - carousel, rails and modal all paint - and
+then each slide is gated on the same allowlist a second time and the default image is the
+same `.svg`. Not one `carousel-item` is emitted.
+
+The PLP was green throughout because `Swift-v2_ProductDefaultImage.cshtml` applies **no
+format filter at all**. That asymmetry between two stock templates is the whole finding.
+
+`files/Templates/Designs/Swift-v2/Paragraph/Swift-v2_ProductMedia.cshtml` is a one-token
+override of the stock render path, alongside the layer's one existing override
+(`RelatedProductsList.cshtml`) and documented in-file the same way: `".svg"` added to
+`supportedImageFormats`, everything else stock byte for byte, so a Swift roll is a re-copy
+plus the same one edit. Declared in `files[]` and in `placeholders[]`.
+
+Scoped to `ProductMedia`. `ProductMediaGallery` carries the same allowlist but no layer
+paragraph uses it; `ProductMediaTable` carries it too but serves PDFs, which the stock
+document formats already accept.
+
+### repositories[] and itemtypes[] are declared (Foundry #1167)
+
+`layer.json` grows `repositories` (3) and `itemtypes` (130), in the same composed-site
+Files-relative vocabulary `files[]` and `placeholders[].path` already use. Before this,
+133 of this layer's staged paths were declared nowhere: a consumer staging from `files[]`
+staged none of them, an audit comparing `files[]` to disk called the layer clean, and a
+retired definition could not be detected as retired. `layers/layer.schema.json` carries
+the two new arrays and `tools/ci/Validate-Distribution.ps1` check 10 diffs all three
+against disk in both directions, and asserts every placeholder resolves into them.
+
+### Consumer impact
+
+Content ymls changed, so a host on 1.11.x needs a **surface-swift Replace** before the
+buy panel renders nine. A template was added, so the `files/` overlay needs restaging
+before the gallery renders images. No re-seed: no data change ships here.
+
+## 1.11.0
+
+### The PDP buy panel gets the four children it was short (Foundry #1160)
+
+Container-scoped inside `[data-dw-itemtype='swift-v2_productcomponentselector']`, on both
+PDPs and in both identities, the panel held exactly four painted components:
+`productheader` 22 px, `productprice` 99 px anonymous / 30 px signed in,
+`productvariantselector` 172 px, `productaddtocart` 0 px anonymous / 60 px signed in.
+Marine's holds eight. Absent: `swift-v2_productnumber`, `swift-v2_productstock` (both 0
+matched page-wide) and the buy-panel documents teaser - the one
+`swift-v2_productmediatable` on the page is the section table further down, 0 inside the
+panel.
+
+Nothing was wrong with the data or the templates. `ProductNumber` is set on all 96
+products, all 60 `EcomStockUnit` rows are populated at qty 148, `EcomDetailsGroup` 7
+(`Manuals`) holds 2 pdf rows per product, and the PLP card renders SKU, description and
+stock from these same three components on these same products. The paragraphs were never
+in the composition: #1136 split the five SECTION heads from their components and did not
+touch the panel.
+
+Three paragraphs are added to `Product Components/Product Info (right side)`, placed so
+the panel reads in marine's order rather than appended at the end:
+
+| where | sort | item type | why there |
+|---|---|---|---|
+| `grid-row-1/paragraph-c1-7.yml` | 7 | `Swift-v2_ProductNumber` | between the title (1) and the lede (9), which is marine's `title, SKU, lead` |
+| `grid-row-2/paragraph-c1-5.yml` | 5 | `Swift-v2_ProductStock` | after price (2) and the quantity-break table (3), before the variant selector in row 3 |
+| `grid-row-4/paragraph-c1-10.yml` | 10 | `Swift-v2_ProductMediaTable` | after add to cart (6), the teaser marine closes its panel with |
+
+The fourth of the marine children, the lede, is `Swift-v2_ProductShortDescription`, and it
+is already on disk at `grid-row-1/paragraph-c1-9.yml` and already registered - 1.10.0
+landed that registration. "Lead" in the parity census is the lede paragraph, not a
+delivery lead time; the layer needs no new field for it and the data layer seeds none.
+
+Field values are lifted from the PLP card instances of the same components, which are the
+proven-rendering ones: the stock component keeps `HideInventory` and `HideStockState`
+both false, because the area gates price and cart and never stock, and the SKU keeps
+`HorizontalAlignment start`. The teaser binds `ImageAssets ["Manuals"]` - the one asset
+category that exists on a composed host, the same discipline #1145 imposed on the gallery
+- with `DefaultImageFallback false`, so a product with no manual shows nothing rather
+than its own photograph in a documents list, and `HideThumbnails true` with a `h6`
+`Documents` title, so it reads as a teaser and not as a second copy of the section table.
+
+MARINE'S `hideForPhones` ON THE TEASER IS NOT REPRODUCED, and not by choice: the
+serializer's paragraph fragment carries no visibility block at all. The twelve keys a
+`paragraph-*.yml` can hold are `paragraphUniqueId`, `sourceParagraphId`, `sortOrder`,
+`itemType`, `header`, `template`, `colorSchemeId`, `moduleSystemName`, `moduleSettings`,
+`fields`, `permissions`, `columnId` - visibility exists on `page.yml` and nowhere else.
+The teaser therefore ships visible at every width. Hiding it on phones is a theme
+decision until the fragment grows the field.
+
+All three are registered in `replace-manifest.json`. That is the known drift class here:
+a paragraph file no manifest path names is a file the deserializer never creates, and it
+fails silently and looks like a content bug. The new `sourceParagraphId` values are
+90023-90025 in the reserved 90000+ band.
+
+VALIDATION is container-scoped, never page-wide:
+`[data-dw-itemtype=swift-v2_productcomponentselector] [data-dw-itemtype]` on both PDPs,
+with the SKU rendering the `ProductNumber` literal and the stock line rendering
+`In stock`. #1155 is the same measurement taken page-wide and getting it wrong.
+
+## 1.10.1
+
+### The related-products table served the prices the padlock withholds (Foundry #1154)
+
+A DATA LEAK, and the only defect in this round that is not a cosmetic one. Area 3
+ships `AnonymousUsers = cart-price`. The gate demonstrably works for the two PDP
+components that read it - the price column renders the sign-in lock and the
+add-to-cart column measures `0 px` anonymous, `60 px` signed in. The related-products
+list does not read it. Measured anonymously on both PDPs at Distribution 4a4cd05b:
+`main [itemprop='price']` totals **5**, all five inside
+`[data-dw-itemtype='swift-v2_relatedproductslist']`, each with a matching
+`.text-price` and an `itemprop='priceCurrency'` content of `USD`. Signed in the total
+is 6 - the same five plus the one the price column is allowed to show. So the exact
+figures the padlock exists to withhold are in the served HTML of the same page,
+machine-readable, and scraping a gated B2B price list needs no session: it needs the
+PDP of one product that relates to others.
+
+The render path is `Swift-v2_RelatedProductsList.cshtml` -> a ServicePage ->
+`eCom/ProductCatalog/RelatedProductsList.cshtml`, and the stock 2.4 file of that path
+is where the row is built. This layer now ships an OVERRIDE of it. That is a different
+kind of file from everything else the layer carries: a layout variant is inert until a
+paragraph's `Template` field names it, whereas a file at a stock render path takes
+effect the moment the layer is on disk. The override is therefore kept byte-minimal -
+**seven inserted lines and zero modified stock lines**, verified by diff against the
+2.4 tree:
+
+- two booleans beside the two the stock file already computes and then never uses -
+  `hidePrice` and `hideAddToCart`, spelled exactly as `Swift-v2_ProductPrice.cshtml`
+  and `Swift-v2_ProductAddToCart.cshtml` spell them, so the three files read as one
+  idiom;
+- `@if (!hidePrice)` around the contents of the price cell;
+- `@if (!hideAddToCart)` around the cart form, because the same gate's other half is
+  the third copy of the figure - the form's hidden `ProductPrice` input - and the PDP
+  buy panel already hides its cart anonymously, so the row now matches it.
+
+Both cells KEEP their `<td>`. The table's header row is unconditional, and a dropped
+cell shifts every column after it. Suppressing contents and not the cell is what the
+stock slider card (`eCom/ProductCatalog/ProductSliderStandard/Product.cshtml`) does in
+the same situation, and it is the whole of the pattern being copied.
+
+No lock badge is rendered here. The affordance is the theme's
+`Swift-v2_ProductPrice/PriceWithSignIn` variant and it is deliberately the one place
+on the page that states the gate; a badge per related row would be noise and would
+break the assert that counts `.td-price-lock` as exactly 1.
+
+On an area whose `AnonymousUsers` value does not contain `price`, neither branch is
+reached and the file renders byte-identical output to the stock one.
+
+VALIDATION is the mirror, not the absence: anonymously `main [itemprop='price']` and
+`main .text-price` must both be 0 on both PDPs while `.td-price-lock` and its
+`__action` anchor stay at 1, and signed in both counts must be 6. A selector that
+matches nothing reads the same as a subject correctly hidden, so the control is
+flipping the area's `AnonymousUsers` value off and watching the anonymous count rise.
+
+## 1.10.0
+
+Four composition defects from the v5 round-two census, all the same shape: a
+paragraph or a repository file naming something that does not exist, or omitting
+something a template dereferences. None raised an error and every row count
+around them was correct.
+
+### The gallery named two asset categories and got neither (Foundry #1145)
+
+The PDP hero gallery set `ImageAssets ["Images","Product_details"]` with
+`DefaultImageFallback 0`. Both names are stock Swift's, where `Images` is a system
+asset category and `Product_details` sits beside it; the Distribution's base ships
+neither, so on a composed host `EcomDetailsGroup` holds one row - `Manuals`,
+created by the data layer for its pdf rows - and both names filtered to nothing at
+`Swift-v2_ProductMedia.cshtml:129`. The default-image fallback at `:145` could not
+fire either: it requires `selectedAssetCategories.Count() == 0` and the count was
+2. The component emitted its wrapper and no children - childCount 0, innerHTML
+length 0, `358 x 0 px` at 390, 0 `img` page-wide at 1440, on both measured products
+in both identities.
+
+The paragraph now names one category, `Images`, and sets `DefaultImageFallback 1`.
+truvio-demo creates that category and puts its 180 image rows in it - the data half
+of contract (a) in the issue. `Product_details` is dropped rather than also created:
+a second category holding the same rows is a second thing to keep true, and the
+gallery reads one strip. The fallback flag matters independently - with it at 0 the
+failure mode is an empty wrapper that paints non-zero at desktop and zero at mobile
+from identical DOM, which is what made a paint-judged presence assert flip by
+viewport.
+
+surface-swift still ships no asset category of its own. A surface NAMES categories;
+a data layer creates them.
+
+### Related products shipped Fields NULL into an unguarded Count (Foundry #1146)
+
+`Swift-v2_RelatedProductsList.cshtml` reads
+`Model.Item.GetList("Fields")?.GetRawValue().OfType<string>().ToList()` and then
+calls `.Count()` on it with no null guard. `GetList` returns null for a field never
+written, the `?.` short-circuits the chain, and the `.Count()` after it dereferences
+null. The yml carried fourteen of the item type's fifteen fields and omitted this
+one, so the component emitted nothing at all -
+`[data-dw-itemtype='swift-v2_relatedproductslist']` matched 0 on both PDPs, in both
+identities, at both viewports - while `EcomProductsRelated` held 324 rows, 6 of them
+on TCPROD0001 and 5 on TCPROD0051.
+
+`Fields` now ships as `"[]"`, the empty list the stock composition writes for an
+unselected checkbox list. Empty and not populated: `Fields` on this item type is a
+DISPLAY-GROUP picker, so naming a group would bind the surface to something only a
+data layer creates. Same class as #1129.
+
+### The spec band states what the group it names must contain (Foundry #1147)
+
+The PDP Specifications paragraph binds `DisplayGroups ["tc_specs"]`, and the group
+was landing with 28 members in `EcomFieldDisplayGroupFields` against 6 names in the
+denormalised `FieldDisplayGroupFieldIds` column, one of which -
+`ProductCategory|tc_content|tcMedia` - is not a field on any host; the real system
+name is `tcMediaSet`. No yml, item-type XML or repository file in this layer carries
+that string, and no `ItemType_*` row on the measured host does either. It exists in
+that one column only, residue of a seed that typed the list beside the member table
+instead of deriving it. The row half is truvio-demo's.
+
+What this layer owns is the naming, so `surface.contract-notes.json` records the
+guarantees a composing data layer has to keep for the band to draw anything: the
+frontend flag the paragraph's own option query filters on, the
+`ProductCategory|<FieldCategoryId>|<FieldId>` reference form, the rule that the
+denormalised column is WRITTEN FROM the relation rather than typed beside it, that
+every name in it must resolve to a live `EcomProductCategoryField` row, and
+`tcMedia -> tcMediaSet` as a known wrong name. The scope note is the part that is
+easy to get backwards: `tc_specs` spans four categories and a product renders only
+the fields it holds a value for, so seven of twenty-eight on one product is correct
+behaviour - the remedy is spreading values, never shortening the group.
+
+### The PLP rail gets attribute facets (Foundry #1149)
+
+`Products.index` set `SkipCategoryFields True`, so the index carried no
+`ProductCategory|...` field while the database held 28 category fields with 420
+values, and no attribute facet could be added at all. The rail rendered Group (24
+values) and Price (2 of its 4 declared bands) against marine's three, the third
+being a real attribute facet.
+
+Four changes, and they only work together - a facet is decorative unless the Field
+is a SystemName in the index, the QueryParameter is a Parameter in the query with a
+`MatchAny` expression in the prunable group, and the Facet is declared in the facets
+file:
+
+- `SkipCategoryFields` **True -> False**, or every `ProductCategory|` Source resolves
+  empty.
+- `SkipDetailImages` **True -> False**: an asset-category gallery and a hover
+  alternative image are detail-image rows, and an index that skips them cannot serve
+  either to a list surface. This is the index leg of #1145.
+- **Four attribute fields**, sourced in the qualified form -
+  `tc_data_models|tcMaterialClass`, `tc_commerce|tcDeliveryLeadTime`,
+  `tc_content|tcLanguageCoverage`, `tc_users|tcAccountTerms` - measured at 5, 5, 5
+  and 4 distinct values over the fifteen products each category owns.
+- **The Manufacturer facet is dropped.** It bound a field that resolves and indexes
+  nothing: `EcomManufacturers` is empty and `ProductManufacturerId` is NULL on every
+  row. `Condition HasValue` suppressed it, so the file declared three facets and the
+  rail drew two. The index field and the query parameter STAY - a passed parameter
+  with no expression filters to nothing - so a catalogue that ships manufacturers
+  restores the facet in four lines.
+
+Four attribute facets and not one because this catalogue PARTITIONS its products
+across its four field categories: each owns fifteen products and has no value on the
+other forty-five. `Condition HasValue` then does the honest work per listing. A
+catalogue with catalogue-wide attributes ships one facet here; the count follows the
+data, never the file.
+
+### The replace manifest lists what is on disk, exactly
+
+`replace-manifest.json` carried 294 files for `content/area-3` while 292 exist: eight
+entries under `Customer center/CSR/grid-row-1|2|3` with no file behind them, and six
+files under `Customer center/Overview/grid-row-6|7` named nowhere. Paragraph numbers
+21-24 match across the two spellings and the grid-row indices shift by five, so this
+is rename residue - two rows moved pages, the manifest kept the old names and never
+learned the new ones. The manifest is the deploy inventory, so eight entries pointed
+at nothing and six files were never staged, silently, in both directions at once.
+
+**The two Overview rows have never been staged by any deploy of this layer**, so the
+next run is the first on which they render. That is composition which has not been
+seen, not composition that regressed, and it wants one look.
+
+## 1.9.0
+
+Five PDP sections rendered a head over nothing. `Swift-v2_ProductLongDescription`,
+`ProductFieldDisplayGroups`, `ProductMediaTable`, `ProductBom` and `RelatedProductsList`
+emitted no markup at all on the flagship detail page - no gridcolumn, no wrapper, no
+empty div - while their `h2[id]` anchors and the anchor nav above them all rendered
+(Foundry #1136).
+
+### One column slot holds one paragraph
+
+The 1.8.0 skeleton paired each section head with its component in **column 1 of the same
+`1Column` row**. A Swift grid row emits one `gridcolumn` per column, so the second
+paragraph of the pair is dropped silently - the grid column binding law of #749, and the
+same shape as #636. The proof was on the page: the two rows holding a `Swift-v2_Text`
+alone (Features, FAQ) rendered their bodies, and the `2Columns` media row rendered both
+of its paragraphs.
+
+Each of the five sections is now **two rows**: the head keeps its own `1Column` row and
+the component gets a `1Column` row of its own directly beneath it. Fifteen rows on the
+page instead of ten, resequenced 1..15, with the head row's `bottomSpacing` dropped to 0
+and the component row carrying the section's closing `bottomSpacing: 4`, so the vertical
+rhythm is what it was. No paragraph identity changes: the five component paragraphs keep
+their `paragraphUniqueId` and their fields, and only the row they hang off is new.
+
+The alternative - a `2Columns` row per section - was rejected: it puts the head beside
+its content rather than above it, which is not the measured marine shape.
+
+**This changes content ymls.** A host built on 1.8.x needs a surface-swift Replace to
+pick the new rows up; a data-only re-run will not move a paragraph between grid rows.
+
+## 1.8.0
+
+Density parity, structure half (V5-PLAN round two, item 1). The PLP row and the PDP are
+rebuilt against the measured marine inventory. What this release ships is the SHAPE and
+the COMPONENT CHOICES; what fills them is the data layer's half, and several sections
+below will render empty until it lands. That is deliberate: an empty section that is
+present, anchored and selectable is measurable, and a section that does not exist is a
+gate entry that passes by finding nothing.
+
+### The PLP card is one row, not four
+
+The Product List Card shipped four components in four separate `1ColumnFlex` rows. The
+measured marine card is ONE `12ColumnsFlex` / `Swift-v2_RowFlex` row with seven populated
+columns and five empty, which is what makes a list row readable at 124px and assertable
+per element instead of per stack.
+
+Seven columns now, in marine's order: default image (120px, alternative-image hover),
+`Swift-v2_ProductNumber`, the `h2.h6` header, `Swift-v2_ProductShortDescription`,
+`Swift-v2_ProductStock` with the inventory count visible, `Swift-v2_ProductPrice`, and
+`Swift-v2_ProductAddToCart`. Stock is NOT gated for anonymous visitors - marine gates
+price and cart and nothing else - and the cart component's own stock band is suppressed,
+because the stock column owns that line and two of them on one row read as a bug.
+
+### The PDP has ten rows
+
+Breadcrumb and the gallery/buy-panel row are unchanged. The gallery was already
+configured for multiple assets (`ImageAssets: ["Images","Product_details"]`, thumbnails
+bottom, `ShowOnlyPrimaryImage: false`) and needed no change to carry a real image set.
+Then: an anchor strip, Overview, Specifications, Documents, Package contents, Related
+products, Features, FAQ.
+
+Overview and Specifications keep their existing components and gain a `Swift-v2_Text`
+head each carrying the section's `<h2 id>`; both bodies get `HideTitle: true`, so the
+heading is emitted once, by the element that owns the anchor.
+
+Component choices, each from the Swift 2.4 vocabulary the parity report maps:
+
+| section | component | binding |
+|---|---|---|
+| Documents | `Swift-v2_ProductMediaTable` | `ImageAssets: ["Manuals"]`, `HideThumbnails: true` - an `EcomDetailsGroup` system name, not a product file field |
+| Package contents | `Swift-v2_ProductBom` | `ListComponentSource: "39"`, the Product List Card, so a BOM line renders as the same seven-component row the PLP renders |
+| Related products | `Swift-v2_RelatedProductsList` | `SourceType: "related-products"`, service page 47 |
+| Features, FAQ | `Swift-v2_Text` | heading in `Title`, body empty - the item fields the data layer fills |
+
+Relations are the list renderer and NOT `Swift-v2_ProductComponentSlider`. The report
+measures marine's own carousel rendering zero items on the aurora and leaving its section
+head stranded; a list degrades to a visible empty list instead of an empty div inside a
+slider shell, and the `Related products list` service page this layer repaired in 1.5 is
+already wired for it.
+
+### The anchor strip has a renderer, and fills itself
+
+`TC_AnchorNav` has shipped as an unused item type since 1.6. It now has a paragraph on
+the PDP and, for the first time, `Templates/Designs/Swift-v2/Paragraph/TC_AnchorNav.cshtml`.
+
+Swift stores a repeater as an item-list id, so a serialized layer can ship the paragraph
+but not its `TC_AnchorNav_Item` children - `AnchorNav_Items` is `0` and always would be.
+The template emits its shell either way, and the theme's `default_custom.js` builds the
+links from `main h2[id]` in document order when the list is empty. An editor who fills
+the repeater overrides the discovered list entirely. Both paths emit the current path in
+front of the fragment, because Dynamicweb's sitewide `<base href>` sends a bare
+`#overview` to the front page.
+
+### Manifest registration
+
+Every paragraph added here is registered in `replace/replace-manifest.json`. So is
+`Product Info (right side)/grid-row-2/paragraph-c1-3.yml`, the `Swift-v2_ProductPriceTable`
+orphaned since 1.7.0: the file has been on disk and absent from the manifest, so the
+deserializer never created it and the PDP has never had a quantity-break table even
+though this layer ships one. An unregistered paragraph file fails silently and reads as a
+content bug, which is why this is checked rather than remembered.
+
+Known residual drift, unchanged here and named so it is not lost: six
+`Customer center/Overview` files on disk are still unregistered, and nine
+`Customer center/CSR` manifest paths still name files that do not exist. Both are
+recorded in 1.7.0. Registering the first six would create two rows on the customer-center
+overview that have never rendered, which is a behaviour change this release has no
+measurement for.
+
+### Selectors this release makes assertable
+
+The gate binds to rendered markup, so here is what each addition emits. Swift stamps
+`data-dw-itemtype` with the lowercased item-type system name on the grid column, which is
+the stable half of every selector below.
+
+PLP row, inside `main .product-list article.product[data-product-id]`:
+
+| element | selector |
+|---|---|
+| image | `[data-dw-itemtype="swift-v2_productdefaultimage"] img` |
+| SKU | `[data-dw-itemtype="swift-v2_productnumber"]`, `[itemprop="sku"]` |
+| name | `[data-dw-itemtype="swift-v2_productheader"] h2` |
+| short description | `[data-dw-itemtype="swift-v2_productshortdescription"]` |
+| stock | `[data-dw-itemtype="swift-v2_productstock"]` |
+| price | `[data-dw-itemtype="swift-v2_productprice"]`; signed out, `.td-price-lock` |
+| add to cart | `[data-dw-itemtype="swift-v2_productaddtocart"]` |
+
+PDP:
+
+| section | selector |
+|---|---|
+| anchor strip | `main nav.td-anchornav[data-td-anchornav]`, links `.td-anchornav__link` |
+| Overview | `main h2#overview`; body `[data-dw-itemtype="swift-v2_productlongdescription"]`, `[itemprop="description"]` |
+| Specifications | `main h2#specifications`; body `[data-dw-itemtype="swift-v2_productfielddisplaygroups"]` |
+| Documents | `main h2#documents`; table `[data-dw-itemtype="swift-v2_productmediatable"]` |
+| Package contents | `main h2#package-contents`; `[data-dw-itemtype="swift-v2_productbom"]` |
+| Related products | `main h2#related`; `[data-dw-itemtype="swift-v2_relatedproductslist"]` |
+| Features | `main h2#features` |
+| FAQ | `main h2#faq` |
+| price lock, detail | `main .td-price-lock--pdp`, its anchor `.td-price-lock__action` |
+
+Two dead selector arms the report names are now worth retiring rather than fixing:
+`swift-v2_productname` and `swift-v2_productdescription` name item types that do not
+exist in Swift 2.4, and never matched anything.
+
+## 1.7.1
+
+Two measurements from the closing round of the v5 end-to-end on DW 10.28.10, both of the same
+family: a value that is one escape level too deep, and a gate that reads a field nobody declared.
+
+**The PDP spec band threw on every product, because `DisplayGroups` carried three backslashes.**
+`Shop/Product Details/grid-row-6/paragraph-c1-10.yml` wrote the field as
+`"[\\\"tc_specs\\\"]"`. YAML resolves `\\` to one backslash and `\"` to one quote, so what
+landed in the item table was `[\"tc_specs\"]` — a literal backslash where JSON expects a quote —
+and Swift's parse of the field raised
+`System.Text.Json.JsonException: "'\' is an invalid start of a value"` into a `dw-error` on the
+detail page of every product in the catalogue. The band rendered nothing and the exception rendered
+instead.
+
+The value is now `"[\"tc_specs\"]"`, which lands as `["tc_specs"]`. That is the encoding the other
+JSON-array fields in this content tree already use and always used —
+`Product Details/grid-row-2/paragraph-c1-7.yml` writes `"ImageAssets": "[\"Images\",\"Product_details\"]"`
+and both checkout pages write `"DisabledWeekdays": "[\"6\",\"0\"]"`. This paragraph was the only
+file in the tree carrying the deeper form, which is why nothing else on the site threw.
+
+**Five gates across four item types read fields nobody declared, so five shipped paragraphs
+rendered nothing and said nothing.** The PLP renders five product rows and none of them carried a SKU
+(Foundry 1115). The `Swift-v2_ProductNumber` paragraph on the Product List Card is present, active,
+bound to a real grid column and pointed at a product whose `ProductNumber` is populated; the stock
+template emits `itemprop="sku"`. The only gate past `product is object` is
+`Model.Item.GetBoolean("HideProductNumber")` — and `ItemType_Swift-v2_ProductNumber.xml` declared
+`Title` and `HorizontalAlignment` and nothing else, which the host item table confirms column for
+column. No exception, no `dw-error`: the cell simply did not render and Swift dropped the empty grid
+column.
+
+`HideProductNumber` is now declared on the item type, `System.Boolean` with a `CheckboxEditor` and
+`defaultValue="False"`, copied verbatim from `ItemType_Swift-v2_EmailProductCatalog.xml`, which has
+carried the identical declaration all along — the two templates read the same field and only one
+half of the pair was ever declared.
+
+A sweep of the whole surface then asked whether anything else gates the same way. Every
+`Item.GetBoolean("…")` call site in the Swift 2.4 design tree — 222 in all, of which 148 read the
+current paragraph's own item and the rest read runtime loop objects no item type governs — was
+mapped to its owning item type and checked against this layer's XML. Four more were undeclared, and
+all four are the same silent shape:
+
+| item type | field | what did not render |
+|---|---|---|
+| `Swift-v2_ProductStock` | `HideStockState` | the stock state band (`!hideStock`) |
+| `Swift-v2_ProductMediaTable` | `DefaultImageFallback` | the default-image fallback path |
+| `Swift-v2_ProductMediaTable` | `ShowOnlyPrimaryImage` | the primary-image-only asset path |
+| `Swift-v2_ProductComponentSlider` | `Autoplay` | slider autoplay, on the shared `ProductSliderComponent` partial |
+
+All four are declared now, each copied verbatim from the sibling item type in this layer that
+already declares it — the label, description, editor and default are not authored here, they are the
+ones the surface already ships. `AutoplayInterval` comes with `Autoplay` because autoplay without
+its interval is half a feature and `ProductSliderComponent.cshtml` reads both. The sweep is clean at
+zero: no template in the tree gates on a field its own item type does not declare.
+
+The shared partials needed their caller traced rather than their path parsed.
+`Components/Specifications/*` renders on `Model` from `Swift-v2_ProductFieldDisplayGroups` and its
+accordion sibling; `ProductListFacets/*` on the facets paragraph; `OrderDeliveryDate.cshtml` on the
+`Swift-v2_CheckoutApp` paragraph; and `ProductSliderComponent.cshtml` on whichever paragraph posted
+its own `Model.ID` as the `ParagraphId` form field — which is how `Autoplay` was found: the partial is
+shared with `Swift-v2_ProductGroupSlider`, which declares the field, and the naive path-to-item-type
+mapping reads the call site as satisfied because *some* item type declares it. Two call sites in
+`Components/VariantSelector.cshtml` pass a variable rather than a literal field name and cannot be
+checked statically at all; they are recorded here rather than silently counted as clean.
+
+Both fixes are authored against measured host state — the item tables read off `sys.columns` on the
+10.28.10 e2e host, the escape levels read off the landed item row — and their rendered proof is one
+re-run away.
+
+## 1.7.0
+
+**The PLP row had no SKU, because the paragraph that renders it was never deployed.** The
+branded PLP renders five rows and the design leg's `PLPROW-01` found no product number on any
+of them. The cause is not a template gap and not an app setting: Swift 2.4 composes the PLP
+card out of paragraphs on a component page, the card already carries a
+`Swift-v2_ProductNumber` paragraph (`header: SKU`, `sourceParagraphId 22301`) on disk, and the
+stock `Swift-v2_ProductNumber.cshtml` already emits `itemprop="sku"`. The file was simply
+absent from `replace/replace-manifest.json`, so the deserializer never created it - and
+reported `979 created, 0 failed` while not creating it. The paragraph-id gap in the rendered
+page says the same thing: 22305, 22306, *22308*.
+
+`Product List Card/grid-row-2/paragraph-c1-2.yml` is now registered, and so are the two
+`grid-row-4` files (the row and its `Swift-v2_ProductAddToCart` paragraph) that had drifted out
+of the manifest with it. No template ships and no content changes - the three files were
+already authored.
+
+**The PDP spec band is back, with the data it needs behind it.** 1.5.0 removed the
+`Swift-v2_ProductFieldDisplayGroupsAccordion` band because no layer shipped an
+`EcomFieldDisplayGroups` row, so it rendered empty on every deserialize. That was the right
+call for the composition as it stood; it is no longer the composition. `truvio-demo` now seeds
+the `tc_specs` display group over its 28 category fields, so the band has something to name.
+
+It comes back as the always-visible variant rather than the accordion:
+`Swift-v2_ProductFieldDisplayGroups` with `Layout: table`, titled *Specifications*, on a new
+full-width row (`grid-row-6`, sortOrder 4) under the Overview band on `Shop/Product Details`.
+`HideFieldsWithZeroValue` and `HideGroupHeaders` are on, so a product renders only the fields
+it carries a value for and one group serves all four product categories. The accordion item
+type stays available and unused; it depends on
+`Swift-v2_ProductFieldDisplayGroupsLayoutSelector`, which this layer does not ship.
+
+A composition without `truvio-demo` seeds no display group and the band renders empty, exactly
+as it did before 1.5.0 - but `base-swift`, the only such composition that carries this page,
+pins `EcomProducts 0`, so there is no product to open it on.
+
+**`replace/_content/templates.manifest.yml` had drifted.** It declared neither
+`Swift-v2_ProductNumber` nor `Swift-v2_ProductLongDescription`, and listed
+`Swift-v2_ProductAddToCart` against `Product Info (right side)` only. All three now match the
+content tree, alongside the new `Swift-v2_ProductFieldDisplayGroups` entry.
+
+Known remaining drift, not touched here: `replace-manifest.json` still omits six
+`Customer center/Overview` files and `Product Info (right side)/grid-row-2/paragraph-c1-3.yml`,
+and still lists nine paths that no longer exist. A regeneration is the clean fix and is a
+change of its own.
+
+## 1.6.1
+
+**The area now carries its own head include (Foundry 1031).** On a freshly deserialized site the
+area item field `Swift-v2_Master.CustomHeadInclude` measured as the empty string, so
+`default_custom.css` and its render-critical token block were absent from every rendered page while
+the three Style-asset sheets linked normally. Nothing failed and the one-shot proof reported green,
+because a missing stylesheet is not an error — it is a site that looks slightly wrong.
+
+The field was in this layer's `excludeFieldsByItemType` for `Swift-v2_Master`, sitting in a list of
+genuinely per-solution values (tag-manager id, favicon, verification meta, social ids). It does not
+belong there: those are a customer's own values and this one is a path into a file the distribution
+itself ships. While it was excluded, no serialized content could carry it and there was nowhere else
+for the binding to live. It is removed from the exclusion list in the layer config and both mode
+manifests, and both `area.yml` files now set
+`/Files/Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml`.
+
+The second half of the finding is a warning for anyone repointing this field: it holds **one** path,
+and `default_custom.css` is registered from *inside* `DefaultHeadInclude.cshtml`. Pointing the field
+at a customer head include therefore unloads the theme's first tier silently — the customer include
+must call `AddStylesheet` on `default_custom.css` first and its own sheet second.
+
+## 1.6.0
+
+**A repository this distribution owns, and the Shop paragraph bound to it (V5-PLAN 2.4).**
+`repositories/TruvioCommerce/{Products.index, Products.query, Products.facets}`, staged before host
+start the way `surface-headless` stages its own `Headless/` set, and the Shop page's
+`Swift-v2_App` repointed from `/Files/System/Repositories/ProductsFrontend/` to it on both the
+`IndexQuery` and the `FacetGroups` path.
+
+Why not keep binding `ProductsFrontend`: it is host-supplied — the base contract records it as
+`provisionedByGate: false`, no layer ships it — and its facet file still declares facets for the
+design package's own demo catalogue, which are dead on any catalogue this distribution composes. A
+facet whose field has no values is worse than a missing facet: it renders, takes a slot in the rail
+and filters nothing. The host's files are **not** overwritten; the base contract carries no
+file-path ownership rule, so two layers on one path would be an unguarded seam.
+
+The three files are deliberately minimal and base-schema only — group, price range and manufacturer,
+no category-field bindings, because the base ships no category fields. Each carries the fill-in
+recipe for adding one, and the recipe names all three files, because a facet added to one of them
+and not the other two is decorative. `Products.facets` also records the failure mode worth knowing:
+a repository that is missing at request time returns **HTTP 200** with an in-page Lucene error, so a
+repository is never asserted by status code.
+
+**`TC_AnchorNav` and `TC_AnchorNav_Item`** join `itemtypes/`: an in-page jump strip as a real item
+type, unused until a row adds it. It exists because the thing a site reaches for instead is a Text
+paragraph holding hand-authored `<nav>` markup and an inline `<script>` — content no serializer
+round-trips and no editor can safely edit. The child ships no field defaults on purpose: an empty
+default renders visibly empty, where a realistic one renders plausible content for a field that
+never arrived.
+
+`layer.json` `placeholders[]` declares all five.
+
 ## 1.5.2
 
 Patch: the layer ships the Swift version stamp — `files/System/Truvio/swift.stamp.json`,

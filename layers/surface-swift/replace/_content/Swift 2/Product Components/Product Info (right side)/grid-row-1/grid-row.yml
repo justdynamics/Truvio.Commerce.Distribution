@@ -5,7 +5,7 @@
 "container": "Grid"
 "containerWidth": 1
 "topSpacing": 5
-"bottomSpacing": 3
+"bottomSpacing": 0
 "verticalAlignment": "None"
 "fields":
   "Id": "1"
