@@ -1,4 +1,4 @@
--- ===========================================================================
+﻿-- ===========================================================================
 -- truvio-demo layer - what fills the product detail page
 -- ===========================================================================
 -- The parity report counted marine's flagship PDP at twenty-one sections and
@@ -60,6 +60,63 @@ IF COL_LENGTH('EcomDetails', 'DetailsGroupId') IS NULL
    OR COL_LENGTH('EcomDetailsGroup', 'DetailsGroupExtensions') IS NULL
    OR COL_LENGTH('EcomProductsRelated', 'ProductRelatedProductRelVariantID') IS NULL
     RAISERROR(N'truvio-pdp.sql: the asset-category or relation columns are not the expected shape. Read the live column names off sys.columns and update this file - do NOT let it seed a documents table the PDP cannot resolve.', 16, 1);
+
+-- ---------------------------------------------------------------------------
+-- 0. The Images asset category, and why a gallery row is nothing without it.
+--    Swift's ProductMedia component does not read "the product's images". It
+--    reads the ASSET CATEGORIES the paragraph names, and then the rows that
+--    belong to them: Swift-v2_ProductMedia.cshtml:129 filters
+--    product.AssetCategories down to the names in the paragraph's ImageAssets,
+--    and :145 will only fall back to the default image when that list is EMPTY.
+--    So a paragraph naming a category that does not exist gets neither the
+--    category nor the fallback, and the component emits its wrapper with no
+--    children - childCount 0, innerHTML length 0, 358 x 0 px at 390 and 0 img
+--    at 1440 (Foundry #1145).
+--
+--    Measured on the composed host before this section existed: EcomDetailsGroup
+--    held exactly ONE row, `Manuals` (created below for the pdf rows), and all
+--    180 image rows carried DetailsGroupId NULL. Not one image in the database
+--    belonged to any asset category, so no category-filtered component could
+--    have seen them even with the right names on the paragraph.
+--
+--    surface-swift 1.10.0 names one category, `Images`, and this section creates
+--    it and puts every image row this layer owns into it. That is contract (a)
+--    of the issue, both halves. `Product_details` is deliberately NOT created:
+--    the paragraph no longer names it, and a second category holding the same
+--    rows is a second thing to keep true.
+--
+--    THE COLUMN VALUES ARE READ OFF A LIVE SOLUTION, not guessed - the same
+--    discipline the Manuals group below states, and for the same reason. The
+--    shape is marine-demo's own `Images` row on this SQL instance
+--    (EcomDetailsGroupId 1): InheritanceType 1, ControlType 0, IsSystemGroup 1,
+--    SortingMode 0, IsPrimaryImageRule 0, HasPrimaryImageRule 1, and both
+--    inherit-default-image flags 1. One deviation, stated: the extensions list
+--    gains `svg` and `webp`, because the concept tiles this layer ships are SVG
+--    and two of the five brand-manifest photographs are WebP. A category whose
+--    extension list excludes the files it holds is the same silent failure as a
+--    NULL ControlType.
+-- ---------------------------------------------------------------------------
+IF NOT EXISTS (SELECT 1 FROM EcomDetailsGroup WHERE EcomDetailsGroupSystemName = 'Images')
+    INSERT INTO EcomDetailsGroup (EcomDetailsGroupSystemName, DetailsGroupInheritanceType, DetailsGroupExtensions, DetailsGroupControlType, DetailsGroupIsSystemGroup, DetailsGroupSortingMode, DetailsGroupIsPrimaryImageRule, DetailsGroupHasPrimaryImageRule, DetailsGroupInheritDefaultImageAcrossVariants, DetailsGroupInheritDefaultImageAcrossLanguages)
+    VALUES ('Images', 1, 'bmp,jpeg,jpg,png,svg,tiff,webp', 0, 1, 0, 0, 1, 1, 1);
+
+-- Converge a host that already carries a half-made group rather than leaving the
+-- failure in place - the same existence-guarded repair the Manuals group gets.
+IF EXISTS (SELECT 1 FROM EcomDetailsGroup
+            WHERE EcomDetailsGroupSystemName = 'Images'
+              AND (DetailsGroupControlType IS NULL
+                OR DetailsGroupInheritanceType IS NULL
+                OR ISNULL(DetailsGroupExtensions, N'') NOT LIKE '%svg%'
+                OR ISNULL(DetailsGroupExtensions, N'') NOT LIKE '%webp%'))
+    UPDATE EcomDetailsGroup
+       SET DetailsGroupControlType = 0,
+           DetailsGroupInheritanceType = 1,
+           DetailsGroupExtensions = 'bmp,jpeg,jpg,png,svg,tiff,webp'
+     WHERE EcomDetailsGroupSystemName = 'Images';
+
+DECLARE @TcImagesGroupId INT = (SELECT TOP 1 EcomDetailsGroupId FROM EcomDetailsGroup WHERE EcomDetailsGroupSystemName = 'Images');
+IF @TcImagesGroupId IS NULL
+    RAISERROR(N'truvio-pdp.sql: the Images asset category was not created. surface-swift''s PDP gallery paragraph names it in ImageAssets, so without it the component filters every row away and renders an empty wrapper - with no error, and with every gallery row count correct.', 16, 1);
 
 -- ---------------------------------------------------------------------------
 -- 1. The gallery.
@@ -271,6 +328,36 @@ UPDATE g
                   AND o.DetailVariantId = ''
                   AND o.DetailId <> g.DetailId
                   AND o.DetailValue = g.DetailValue);
+
+-- Every image row this layer owns joins the Images category. Scoped by PATH
+-- rather than by DetailId, so the default-image rows truvio-images.sql writes
+-- (TC-DETAIL-*) and the gallery rows above (TC-GAL-*) are both covered by one
+-- statement and a row added by a later section cannot be forgotten. The pdf rows
+-- live under /Files/Documents/ and belong to Manuals, so the path filter excludes
+-- them without naming them.
+UPDATE d
+   SET d.DetailsGroupId = @TcImagesGroupId
+  FROM EcomDetails d
+ WHERE d.DetailProductId LIKE 'TCPROD%'
+   AND d.DetailValue LIKE '/Files/Images/TruvioCommerce/%'
+   AND ISNULL(d.DetailsGroupId, 0) <> @TcImagesGroupId;
+
+-- THE CATEGORY GUARD, and it asserts the thing the PAGE needs rather than a row
+-- count: that the rows are IN the category the paragraph names. 180 image rows
+-- with DetailsGroupId NULL is exactly the state that measured green on every
+-- count and rendered zero images.
+DECLARE @TcUncategorisedImages INT = (
+    SELECT COUNT(*) FROM EcomDetails
+     WHERE DetailProductId LIKE 'TCPROD%'
+       AND DetailValue LIKE '/Files/Images/TruvioCommerce/%'
+       AND ISNULL(DetailsGroupId, 0) <> @TcImagesGroupId);
+IF @TcUncategorisedImages > 0
+    RAISERROR(N'truvio-pdp.sql: an image row is in no asset category. Swift''s ProductMedia component filters on the categories its paragraph names, so a row outside every category is invisible to it however correct the path is - and the failure is silent, with correct row counts everywhere.', 16, 1);
+
+DECLARE @TcImagesInCategory INT = (
+    SELECT COUNT(*) FROM EcomDetails WHERE DetailsGroupId = @TcImagesGroupId AND DetailProductId LIKE 'TCPROD%');
+IF @TcImagesInCategory < 84
+    RAISERROR(N'truvio-pdp.sql: fewer than 84 image rows belong to the Images asset category. The PDP thumbnail strip would render with fewer slides than this layer claims to ship.', 16, 1);
 
 -- ---------------------------------------------------------------------------
 -- 2. The Manuals asset category and the documents on it.
