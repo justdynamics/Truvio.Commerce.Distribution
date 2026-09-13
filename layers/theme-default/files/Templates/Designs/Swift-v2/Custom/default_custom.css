@@ -431,15 +431,42 @@ body > footer a:hover,
  * The cover card carries an INLINE `min-height:25rem` (≈400px) and the swiffy
  * item width tops out at 25rem, so each slide reads as a tall near-square tile
  * dominating the fold. Cap the card to a viewport-relative band height (inline
- * min-height must be beaten with !important) and keep the cover image cropped. */
-[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .card {
+ * min-height must be beaten with !important) and keep the cover image cropped.
+ *
+ * SCOPED TO THE TILE LAYOUTS (Foundry #947). All four Swift-v2_Slider layouts
+ * render `.card.h-100`, and only CardCoverFull writes
+ * `--swiffy-slider-item-width: 100%` on its slider container and an inline
+ * min-height:55vh on its card - the full-width hero's only height source. An
+ * unscoped cap zeroed that min-height, and the clamp (no !important) lost to
+ * Bootstrap's `.h-100 { height: 100% !important }`, so the hero collapsed to a
+ * 2px card inside a 58px strip. The cap therefore skips the container that
+ * carries the 100% item width. */
+[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .slider-container:not([style*="--swiffy-slider-item-width: 100%"]) .card {
   min-height: 0 !important;
   height: clamp(15rem, 34vh, 21rem);
   aspect-ratio: auto;
 }
-[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .card > .card-img {
+[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .slider-container:not([style*="--swiffy-slider-item-width: 100%"]) .card > .card-img {
   height: 100% !important;
   object-fit: cover;
+}
+
+/* --- Swift-v2_Slider CardCoverFull hero: the band keeps its height and grows
+ * with its copy (Foundry #947). The card holds the template's 55vh floor against
+ * `.h-100` (height:100% of an auto-height chain resolves to 0), and the
+ * `.card-img-overlay`, absolute in the template, joins the flow, so long copy
+ * grows the card instead of running past it where the card's overflow:hidden
+ * clips the call to action at 390. The cover image stays absolute behind it.
+ * Measured with the same two rules in a Tier 1 sheet: card 502px at 1400x900,
+ * 557px at 390x844, CTA inside the card at both, no horizontal overflow. */
+[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .slider-container[style*="--swiffy-slider-item-width: 100%"] > li > .card {
+  min-height: 55vh !important;
+  height: auto !important;
+}
+[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .slider-container[style*="--swiffy-slider-item-width: 100%"] > li > .card > .card-img-overlay {
+  position: relative;
+  inset: auto;
+  min-height: inherit;
 }
 
 /* === Utility: table data density === */

@@ -37,6 +37,22 @@ the open dropdown panel. The overflow context is on the name block alone, which 
 own text, so block #23's guard against overflow on header elements that contain a panel is
 unaffected.
 
+### The slider cover-card cap no longer collapses the CardCoverFull hero (Foundry #947)
+
+The cover-card cap written for the tile layouts selected every
+`[data-dw-itemtype="swift-v2_slider"] .swiffy-slider .card`. On CardCoverFull it zeroed the
+inline `min-height:55vh` with `!important`, and its `clamp(15rem, 34vh, 21rem)` height, not
+`!important`, lost to the card's own `.h-100`. `height: 100%` of an auto-height chain
+resolves to 0: the hero measured a 2px card inside a 58px strip holding only the indicator
+dots.
+
+The cap now applies only inside a `.slider-container` that does not carry
+`--swiffy-slider-item-width: 100%`, the property CardCoverFull alone writes. For that
+container the card keeps `min-height: 55vh` with `height: auto`, and its
+`.card-img-overlay` joins the flow, so long hero copy grows the card rather than being
+clipped at 390. Both rules were measured in a Tier 1 sheet before this fold (card 502px at
+1400x900, 557px at 390x844, CTA inside the card).
+
 ## 2.3.1
 
 ### The PLP price lock gains the action the PDP lock has (Foundry #1159)
