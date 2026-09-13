@@ -47,10 +47,17 @@ SET NOCOUNT ON;
 SET XACT_ABORT ON;
 BEGIN TRAN;
 
+-- COLUMN-SHAPE GUARD, A BATCH OF ITS OWN: the GO below ends it ahead of the writes.
+-- SQL Server binds column names when it compiles a batch, before any statement in
+-- it runs, so a guard sharing a batch with a statement that names a missing column
+-- never fires: the batch dies with a bare Msg 207 first. COL_LENGTH takes its names
+-- as strings, so this batch compiles on any shape, runs, and RAISERRORs naming the
+-- script and the column; under sqlcmd -b that ends the apply before the next batch.
 IF COL_LENGTH('EcomPrices', 'PriceUserGroupId') IS NULL
     RAISERROR(N'truvio-b2b.sql: EcomPrices has no PriceUserGroupId column on this platform build. A customer-group price cannot be scoped; read the live column names off sys.columns before seeding.', 16, 1);
 IF COL_LENGTH('EcomProducts', 'ProductExpectedDelivery') IS NULL
     RAISERROR(N'truvio-b2b.sql: EcomProducts has no ProductExpectedDelivery column. The zero-stock rows would be orderable with no date behind them.', 16, 1);
+GO
 IF NOT EXISTS (SELECT 1 FROM AccessUser WHERE AccessUserId = 1325)
     RAISERROR(N'truvio-b2b.sql: the buyer user group 1325 is missing. Every group price seeded here would resolve for nobody - a signed-in buyer would read list price and the demo would silently show nothing.', 16, 1);
 

@@ -1201,6 +1201,13 @@ IF NOT EXISTS (SELECT 1 FROM EcomVariantsOptions WHERE VariantOptionId = 'TCVO-M
 --    is a RUNTIME check and the batch dies at COMPILE time with Msg 207, so a
 --    guard spelled from the same wrong guess as the insert never gets to fire.
 -- ---------------------------------------------------------------------------
+GO
+-- COLUMN-SHAPE GUARD, A BATCH OF ITS OWN, AHEAD OF THE WRITES IT GUARDS.
+-- SQL Server binds column names when it compiles a batch, before any statement in
+-- it runs, so a guard sharing a batch with a statement that names a missing column
+-- never fires: the batch dies with a bare Msg 207 first. COL_LENGTH takes its names
+-- as strings, so this batch compiles on any shape, runs, and RAISERRORs naming the
+-- script and the column; under sqlcmd -b that ends the apply before the next batch.
 IF COL_LENGTH('EcomPrices', 'PriceProductVariantId') IS NULL
     RAISERROR(N'truvio-catalog.sql: EcomPrices has no PriceProductVariantId column on this platform build. Per-variant prices cannot be scoped; read the live column names off sys.columns before seeding.', 16, 1);
 
@@ -1231,6 +1238,7 @@ IF COL_LENGTH('EcomPrices', 'PriceProductVariantId') IS NULL
 -- Measured off sys.columns, in this file's own idiom.
 IF COL_LENGTH('EcomVariantGroupProductRelation', 'VariantGroupProductRelationId') IS NULL
     RAISERROR(N'truvio-catalog.sql: EcomVariantGroupProductRelation is missing its id column on this platform build. The variant selector reads this table to learn which axes a product uses; without it every variant master renders an empty selector, silently.', 16, 1);
+GO
 IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0001' AND VariantGroupProductRelationVariantGroupId = 'TCVG-TIER')
     INSERT INTO EcomVariantGroupProductRelation (VariantGroupProductRelationId, VariantGroupProductRelationProductId, VariantGroupProductRelationVariantGroupId, VariantGroupProductRelationSorting, VariantGroupProductRelationPriceDif) VALUES ('TCVGR-TCPROD0001-TIER', 'TCPROD0001', 'TCVG-TIER', 1, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomVariantGroupProductRelation WHERE VariantGroupProductRelationProductId = 'TCPROD0001' AND VariantGroupProductRelationVariantGroupId = 'TCVG-MODE')
@@ -1699,6 +1707,9 @@ IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-CONTRACT')
 --    the insert passes and then the insert fails at compile time with Msg 207,
 --    which is what happened before this fix.
 -- ---------------------------------------------------------------------------
+GO
+-- COLUMN-SHAPE GUARD, a batch of its own ahead of the writes (see the note on the
+-- first such guard in this file): it compiles on any shape and names the column.
 IF OBJECT_ID(N'dbo.EcomProductCategory', N'U') IS NULL
    OR OBJECT_ID(N'dbo.EcomProductCategoryTranslation', N'U') IS NULL
    OR OBJECT_ID(N'dbo.EcomProductCategoryField', N'U') IS NULL
@@ -1714,6 +1725,7 @@ IF COL_LENGTH('EcomProductCategoryField', 'FieldId') IS NULL
    OR COL_LENGTH('EcomProductCategoryFieldValue', 'FieldValueFieldId') IS NULL
    OR COL_LENGTH('EcomProductCategoryFieldValue', 'FieldValueValue') IS NULL
     RAISERROR(N'truvio-catalog.sql: the product-category FIELD columns are not the expected shape (FieldId / FieldCategoryId / FieldTemplateTag / FieldType / FieldSortOrder / FieldTranslationFieldId / FieldValueFieldId / FieldValueValue). Read the live column names off sys.columns and update this section - do NOT let it seed a catalogue with no attributes.', 16, 1);
+GO
 
 IF NOT EXISTS (SELECT 1 FROM EcomProductCategory WHERE CategoryId = 'tc_data_models')
     INSERT INTO EcomProductCategory (CategoryId, CategoryProductProperties, CategoryType) VALUES ('tc_data_models', 0, 1);
@@ -2228,8 +2240,12 @@ IF NOT EXISTS (SELECT 1 FROM EcomProductCategoryFieldValue WHERE FieldValueField
 --    filled on the next run. Variant rows inherit the master's body, so only the
 --    60 masters are written.
 -- ---------------------------------------------------------------------------
+GO
+-- COLUMN-SHAPE GUARD, a batch of its own ahead of the writes (see the note on the
+-- first such guard in this file): it compiles on any shape and names the column.
 IF COL_LENGTH('EcomProducts', 'ProductLongDescription') IS NULL
     RAISERROR(N'truvio-catalog.sql: EcomProducts.ProductLongDescription is missing. The PDP Overview band reads this column; do NOT let this script seed 60 products with no detail-page body.', 16, 1);
+GO
 
 IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductLongDescription, '') = '')
     UPDATE EcomProducts SET ProductLongDescription = N'A variant master carries the axes and the option rows that hang off them, and every combination is a product row of its own with its own price. This master demonstrates the plain two-axis case: a tier axis and a mode axis, expanded into the full grid of combinations. Open the tier and mode selectors on this page to watch the price, the number and the stock position change without leaving the record.' WHERE ProductId = 'TCPROD0001' AND ProductVariantId = '' AND ProductLanguageId = 'ENU' AND ISNULL(ProductLongDescription, '') = '';
@@ -2395,6 +2411,9 @@ IF EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0060' AND Product
 --    1.1.0 bare names is rewritten to the qualified form in place, so it converges
 --    rather than accumulating a second set of members that do not resolve.
 -- ---------------------------------------------------------------------------
+GO
+-- COLUMN-SHAPE GUARD, a batch of its own ahead of the writes (see the note on the
+-- first such guard in this file): it compiles on any shape and names the column.
 IF OBJECT_ID(N'dbo.EcomFieldDisplayGroups', N'U') IS NULL
    OR OBJECT_ID(N'dbo.EcomFieldDisplayGroupTranslation', N'U') IS NULL
    OR OBJECT_ID(N'dbo.EcomFieldDisplayGroupFields', N'U') IS NULL
@@ -2413,6 +2432,7 @@ IF COL_LENGTH('EcomFieldDisplayGroups', 'FieldDisplayGroupId') IS NULL
    OR COL_LENGTH('EcomFieldDisplayGroupFields', 'FieldDisplayGroupFieldGroupId') IS NULL
    OR COL_LENGTH('EcomFieldDisplayGroupFields', 'FieldDisplayGroupFieldSortOrder') IS NULL
     RAISERROR(N'truvio-catalog.sql: the field-display-group columns are not the expected shape (FieldDisplayGroupId / FieldDisplayGroupSystemName / FieldDisplayGroupName / FieldDisplayGroupSortIndex / FieldDisplayGroupAvailableInFrontend / FieldDisplayGroupFieldIds / the three translation columns / the three relation columns). Read the live column names off sys.columns and update this section - do NOT let it seed a group the PDP cannot resolve.', 16, 1);
+GO
 
 IF NOT EXISTS (SELECT 1 FROM EcomFieldDisplayGroups WHERE FieldDisplayGroupSystemName = 'tc_specs')
     INSERT INTO EcomFieldDisplayGroups (FieldDisplayGroupSystemName, FieldDisplayGroupName, FieldDisplayGroupSortIndex, FieldDisplayGroupAvailableInFrontend, FieldDisplayGroupFieldIds)
