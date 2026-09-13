@@ -8,7 +8,7 @@
     "feature-subscription-orders@1.2.1",
     "feature-bom-configurator@1.2.1",
     "feature-b2b-comms@1.0.3",
-    "feature-baseline-guide@1.0.1",
+    "feature-baseline-guide@1.0.2",
     "truvio-demo@1.7.1"
   ],
   "surfaces": [
