@@ -1166,26 +1166,6 @@ UPDATE p
  WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = ''
    AND (p.ProductVariantGroupCounter <> x.axes OR p.ProductVariantCounter <> x.combos OR p.ProductVariantProdCounter <> x.combos);
 
--- THE SELECTOR GUARD. A row count would have been green on every run that
--- shipped an empty selector, so this asserts the thing the control needs: a
--- master bound to at least two axes, each of which offers at least two options
--- THAT MASTER actually carries. Anything less is a selector with nothing to
--- choose between, which renders as an empty div and says nothing about why.
-DECLARE @TcRenderableSelectors INT = (
-    SELECT COUNT(*) FROM (
-        SELECT r.VariantGroupProductRelationProductId AS prod
-          FROM EcomVariantGroupProductRelation r
-         WHERE r.VariantGroupProductRelationProductId LIKE 'TCPROD%'
-           AND (SELECT COUNT(*) FROM EcomVariantsOptions o
-                 WHERE o.VariantOptionGroupId = r.VariantGroupProductRelationVariantGroupId
-                   AND o.VariantOptionLanguageId = 'ENU'
-                   AND EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation vp
-                                WHERE vp.VariantOptionsProductRelationProductId = r.VariantGroupProductRelationProductId
-                                  AND vp.VariantOptionsProductRelationVariantId = o.VariantOptionId)) >= 2
-         GROUP BY r.VariantGroupProductRelationProductId
-        HAVING COUNT(*) >= 2) s);
-IF @TcRenderableSelectors < 6
-    RAISERROR(N'truvio-catalog.sql: fewer than 6 variant masters can actually render a selector. A master needs a row in EcomVariantGroupProductRelation per axis AND at least two of that axis options on itself; without both the PDP draws an empty div and the product copy telling the reader to open the selector is a lie on the page.', 16, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0001' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-STD')
     INSERT INTO EcomVariantOptionsProductRelation (VariantOptionsProductRelationProductId, VariantOptionsProductRelationVariantId) VALUES ('TCPROD0001', 'TCVO-TIER-STD');
 IF NOT EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation WHERE VariantOptionsProductRelationProductId = 'TCPROD0001' AND VariantOptionsProductRelationVariantId = 'TCVO-TIER-ADV')
@@ -1426,6 +1406,32 @@ IF NOT EXISTS (SELECT 1 FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND Pro
     SELECT ProductId, ProductLanguageId, 'TCVO-TIER-ENT.TCVO-MODE-PUB', ProductNumber + '-ENT-PUB', ProductName, ProductShortDescription, 79.20, 1, 1, 100, 0, ProductDefaultShopId, GETDATE(), GETDATE() FROM EcomProducts WHERE ProductId = 'TCPROD0051' AND ProductVariantId = '';
 IF NOT EXISTS (SELECT 1 FROM EcomPrices WHERE PriceId = 'TC-PRICE-VAR-0036')
     INSERT INTO EcomPrices (PriceId, PriceProductId, PriceProductVariantId, PriceCurrency, PriceQuantity, PriceAmount, PriceCustomerGroupId, PriceUserCustomerNumber) VALUES ('TC-PRICE-VAR-0036', 'TCPROD0051', 'TCVO-TIER-ENT.TCVO-MODE-PUB', 'EUR', 1, 79.20, '', '');
+
+-- THE SELECTOR GUARD, and it sits HERE - after the last option relation and
+-- the last combination row - because it asserts exactly those. Upstream of
+-- them it measured an empty table on any host seeding for the first time, and
+-- a severity-16 RAISERROR does not abort the batch, so the script went on to
+-- print its own success line on the run that had just reported the failure.
+-- A row count would have been green on every run that
+-- shipped an empty selector, so this asserts the thing the control needs: a
+-- master bound to at least two axes, each of which offers at least two options
+-- THAT MASTER actually carries. Anything less is a selector with nothing to
+-- choose between, which renders as an empty div and says nothing about why.
+DECLARE @TcRenderableSelectors INT = (
+    SELECT COUNT(*) FROM (
+        SELECT r.VariantGroupProductRelationProductId AS prod
+          FROM EcomVariantGroupProductRelation r
+         WHERE r.VariantGroupProductRelationProductId LIKE 'TCPROD%'
+           AND (SELECT COUNT(*) FROM EcomVariantsOptions o
+                 WHERE o.VariantOptionGroupId = r.VariantGroupProductRelationVariantGroupId
+                   AND o.VariantOptionLanguageId = 'ENU'
+                   AND EXISTS (SELECT 1 FROM EcomVariantOptionsProductRelation vp
+                                WHERE vp.VariantOptionsProductRelationProductId = r.VariantGroupProductRelationProductId
+                                  AND vp.VariantOptionsProductRelationVariantId = o.VariantOptionId)) >= 2
+         GROUP BY r.VariantGroupProductRelationProductId
+        HAVING COUNT(*) >= 2) s);
+IF @TcRenderableSelectors < 6
+    RAISERROR(N'truvio-catalog.sql: fewer than 6 variant masters can actually render a selector. A master needs a row in EcomVariantGroupProductRelation per axis AND at least two of that axis options on itself; without both the PDP draws an empty div and the product copy telling the reader to open the selector is a lie on the page.', 16, 1);
 
 -- ---------------------------------------------------------------------------
 -- 5. The BOM kit. Each slot binds a GROUP and names a default child, which is

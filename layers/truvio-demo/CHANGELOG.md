@@ -1,5 +1,23 @@
 # Changelog — truvio-demo
 
+## 1.3.0
+
+Three defects the round-two e2e measured on a PRISTINE host, every one of them invisible
+to the row counts this layer ships (`costHints.expectedRows` matched exactly while all
+three were live).
+
+### The variant selector guard runs after the rows it asserts (Foundry #1133)
+
+`truvio-catalog.sql`'s selector guard sat between the axis relations and the OPTION
+relations it measures, so on a pristine database it read an empty
+`EcomVariantOptionsProductRelation`, raised severity 16, and - because a severity-16
+`RAISERROR` does not abort the batch - the script carried on, seeded the options, and
+printed its own success line on the same run that had just reported failure. Under
+`sqlcmd -b` that is exit 1 on a first run and exit 0 on every re-run, which is why it had
+never been seen. The guard is moved verbatim to the end of the variant section, after the
+last option relation and the last combination row. The assertion itself is unchanged; it
+was always the right assertion, in the wrong place.
+
 ## 1.2.0
 
 Density parity, data half (V5-PLAN round two, items 1-4), against the measured parity
