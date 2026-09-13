@@ -65,173 +65,212 @@ IF COL_LENGTH('EcomDetails', 'DetailsGroupId') IS NULL
 -- 1. The gallery.
 -- ---------------------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0001-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0001-2', 'TCPROD0001', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0001-2', 'TCPROD0001', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0001-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0001-3', 'TCPROD0001', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0001-3', 'TCPROD0001', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0002-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0002-2', 'TCPROD0002', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0002-2', 'TCPROD0002', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0003-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0003-2', 'TCPROD0003', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0003-2', 'TCPROD0003', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0004-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0004-2', 'TCPROD0004', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0004-2', 'TCPROD0004', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0004-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0004-3', 'TCPROD0004', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0004-3', 'TCPROD0004', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0005-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0005-2', 'TCPROD0005', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0005-2', 'TCPROD0005', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0006-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0006-2', 'TCPROD0006', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0006-2', 'TCPROD0006', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0006-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0006-3', 'TCPROD0006', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0006-3', 'TCPROD0006', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0007-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0007-2', 'TCPROD0007', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0007-2', 'TCPROD0007', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0008-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0008-2', 'TCPROD0008', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0008-2', 'TCPROD0008', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0009-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0009-2', 'TCPROD0009', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0009-2', 'TCPROD0009', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0009-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0009-3', 'TCPROD0009', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0009-3', 'TCPROD0009', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0010-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0010-2', 'TCPROD0010', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0010-2', 'TCPROD0010', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0011-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0011-2', 'TCPROD0011', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0011-2', 'TCPROD0011', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0011-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0011-3', 'TCPROD0011', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0011-3', 'TCPROD0011', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0012-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0012-2', 'TCPROD0012', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0012-2', 'TCPROD0012', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0013-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0013-2', 'TCPROD0013', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0013-2', 'TCPROD0013', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0014-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0014-2', 'TCPROD0014', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0014-2', 'TCPROD0014', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0014-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0014-3', 'TCPROD0014', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0014-3', 'TCPROD0014', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0015-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0015-2', 'TCPROD0015', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0015-2', 'TCPROD0015', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0016-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0016-2', 'TCPROD0016', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0016-2', 'TCPROD0016', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0016-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0016-3', 'TCPROD0016', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0016-3', 'TCPROD0016', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0017-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0017-2', 'TCPROD0017', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0017-2', 'TCPROD0017', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0018-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0018-2', 'TCPROD0018', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0018-2', 'TCPROD0018', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0019-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0019-2', 'TCPROD0019', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0019-2', 'TCPROD0019', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0019-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0019-3', 'TCPROD0019', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0019-3', 'TCPROD0019', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0020-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0020-2', 'TCPROD0020', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0020-2', 'TCPROD0020', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0021-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0021-2', 'TCPROD0021', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0021-2', 'TCPROD0021', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0021-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0021-3', 'TCPROD0021', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0021-3', 'TCPROD0021', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0022-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0022-2', 'TCPROD0022', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0022-2', 'TCPROD0022', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0023-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0023-2', 'TCPROD0023', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0023-2', 'TCPROD0023', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0024-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0024-2', 'TCPROD0024', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0024-2', 'TCPROD0024', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0024-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0024-3', 'TCPROD0024', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0024-3', 'TCPROD0024', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0025-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0025-2', 'TCPROD0025', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0025-2', 'TCPROD0025', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0026-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0026-2', 'TCPROD0026', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0026-2', 'TCPROD0026', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0026-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0026-3', 'TCPROD0026', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0026-3', 'TCPROD0026', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0027-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0027-2', 'TCPROD0027', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0027-2', 'TCPROD0027', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0028-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0028-2', 'TCPROD0028', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0028-2', 'TCPROD0028', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0029-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0029-2', 'TCPROD0029', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0029-2', 'TCPROD0029', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0029-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0029-3', 'TCPROD0029', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0029-3', 'TCPROD0029', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0030-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0030-2', 'TCPROD0030', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-2.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0030-2', 'TCPROD0030', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0031-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0031-2', 'TCPROD0031', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0031-2', 'TCPROD0031', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0031-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0031-3', 'TCPROD0031', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0031-3', 'TCPROD0031', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0032-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0032-2', 'TCPROD0032', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0032-2', 'TCPROD0032', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0033-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0033-2', 'TCPROD0033', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0033-2', 'TCPROD0033', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0034-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0034-2', 'TCPROD0034', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0034-2', 'TCPROD0034', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0034-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0034-3', 'TCPROD0034', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0034-3', 'TCPROD0034', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0035-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0035-2', 'TCPROD0035', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0035-2', 'TCPROD0035', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0036-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0036-2', 'TCPROD0036', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0036-2', 'TCPROD0036', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0036-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0036-3', 'TCPROD0036', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0036-3', 'TCPROD0036', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0037-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0037-2', 'TCPROD0037', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0037-2', 'TCPROD0037', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0038-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0038-2', 'TCPROD0038', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0038-2', 'TCPROD0038', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0039-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0039-2', 'TCPROD0039', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0039-2', 'TCPROD0039', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0039-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0039-3', 'TCPROD0039', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0039-3', 'TCPROD0039', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0040-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0040-2', 'TCPROD0040', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0040-2', 'TCPROD0040', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0041-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0041-2', 'TCPROD0041', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0041-2', 'TCPROD0041', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0041-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0041-3', 'TCPROD0041', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0041-3', 'TCPROD0041', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0042-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0042-2', 'TCPROD0042', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0042-2', 'TCPROD0042', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0043-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0043-2', 'TCPROD0043', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0043-2', 'TCPROD0043', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0044-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0044-2', 'TCPROD0044', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0044-2', 'TCPROD0044', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0044-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0044-3', 'TCPROD0044', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0044-3', 'TCPROD0044', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0045-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0045-2', 'TCPROD0045', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-1.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0045-2', 'TCPROD0045', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0046-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0046-2', 'TCPROD0046', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0046-2', 'TCPROD0046', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0046-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0046-3', 'TCPROD0046', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0046-3', 'TCPROD0046', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0047-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0047-2', 'TCPROD0047', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0047-2', 'TCPROD0047', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0048-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0048-2', 'TCPROD0048', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0048-2', 'TCPROD0048', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0049-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0049-2', 'TCPROD0049', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0049-2', 'TCPROD0049', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0049-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0049-3', 'TCPROD0049', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0049-3', 'TCPROD0049', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0050-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0050-2', 'TCPROD0050', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-visual.png', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0050-2', 'TCPROD0050', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0051-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0051-2', 'TCPROD0051', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0051-2', 'TCPROD0051', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0051-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0051-3', 'TCPROD0051', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0051-3', 'TCPROD0051', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0052-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0052-2', 'TCPROD0052', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0052-2', 'TCPROD0052', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0053-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0053-2', 'TCPROD0053', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0053-2', 'TCPROD0053', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0054-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0054-2', 'TCPROD0054', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0054-2', 'TCPROD0054', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0054-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0054-3', 'TCPROD0054', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0054-3', 'TCPROD0054', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0055-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0055-2', 'TCPROD0055', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0055-2', 'TCPROD0055', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0056-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0056-2', 'TCPROD0056', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0056-2', 'TCPROD0056', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0056-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0056-3', 'TCPROD0056', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0056-3', 'TCPROD0056', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0057-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0057-2', 'TCPROD0057', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0057-2', 'TCPROD0057', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0058-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0058-2', 'TCPROD0058', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0058-2', 'TCPROD0058', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0059-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0059-2', 'TCPROD0059', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0059-2', 'TCPROD0059', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0059-3')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0059-3', 'TCPROD0059', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp', 3, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0059-3', 'TCPROD0059', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0060-2')
-    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0060-2', 'TCPROD0060', '', 'ENU', 0, '/Files/Images/TruvioCommerce/scenic/product-shot-3.webp', 2, 0);
+    INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0060-2', 'TCPROD0060', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+
+
+-- The gallery must never repeat a picture. The five slots above are fixed
+-- literals, so a master whose own default tile is one of them would open on the
+-- same image twice; this converges those rows onto the first tile the master
+-- does not already carry. It runs over the master rows only (DetailVariantId
+-- ''), because a variant row deliberately mirrors its master's default.
+;WITH TcTiles(n, path) AS (
+    SELECT * FROM (VALUES
+        ( 1, '/Files/Images/TruvioCommerce/products/tc-tile-variants.svg'),
+        ( 2, '/Files/Images/TruvioCommerce/products/tc-tile-units.svg'),
+        ( 3, '/Files/Images/TruvioCommerce/products/tc-tile-bundles.svg'),
+        ( 4, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg'),
+        ( 5, '/Files/Images/TruvioCommerce/products/tc-tile-discounts.svg'),
+        ( 6, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg'),
+        ( 7, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg'),
+        ( 8, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg'),
+        ( 9, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg'),
+        (10, '/Files/Images/TruvioCommerce/products/tc-tile-assortments.svg'),
+        (11, '/Files/Images/TruvioCommerce/products/tc-tile-currencies.svg'),
+        (12, '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing.svg')) AS v(n, path))
+UPDATE g
+   SET g.DetailValue = x.path
+  FROM EcomDetails g
+ CROSS APPLY (SELECT TOP 1 t.path
+                FROM TcTiles t
+               WHERE NOT EXISTS (SELECT 1 FROM EcomDetails o
+                                  WHERE o.DetailProductId = g.DetailProductId
+                                    AND o.DetailVariantId = ''
+                                    AND o.DetailId <> g.DetailId
+                                    AND o.DetailValue = t.path)
+               ORDER BY t.n) x
+ WHERE g.DetailId LIKE 'TC-GAL-%'
+   AND g.DetailVariantId = ''
+   AND EXISTS (SELECT 1 FROM EcomDetails o
+                WHERE o.DetailProductId = g.DetailProductId
+                  AND o.DetailVariantId = ''
+                  AND o.DetailId <> g.DetailId
+                  AND o.DetailValue = g.DetailValue);
 
 -- ---------------------------------------------------------------------------
 -- 2. The Manuals asset category and the documents on it.
@@ -1646,6 +1685,30 @@ DECLARE @TcThinGalleries INT = (
 IF @TcThinGalleries > 0
     RAISERROR(N'truvio-pdp.sql: a master carries fewer than two gallery images. The thumbnail strip does not render for a single image, so the PDP would open on one picture with nothing to step through.', 16, 1);
 
+-- The gallery guard counts ROWS, so it was green on a catalogue whose every
+-- gallery member pointed at a file no layer shipped. A gallery is only a
+-- gallery if the pictures resolve, so the path is asserted too. Two prefixes
+-- are legitimate: products/, the twelve concept tiles this layer ships in
+-- files/ and the committed default; and scenic/, the five photographic targets
+-- brand/brand-assets.manifest.json declares, which exist only after a brand
+-- step has downloaded them and the optional tools/truvio-gallery-photos.sql has
+-- swapped the rows over. Anything else is a 404 on the page.
+DECLARE @TcUnshippedGalleryAssets INT = (
+    SELECT COUNT(*) FROM EcomDetails d
+     WHERE d.DetailId LIKE 'TC-GAL-%'
+       AND d.DetailValue NOT LIKE '/Files/Images/TruvioCommerce/products/%'
+       AND d.DetailValue NOT LIKE '/Files/Images/TruvioCommerce/scenic/%');
+IF @TcUnshippedGalleryAssets > 0
+    RAISERROR(N'truvio-pdp.sql: a gallery row points at an asset outside this layer''s own files[] and outside the brand manifest''s scenic targets. A data layer never references an asset it cannot account for: the row count stays green while every thumbnail 404s, which is exactly how 84 rows shipped against five files no layer carried.', 16, 1);
+
+DECLARE @TcSameShotGalleries INT = (
+    SELECT COUNT(*) FROM (
+        SELECT d.DetailProductId FROM EcomDetails d
+         WHERE d.DetailProductId LIKE 'TCPROD%' AND d.DetailVariantId = ''
+         GROUP BY d.DetailProductId HAVING COUNT(DISTINCT d.DetailValue) < 2) x);
+IF @TcSameShotGalleries > 0
+    RAISERROR(N'truvio-pdp.sql: a master carries two gallery rows pointing at the SAME picture. The thumbnail strip renders, and steps from an image to itself.', 16, 1);
+
 DECLARE @TcDocLess INT = (
     SELECT COUNT(*) FROM EcomProducts p
      WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = '' AND p.ProductLanguageId = 'ENU'
@@ -1670,4 +1733,4 @@ IF @TcThinSpecs > 0
     RAISERROR(N'truvio-pdp.sql: a master does not carry exactly seven specification values. The table is meant to read seven of seven on every page; a partial row set is the thin table the parity report measured.', 16, 1);
 
 COMMIT TRAN;
-PRINT 'Done - truvio-demo PDP fill: 84 gallery rows (2 to 3 images per master), the Manuals asset category and 120 document rows over 8 layer-shipped PDFs, 324 relations in 3 groups, 240 category-field values taking every specification table to seven of seven.';
+PRINT 'Done - truvio-demo PDP fill: 84 gallery rows (2 to 3 images per master, all of them concept tiles this layer ships), the Manuals asset category and 120 document rows over 8 layer-shipped PDFs, 324 relations in 3 groups, 240 category-field values taking every specification table to seven of seven.';

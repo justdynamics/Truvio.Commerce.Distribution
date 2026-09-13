@@ -1,6 +1,6 @@
 {
   "name": "truvio-demo",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -67,7 +67,7 @@
       "mode": "merge",
       "phase": "after-replace-deserialize",
       "order": 9,
-      "description": "What fills the product detail page, which the parity report measured at 84 characters of main text with four empty sections. A gallery of two to four images per master (the concept tile plus the photographic frame its top group is branded with, from the Distribution's own brand/brand-assets.manifest.json targets, plus a detail shot on two rows in five). The Manuals ASSET CATEGORY - one EcomDetailsGroup with extensions pdf, InheritanceType 3 and ControlType 0, the shape Swift's ProductMediaTable binds to when configured ImageAssets=[\"Manuals\"] - carrying 120 document rows over the eight one-page PDFs this layer ships in files/Documents/TruvioCommerce/ and regenerates with tools/make-documents.py. 324 related-product rows in three groups (Related products, Accessories, Spare parts), with the kit story written BOTH ways so a member points back at its kit. And the remaining four category-field values per master, taking every specification table from three rows to seven. Ends in four resolution guards that assert what the page needs - two images, two documents, two relations, exactly seven specification values on every master - rather than what was inserted.",
+      "description": "What fills the product detail page, which the parity report measured at 84 characters of main text with four empty sections. A gallery of two to three images per master, every member one of the 12 concept tiles this layer ships under files/Images/TruvioCommerce/products/, converged so no strip repeats a picture - a data layer references no asset outside its own files[]. The photographic set the Distribution's brand/brand-assets.manifest.json declares under scenic/ is an OPTIONAL upgrade applied by tools/truvio-gallery-photos.sql after a brand step has put those five files on disk; it is deliberately undeclared here, because a declared script is one the composer runs and this one would seed 84 404s on any host that skipped the brand step. The Manuals ASSET CATEGORY - one EcomDetailsGroup with extensions pdf, InheritanceType 3 and ControlType 0, the shape Swift's ProductMediaTable binds to when configured ImageAssets=[\"Manuals\"] - carrying 120 document rows over the eight one-page PDFs this layer ships in files/Documents/TruvioCommerce/ and regenerates with tools/make-documents.py. 324 related-product rows in three groups (Related products, Accessories, Spare parts), with the kit story written BOTH ways so a member points back at its kit. And the remaining four category-field values per master, taking every specification table from three rows to seven. Ends in four resolution guards that assert what the page needs - two images, two documents, two relations, exactly seven specification values on every master - rather than what was inserted.",
       "idempotent": true,
       "transactional": true,
       "requiresHostRestart": true

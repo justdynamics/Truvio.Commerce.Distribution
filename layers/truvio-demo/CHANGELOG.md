@@ -22,6 +22,27 @@ after the group section joins all twelve subgroup ids against their final names 
 `RAISERROR`s with the offending `GroupId=GroupName` pairs, so the next drift names itself
 instead of counting sixteen rows and passing.
 
+### The gallery points at pictures this layer ships (Foundry #1137)
+
+All 84 gallery rows pointed at five photographs under `Images/TruvioCommerce/scenic/` -
+artefacts of the previous round's brand pass, which had happened to leave them in that
+host's `Files` tree. No layer ships them, so a clean install seeded a gallery of 404s, and
+the `@TcThinGalleries` guard passed because it counted `EcomDetails` ROWS.
+
+The committed default is now self-contained: every gallery row points at one of the twelve
+concept tiles in this layer's own `files/`, with a converging `UPDATE` that moves any row
+colliding with its master's default tile onto the first tile that master does not already
+carry, so no strip steps from an image to itself. The guard asserts the PATH now - a
+gallery row outside `products/` (shipped) or `scenic/` (brand-manifest, brand-step) is a
+loud failure - and a second guard asserts the pictures in a strip are distinct.
+
+The photographs remain available as an opt-in: `tools/truvio-gallery-photos.sql` swaps the
+gallery onto the five `scenic/` targets `brand/brand-assets.manifest.json` declares, to be
+run by hand AFTER a brand step has put them on disk. It is under `tools/` and deliberately
+NOT in `layer.json` `sql[]`, because a declared script is one the composer runs and this
+one would re-seed 84 404s on any host that skipped the brand step. SQL cannot test for a
+file on disk, so that gate is a human step; the README carries the four-line sequence.
+
 ### The variant selector guard runs after the rows it asserts (Foundry #1133)
 
 `truvio-catalog.sql`'s selector guard sat between the axis relations and the OPTION

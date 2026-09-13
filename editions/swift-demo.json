@@ -9,7 +9,7 @@
     "feature-bom-configurator@1.2.0",
     "feature-b2b-comms@1.0.3",
     "feature-baseline-guide@1.0.0",
-    "truvio-demo@1.2.0"
+    "truvio-demo@1.3.0"
   ],
   "surfaces": [
     "surface-swift@1.12.0"

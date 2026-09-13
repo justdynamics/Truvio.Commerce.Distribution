@@ -121,6 +121,33 @@ The photographic brand assets stay in the Distribution's
 [`brand/brand-assets.manifest.json`](../../brand/brand-assets.manifest.json), fetched at
 brand time and sha256-pinned. They are deliberately **not** committed here.
 
+### The PDP gallery, and the optional photographic upgrade
+
+**The committed default is self-contained.** Every one of the 84 gallery rows
+`truvio-pdp.sql` seeds points at one of the twelve concept tiles above, converged so no
+master's strip repeats a picture, and `truvio-pdp.sql`'s gallery guard now asserts the
+PATH as well as the row count — a data layer references no asset outside its own `files[]`.
+The 1.2.0 gallery pointed at five photographs under
+`Images/TruvioCommerce/scenic/` that no layer ships, so a clean install seeded 84 rows of
+404 while every count stayed green (Foundry #1137).
+
+**The photographs are an optional upgrade, run by hand after the brand step.** The brand
+step already downloads the manifest's five `scenic/` targets into the host `Files` tree;
+once they are on disk, `tools/truvio-gallery-photos.sql` converges the gallery rows onto
+them:
+
+```
+1. compose the edition (truvio-pdp.sql runs; the gallery is concept tiles)
+2. run the brand step (brand-assets.manifest.json -> Files/Images/TruvioCommerce/scenic/)
+3. confirm the five scenic files are on disk
+4. sqlcmd -i layers/truvio-demo/tools/truvio-gallery-photos.sql
+```
+
+It lives under `tools/`, **not** under `merge/_sql/`, and it is deliberately absent from
+`layer.json` `sql[]`: a declared script is one the composer runs, and running this one
+before step 2 recreates exactly the defect it exists to retire. SQL cannot test for a file
+on disk, so the gate for this one is a human step and the script says so in its header.
+
 Attachment writes two surfaces: `EcomDetails` (the attachment the storefront reads —
 `DetailValue` + `DetailIsDefault`, the shape observed on a live DW 10.28 host) with its
 column list resolved from `sys.columns`, and the legacy `EcomProducts.ProductImage*`
