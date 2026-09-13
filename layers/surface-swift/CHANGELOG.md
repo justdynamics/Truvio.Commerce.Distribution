@@ -1,6 +1,105 @@
 # Changelog — surface-swift
 
+## 1.12.0
 
+### The buy panel gets a row per component, so nine paragraphs render nine (Foundry #1165)
+
+1.11.0 put the three missing components into rows that were already occupied, and the fix
+was inert by construction. `Product Info (right side)` carried NINE active paragraphs
+across FOUR `1ColumnFlex` rows and the PDP rendered FOUR - the lowest sort in each row,
+the rest emitted with no markup, no `dw-error` and no empty wrapper. Dropped: 22564 SKU,
+22565 Stock and 22566 Documents teaser, all three of 1.11.0's, plus 22379
+`ProductShortDescription` and 22381 `ProductPriceTable`, which were already being dropped
+before it. Those last two are what prove the renderer and not 1.11.0 is the cause.
+
+Same shape as #1136 on a ProductComponent page rather than the ProductDetails page, and
+the same fix: **one paragraph per grid row**. Four rows become nine, sequenced 1..9 in
+the order the panel reads.
+
+| row | paragraph | item type |
+|---:|---|---|
+| 1 | `paragraph-c1-1.yml` | `Swift-v2_ProductHeader` |
+| 2 | `paragraph-c1-7.yml` | `Swift-v2_ProductNumber` |
+| 3 | `paragraph-c1-9.yml` | `Swift-v2_ProductShortDescription` |
+| 4 | `paragraph-c1-2.yml` | `Swift-v2_ProductPrice` |
+| 5 | `paragraph-c1-3.yml` | `Swift-v2_ProductPriceTable` |
+| 6 | `paragraph-c1-4.yml` | `Swift-v2_ProductVariantSelector` |
+| 7 | `paragraph-c1-5.yml` | `Swift-v2_ProductStock` |
+| 8 | `paragraph-c1-6.yml` | `Swift-v2_ProductAddToCart` |
+| 9 | `paragraph-c1-10.yml` | `Swift-v2_ProductMediaTable` |
+
+No paragraph identity moves: every one keeps its `paragraphUniqueId`, `sourceParagraphId`,
+`sortOrder` and fields, and only the row it hangs off is new. Four rows keep their own id
+too, each staying with the occupant it was already rendering, so a seeded host converges
+by gaining five rows rather than by having its panel replaced. The rhythm is unchanged -
+the panel opens on `topSpacing` 5, the header block closes on 3, the variant selector
+keeps its 4/4 band, and the panel closes on `bottomSpacing` 5.
+
+All eighteen paths are in `replace-manifest.json`, replacing the thirteen that described
+the four-row shape.
+
+### The PDP gallery stops discarding the pictures it resolved (Foundry #1166)
+
+`swift-v2_productmedia` painted an EMPTY `carousel-inner` on every PDP - 0 `img` and 0
+`video` inside the block on three products, all 200 with `dw-error` 0, after a recycle and
+a full rebuild of both repositories. #1145 had already fixed the data and the symptom did
+not move.
+
+**It was never the data.** Read-only against the host's stock Swift 2.4
+`Paragraph/Swift-v2_ProductMedia.cshtml`, images resolve by asset-category **system name**:
+
+```csharp
+product.AssetCategories.Where(x => selectedAssetCategories.Contains(x.SystemName))
+```
+
+That is the `EcomDetailsGroupSystemName`, and nothing else - not `ProductAssetCategory`,
+not the media folder, not an id. Paragraph 22402 asks for `["Images"]`, `EcomDetailsGroup`
+8 is named `Images`, 276 rows carry it. The rows resolved.
+
+They were then thrown away by a **format allowlist** hardcoded in the template:
+
+```csharp
+supportedImageFormats = new string[] { ".jpg", ".jpeg", ".webp", ".png", ".gif", ".bmp", ".tiff" };
+```
+
+No `.svg`, while `EcomDetailsGroup` 8 itself declares svg among its
+`DetailsGroupExtensions`. Every image this distribution ships is an SVG.
+
+And that is why the symptom was an empty container rather than a missing one:
+`totalAssets` counts only what the allowlist accepts, so it was 0; with
+`DefaultImageFallback` true the next branch forces the list to the default image and
+`totalAssets` to 1, so the outer block renders - carousel, rails and modal all paint - and
+then each slide is gated on the same allowlist a second time and the default image is the
+same `.svg`. Not one `carousel-item` is emitted.
+
+The PLP was green throughout because `Swift-v2_ProductDefaultImage.cshtml` applies **no
+format filter at all**. That asymmetry between two stock templates is the whole finding.
+
+`files/Templates/Designs/Swift-v2/Paragraph/Swift-v2_ProductMedia.cshtml` is a one-token
+override of the stock render path, alongside the layer's one existing override
+(`RelatedProductsList.cshtml`) and documented in-file the same way: `".svg"` added to
+`supportedImageFormats`, everything else stock byte for byte, so a Swift roll is a re-copy
+plus the same one edit. Declared in `files[]` and in `placeholders[]`.
+
+Scoped to `ProductMedia`. `ProductMediaGallery` carries the same allowlist but no layer
+paragraph uses it; `ProductMediaTable` carries it too but serves PDFs, which the stock
+document formats already accept.
+
+### repositories[] and itemtypes[] are declared (Foundry #1167)
+
+`layer.json` grows `repositories` (3) and `itemtypes` (130), in the same composed-site
+Files-relative vocabulary `files[]` and `placeholders[].path` already use. Before this,
+133 of this layer's staged paths were declared nowhere: a consumer staging from `files[]`
+staged none of them, an audit comparing `files[]` to disk called the layer clean, and a
+retired definition could not be detected as retired. `layers/layer.schema.json` carries
+the two new arrays and `tools/ci/Validate-Distribution.ps1` check 10 diffs all three
+against disk in both directions, and asserts every placeholder resolves into them.
+
+### Consumer impact
+
+Content ymls changed, so a host on 1.11.x needs a **surface-swift Replace** before the
+buy panel renders nine. A template was added, so the `files/` overlay needs restaging
+before the gallery renders images. No re-seed: no data change ships here.
 
 ## 1.11.0
 
