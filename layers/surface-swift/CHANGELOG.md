@@ -2,6 +2,121 @@
 
 
 
+## 1.8.0
+
+Density parity, structure half (V5-PLAN round two, item 1). The PLP row and the PDP are
+rebuilt against the measured marine inventory. What this release ships is the SHAPE and
+the COMPONENT CHOICES; what fills them is the data layer's half, and several sections
+below will render empty until it lands. That is deliberate: an empty section that is
+present, anchored and selectable is measurable, and a section that does not exist is a
+gate entry that passes by finding nothing.
+
+### The PLP card is one row, not four
+
+The Product List Card shipped four components in four separate `1ColumnFlex` rows. The
+measured marine card is ONE `12ColumnsFlex` / `Swift-v2_RowFlex` row with seven populated
+columns and five empty, which is what makes a list row readable at 124px and assertable
+per element instead of per stack.
+
+Seven columns now, in marine's order: default image (120px, alternative-image hover),
+`Swift-v2_ProductNumber`, the `h2.h6` header, `Swift-v2_ProductShortDescription`,
+`Swift-v2_ProductStock` with the inventory count visible, `Swift-v2_ProductPrice`, and
+`Swift-v2_ProductAddToCart`. Stock is NOT gated for anonymous visitors - marine gates
+price and cart and nothing else - and the cart component's own stock band is suppressed,
+because the stock column owns that line and two of them on one row read as a bug.
+
+### The PDP has ten rows
+
+Breadcrumb and the gallery/buy-panel row are unchanged. The gallery was already
+configured for multiple assets (`ImageAssets: ["Images","Product_details"]`, thumbnails
+bottom, `ShowOnlyPrimaryImage: false`) and needed no change to carry a real image set.
+Then: an anchor strip, Overview, Specifications, Documents, Package contents, Related
+products, Features, FAQ.
+
+Overview and Specifications keep their existing components and gain a `Swift-v2_Text`
+head each carrying the section's `<h2 id>`; both bodies get `HideTitle: true`, so the
+heading is emitted once, by the element that owns the anchor.
+
+Component choices, each from the Swift 2.4 vocabulary the parity report maps:
+
+| section | component | binding |
+|---|---|---|
+| Documents | `Swift-v2_ProductMediaTable` | `ImageAssets: ["Manuals"]`, `HideThumbnails: true` - an `EcomDetailsGroup` system name, not a product file field |
+| Package contents | `Swift-v2_ProductBom` | `ListComponentSource: "39"`, the Product List Card, so a BOM line renders as the same seven-component row the PLP renders |
+| Related products | `Swift-v2_RelatedProductsList` | `SourceType: "related-products"`, service page 47 |
+| Features, FAQ | `Swift-v2_Text` | heading in `Title`, body empty - the item fields the data layer fills |
+
+Relations are the list renderer and NOT `Swift-v2_ProductComponentSlider`. The report
+measures marine's own carousel rendering zero items on the aurora and leaving its section
+head stranded; a list degrades to a visible empty list instead of an empty div inside a
+slider shell, and the `Related products list` service page this layer repaired in 1.5 is
+already wired for it.
+
+### The anchor strip has a renderer, and fills itself
+
+`TC_AnchorNav` has shipped as an unused item type since 1.6. It now has a paragraph on
+the PDP and, for the first time, `Templates/Designs/Swift-v2/Paragraph/TC_AnchorNav.cshtml`.
+
+Swift stores a repeater as an item-list id, so a serialized layer can ship the paragraph
+but not its `TC_AnchorNav_Item` children - `AnchorNav_Items` is `0` and always would be.
+The template emits its shell either way, and the theme's `default_custom.js` builds the
+links from `main h2[id]` in document order when the list is empty. An editor who fills
+the repeater overrides the discovered list entirely. Both paths emit the current path in
+front of the fragment, because Dynamicweb's sitewide `<base href>` sends a bare
+`#overview` to the front page.
+
+### Manifest registration
+
+Every paragraph added here is registered in `replace/replace-manifest.json`. So is
+`Product Info (right side)/grid-row-2/paragraph-c1-3.yml`, the `Swift-v2_ProductPriceTable`
+orphaned since 1.7.0: the file has been on disk and absent from the manifest, so the
+deserializer never created it and the PDP has never had a quantity-break table even
+though this layer ships one. An unregistered paragraph file fails silently and reads as a
+content bug, which is why this is checked rather than remembered.
+
+Known residual drift, unchanged here and named so it is not lost: six
+`Customer center/Overview` files on disk are still unregistered, and nine
+`Customer center/CSR` manifest paths still name files that do not exist. Both are
+recorded in 1.7.0. Registering the first six would create two rows on the customer-center
+overview that have never rendered, which is a behaviour change this release has no
+measurement for.
+
+### Selectors this release makes assertable
+
+The gate binds to rendered markup, so here is what each addition emits. Swift stamps
+`data-dw-itemtype` with the lowercased item-type system name on the grid column, which is
+the stable half of every selector below.
+
+PLP row, inside `main .product-list article.product[data-product-id]`:
+
+| element | selector |
+|---|---|
+| image | `[data-dw-itemtype="swift-v2_productdefaultimage"] img` |
+| SKU | `[data-dw-itemtype="swift-v2_productnumber"]`, `[itemprop="sku"]` |
+| name | `[data-dw-itemtype="swift-v2_productheader"] h2` |
+| short description | `[data-dw-itemtype="swift-v2_productshortdescription"]` |
+| stock | `[data-dw-itemtype="swift-v2_productstock"]` |
+| price | `[data-dw-itemtype="swift-v2_productprice"]`; signed out, `.td-price-lock` |
+| add to cart | `[data-dw-itemtype="swift-v2_productaddtocart"]` |
+
+PDP:
+
+| section | selector |
+|---|---|
+| anchor strip | `main nav.td-anchornav[data-td-anchornav]`, links `.td-anchornav__link` |
+| Overview | `main h2#overview`; body `[data-dw-itemtype="swift-v2_productlongdescription"]`, `[itemprop="description"]` |
+| Specifications | `main h2#specifications`; body `[data-dw-itemtype="swift-v2_productfielddisplaygroups"]` |
+| Documents | `main h2#documents`; table `[data-dw-itemtype="swift-v2_productmediatable"]` |
+| Package contents | `main h2#package-contents`; `[data-dw-itemtype="swift-v2_productbom"]` |
+| Related products | `main h2#related`; `[data-dw-itemtype="swift-v2_relatedproductslist"]` |
+| Features | `main h2#features` |
+| FAQ | `main h2#faq` |
+| price lock, detail | `main .td-price-lock--pdp`, its anchor `.td-price-lock__action` |
+
+Two dead selector arms the report names are now worth retiring rather than fixing:
+`swift-v2_productname` and `swift-v2_productdescription` name item types that do not
+exist in Swift 2.4, and never matched anything.
+
 ## 1.7.1
 
 Two measurements from the closing round of the v5 end-to-end on DW 10.28.10, both of the same

@@ -2,6 +2,92 @@
 
 
 
+## 2.2.0
+
+Two additions and one rename, all of them in service of the round-two density parity
+the surface layer ships alongside.
+
+### `td-wave-*` becomes `td-edge-*`
+
+Block 22 named its mechanism after one silhouette. A wave is a brand's fit, and this
+layer is brand-free, so the name made every other shape read as a misuse of the utility.
+The classes are `td-edge-bottom` / `td-edge-top` / `td-edge-alt` and the tokens
+`--td-edge-mask` / `--td-edge-fill` / `--td-edge-h`. Every clearance rule is unchanged and
+still sized off `--td-edge-h`. Nothing outside this branch referenced the old names.
+
+The shipped silhouette is now deliberately dull - a barely-perceptible shallow bevel -
+which is what a brand-free default should be. `Images/Brand/wave.svg` becomes
+`Images/Brand/edge.svg` carrying that path.
+
+`Images/Brand/edge-truvio.svg` lands beside it: the Truvio line, a softened zigzag with
+gently rounded peaks, vertices every 120px alternating y=58 and y=20 with each apex
+rounded over a 30px leg. Industrial rather than organic, and rounded so it does not read
+as a warning stripe at 40px on a phone. **Nothing paints it.** Block 22 carries one
+commented declaration showing the entire brand-time edit: set `--td-edge-mask` to that
+path as a data URI in the brand's own sheet, loaded after this one, and all three
+instances change at once.
+
+**A Truvio-branded site must perform that flip.** The standing e2e site is branded
+Truvio; until its branding step sets `--td-edge-mask` to the `edge-truvio.svg` path, the
+three instances below paint the neutral bevel - correct, inert-looking, and not the brand.
+
+### The motif is applied, so the paint asserts have subjects
+
+All three `PAINT-01` entries SKIPped for want of a subject. Block 26 of
+`default_custom.js` supplies three: the home hero row takes `td-edge-bottom`, the first
+colour-scheme boundary after it takes `td-edge-top`, and the site footer takes
+`td-edge-top` for the sitewide crest.
+
+Owner selectors, one gate entry each: `main .td-edge-bottom::after`,
+`main .td-edge-top::before`, `footer::before`.
+
+It is applied from JavaScript because a Swift grid row cannot carry a class. The stock
+`Grid/Page/RowTemplates/Swift-v2_Row.cshtml` emits `data-swift-gridrow`, a colour-scheme
+attribute and spacing attributes, and no class authored from content; grid-row
+serialization has no `cssClass` key either. The 2.0.0 note claiming the opt-in is "one
+entry in a grid row's CSS-class field in the Visual Editor" was wrong, and is corrected
+here.
+
+Hanging the pseudo-elements straight off colour-scheme adjacency and the footer landmark
+is the other available route and is rejected: the classes ARE the contract that block
+22's clearance rules and a `paintClearance` gate entry both key on, and a site adding a
+fourth instance should be adding one class rather than a fourth bespoke structural
+selector nobody can find later.
+
+Scope comes from content, not from a page id. The hero is the first direct child section
+of `main` containing a Swift poster, so a PLP, a PDP or the cart gets neither main-side
+instance and this file never learns a page number.
+
+### The signed-out price column gets an affordance
+
+`Paragraph/Swift-v2_ProductPrice/PriceWithSignIn.cshtml`: the stock Swift 2.4 price
+component with one block ahead of it. When the area's `AnonymousUsers` field gates prices
+and the visitor is anonymous, stock Swift renders an empty div - a blank column with no
+explanation, which also lets a presence-only price assert pass vacuously. The variant
+renders a neutral lock badge there instead, and on a detail page a sign-in anchor with it.
+
+The copy is generic - "Account price", "Sign in for account pricing" - and both strings
+go through `@Translate`, so a re-skin changes them in the translation table. Classes are
+`td-price-lock`, `__icon`, `__label`, `__action` and the `--pdp` modifier. The href
+resolves through `Services.Pages.GetFirstModulePageForArea(Pageview.AreaID,
+"UserAuthentication")` and `SearchEngineFriendlyURLs`, the same two lines stock
+`Swift-v2_MyAccount/UserAvatarDropdown.cshtml` uses, so it survives a renamed sign-in page
+and a second culture.
+
+It is a VARIANT, not an overlay of the stock file. Marine edits the default in place,
+which makes price rendering a permanent customisation and masks the next Swift upgrade of
+the component. A variant is inert until a paragraph's `Template` field names it, and inert
+again on any area that does not gate prices.
+
+Block 24 dresses it; block 25 dresses the surface layer's anchor strip
+(`nav.td-anchornav`), sticky from 768 up only, with `scroll-margin-block-start` on
+`main h2[id]` sized off the same variable as the strip's own height so a jump cannot land
+a heading underneath it. Block 26 of `default_custom.js` also carries the strip's
+base-href repointing and its empty-list fallback.
+
+Everything above resolves through the `--td-*` tokens and `currentColor`, so a palette
+swap carries it and no colour scheme is special-cased.
+
 ## 2.1.0
 
 **Block #23 - the laptop band.** Home and the PLP overflowed horizontally by exactly 66px at
