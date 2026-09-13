@@ -13,7 +13,7 @@
   "HideFieldLabels": false
   "HideFieldsWithZeroValue": true
   "HideGroupHeaders": true
-  "HideTitle": false
+  "HideTitle": true
   "Id": "1"
   "ItemInstanceType": ""
   "Layout": "table"

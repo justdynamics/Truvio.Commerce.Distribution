@@ -9,16 +9,8 @@
   ],
   "files": [
     "System/Truvio/swift.stamp.json",
-    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Detail/Favorite_Details.cshtml",
-    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/List/FavoriteLists_Grid.cshtml",
-    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/List/FavoriteLists_List.cshtml",
-    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/CreateFavoriteListModal.cshtml",
-    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/DeleteFavoriteListModal.cshtml",
-    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RemoveFavoriteProductModal.cshtml",
-    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RenameFavoriteListEdit.cshtml",
-    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RenameFavoriteListModal.cshtml",
-    "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Chart/Charts/bar-chart.css",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Chart/Charts/MonthlySpending.cshtml",
+    "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Chart/Charts/bar-chart.css",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Chart/MonthlySpending.cshtml",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_List/Favorites.cshtml",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_List/Lists/Favorites.cshtml",
@@ -37,10 +29,19 @@
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Number/Orders.cshtml",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Number/Quotes.cshtml",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Product/Product.cshtml",
+    "Templates/Designs/Swift-v2/Paragraph/TC_AnchorNav.cshtml",
     "Templates/Designs/Swift-v2/QueryPublisher/Post/PostPagination.cshtml",
     "Templates/Designs/Swift-v2/Users/UserAuthentication/Login/SelectableUsers.cshtml",
     "Templates/Designs/Swift-v2/Users/UserAuthentication/Login/SelectableUsersDirectLogin.cshtml",
-    "Templates/Designs/Swift-v2/Users/UserCreate/Create/UserGroupUser_Invite.cshtml"
+    "Templates/Designs/Swift-v2/Users/UserCreate/Create/UserGroupUser_Invite.cshtml",
+    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Detail/Favorite_Details.cshtml",
+    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/List/FavoriteLists_Grid.cshtml",
+    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/List/FavoriteLists_List.cshtml",
+    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/CreateFavoriteListModal.cshtml",
+    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/DeleteFavoriteListModal.cshtml",
+    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RemoveFavoriteProductModal.cshtml",
+    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RenameFavoriteListEdit.cshtml",
+    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RenameFavoriteListModal.cshtml"
   ],
   "placeholders": [
     {
@@ -61,12 +62,17 @@
     {
       "path": "System/Items/ItemType_TC_AnchorNav.xml",
       "kind": "itemtype",
-      "why": "An in-page jump strip as a real item type, so a site does not author one as raw markup inside a Text paragraph. Unused until a row adds it."
+      "why": "An in-page jump strip as a real item type, so a site does not author one as raw markup inside a Text paragraph. Rendered by Templates/Designs/Swift-v2/Paragraph/TC_AnchorNav.cshtml, which ships beside it; the strip is inert on any page that does not carry the paragraph."
     },
     {
       "path": "System/Items/ItemType_TC_AnchorNav_Item.xml",
       "kind": "itemtype",
       "why": "The repeater child of TC_AnchorNav: label plus anchor id, no defaults, so a missing field renders visibly empty."
+    },
+    {
+      "path": "Templates/Designs/Swift-v2/Paragraph/TC_AnchorNav.cshtml",
+      "kind": "template",
+      "why": "The renderer for TC_AnchorNav. Emits its shell even with no links, so the section is measurable when the repeater is empty; the theme's default_custom.js fills an empty strip from the page's own main h2[id] headings and repoints every href past Dynamicweb's sitewide <base href>."
     }
   ]
 }

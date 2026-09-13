@@ -9,7 +9,7 @@
 "moduleSettings": ""
 "fields":
   "GlobalRecordPageGuid": "15e4ab2a-a10e-4959-8c9f-67293f8afa30"
-  "HideTitle": false
+  "HideTitle": true
   "Id": "1"
   "ItemInstanceType": ""
   "Sort": 0

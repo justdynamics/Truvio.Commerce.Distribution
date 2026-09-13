@@ -1428,3 +1428,73 @@ body > footer.td-wave-top,
   align-self: stretch;
   text-align: center;
 }
+
+/* ==========================================================================
+ * BLOCK 25 - THE ANCHOR STRIP. Dressing for the TC_AnchorNav item type the
+ * surface layer ships.
+ *
+ * WHAT IT DRESSES. One <nav data-td-anchornav> holding a flat list of in-page
+ * jump links. The strip renders its shell even with no links in it - an element
+ * that vanishes when its data is missing is a section nobody can measure - so
+ * these rules have to look deliberate when the list is empty as well as full.
+ *
+ * STICKY, BUT ONLY WHERE THERE IS ROOM. Below 768 a sticky strip eats a third
+ * of a phone viewport on a page whose whole point is long-form content, so it
+ * sticks from the small-tablet tier up and scrolls away on a phone.
+ *
+ * SCROLL-MARGIN IS THE OTHER HALF. A sticky strip and an #id target collide by
+ * construction: the browser scrolls the heading to the viewport top and the
+ * strip is already sitting there. scroll-margin-block-start on the headings the
+ * strip points at is the fix, sized off the same variable the strip's own height
+ * is, so the two cannot drift.
+ *
+ * NO COLOUR OF ITS OWN - --td-* tokens and currentColor throughout.
+ * ========================================================================== */
+[data-td-block="25"] { --td-block: 25; }
+
+:root {
+  --td-anchornav-h: 3rem;
+}
+
+.td-anchornav {
+  border-block-end: 1px solid var(--td-hairline);
+  background-color: var(--td-white);
+}
+
+.td-anchornav__list {
+  min-height: var(--td-anchornav-h);
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.td-anchornav__list::-webkit-scrollbar { display: none; }
+
+.td-anchornav__link {
+  display: inline-block;
+  padding-block: .5rem;
+  color: var(--td-slate-mid);
+  text-decoration: none;
+  white-space: nowrap;
+  border-block-end: 2px solid transparent;
+}
+
+.td-anchornav__link:hover,
+.td-anchornav__link:focus-visible {
+  color: var(--td-accent);
+  border-block-end-color: var(--td-accent);
+}
+
+@media (min-width: 768px) {
+  .td-anchornav {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+  }
+
+  /* The strip's own height, reserved above every heading it can jump to, so a
+   * jump does not land the heading underneath the strip. */
+  main h2[id] {
+    scroll-margin-block-start: calc(var(--td-anchornav-h) + 1rem);
+  }
+}

@@ -46,6 +46,73 @@
 (function () {
     "use strict";
 
-    // Theme behaviour goes here. Nothing ships enabled.
+    /* ----------------------------------------------------------------------
+     * THE ANCHOR STRIP. Shape 2 from the list above, and the reason that entry
+     * is there at all.
+     *
+     * Dynamicweb emits a sitewide <base href>, so a bare "#overview" href
+     * resolves against the FRONT PAGE and navigates away instead of scrolling.
+     * Every link in the strip therefore has to carry the current path in front
+     * of its fragment. TC_AnchorNav.cshtml already emits them that way; this
+     * re-points them after load, which is what keeps them right on a page whose
+     * URL the client changed (a facet, a variant, a paging step).
+     *
+     * IT ALSO FILLS AN EMPTY STRIP. Swift stores a repeater as an item-list id,
+     * so a serialized layer can ship the TC_AnchorNav paragraph but not its
+     * TC_AnchorNav_Item children - the strip lands on the page with no links in
+     * it. When the list is empty this builds it from the section headings the
+     * page actually renders: every `main h2[id]`, in document order, using the
+     * heading's own text as the label. A skeleton and a hand-maintained jump
+     * list drift apart; reading the headings means they cannot.
+     *
+     * An editor who wants different words or a different order fills the
+     * repeater, and the discovered list is not used at all.
+     *
+     * No marker string is written and no state is stamped on <body>: the strip
+     * either has links in it or it does not, and that is the whole proof.
+     * -------------------------------------------------------------------- */
+    function anchorStrip() {
+        var navs = document.querySelectorAll("[data-td-anchornav]");
+        if (!navs.length) { return; }
+
+        var path = window.location.pathname || "";
+
+        Array.prototype.forEach.call(navs, function (nav) {
+            var list = nav.querySelector(".td-anchornav__list");
+            if (!list) { return; }
+
+            if (!list.querySelector("a")) {
+                var main = document.querySelector("main") || document.body;
+                var headings = main ? main.querySelectorAll("h2[id]") : [];
+
+                Array.prototype.forEach.call(headings, function (heading) {
+                    var label = (heading.textContent || "").trim();
+                    if (!heading.id || !label) { return; }
+
+                    var li = document.createElement("li");
+                    li.className = "td-anchornav__item";
+
+                    var a = document.createElement("a");
+                    a.className = "td-anchornav__link";
+                    a.setAttribute("data-td-anchor", heading.id);
+                    a.textContent = label;
+                    a.href = path + "#" + heading.id;
+
+                    li.appendChild(a);
+                    list.appendChild(li);
+                });
+            }
+
+            Array.prototype.forEach.call(list.querySelectorAll("[data-td-anchor]"), function (a) {
+                a.href = path + "#" + a.getAttribute("data-td-anchor");
+            });
+        });
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", anchorStrip);
+    } else {
+        anchorStrip();
+    }
 
 })();
