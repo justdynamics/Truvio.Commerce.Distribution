@@ -1,5 +1,9 @@
 # Changelog — feature-rma
 
+## 1.0.1
+
+Every probe and criticalPath moves from the `/swift-2/` area segment to the `/en-us/` culture root (Foundry #965). `AreaUrlName` `swift-2` is decorative on a single-area host: Dynamicweb prefixes the area segment only when more than one area competes for the host and otherwise serves the culture segment, so every `/swift-2/` path answered 404 on a healthy, fully deserialized site while the same pages answered under `/en-us/`. Page targets are unchanged; only the prefix moves. README probe tables follow.
+
 ## 1.0.0
 
 Initial release (P3 feature surgery, RUN-DISTRIBUTION-QUALITY item E, decision D-E). Data-only,

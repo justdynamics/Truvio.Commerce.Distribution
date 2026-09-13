@@ -9,8 +9,8 @@ decision D-D); the pricing half moved to `feature-pricing`.
 
 | Capability | How | Artifact |
 |------------|-----|----------|
-| Quick-order pad (CAND-01) | SKU + quantity grid with paste-from-Excel/CSV (tab-separated first, comma/semicolon fallback), feed-based SKU validation, one-click `cartcmd=addmulti` cart fill — all client-side parsing, zero custom server code | `templates/Designs/Swift-v2/Paragraph/PackQuickOrderPad.cshtml`, `itemtypes/ItemType_PackQuickOrderPad.xml`, Quick Order page fragment, shipped in the `Swift 2` (area 3, `/swift-2/quick-order`) nav tree, navigationTag `QuickOrderPadPage` |
-| Editable buy-it-again (empty-cart safe) | **The stock Express Buy `?OrderID=` prefill flow the base/surface already routes to** — `OrderViewSearchList.cshtml` renders the Reorder button to `ExpressBuyPage?OrderID=<id>`; the flow prefills an editable quantity grid and submits `cartcmd=addmulti`, which needs no active cart. The layer PROVES this flow (probes on `/swift-2/express-buy`), it does not rebuild it | `layer.json` asserts (`http-body-contains` on Express Buy, criticalPath) |
+| Quick-order pad (CAND-01) | SKU + quantity grid with paste-from-Excel/CSV (tab-separated first, comma/semicolon fallback), feed-based SKU validation, one-click `cartcmd=addmulti` cart fill — all client-side parsing, zero custom server code | `templates/Designs/Swift-v2/Paragraph/PackQuickOrderPad.cshtml`, `itemtypes/ItemType_PackQuickOrderPad.xml`, Quick Order page fragment, shipped in the `Swift 2` (area 3, `/en-us/quick-order`) nav tree, navigationTag `QuickOrderPadPage` |
+| Editable buy-it-again (empty-cart safe) | **The stock Express Buy `?OrderID=` prefill flow the base/surface already routes to** — `OrderViewSearchList.cshtml` renders the Reorder button to `ExpressBuyPage?OrderID=<id>`; the flow prefills an editable quantity grid and submits `cartcmd=addmulti`, which needs no active cart. The layer PROVES this flow (probes on `/en-us/express-buy`), it does not rebuild it | `layer.json` asserts (`http-body-contains` on Express Buy, criticalPath) |
 
 ## Zero custom code
 
@@ -48,9 +48,9 @@ matching `areaName`/`areaId` in `merge/merge-manifest.json` + `fragmentContent[]
 
 | Probe | Expectation |
 |-------|-------------|
-| `http-body-contains /swift-2/quick-order` | addmulti form marker (`name="cartcmd" ... value="addmulti"`) |
-| `http-body-contains /swift-2/express-buy` | `id="ExpressBuySearchForm"` (buy-it-again surface, anonymous) |
-| `sku-validation /swift-2/quick-order` (sku `FIXT-0001`) | the Quick Order feed resolves the sample-data catalog SKU — proves the pad's index-feed wiring |
+| `http-body-contains /en-us/quick-order` | addmulti form marker (`name="cartcmd" ... value="addmulti"`) |
+| `http-body-contains /en-us/express-buy` | `id="ExpressBuySearchForm"` (buy-it-again surface, anonymous) |
+| `sku-validation /en-us/quick-order` (sku `FIXT-0001`) | the Quick Order feed resolves the sample-data catalog SKU — proves the pad's index-feed wiring |
 
 ## `Template file not found` on the Quick Order page is platform noise, not a layer defect (Foundry #143)
 
@@ -103,10 +103,10 @@ entries whose template no design folder in the composition ships, or drop it.
 
 Inherited verbatim from `feature-reordering-pricing` 1.1.0: after a deactivate→reactivate cycle the
 2-page area 3 Quick Order fragment does not fully re-bind (the page 404s), so the two
-`/swift-2/quick-order` cycle asserts (`http-body-contains` + `sku-validation`, phase `behavior-cycle`)
+`/en-us/quick-order` cycle asserts (`http-body-contains` + `sku-validation`, phase `behavior-cycle`)
 fail in the gate's Step 12c cycle leg. Declared in `layer.json` `knownCycleLimitations`; the gate records
 them as **`KNOWN-LIMITATION` (WARN)**, not FAIL. Scope: toggle-cycle only — first activation and every
-first-activation assert are unaffected, and `/swift-2/express-buy` survives the cycle. A full
+first-activation assert are unaffected, and `/en-us/express-buy` survives the cycle. A full
 re-deserialize of the base + this layer restores the page.
 
 ## Provenance

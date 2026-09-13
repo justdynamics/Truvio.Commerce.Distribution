@@ -37,23 +37,23 @@ or alters the contract-price guarantee. The Foundry gate compiles + proves both 
 
 ## Probe expectations (test coupling broken — P3)
 
-Both `cart-price` probes now use **`/swift-2/express-buy`** as the add-to-cart vehicle (was
-`/swift-2/quick-order`). The combined layer routed these probes through the Quick Order page, which was
+Both `cart-price` probes now use **`/en-us/express-buy`** as the add-to-cart vehicle (was
+`/en-us/quick-order`). The combined layer routed these probes through the Quick Order page, which was
 only a test-authoring convenience — contract/tier pricing resolves on **any** add-to-cart surface. The
-re-point removes the last coupling to the reordering half: `/swift-2/express-buy` is the OOTB buy-it-again
+re-point removes the last coupling to the reordering half: `/en-us/express-buy` is the OOTB buy-it-again
 multi-add page shipped by **surface-swift** (present in every edition that composes surface-swift, and
 independent of `feature-reordering`), and it processes the `cartcmd=addmulti` numbered-field POST directly.
 
 > **Authoring note (P3 gate finding).** The `cart-price` `path` (the addmulti POST target) must NOT carry
-> a trailing slash: POSTing to `/swift-2/cart/` 301-redirects and the follow drops the POST body, so the
+> a trailing slash: POSTing to `/en-us/cart/` 301-redirects and the follow drops the POST body, so the
 > add silently no-ops ("product not found in the cart body"). Any non-slash ecommerce page with cart
-> context works (`/swift-2/express-buy`, `/swift-2/shop`, `/swift-2/cart`); `express-buy` is the chosen
-> decoupled surface. The `cartPath` GET keeps the canonical trailing slash (`/swift-2/cart/`).
+> context works (`/en-us/express-buy`, `/en-us/shop`, `/en-us/cart`); `express-buy` is the chosen
+> decoupled surface. The `cartPath` GET keeps the canonical trailing slash (`/en-us/cart/`).
 
 | Probe | Expectation |
 |-------|-------------|
-| `cart-price` PACK-RPP-PROD2 × 1 via `/swift-2/express-buy` → `/swift-2/cart/` | unit price **1399** as the signed-in buyer 98745621 (contract row applied at cart time — data-only) |
-| `cart-price` PACK-RPP-PROD1 × 5 via `/swift-2/express-buy` → `/swift-2/cart/` | unit price **4500** (tier applied end-to-end — requires the compiled provider) |
+| `cart-price` PACK-RPP-PROD2 × 1 via `/en-us/express-buy` → `/en-us/cart/` | unit price **1399** as the signed-in buyer 98745621 (contract row applied at cart time — data-only) |
+| `cart-price` PACK-RPP-PROD1 × 5 via `/en-us/express-buy` → `/en-us/cart/` | unit price **4500** (tier applied end-to-end — requires the compiled provider) |
 
 Displayed cart prices are VAT/locale-dependent per shop configuration; the probe matches locale-tolerantly
 and reports observed price tokens on FAIL.

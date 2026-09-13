@@ -10,7 +10,7 @@ OOTB. Confirmed against the gate DB (`Harness-Swift-2.4`, Swift 2.4 / DW 10.28.1
 
 | Piece | OOTB source | Evidence |
 |-------|-------------|----------|
-| **My returns page** (`/swift-2/customer-center/my-returns`) | **surface-swift** (`replace/_content/.../Customer center/Customer center/My returns`) — an `eCom_CustomerCenter` app paragraph, `DefaultView=rma`, `RMASource=orders`, `RMAListTemplate=RMAList.cshtml`, `RMADetailsTemplate=RMADetails.cshtml` | page renders; request types **Return / Defect / Exchange** (`RmaType` 1/2/3) → select order → items → reason/info → create; CSR processes from the order-list Actions menu |
+| **My returns page** (`/en-us/customer-center/my-returns`) | **surface-swift** (`replace/_content/.../Customer center/Customer center/My returns`) — an `eCom_CustomerCenter` app paragraph, `DefaultView=rma`, `RMASource=orders`, `RMAListTemplate=RMAList.cshtml`, `RMADetailsTemplate=RMADetails.cshtml` | page renders; request types **Return / Defect / Exchange** (`RmaType` 1/2/3) → select order → items → reason/info → create; CSR processes from the order-list Actions menu |
 | **Status flow** (7 states) | **DW platform default** (`EcomRmaStates`) | Waiting for product(s) from customer *(default for new RMA)* / Received / Rejected / Sent for repair / Received from repair / Returned to customer / Sent replacement — with `RmaStateTypeRelation` gating states per request type |
 | **Lifecycle events** (7) | **DW platform default** (`EcomRmaEvents`) | Created / Closed / StateChanged / CommentAdded / Deleted / ReplacementOrderSet / UserInfoChanged |
 
@@ -39,8 +39,8 @@ content-path collision rule) — it references it and seeds against it.
 
 | Probe | Expectation |
 |-------|-------------|
-| `criticalPath /swift-2/customer-center/my-returns` | the My RMA customer-center page responds 2xx |
-| `authenticated-body-contains /swift-2/customer-center/my-returns` (`Add new request`) | signed in as buyer `98745621`, the My RMA customer-center app renders (its "+ Add new request" affordance) — proves the RMA CC surface is wired and live for the buyer |
+| `criticalPath /en-us/customer-center/my-returns` | the My RMA customer-center page responds 2xx |
+| `authenticated-body-contains /en-us/customer-center/my-returns` (`Add new request`) | signed in as buyer `98745621`, the My RMA customer-center app renders (its "+ Add new request" affordance) — proves the RMA CC surface is wired and live for the buyer |
 | `configRows EcomRmas RmaId='PACK-RMA-0001'` | deterministic SQL proof the return request row was seeded |
 | `configRows EcomRmaStates RmaStateDefaultName='Rejected'` | the OOTB status flow is present (platform default) |
 
