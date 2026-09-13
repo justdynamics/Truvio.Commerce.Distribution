@@ -1,6 +1,6 @@
 {
   "name": "feature-baseline-guide",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "fragmentModes": [
@@ -15,9 +15,19 @@
   "asserts": {
     "behaviorProbes": [
       {
-        "kind": "body-contains",
+        "kind": "http-body-contains",
         "path": "/en-us/baseline-guide",
         "pattern": "Baseline guide"
+      },
+      {
+        "kind": "http-body-contains",
+        "path": "/en-us/baseline-guide/branding-path",
+        "pattern": "Branding path"
+      },
+      {
+        "kind": "http-body-contains",
+        "path": "/en-us/baseline-guide/branding-path",
+        "pattern": "The two standing rules"
       }
     ],
     "criticalPaths": [
