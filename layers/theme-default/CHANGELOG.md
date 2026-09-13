@@ -2,6 +2,50 @@
 
 
 
+## 2.3.1
+
+### The PLP price lock gains the action the PDP lock has (Foundry #1159)
+
+Measured anonymously at 1440, the listing rendered `.td-price-lock` on all five rows
+with the text "Account price" and `.td-price-lock__action` **0 page-wide**. The same
+lock on the detail page rendered the anchor, reading "Sign in for account pricing".
+The two surfaces disagreed: the detail page invited the visitor to sign in, the listing
+stated a fact and offered no way to act on it. Signed in, both locks are 0 and the PLP
+column reads `$45.00 - $79.20 In stock`, so the swap itself was never the defect - only
+the anonymous call to action. This was the last live remnant of the marine "PLP anon
+price substitute" parity row.
+
+The variant resolved the sign-in URL inside `if (!inProductList)`, so in list context
+the href was `string.Empty` and the anchor's own emptiness guard dropped it. The
+resolution now happens once, unconditionally, through the identical two lines the stock
+`Swift-v2_MyAccount/UserAvatarDropdown.cshtml` uses -
+`Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")` then
+`SearchEngineFriendlyURLs.GetFriendlyUrl` - so both contexts point at the same page and
+a site that renames or re-cultures its sign-in page carries both. On an area with no
+`UserAuthentication` page the anchor is still omitted and the badge still renders.
+
+`inProductList` survives and keeps its only remaining job: the `td-price-lock--pdp`
+modifier. The two contexts now differ in SHAPE and not in capability - the detail
+instance stacks and stretches the anchor onto its own full-width line, the list instance
+stays a chip.
+
+Block **#24** is amended for that chip. `.td-price-lock` gains `flex-wrap: wrap` and
+`min-width: 0`, and the `align-self: stretch` on `.td-price-lock__action` is narrowed to
+the `--pdp` instance; the list anchor takes `max-width: 100%` and `white-space: nowrap`
+instead. The wrap is the point: the PLP price cell is `flex: 0 0 auto`, so anything it
+cannot wrap it charges to the row, and 2.3.0's whole subject was a row with no width
+left to give. The anchor drops under the label when the column is narrow rather than
+widening it.
+
+Block **#11** needed no change - it has dressed "the pill that renders INSIDE
+swift-v2_productprice" on the PLP since P4, and has been styling an element that never
+rendered.
+
+VALIDATION: anonymously, `main .td-price-lock__action` must be >= 1 on the PLP as well
+as the PDP, and 0 in both places signed in; the control is the identity flip, which
+before this changed the PDP count and not the PLP count. The width control is #1156's:
+`scrollWidth / clientWidth` on both roots, both identities, 1440 and 1366.
+
 ## 2.3.0
 
 ### The signed-in PLP row gets a width budget (Foundry #1156)

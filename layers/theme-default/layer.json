@@ -1,6 +1,6 @@
 ﻿{
   "name": "theme-default",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "kind": "theme",
   "swiftVersion": "2.4.0",
   "files": [
@@ -50,7 +50,7 @@
     {
       "path": "Templates/Designs/Swift-v2/Paragraph/Swift-v2_ProductPrice/PriceWithSignIn.cshtml",
       "kind": "template",
-      "why": "The signed-out price affordance. Stock Swift renders an empty div where the price would be when the area's AnonymousUsers field gates prices, so an anonymous shopper sees a blank column with no call to action; this variant renders a neutral lock badge there, and a sign-in anchor on the detail page. Inert until a paragraph's Template field names it, and inert again on any area that does not gate prices."
+      "why": "The signed-out price affordance. Stock Swift renders an empty div where the price would be when the area's AnonymousUsers field gates prices, so an anonymous shopper sees a blank column with no call to action; this variant renders a neutral lock badge there, and a sign-in anchor beside it in BOTH list and detail context - the href resolved through the same UserAuthentication lookup Swift uses everywhere, so a renamed or re-cultured sign-in page carries. Inert until a paragraph's Template field names it, and inert again on any area that does not gate prices."
     },
     {
       "path": "Templates/Designs/Swift-v2/Paragraph/Swift-v2_VideoPlayer/PosterLazy.cshtml",

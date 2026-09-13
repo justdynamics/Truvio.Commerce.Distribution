@@ -1489,10 +1489,14 @@ main:has(+ footer.td-edge-top) {
  * theme surface, not content: a re-skin restyles it by overriding these four
  * rules and never by editing the template that emits it.
  *
- * LIST VS DETAIL. The list badge is a chip and no more - a sign-in call to
- * action repeated once per row is noise, and the row already carries a stretched
- * link. td-price-lock--pdp is the detail-page modifier: it stacks, and it is the
- * only state in which the anchor exists at all.
+ * LIST VS DETAIL. BOTH carry the anchor (#1159). A listing that names a gate and
+ * offers no way past it is a dead end on the one surface a buyer scans, and it was
+ * the last remnant of the marine "PLP anon price substitute" row. The two differ in
+ * SHAPE only: td-price-lock--pdp is the detail modifier and stacks the anchor onto
+ * its own full-width line, while the list instance stays a chip that WRAPS - the
+ * anchor drops under the label when the column is narrow instead of pushing the row
+ * wider. That wrap is what keeps #1156's width budget intact: the price cell is
+ * flex: 0 0 auto, so anything it cannot wrap it charges to the row.
  *
  * NO COLOUR OF ITS OWN. Everything below resolves through the --td-* tokens and
  * currentColor, so a palette swap carries the badge with it and a dark colour
@@ -1503,6 +1507,8 @@ main:has(+ footer.td-edge-top) {
 .td-price-lock {
   display: inline-flex;
   align-items: center;
+  flex-wrap: wrap;
+  min-width: 0;
   gap: .375rem;
   padding: .25rem .5rem;
   border: 1px solid var(--td-hairline);
@@ -1539,9 +1545,16 @@ main:has(+ footer.td-edge-top) {
   vertical-align: middle;
 }
 
+/* The list chip's anchor is a compact second line, never a stretched block: it
+ * wraps under the label rather than widening a column the row cannot spare. */
 .td-price-lock__action {
-  align-self: stretch;
+  max-width: 100%;
   text-align: center;
+  white-space: nowrap;
+}
+
+.td-price-lock--pdp .td-price-lock__action {
+  align-self: stretch;
 }
 
 /* ==========================================================================
