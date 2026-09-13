@@ -287,7 +287,7 @@
           }
         }
       },
-      "description": "OPTIONAL declared PLACEHOLDER footprint - present-but-inert hooks the layer ships so a re-skin is an edit and never a create. A placeholder is (a) present on disk, (b) neutral - no brand, no lorem, (c) documented in-file with its fill-in recipe, (d) inert - it adds nothing to render output until a consumer opts in, and (e) replaceable by a brand overlay without editing anything else. Declaring the footprint here is what lets the gate assert present / parsed / inert / neutral over the set instead of over a hand-maintained list. Every entry that comes from the layer's files/ tree must also appear in files[], with the identical Files-relative spelling."
+      "description": "OPTIONAL declared PLACEHOLDER footprint - present-but-inert hooks the layer ships so a re-skin is an edit and never a create. A placeholder is (a) present on disk, (b) neutral - no brand, no lorem, (c) documented in-file with its fill-in recipe, (d) inert - it adds nothing to render output until a consumer opts in, and (e) replaceable by a brand overlay without editing anything else. Declaring the footprint here gives the gate a declared set instead of a hand-maintained list: the Foundry placeholder leg asserts present, parsed and inert over it (see kind for the proof each class owes and the part that leg does not run). Neutral (b), documented (c) and replaceable (e) are authoring rules that leg does not assert. Every entry that comes from the layer's files/ tree must also appear in files[], with the identical Files-relative spelling."
     },
     "asserts": {
       "type": "object",
