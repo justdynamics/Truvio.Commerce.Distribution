@@ -1,6 +1,6 @@
 {
   "name": "truvio-demo",
-  "version": "1.7.1",
+  "version": "1.7.2",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -28,16 +28,19 @@
         {
           "name": "TruvioBuyerPassword",
           "secret": true,
+          "valueShape": "dw-password-hash",
           "description": "The platform password HASH for buyer@truvio-demo.example (persona 100101): the 128-character hex string AccessUserPassword stores, never the plaintext password. The script refuses any other shape before writing. Demo credential, never repo content, never logged."
         },
         {
           "name": "TruvioCsrPassword",
           "secret": true,
+          "valueShape": "dw-password-hash",
           "description": "The platform password HASH for csr@truvio-demo.example (persona 100102): the 128-character hex string AccessUserPassword stores, never the plaintext password. The script refuses any other shape before writing. Demo credential, never repo content, never logged."
         },
         {
           "name": "TruvioAdminPassword",
           "secret": true,
+          "valueShape": "dw-password-hash",
           "description": "The platform password HASH for admin@truvio-demo.example (persona 100103): the 128-character hex string AccessUserPassword stores, never the plaintext password. The script refuses any other shape before writing. Demo credential, never repo content, never logged."
         }
       ]
