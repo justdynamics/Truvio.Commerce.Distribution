@@ -29,6 +29,7 @@
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Number/Orders.cshtml",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Number/Quotes.cshtml",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Product/Product.cshtml",
+    "Templates/Designs/Swift-v2/Paragraph/Swift-v2_ProductMedia.cshtml",
     "Templates/Designs/Swift-v2/Paragraph/TC_AnchorNav.cshtml",
     "Templates/Designs/Swift-v2/QueryPublisher/Post/PostPagination.cshtml",
     "Templates/Designs/Swift-v2/Users/UserAuthentication/Login/SelectableUsers.cshtml",
@@ -74,6 +75,11 @@
       "path": "Templates/Designs/Swift-v2/Paragraph/TC_AnchorNav.cshtml",
       "kind": "template",
       "why": "The renderer for TC_AnchorNav. Emits its shell even with no links, so the section is measurable when the repeater is empty; the theme's default_custom.js fills an empty strip from the page's own main h2[id] headings and repoints every href past Dynamicweb's sitewide <base href>."
+    },
+    {
+      "path": "Templates/Designs/Swift-v2/Paragraph/Swift-v2_ProductMedia.cshtml",
+      "kind": "template",
+      "why": "The PDP hero gallery. A one-token override of the stock Swift 2.4 render path: \".svg\" added to the supportedImageFormats allowlist, and nothing else. Stock ProductMedia resolves images by asset-category system name (which matched all along) and then discards every asset whose path does not contain one of seven hardcoded raster extensions, so an SVG catalogue renders a carousel with no slides in it while the PLP card, which applies no format filter, renders the same rows. Inert on a raster catalogue: identical output to stock."
     },
     {
       "path": "Templates/Designs/Swift-v2/eCom/ProductCatalog/RelatedProductsList.cshtml",
