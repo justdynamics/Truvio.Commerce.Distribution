@@ -1,5 +1,22 @@
 # Changelog — base
 
+## 3.4.1
+
+Patch: the contract states one serializer floor. `baseContractVersion` moves 2.2.0 -> 2.2.1. The
+effective floor does not change: `compat.apps[id=Truvio.Commerce.Serializer].min` stays
+`0.9.0-beta`. No SQL, no content and no row counts change.
+
+- **One serializer floor, not two (Foundry #1084).** The contract carried `compat.apps` at
+  `0.9.0-beta`, which the Foundry compat leg enforces, beside the deprecated alias
+  `minSerializerVersion` at `0.8.1-beta` and a `minSerializerVersionNote` restating `0.8.1-beta`.
+  A host at `0.8.1-beta` satisfied the alias and breached the enforced floor. The alias now carries
+  `0.9.0-beta`, its description names `compat.apps` as the only floor, and the stale note is
+  removed. The alias stays because a skills page (`dw-users-permissions` `page-gating.md`) still
+  names it in prose; no machine reader reads it (the Foundry `Test-CompatFloors` and the
+  `dw-demo-base` install step both read `compat.apps`).
+  `tools/ci/Validate-Distribution.ps1` now fails when `compat.apps` does not carry exactly one
+  serializer entry with a `min`, or when the alias disagrees with it.
+
 ## 3.4.0
 
 Minor bump, not patch: `base.contract.json` gains keys additions read (`presentOnlyWhen`,

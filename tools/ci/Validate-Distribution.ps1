@@ -12,7 +12,9 @@ Checks (all fail-closed; any failure -> exit 1):
   4. Edition refs      — from/add/surfaces '<name>@<semver>' resolve to layers/<name> whose
                          layer.json version == the pinned semver; themes[] resolve to
                          layers/theme-<name> (kind theme).
-  5. Base contract     — layers/base/base.contract.json parses; reserved prefixes present.
+  5. Base contract     — layers/base/base.contract.json parses; compat.apps carries exactly one
+                         Truvio.Commerce.Serializer floor, and the deprecated minSerializerVersion
+                         alias (when present) equals it (Foundry #1084).
   6. Cross-layer clash — no two non-base layers ship the same _sql/<Table>/<key>.yml path
                          (a silent last-writer-wins collision at deserialize).
   7. Protected strings — plan §3.1 guard (Test-ProtectedStrings.ps1).
@@ -120,6 +122,17 @@ if (-not (Test-Path $contractPath)) {
         $hasContract = $null -ne $contract
         & $log $hasContract "base contract parses"
     } catch { & $log $false "base contract invalid JSON: $_" }
+    if ($hasContract) {
+        # One serializer floor (Foundry #1084): compat.apps[id=Truvio.Commerce.Serializer].min is the
+        # key every machine reader reads. The deprecated minSerializerVersion alias may stay for prose
+        # readers, but only as the same value; a disagreement is two floors and FAILs.
+        $serApps  = @(@($contract.compat.apps) | Where-Object { $_ -and $_.id -eq 'Truvio.Commerce.Serializer' })
+        $serFloor = if ($serApps.Count -eq 1) { "$($serApps[0].min)" } else { '' }
+        & $log ($serApps.Count -eq 1 -and $serFloor -ne '') "base contract states exactly one serializer floor under compat.apps (found $($serApps.Count) entr$(if($serApps.Count -eq 1){'y'}else{'ies'}), min '$serFloor')"
+        if ($contract.PSObject.Properties.Name -contains 'minSerializerVersion') {
+            & $log ("$($contract.minSerializerVersion)" -eq $serFloor) "base contract deprecated alias minSerializerVersion ('$($contract.minSerializerVersion)') equals compat.apps serializer floor ('$serFloor')"
+        }
+    }
 }
 
 # Cross-layer collision: same _sql/<Table>/<key>.yml shipped by two non-base layers.

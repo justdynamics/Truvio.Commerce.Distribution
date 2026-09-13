@@ -1,6 +1,6 @@
 ﻿{
   "name": "gate-fixtures",
-  "from": "base@3.4.0",
+  "from": "base@3.4.1",
   "add": [
     "feature-reordering@1.0.3",
     "feature-pricing@1.1.2",

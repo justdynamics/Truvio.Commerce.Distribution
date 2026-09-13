@@ -279,7 +279,7 @@
               "asset",
               "itemtype"
             ],
-            "description": "What the gate must do to prove it. css -> lint + served-200; js -> served-200 + parses; template -> a real GET of a page that renders it, asserted on body content and never on status (a Razor error is an HTTP-200 compile dump); repository -> XML parse + Type= resolution on the STAGED artefact; asset -> present + served-200; itemtype -> the registration leg (parsed fields on the host, not bytes - activation rewrites the XML)."
+            "description": "The artefact class, and the proof that class OWES before a placeholder of it counts as proven. Owed: css -> lint + served-200; js -> served-200 + parses; template -> a real GET of a page that renders it, asserted on body content and never on status (a Razor error is an HTTP-200 compile dump); repository -> XML parse + Type= resolution on the STAGED artefact; asset -> present + served-200; itemtype -> the registration leg (parsed fields on the host, not bytes - activation rewrites the XML). What the Foundry gate RUNS is narrower. The placeholder leg checks present, the parse claim (XML for repository, JSON, the CSS sentinel) and inert (a byte diff against the pinned Swift overlay, SKIP where no origin exists); itemtype registration is the item-type leg. The placeholder leg makes no HTTP request, so served-200, lint, the template body GET and Type= resolution are NOT run, and a green placeholder leg is never evidence that a template renders or that a js or asset entry is served. Until the owed proof runs, prove a template or js placeholder with an asserts.behaviorProbes entry on a page that loads it."
           },
           "why": {
             "type": "string",
@@ -287,7 +287,7 @@
           }
         }
       },
-      "description": "OPTIONAL declared PLACEHOLDER footprint - present-but-inert hooks the layer ships so a re-skin is an edit and never a create. A placeholder is (a) present on disk, (b) neutral - no brand, no lorem, (c) documented in-file with its fill-in recipe, (d) inert - it adds nothing to render output until a consumer opts in, and (e) replaceable by a brand overlay without editing anything else. Declaring the footprint here is what lets the gate assert present / parsed / inert / neutral over the set instead of over a hand-maintained list. Every entry that comes from the layer's files/ tree must also appear in files[], with the identical Files-relative spelling."
+      "description": "OPTIONAL declared PLACEHOLDER footprint - present-but-inert hooks the layer ships so a re-skin is an edit and never a create. A placeholder is (a) present on disk, (b) neutral - no brand, no lorem, (c) documented in-file with its fill-in recipe, (d) inert - it adds nothing to render output until a consumer opts in, and (e) replaceable by a brand overlay without editing anything else. Declaring the footprint here gives the gate a declared set instead of a hand-maintained list: the Foundry placeholder leg asserts present, parsed and inert over it (see kind for the proof each class owes and the part that leg does not run). Neutral (b), documented (c) and replaceable (e) are authoring rules that leg does not assert. Every entry that comes from the layer's files/ tree must also appear in files[], with the identical Files-relative spelling."
     },
     "asserts": {
       "type": "object",
