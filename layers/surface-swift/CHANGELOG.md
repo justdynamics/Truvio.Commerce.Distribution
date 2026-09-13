@@ -2,6 +2,36 @@
 
 
 
+## 1.9.0
+
+Five PDP sections rendered a head over nothing. `Swift-v2_ProductLongDescription`,
+`ProductFieldDisplayGroups`, `ProductMediaTable`, `ProductBom` and `RelatedProductsList`
+emitted no markup at all on the flagship detail page - no gridcolumn, no wrapper, no
+empty div - while their `h2[id]` anchors and the anchor nav above them all rendered
+(Foundry #1136).
+
+### One column slot holds one paragraph
+
+The 1.8.0 skeleton paired each section head with its component in **column 1 of the same
+`1Column` row**. A Swift grid row emits one `gridcolumn` per column, so the second
+paragraph of the pair is dropped silently - the grid column binding law of #749, and the
+same shape as #636. The proof was on the page: the two rows holding a `Swift-v2_Text`
+alone (Features, FAQ) rendered their bodies, and the `2Columns` media row rendered both
+of its paragraphs.
+
+Each of the five sections is now **two rows**: the head keeps its own `1Column` row and
+the component gets a `1Column` row of its own directly beneath it. Fifteen rows on the
+page instead of ten, resequenced 1..15, with the head row's `bottomSpacing` dropped to 0
+and the component row carrying the section's closing `bottomSpacing: 4`, so the vertical
+rhythm is what it was. No paragraph identity changes: the five component paragraphs keep
+their `paragraphUniqueId` and their fields, and only the row they hang off is new.
+
+The alternative - a `2Columns` row per section - was rejected: it puts the head beside
+its content rather than above it, which is not the measured marine shape.
+
+**This changes content ymls.** A host built on 1.8.x needs a surface-swift Replace to
+pick the new rows up; a data-only re-run will not move a paragraph between grid rows.
+
 ## 1.8.0
 
 Density parity, structure half (V5-PLAN round two, item 1). The PLP row and the PDP are

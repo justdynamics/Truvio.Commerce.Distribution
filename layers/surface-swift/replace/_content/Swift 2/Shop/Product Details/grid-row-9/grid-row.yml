@@ -1,10 +1,10 @@
 "id": a716e1d5-7ea5-4640-b04c-281f99c3bdd2
-"sortOrder": 8
+"sortOrder": 12
 "definitionId": "1Column"
 "itemType": "Swift-v2_Row"
 "container": "Grid"
 "topSpacing": 2
-"bottomSpacing": 4
+"bottomSpacing": 0
 "verticalAlignment": "None"
 "fields":
   "Id": "60"
