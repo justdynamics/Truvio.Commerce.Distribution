@@ -1613,3 +1613,126 @@ main:has(+ footer.td-edge-top) {
     scroll-margin-block-start: calc(var(--td-anchornav-h) + 1rem);
   }
 }
+
+/* =============================================================================
+ * #27 THE SIGNED-IN PLP ROW HAS A WIDTH BUDGET - blocks #10 and #15 sized the
+ * card for the ANONYMOUS column set
+ *
+ * Block #10's desktop discipline pins five of the seven card columns to fixed,
+ * NON-SHRINKABLE bases - image 72, number 150, short description 280 with a
+ * matching max-width, stock 100, and `flex: 0 0 auto` on price and cart - and
+ * gives only the header `min-width: 0`. Every one of those was measured on the
+ * ANONYMOUS card, where the price column is a small badge and the cart column is
+ * a stub. Signed in the same row gains a real price figure and a real cart
+ * control, and nothing in the row is allowed to give the width back: `flex-shrink`
+ * is 0 on five of seven, the row does not wrap, and the one column with a
+ * max-width equal to its basis cannot even absorb its own text.
+ *
+ * MEASURED, before (Foundry #1156, legs run 20260913-111100, both roots):
+ *   1440 authenticated   documentElement 1454 / 1440,  body 1454 / 1440   -> 14px
+ *   1366 authenticated   documentElement 1469 / 1366,  body 1469 / 1366   -> 103px
+ *   1440 anonymous       overflowX 0        1366 anonymous  overflowX 0
+ *   both viewports, both identities, mobile: overflowX 0
+ *   5 of 5 cards: swift-v2_productshortdescription display:flex 0 x 136 px,
+ *                 still carrying 77-89 characters
+ * The 14-vs-103 spread is the point: the wrap point sits BETWEEN the two widths,
+ * which is why one desktop measurement would have read as a rounding error.
+ *
+ * THE ZERO-WIDTH CELL IS THE SYMPTOM, NOT THE CAUSE - the same shape as block #23
+ * and the search field. A line that is overcommitted picks a victim, and the
+ * victim is whichever item the cascade lets collapse; removing the victim's floor
+ * or widening the victim moves the casualty, it does not close the overcommit.
+ * So this block fixes the BUDGET, and the description's floor is a consequence of
+ * that rather than the fix itself.
+ *
+ * THE BUDGET, at 992 and up. The non-shrinkable floor of the signed-in row was
+ * 72 + 150 + 280 + 100 + price + cart, with the header the only column able to
+ * give anything back and the description unable to give back even its own
+ * max-width. It is now 72 + stock + price + cart, and every other column is
+ * shrinkable against a stated floor:
+ *   image        0 0 72px      unchanged - the one genuinely fixed column
+ *   number       0 1 150px     shrinkable; SKU is the column a buyer scans, so it
+ *                              keeps its basis and gives width only under pressure
+ *   header       1 1 12rem     with min-width 0, as before
+ *   description  1 1 10rem     min-width 6rem, max-width none, and it WRAPS -
+ *                              block #10's nowrap/overflow/ellipsis trio is what
+ *                              turned a too-narrow cell into a zero-height line
+ *                              instead of a second line of text
+ *   stock        0 0 auto      min-width 5.5rem, still margin-left auto
+ *   price, cart  0 0 auto      min-width 0, so they contribute their content and
+ *                              not an automatic minimum on top of it
+ * and the row WRAPS. A row that wraps cannot push the document: the cart drops to
+ * a second line of the same card before the line overflows, which is the failure
+ * mode this page is allowed to have. Nothing here sets `overflow` on the row, the
+ * card or either root - the probe measures both roots precisely to catch a theme
+ * hiding the scrollbar that would have shown a human the same defect.
+ *
+ * BETWEEN 992 AND 1440 the budget is tightened again, the way block #23 tightens
+ * the header line over the same band: the image returns 16px and the number and
+ * description floors come down, because 1366 is where the measurement says the
+ * line actually breaks.
+ *
+ * NOT MEASURED AFTER, and this is stated rather than implied: this session is
+ * read-only on foundry.mydwsite4.com, so the sheet has not been staged and the
+ * after-widths are the computed floor above, not a measurement. The e2e session
+ * validates it with `pwsh runs\v5-prep\Invoke-V5Legs.ps1 -Legs design
+ * -PersonaUser TruvioBuyer` - the two COLLAPSE-01 and two VISIBLE-01
+ * AUTHENTICATED rows must print overflowX 0 on both roots while the anonymous
+ * rows stay PASS. A -SkipPersona run cannot validate it: the two columns that
+ * cause the overcommit do not exist there.
+ * ========================================================================== */
+[data-td-block="27"] { --td-block: 27; }
+
+@media (min-width: 992px) {
+  /* The row itself: it may wrap, and no child keeps an automatic minimum it is
+   * not willing to give up. */
+  .product-list article.product section > [data-swift-container] {
+    flex-wrap: wrap;
+    column-gap: .75rem;
+    row-gap: .35rem;
+  }
+  .product-list article.product section > [data-swift-container] > * { min-width: 0; }
+
+  .product-list article.product [data-dw-itemtype="swift-v2_productnumber"] {
+    flex: 0 1 150px !important;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] {
+    flex: 1 1 12rem !important;
+    min-width: 0;
+  }
+  /* The description shrinks and wraps instead of collapsing. The floor is a floor,
+   * not a basis: it is the width below which the cell stops being readable, and
+   * the row wraps rather than taking it below that. */
+  .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] {
+    flex: 1 1 10rem !important;
+    min-width: 6rem;
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
+    white-space: normal;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productstock"] {
+    flex: 0 0 auto !important;
+    min-width: 5.5rem;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productprice"],
+  .product-list article.product [data-dw-itemtype="swift-v2_productaddtocart"] {
+    min-width: 0;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1439.98px) {
+  .product-list article.product [data-dw-itemtype="swift-v2_productdefaultimage"] {
+    flex: 0 0 56px !important;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productnumber"] {
+    flex: 0 1 8.75rem !important;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productheader"] {
+    flex: 1 1 9rem !important;
+  }
+  .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] {
+    flex: 1 1 8rem !important;
+    min-width: 5rem;
+  }
+}
