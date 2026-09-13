@@ -15,9 +15,19 @@
   "asserts": {
     "behaviorProbes": [
       {
-        "kind": "body-contains",
+        "kind": "http-body-contains",
         "path": "/en-us/baseline-guide",
         "pattern": "Baseline guide"
+      },
+      {
+        "kind": "http-body-contains",
+        "path": "/en-us/baseline-guide/branding-path",
+        "pattern": "Branding path"
+      },
+      {
+        "kind": "http-body-contains",
+        "path": "/en-us/baseline-guide/branding-path",
+        "pattern": "The two standing rules"
       }
     ],
     "criticalPaths": [

@@ -1,5 +1,29 @@
 # Changelog — feature-baseline-guide
 
+## 1.0.2
+
+- **The branding path gets content probes (Foundry #1106).** It was a `criticalPath` only, so a
+  branding pass that overwrote its content left one automated statement about it: HTTP 200.
+  `asserts.behaviorProbes` adds two probes on `/en-us/baseline-guide/branding-path`, one for the
+  page title `Branding path` and one for the `The two standing rules` heading, both guide content
+  that a correct branding pass leaves in place. The existing index probe's kind is corrected
+  from `body-contains`, which is not a registered probe kind and fails closed, to
+  `http-body-contains`.
+- **Step 3 asserts the commerce bindings by value (Foundry #1112).** The Assert asks
+  `get_area_by_id` for non-empty `ecomShopId`, `ecomLanguageId`, `ecomCurrencyId` and
+  `ecomCountryCode` equal to the values bound, with `domain` optional, and states why the
+  header/footer page check alone passes on an unbound area: on a single-shop, single-language,
+  single-currency host Swift falls back to them. The bindings stay unserialized
+  (`replace/replace-manifest.json` `excludeAreaColumns`).
+- **The Rule 1 note cites its enforcement point (Foundry #1016).** The boxed note under the
+  standing rules claimed no guarded-write preflight exists on `distribution\layers\` (Finding
+  F-G1). It now cites `dw-demo-base/SKILL.md` "Three guarded-writes (always-on rules)", rule 3
+  *Distribution layer path*, and records F-G1 as resolved by that rule.
+- **Step 2's zero-state pass includes the meta description (Foundry #1109, guide half).** The
+  frontpage meta description, which `og:description` repeats, joins the title and meta title,
+  with the admin page settings named as the write surface (no MCP tool writes it) and a
+  served-head assert that the vendor sentence is gone.
+
 ## 1.0.1
 
 The Pricing page states the currency rate base 3.4.0 ships: `USD$$ENU` at `CurrencyRate` 100 (parity
