@@ -1,5 +1,71 @@
 # Changelog — truvio-demo
 
+## 1.6.0
+
+### The gallery row is derived from its own master, not assigned (Foundry #1137)
+
+#1157 gave every master its own pair and the retest found the residual: of the 276 rows in
+asset category `Images`, 192 pointed at a per-product picture and **84 still pointed at
+another band's concept tile** - `TC-GAL-TCPROD0042-2`, a Bundles master, pointing at
+`tc-tile-price-structures.svg`.
+
+The rekey did not reach them because they were never keyed on the product. The gallery row
+was a fixed literal drawn from a twelve-tile ring by seed position, and the anti-repeat
+pass beneath it picked *the first tile this master does not already carry* - an ordering
+over the ring, not a fact about the product. And the row it produced named a picture that
+is shipped, categorised, correctly sorted and served 200, so the path guard, the row count,
+the scenic-residue guard and the 404 check were **all green** while the page put a
+Price-structures illustration on a kit.
+
+**Derived, not assigned.** Every master owns `tc-tile-<band>-<nnnn>.svg` as its default and
+`tc-detail-<band>-<nnnn>.svg` as its hover, and the band and the index are both readable
+off the default row. Strip the `-<nnnn>` index off the default's filename and what remains
+is that master's own band concept tile:
+
+| row | value | sort |
+|---|---|---:|
+| `TC-DETAIL-TCPROD0042` | `.../products/tc-tile-bundles-0042.svg` | 0 |
+| `TC-HOVER-TCPROD0042` | `.../products/tc-detail-bundles-0042.svg` | 1 |
+| `TC-GAL-TCPROD0042-2` | `.../products/tc-tile-bundles.svg` | 2 |
+
+No per-product literal, no ring, no position. The only band a row can name is its own, and
+the 60 rows converge in place on a seeded host.
+
+**Three pictures is the ceiling**, so the second gallery row is retired rather than
+repointed. The layer ships two generated pictures per master plus twelve band tiles; a
+fourth slide could only repeat one of the three, and a strip that steps from an image to
+itself is what the distinctness guard already forbids. The 24 `TC-GAL-*-3` literals leave
+the seed and a scoped `DELETE` retires them on a host that carries them. **84 gallery rows
+become 60**, one per master.
+
+**Guards.** A new band guard counts unstamped gallery rows that do not equal the tile
+derived from their own master's default - it must be 0, and it is the only check here that
+could have seen this state. The distinctness guard moves from *fewer than 2 distinct
+pictures* to *fewer than 3*, which is the real floor now. The Images-category floor moves
+84 -> 60. `expectedRows.EcomDetails` 396 -> 372.
+
+### The trees are declared, the tiles are eol-insensitive, the PDP link carries both ids (Foundry #1167, #1157)
+
+`layer.json` gains `repositories: []` and `itemtypes: []` - both empty and both deliberate,
+because an empty array states positively that this layer stages neither tree, which the
+gate now treats as a different claim from an absent key. This layer's whole staging surface
+is its 140 `files[]` paths, and it is now derivable from the manifest.
+
+A root `.gitattributes` marks `*.svg -text`. The #1157 retest diffed a fresh `make-tiles.py`
+run and got **120 of 120 DIFFERENT** against the working tree and **120 of 120 IDENTICAL**
+against the committed blobs - a line-ending delta alone (`core.autocrlf=true`, no
+`.gitattributes`, CRLF 1124 B in the tree against LF 1113 B in the blob). The generator was
+deterministic throughout; the checkout was what moved.
+
+And the README's PDP flow now records that `/en-us/shop?ProductID=...` **404s** on its own
+for a bundle master: the shop page resolves a product through its group context, so every
+demo link carries `GroupID` and `ProductID` together.
+
+### Consumer impact
+
+SQL only, all of it converging. A host on 1.5.x is brought to this state by re-running
+`truvio-pdp.sql` - 60 rows updated in place, 24 deleted. No Replace, no restage.
+
 ## 1.5.1
 
 ### The short descriptions stop sharing a stem, and a guard stops them starting again (Foundry #1158)
