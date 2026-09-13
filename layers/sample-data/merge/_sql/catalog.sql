@@ -18,6 +18,22 @@
 --   machine-detectable marker a design gate scans for (/placeholder/i). On any
 --   edition with sampleData: true this is the catalogue a prospect sees, and the
 --   build replaces it per customer.
+--
+--   THESE ROWS ARE GATE FIXTURES, NEVER BROWSABLE DEMO CONTENT - the sentence above
+--   describes what sampleData: true USED to mean and is kept only so the convention
+--   reads whole. Owner decision, Foundry #1074 (2026-09-13): the FIXT*/PACK-* rows
+--   exist so the gate's layer-declared probes have stable, id-addressable subjects,
+--   not so a prospect can browse them. Composed into a storefront a prospect opens
+--   they are a measured defect, twice filed - 12 bare 'Placeholder product.' strings
+--   on the unfiltered /en-us/shop (#1174) and 6 'Sample Group N' values in the PLP
+--   facet rail, which is the permanent STOCKCOPY-01 design FAIL (#1127, rail
+--   re-screened in #1134). The fix is COMPOSITIONAL and lives in editions/, not in
+--   this file: exactly ONE edition sets sampleData: true on the Swift surface -
+--   editions/gate-fixtures.json - and swift-demo, the edition a prospect sees, sets
+--   it false and takes its catalogue from the truvio-demo layer. Nothing here moved
+--   and no id changed. Do not neutralize these strings any further: the marker word
+--   is what the placeholder asserts key on, and it is correct for a fixture to
+--   carry it.
 --   - 14 master products (FIXT0001..FIXT0014), active, never-out-of-stock,
 --     priced, each related to a group.
 --   - 1 "Size" variant axis (FIXTVG1, options S/M/L) on FIXT0013 + FIXT0014

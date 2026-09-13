@@ -9,6 +9,17 @@ catalog and no frontend users.
 **Activated by `sampleData: true`** in an edition (`editions/<name>.json`). Singleton —
 there is exactly one sample-data layer.
 
+> **These rows are GATE FIXTURES, not browsable demo content** (owner decision, Foundry
+> #1074, 2026-09-13). They exist so the gate's layer-declared `behaviorProbes` have stable,
+> id-addressable subjects. Composed into a storefront a prospect opens they are a measured
+> defect: 12 bare `Placeholder product.` strings on the unfiltered `/en-us/shop` (#1174) and
+> 6 `Sample Group N` values in the PLP facet rail, the permanent `STOCKCOPY-01` design FAIL
+> (#1127 / #1134). On the Swift surface exactly ONE edition therefore sets
+> `sampleData: true` - **`editions/gate-fixtures.json`** - and `swift-demo`, the edition a
+> prospect sees, sets it false and takes its catalogue from the `truvio-demo` layer.
+> `headless-demo` and `dap-portal` keep it true: neither renders the Swift PLP or its facet
+> rail.
+
 ## What it contains
 
 All content ships as executable SQL under [`merge/_sql/`](merge/_sql/README.md):

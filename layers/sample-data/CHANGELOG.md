@@ -1,5 +1,46 @@
 # Changelog — sample-data
 
+## 2.3.3
+
+**The fixtures stop being demo content, and not one row changes (Foundry #1074, #1174, #1127,
+#1134).** Two defects were filed against the rows this layer ships on purpose. On the unfiltered
+`/en-us/shop` the branded v5 host served **12 bare `Placeholder product.` strings** inside
+`itemprop="disambiguatingDescription"`, from 22 `FIXT*` / `PACK-*` masters (28 `EcomProducts`
+rows) - and no assert saw them, because `design-assert.publish.json`'s `placeholderRegex` requires
+a dash after the marker word and these carry a space (#1174). On the PLP the Group facet rail
+rendered **6 `Sample Group N` values**, the permanent `STOCKCOPY-01` FAIL the design leg cannot
+pass while sample data is composed: one leg asserts those names must render correctly (the 2.3.2
+em-dash repair) and another asserts they must not render at all (#1127, rail re-screened in
+#1134).
+
+Neither is a rendering bug and neither is fixed by rewriting a row. The rows are doing what they
+were written to do - be stable, id-addressable subjects for the gate's layer-declared probes. The
+defect is that they were composed into the storefront a prospect opens. The owner decision on
+#1074 (2026-09-13, round-three close-out) resolves it in `editions/`:
+
+- `editions/swift-demo.json` sets **`sampleData: false`**. Its catalogue is `truvio-demo@1.7.0`,
+  and `expectedCounts` is pinned to what that layer ships (96 / 16 / 96, measured) because
+  `Set-ConfigFromEdition` derives the product and group counts from the `sampleData` toggle alone.
+- `editions/gate-fixtures.json` is **new** and is the only composition that sets
+  `sampleData: true` on the Swift surface. It carries the same seven feature layers at the pins
+  swift-demo carried before this change, because `behaviorProbes` are LAYER asserts and the five
+  fixture legs need a composition that still ships their subjects: `sku-validation FIXT-0001`,
+  `cart-price PACK-RPP-PROD1/PROD2`, `bom-cart-lines PACK-BOM-0001`,
+  `checkout-recurring PACK-SUB-PROD1`, and feature-rma's authenticated `/my-returns` probe, which
+  needs buyer 1328 and `FIXT-ORDER-RMA1`.
+
+`headless-demo` and `dap-portal` keep `sampleData: true`: neither renders the Swift PLP or its
+facet rail, and `surface-headless`'s own query deliberately drops the shop and language macros.
+
+**This layer's SQL is unchanged.** Every `FIXT*` / `FIXTGRP*` / `FIXT-PRICE-*` / `PACK-*` id, row,
+count and price is byte-identical to 2.3.2 - `EcomProducts` 20 + 8, `EcomGroups` 3 + 5,
+`EcomPrices` 4 + 4, the 2 BOM slots and `FIXT-ORDER-RMA1`. The only edit to `catalog.sql` is a
+comment: the NEUTRALIZATION CONVENTION block said "on any edition with `sampleData: true` this is
+the catalogue a prospect sees", which is now false, and the block records why the marker word
+stays - several asserts key on it, so the next pass must not neutralize the strings instead of the
+composition.
+
+
 
 ## 2.3.2
 
