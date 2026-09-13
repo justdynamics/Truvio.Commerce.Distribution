@@ -13,6 +13,6 @@
   "ItemInstanceType": ""
   "Sort": 0
   "Subtitle": ""
-  "Text": ""
+  "Text": "<ul class=\"list-unstyled\"><li><strong>Priced in your own unit.</strong> The unit of measure and the pack quantity in the specification table are the ones the quantity box and the line total are calculated in.</li><li><strong>Your price, not the list price.</strong> A signed-in account resolves its customer-group price, and a contract agreed against the account number narrows it further.</li><li><strong>Quantity breaks that show their working.</strong> Where a row carries a ladder, every step is on the page before the item reaches the cart.</li><li><strong>Stock you can act on.</strong> A live count, a status, and an expected-delivery date on a row that is orderable at zero.</li><li><strong>Documents on the record.</strong> The datasheet and the install guide are rows on the product, versioned with it, not links in a paragraph.</li><li><strong>Options resolved on the page.</strong> Each axis is a selector, and every combination carries its own number, stock position and price.</li></ul>"
   "Title": "<h2 id=\"features\">Features</h2>"
 "columnId": 1
