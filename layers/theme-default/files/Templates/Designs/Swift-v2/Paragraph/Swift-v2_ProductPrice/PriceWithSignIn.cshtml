@@ -1,7 +1,6 @@
 @inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.ParagraphViewModel>
 @using Dynamicweb.Ecommerce.ProductCatalog
 @using Dynamicweb.Ecommerce.Products
-@using Dynamicweb.Frontend
 
 @*
 	PriceWithSignIn - a layout variant of Swift-v2_ProductPrice.
@@ -31,7 +30,7 @@
 	two strings through the translation table, not by editing this file.
 
 	THE SIGN-IN HREF is resolved the way Swift resolves it everywhere else -
-	Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")
+	Dynamicweb.Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")
 	through SearchEngineFriendlyURLs, the identical two lines the stock
 	Swift-v2_MyAccount/UserAvatarDropdown.cshtml uses. A hard-coded path is wrong the
 	first time a site renames its sign-in page or serves a second culture. On an area
@@ -51,7 +50,7 @@
 		product = (ProductViewModel)Dynamicweb.Context.Current.Items["ProductDetails"];
 	} else if (Pageview.IsVisualEditorMode) {
 		product = new ProductViewModel();
-		product.Price = new PriceViewModel() {
+		product.Price = new Dynamicweb.Ecommerce.ProductCatalog.PriceViewModel() {
 			Price = 99,
 			PriceFormatted = "99 " + Pageview.Area.EcomCurrencyId,
 			PriceWithoutVat = 99,
@@ -59,7 +58,7 @@
 			PriceWithVat = 99,
 			PriceWithVatFormatted = "99 " + Pageview.Area.EcomCurrencyId
 		};
-		product.PriceInformative = new PriceViewModel() {
+		product.PriceInformative = new Dynamicweb.Ecommerce.ProductCatalog.PriceViewModel() {
 			Price = 49,
 			PriceFormatted = "49 " + Pageview.Area.EcomCurrencyId,
 			PriceWithoutVat = 49,
@@ -67,7 +66,7 @@
 			PriceWithVat = 49,
 			PriceWithVatFormatted = "49 " + Pageview.Area.EcomCurrencyId
 		};
-		product.PriceBeforeDiscount = new PriceViewModel() {
+		product.PriceBeforeDiscount = new Dynamicweb.Ecommerce.ProductCatalog.PriceViewModel() {
 			Price = 199,
 			PriceFormatted = "199 " + Pageview.Area.EcomCurrencyId,
 			PriceWithoutVat = 199,
@@ -97,8 +96,8 @@
 	string signInUrl = string.Empty;
 	if (!inProductList)
 	{
-		int signInPageId = Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")?.ID ?? 0;
-		signInUrl = signInPageId != 0 ? SearchEngineFriendlyURLs.GetFriendlyUrl(signInPageId) : string.Empty;
+		int signInPageId = Dynamicweb.Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")?.ID ?? 0;
+		signInUrl = signInPageId != 0 ? Dynamicweb.Frontend.SearchEngineFriendlyURLs.GetFriendlyUrl(signInPageId) : string.Empty;
 	}
 
 	<div class="td-price-lock@(inProductList ? "" : " td-price-lock--pdp")" data-td-price-lock="1">
@@ -130,8 +129,8 @@
 	string flexGap = layout == "horizontal" ? "gap-3" : string.Empty;
 	string order = layout == "horizontal" ? string.Empty : "order-2";
 
-	string? priceMin = product?.VariantInfo?.PriceMin?.PriceFormatted;
-	string? priceMax = product?.VariantInfo?.PriceMax?.PriceFormatted;
+	string priceMin = product?.VariantInfo?.PriceMin?.PriceFormatted;
+	string priceMax = product?.VariantInfo?.PriceMax?.PriceFormatted;
 	string price = !string.IsNullOrEmpty(unitId) ? product.GetPrice(unitId).Price.PriceFormatted : product?.Price.PriceFormatted;
 	price = !string.IsNullOrEmpty(priceMin) ? (priceMin != priceMax ? priceMin + " - " + priceMax : priceMin) : price;
 

@@ -2,6 +2,34 @@
 
 
 
+## 2.2.1
+
+`PriceWithSignIn.cshtml` did not compile on 10.28.10, so every paragraph that named
+it rendered a `dw-error` block where the price belongs: 12 on the shop list, 5 on the
+variants PLP, 1 on the flagship PDP. The lock affordance 2.2.0 exists to ship had
+therefore never rendered anywhere, and neither had the price it guards (Foundry #1135).
+
+Three compile faults, all in the file and none in the platform:
+
+- **`@using Dynamicweb.Frontend` made `PriceViewModel` ambiguous.** The Razor host on
+  10.28.10 resolves `Dynamicweb.Frontend.PriceViewModel` and
+  `Dynamicweb.Ecommerce.ProductCatalog.PriceViewModel` in the same unit, so the bare
+  name cannot bind. The using block is now exactly the stock
+  `Paragraph/Swift-v2_ProductPrice.cshtml` block - `Dynamicweb.Ecommerce.ProductCatalog`
+  and `Dynamicweb.Ecommerce.Products`, nothing else - and the three visual-editor
+  placeholders name the type in full anyway. `@inherits` already qualified
+  `Dynamicweb.Frontend.ParagraphViewModel`, which is the only thing the using bought.
+- **`Services` is not in scope** in a `ViewModelTemplate<ParagraphViewModel>`. The
+  sign-in lookup and the friendly-URL call are now
+  `Dynamicweb.Services.Pages.GetFirstModulePageForArea(...)` and
+  `Dynamicweb.Frontend.SearchEngineFriendlyURLs.GetFriendlyUrl(...)`.
+- **`string?` needs a `#nullable` context** a generated Razor class does not have, and
+  templates compile warnings-as-errors. `priceMin` / `priceMax` are plain `string`.
+
+The render is unchanged in both states: signed out the area still gets `.td-price-lock`
+with its sign-in anchor on the detail page, signed in it is the stock price rendering.
+A template variant this central is compiled against the target platform before release.
+
 ## 2.2.0
 
 Two additions and one rename, all of them in service of the round-two density parity
