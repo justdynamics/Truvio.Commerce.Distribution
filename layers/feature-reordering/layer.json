@@ -32,7 +32,8 @@
       {
         "kind": "sku-validation",
         "path": "/swift-2/quick-order",
-        "sku": "FIXT-0001"
+        "sku": "FIXT-0001",
+        "requiresFixtures": [ "FIXT-0001" ]
       }
     ],
     "criticalPaths": [

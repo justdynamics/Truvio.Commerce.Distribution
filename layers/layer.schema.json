@@ -392,6 +392,13 @@
                 "type": "string",
                 "pattern": "^[a-zA-Z0-9 ._-]+$",
                 "description": "sku-validation only: OPTIONAL - the ProductNumber the feed article must carry (default = sku). Set when the queried SKU differs from the expected resolved ProductNumber. Same charset guard as sku."
+              },
+              "requiresFixtures": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": { "type": "string", "pattern": "^[A-Za-z0-9 ._-]+$" },
+                "description": "OPTIONAL, edition-level opt-in (Foundry #1074 / Distribution PR #41). The gate-fixture ids this probe's subject resolves through - FIXT-* / PACK-* rows that ship in the sample-data layer, never in a browsable catalogue. behaviorProbes are LAYER asserts, so they run for every edition composing the layer; a probe that declares requiresFixtures runs ONLY where the composition carries sample data (editions/gate-fixtures.json - the only composition setting sampleData:true on the Swift surface) and is recorded as a loud SKIP row naming those ids and the proving edition everywhere else. A probe is NEVER silently dropped: the SKIP row lands in pack-assert.json alongside the PASS rows. Declare it whenever the probe names an id the sample-data layer owns; omit it for probes that only assert page markup the feature layer itself ships."
               }
             }
           },

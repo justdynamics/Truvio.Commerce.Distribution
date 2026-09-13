@@ -48,7 +48,8 @@
         "quantity": 1,
         "paymentMethodId": "PAY2",
         "shippingMethodId": "SHIP9",
-        "checkoutStepIndex": 1
+        "checkoutStepIndex": 1,
+        "requiresFixtures": [ "PACK-SUB-PROD1" ]
       }
     ],
     "criticalPaths": [
