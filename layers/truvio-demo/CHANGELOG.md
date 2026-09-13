@@ -6,6 +6,22 @@ Three defects the round-two e2e measured on a PRISTINE host, every one of them i
 to the row counts this layer ships (`costHints.expectedRows` matched exactly while all
 three were live).
 
+### The taxonomy is seeded under its final names (Foundry #1134)
+
+1.2.0 re-screened eight subgroup names in the section-0 **converge** block only - a
+guarded `UPDATE` for a host already seeded under the retired taxonomy. On a clean install
+there is nothing to converge, the predicate is false, and the `INSERT` literals below it
+still carried `Item Types`, `Groups`, `Paragraphs`, `Permissions`, `Pages`,
+`Impersonation`, `Completeness` and `Workflows` - the exact eight words the 1.2.0 entry
+says were retired, reaching the shop navigation and the PLP facet rail.
+
+The final `GroupName` is now in the `INSERT` literal, which is the only place a clean
+install reads. The section-0 `UPDATE` stays, unchanged, as the converge path for seeded
+hosts: a rename must never be the ONLY place the final name appears. A new taxonomy guard
+after the group section joins all twelve subgroup ids against their final names and
+`RAISERROR`s with the offending `GroupId=GroupName` pairs, so the next drift names itself
+instead of counting sixteen rows and passing.
+
 ### The variant selector guard runs after the rows it asserts (Foundry #1133)
 
 `truvio-catalog.sql`'s selector guard sat between the axis relations and the OPTION

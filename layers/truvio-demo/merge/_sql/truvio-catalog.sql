@@ -591,11 +591,11 @@ IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-VARIANTS')
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-VARIANTS' AND GroupRelationsParentId = 'TCGRP-DATA-MODELS')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-VARIANTS', 'TCGRP-DATA-MODELS', 1, 1, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-STOCK-DELIVERY')
-    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-STOCK-DELIVERY', 'ENU', N'Completeness', 'TCGRP-STOCK-DELIVERY', 1, 1, 1);
+    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-STOCK-DELIVERY', 'ENU', N'Stock & Delivery', 'TCGRP-STOCK-DELIVERY', 1, 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-STOCK-DELIVERY' AND GroupRelationsParentId = 'TCGRP-COMMERCE')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-STOCK-DELIVERY', 'TCGRP-COMMERCE', 3, 1, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-UNITS')
-    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-UNITS', 'ENU', N'Workflows', 'TCGRP-UNITS', 1, 1, 1);
+    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-UNITS', 'ENU', N'Units & Measures', 'TCGRP-UNITS', 1, 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-UNITS' AND GroupRelationsParentId = 'TCGRP-DATA-MODELS')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-UNITS', 'TCGRP-DATA-MODELS', 2, 1, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-PRICE-STRUCTURES')
@@ -611,29 +611,60 @@ IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-DISCOUNTS')
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-DISCOUNTS' AND GroupRelationsParentId = 'TCGRP-COMMERCE')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-DISCOUNTS', 'TCGRP-COMMERCE', 2, 1, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-MEDIA')
-    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-MEDIA', 'ENU', N'Pages', 'TCGRP-MEDIA', 1, 1, 1);
+    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-MEDIA', 'ENU', N'Media & Galleries', 'TCGRP-MEDIA', 1, 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-MEDIA' AND GroupRelationsParentId = 'TCGRP-CONTENT')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-MEDIA', 'TCGRP-CONTENT', 2, 1, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-CURRENCIES')
-    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-CURRENCIES', 'ENU', N'Paragraphs', 'TCGRP-CURRENCIES', 1, 1, 1);
+    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-CURRENCIES', 'ENU', N'Currencies & VAT', 'TCGRP-CURRENCIES', 1, 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-CURRENCIES' AND GroupRelationsParentId = 'TCGRP-USERS')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-CURRENCIES', 'TCGRP-USERS', 2, 1, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-BUNDLES')
-    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-BUNDLES', 'ENU', N'Item Types', 'TCGRP-BUNDLES', 1, 1, 1);
+    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-BUNDLES', 'ENU', N'Bundles & BOM', 'TCGRP-BUNDLES', 1, 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-BUNDLES' AND GroupRelationsParentId = 'TCGRP-DATA-MODELS')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-BUNDLES', 'TCGRP-DATA-MODELS', 3, 1, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-CONTRACT-PRICING')
-    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-CONTRACT-PRICING', 'ENU', N'Groups', 'TCGRP-CONTRACT-PRICING', 1, 1, 1);
+    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-CONTRACT-PRICING', 'ENU', N'Contract Pricing', 'TCGRP-CONTRACT-PRICING', 1, 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-CONTRACT-PRICING' AND GroupRelationsParentId = 'TCGRP-USERS')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-CONTRACT-PRICING', 'TCGRP-USERS', 3, 1, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-DOCUMENTS')
-    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-DOCUMENTS', 'ENU', N'Permissions', 'TCGRP-DOCUMENTS', 1, 1, 1);
+    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-DOCUMENTS', 'ENU', N'Documents', 'TCGRP-DOCUMENTS', 1, 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-DOCUMENTS' AND GroupRelationsParentId = 'TCGRP-CONTENT')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-DOCUMENTS', 'TCGRP-CONTENT', 1, 1, 0);
 IF NOT EXISTS (SELECT 1 FROM EcomGroups WHERE GroupId = 'TCGRP-RELATIONS')
-    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-RELATIONS', 'ENU', N'Impersonation', 'TCGRP-RELATIONS', 1, 1, 1);
+    INSERT INTO EcomGroups (GroupId, GroupLanguageId, GroupName, GroupNumber, GroupNavigationShowInMenu, GroupNavigationShowInSiteMap, GroupNavigationClickable) VALUES ('TCGRP-RELATIONS', 'ENU', N'Relations', 'TCGRP-RELATIONS', 1, 1, 1);
 IF NOT EXISTS (SELECT 1 FROM EcomGroupRelations WHERE GroupRelationsGroupId = 'TCGRP-RELATIONS' AND GroupRelationsParentId = 'TCGRP-CONTENT')
     INSERT INTO EcomGroupRelations (GroupRelationsGroupId, GroupRelationsParentId, GroupRelationsSorting, GroupRelationsIsPrimary, GroupRelationsInheritCategories) VALUES ('TCGRP-RELATIONS', 'TCGRP-CONTENT', 3, 1, 0);
+
+-- THE TAXONOMY GUARD. The names above are the re-screened ones, seeded as
+-- literals, because the converge UPDATE in section 0 renames only rows that
+-- already exist: on a clean install there is nothing to converge, the predicate
+-- is false, and the retired backend words would reach the shop navigation and
+-- the PLP facet rail. Every row count was green while that happened, so this
+-- asserts the NAMES and names the offender.
+DECLARE @TcRetiredNames TABLE (GroupId NVARCHAR(255), GroupName NVARCHAR(255));
+INSERT INTO @TcRetiredNames (GroupId, GroupName)
+SELECT g.GroupId, g.GroupName
+  FROM EcomGroups g
+  JOIN (VALUES
+        ('TCGRP-VARIANTS',         N'Variants'),
+        ('TCGRP-UNITS',            N'Units & Measures'),
+        ('TCGRP-BUNDLES',          N'Bundles & BOM'),
+        ('TCGRP-PRICE-STRUCTURES', N'Price Structures'),
+        ('TCGRP-DISCOUNTS',        N'Discounts'),
+        ('TCGRP-STOCK-DELIVERY',   N'Stock & Delivery'),
+        ('TCGRP-DOCUMENTS',        N'Documents'),
+        ('TCGRP-MEDIA',            N'Media & Galleries'),
+        ('TCGRP-RELATIONS',        N'Relations'),
+        ('TCGRP-ASSORTMENTS',      N'Assortments'),
+        ('TCGRP-CURRENCIES',       N'Currencies & VAT'),
+        ('TCGRP-CONTRACT-PRICING', N'Contract Pricing')) AS x(GroupId, GroupName)
+    ON x.GroupId = g.GroupId
+ WHERE g.GroupName <> x.GroupName;
+IF EXISTS (SELECT 1 FROM @TcRetiredNames)
+BEGIN
+    DECLARE @TcBadTaxonomy NVARCHAR(2000) = STUFF((SELECT N', ' + GroupId + N'=' + GroupName FROM @TcRetiredNames FOR XML PATH(''), TYPE).value('.', 'NVARCHAR(MAX)'), 1, 2, N'');
+    RAISERROR(N'truvio-catalog.sql: a subgroup carries a name the re-screen retired: %s. The final GroupName belongs in the INSERT literal; the section-0 UPDATE converges an already-seeded host and does nothing on a clean one, so a rename that lives only there ships the retired word to the shop navigation and the PLP facet rail while every row count stays green.', 16, 1, @TcBadTaxonomy);
+END
 
 -- ---------------------------------------------------------------------------
 -- 2. The 60 masters. ProductType 0 = stock item, 1 = service, 2 = BOM parent.
