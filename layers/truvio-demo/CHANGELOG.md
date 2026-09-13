@@ -1,5 +1,81 @@
 # Changelog — truvio-demo
 
+## 1.7.0
+
+### Every product image is raster, because the handler cannot decode a vector (Foundry #1171)
+
+Dynamicweb's `GetImage.ashx` decodes with **SixLabors.ImageSharp**, and ImageSharp ships no
+SVG decoder. The 500 body names the set it does have:
+
+    SixLabors.ImageSharp.UnknownImageFormatException: Image cannot be loaded.
+    Available decoders: Webp, TIFF, GIF, TGA, JPEG, PNG, PBM, BMP
+
+thrown from `Dynamicweb.Imaging.Providers.ImageSharpProviders.ImageSharpImageConverterProvider.ProcessImage`.
+Nothing in that list parses XML vector markup.
+
+Three isolating controls on the composed host inside one minute:
+
+| request | answer |
+|---|---|
+| `/Files/Images/TruvioCommerce/products/tc-tile-bundles-0042.svg` | 200, `image/svg+xml`, 1209 bytes |
+| the same file through `GetImage.ashx`, `width=180&format=webp` | 500 |
+| the same file through `GetImage.ashx`, width alone | 500 |
+| the same file through `GetImage.ashx`, no parameters at all | 500 |
+| a `.png` through the identical handler | 200 |
+
+So it is neither the webp conversion nor a sizing argument. One PDP load produced **17
+`tc-*` image requests and 17 of 17 answered 500**, across all three call sites - hero
+gallery at `width=180`, relations strip at `width=30`, recommendation rail with no width -
+and the three hero slides read `complete=true`, `naturalWidth=0`, `naturalHeight=0`, box
+126x95.
+
+Swift's card and gallery components only ever ask through that handler, because they need
+its width and crop arguments. So **every `tc-*` product image has been a broken image
+behind a correctly-counted `img` node since 1.2.0**: the node is in the DOM, the count is
+right, the row is green, and the page paints a broken-image glyph. Same blind-spot class as
+#1151 - presence judged without paint - applied to media.
+
+**The layer ships raster.** `tools/make-tiles.py` now writes a PNG beside each SVG it
+already wrote, plus a PNG twin of the twelve band tiles: 132 files, 480x480, 8-bit
+truecolour. The PNG is not a rasterisation - no rasteriser is available and none is being
+added as a dependency - it is a second drawing of the SAME per-product differentiators, so a
+PNG tile still traces to one product: the two-digit numeral, the pip row whose COUNT is the
+band position, the corner mark turned per position, the concept word, the band hue, and the
+light-on-dark inversion for the detail. The writer is `zlib` + `struct` and a 5x7 bitmap
+alphabet, nothing installed. Output is byte-identical run to run: no `tIME` chunk, a fixed
+filter byte, a pinned deflate configuration. Largest file **3430 bytes**, smallest 2203, 132
+files totalling 407 KB.
+
+**The SVGs stay.** They are the authoring sources, they stay on disk and they stay in
+`files[]`. Only what a row POINTS AT changed.
+
+| row | 1.6.0 | 1.7.0 |
+|---|---|---|
+| `TC-DETAIL-TCPROD0042` | `.../tc-tile-bundles-0042.svg` | `.../tc-tile-bundles-0042.png` |
+| `TC-HOVER-TCPROD0042` | `.../tc-detail-bundles-0042.svg` | `.../tc-detail-bundles-0042.png` |
+| `TC-GAL-TCPROD0042-2` | `.../tc-tile-bundles.svg` | `.../tc-tile-bundles.png` |
+| `EcomProducts.ProductImage*` | the `.svg` tile | the `.png` tile |
+
+**Converging, both rows.** `truvio-images.sql` already converged `TC-DETAIL-*` in place off
+a product-derived id; the hover row now gets the same treatment, so a host seeded at 1.5.0
+or 1.6.0 is updated rather than given a second set. The gallery row needs no new statement:
+it is DERIVED from the master's own default by stripping the `-<nnnn>` index, and `-0042.png`
+is the same nine characters `-0042.svg` was.
+
+**Two new guards, and neither weakens one that existed.** `truvio-images.sql` fails if any
+`TC-DETAIL-*` or `TC-HOVER-*` row still carries an `.svg`; `truvio-pdp.sql` fails if any
+unstamped `TC-GAL-*` row does. Every guard already in those files - attach count, hover
+count, shared defaults, masters without a second image, foreign-band gallery, uncategorised
+images, thin galleries, same-shot galleries - was **green** through the whole 1.2.0 to 1.6.0
+window this defect ran, which is the reason to add a guard that asks the one question they
+could not.
+
+`.gitattributes` gains `*.png binary` beside the `*.svg -text` pin, so a regeneration check
+measures the generator on either kind of file.
+
+The `GetImage.ashx` 200 proof on the new `.png` paths rides the next restage: this change
+writes no host.
+
 ## 1.6.0
 
 ### The gallery row is derived from its own master, not assigned (Foundry #1137)

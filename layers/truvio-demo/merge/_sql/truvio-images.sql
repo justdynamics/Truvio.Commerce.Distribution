@@ -16,6 +16,19 @@
 -- in truvio-pdp.sql still draws them, and a picture a product does not own is
 -- exactly what a strip is for.
 --
+-- WHAT CHANGED AT 1.7.0 (Foundry #1171). The rows point at PNG. Dynamicweb's
+-- GetImage.ashx decodes with SixLabors.ImageSharp, and ImageSharp ships no SVG
+-- decoder: the 500 body names its set - Webp, TIFF, GIF, TGA, JPEG, PNG, PBM,
+-- BMP - and nothing in it parses XML vector markup. Measured read-only on the
+-- composed host: the raw /Files/... path 200 at 1209 bytes, the same file through
+-- the handler 500 with width and format, 500 with width alone, 500 with no
+-- parameters at all, and a PNG through the identical handler 200. Swift's card
+-- and gallery components only ever ask through that handler, because they need
+-- its width and crop arguments, so every tc-* image this file mapped had been a
+-- broken picture behind a correctly-counted img node since 1.2.0. tools/
+-- make-tiles.py now writes a PNG beside each SVG; the SVGs stay as the authoring
+-- sources and stay in files[].
+--
 -- THE TILES ARE DATA, not theme: the file is what a product row points at, never
 -- a style. They are generated, deterministically and self-contained, by
 -- tools/make-tiles.py - 120 files, two per master, each carrying the product's
@@ -68,66 +81,66 @@ IF OBJECT_ID(N'dbo.EcomDetails', N'U') IS NULL
 IF OBJECT_ID('tempdb..#TcTile') IS NOT NULL DROP TABLE #TcTile;
 CREATE TABLE #TcTile (ProductId nvarchar(255) NOT NULL PRIMARY KEY, TilePath nvarchar(510) NOT NULL, DetailPath nvarchar(510) NOT NULL);
 INSERT INTO #TcTile (ProductId, TilePath, DetailPath) VALUES
-    ('TCPROD0001', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0001.svg', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0001.svg'),
-    ('TCPROD0002', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0002.svg', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0002.svg'),
-    ('TCPROD0003', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0003.svg', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0003.svg'),
-    ('TCPROD0004', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0004.svg', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0004.svg'),
-    ('TCPROD0005', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0005.svg', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0005.svg'),
-    ('TCPROD0006', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0006.svg', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0006.svg'),
-    ('TCPROD0007', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0007.svg', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0007.svg'),
-    ('TCPROD0008', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0008.svg', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0008.svg'),
-    ('TCPROD0009', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0009.svg', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0009.svg'),
-    ('TCPROD0010', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0010.svg', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0010.svg'),
-    ('TCPROD0011', '/Files/Images/TruvioCommerce/products/tc-tile-units-0011.svg', '/Files/Images/TruvioCommerce/products/tc-detail-units-0011.svg'),
-    ('TCPROD0012', '/Files/Images/TruvioCommerce/products/tc-tile-units-0012.svg', '/Files/Images/TruvioCommerce/products/tc-detail-units-0012.svg'),
-    ('TCPROD0013', '/Files/Images/TruvioCommerce/products/tc-tile-units-0013.svg', '/Files/Images/TruvioCommerce/products/tc-detail-units-0013.svg'),
-    ('TCPROD0014', '/Files/Images/TruvioCommerce/products/tc-tile-units-0014.svg', '/Files/Images/TruvioCommerce/products/tc-detail-units-0014.svg'),
-    ('TCPROD0015', '/Files/Images/TruvioCommerce/products/tc-tile-units-0015.svg', '/Files/Images/TruvioCommerce/products/tc-detail-units-0015.svg'),
-    ('TCPROD0016', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0016.svg', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0016.svg'),
-    ('TCPROD0017', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0017.svg', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0017.svg'),
-    ('TCPROD0018', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0018.svg', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0018.svg'),
-    ('TCPROD0019', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0019.svg', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0019.svg'),
-    ('TCPROD0020', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0020.svg', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0020.svg'),
-    ('TCPROD0021', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0021.svg', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0021.svg'),
-    ('TCPROD0022', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0022.svg', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0022.svg'),
-    ('TCPROD0023', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0023.svg', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0023.svg'),
-    ('TCPROD0024', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0024.svg', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0024.svg'),
-    ('TCPROD0025', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0025.svg', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0025.svg'),
-    ('TCPROD0026', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0026.svg', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0026.svg'),
-    ('TCPROD0027', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0027.svg', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0027.svg'),
-    ('TCPROD0028', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0028.svg', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0028.svg'),
-    ('TCPROD0029', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0029.svg', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0029.svg'),
-    ('TCPROD0030', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0030.svg', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0030.svg'),
-    ('TCPROD0031', '/Files/Images/TruvioCommerce/products/tc-tile-media-0031.svg', '/Files/Images/TruvioCommerce/products/tc-detail-media-0031.svg'),
-    ('TCPROD0032', '/Files/Images/TruvioCommerce/products/tc-tile-media-0032.svg', '/Files/Images/TruvioCommerce/products/tc-detail-media-0032.svg'),
-    ('TCPROD0033', '/Files/Images/TruvioCommerce/products/tc-tile-media-0033.svg', '/Files/Images/TruvioCommerce/products/tc-detail-media-0033.svg'),
-    ('TCPROD0034', '/Files/Images/TruvioCommerce/products/tc-tile-media-0034.svg', '/Files/Images/TruvioCommerce/products/tc-detail-media-0034.svg'),
-    ('TCPROD0035', '/Files/Images/TruvioCommerce/products/tc-tile-media-0035.svg', '/Files/Images/TruvioCommerce/products/tc-detail-media-0035.svg'),
-    ('TCPROD0036', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0036.svg', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0036.svg'),
-    ('TCPROD0037', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0037.svg', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0037.svg'),
-    ('TCPROD0038', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0038.svg', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0038.svg'),
-    ('TCPROD0039', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0039.svg', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0039.svg'),
-    ('TCPROD0040', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0040.svg', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0040.svg'),
-    ('TCPROD0041', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0041.svg', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0041.svg'),
-    ('TCPROD0042', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0042.svg', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0042.svg'),
-    ('TCPROD0043', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0043.svg', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0043.svg'),
-    ('TCPROD0044', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0044.svg', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0044.svg'),
-    ('TCPROD0045', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0045.svg', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0045.svg'),
-    ('TCPROD0046', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0046.svg', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0046.svg'),
-    ('TCPROD0047', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0047.svg', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0047.svg'),
-    ('TCPROD0048', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0048.svg', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0048.svg'),
-    ('TCPROD0049', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0049.svg', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0049.svg'),
-    ('TCPROD0050', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0050.svg', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0050.svg'),
-    ('TCPROD0051', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0051.svg', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0051.svg'),
-    ('TCPROD0052', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0052.svg', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0052.svg'),
-    ('TCPROD0053', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0053.svg', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0053.svg'),
-    ('TCPROD0054', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0054.svg', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0054.svg'),
-    ('TCPROD0055', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0055.svg', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0055.svg'),
-    ('TCPROD0056', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0056.svg', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0056.svg'),
-    ('TCPROD0057', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0057.svg', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0057.svg'),
-    ('TCPROD0058', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0058.svg', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0058.svg'),
-    ('TCPROD0059', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0059.svg', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0059.svg'),
-    ('TCPROD0060', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0060.svg', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0060.svg');
+    ('TCPROD0001', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0001.png', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0001.png'),
+    ('TCPROD0002', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0002.png', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0002.png'),
+    ('TCPROD0003', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0003.png', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0003.png'),
+    ('TCPROD0004', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0004.png', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0004.png'),
+    ('TCPROD0005', '/Files/Images/TruvioCommerce/products/tc-tile-variants-0005.png', '/Files/Images/TruvioCommerce/products/tc-detail-variants-0005.png'),
+    ('TCPROD0006', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0006.png', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0006.png'),
+    ('TCPROD0007', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0007.png', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0007.png'),
+    ('TCPROD0008', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0008.png', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0008.png'),
+    ('TCPROD0009', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0009.png', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0009.png'),
+    ('TCPROD0010', '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0010.png', '/Files/Images/TruvioCommerce/products/tc-detail-stock-delivery-0010.png'),
+    ('TCPROD0011', '/Files/Images/TruvioCommerce/products/tc-tile-units-0011.png', '/Files/Images/TruvioCommerce/products/tc-detail-units-0011.png'),
+    ('TCPROD0012', '/Files/Images/TruvioCommerce/products/tc-tile-units-0012.png', '/Files/Images/TruvioCommerce/products/tc-detail-units-0012.png'),
+    ('TCPROD0013', '/Files/Images/TruvioCommerce/products/tc-tile-units-0013.png', '/Files/Images/TruvioCommerce/products/tc-detail-units-0013.png'),
+    ('TCPROD0014', '/Files/Images/TruvioCommerce/products/tc-tile-units-0014.png', '/Files/Images/TruvioCommerce/products/tc-detail-units-0014.png'),
+    ('TCPROD0015', '/Files/Images/TruvioCommerce/products/tc-tile-units-0015.png', '/Files/Images/TruvioCommerce/products/tc-detail-units-0015.png'),
+    ('TCPROD0016', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0016.png', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0016.png'),
+    ('TCPROD0017', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0017.png', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0017.png'),
+    ('TCPROD0018', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0018.png', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0018.png'),
+    ('TCPROD0019', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0019.png', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0019.png'),
+    ('TCPROD0020', '/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0020.png', '/Files/Images/TruvioCommerce/products/tc-detail-price-structures-0020.png'),
+    ('TCPROD0021', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0021.png', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0021.png'),
+    ('TCPROD0022', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0022.png', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0022.png'),
+    ('TCPROD0023', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0023.png', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0023.png'),
+    ('TCPROD0024', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0024.png', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0024.png'),
+    ('TCPROD0025', '/Files/Images/TruvioCommerce/products/tc-tile-assortments-0025.png', '/Files/Images/TruvioCommerce/products/tc-detail-assortments-0025.png'),
+    ('TCPROD0026', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0026.png', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0026.png'),
+    ('TCPROD0027', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0027.png', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0027.png'),
+    ('TCPROD0028', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0028.png', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0028.png'),
+    ('TCPROD0029', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0029.png', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0029.png'),
+    ('TCPROD0030', '/Files/Images/TruvioCommerce/products/tc-tile-discounts-0030.png', '/Files/Images/TruvioCommerce/products/tc-detail-discounts-0030.png'),
+    ('TCPROD0031', '/Files/Images/TruvioCommerce/products/tc-tile-media-0031.png', '/Files/Images/TruvioCommerce/products/tc-detail-media-0031.png'),
+    ('TCPROD0032', '/Files/Images/TruvioCommerce/products/tc-tile-media-0032.png', '/Files/Images/TruvioCommerce/products/tc-detail-media-0032.png'),
+    ('TCPROD0033', '/Files/Images/TruvioCommerce/products/tc-tile-media-0033.png', '/Files/Images/TruvioCommerce/products/tc-detail-media-0033.png'),
+    ('TCPROD0034', '/Files/Images/TruvioCommerce/products/tc-tile-media-0034.png', '/Files/Images/TruvioCommerce/products/tc-detail-media-0034.png'),
+    ('TCPROD0035', '/Files/Images/TruvioCommerce/products/tc-tile-media-0035.png', '/Files/Images/TruvioCommerce/products/tc-detail-media-0035.png'),
+    ('TCPROD0036', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0036.png', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0036.png'),
+    ('TCPROD0037', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0037.png', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0037.png'),
+    ('TCPROD0038', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0038.png', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0038.png'),
+    ('TCPROD0039', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0039.png', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0039.png'),
+    ('TCPROD0040', '/Files/Images/TruvioCommerce/products/tc-tile-currencies-0040.png', '/Files/Images/TruvioCommerce/products/tc-detail-currencies-0040.png'),
+    ('TCPROD0041', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0041.png', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0041.png'),
+    ('TCPROD0042', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0042.png', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0042.png'),
+    ('TCPROD0043', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0043.png', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0043.png'),
+    ('TCPROD0044', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0044.png', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0044.png'),
+    ('TCPROD0045', '/Files/Images/TruvioCommerce/products/tc-tile-bundles-0045.png', '/Files/Images/TruvioCommerce/products/tc-detail-bundles-0045.png'),
+    ('TCPROD0046', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0046.png', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0046.png'),
+    ('TCPROD0047', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0047.png', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0047.png'),
+    ('TCPROD0048', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0048.png', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0048.png'),
+    ('TCPROD0049', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0049.png', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0049.png'),
+    ('TCPROD0050', '/Files/Images/TruvioCommerce/products/tc-tile-contract-pricing-0050.png', '/Files/Images/TruvioCommerce/products/tc-detail-contract-pricing-0050.png'),
+    ('TCPROD0051', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0051.png', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0051.png'),
+    ('TCPROD0052', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0052.png', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0052.png'),
+    ('TCPROD0053', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0053.png', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0053.png'),
+    ('TCPROD0054', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0054.png', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0054.png'),
+    ('TCPROD0055', '/Files/Images/TruvioCommerce/products/tc-tile-documents-0055.png', '/Files/Images/TruvioCommerce/products/tc-detail-documents-0055.png'),
+    ('TCPROD0056', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0056.png', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0056.png'),
+    ('TCPROD0057', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0057.png', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0057.png'),
+    ('TCPROD0058', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0058.png', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0058.png'),
+    ('TCPROD0059', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0059.png', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0059.png'),
+    ('TCPROD0060', '/Files/Images/TruvioCommerce/products/tc-tile-relations-0060.png', '/Files/Images/TruvioCommerce/products/tc-detail-relations-0060.png');
 
 -- ---------------------------------------------------------------------------
 -- 1. EcomDetails: the attachment the storefront reads.
@@ -138,7 +151,7 @@ INSERT INTO #TcTile (ProductId, TilePath, DetailPath) VALUES
 -- EcomDetails names the variant column DetailVariantId, NOT DetailProductVariantId
 -- (sys.columns, DW 10.28.10). The wrong spelling is a compile-time Msg 207 inside
 -- sp_executesql, so it survives every COL_LENGTH guard above it.
-DECLARE @inserted int = 0, @hovered int = 0, @converged int = 0, @updated int = 0, @attached int = 0, @hoverRows int = 0;
+DECLARE @inserted int = 0, @hovered int = 0, @converged int = 0, @hoverConverged int = 0, @updated int = 0, @attached int = 0, @hoverRows int = 0;
 DECLARE @cols nvarchar(max) = N'DetailId, DetailProductId, DetailVariantId, DetailValue, DetailIsDefault';
 -- The detail id is DERIVED from the product key, never from a ROW_NUMBER: a
 -- re-run that attaches only the missing rows would restart the counter at 1 and
@@ -191,6 +204,20 @@ UPDATE d
    AND d.DetailValue <> t.TilePath
    AND ISNULL(d.DetailsName, N'') <> N'brand-photograph';
 SET @converged = @@ROWCOUNT;
+
+-- 1d. The same convergence for the HOVER row, and for the same reason one step
+--     later: a host seeded at 1.5.0 or 1.6.0 carries TC-HOVER-* rows pointing at
+--     the .svg detail image. The id is derived from the product key here too, so
+--     the row is updated in place and no second hover row is ever created.
+UPDATE d
+   SET d.DetailValue = t.DetailPath
+  FROM EcomDetails d
+  JOIN EcomProducts p ON p.ProductId = d.DetailProductId AND p.ProductVariantId = d.DetailVariantId
+  JOIN #TcTile t ON t.ProductId = p.ProductId
+ WHERE d.DetailId = 'TC-HOVER-' + p.ProductId + CASE WHEN p.ProductVariantId = '' THEN '' ELSE '-' + p.ProductVariantId END
+   AND d.DetailValue <> t.DetailPath
+   AND ISNULL(d.DetailsName, N'') <> N'brand-photograph';
+SET @hoverConverged = @@ROWCOUNT;
 
 -- ---------------------------------------------------------------------------
 -- 2. The legacy EcomProducts image columns, where the build still has them.
@@ -248,6 +275,15 @@ DECLARE @TcSharedDefaults INT = (
 -- 3b. THE SECOND-IMAGE GUARD. A master with one image has nothing to hover to,
 --     and the card component fails that silently: no error, no empty element,
 --     just a swap that never happens.
+-- 3c. THE RASTER GUARD (Foundry #1171). A TCPROD image row carrying an .svg path
+--     is a picture that answers 200 on its raw path and 500 through the only
+--     route Swift's card takes. Every guard above this one counts it as present.
+DECLARE @TcVectorImages INT = (
+    SELECT COUNT(*) FROM EcomDetails
+     WHERE DetailProductId LIKE 'TCPROD%'
+       AND (DetailId LIKE 'TC-DETAIL-%' OR DetailId LIKE 'TC-HOVER-%')
+       AND DetailValue LIKE '%.svg');
+
 DECLARE @TcMastersWithoutSecond INT = (
     SELECT COUNT(*) FROM EcomProducts p
      WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = ''
@@ -277,11 +313,17 @@ BEGIN
     ROLLBACK TRAN;
     RAISERROR(N'truvio-images.sql: a master carries fewer than two distinct images. The hover swap has no subject on that card.', 16, 1);
 END
+ELSE IF @TcVectorImages > 0
+BEGIN
+    ROLLBACK TRAN;
+    RAISERROR(N'truvio-images.sql: a product image row still points at an .svg. GetImage.ashx decodes with SixLabors.ImageSharp, which ships no SVG decoder and answers HTTP 500 for every one of them - so the card and the PDP paint a broken image while the attach count, the sharing guard and the second-image guard are all green. That is the state every release from 1.2.0 to 1.6.0 shipped.', 16, 1);
+END
 ELSE
 BEGIN
     COMMIT TRAN;
     PRINT CONCAT(N'truvio-demo imagery: ', @inserted, N' default row(s) inserted, ',
-                 @hovered, N' hover row(s) inserted, ', @converged, N' row(s) converged off the subgroup tiles, ',
+                 @hovered, N' hover row(s) inserted, ', @converged, N' default row(s) converged onto the raster tile, ',
+                 @hoverConverged, N' hover row(s) converged onto the raster detail, ',
                  @updated, N' EcomProducts row(s) given the legacy image columns, ',
                  @attached, N' TCPROD row(s) carry their own tile and ', @hoverRows, N' carry a second image.');
 END

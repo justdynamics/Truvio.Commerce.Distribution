@@ -1,5 +1,29 @@
 # Changelog — surface-swift
 
+## 1.12.1
+
+### The ProductMedia header said the PLP was serving those SVGs; it was not (Foundry #1171)
+
+Comment only, no template logic and no serialized content changed.
+
+1.12.0's header wrote that because `Swift-v2_ProductDefaultImage.cshtml` applies no format
+filter, "the identical SVG rows have been serving through GetImage.ashx on the listing page
+the whole time". The first half is right and the conclusion is wrong. The listing page
+EMITTED an `img` node for every SVG row, which is why its counts were green. It never served
+one. The `src` on that node is a `GetImage.ashx` url, and `GetImage.ashx` decodes with
+SixLabors.ImageSharp, which ships no SVG decoder:
+
+    Image cannot be loaded. Available decoders: Webp, TIFF, GIF, TGA, JPEG, PNG, PBM, BMP
+
+Measured on the composed host: **17 of 17** `tc-*` image requests on one page load answered
+HTTP 500 - with no width argument, with width alone and with `width&format` alike - and the
+slides read `complete=true` with `naturalWidth=0`.
+
+The asymmetry between the two templates is still real and still the finding, only narrower
+than it was written: this template renders no node, the other renders a node that paints
+nothing. The catalogue half is fixed in `truvio-demo` 1.7.0, which points every product row
+at a PNG.
+
 ## 1.12.0
 
 ### The buy panel gets a row per component, so nine paragraphs render nine (Foundry #1165)

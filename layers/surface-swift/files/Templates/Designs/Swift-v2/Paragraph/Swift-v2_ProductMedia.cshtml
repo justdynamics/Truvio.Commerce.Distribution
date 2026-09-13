@@ -33,10 +33,19 @@
 	nothing in it. A presence assert on the paragraph passes; only a node count inside it
 	fails.
 
-	WHY THE PLP WAS GREEN THROUGHOUT. Swift-v2_ProductDefaultImage.cshtml applies NO format
-	filter at all - it takes the assets and renders them - so the identical SVG rows have
-	been serving through GetImage.ashx on the listing page the whole time. The asymmetry
-	between the two templates is the whole finding.
+	WHY THE PLP LOOKED GREEN THROUGHOUT, AND WHAT THAT READING GOT WRONG (corrected for
+	Foundry #1171). Swift-v2_ProductDefaultImage.cshtml applies NO format filter at all -
+	it takes the assets and renders them - so the listing page EMITTED an img node for
+	every SVG row and the node count was right. It was never serving them. The src on
+	that node is a GetImage.ashx url, and GetImage.ashx decodes with SixLabors.ImageSharp,
+	which ships no SVG decoder: 'Image cannot be loaded. Available decoders: Webp, TIFF,
+	GIF, TGA, JPEG, PNG, PBM, BMP', thrown from ImageSharpImageConverterProvider.
+	ProcessImage. Measured on the composed host: 17 of 17 tc-* image requests on one page
+	load answered HTTP 500, with no width argument, with width alone and with
+	width+format alike, and the slides read complete=true with naturalWidth=0. So the
+	asymmetry between the two templates is real but narrower than it was written here:
+	this one renders no node, the other renders a node that paints nothing. The catalogue
+	side is fixed in truvio-demo 1.7.0, which points every product row at a PNG.
 
 	SCOPE. ProductMedia only. Swift-v2_ProductMediaGallery.cshtml carries the same
 	allowlist but no layer paragraph uses it, and Swift-v2_ProductMediaTable.cshtml carries
