@@ -130,9 +130,21 @@
      *
      * THE THREE INSTANCES, which are the three the gate measures:
      *   1. the home hero row            -> td-edge-bottom  (main .td-edge-bottom::after)
-     *   2. the first colour boundary    -> td-edge-top     (main .td-edge-top::before)
-     *      after it in the same main
+     *   2. the row BEFORE the first     -> td-edge-bottom  (+ td-edge-alt)
+     *      colour boundary after it
      *   3. the site footer              -> td-edge-top     (footer::before)
+     *
+     * INSTANCE 2 IS A BOTTOM EDGE, NOT A TOP ONE (2.2.2, Foundry #1152). It used
+     * to be td-edge-top on the boundary row itself, which put the band above that
+     * row and therefore over the ink of the row before it - and made the instance
+     * unmeasurable as well as unsafe. A top-anchored band is judged against the
+     * ink of the scope it paints into, and for an owner inside <main> that scope
+     * includes every row BELOW it, so a boundary halfway down the page measures
+     * against ink 1700px underneath and is negative by construction whatever it
+     * is padded with. Drawn as a bottom edge on the row ABOVE the boundary the
+     * band lands in exactly the same place, the ink it covers is its owner's own,
+     * and the owner reserves it. A top edge now belongs only to an owner that
+     * terminates the ink it threatens - the footer.
      *
      * SCOPE. Instances 1 and 2 are found through the hero itself: the row is the
      * first direct child section of main that contains a Swift poster. A page
@@ -172,7 +184,14 @@
         for (var j = heroIndex + 1; j < rows.length; j++) {
             var scheme = rows[j].getAttribute("data-dw-colorscheme") || "";
             if (scheme !== previousScheme) {
-                rows[j].classList.add("td-edge-top");
+                // The band goes on the row ABOVE the boundary, which is the row
+                // whose own last line the band would otherwise cover. If that row
+                // is the hero it already carries the motif and a second stamp on
+                // the same element is nothing at all, so it is left alone.
+                if (j - 1 > heroIndex) {
+                    rows[j - 1].classList.add("td-edge-bottom");
+                    rows[j - 1].classList.add("td-edge-alt");
+                }
                 return;
             }
             previousScheme = scheme;

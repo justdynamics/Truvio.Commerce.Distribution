@@ -1178,16 +1178,23 @@ main [data-td-full-bleed] [data-dw-container-width="4"] {
  * instances this theme applies are named.
  *
  * THE CLEARANCE RULE, which is the whole reason this block is longer than the
- * mask. An edge at the TOP of a section sits at top 0 and is flipped, and a
- * pseudo-element with a negative offset paints ABOVE its owner's border box.
- * Both mean the crest paints over content while every box-model measurement
- * reads healthy - the element genuinely does not overlap, so a geometry probe
- * finds nothing and the text is still sliced. The fix is SPACING, never
- * stacking: the owner reserves padding sized off the motif's own clamp, so the
- * reservation tracks it at every viewport automatically. Raising z-index on the
- * content instead is the tempting fix and the wrong one: it repaints the text
- * above the crest and leaves the design looking like a mistake rather than a
- * motif.
+ * mask. A pseudo-element paints wherever it is positioned, inside its owner's
+ * border box or outside it, and every box-model measurement reads healthy either
+ * way - the elements genuinely do not overlap, so a geometry probe finds nothing
+ * and the text is still sliced. The fix is SPACING, never stacking: padding sized
+ * off the motif's own clamp is reserved on the element whose INK the band would
+ * cover, so the reservation tracks the motif at every viewport automatically.
+ * Raising z-index on the content instead is the tempting fix and the wrong one:
+ * it repaints the text above the crest and leaves the design looking like a
+ * mistake rather than a motif.
+ *
+ * THE RECEIVER, not the owner (2.2.2, Foundry #1152). The element that declares
+ * the motif is not usually the element the motif paints over, and reserving the
+ * room on the declaring element is the defect that shipped three instances at
+ * 0.00px, -71px and -1700px of painted clearance at once. A bottom edge paints
+ * inside its owner, so there the owner IS the receiver; a top edge paints above
+ * its owner, so the receiver is whatever precedes it - and for the footer crest
+ * that is <main>, whose end padding is the only thing the band can rise into.
  *
  * ONE TOKEN, THREE KNOBS.
  *   --td-edge-fill  the painted colour. Defaults to the neutral page ground, so
@@ -1248,20 +1255,28 @@ main [data-td-full-bleed] [data-dw-container-width="4"] {
   bottom: -1px;
 }
 
-/* TOP: the motif sits at the owner's top edge, flipped vertically so the crest
- * points up into the PREVIOUS section. top 0 and a flip, never a negative top:
- * a negative offset paints the shape inside the previous element's box, where it
- * is that element's problem and nobody's clearance. */
+/* TOP: the motif sits ABOVE the owner's border box and rises into the section
+ * before it - `bottom: 100%`, so the band is exactly [ownerTop - H, ownerTop] and
+ * its ink is flush with the owner's own top edge. `top: 0` was the defect: it put
+ * the band INSIDE the owner, where a vertical flip pointed the crest up while the
+ * ink still sat over the owner's own first H pixels of content. No flip is needed
+ * now - the mask's ink is flush with the band's bottom edge already, which is the
+ * edge that meets the owner.
+ *
+ * Painting above the owner is only safe because the RECEIVER below reserves the
+ * room (the clearance rules), which is the whole difference between this and the
+ * negative-offset failure class: a band above the owner's box is somebody's
+ * clearance, and that somebody is named. */
 .td-edge-top::before {
-  top: 0;
-  transform: scaleY(-1);
+  bottom: 100%;
 }
 
 /* A second top edge adjacent to the first would read as one repeated stamp, so
- * the alternate flips on X as well. Apply it to the second of two consecutive
+ * the alternate flips on X. Apply it to the second of two consecutive
  * boundaries. */
-.td-edge-top.td-edge-alt::before {
-  transform: scaleY(-1) scaleX(-1);
+.td-edge-top.td-edge-alt::before,
+.td-edge-bottom.td-edge-alt::after {
+  transform: scaleX(-1);
 }
 
 /* --------------------------------------------------------------------------
@@ -1269,39 +1284,68 @@ main [data-td-full-bleed] [data-dw-container-width="4"] {
  * same clamp as the motif, so nothing has to be re-tuned per breakpoint.
  * -------------------------------------------------------------------------- */
 
-/* The owner of a TOP edge reserves room above its own content for the crest,
- * plus 14px of breathing room. Expressed on Swift's own row-space variable, so
- * an editor changing the admin spacing step still lands on a cleared row. */
-.td-edge-top {
-  --dw-row-space-top: calc(var(--td-edge-h) + 14px);
-}
+/* THE RULE. Padding goes on the element whose INK the band would cover - the
+ * RECEIVER - and never on the owner just because the owner declares the motif.
+ * Both of the shipped clearance rules got this wrong before 2.2.2 and both read
+ * healthy in every box-model check while the band sliced text.
+ *
+ * There are exactly two receivers, one per direction:
+ *   BOTTOM edge  the band is [ownerBottom + 1 - H, ownerBottom + 1], i.e. INSIDE
+ *                its owner. The ink it covers is the owner's OWN last line, so
+ *                the owner is the receiver and takes padding-block-end.
+ *   TOP edge     the band is [ownerTop - H, ownerTop], ABOVE its owner. The ink
+ *                it covers belongs to whatever precedes the owner, so THAT
+ *                element takes padding-block-end - never the owner.
+ *
+ * A padding PROPERTY, not --dw-row-space-*. Swift resolves a grid row's padding
+ * from an attribute rule, `[data-swift-gridrow][data-dw-row-space-bottom="0"]`,
+ * whose (0,2,0) out-specifies a (0,1,0) class, so a class that sets the variable
+ * is silently discarded on every row an editor has set to spacing step 0 - which
+ * is every poster hero. The variable is set too, at attribute specificity, so
+ * Swift's own padding declaration computes the same number and an editor reading
+ * the row's spacing sees no contradiction. */
 
-/* The owner of a BOTTOM edge keeps a small floor under its last line, so the
- * trough does not graze descenders. The motif itself overhangs the following
- * section, which is why this is 16px and not another full clamp. */
+/* BOTTOM edge: the owner is the receiver. */
 .td-edge-bottom {
-  --dw-row-space-bottom: 16px;
+  padding-block-end: calc(var(--td-edge-h) + 14px);
+}
+.td-edge-bottom[data-swift-gridrow] {
+  --dw-row-space-bottom: calc(var(--td-edge-h) + 14px);
 }
 
-/* A section that RECEIVES a bottom edge from the element above it gets the
- * clamp, since that crest is painting into its top edge. */
-.td-edge-bottom + * {
-  padding-block-start: calc(var(--td-edge-h) + 14px);
+/* TOP edge inside main: the element BEFORE the owner is the receiver. Block 26
+ * no longer creates one of these (see below), but the utility stays safe for any
+ * site that applies .td-edge-top to a row by hand. */
+main > *:has(+ .td-edge-top) {
+  padding-block-end: calc(var(--td-edge-h) + 14px);
+}
+main > [data-swift-gridrow]:has(+ .td-edge-top) {
+  --dw-row-space-bottom: calc(var(--td-edge-h) + 14px);
 }
 
-/* main itself, when the last row carries a bottom edge: the page's own end
- * padding has to clear the overhang or the motif crosses into the footer. */
-main:has(> .td-edge-bottom:last-child) {
-  padding-block-end: calc(var(--td-edge-h) - 22px);
+/* The footer crest, which is the sitewide instance and the one that was 0.00px
+ * clear in both identities on every page. Its receiver is MAIN: the band rises
+ * out of the footer into the gap at the end of the page, so the page's own end
+ * padding is the clearance and the footer's top padding is irrelevant to it. The
+ * old rule padded the footer - the owner - and reserved nothing at all where the
+ * band actually paints.
+ *
+ * Keyed on the footer carrying the crest, so the reservation appears only when
+ * block 26 has applied the class and the motif is inert without it. */
+main:has(+ footer.td-edge-top) {
+  padding-block-end: calc(var(--td-edge-h) + 14px);
 }
 
-/* The footer instance. A footer crest is the common sitewide case and the one
- * that is easiest to get wrong, because the footer's own top padding is the only
- * thing between the crest and the last ink in main. */
-body > footer.td-edge-top,
-[data-swift-page-footer].td-edge-top {
-  padding-block-start: calc(var(--td-edge-h) + 14px);
-}
+/* WHY THERE IS NO TOP-EDGE INSTANCE INSIDE MAIN ANY MORE. A top-anchored band is
+ * measured against the ink of the scope it paints into, and for an owner inside
+ * <main> that scope is all of main - including every row BELOW the owner. A
+ * boundary row halfway down the page therefore measures its band against ink
+ * 1700px underneath it, and no padding value anywhere can close a gap that is
+ * negative by construction. The band is not the problem; the arrangement is. A
+ * top anchor is sound only when its owner terminates the ink it threatens, which
+ * is true of exactly one element on a page: the footer. Every boundary inside
+ * main is therefore drawn as a BOTTOM edge on the row above it - the same band in
+ * the same place, with the ink it covers owned by the element that reserves it. */
 
 /* =============================================================================
  * #23 THE LAPTOP BAND - the header line has to fit between 992 and 1440 as well
