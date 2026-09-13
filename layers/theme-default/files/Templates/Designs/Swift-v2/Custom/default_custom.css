@@ -1141,72 +1141,91 @@ main [data-td-full-bleed] [data-dw-container-width="4"] {
 }
 
 /* ==========================================================================
- * BLOCK 22 — THE WAVE. An opt-in boundary motif, and the clearance that makes
+ * BLOCK 22 - THE EDGE. An opt-in boundary motif, and the clearance that makes
  * it safe.
  *
- * WHAT IT IS. One cubic path on a 1440x75 viewBox, applied as a CSS mask to a
+ * WHAT IT IS. One path on a 1440x75 viewBox, applied as a CSS mask to a
  * pseudo-element that carries a flat background-color. The mask carves the
  * shape; the colour comes from a token. That is why one asset serves every
- * colour scheme and a brand changes the motif by changing a variable. The same
- * path ships as a readable file at Images/Brand/wave.svg — edit both together,
- * exactly as the token block here and the copy in DefaultHeadInclude.cshtml are
- * edited together.
+ * colour scheme, and why a brand changes the motif by changing a variable
+ * rather than by shipping a second image per scheme.
  *
- * IT IS INERT. Nothing below paints until a class is applied. No element in a
- * Swift document carries td-wave-bottom or td-wave-top, so this block adds
- * exactly zero pixels to a page that has not opted in. Opting in is one entry
- * in a grid row's CSS-class field in the Visual Editor — no template edit and no
- * serialized content of ours.
+ * THE SHAPE HERE IS A PLACEHOLDER, and deliberately the dullest one available:
+ * a barely-perceptible shallow bevel. This layer is brand-free, and a motif with
+ * a personality is a brand decision made in the wrong place - a theme that ships
+ * a signature silhouette hands every consuming site somebody else's signature.
+ * The same path ships as a readable file at Images/Brand/edge.svg; edit both
+ * together, exactly as the token block here and the copy in
+ * DefaultHeadInclude.cshtml are edited together.
+ *
+ * HOW A BRAND SETS ITS OWN. One declaration in the brand's own sheet, loaded
+ * after this one. Nothing else changes - not this block, not the clearance
+ * rules, not a template. Take the d= attribute out of the brand's SVG,
+ * percent-encode the commas, and:
+ *
+ *   :root { --td-edge-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 75' preserveAspectRatio='none'%3E%3Cpath d='M0%2C58%20L91.4%2C29.1%20Q120%2C20%20148.6%2C29.1%20L211.4%2C48.9%20Q240%2C58%20268.6%2C48.9%20L331.4%2C29.1%20Q360%2C20%20388.6%2C29.1%20L451.4%2C48.9%20Q480%2C58%20508.6%2C48.9%20L571.4%2C29.1%20Q600%2C20%20628.6%2C29.1%20L691.4%2C48.9%20Q720%2C58%20748.6%2C48.9%20L811.4%2C29.1%20Q840%2C20%20868.6%2C29.1%20L931.4%2C48.9%20Q960%2C58%20988.6%2C48.9%20L1051.4%2C29.1%20Q1080%2C20%201108.6%2C29.1%20L1171.4%2C48.9%20Q1200%2C58%201228.6%2C48.9%20L1291.4%2C29.1%20Q1320%2C20%201348.6%2C29.1%20L1440%2C58%20L1440%2C75%20L0%2C75%20Z'/%3E%3C/svg%3E"); }
+ *
+ * Images/Brand/edge-truvio.svg beside the placeholder is the worked example and
+ * the source of the line above: a softened zigzag with gently rounded peaks -
+ * industrial, not a sine wave - which is the Truvio edge. That swap is the whole
+ * of the brand-time edit, and it is what the branding step of an e2e run
+ * performs on a Truvio-branded site.
+ *
+ * IT IS INERT. Nothing below paints until a class is applied, and no Swift grid
+ * row can carry one: the stock row template emits no class attribute from
+ * content and grid-row serialization has no cssClass key. Block 26 of
+ * default_custom.js is what opts the standing pages in, and is where the three
+ * instances this theme applies are named.
  *
  * THE CLEARANCE RULE, which is the whole reason this block is longer than the
- * mask. A wave at the TOP of a section sits at top 0 and is flipped, and a
+ * mask. An edge at the TOP of a section sits at top 0 and is flipped, and a
  * pseudo-element with a negative offset paints ABOVE its owner's border box.
  * Both mean the crest paints over content while every box-model measurement
- * reads healthy — the element genuinely does not overlap, so a geometry probe
+ * reads healthy - the element genuinely does not overlap, so a geometry probe
  * finds nothing and the text is still sliced. The fix is SPACING, never
- * stacking: the owner reserves padding sized off the wave's own clamp, so the
- * reservation tracks the wave at every viewport automatically. Raising z-index
- * on the content instead is the tempting fix and the wrong one: it repaints the
- * text above the crest and leaves the design looking like a mistake rather than
- * a motif.
+ * stacking: the owner reserves padding sized off the motif's own clamp, so the
+ * reservation tracks it at every viewport automatically. Raising z-index on the
+ * content instead is the tempting fix and the wrong one: it repaints the text
+ * above the crest and leaves the design looking like a mistake rather than a
+ * motif.
  *
  * ONE TOKEN, THREE KNOBS.
- *   --td-wave-fill  the painted colour. Defaults to the neutral page ground, so
- *                   an un-themed wave reads as a carved edge, not as a stripe.
- *                   Set it to the colour of the section the wave points INTO.
- *   --td-wave-h     the height. clamp(40px, 5vw, 75px) — 72px at 1440, 40px at
+ *   --td-edge-fill  the painted colour. Defaults to the neutral page ground, so
+ *                   an un-themed edge reads as a carved boundary, not a stripe.
+ *                   Set it to the colour of the section the edge points INTO.
+ *   --td-edge-h     the height. clamp(40px, 5vw, 75px) - 72px at 1440, 40px at
  *                   390, and the same expression drives every clearance below,
  *                   which is what keeps the two in step.
- *   --td-wave-mask  the shape. Swap it for a different silhouette without
+ *   --td-edge-mask  the shape. Swap it for a different silhouette without
  *                   touching any rule here.
  *
  * GATE NOTE. Pseudo-element paint is invisible to every probe except the
- * painted-clearance one, so every wave instance a site ships needs its own
- * paintClearance entry naming its owner selector. A sitewide footer wave and a
+ * painted-clearance one, so every edge instance a site ships needs its own
+ * paintClearance entry naming its owner selector. A sitewide footer crest and a
  * single band boundary are two entries, not one.
  * ========================================================================== */
 [data-td-block="22"] { --td-block: 22; }
 
 :root {
-  --td-wave-h:    clamp(40px, 5vw, 75px);
-  --td-wave-fill: var(--td-white);
-  --td-wave-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 75' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C240,74 480,8 720,32 C960,56 1200,14 1440,44 L1440,75 L0,75 Z'/%3E%3C/svg%3E");
+  --td-edge-h:    clamp(40px, 5vw, 75px);
+  --td-edge-fill: var(--td-white);
+  --td-edge-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 75' preserveAspectRatio='none'%3E%3Cpath d='M0%2C66%20C480%2C74%20960%2C74%201440%2C66%20L1440%2C75%20L0%2C75%20Z'/%3E%3C/svg%3E");
 }
 
 /* The shared pseudo-element. Full-bleed horizontally, clamped vertically,
  * pointer-transparent, and masked to the path. No fallback is declared: a
  * browser without mask support simply does not paint it, which is the correct
  * degradation for a decorative shape. */
-.td-wave-bottom::after,
-.td-wave-top::before {
+.td-edge-bottom::after,
+.td-edge-top::before {
   content: "";
   position: absolute;
   left: 0;
   right: 0;
-  height: var(--td-wave-h);
-  background-color: var(--td-wave-fill);
-  -webkit-mask-image: var(--td-wave-mask);
-          mask-image: var(--td-wave-mask);
+  height: var(--td-edge-h);
+  background-color: var(--td-edge-fill);
+  -webkit-mask-image: var(--td-edge-mask);
+          mask-image: var(--td-edge-mask);
   -webkit-mask-size: 100% 100%;
           mask-size: 100% 100%;
   -webkit-mask-repeat: no-repeat;
@@ -1216,72 +1235,72 @@ main [data-td-full-bleed] [data-dw-container-width="4"] {
 
 /* An owner must establish a containing block for the absolutely-positioned
  * pseudo-element, and must not clip it. */
-.td-wave-bottom,
-.td-wave-top {
+.td-edge-bottom,
+.td-edge-top {
   position: relative;
   overflow: visible;
 }
 
-/* BOTTOM: the wave sits on the owner's own bottom edge and points down into
+/* BOTTOM: the motif sits on the owner's own bottom edge and points down into
  * whatever follows. bottom -1px closes the sub-pixel seam that fractional
  * layout heights open between the mask and the edge. */
-.td-wave-bottom::after {
+.td-edge-bottom::after {
   bottom: -1px;
 }
 
-/* TOP: the wave sits at the owner's top edge, flipped vertically so the crest
+/* TOP: the motif sits at the owner's top edge, flipped vertically so the crest
  * points up into the PREVIOUS section. top 0 and a flip, never a negative top:
- * a negative offset paints the shape inside the previous element's box, where
- * it is that element's problem and nobody's clearance. */
-.td-wave-top::before {
+ * a negative offset paints the shape inside the previous element's box, where it
+ * is that element's problem and nobody's clearance. */
+.td-edge-top::before {
   top: 0;
   transform: scaleY(-1);
 }
 
-/* A second top wave adjacent to the first would read as one repeated stamp, so
+/* A second top edge adjacent to the first would read as one repeated stamp, so
  * the alternate flips on X as well. Apply it to the second of two consecutive
  * boundaries. */
-.td-wave-top.td-wave-alt::before {
+.td-edge-top.td-edge-alt::before {
   transform: scaleY(-1) scaleX(-1);
 }
 
 /* --------------------------------------------------------------------------
  * CLEARANCE. Mandatory whenever the motif is on. Every value is sized off the
- * same clamp as the wave, so nothing has to be re-tuned per breakpoint.
+ * same clamp as the motif, so nothing has to be re-tuned per breakpoint.
  * -------------------------------------------------------------------------- */
 
-/* The owner of a TOP wave reserves room above its own content for the crest,
+/* The owner of a TOP edge reserves room above its own content for the crest,
  * plus 14px of breathing room. Expressed on Swift's own row-space variable, so
  * an editor changing the admin spacing step still lands on a cleared row. */
-.td-wave-top {
-  --dw-row-space-top: calc(var(--td-wave-h) + 14px);
+.td-edge-top {
+  --dw-row-space-top: calc(var(--td-edge-h) + 14px);
 }
 
-/* The owner of a BOTTOM wave keeps a small floor under its last line, so the
- * trough does not graze descenders. The wave itself overhangs the following
+/* The owner of a BOTTOM edge keeps a small floor under its last line, so the
+ * trough does not graze descenders. The motif itself overhangs the following
  * section, which is why this is 16px and not another full clamp. */
-.td-wave-bottom {
+.td-edge-bottom {
   --dw-row-space-bottom: 16px;
 }
 
-/* A section that RECEIVES a bottom wave from the element above it gets the
- * clamp, since that wave is painting into its top edge. */
-.td-wave-bottom + * {
-  padding-block-start: calc(var(--td-wave-h) + 14px);
+/* A section that RECEIVES a bottom edge from the element above it gets the
+ * clamp, since that crest is painting into its top edge. */
+.td-edge-bottom + * {
+  padding-block-start: calc(var(--td-edge-h) + 14px);
 }
 
-/* main itself, when the last row carries a bottom wave: the page's own end
- * padding has to clear the overhang or the wave crosses into the footer. */
-main:has(> .td-wave-bottom:last-child) {
-  padding-block-end: calc(var(--td-wave-h) - 22px);
+/* main itself, when the last row carries a bottom edge: the page's own end
+ * padding has to clear the overhang or the motif crosses into the footer. */
+main:has(> .td-edge-bottom:last-child) {
+  padding-block-end: calc(var(--td-edge-h) - 22px);
 }
 
-/* The footer instance. A footer wave is the common sitewide case and the one
- * that is easiest to get wrong, because the footer's own top padding is the
- * only thing between the crest and the last ink in main. */
-body > footer.td-wave-top,
-[data-swift-page-footer].td-wave-top {
-  padding-block-start: calc(var(--td-wave-h) + 14px);
+/* The footer instance. A footer crest is the common sitewide case and the one
+ * that is easiest to get wrong, because the footer's own top padding is the only
+ * thing between the crest and the last ink in main. */
+body > footer.td-edge-top,
+[data-swift-page-footer].td-edge-top {
+  padding-block-start: calc(var(--td-edge-h) + 14px);
 }
 
 /* =============================================================================

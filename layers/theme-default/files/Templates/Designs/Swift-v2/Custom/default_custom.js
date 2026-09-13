@@ -109,10 +109,85 @@
         });
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", anchorStrip);
-    } else {
+    /* ----------------------------------------------------------------------
+     * BLOCK 26 - APPLYING THE EDGE. A fourth shape, and the reason it is here
+     * rather than in the stylesheet or in content.
+     *
+     * WHY NOT A CSS CLASS FIELD. Swift grid rows have none. The stock
+     * Grid/Page/RowTemplates/Swift-v2_Row.cshtml emits data-swift-gridrow, a
+     * colour-scheme attribute and spacing attributes, and no class attribute
+     * authored from content; grid-row serialization carries no cssClass key
+     * either. A row therefore cannot opt itself in, and neither can a layer
+     * that ships rows.
+     *
+     * WHY NOT A PURE-CSS SELECTOR. It would work - hang the pseudo-elements off
+     * the adjacency of the colour-scheme attributes and the footer landmark, and
+     * never name a class at all. It is rejected because the classes ARE the
+     * contract: the clearance rules in block 22 key on them, a paintClearance
+     * gate entry names them, and every future instance a site adds is then one
+     * class rather than one more bespoke structural selector nobody can find.
+     * Adding the class and letting block 22 do the rest keeps one mechanism.
+     *
+     * THE THREE INSTANCES, which are the three the gate measures:
+     *   1. the home hero row            -> td-edge-bottom  (main .td-edge-bottom::after)
+     *   2. the first colour boundary    -> td-edge-top     (main .td-edge-top::before)
+     *      after it in the same main
+     *   3. the site footer              -> td-edge-top     (footer::before)
+     *
+     * SCOPE. Instances 1 and 2 are found through the hero itself: the row is the
+     * first direct child section of main that contains a Swift poster. A page
+     * with no poster hero - a PLP, a PDP, the cart - gets neither, without this
+     * file knowing any page id. Instance 3 is sitewide, which is what a crest
+     * over the footer is.
+     *
+     * THE SILHOUETTE IS NOT DECIDED HERE. The shape comes from --td-edge-mask,
+     * which defaults to the theme's neutral placeholder; a brand overrides the
+     * token in its own sheet and all three instances change at once. Nothing
+     * below knows or cares which path is in the token.
+     *
+     * IDEMPOTENT and marker-free: classList.add twice is once, and the classes
+     * are function, not proof-of-run.
+     * -------------------------------------------------------------------- */
+    function edgeMotif() {
+        var footer = document.querySelector("footer[data-swift-page-footer]");
+        if (footer) {
+            footer.classList.add("td-edge-top");
+        }
+
+        var main = document.querySelector("main");
+        if (!main) { return; }
+
+        var rows = main.querySelectorAll(":scope > section[data-swift-gridrow]");
+        if (!rows.length) { return; }
+
+        var heroIndex = -1;
+        for (var i = 0; i < rows.length; i++) {
+            if (rows[i].querySelector("[data-swift-poster]")) { heroIndex = i; break; }
+        }
+        if (heroIndex === -1) { return; }
+
+        rows[heroIndex].classList.add("td-edge-bottom");
+
+        var previousScheme = rows[heroIndex].getAttribute("data-dw-colorscheme") || "";
+        for (var j = heroIndex + 1; j < rows.length; j++) {
+            var scheme = rows[j].getAttribute("data-dw-colorscheme") || "";
+            if (scheme !== previousScheme) {
+                rows[j].classList.add("td-edge-top");
+                return;
+            }
+            previousScheme = scheme;
+        }
+    }
+
+    function run() {
         anchorStrip();
+        edgeMotif();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", run);
+    } else {
+        run();
     }
 
 })();

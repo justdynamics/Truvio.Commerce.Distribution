@@ -4,8 +4,9 @@
   "kind": "theme",
   "swiftVersion": "2.4.0",
   "files": [
+    "Images/Brand/edge-truvio.svg",
+    "Images/Brand/edge.svg",
     "Images/Brand/logo.svg",
-    "Images/Brand/wave.svg",
     "System/Styles/Buttons/default.css",
     "System/Styles/Buttons/default.json",
     "System/Styles/ColorSchemes/default.css",
@@ -62,9 +63,14 @@
       "why": "The wordmark slot, neutral grey. A re-skin overwrites this file in place instead of adding an asset and repointing every field that should have named it."
     },
     {
-      "path": "Images/Brand/wave.svg",
+      "path": "Images/Brand/edge.svg",
       "kind": "asset",
-      "why": "The wave motif as a readable single-path source. The CSS utility carries the same path inline as a mask data-URI; this file is what you edit when the curve changes."
+      "why": "The boundary motif as a readable single-path source, and deliberately the dullest silhouette available: a barely-perceptible bevel, because a motif with a personality is a brand decision and this layer is brand-free. The CSS utility carries the same path inline as a mask data-URI; this file is what you edit when the silhouette changes."
+    },
+    {
+      "path": "Images/Brand/edge-truvio.svg",
+      "kind": "asset",
+      "why": "The worked example of a brand-time motif swap: the Truvio edge, a softened zigzag with gently rounded peaks. Nothing paints it - the theme's --td-edge-mask token points at the neutral edge.svg - until a branded site sets that one token to this path as a data URI, which is the whole of the brand-time edit."
     }
   ]
 }

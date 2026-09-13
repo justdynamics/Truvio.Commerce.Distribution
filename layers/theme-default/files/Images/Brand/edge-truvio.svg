@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  edge-truvio.svg - the Truvio boundary motif, and the worked example of a brand-time
+  --td-edge-mask swap.
+
+  THE LINE. A softened zigzag: vertices every 120px alternating between y=58 and y=20,
+  each apex rounded with a quadratic over a 30px leg. Industrial and faceted rather than
+  organic - not a sine wave, and not a decorative flourish. The rounding is what keeps it
+  from reading as a warning stripe at 40px on a phone.
+
+  NOTHING PAINTS THIS BY DEFAULT. The theme's own token points at edge.svg, the neutral
+  placeholder. A Truvio-branded site sets one declaration in its own sheet, loaded after
+  default_custom.css:
+
+    :root { --td-edge-mask: url("data:image/svg+xml,...<path d=' the d= below '/>..."); }
+
+  and every instance the theme applies - the home hero, the home section boundary and the
+  footer crest - picks the new silhouette up at once. The clearance rules are sized off
+  --td-edge-h and are indifferent to which path is in the token, so a swap needs no
+  re-tuning anywhere.
+
+  Same rules as the placeholder: no fill attribute (it is a mask), no preserveAspectRatio
+  (the utility sets it on the mask side), and this file and the data-URI in the consuming
+  sheet are edited together.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 75" width="1440" height="75" aria-hidden="true" focusable="false">
+  <path d="M0,58 L91.4,29.1 Q120,20 148.6,29.1 L211.4,48.9 Q240,58 268.6,48.9 L331.4,29.1 Q360,20 388.6,29.1 L451.4,48.9 Q480,58 508.6,48.9 L571.4,29.1 Q600,20 628.6,29.1 L691.4,48.9 Q720,58 748.6,48.9 L811.4,29.1 Q840,20 868.6,29.1 L931.4,48.9 Q960,58 988.6,48.9 L1051.4,29.1 Q1080,20 1108.6,29.1 L1171.4,48.9 Q1200,58 1228.6,48.9 L1291.4,29.1 Q1320,20 1348.6,29.1 L1440,58 L1440,75 L0,75 Z"/>
+</svg>
