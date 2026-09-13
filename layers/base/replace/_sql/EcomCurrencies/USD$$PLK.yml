@@ -2,7 +2,7 @@
 "CurrencyLanguageId": "PLK"
 "CurrencySymbol": "$"
 "CurrencyName": "US Dollar"
-"CurrencyRate": 1
+"CurrencyRate": 100
 "CurrencyIsDefault": false
 "CurrencyCultureInfo": "en-US"
 "CurrencyPayGatewayCode": 0

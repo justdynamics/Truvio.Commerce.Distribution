@@ -16,7 +16,7 @@
     {
       "name": "base",
       "kind": "base",
-      "version": "3.3.0",
+      "version": "3.4.0",
       "status": "active"
     },
     {
@@ -28,7 +28,7 @@
     {
       "name": "feature-baseline-guide",
       "kind": "feature",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "status": "active"
     },
     {
@@ -93,7 +93,7 @@
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.13.0",
+      "version": "1.13.1",
       "status": "active"
     },
     {

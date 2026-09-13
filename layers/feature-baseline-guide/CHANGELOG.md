@@ -1,5 +1,11 @@
 # Changelog — feature-baseline-guide
 
+## 1.0.1
+
+The Pricing page states the currency rate base 3.4.0 ships: `USD$$ENU` at `CurrencyRate` 100 (parity
+with the default, a demo value), and a rate of 1 on any currency renders every price a hundred times
+over (Foundry #971). Text-only change to one paragraph.
+
 ## 1.0.0
 
 Initial release (foundry.mydwsite4.com e2e session, 2026-09-12). Content-only, **zero custom code**,
