@@ -1,4 +1,4 @@
--- ===========================================================================
+﻿-- ===========================================================================
 -- truvio-demo layer - the Truvio Commerce brand catalogue (V5-PLAN 2.4, D-B/D-D)
 -- ===========================================================================
 -- WHAT THIS IS
@@ -2303,6 +2303,78 @@ SELECT @TcSpecsFieldIds = STRING_AGG(r.FieldDisplayGroupFieldSystemName, ',')
  WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId;
 IF EXISTS (SELECT 1 FROM EcomFieldDisplayGroups WHERE FieldDisplayGroupSystemName = 'tc_specs' AND ISNULL(FieldDisplayGroupFieldIds, N'') <> ISNULL(@TcSpecsFieldIds, N''))
     UPDATE EcomFieldDisplayGroups SET FieldDisplayGroupFieldIds = ISNULL(@TcSpecsFieldIds, N'') WHERE FieldDisplayGroupSystemName = 'tc_specs';
+
+-- THE COMPLETENESS GUARDS, and they come before the resolution guard because a
+-- group can resolve and still be short. The measured failure was exactly that:
+-- EcomFieldDisplayGroupFields held 28 members for group 14 while the denormalised
+-- FieldDisplayGroupFieldIds column listed SIX names, and the sixth of them,
+-- ProductCategory|tc_content|tcMedia, is not a field on any host - the real system
+-- name is tcMediaSet (Foundry #1147). The relation was right, the column was typed,
+-- and nothing anywhere said so: no exception, no dw-error, and every row count
+-- correct. Whichever of the two stores the runtime reads, a band built from six
+-- names of which one cannot resolve shows one row on TCPROD0051 and none at all on
+-- TCPROD0001.
+--
+-- Three assertions, in the order they can fail:
+--   1. the relation holds EVERY tc_* category field, not a subset
+--   2. it holds every one of them PER CATEGORY, so a whole category cannot go
+--      missing while the total happens to come out right
+--   3. every name in the denormalised column resolves to a live category field,
+--      which is the assertion that would have caught tcMedia on the run that
+--      introduced it
+DECLARE @TcSpecsMembers INT = (SELECT COUNT(*) FROM EcomFieldDisplayGroupFields WHERE FieldDisplayGroupFieldGroupId = @TcSpecsGroupId);
+DECLARE @TcSpecsFields INT = (SELECT COUNT(*) FROM EcomProductCategoryField WHERE FieldCategoryId LIKE 'tc[_]%');
+DECLARE @TcSpecsMsg NVARCHAR(1000);
+IF @TcSpecsMembers <> @TcSpecsFields
+BEGIN
+    SET @TcSpecsMsg = CONCAT(N'truvio-catalog.sql: the tc_specs display group holds ', @TcSpecsMembers,
+                             N' member(s) against ', @TcSpecsFields,
+                             N' tc_* category field(s) in the database. The spec band is built from the members, so a short group shows a short table on every product and says nothing about why.');
+    RAISERROR(@TcSpecsMsg, 16, 1);
+END
+
+DECLARE @TcSpecsShortCategory NVARCHAR(400) = (
+    SELECT TOP 1 CONCAT(f.FieldCategoryId, N' (', COUNT(*), N' field(s), ',
+                        SUM(CASE WHEN EXISTS (SELECT 1 FROM EcomFieldDisplayGroupFields r
+                                               WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId
+                                                 AND r.FieldDisplayGroupFieldSystemName = 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId)
+                                 THEN 1 ELSE 0 END), N' member(s))')
+      FROM EcomProductCategoryField f
+     WHERE f.FieldCategoryId LIKE 'tc[_]%'
+     GROUP BY f.FieldCategoryId
+    HAVING COUNT(*) <> SUM(CASE WHEN EXISTS (SELECT 1 FROM EcomFieldDisplayGroupFields r
+                                              WHERE r.FieldDisplayGroupFieldGroupId = @TcSpecsGroupId
+                                                AND r.FieldDisplayGroupFieldSystemName = 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId)
+                                THEN 1 ELSE 0 END));
+IF @TcSpecsShortCategory IS NOT NULL
+BEGIN
+    SET @TcSpecsMsg = CONCAT(N'truvio-catalog.sql: a whole field category is under-represented in tc_specs - ', @TcSpecsShortCategory,
+                             N'. The group spans four categories and a product renders only the fields it carries a value for, so a missing category is invisible on three products in four.');
+    RAISERROR(@TcSpecsMsg, 16, 1);
+END
+
+DECLARE @TcSpecsUnresolvedNames INT = (
+    SELECT COUNT(*)
+      FROM STRING_SPLIT(ISNULL(@TcSpecsFieldIds, N''), ',') x
+     WHERE LTRIM(RTRIM(x.value)) <> N''
+       AND NOT EXISTS (SELECT 1 FROM EcomProductCategoryField f
+                        WHERE 'ProductCategory|' + f.FieldCategoryId + '|' + f.FieldId = LTRIM(RTRIM(x.value))));
+IF @TcSpecsUnresolvedNames > 0
+BEGIN
+    SET @TcSpecsMsg = CONCAT(N'truvio-catalog.sql: ', @TcSpecsUnresolvedNames,
+                             N' name(s) in FieldDisplayGroupFieldIds do not resolve to a live EcomProductCategoryField row. A typed name that resolves to nothing is silent - the measured case was ProductCategory|tc_content|tcMedia, where the real system name is tcMediaSet. The column is written FROM the relation, so an unresolved name here means the relation itself names a field that does not exist.');
+    RAISERROR(@TcSpecsMsg, 16, 1);
+END
+
+DECLARE @TcSpecsListedNames INT = (
+    SELECT COUNT(*) FROM STRING_SPLIT(ISNULL(@TcSpecsFieldIds, N''), ',') x WHERE LTRIM(RTRIM(x.value)) <> N'');
+IF @TcSpecsListedNames <> @TcSpecsMembers
+BEGIN
+    SET @TcSpecsMsg = CONCAT(N'truvio-catalog.sql: the denormalised FieldDisplayGroupFieldIds column lists ', @TcSpecsListedNames,
+                             N' name(s) against ', @TcSpecsMembers,
+                             N' relation member(s). The two stores disagreeing is the defect of #1147 - 6 against 28 on the measured host - and the column is meant to be WRITTEN FROM the relation rather than typed beside it.');
+    RAISERROR(@TcSpecsMsg, 16, 1);
+END
 
 -- THE RESOLUTION GUARD. The shape guard above asserts COLUMNS; it passed on the run
 -- that shipped a band with no rows, because column shape was never the thing that was
