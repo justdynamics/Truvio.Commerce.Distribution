@@ -92,6 +92,13 @@
       <Copy Sources="Name,Number,LongDescription,ShortDescription,ManufacturerName,MetaTitle,MetaKeywords,MetaDescription" Name="Free text search" SystemName="freetext" Type="System.String" Stored="false" Analyzed="true" Indexed="true" />
       <!-- A category field is added like this, together with SkipCategoryFields False above:
       <Field Source="ProductCategory|MyCategory|MyField" Name="MyField" SystemName="MyField" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
+      A GLOBAL custom product field (EcomProducts column, not a category field) is sourced as
+      CustomField_<FieldSystemName>:
+      <Field Source="CustomField_MyGlobalField" Name="MyGlobalField_Facet" SystemName="MyGlobalField_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
+      A Source that names no indexed field (Source="MyGlobalField" without the CustomField_
+      prefix, or a misspelt category path) builds without an error or a warning and indexes
+      nothing, so the facet bound to it renders empty. Check a new field's values in the
+      built index before binding a facet or a query parameter to it.
       -->
     </Fields>
     <FieldTypes />

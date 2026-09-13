@@ -37,6 +37,10 @@ Checks (all fail-closed; any failure -> exit 1):
                         FAILs; [] is how a layer states it ships none. .gitkeep excluded.
                         Every placeholders[].path must appear in one of the three arrays,
                         so the placeholder assert has a declared universe.
+ 11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
+                        content names a scheme Id defined by a kind:theme layer's
+                        files/System/Styles/ColorSchemes/*.json, compared case-sensitively
+                        (the theme CSS matches [data-dw-colorscheme] by exact value).
 
 Usage: pwsh tools/ci/Validate-Distribution.ps1  (run from repo root; exits 0 pass / 1 fail)
        pwsh tools/ci/Validate-Distribution.ps1 -RegenerateIndex  (rewrite the layers/INDEX.json
@@ -226,6 +230,42 @@ foreach ($d in $layerDirs) {
         }
         & $log ($universe -contains $path) "layer '$($d.Name)': placeholder '$path' is declared in files[]/repositories[]/itemtypes[]"
     }
+}
+
+# ---------------------------------------------------------------------------
+# 11. colorSchemeId values resolve to a theme-defined scheme (Foundry #1003).
+#     An unknown id is written, read back and deserialized without complaint; the row
+#     renders with no scheme. Compared case-sensitively.
+# ---------------------------------------------------------------------------
+$schemeIds = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::Ordinal)
+foreach ($d in $layerDirs) {
+    if (-not $manifests.ContainsKey($d.Name)) { continue }
+    if ("$($manifests[$d.Name].kind)" -ne 'theme') { continue }
+    $csDir = Join-Path $d.FullName 'files/System/Styles/ColorSchemes'
+    if (-not (Test-Path -LiteralPath $csDir)) { continue }
+    foreach ($f in @(Get-ChildItem -LiteralPath $csDir -Filter '*.json' -File)) {
+        $cs = Get-Content -LiteralPath $f.FullName -Raw -Encoding utf8 | ConvertFrom-Json
+        foreach ($s in @($cs.Schemes)) { if ($s.Id) { [void]$schemeIds.Add("$($s.Id)") } }
+    }
+}
+if ($schemeIds.Count -eq 0) {
+    & $log $false "color schemes: no kind:theme layer defines a ColorSchemes/*.json scheme"
+} else {
+    $badSchemes = @()
+    foreach ($d in $layerDirs) {
+        if (-not $manifests.ContainsKey($d.Name)) { continue }
+        foreach ($f in @(Get-ChildItem -LiteralPath $d.FullName -Recurse -File -Filter '*.yml' -ErrorAction SilentlyContinue)) {
+            $raw = Get-Content -LiteralPath $f.FullName -Raw -Encoding utf8
+            if (-not $raw -or $raw.IndexOf('colorSchemeId') -lt 0) { continue }
+            foreach ($mt in [regex]::Matches($raw, '"colorSchemeId":\s*"([^"]+)"')) {
+                $v = $mt.Groups[1].Value
+                if (-not $schemeIds.Contains($v)) {
+                    $badSchemes += "$($d.Name): $($f.FullName.Substring($d.FullName.Length + 1) -replace '\\', '/') '$v'"
+                }
+            }
+        }
+    }
+    & $log ($badSchemes.Count -eq 0) "color schemes: every colorSchemeId names one of $($schemeIds.Count) theme-defined scheme id(s)$(if($badSchemes.Count){' - unknown: ' + (($badSchemes | Select-Object -First 5) -join '; ')})"
 }
 
 # ---------------------------------------------------------------------------

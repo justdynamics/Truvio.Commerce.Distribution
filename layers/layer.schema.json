@@ -242,9 +242,9 @@
       "type": "array",
       "items": {
         "type": "string",
-        "pattern": "^[a-zA-Z0-9 ._/-]+$"
+        "pattern": "^[a-zA-Z0-9 ._/+-]+$"
       },
-      "description": "OPTIONAL declared REPOSITORY footprint - the repositories/ analog of files[], in the identical vocabulary: composed-site Files-relative paths (System/Repositories/<Repo>/<Name>.index, .query, .facets), never layer-relative ones. The layer stages repositories/<Repo>/<Name>.ext to System/Repositories/<Repo>/<Name>.ext. Declared so the staging set is DERIVABLE rather than a folder convention a consumer is expected to walk: a consumer that stages from the declared arrays stages these too, a manifest audit can see them, and a definition retired from the tree is detectable as retired because there is a previous declaration to diff against. Required whenever the layer ships a non-empty repositories/ tree; declare [] to state positively that it ships none. .gitkeep is never listed. Charset-constrained, traversal sequences ('..') rejected - same discipline as files[]."
+      "description": "OPTIONAL declared REPOSITORY footprint - the repositories/ analog of files[], in the identical vocabulary: composed-site Files-relative paths (System/Repositories/<Repo>/<Name>.index, .query, .facets, and the repository's Build+Index.task), never layer-relative ones. The layer stages repositories/<Repo>/<Name>.ext to System/Repositories/<Repo>/<Name>.ext. Declared so the staging set is DERIVABLE rather than a folder convention a consumer is expected to walk: a consumer that stages from the declared arrays stages these too, a manifest audit can see them, and a definition retired from the tree is detectable as retired because there is a previous declaration to diff against. Required whenever the layer ships a non-empty repositories/ tree; declare [] to state positively that it ships none. .gitkeep is never listed. Charset-constrained, traversal sequences ('..') rejected - same discipline as files[], plus '+', which Dynamicweb's fixed task file name Build+Index.task requires."
     },
     "itemtypes": {
       "type": "array",
