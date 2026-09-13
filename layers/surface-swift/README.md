@@ -1,6 +1,6 @@
 # surface-swift — the Swift storefront content surface
 
-**Version:** 1.0.0 · **Kind:** `surface` · **Swift:** 2.4.0 · **Proven on DW 10.28.1-PreRelease**
+**Kind:** `surface` · **Swift:** 2.4.0 · **Proven on DW 10.28.1-PreRelease**
 
 Born in the Swift 2.4 roll-forward base split: `base` 3.0.0 became **framework-only** and
 ALL Swift content moved here. This layer is what the Swift (Razor) frontend needs, packaged
@@ -14,6 +14,8 @@ storefront leg.
 | `replace/_content` | The full structural page tree of the `Swift 2` area (EN, area 3) — framework pages (Customer Center incl. per-role permissions, checkout, account, navigation), item types bindings, layouts. |
 | `merge/_content` | The ENTIRE former base merge tree: bootstrap content (Home, site chrome, About, posts, dealers, footer navs, newsletter examples) in the Swift 2 area — field-level merge, customer edits survive. |
 | `replace/_sql/UrlPath` | The friendly-URL redirect table (see the UrlPath decision below). |
+| `repositories/TruvioCommerce` | The storefront product repository: `Products.index`, `Products.query`, `Products.facets` and `Build+Index.task`. On a host whose index builds are drained by the Repository task handler, a repository folder with no `Build+Index.task` is never rebuilt, whatever a build call reports. |
+| `files/` | Template overrides and the assets they read, including `Images/Icons/cube.svg`, the icon every `Swift-v2_Dashboard_*` template reads. |
 | `itemtypes/` | **Its own 128 `ItemType_Swift-v2_*.xml` definitions from the official Swift v2.4.0 design package** — the surface registers its item types itself (self-contained; the gate overlays them via `Deploy-LayerFilesOverlay` before deserialize). |
 | `config/swift-content-2.4.json` | The content predicates: `Site framework` (Deploy, areaId 3) + the 10 Seed content predicates + UrlPath + the content-scoped exclude maps (`excludeFieldsByItemType`, `excludeXmlElementsByType`). |
 | `surface.contract-notes.json` | The content-scoped contract bits that moved OUT of `base.contract.json`: content anchors (area 3, `/swift-2`), per-environment Area exclusions, protected Swift item types, navDepth obligation, title rules — and the UrlPath decision record. |
@@ -31,8 +33,10 @@ The same decision is recorded in `layers/base/BASE.md`.
 
 ## Composition
 
-Editions compose this surface via `surfaces: ["surface-swift@1.0.0"]` (see
-`editions/swift-demo.json`). Gate order: base framework → sample-data catalog →
+Editions compose this surface via `surfaces: ["surface-swift@<version>"]`, where `<version>`
+is the `version` in this layer's `layer.json`; copy the ref from an edition that already pins
+it (`editions/swift-demo.json`, `editions/base-swift.json`) rather than typing it. The gate
+rejects a ref whose semver differs from `layer.json`. Gate order: base framework → sample-data catalog →
 **surface-swift** → feature fragments (features add content INTO these areas, so the
 surface lands first). The content asserts (language-layer round-trip, permissions parity,
 title integrity) bind to this layer's trees.

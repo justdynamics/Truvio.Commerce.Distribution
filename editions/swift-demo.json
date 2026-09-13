@@ -12,7 +12,7 @@
     "truvio-demo@1.7.0"
   ],
   "surfaces": [
-    "surface-swift@1.12.1"
+    "surface-swift@1.13.0"
   ],
   "sampleData": false,
   "themes": [

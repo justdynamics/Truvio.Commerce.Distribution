@@ -1,5 +1,49 @@
 # Changelog — surface-swift
 
+## 1.13.0
+
+### The TruvioCommerce repository ships its Build+Index.task (Foundry #1070)
+
+`repositories/TruvioCommerce/` shipped `Products.index`, `Products.query` and
+`Products.facets` and no task file, and no layer in the distribution shipped one. On a host
+whose index builds are drained by the Repository task handler, a repository folder with no
+`Build+Index.task` is never rebuilt, while a build call still answers success. The layer now
+ships `Build+Index.task` (the stock Swift 2.4 `ProductsFrontend` task: `Products.index`,
+build `Full`, repeat 1440) and declares it in `repositories[]`.
+
+### The dashboard templates' cube icon ships with them (Foundry #686)
+
+Five `Swift-v2_Dashboard_*` templates read `/Files/Images/Icons/cube.svg`, and no layer
+shipped it. `ReadFile` returns nothing for a missing file, so the tile rendered an empty
+coloured badge with no error. `files/Images/Icons/cube.svg` is the stock Swift v2.4.0 icon,
+byte-identical to the design package's, and is declared in `files[]`.
+
+### Every colorSchemeId names a scheme the theme defines (Foundry #1003)
+
+The About and Contact rows `grid-row-2` carried `lightgrey`, which no scheme group defines;
+both read `lightgrey1`. The Desktop Footer `grid-row-2` and Mobile Footer `grid-row-4` rows
+carried `Dark` against the id `dark`, and the theme CSS matches `[data-dw-colorscheme]` by
+exact value; both read `dark`. `tools/ci/Validate-Distribution.ps1` check 11 fails any
+non-empty `colorSchemeId` that no theme layer's `ColorSchemes/*.json` defines.
+
+### The seo descriptions follow the placeholder convention (Foundry #976, #1109)
+
+The five `seo.description` values on Home, the Home preset, About, Contact and the footer
+About us page carried the design package's vendor copy into the meta description and
+`og:description`. Each now reads as a function-descriptive `Placeholder` string, in the merge
+tree and in `Page presets/`, so a page rebuilt from the preset does not reacquire the vendor
+sentence.
+
+### Smaller corrections
+
+- `templates.manifest.yml` no longer lists `Swift-v2_ProductComponentSlider` as referenced by
+  Product Details; no serialized paragraph uses it (Foundry #631).
+- `Products.index` carries a commented global-field example (`Source="CustomField_<Field>"`)
+  and states that a Source naming no indexed field builds silently and indexes nothing
+  (Foundry #1197).
+- The README carries no hard-coded version; the composition example points at the edition
+  pin (Foundry #972).
+
 ## 1.12.1
 
 ### The ProductMedia header said the PLP was serving those SVGs; it was not (Foundry #1171)

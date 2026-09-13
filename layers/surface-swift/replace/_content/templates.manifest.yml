@@ -226,10 +226,6 @@
   kind: item-type
   referencedBy:
   - Product Details
-- path: Swift-v2_ProductComponentSlider
-  kind: item-type
-  referencedBy:
-  - Product Details
 - path: Swift-v2_ProductDefaultImage
   kind: item-type
   referencedBy:
