@@ -123,173 +123,360 @@ IF @TcImagesGroupId IS NULL
 -- ---------------------------------------------------------------------------
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0001-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0001-2', 'TCPROD0001', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0001-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0001-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0001-3', 'TCPROD0001', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0001-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0002-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0002-2', 'TCPROD0002', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0002-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0003-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0003-2', 'TCPROD0003', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0003-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0004-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0004-2', 'TCPROD0004', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0004-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0004-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0004-3', 'TCPROD0004', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0004-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0005-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0005-2', 'TCPROD0005', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0005-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0006-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0006-2', 'TCPROD0006', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0006-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0006-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0006-3', 'TCPROD0006', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0006-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0007-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0007-2', 'TCPROD0007', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0007-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0008-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0008-2', 'TCPROD0008', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0008-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0009-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0009-2', 'TCPROD0009', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0009-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0009-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0009-3', 'TCPROD0009', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0009-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0010-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0010-2', 'TCPROD0010', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0010-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0011-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0011-2', 'TCPROD0011', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0011-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0011-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0011-3', 'TCPROD0011', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0011-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0012-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0012-2', 'TCPROD0012', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0012-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0013-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0013-2', 'TCPROD0013', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0013-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0014-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0014-2', 'TCPROD0014', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0014-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0014-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0014-3', 'TCPROD0014', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0014-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0015-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0015-2', 'TCPROD0015', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0015-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0016-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0016-2', 'TCPROD0016', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0016-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0016-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0016-3', 'TCPROD0016', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0016-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0017-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0017-2', 'TCPROD0017', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0017-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0018-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0018-2', 'TCPROD0018', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0018-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0019-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0019-2', 'TCPROD0019', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0019-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0019-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0019-3', 'TCPROD0019', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0019-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0020-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0020-2', 'TCPROD0020', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0020-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0021-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0021-2', 'TCPROD0021', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0021-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0021-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0021-3', 'TCPROD0021', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0021-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0022-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0022-2', 'TCPROD0022', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0022-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0023-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0023-2', 'TCPROD0023', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0023-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0024-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0024-2', 'TCPROD0024', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0024-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0024-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0024-3', 'TCPROD0024', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0024-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0025-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0025-2', 'TCPROD0025', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0025-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0026-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0026-2', 'TCPROD0026', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0026-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0026-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0026-3', 'TCPROD0026', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0026-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0027-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0027-2', 'TCPROD0027', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0027-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0028-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0028-2', 'TCPROD0028', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0028-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0029-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0029-2', 'TCPROD0029', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0029-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0029-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0029-3', 'TCPROD0029', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0029-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0030-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0030-2', 'TCPROD0030', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' WHERE DetailId = 'TC-GAL-TCPROD0030-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0031-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0031-2', 'TCPROD0031', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0031-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0031-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0031-3', 'TCPROD0031', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0031-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0032-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0032-2', 'TCPROD0032', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0032-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0033-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0033-2', 'TCPROD0033', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0033-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0034-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0034-2', 'TCPROD0034', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0034-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0034-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0034-3', 'TCPROD0034', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0034-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0035-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0035-2', 'TCPROD0035', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0035-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0036-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0036-2', 'TCPROD0036', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0036-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0036-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0036-3', 'TCPROD0036', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0036-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0037-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0037-2', 'TCPROD0037', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0037-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0038-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0038-2', 'TCPROD0038', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0038-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0039-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0039-2', 'TCPROD0039', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0039-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0039-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0039-3', 'TCPROD0039', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0039-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0040-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0040-2', 'TCPROD0040', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0040-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0041-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0041-2', 'TCPROD0041', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0041-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0041-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0041-3', 'TCPROD0041', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0041-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0042-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0042-2', 'TCPROD0042', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0042-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0043-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0043-2', 'TCPROD0043', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0043-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0044-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0044-2', 'TCPROD0044', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0044-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0044-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0044-3', 'TCPROD0044', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0044-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0045-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0045-2', 'TCPROD0045', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' WHERE DetailId = 'TC-GAL-TCPROD0045-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-price-structures.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0046-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0046-2', 'TCPROD0046', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0046-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0046-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0046-3', 'TCPROD0046', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0046-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0047-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0047-2', 'TCPROD0047', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0047-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0048-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0048-2', 'TCPROD0048', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0048-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0049-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0049-2', 'TCPROD0049', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0049-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0049-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0049-3', 'TCPROD0049', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0049-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0050-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0050-2', 'TCPROD0050', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-media.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' WHERE DetailId = 'TC-GAL-TCPROD0050-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-media.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0051-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0051-2', 'TCPROD0051', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0051-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0051-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0051-3', 'TCPROD0051', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0051-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0052-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0052-2', 'TCPROD0052', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0052-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0053-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0053-2', 'TCPROD0053', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0053-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0054-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0054-2', 'TCPROD0054', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0054-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0054-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0054-3', 'TCPROD0054', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0054-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0055-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0055-2', 'TCPROD0055', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0055-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0056-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0056-2', 'TCPROD0056', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0056-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0056-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0056-3', 'TCPROD0056', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0056-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0057-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0057-2', 'TCPROD0057', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0057-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0058-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0058-2', 'TCPROD0058', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0058-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0059-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0059-2', 'TCPROD0059', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0059-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0059-3')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0059-3', 'TCPROD0059', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg', 3, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' WHERE DetailId = 'TC-GAL-TCPROD0059-3' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-documents.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 IF NOT EXISTS (SELECT 1 FROM EcomDetails WHERE DetailId = 'TC-GAL-TCPROD0060-2')
     INSERT INTO EcomDetails (DetailId, DetailProductId, DetailVariantId, DetailLanguageId, DetailType, DetailValue, DetailSortOrder, DetailIsDefault) VALUES ('TC-GAL-TCPROD0060-2', 'TCPROD0060', '', 'ENU', 0, '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg', 2, 0);
+ELSE
+    UPDATE EcomDetails SET DetailValue = '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' WHERE DetailId = 'TC-GAL-TCPROD0060-2' AND DetailValue <> '/Files/Images/TruvioCommerce/products/tc-tile-relations.svg' AND ISNULL(DetailsName, N'') <> N'brand-photograph';
 
+
+-- WHY EVERY GALLERY ROW ABOVE CARRIES AN ELSE (Foundry #1137). The guard is
+-- IF NOT EXISTS on DetailId, and 1.2.0 seeded these same DetailIds with SCENIC
+-- paths. Only DetailValue changed between 26bb0a06 and 4a4cd05b, so on a host
+-- seeded at 1.2.0 every row already existed, nothing was updated, and the closing
+-- PRINT reported 84 tile rows over 84 scenic ones. Measured there:
+-- 45 + 24 + 15 = 84 scenic gallery rows and ZERO tile gallery rows, with the
+-- resolution guard green throughout because it accepted both prefixes.
+--
+-- A layer that declares itself idempotent has to REPAIR a row it previously wrote
+-- wrong, not skip it. Each row therefore converges to the value this version
+-- ships, and the UPDATE is a no-op on a host that already carries it.
+--
+-- THE ONE ROW IT LEAVES ALONE is a row the photographic opt-in
+-- (tools/truvio-gallery-photos.sql) has stamped DetailsName = 'brand-photograph'.
+-- That swap is a deliberate choice a brand step makes, and a Replace that silently
+-- undid it would make the opt-in unusable. The stamp is the ONLY thing that can
+-- distinguish the two states: the 1.2.0 residue and the opt-in result point at the
+-- same five files, so the path cannot tell them apart and neither can a count.
 
 -- The gallery must never repeat a picture. The five slots above are fixed
 -- literals, so a master whose own default tile is one of them would open on the
@@ -1785,6 +1972,20 @@ DECLARE @TcUnshippedGalleryAssets INT = (
      WHERE d.DetailId LIKE 'TC-GAL-%'
        AND d.DetailValue NOT LIKE '/Files/Images/TruvioCommerce/products/%'
        AND d.DetailValue NOT LIKE '/Files/Images/TruvioCommerce/scenic/%');
+-- THE STALE-GALLERY GUARD. The prefix guard below accepts BOTH the products/ and
+-- the scenic/ prefixes, which is precisely what made it blind to 84 stale rows.
+-- This one asks the question the prefix guard cannot: is a gallery row still
+-- carrying a scenic path WITHOUT the opt-in stamp that would explain it? If so the
+-- convergence above did not reach it and the layer is shipping 1.2.0's assignment
+-- while reporting 1.3.0's.
+DECLARE @TcUnconvergedGallery INT = (
+    SELECT COUNT(*) FROM EcomDetails
+     WHERE DetailId LIKE 'TC-GAL-%'
+       AND DetailValue LIKE '/Files/Images/TruvioCommerce/scenic/%'
+       AND ISNULL(DetailsName, N'') <> N'brand-photograph');
+IF @TcUnconvergedGallery > 0
+    RAISERROR(N'truvio-pdp.sql: a gallery row still carries a scenic path and no brand-photograph stamp, so it is 1.2.0 residue this run failed to converge rather than a deliberate opt-in. The row count and the prefix guard are both green in this state, which is how 84 stale rows survived every subsequent Replace.', 16, 1);
+
 IF @TcUnshippedGalleryAssets > 0
     RAISERROR(N'truvio-pdp.sql: a gallery row points at an asset outside this layer''s own files[] and outside the brand manifest''s scenic targets. A data layer never references an asset it cannot account for: the row count stays green while every thumbnail 404s, which is exactly how 84 rows shipped against five files no layer carried.', 16, 1);
 

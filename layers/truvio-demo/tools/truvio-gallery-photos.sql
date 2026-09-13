@@ -1,4 +1,4 @@
--- ===========================================================================
+﻿-- ===========================================================================
 -- truvio-gallery-photos.sql - OPTIONAL, and deliberately NOT declared in
 -- truvio-demo/layer.json sql[].
 --
@@ -27,9 +27,28 @@
 -- so the default render is self-contained and every thumbnail resolves. This
 -- script is an upgrade of that render, never a prerequisite for it.
 --
--- TO REVERSE IT, re-run truvio-pdp.sql: its gallery section is an IF NOT EXISTS
--- upsert on DetailId, so it will not overwrite these values - delete the
--- TC-GAL-% rows first, then re-run it.
+-- AND THAT SENTENCE WAS FALSE ON A HOST SEEDED AT 1.2.0, which is worth stating
+-- because it is how this script's own guards stayed green over a defect. 1.2.0
+-- seeded the gallery SCENIC, 1.3.0's upsert was IF NOT EXISTS on DetailId, so such
+-- a host arrived here already carrying 84 scenic rows and this script re-derived
+-- the ring rather than performing the swap it exists to perform: 84 rows before and
+-- after, 0 added, 0 removed, 60 of 84 values changed, `products/` count 0 in both
+-- states (Foundry #1137, #1145). truvio-pdp.sql now CONVERGES each gallery row
+-- instead of skipping it, so the sentence above is true again on every host.
+--
+-- THE STAMP, and why it exists. Every row this script writes is stamped
+-- DetailsName = 'brand-photograph'. truvio-pdp.sql's convergence skips a stamped
+-- row, so a later Replace cannot silently undo a swap a brand step chose to make.
+-- The stamp is the ONLY thing that can distinguish the two states: 1.2.0's residue
+-- and this script's result point at the same five files, so neither the path nor
+-- any count can tell them apart.
+--
+-- TO REVERSE IT, clear the stamp and re-run truvio-pdp.sql:
+--
+--   UPDATE EcomDetails SET DetailsName = NULL WHERE DetailId LIKE 'TC-GAL-%';
+--
+-- the convergence then repoints every row back onto the shipped tiles. Deleting the
+-- rows first is no longer necessary.
 -- ===========================================================================
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
@@ -45,14 +64,18 @@ BEGIN TRAN;
         (3, '/Files/Images/TruvioCommerce/scenic/product-visual.png'),
         (4, '/Files/Images/TruvioCommerce/scenic/ui-composite.webp')) AS v(n, path))
 UPDATE g
-   SET g.DetailValue = p.path
+   SET g.DetailValue = p.path,
+       g.DetailsName = N'brand-photograph'
   FROM EcomDetails g
   JOIN TcPhotos p
     ON p.n = (ISNULL(TRY_CAST(SUBSTRING(g.DetailProductId, 7, 4) AS INT), 0) + g.DetailSortOrder) % 5
  WHERE g.DetailId LIKE 'TC-GAL-%'
    AND g.DetailVariantId = '';
 
-DECLARE @TcPhotoRows INT = (SELECT COUNT(*) FROM EcomDetails WHERE DetailId LIKE 'TC-GAL-%' AND DetailValue LIKE '/Files/Images/TruvioCommerce/scenic/%');
+-- The swap is proven by the STAMP, not by the prefix. A host seeded at 1.2.0
+-- already carried scenic paths before this script ran, so a prefix count was green
+-- on a run that swapped nothing.
+DECLARE @TcPhotoRows INT = (SELECT COUNT(*) FROM EcomDetails WHERE DetailId LIKE 'TC-GAL-%' AND DetailValue LIKE '/Files/Images/TruvioCommerce/scenic/%' AND ISNULL(DetailsName, N'') = N'brand-photograph');
 IF @TcPhotoRows = 0
     RAISERROR(N'truvio-gallery-photos.sql: no gallery row was swapped. Either truvio-pdp.sql has not run on this host, or the TC-GAL-%% rows were seeded under different ids.', 16, 1);
 
