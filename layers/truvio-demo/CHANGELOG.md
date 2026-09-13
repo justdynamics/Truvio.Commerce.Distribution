@@ -1,5 +1,136 @@
 # Changelog — truvio-demo
 
+## 1.2.0
+
+Density parity, data half (V5-PLAN round two, items 1-4), against the measured parity
+report `parity-gaps.md` (2026-09-13): marine's PLP row and flagship PDP compared
+element-for-element with truvio's, and the owner's filter made binding on the result -
+**an example ships only if Swift shows it.**
+
+### The taxonomy is re-screened (report section 3, "Backend-only taxonomy")
+
+Eight of the twelve subgroups named a concept with no storefront surface at all. The
+report's own table proposed the replacements and they are taken, with two of its
+alternatives chosen for the Pages/Paragraphs pair:
+
+| Retired | Replaced by | What draws it |
+|---|---|---|
+| Workflows | **Units & Measures** | the unit selector on add-to-cart |
+| Completeness | **Stock & Delivery** | the stock count, status and delivery line |
+| Permissions | **Documents** | the documents table |
+| Impersonation | **Relations** | the related-products strip |
+| Item Types | **Bundles & BOM** | the package-contents list |
+| Pages | **Media & Galleries** | the gallery and its thumbnails |
+| Paragraphs | **Currencies & VAT** | the figure itself |
+| Groups | **Contract Pricing** | your price against list |
+
+`Variants`, `Price Structures`, `Discounts` and `Assortments` are unchanged - all four
+were already showable. Twelve total, three under each of the four top groups, which took
+six bands re-homing so each top keeps 15 products and every child reads under its parent.
+
+Concept tokens, SKUs, names and concept tiles follow the group, and so do the order-line
+snapshots: a demo order history citing `TC-CMP-0007` against a catalogue that no longer
+has that number is a broken page. D-B is untouched - every new name is still PIM,
+Commerce or CMS vocabulary, never a real product domain.
+
+The 28 category fields were re-screened by the same filter. `Completeness Score` was the
+report's named example - an enrichment metric rendered as a shopper-facing spec row - and
+it is gone with `Workflow State`, `Permission Grant`, `Impersonation Scope` and the rest.
+What replaces them is what a buyer reads: unit of measure, pack quantity, net weight,
+dimensions, material class, rating, compatibility, and commercial terms named from
+commerce vocabulary.
+
+A new section 0 runs first and converges a host seeded under the retired taxonomy:
+renames in place across the five tables a GroupId reaches, rather than inserting a second
+taxonomy beside the first. The category values are rebuilt rather than patched - after a
+re-screen a value can be stale three ways at once, and reconciling them one at a time
+left four survivors on the first measured pass.
+
+### The row carries B2B information, richer than marine's (report section 1)
+
+The report found marine's signed-in half **faked**: 22 `EcomPrices` rows, none with a
+user group, no dealer discount rows anywhere, the anonymous GA4 payload already carrying
+the figure the signed-in dealer sees. `truvio-b2b.sql` makes it data.
+
+- 60 short descriptions, one sentence each, every one distinct.
+- 60 stock positions on a five-step profile - healthy, low, zero-but-orderable against a
+  date the row carries, mid, deep - with 60 matching stock-unit rows on the default
+  location. SHOP1 carries `ShopStockLocationID = 0`, so the storefront reads the
+  product-level number and these are the breakdown a multi-warehouse demo switches on,
+  summing to exactly the same figure so the two can never disagree.
+- **96 real `PriceUserGroupId` prices** scoped to the group the buyer persona belongs to:
+  60 masters and all 36 variant combinations, because a tier change that threw the buyer
+  back to list price reads as a bug. Four in five discount and the fifth is at list on
+  purpose, so the demo has a control. Every amount is derived from the row's own list
+  price rather than typed.
+- 30 quantity-break rows - a three-step ladder on all six variant masters and all five
+  Price Structures masters - where 1.1.x shipped one ladder on one product.
+- 5 new contract prices on `TC-100200` beside the one already there, which is kept: the
+  band named for the mechanism demonstrated none of it.
+
+### The detail page is filled (report section 2)
+
+The report counted marine's flagship PDP at 21 sections and truvio's at 8, four empty, the page
+measuring 84 characters of main text. `truvio-pdp.sql` supplies the data half:
+
+- **Gallery**, 2 to 4 images per master: the concept tile plus the photographic frame its
+  top group is branded with, plus a detail shot on two rows in five. The photographic
+  targets are the Distribution's own `brand/brand-assets.manifest.json` entries by their
+  `target` path - fetched at brand time, never committed - so a solution that has not run
+  its brand step shows the tile alone rather than a broken page.
+- **Documents** as the platform shape the report names: one `Manuals` `EcomDetailsGroup`
+  (extensions `pdf`, `InheritanceType 3`, `ControlType 0`) with 120 `EcomDetails` rows,
+  which is what `Swift-v2_ProductMediaTable` binds to when configured
+  `ImageAssets=["Manuals"]`. Those three column values are read off a live DW 10 solution
+  carrying a working group rather than guessed - a NULL `ControlType`/`InheritanceType`
+  there is the silent failure the report records - and a host already carrying the
+  half-made group is converged.
+- **Eight one-page PDFs** in `files/Documents/TruvioCommerce/`, a datasheet and an install
+  guide per top group, generated by `tools/make-documents.py` and about a kilobyte each
+  because the base-14 Helvetica face embeds nothing. The generator is byte-deterministic,
+  so regenerating what is committed shows no diff.
+- **324 relations** in three groups. Related products gives every master the other three
+  rows in its band; Accessories gives it the same slot in the two sibling bands under its
+  top group; Spare parts carries the kit story both ways, because a relation that reads
+  from one end only is half a demo. Marine's own "you'll also need" strip is an empty div
+  under a stranded head; every master here shows between five and eight.
+- **Specification density to seven of seven** on every page, 240 more values.
+
+### The variant selector had no axes to draw (report section 3)
+
+The report found it empty even signed in, on the product whose own Overview copy tells the
+reader to open it, with every count correct and nothing erroring. Diagnosed on the live
+host: `EcomVariantGroupProductRelation` held **zero rows**, for this layer and for the
+whole database. That table answers the selector's first question - which axes does this
+product use. The option relations answer which values on an axis a product offers; the
+combination rows answer what each intersection costs. Neither answers the first, and with
+no answer the control draws nothing. `ProductVariantGroupCounter = 0` on every master was
+the same fact stated a second way.
+
+Twelve rows fix it, and they go into section 4 beside the variant data they complete. The
+id column is a NOT NULL nvarchar key rather than an identity, measured off `sys.columns`;
+the counters are derived from the rows rather than typed.
+
+### Guards, not row counts
+
+Every new section ends in a **resolution guard** that asserts what the PAGE needs, because
+a row count was green throughout the period the spec band, the selector and the signed-in
+price were each silently empty. Masters priced below list for the persona; two images, two
+documents, two relations and exactly seven specification values per master; and six
+variant masters each binding two axes that offer at least two options the master carries.
+
+### Currency: already fixed, and verified
+
+The report's closing defect (`$4,500.00` where `$45.00` belongs) was real at the step-7
+capture and is **already closed** by 1.1.1's section 8, which moves every currency row
+still at the placeholder rate 1 to 100. Verified on the live host this round:
+`EcomCurrencies` reads `USD 100` and `EUR 100 (default)`, with the eight other enabled
+currencies at their own real rates. No change was made here; the report cites pre-fix
+evidence.
+
+Proven on `dwsalesweb\SQL2022` / `foundry.mydwsite4.com` with all four scripts applied in
+order inside a single rolled-back transaction. Nothing on the live host was modified.
+
 ## 1.1.1
 
 **The spec group existed, was flagged for the frontend, carried 28 members — and resolved to

@@ -1,7 +1,7 @@
 -- ===========================================================================
 -- truvio-demo layer - what fills the product detail page
 -- ===========================================================================
--- The parity report counted marine's aurora PDP at twenty-one sections and
+-- The parity report counted marine's flagship PDP at twenty-one sections and
 -- truvio's at eight, four of them empty, with the whole page measuring 84
 -- characters of main text. Four of those sections had no DATA to draw, which is
 -- what this file supplies: a gallery, a documents table, relations, and a
