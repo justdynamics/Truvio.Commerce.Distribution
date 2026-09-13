@@ -27,7 +27,8 @@
       {
         "kind": "authenticated-body-contains",
         "path": "/swift-2/customer-center/my-returns",
-        "pattern": "Add new request"
+        "pattern": "Add new request",
+        "requiresFixtures": [ "FIXT-ORDER-RMA1" ]
       }
     ],
     "criticalPaths": [

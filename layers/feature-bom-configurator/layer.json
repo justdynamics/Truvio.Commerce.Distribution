@@ -36,7 +36,8 @@
           }
         ],
         "expectedChildLines": 2,
-        "renderProof": false
+        "renderProof": false,
+        "requiresFixtures": [ "PACK-BOM-0001", "PACK-BOM-FORK-2", "PACK-BOM-RACK-2" ]
       }
     ],
     "criticalPaths": [

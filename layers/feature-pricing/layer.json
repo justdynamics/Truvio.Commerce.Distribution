@@ -38,7 +38,8 @@
         "cartPath": "/swift-2/cart/",
         "productId": "PACK-RPP-PROD2",
         "quantity": 1,
-        "expectedAmount": 1399
+        "expectedAmount": 1399,
+        "requiresFixtures": [ "PACK-RPP-PROD2" ]
       },
       {
         "kind": "cart-price",
@@ -46,7 +47,8 @@
         "cartPath": "/swift-2/cart/",
         "productId": "PACK-RPP-PROD1",
         "quantity": 5,
-        "expectedAmount": 4500
+        "expectedAmount": 4500,
+        "requiresFixtures": [ "PACK-RPP-PROD1" ]
       }
     ]
   }
