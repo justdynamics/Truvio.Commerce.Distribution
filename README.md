@@ -29,7 +29,9 @@ A **layer** is one versioned unit: a `layer.json` manifest + serialized content 
 trees `replace/` source-wins, `merge/` field-level) and/or a `files/` disk overlay. Its
 `kind` (`base` / `feature` / `surface` / `sample-data` / `theme`)
 says how it composes — the dir-name prefix equals the kind (`feature-*`,
-`surface-*`, `theme-*`; `base` and `sample-data` are singletons). See [LAYERS.md](LAYERS.md) for the prefix→lane table.
+`surface-*`, `theme-*`; `base` is a singleton). Two layers carry kind `sample-data`: `sample-data`,
+the gate's marker-string fixtures on the `sampleData` toggle, and `truvio-demo`, the Truvio
+Commerce brand catalogue the `swift-demo` edition composes. See [LAYERS.md](LAYERS.md) for the prefix→lane table.
 
 An **edition** is a composition — `from` a privileged base + an ordered `add` of layers,
 plus optional `surfaces`, `sampleData`, and `themes`. Additions bind ONLY to the

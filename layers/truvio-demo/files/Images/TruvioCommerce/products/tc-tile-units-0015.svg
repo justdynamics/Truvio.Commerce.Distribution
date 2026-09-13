@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" width="480" height="480" role="img" aria-label="Truvio UNITS 15 tile">
+  <title>Truvio UNITS 15</title>
+  <rect width="480" height="480" fill="#E7EEF5"/>
+  <rect x="40" y="40" width="400" height="400" rx="16" fill="#35608A"/>
+  <rect x="40" y="40" width="400" height="8" fill="#1F3A55"/>
+  <g transform="translate(400 96) rotate(288)"><path d="M0 -30 L30 0 L0 30 Z" fill="#E7EEF5" opacity="0.30"/></g>
+  <text x="72" y="118" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="22" font-weight="600" letter-spacing="2.5" fill="#E7EEF5" opacity="0.85">UNITS</text>
+  <text x="240" y="300" text-anchor="middle" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="184" font-weight="700" letter-spacing="-4" fill="#FFFFFF">15</text>
+  <rect x="72" y="340" width="22" height="22" rx="5" fill="#E7EEF5" opacity="0.85"/>
+  <rect x="106" y="340" width="22" height="22" rx="5" fill="#E7EEF5" opacity="0.85"/>
+  <rect x="140" y="340" width="22" height="22" rx="5" fill="#E7EEF5" opacity="0.85"/>
+  <rect x="174" y="340" width="22" height="22" rx="5" fill="#E7EEF5" opacity="0.85"/>
+  <rect x="208" y="340" width="22" height="22" rx="5" fill="#E7EEF5" opacity="0.85"/>
+  <text x="240" y="412" text-anchor="middle" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="700" letter-spacing="6" fill="#E7EEF5">TRUVIO</text>
+</svg>

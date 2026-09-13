@@ -1,5 +1,29 @@
 # Changelog — surface-swift
 
+## 1.12.1
+
+### The ProductMedia header said the PLP was serving those SVGs; it was not (Foundry #1171)
+
+Comment only, no template logic and no serialized content changed.
+
+1.12.0's header wrote that because `Swift-v2_ProductDefaultImage.cshtml` applies no format
+filter, "the identical SVG rows have been serving through GetImage.ashx on the listing page
+the whole time". The first half is right and the conclusion is wrong. The listing page
+EMITTED an `img` node for every SVG row, which is why its counts were green. It never served
+one. The `src` on that node is a `GetImage.ashx` url, and `GetImage.ashx` decodes with
+SixLabors.ImageSharp, which ships no SVG decoder:
+
+    Image cannot be loaded. Available decoders: Webp, TIFF, GIF, TGA, JPEG, PNG, PBM, BMP
+
+Measured on the composed host: **17 of 17** `tc-*` image requests on one page load answered
+HTTP 500 - with no width argument, with width alone and with `width&format` alike - and the
+slides read `complete=true` with `naturalWidth=0`.
+
+The asymmetry between the two templates is still real and still the finding, only narrower
+than it was written: this template renders no node, the other renders a node that paints
+nothing. The catalogue half is fixed in `truvio-demo` 1.7.0, which points every product row
+at a PNG.
+
 ## 1.12.0
 
 ### The buy panel gets a row per component, so nine paragraphs render nine (Foundry #1165)
@@ -335,6 +359,25 @@ at nothing and six files were never staged, silently, in both directions at once
 **The two Overview rows have never been staged by any deploy of this layer**, so the
 next run is the first on which they render. That is composition which has not been
 seen, not composition that regressed, and it wants one look.
+## 1.9.1
+
+The Features and FAQ section heads get their bodies (V5-PLAN round two, item 3).
+
+1.8.0 shipped `<h2 id="features">` and `<h2 id="faq">` as `Swift-v2_Text` paragraphs with
+an empty `Text` field, on the stated understanding that the data half would fill them. It
+does, here. Both are product-independent copy on the shared detail page, which is how
+marine's own five-question FAQ works, so they live in the paragraph rather than on a
+product row.
+
+Features is six lines, and every one of them names something the page beside it actually
+draws: the unit the quantity is calculated in, the account price against list, the
+quantity ladder, the stock position, the documents table, the option selectors. FAQ is
+six questions answering what a B2B shopper asks when a price is hidden until sign-in and
+a row is orderable at zero stock.
+
+A stranded section head is the defect the parity report named on marine's flagship page -
+`RelationType='related'` over an empty div - and these two were the last of them on this
+PDP.
 
 ## 1.9.0
 

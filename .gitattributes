@@ -1,0 +1,17 @@
+# The generated concept and per-product SVG tiles (layers/truvio-demo/tools/make-tiles.py)
+# regenerate byte-identical, but a clone with core.autocrlf=true materialises them CRLF
+# while the generator and the committed blob are LF. A retest that diffs a fresh generator
+# run against the WORKING TREE then reports 120 of 120 files "different" on a line-ending
+# delta alone, while the same diff against the committed blobs is 120 of 120 identical
+# (Foundry #1157 retest). Pinning the working-tree form to LF makes the two diffs agree, so
+# a determinism check measures the generator rather than the checkout.
+*.svg -text
+
+# The PNG twins the same generator writes (Foundry #1171). GetImage.ashx decodes with
+# SixLabors.ImageSharp, which ships no SVG decoder and answers HTTP 500 for every .svg
+# handed to it, so the product rows point at raster and the raster is what ships. A PNG
+# is a deflate stream inside a CRC-checked container: a line-ending translation does not
+# reformat it, it corrupts it, and a text diff of it is noise no reviewer can read.
+# Marking it binary stops both, and pairs with the LF pin above so one regeneration check
+# measures the generator on either kind of file.
+*.png binary

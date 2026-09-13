@@ -91,13 +91,19 @@
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.12.0",
+      "version": "1.12.1",
       "status": "active"
     },
     {
       "name": "theme-default",
       "kind": "theme",
       "version": "2.3.1",
+      "status": "active"
+    },
+    {
+      "name": "truvio-demo",
+      "kind": "sample-data",
+      "version": "1.7.0",
       "status": "active"
     }
   ],
