@@ -85,6 +85,19 @@ foreach ($d in $layerDirs) {
     $manifests[$d.Name] = $m
 }
 
+# Password value shape (Foundry #1104): AccessUserPassword stores the platform hash, and a plaintext
+# value signs in nobody with no error anywhere. Every declared sqlcmd variable named like a password
+# must declare valueShape 'dw-password-hash', so an applier knows to hash the plaintext it is given.
+foreach ($ln in @($manifests.Keys | Sort-Object)) {
+    foreach ($s in @($manifests[$ln].sql)) {
+        if (-not $s) { continue }
+        foreach ($v in @($s.sqlcmdVariables)) {
+            if (-not $v -or "$($v.name)" -notmatch '(?i)password') { continue }
+            & $log ("$($v.valueShape)" -eq 'dw-password-hash') "layer '$ln': $($s.file) sqlcmd variable '$($v.name)' declares valueShape 'dw-password-hash' (found '$($v.valueShape)')"
+        }
+    }
+}
+
 # Edition schema + reference resolution.
 $editionFiles = @(Get-ChildItem -LiteralPath $editionsRoot -File -Filter '*.json' -ErrorAction SilentlyContinue |
     Where-Object { $_.Name -ne 'edition.schema.json' })

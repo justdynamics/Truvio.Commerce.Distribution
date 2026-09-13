@@ -1,5 +1,15 @@
 # Changelog — truvio-demo
 
+## 1.7.2
+
+### The password variables declare their value shape (Foundry #1104, password half)
+
+`TruvioBuyerPassword`, `TruvioCsrPassword` and `TruvioAdminPassword` declare
+`valueShape: "dw-password-hash"` (new in `layers/layer.schema.json`). 1.7.1 stated the hash
+contract in prose and guarded it in SQL; the declaration makes it machine-readable, so the
+Foundry composer `sql[]` applier (Foundry PR #1213, #1066) hashes the plaintext it is given
+without a side list. No SQL, row or count changes.
+
 ## 1.7.1
 
 ### Column-shape guards run in a batch of their own (Foundry #1100)
