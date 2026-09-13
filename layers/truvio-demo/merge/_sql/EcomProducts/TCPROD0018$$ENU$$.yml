@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "TCPROD0018"
+"ProductLanguageId": "ENU"
+"ProductVariantId": ""
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "TC-PRC-0018"
+"ProductName": "Truvio Price Matrix 18"
+"ProductShortDescription": "Its first step is at ten, so small orders all pay the same."
+"ProductLongDescription": "A price structure is the set of rows that answer one question - what does this product cost, for this customer, at this quantity, in this currency. This record shows a currency-scoped row, the shape a price takes when a solution sells in more than one currency. Resolution is ordered and deterministic: the most specific row that matches the request wins, and nothing about it is hard-coded in a template."
+"ProductImageSmall": "/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0018.png"
+"ProductImageMedium": "/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0018.png"
+"ProductImageLarge": "/Files/Images/TruvioCommerce/products/tc-tile-price-structures-0018.png"
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 75
+"ProductStock": 0
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-13T22:45:50.6000000
+"ProductUpdated": 2026-09-13T22:45:50.6000000
+"ProductCustomFieldsXml": 
+"ProductType": 0
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 0
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4684
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": true
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 2026-09-27T00:00:00.0000000
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": 9d19d9dd-c4af-f111-8d58-000d3a7e3238
+"ProductDiscontinuedDate": 

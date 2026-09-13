@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "TCPROD0001"
+"ProductLanguageId": "ENU"
+"ProductVariantId": ""
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "TC-VAR-0001"
+"ProductName": "Truvio Variant Master 01"
+"ProductShortDescription": "Two axes and six combinations, each with its own number, stock and price."
+"ProductLongDescription": "A variant master carries the axes and the option rows that hang off them, and every combination is a product row of its own with its own price. This master demonstrates the plain two-axis case: a tier axis and a mode axis, expanded into the full grid of combinations. Open the tier and mode selectors on this page to watch the price, the number and the stock position change without leaving the record."
+"ProductImageSmall": "/Files/Images/TruvioCommerce/products/tc-tile-variants-0001.png"
+"ProductImageMedium": "/Files/Images/TruvioCommerce/products/tc-tile-variants-0001.png"
+"ProductImageLarge": "/Files/Images/TruvioCommerce/products/tc-tile-variants-0001.png"
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 45
+"ProductStock": 148
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-13T22:45:50.5630000
+"ProductUpdated": 2026-09-13T22:45:50.5630000
+"ProductCustomFieldsXml": 
+"ProductType": 0
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 2
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4667
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": false
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": 8c19d9dd-c4af-f111-8d58-000d3a7e3238
+"ProductDiscontinuedDate": 

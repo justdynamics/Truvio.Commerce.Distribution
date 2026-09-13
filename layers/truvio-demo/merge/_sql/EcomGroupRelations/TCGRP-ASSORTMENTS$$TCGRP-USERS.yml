@@ -1,0 +1,8 @@
+﻿"ownership":
+  "mode": "merge"
+"GroupRelationsGroupId": "TCGRP-ASSORTMENTS"
+"GroupRelationsParentId": "TCGRP-USERS"
+"GroupRelationsSorting": 1
+"GroupRelationsIsPrimary": true
+"GroupRelationsAutoId": 686
+"GroupRelationsInheritCategories": false

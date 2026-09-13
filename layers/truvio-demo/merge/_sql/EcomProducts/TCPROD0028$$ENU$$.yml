@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "TCPROD0028"
+"ProductLanguageId": "ENU"
+"ProductVariantId": ""
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "TC-DSC-0028"
+"ProductName": "Truvio Discount Ladder 28"
+"ProductShortDescription": "The deepest discount in the band, and the widest gap between list and yours."
+"ProductLongDescription": "A discount ladder is a set of conditions and rewards the order engine evaluates on every cart recalculation. This record carries a quantity-triggered reward, evaluated per line rather than per order. Conditions and rewards are configured rather than written, so a campaign is authored by a merchandiser and takes effect on the next request."
+"ProductImageSmall": "/Files/Images/TruvioCommerce/products/tc-tile-discounts-0028.png"
+"ProductImageMedium": "/Files/Images/TruvioCommerce/products/tc-tile-discounts-0028.png"
+"ProductImageLarge": "/Files/Images/TruvioCommerce/products/tc-tile-discounts-0028.png"
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 75
+"ProductStock": 0
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-13T22:45:50.6300000
+"ProductUpdated": 2026-09-13T22:45:50.6300000
+"ProductCustomFieldsXml": 
+"ProductType": 0
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 0
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4694
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": true
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 2026-09-27T00:00:00.0000000
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": a719d9dd-c4af-f111-8d58-000d3a7e3238
+"ProductDiscontinuedDate": 

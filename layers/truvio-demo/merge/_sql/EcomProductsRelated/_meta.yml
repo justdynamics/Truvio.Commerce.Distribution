@@ -1,0 +1,94 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomProductsRelated"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "ProductRelatedGroupId"
+- "ProductRelatedProductId"
+- "ProductRelatedProductRelId"
+- "ProductRelatedProductRelVariantID"
+"identityColumns":
+- "ProductRelatedAutoId"
+"allColumns":
+- "ProductRelatedProductId"
+- "ProductRelatedProductRelId"
+- "ProductRelatedGroupId"
+- "ProductRelatedSortOrder"
+- "ProductRelatedLimitLanguage"
+- "ProductRelatedLimitCountry"
+- "ProductRelatedLimitShop"
+- "ProductRelatedAutoId"
+- "ProductRelatedProductRelVariantID"
+- "ProductRelatedLimitVariant"
+"columnDefinitions":
+- "name": "ProductRelatedProductId"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductRelatedProductRelId"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductRelatedGroupId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductRelatedSortOrder"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductRelatedLimitLanguage"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductRelatedLimitCountry"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductRelatedLimitShop"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductRelatedAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "ProductRelatedProductRelVariantID"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductRelatedLimitVariant"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

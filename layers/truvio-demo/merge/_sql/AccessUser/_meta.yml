@@ -1,0 +1,859 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "AccessUser"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "AccessUserId"
+"identityColumns":
+- "AccessUserId"
+"allColumns":
+- "AccessUserId"
+- "AccessUserParentId"
+- "AccessUserUserName"
+- "AccessUserPassword"
+- "AccessUserName"
+- "AccessUserDepartment"
+- "AccessUserEmail"
+- "AccessUserPhone"
+- "AccessUserFax"
+- "AccessUserGroups"
+- "AccessUserType"
+- "AccessUserValidFrom"
+- "AccessUserValidTo"
+- "AccessUserPages"
+- "AccessUserAreas"
+- "AccessUserSettings"
+- "AccessUserModules"
+- "AccessUserInformation"
+- "AccessUserMyFolder"
+- "AccessUserAddress"
+- "AccessUserAddress2"
+- "AccessUserZip"
+- "AccessUserCity"
+- "AccessUserCountry"
+- "AccessUserJobTitle"
+- "AccessUserCompany"
+- "AccessUserPhonePriv"
+- "AccessUserMobile"
+- "AccessUserCustomerNumber"
+- "AccessUserRedirectOnLogin"
+- "AccessUserCurrencyCharacter"
+- "AccessUserRead"
+- "AccessUserAdsiMap"
+- "AccessUserPasswordDate"
+- "AccessUserLastName"
+- "AccessUserMiddleName"
+- "AccessUserActive"
+- "AccessUserImage"
+- "AccessUserBusiness"
+- "AccessUserInitials"
+- "AccessUserComment"
+- "AccessUserLevel"
+- "AccessUserInheritAddress"
+- "AccessUserWeb"
+- "AccessUserSort"
+- "AccessUserStatus"
+- "AccessUserStatusBegin"
+- "AccessUserStatusEnd"
+- "AccessUserStatusComment"
+- "AccessUserEditorConfigurationId"
+- "AccessUserHideStat"
+- "AccessUserCartId"
+- "AccessUserAllowBackend"
+- "AccessUserApprovalKey"
+- "AccessUserShopId"
+- "AccessUserExternalId"
+- "AccessUserSortXML"
+- "AccessUserGeoLocationLat"
+- "AccessUserGeoLocationLng"
+- "AccessUserGeoLocationIsCustom"
+- "AccessUserGeoLocationImage"
+- "AccessUserGeoLocationHash"
+- "AccessUserNewsletterAllowed"
+- "AccessUserCreatedOn"
+- "AccessUserUpdatedOn"
+- "AccessUserCreatedBy"
+- "AccessUserUpdatedBy"
+- "AccessUserEmailPermissionGivenOn"
+- "AccessUserEmailPermissionUpdatedOn"
+- "AccessUserState"
+- "AccessUserVatRegNumber"
+- "AccessUserDisableLivePrices"
+- "AccessUserLastLoginOn"
+- "AccessUserAdministratorInGroups"
+- "AccessUserTitle"
+- "AccessUserFirstName"
+- "AccessUserHouseNumber"
+- "AccessUserLastOrderDate"
+- "AccessUserPasswordRecoveryToken"
+- "AccessUserPasswordRecoveryTokenExpirationTime"
+- "AccessUserGroupSmartSearch"
+- "AccessUserGroupSmartSearchLastCalculatedTime"
+- "AccessUserExported"
+- "AccessUserItemType"
+- "AccessUserItemId"
+- "AccessUserDefaultUserItemType"
+- "AccessUserStockLocationID"
+- "AccessUserCountryCode"
+- "AccessUserPointBalance"
+- "AccessUserAddressTitle"
+- "AccessUserUserAndGroupType"
+- "AccessUserInformationSent"
+- "AccessUserReverseChargeForVat"
+- "AccessUserProfileCreatedDate"
+- "DefaultPermission"
+- "AccessUserTreeSection"
+- "AccessUserUniqueId"
+- "AccessUserShippingCode"
+- "AccessUserShippingAgentCode"
+- "AccessUserShippingAgentServiceCode"
+- "AccessUserLoginType"
+- "AccessUserInvitationSent"
+- "AccessUserDisableLiveDiscounts"
+- "AccessUserIsServiceAccount"
+- "AccessUserIsLogin"
+- "AccessUserLastLoginBackendOn"
+"columnDefinitions":
+- "name": "AccessUserId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "AccessUserParentId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserUserName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserPassword"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserDepartment"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserEmail"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserPhone"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserFax"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserGroups"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserType"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserValidFrom"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserValidTo"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserPages"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserAreas"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserSettings"
+  "dataType": "ntext"
+  "maxLength": 1073741823
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserModules"
+  "dataType": "ntext"
+  "maxLength": 1073741823
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserInformation"
+  "dataType": "ntext"
+  "maxLength": 1073741823
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserMyFolder"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserAddress"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserAddress2"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserZip"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserCity"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserCountry"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserJobTitle"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserCompany"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserPhonePriv"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserMobile"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserCustomerNumber"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserRedirectOnLogin"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserCurrencyCharacter"
+  "dataType": "nvarchar"
+  "maxLength": 3
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserRead"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserAdsiMap"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserPasswordDate"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserLastName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserMiddleName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserActive"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserImage"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserBusiness"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserInitials"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserComment"
+  "dataType": "ntext"
+  "maxLength": 1073741823
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserLevel"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserInheritAddress"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserWeb"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserSort"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserStatus"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserStatusBegin"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserStatusEnd"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserStatusComment"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserEditorConfigurationId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserHideStat"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserCartId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserAllowBackend"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserApprovalKey"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserShopId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserExternalId"
+  "dataType": "nvarchar"
+  "maxLength": 250
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserSortXML"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserGeoLocationLat"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserGeoLocationLng"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserGeoLocationIsCustom"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserGeoLocationImage"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserGeoLocationHash"
+  "dataType": "nvarchar"
+  "maxLength": 32
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserNewsletterAllowed"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserCreatedOn"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserUpdatedOn"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserCreatedBy"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserUpdatedBy"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserEmailPermissionGivenOn"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserEmailPermissionUpdatedOn"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserState"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserVatRegNumber"
+  "dataType": "nvarchar"
+  "maxLength": 20
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserDisableLivePrices"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserLastLoginOn"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserAdministratorInGroups"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserTitle"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserFirstName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserHouseNumber"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserLastOrderDate"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserPasswordRecoveryToken"
+  "dataType": "nvarchar"
+  "maxLength": 128
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserPasswordRecoveryTokenExpirationTime"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserGroupSmartSearch"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserGroupSmartSearchLastCalculatedTime"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserExported"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserItemType"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserItemId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserDefaultUserItemType"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserStockLocationID"
+  "dataType": "bigint"
+  "maxLength": 0
+  "precision": 19
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserCountryCode"
+  "dataType": "nvarchar"
+  "maxLength": 2
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserPointBalance"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserAddressTitle"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserUserAndGroupType"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserInformationSent"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserReverseChargeForVat"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserProfileCreatedDate"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DefaultPermission"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserTreeSection"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserUniqueId"
+  "dataType": "uniqueidentifier"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserShippingCode"
+  "dataType": "nvarchar"
+  "maxLength": 25
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserShippingAgentCode"
+  "dataType": "nvarchar"
+  "maxLength": 25
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserShippingAgentServiceCode"
+  "dataType": "nvarchar"
+  "maxLength": 25
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserLoginType"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserInvitationSent"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserDisableLiveDiscounts"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AccessUserIsServiceAccount"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserIsLogin"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserLastLoginBackendOn"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

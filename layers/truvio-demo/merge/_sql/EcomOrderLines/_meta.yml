@@ -1,0 +1,459 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomOrderLines"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "OrderLineId"
+"identityColumns":
+- "OrderLineAutoId"
+"allColumns":
+- "OrderLineId"
+- "OrderLineOrderId"
+- "OrderLineParentLineId"
+- "OrderLineBOM"
+- "OrderLineDate"
+- "OrderLineModified"
+- "OrderLineProductNumber"
+- "OrderLineProductId"
+- "OrderLineProductVariantId"
+- "OrderLineProductName"
+- "OrderLineProductVariantText"
+- "OrderLineUnitPrice"
+- "OrderLineVatPercent"
+- "OrderLineVatPrice"
+- "OrderLineQuantity"
+- "OrderLineType"
+- "OrderLineReference"
+- "OrderLineBOMItemId"
+- "OrderLineUnitId"
+- "OrderLineWeight"
+- "OrderLineVolume"
+- "OrderLinePriceWithVAT"
+- "OrderLinePriceWithoutVAT"
+- "OrderLinePriceVAT"
+- "OrderLinePriceVATPercent"
+- "OrderLineUnitPriceWithVAT"
+- "OrderLineUnitPriceWithoutVAT"
+- "OrderLineUnitPriceVAT"
+- "OrderLineUnitPriceVATPercent"
+- "OrderLinePageId"
+- "OrderLineDiscountId"
+- "OrderLineFieldValues"
+- "OrderLineAttachment"
+- "OrderLineAutoId"
+- "OrderLineWishListId"
+- "OrderLinePriceCalculationReference"
+- "OrderLineUnitPriceCalculationReference"
+- "OrderLineUnitPoints"
+- "OrderLineUnitRewardPoints"
+- "OrderLinePoints"
+- "OrderLineRewardPoints"
+- "OrderLineRewardId"
+- "OrderLineReverseChargeForVat"
+- "OrderLineTotalDiscountWithVAT"
+- "OrderLineTotalDiscountWithoutVAT"
+- "OrderLineTotalDiscountVAT"
+- "OrderLineTotalDiscountVATPercent"
+- "OrderLineGiftCardCode"
+- "OrderLineDiscountPercentage"
+- "OrderLineUnitPriceBeforeDiscount"
+- "OrderLineStockLocationId"
+- "OrderLineComment"
+- "OrderLineUnitPriceDiscountPercentage"
+- "OrderLineCustomerComment"
+- "OrderLineAllowOrderDiscounts"
+- "OrderLineAllowOrderLineDiscounts"
+"columnDefinitions":
+- "name": "OrderLineId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "OrderLineOrderId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineParentLineId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineBOM"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineDate"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineModified"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineProductNumber"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineProductId"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineProductVariantId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineProductName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineProductVariantText"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineUnitPrice"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineVatPercent"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineVatPrice"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineQuantity"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineType"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineReference"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineBOMItemId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineUnitId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineWeight"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineVolume"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLinePriceWithVAT"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLinePriceWithoutVAT"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLinePriceVAT"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLinePriceVATPercent"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineUnitPriceWithVAT"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineUnitPriceWithoutVAT"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineUnitPriceVAT"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineUnitPriceVATPercent"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLinePageId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineDiscountId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineFieldValues"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineAttachment"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "OrderLineWishListId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "OrderLinePriceCalculationReference"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineUnitPriceCalculationReference"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineUnitPoints"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineUnitRewardPoints"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLinePoints"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineRewardPoints"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineRewardId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineReverseChargeForVat"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineTotalDiscountWithVAT"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineTotalDiscountWithoutVAT"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineTotalDiscountVAT"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineTotalDiscountVATPercent"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineGiftCardCode"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineDiscountPercentage"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "OrderLineUnitPriceBeforeDiscount"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "OrderLineStockLocationId"
+  "dataType": "bigint"
+  "maxLength": 0
+  "precision": 19
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineComment"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineUnitPriceDiscountPercentage"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "OrderLineCustomerComment"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "OrderLineAllowOrderDiscounts"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "OrderLineAllowOrderLineDiscounts"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "TCPROD0027"
+"ProductLanguageId": "ENU"
+"ProductVariantId": ""
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "TC-DSC-0027"
+"ProductName": "Truvio Discount Ladder 27"
+"ProductShortDescription": "Discounted to a round figure rather than by a percentage."
+"ProductLongDescription": "A discount ladder is a set of conditions and rewards the order engine evaluates on every cart recalculation. This record carries an amount-off reward, which behaves differently from a percentage once a cart has several lines. Conditions and rewards are configured rather than written, so a campaign is authored by a merchandiser and takes effect on the next request."
+"ProductImageSmall": "/Files/Images/TruvioCommerce/products/tc-tile-discounts-0027.png"
+"ProductImageMedium": "/Files/Images/TruvioCommerce/products/tc-tile-discounts-0027.png"
+"ProductImageLarge": "/Files/Images/TruvioCommerce/products/tc-tile-discounts-0027.png"
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 60
+"ProductStock": 12
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-13T22:45:50.6270000
+"ProductUpdated": 2026-09-13T22:45:50.6270000
+"ProductCustomFieldsXml": 
+"ProductType": 0
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 0
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4693
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": false
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": a619d9dd-c4af-f111-8d58-000d3a7e3238
+"ProductDiscontinuedDate": 

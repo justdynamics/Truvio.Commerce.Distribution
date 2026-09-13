@@ -1,0 +1,28 @@
+﻿"ownership":
+  "mode": "merge"
+"FieldId": "tcRevision"
+"FieldCategoryId": "tc_content"
+"FieldTemplateTag": "tcRevision"
+"FieldType": 1
+"FieldDefaultValue": 
+"FieldPresentationType": 
+"FieldSortOrder": 3
+"FieldAutoId": 251
+"FieldDoNotRender": false
+"FieldHideEmpty": false
+"FieldForeignCategoryId": 
+"FieldValidationPattern": 
+"FieldIncludeAllExistingLanguage": false
+"FieldAllowChangesAcrossLanguages": false
+"FieldAllowChangesAcrossVariants": false
+"FieldRequired": false
+"FieldReadOnly": false
+"FieldValueConversionPreset": 
+"FieldValueConversionDecimals": 
+"FieldValueConversionDisplayRule": 
+"FieldShowFieldOnBothMasterAndVariant": false
+"FieldTypeSystemName": 
+"FieldUseAsFacet": false
+"FieldValueConversionGroupId": 
+"FieldEditorConfiguration": 
+"FieldMatrixAttributeGroupId": 

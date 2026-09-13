@@ -1,0 +1,60 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomGroupRelations"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "GroupRelationsGroupId"
+- "GroupRelationsParentId"
+"identityColumns":
+- "GroupRelationsAutoId"
+"allColumns":
+- "GroupRelationsGroupId"
+- "GroupRelationsParentId"
+- "GroupRelationsSorting"
+- "GroupRelationsIsPrimary"
+- "GroupRelationsAutoId"
+- "GroupRelationsInheritCategories"
+"columnDefinitions":
+- "name": "GroupRelationsGroupId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "GroupRelationsParentId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "GroupRelationsSorting"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "GroupRelationsIsPrimary"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "GroupRelationsAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "GroupRelationsInheritCategories"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

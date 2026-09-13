@@ -1,0 +1,163 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomDetailsGroup"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "EcomDetailsGroupId"
+"identityColumns":
+- "EcomDetailsGroupId"
+"allColumns":
+- "EcomDetailsGroupId"
+- "EcomDetailsGroupSystemName"
+- "DetailsGroupInheritanceType"
+- "DetailsGroupIcon"
+- "DetailsGroupIconColor"
+- "DetailsGroupExtensions"
+- "DetailsGroupControlType"
+- "DetailsGroupIsSystemGroup"
+- "DetailsGroupCheckinPattern"
+- "DetailsGroupIsPrimaryImageRule"
+- "DetailsGroupPrimaryImageNameAdditionType"
+- "DetailsGroupPrimaryImageNameAddition"
+- "DetailsGroupSearchPattern"
+- "DetailsGroupHasPrimaryImageRule"
+- "DetailsGroupInheritDefaultImageAcrossVariants"
+- "DetailsGroupInheritDefaultImageAcrossLanguages"
+- "DetailsGroupDefaultUploadFolder"
+- "DetailsGroupRegularExpression"
+- "DetailsGroupSortingMode"
+"columnDefinitions":
+- "name": "EcomDetailsGroupId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "EcomDetailsGroupSystemName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DetailsGroupInheritanceType"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupIcon"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupIconColor"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupExtensions"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupControlType"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupIsSystemGroup"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DetailsGroupCheckinPattern"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupIsPrimaryImageRule"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DetailsGroupPrimaryImageNameAdditionType"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupPrimaryImageNameAddition"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupSearchPattern"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupHasPrimaryImageRule"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DetailsGroupInheritDefaultImageAcrossVariants"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DetailsGroupInheritDefaultImageAcrossLanguages"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DetailsGroupDefaultUploadFolder"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupRegularExpression"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DetailsGroupSortingMode"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

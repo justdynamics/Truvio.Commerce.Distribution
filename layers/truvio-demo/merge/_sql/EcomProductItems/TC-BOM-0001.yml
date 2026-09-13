@@ -1,0 +1,17 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductItemId": "TC-BOM-0001"
+"ProductItemProductId": "TCPROD0021"
+"ProductItemBomProductId": ""
+"ProductItemBomGroupId": "TCGRP-VARIANTS"
+"ProductItemQuantity": 1
+"ProductItemName": "Variant component"
+"ProductItemRequired": true
+"ProductItemDefaultProductId": "TCPROD0002"
+"ProductItemBomNoProductText": ""
+"ProductItemSortOrder": 1
+"ProductItemBomVariantId": ""
+"ProductItemAutoId": 50
+"ProductItemDefaultVariantId": ""
+"ProductItemDefaultUnitId": ""
+"ProductItemBomUnitId": ""

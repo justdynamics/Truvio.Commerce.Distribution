@@ -1,0 +1,8 @@
+﻿"ownership":
+  "mode": "merge"
+"GroupRelationsGroupId": "TCGRP-CURRENCIES"
+"GroupRelationsParentId": "TCGRP-USERS"
+"GroupRelationsSorting": 2
+"GroupRelationsIsPrimary": true
+"GroupRelationsAutoId": 689
+"GroupRelationsInheritCategories": false

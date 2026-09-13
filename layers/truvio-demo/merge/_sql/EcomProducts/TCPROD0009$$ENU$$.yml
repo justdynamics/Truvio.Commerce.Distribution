@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "TCPROD0009"
+"ProductLanguageId": "ENU"
+"ProductVariantId": ""
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "TC-STK-0009"
+"ProductName": "Truvio Stock Item 09"
+"ProductShortDescription": "Stock split across three locations, which is what a multi-warehouse read looks like."
+"ProductLongDescription": "Stock is a number a buyer acts on, so the row carries a real level, a delivery text and a policy for what happens at zero. This row splits its level across three stock locations, which is what a multi-warehouse read looks like. The count, the status colour and the delivery line all come from the same product row you are looking at."
+"ProductImageSmall": "/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0009.png"
+"ProductImageMedium": "/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0009.png"
+"ProductImageLarge": "/Files/Images/TruvioCommerce/products/tc-tile-stock-delivery-0009.png"
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 90
+"ProductStock": 64
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-13T22:45:50.5800000
+"ProductUpdated": 2026-09-13T22:45:50.5800000
+"ProductCustomFieldsXml": 
+"ProductType": 0
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 0
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4675
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": false
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": 9419d9dd-c4af-f111-8d58-000d3a7e3238
+"ProductDiscontinuedDate": 

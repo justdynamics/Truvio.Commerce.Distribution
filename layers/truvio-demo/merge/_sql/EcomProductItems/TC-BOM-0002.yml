@@ -1,0 +1,17 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductItemId": "TC-BOM-0002"
+"ProductItemProductId": "TCPROD0021"
+"ProductItemBomProductId": ""
+"ProductItemBomGroupId": "TCGRP-BUNDLES"
+"ProductItemQuantity": 1
+"ProductItemName": "Item type component"
+"ProductItemRequired": true
+"ProductItemDefaultProductId": "TCPROD0042"
+"ProductItemBomNoProductText": ""
+"ProductItemSortOrder": 2
+"ProductItemBomVariantId": ""
+"ProductItemAutoId": 51
+"ProductItemDefaultVariantId": ""
+"ProductItemDefaultUnitId": ""
+"ProductItemBomUnitId": ""

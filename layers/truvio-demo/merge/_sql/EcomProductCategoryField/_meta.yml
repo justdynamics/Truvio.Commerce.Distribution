@@ -1,0 +1,220 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomProductCategoryField"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "FieldCategoryId"
+- "FieldId"
+"identityColumns":
+- "FieldAutoId"
+"allColumns":
+- "FieldId"
+- "FieldCategoryId"
+- "FieldTemplateTag"
+- "FieldType"
+- "FieldDefaultValue"
+- "FieldPresentationType"
+- "FieldSortOrder"
+- "FieldAutoId"
+- "FieldDoNotRender"
+- "FieldHideEmpty"
+- "FieldForeignCategoryId"
+- "FieldValidationPattern"
+- "FieldIncludeAllExistingLanguage"
+- "FieldAllowChangesAcrossLanguages"
+- "FieldAllowChangesAcrossVariants"
+- "FieldRequired"
+- "FieldReadOnly"
+- "FieldValueConversionPreset"
+- "FieldValueConversionDecimals"
+- "FieldValueConversionDisplayRule"
+- "FieldShowFieldOnBothMasterAndVariant"
+- "FieldTypeSystemName"
+- "FieldUseAsFacet"
+- "FieldValueConversionGroupId"
+- "FieldEditorConfiguration"
+- "FieldMatrixAttributeGroupId"
+"columnDefinitions":
+- "name": "FieldId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldCategoryId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldTemplateTag"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldType"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldDefaultValue"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldPresentationType"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldSortOrder"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "FieldDoNotRender"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldHideEmpty"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldForeignCategoryId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldValidationPattern"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldIncludeAllExistingLanguage"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldAllowChangesAcrossLanguages"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldAllowChangesAcrossVariants"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldRequired"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldReadOnly"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldValueConversionPreset"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldValueConversionDecimals"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldValueConversionDisplayRule"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldShowFieldOnBothMasterAndVariant"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldTypeSystemName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldUseAsFacet"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldValueConversionGroupId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldEditorConfiguration"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldMatrixAttributeGroupId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

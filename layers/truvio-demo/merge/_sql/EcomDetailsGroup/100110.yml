@@ -1,0 +1,21 @@
+﻿"ownership":
+  "mode": "merge"
+"EcomDetailsGroupId": 100110
+"EcomDetailsGroupSystemName": "Images"
+"DetailsGroupInheritanceType": 1
+"DetailsGroupIcon": 
+"DetailsGroupIconColor": 
+"DetailsGroupExtensions": "bmp,jpeg,jpg,png,svg,tiff,webp"
+"DetailsGroupControlType": 0
+"DetailsGroupIsSystemGroup": true
+"DetailsGroupCheckinPattern": 
+"DetailsGroupIsPrimaryImageRule": false
+"DetailsGroupPrimaryImageNameAdditionType": 
+"DetailsGroupPrimaryImageNameAddition": 
+"DetailsGroupSearchPattern": 
+"DetailsGroupHasPrimaryImageRule": true
+"DetailsGroupInheritDefaultImageAcrossVariants": true
+"DetailsGroupInheritDefaultImageAcrossLanguages": true
+"DetailsGroupDefaultUploadFolder": 
+"DetailsGroupRegularExpression": 
+"DetailsGroupSortingMode": 0

@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "TCPROD0031"
+"ProductLanguageId": "ENU"
+"ProductVariantId": "TCVO-TIER-ENT.TCVO-MODE-PUB"
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "TC-MED-0031-ENT-PUB"
+"ProductName": "Truvio Media Set 31"
+"ProductShortDescription": "Truvio demo data. Media set in the Media & Galleries band of the Truvio Commerce platform-vocabulary catalogue."
+"ProductLongDescription": 
+"ProductImageSmall": "/Files/Images/TruvioCommerce/products/tc-tile-media-0031.png"
+"ProductImageMedium": "/Files/Images/TruvioCommerce/products/tc-tile-media-0031.png"
+"ProductImageLarge": "/Files/Images/TruvioCommerce/products/tc-tile-media-0031.png"
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 79.2
+"ProductStock": 100
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-13T22:45:51.0600000
+"ProductUpdated": 2026-09-13T22:45:51.0600000
+"ProductCustomFieldsXml": 
+"ProductType": 0
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 0
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4750
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": true
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": df19d9dd-c4af-f111-8d58-000d3a7e3238
+"ProductDiscontinuedDate": 

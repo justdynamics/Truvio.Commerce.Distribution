@@ -1,0 +1,52 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomProductsRelatedGroups"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "RelatedGroupId"
+- "RelatedGroupLanguageId"
+"identityColumns":
+- "RelatedGroupAutoId"
+"allColumns":
+- "RelatedGroupId"
+- "RelatedGroupName"
+- "RelatedGroupLanguageId"
+- "RelatedGroupSortOrder"
+- "RelatedGroupAutoId"
+"columnDefinitions":
+- "name": "RelatedGroupId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "RelatedGroupName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "RelatedGroupLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "RelatedGroupSortOrder"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "RelatedGroupAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true

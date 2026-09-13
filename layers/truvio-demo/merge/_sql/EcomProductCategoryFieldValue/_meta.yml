@@ -1,0 +1,88 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomProductCategoryFieldValue"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "FieldValueFieldCategoryId"
+- "FieldValueFieldId"
+- "FieldValueProductId"
+- "FieldValueProductLanguageId"
+- "FieldValueProductVariantId"
+- "FieldValueSortOrder"
+"identityColumns":
+- "FieldValueAutoId"
+"allColumns":
+- "FieldValueFieldId"
+- "FieldValueFieldCategoryId"
+- "FieldValueProductId"
+- "FieldValueProductVariantId"
+- "FieldValueProductLanguageId"
+- "FieldValueValue"
+- "FieldValueAutoId"
+- "FieldValueSortOrder"
+- "FieldValueReferenceCategoryId"
+"columnDefinitions":
+- "name": "FieldValueFieldId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldValueFieldCategoryId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldValueProductId"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldValueProductVariantId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldValueProductLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldValueValue"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldValueAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "FieldValueSortOrder"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldValueReferenceCategoryId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
