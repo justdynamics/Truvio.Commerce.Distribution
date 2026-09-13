@@ -4,11 +4,13 @@
     "date": "2026-07-28",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.28.1-PreRelease",
+    "skills": "v5.0.0",
     "editions": {
       "base-only": "20260728-114614",
       "headless-demo": "20260728-114756",
       "swift-demo": "20260728-112957"
-    }
+    },
+    "note": "v5 close-out, 2026-09-13. `skills` is the single cross-artifact pointer (V5-PLAN section 2.2 / D-A): the Distribution cites the dynamicweb/skills release that matches this main, and nothing points the other way. It is the one axis a gate run cannot observe, so it is told, not measured. The edition runIds, date and version fields below are UNCHANGED from the gate runs that stamped them - this edit adds the pointer only and attests nothing new. The full v5-shape marker (dw{ring,version}, apps[], swift{tag}, gateRunId) is written by the Foundry publish flow (tools/harness/Write-IndexGateProven.ps1) on the next gate run over this main, mandated for 5.1."
   },
   "layers": [
     {
