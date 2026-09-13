@@ -1,0 +1,19 @@
+"paragraphUniqueId": a7344d03-afea-49b0-8d66-7bd6c9ec91cf
+"sourceParagraphId": 90024
+"sortOrder": 5
+"itemType": "Swift-v2_ProductStock"
+"header": "Stock"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "fb23f239-6758-47a7-ae31-fbed98fdedfa"
+  "HideInventory": false
+  "HideStockState": false
+  "HorizontalAlignment": "start"
+  "Id": "1"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": ""
+"columnId": 1

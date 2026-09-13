@@ -1,0 +1,24 @@
+"paragraphUniqueId": fc5de19c-9f04-4ee2-bfa3-cd855d38f1c0
+"sourceParagraphId": 90025
+"sortOrder": 10
+"itemType": "Swift-v2_ProductMediaTable"
+"header": "Documents (teaser)"
+"template": ""
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "DefaultImageFallback": false
+  "GlobalRecordPageGuid": "fb23f239-6758-47a7-ae31-fbed98fdedfa"
+  "HideThumbnails": true
+  "HideTitle": false
+  "Id": "1"
+  "ImageAspectRatio": "0"
+  "ImageAssets": "[\"Manuals\"]"
+  "ImagePatternImages": false
+  "ItemInstanceType": ""
+  "ShowOnlyPrimaryImage": false
+  "Sort": 0
+  "Title": "Documents"
+  "TitleFontSize": "h6"
+"columnId": 1

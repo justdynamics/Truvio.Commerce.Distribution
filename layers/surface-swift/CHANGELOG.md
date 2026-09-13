@@ -2,6 +2,67 @@
 
 
 
+## 1.11.0
+
+### The PDP buy panel gets the four children it was short (Foundry #1160)
+
+Container-scoped inside `[data-dw-itemtype='swift-v2_productcomponentselector']`, on both
+PDPs and in both identities, the panel held exactly four painted components:
+`productheader` 22 px, `productprice` 99 px anonymous / 30 px signed in,
+`productvariantselector` 172 px, `productaddtocart` 0 px anonymous / 60 px signed in.
+Marine's holds eight. Absent: `swift-v2_productnumber`, `swift-v2_productstock` (both 0
+matched page-wide) and the buy-panel documents teaser - the one
+`swift-v2_productmediatable` on the page is the section table further down, 0 inside the
+panel.
+
+Nothing was wrong with the data or the templates. `ProductNumber` is set on all 96
+products, all 60 `EcomStockUnit` rows are populated at qty 148, `EcomDetailsGroup` 7
+(`Manuals`) holds 2 pdf rows per product, and the PLP card renders SKU, description and
+stock from these same three components on these same products. The paragraphs were never
+in the composition: #1136 split the five SECTION heads from their components and did not
+touch the panel.
+
+Three paragraphs are added to `Product Components/Product Info (right side)`, placed so
+the panel reads in marine's order rather than appended at the end:
+
+| where | sort | item type | why there |
+|---|---|---|---|
+| `grid-row-1/paragraph-c1-7.yml` | 7 | `Swift-v2_ProductNumber` | between the title (1) and the lede (9), which is marine's `title, SKU, lead` |
+| `grid-row-2/paragraph-c1-5.yml` | 5 | `Swift-v2_ProductStock` | after price (2) and the quantity-break table (3), before the variant selector in row 3 |
+| `grid-row-4/paragraph-c1-10.yml` | 10 | `Swift-v2_ProductMediaTable` | after add to cart (6), the teaser marine closes its panel with |
+
+The fourth of the marine children, the lede, is `Swift-v2_ProductShortDescription`, and it
+is already on disk at `grid-row-1/paragraph-c1-9.yml` and already registered - 1.10.0
+landed that registration. "Lead" in the parity census is the lede paragraph, not a
+delivery lead time; the layer needs no new field for it and the data layer seeds none.
+
+Field values are lifted from the PLP card instances of the same components, which are the
+proven-rendering ones: the stock component keeps `HideInventory` and `HideStockState`
+both false, because the area gates price and cart and never stock, and the SKU keeps
+`HorizontalAlignment start`. The teaser binds `ImageAssets ["Manuals"]` - the one asset
+category that exists on a composed host, the same discipline #1145 imposed on the gallery
+- with `DefaultImageFallback false`, so a product with no manual shows nothing rather
+than its own photograph in a documents list, and `HideThumbnails true` with a `h6`
+`Documents` title, so it reads as a teaser and not as a second copy of the section table.
+
+MARINE'S `hideForPhones` ON THE TEASER IS NOT REPRODUCED, and not by choice: the
+serializer's paragraph fragment carries no visibility block at all. The twelve keys a
+`paragraph-*.yml` can hold are `paragraphUniqueId`, `sourceParagraphId`, `sortOrder`,
+`itemType`, `header`, `template`, `colorSchemeId`, `moduleSystemName`, `moduleSettings`,
+`fields`, `permissions`, `columnId` - visibility exists on `page.yml` and nowhere else.
+The teaser therefore ships visible at every width. Hiding it on phones is a theme
+decision until the fragment grows the field.
+
+All three are registered in `replace-manifest.json`. That is the known drift class here:
+a paragraph file no manifest path names is a file the deserializer never creates, and it
+fails silently and looks like a content bug. The new `sourceParagraphId` values are
+90023-90025 in the reserved 90000+ band.
+
+VALIDATION is container-scoped, never page-wide:
+`[data-dw-itemtype=swift-v2_productcomponentselector] [data-dw-itemtype]` on both PDPs,
+with the SKU rendering the `ProductNumber` literal and the stock line rendering
+`In stock`. #1155 is the same measurement taken page-wide and getting it wrong.
+
 ## 1.10.1
 
 ### The related-products table served the prices the padlock withholds (Foundry #1154)
