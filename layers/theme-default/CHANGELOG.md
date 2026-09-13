@@ -2,6 +2,41 @@
 
 
 
+## 2.3.2
+
+### One edge fill per instance, following the adjoining scheme (Foundry #1186)
+
+With a custom `--td-edge-mask` on base-swift home, the computed `mask-image` was present on
+all three `.td-edge` instances - hero bottom, alternate row, footer top - and nothing was
+visible: 2.3.1 shipped one `--td-edge-fill` (`#FFFFFF`) for every edge, and the grounds on
+either side were white or near-white. The single fill only ever read against the dark Truvio
+hero. A probe that checks for `mask-image` passes while nothing paints.
+
+Block **#22** now reads a fill per instance at the pseudo-element:
+`--td-edge-fill-hero`, `--td-edge-fill-alt` and `--td-edge-fill-footer`. Unset, the two bottom
+edges take the `--dw-color-background` of the row below their owner, which block 26 of
+`default_custom.js` copies onto the owner as `--td-edge-adjoin`, and the footer crest takes the
+footer's own `--dw-color-background`. `--td-edge-fill` stays as the last resort. The per-edge
+tokens are never declared on `:root`: a custom property holding `var()` resolves where it is
+declared, so a root default would resolve before any owner carried `--td-edge-adjoin`.
+
+Where the grounds on both sides of an edge are the same colour no default can make it
+visible, so the README now states that a brand sets all three tokens.
+
+### The signed-in account name no longer widens the phone header (Foundry #1200)
+
+Signed in as a persona whose name is 18 characters, COLLAPSE-01 failed at 390 on the PLP and
+a PDP: overflowX 10px, anonymous 0px. Swift's MyAccount avatar dropdown renders the name in a
+`div.text-nowrap` inside `button.nav-link.hstack` with no max-width, so the name set the width
+of the header line (145px for "Veltrix Demo Buyer").
+
+New block **#28**, below 768px: the `SignInDropdown_<id>` button gives up its automatic
+minimum, and the name block takes `max-width: 6.5rem` with `overflow: hidden` and
+`text-overflow: ellipsis`. The avatar initials stay visible, and the full name still reads in
+the open dropdown panel. The overflow context is on the name block alone, which holds only its
+own text, so block #23's guard against overflow on header elements that contain a panel is
+unaffected.
+
 ## 2.3.1
 
 ### The PLP price lock gains the action the PDP lock has (Foundry #1159)

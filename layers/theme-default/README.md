@@ -67,6 +67,14 @@ width-4 Text or product-list row in `main` renders at x=0. The block restores `c
 `main`, excluding nested containers and anything marked `data-td-full-bleed`. It restores the
 gutter, never the width.
 
+The edge motif (block #22) paints one fill per instance: `--td-edge-fill-hero` (the home hero
+row's bottom edge), `--td-edge-fill-alt` (the first colour-scheme boundary after it) and
+`--td-edge-fill-footer` (the crest over the site footer). Unset, each one follows the scheme
+the band belongs to - the row below a bottom edge, the footer's own scheme for the crest - and
+`--td-edge-fill` is the last resort. **A brand sets all three in its own sheet**: where the
+grounds on both sides of an edge are the same colour, the default paints the ground the band
+sits on, and the edge is invisible while its mask is present.
+
 ## Not fixable from a theme — upstream asks
 
 A disk-overlay theme is CSS, style assets and disk files; it forks no Swift template
