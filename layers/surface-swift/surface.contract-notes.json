@@ -48,6 +48,7 @@
     "consumerObligation": {
       "bindSiteRoot": "After deserialize, set each area's AreaFrontpage to the environment's site-root page id.",
       "bindShop": "After deserialize, set each area's AreaEcomShopId to the environment shop. The base ships exactly one shop: SHOP1 ('B2B Commerce Store').",
+      "bindProductPrimaryPage": "After deserialize, set SHOP1's ShopProductPrimaryPageId (EcomShops) to the environment's product detail page id (the Shop/Product Details page this layer ships). The base ships it as 0 because page ids are allocated per environment; until it is set, a product URL generated outside a page context has no primary page to resolve against.",
       "restart": "Restart the DW host after binding - Area routing, frontpage resolution, and shop resolution are cached at host startup."
     },
     "source": "layers/surface-swift/config/swift-content-2.4.json -> predicates[name='Site framework'].excludeAreaColumns + .excludeFields"

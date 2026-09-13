@@ -1,5 +1,16 @@
 # Changelog — surface-swift
 
+## 1.13.1
+
+### Binding the shop's product primary page is a consumer obligation (Foundry #969)
+
+`surface.contract-notes.json` `perEnvironmentAreaExclusions.consumerObligation` gains
+`bindProductPrimaryPage`: after deserialize, set SHOP1's `ShopProductPrimaryPageId` to the
+environment's Shop/Product Details page id, before the host restart. The base ships the column as 0
+because page ids are allocated per environment, and nothing told a consumer to set it, so product URLs
+generated outside a page context had no primary page to resolve against. The version moves because the
+contract a consumer follows gains an obligation; released as 1.13.1 because 1.13.0 already shipped. No serialized content changes.
+
 ## 1.13.0
 
 ### The TruvioCommerce repository ships its Build+Index.task (Foundry #1070)

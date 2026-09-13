@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "2.1.0",
+  "baseContractVersion": "2.2.0",
   "swiftVersion": "2.4.0",
   "compat": {
     "dw": {
@@ -34,7 +34,7 @@
     "nvarcharPkPrefix": "PACK-<NAME>-",
     "nvarcharPkNote": "When an addition writes rows into a base-owned table whose PK is nvarchar (most Ecom tables - PriceId, PaymentId, ProductId, etc.), it MUST namespace the PK with a PACK-<NAME>- prefix (uppercase layer name). Keeps additions disjoint from the base and from each other.",
     "intIdentityFloor": 100000,
-    "intIdentityNote": "When an addition writes rows keyed by an int-identity PK, it MUST reserve an id at or above the 100000 floor. Applies equally to item-instance ids (ItemType_<systemName> PK rows).",
+    "intIdentityNote": "When an addition writes SqlTable rows keyed by an int-identity PK, it MUST reserve an id at or above the 100000 floor. The floor does not reach _content item-instance ids (ItemType_<systemName> rows written through a page or paragraph): ItemType_* Id is a non-identity nvarchar the platform allocates on insert, and the Serializer content provider re-creates item rows by page/paragraph uniqueId, so the target assigns its own id and a YAML fields.Id never lands as the stored id. fields.Id in _content is informational only; no validator checks an item-id floor on _content.",
     "baseCatalog": "empty",
     "baseCatalogNote": "The base ships ZERO catalog (scaffolding-only, swift/2.3.2): EcomGroups, EcomProducts, EcomGroupProductRelation, EcomVariantGroups, EcomVariantsOptions, EcomVariantOptionsProductRelation, EcomDiscount, EcomDiscountTranslation, EcomPrices carry no base rows. The collision surface for these tables is addition-vs-sample-data-vs-addition, arbitrated statically by the gate.",
     "reservedFixtureKeys": [
@@ -75,7 +75,8 @@
         "id": 1328,
         "name": "IMCUser",
         "customerNumber": "98745621",
-        "role": "buyer"
+        "role": "buyer",
+        "presentOnlyWhen": "sampleData"
       },
       {
         "table": "AccessUser",
@@ -83,21 +84,25 @@
         "id": 1326,
         "name": "IMCSalesrep",
         "customerNumber": "7789765",
-        "role": "csr"
+        "role": "csr",
+        "presentOnlyWhen": "sampleData"
       }
     ],
     "memberships": [
       {
         "table": "AccessUserGroupRelation",
         "userId": 1328,
-        "groupId": 1325
+        "groupId": 1325,
+        "presentOnlyWhen": "sampleData"
       },
       {
         "table": "AccessUserGroupRelation",
         "userId": 1326,
-        "groupId": 1292
+        "groupId": 1292,
+        "presentOnlyWhen": "sampleData"
       }
     ],
+    "usersNote": "users and memberships are NOT base rows. They ship in the sample-data layer (merge/_sql/identities.sql, sample-data layer.json sql[0]) and every entry carries presentOnlyWhen: sampleData - they exist only when an edition activates sampleData: true. An edition with sampleData: false has no AccessUser 1328 / 1326 and no memberships, so a sign-in, persona or customer-number binding against them finds no row. A layer probe that needs them names the fixture in its requiresFixtures. Only permissionGroups are base-owned (baseOwnedTables.replaceFiltered FILTER-01).",
     "referenceCategory": {
       "parent": {
         "table": "EcomProductCategory",
@@ -118,6 +123,7 @@
       "priceProductId": "FIXT0001",
       "priceUserCustomerNumber": "98745621",
       "unitRule": "list x 0.8",
+      "presentOnlyWhen": "sampleData",
       "note": "Ships in the sample-data layer's catalog.sql, next to the product it scopes to; present only when an edition activates sampleData: true."
     }
   },
@@ -126,7 +132,7 @@
     "buyerCustomerNumber": "98745621",
     "csrUsername": "IMCSalesrep",
     "csrCustomerNumber": "7789765",
-    "note": "Content anchors (area 3, langPrefix /swift-2) moved to surface-swift (base 3.0.0 ships zero content areas)."
+    "note": "The buyer and CSR anchors name the sample-data rows in guaranteedRows.users: present only when an edition activates sampleData: true. Content anchors (area 3, langPrefix /swift-2) moved to surface-swift (base 3.0.0 ships zero content areas)."
   },
   "repositories": {
     "provisionedByGate": false,
@@ -135,8 +141,13 @@
     "query": "Products.query",
     "facets": "Products.facets",
     "installPath": "wwwroot/Files/System/Repositories/ProductsFrontend/",
-    "note": "ProductsFrontend is the storefront search repository the Swift design package ships (Files/System/Repositories/ProductsFrontend/ at the Swift 2.4.0 tag, alongside ProductsBackend). No layer in this Distribution ships it: it arrives with the host's Swift Files overlay, which is why provisionedByGate is false. Every eCom_ProductCatalog surface this Distribution ships binds it by path - surface-swift Shop PLP (IndexQuery + FacetGroups), surface-swift desktop header search, surface-swift Express Buy, surface-dap-portal Product Assets and Search results, feature-bom-configurator Kit Configurator. A consumer whose host has no ProductsFrontend gets HTTP 200 with an in-page Lucene 'numHits must be > 0' error, never a 500, so gate the PLP on a product count and dw-error == 0, never on HTTP status.",
+    "note": "ProductsFrontend is the storefront search repository the Swift design package ships (Files/System/Repositories/ProductsFrontend/ at the Swift 2.4.0 tag, alongside ProductsBackend). No layer in this Distribution ships it: it arrives with the host's Swift Files overlay, which is why provisionedByGate is false. Every eCom_ProductCatalog surface this Distribution ships binds it by path - surface-swift Shop PLP (IndexQuery + FacetGroups), surface-swift desktop header search, surface-swift Express Buy, surface-dap-portal Product Assets and Search results, feature-bom-configurator Kit Configurator. A storefront PLP that cannot list products answers HTTP 200 in both of its failure shapes, never a 500. (1) Repository present over an index of zero documents: the page carries an in-page dw-error block with the Lucene 'numHits must be > 0' ArgumentException. (2) Repository absent: the catalog app renders an EMPTY swift-v2_app div with no product list, no facet rail and no error text of any kind, so the page passes a status scan AND an error-text scan while showing nothing. Gate the PLP on a positive subject (at least one product-card element) plus dw-error == 0, never on HTTP status or on the absence of error text alone.",
     "consumingApp": "eCom_ProductCatalog"
+  },
+  "currencyRates": {
+    "defaultRate": 100,
+    "minNonDefaultRateExclusive": 1,
+    "note": "EcomCurrencies.CurrencyRate is hundredths against the default currency. The default (EUR, CurrencyIsDefault true on every EUR$$<lang> row) carries 100. A non-default currency at rate 1 renders every price in it a hundred times over, with correct symbol and culture formatting, no error and no log entry (measured on DW 10.28.10: a stored 45.00 served as $4,500.00 at USD rate 1). USD, the currency the Swift storefront serves, ships at 100: one-to-one parity with the default, a deliberate demo value and not an exchange rate. No shipped row carries a rate at or below 1. The other non-default rows carry the values of the source solution and are not maintained exchange rates; a solution that needs real conversion sets real rates, keeping the default at 100 and every other rate relative to it."
   },
   "baseOwnedTables": {
     "replaceWholeTable": [

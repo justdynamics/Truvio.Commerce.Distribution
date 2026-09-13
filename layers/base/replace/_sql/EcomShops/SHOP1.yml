@@ -1,7 +1,7 @@
 ﻿"ShopId": "SHOP1"
 "ShopName": "B2B Commerce Store"
 "ShopCreated": 2016-10-31T15:03:30.0000000
-"ShopDefault": false
+"ShopDefault": true
 "ShopIcon": ""
 "ShopOrderFlowId": 1
 "ShopStockStateId": ""
@@ -22,7 +22,7 @@
 "ShopImageUploadFolder": ""
 "ShopAutoCreateUploadFolderPerProduct": false
 "ShopType": 1
-"ShopCompletionRules": "1004,2"
-"ShopCompletionLanguageIds": "DAN,ENU"
+"ShopCompletionRules": ""
+"ShopCompletionLanguageIds": ""
 "ShopImagePatternMain": "/{ProductNumber}.jpg"
 "ShopImagePatternVariant": "/{ProductNumber}{VariantOptionLevel1}.jpg"

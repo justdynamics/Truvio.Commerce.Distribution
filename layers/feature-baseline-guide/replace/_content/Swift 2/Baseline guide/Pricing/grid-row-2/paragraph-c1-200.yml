@@ -25,9 +25,9 @@
       context threw on GetDefaultCurrency(), and the Products index aborted at 0/28 documents —
       an empty storefront. 3.1.2 reverted it. Do not "tidy" this to one global default.
       EUR$$ENU: CurrencyRate 100, CultureInfo de-DE.
-      USD$$ENU: CurrencyRate 1,   CultureInfo en-US, IsDefault false.
-      ** CurrencyRate is relative to the default, and the default is 100. A rate of 1 on USD
-      means 1 USD = 0.01 EUR. If this demo is re-based onto USD, the new default currency must be
+      USD$$ENU: CurrencyRate 100, CultureInfo en-US, IsDefault false (parity with the default, a demo value).
+      ** CurrencyRate is relative to the default, and the default is 100. A rate of 1 on any
+      currency renders every price in it a hundred times over. If this demo is re-based onto USD, the new default currency must be
       rate 100 and every other rate set relative to it. **
 
     VAT (base): EcomVatGroups 2 rows ("VAT Default", "Moms") + EcomVatCountryRelations.

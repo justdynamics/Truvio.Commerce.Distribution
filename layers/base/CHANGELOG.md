@@ -1,5 +1,46 @@
 # Changelog — base
 
+## 3.4.0
+
+Minor bump, not patch: `base.contract.json` gains keys additions read (`presentOnlyWhen`,
+`usersNote`, `currencyRates`). `baseContractVersion` moves 2.1.0 -> 2.2.0 (additive).
+
+- **User rows are sample data, and the contract now says so (Foundry #967).**
+  `guaranteedRows.users` (IMCUser 1328 / 98745621, IMCSalesrep 1326 / 7789765) and
+  `guaranteedRows.memberships` were listed unqualified, while the same file's FILTER-01 note said
+  the rows are seeded, not serialized. They ship in `sample-data` `merge/_sql/identities.sql`. Every
+  user, membership and the contract-price entry now carries `presentOnlyWhen: sampleData`, a
+  `usersNote` states what an edition with `sampleData: false` lacks, and `anchors.note` and `BASE.md`
+  say the same. The probe-side half (`requiresFixtures` on the feature-rma and feature-pricing probes)
+  is already in the tree.
+- **SHOP1 no longer names completion rules and a language nothing ships (Foundry #968).**
+  `ShopCompletionRules` `1004,2` and `ShopCompletionLanguageIds` `DAN,ENU` are blank. No layer ships a
+  completion rule, and DAN has not been a SHOP1 language since 3.1.0. Same treatment 3.1.3 gave the
+  dangling `CountryCurrencyCode` values.
+- **SHOP1 is the default shop (Foundry #969).** It is the only `EcomShops` row, so `ShopDefault` is
+  now `true`; code that resolves the default shop instead of the area's `AreaEcomShopId` finds it.
+  `ShopProductPrimaryPageId` stays `0` (the product page id is per-environment); `surface-swift`
+  1.13.0 declares binding it as a consumer obligation.
+- **USD ships at `CurrencyRate` 100, not 1 (Foundry #971).** `CurrencyRate` is hundredths against the
+  default (EUR at 100); USD at 1 rendered a stored 45.00 as $4,500.00 on DW 10.28.10. All 17
+  `USD$$<lang>` rows move to 100, parity with the default, the same demo value `truvio-demo`'s
+  existence-guarded currency UPDATE converges to (that UPDATE now finds no row and writes nothing).
+  The contract gains `currencyRates` (default 100, no rate at or below 1). Other non-default rates are
+  unchanged.
+- **Both HTTP-200 shapes of a PLP that cannot list products (Foundry #1064).** `repositories.note`
+  documented only the in-page Lucene `numHits must be > 0` error (repository present, zero documents).
+  It now also documents the repository-absent shape: an empty `swift-v2_app` div with no error text,
+  which passes a status scan and an error-text scan. Gate advice moves to a positive subject (a product
+  card) plus `dw-error == 0`.
+- **The 100000 id floor is scoped to SqlTable rows (Foundry #1008).** `intIdentityNote` said the floor
+  applies equally to `ItemType_<systemName>` item-instance ids. It cannot: `ItemType_*` `Id` is a
+  non-identity nvarchar, and the Serializer content provider re-creates item rows by page/paragraph
+  uniqueId, so the target allocates the id (feature-b2b-comms YAML ids 100300-100365 landed as 48, 446
+  and 139 on foundry). `fields.Id` in `_content` is informational.
+
+Row counts are unchanged: 17 `EcomCurrencies` rows and one `EcomShops` row change value, none is added
+or removed.
+
 ## 3.3.0
 
 `base.contract.json` gains `compat` — the compatibility floor every addition inherits (v5
