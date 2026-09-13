@@ -1950,14 +1950,63 @@ DECLARE @TcRelationLess INT = (
 IF @TcRelationLess > 0
     RAISERROR(N'truvio-pdp.sql: a master shows fewer than two related products. The relations strip would render a stranded section head, which is what marine ships on its own flagship page and what this layer exists not to repeat.', 16, 1);
 
-DECLARE @TcThinSpecs INT = (
-    SELECT COUNT(*) FROM EcomProducts p
-     WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = '' AND p.ProductLanguageId = 'ENU'
-       AND (SELECT COUNT(*) FROM EcomProductCategoryFieldValue v
-             WHERE v.FieldValueProductId = p.ProductId AND v.FieldValueProductVariantId = ''
-               AND ISNULL(v.FieldValueValue, N'') <> N'') <> 7);
-IF @TcThinSpecs > 0
-    RAISERROR(N'truvio-pdp.sql: a master does not carry exactly seven specification values. The table is meant to read seven of seven on every page; a partial row set is the thin table the parity report measured.', 16, 1);
+-- THE PER-PRODUCT VALUE GUARDS (Foundry #1168). The count-only form of this guard
+-- said HOW MANY masters were thin and never WHICH, so the sibling defect it should
+-- have named - truvio-catalog.sql clearing the 240 values this script owns - had to be
+-- found by hand off a row count. Both halves name the products now, and the first
+-- half asserts this script's OWN sixteen pairs, so a shortfall there can never be
+-- blamed on ordering: those four per master are written a few hundred lines above.
+DECLARE @TcSpecValueMsg NVARCHAR(2000);
+DECLARE @TcSpecShortProducts NVARCHAR(900);
+
+SET @TcSpecShortProducts = (
+    SELECT STRING_AGG(x.ProductId, N', ') WITHIN GROUP (ORDER BY x.ProductId)
+      FROM (SELECT TOP 20 p.ProductId
+              FROM EcomProducts p
+             WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = '' AND p.ProductLanguageId = 'ENU'
+               AND (SELECT COUNT(*)
+                      FROM EcomProductCategoryFieldValue v
+                      JOIN (VALUES
+                      ('tc_data_models','tcDimensions'), ('tc_data_models','tcMaterialClass'), ('tc_data_models','tcRating'), ('tc_data_models','tcCompatibility'),
+                      ('tc_commerce','tcVatGroup'), ('tc_commerce','tcDeliveryLeadTime'), ('tc_commerce','tcWarrantyTerm'), ('tc_commerce','tcReturnWindow'),
+                      ('tc_content','tcDatasheetCode'), ('tc_content','tcCertification'), ('tc_content','tcLanguageCoverage'), ('tc_content','tcCatalogueSection'),
+                      ('tc_users','tcCurrencyScope'), ('tc_users','tcContractScope'), ('tc_users','tcStockStatus'), ('tc_users','tcOrderChannel')
+                           ) AS k(cat, fld)
+                        ON k.cat = v.FieldValueFieldCategoryId AND k.fld = v.FieldValueFieldId
+                     WHERE v.FieldValueProductId = p.ProductId
+                       AND v.FieldValueProductVariantId = ''
+                       AND v.FieldValueProductLanguageId = 'ENU'
+                       AND ISNULL(v.FieldValueValue, N'') <> N'') < 4
+             ORDER BY p.ProductId) x);
+IF @TcSpecShortProducts IS NOT NULL
+BEGIN
+    SET @TcSpecValueMsg = CONCAT(N'truvio-pdp.sql: a TCPROD master carries fewer than the FOUR specification values this script writes for it. The section above did not converge, and no ordering with truvio-catalog.sql explains it. Short (first 20): ', @TcSpecShortProducts, N'.');
+    RAISERROR(@TcSpecValueMsg, 16, 1);
+END
+
+-- The phase total. This script is order 9 and truvio-catalog.sql is order 5, so by the
+-- time this runs every master is meant to read seven of seven - four from here, three
+-- from the catalogue - and a master below seven means the catalogue's three are gone or
+-- were never written. Unconditional on purpose: the declared order makes seven the only
+-- correct state at this point in the phase.
+SET @TcSpecShortProducts = (
+    SELECT STRING_AGG(x.ProductId, N', ') WITHIN GROUP (ORDER BY x.ProductId)
+      FROM (SELECT TOP 20 p.ProductId
+              FROM EcomProducts p
+             WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = '' AND p.ProductLanguageId = 'ENU'
+               AND (SELECT COUNT(*)
+                      FROM EcomProductCategoryFieldValue v
+                     WHERE v.FieldValueProductId = p.ProductId
+                       AND v.FieldValueProductVariantId = ''
+                       AND v.FieldValueProductLanguageId = 'ENU'
+                       AND v.FieldValueFieldCategoryId LIKE 'tc[_]%'
+                       AND ISNULL(v.FieldValueValue, N'') <> N'') < 7
+             ORDER BY p.ProductId) x);
+IF @TcSpecShortProducts IS NOT NULL
+BEGIN
+    SET @TcSpecValueMsg = CONCAT(N'truvio-pdp.sql: a TCPROD master does not carry the seven specification values the phase ends with - this script''s four plus truvio-catalog.sql''s three. The table is meant to read seven of seven on every page; a partial row set is the thin table the parity report measured, and it is silent everywhere else. Short (first 20): ', @TcSpecShortProducts, N'.');
+    RAISERROR(@TcSpecValueMsg, 16, 1);
+END
 
 COMMIT TRAN;
 PRINT 'Done - truvio-demo PDP fill: 60 gallery rows (one per master, each one its own band''s concept tile, derived from the master''s own default rather than assigned), the Manuals asset category and 120 document rows over 8 layer-shipped PDFs, 324 relations in 3 groups, 240 category-field values taking every specification table to seven of seven.';

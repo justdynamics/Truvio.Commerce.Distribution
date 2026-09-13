@@ -522,17 +522,81 @@ UPDATE EcomProducts SET ProductLongDescription = NULL
 -- Score that rendered as a shopper-facing spec row above all - and its values go
 -- with it. Written as an anti-join against a VALUES list so the kept set is
 -- stated once and read literally.
--- THE VALUES ARE REBUILT, NOT PATCHED. This layer owns every tc_* value on
--- every TCPROD row, and after the re-screen a value can be stale in three ways
--- at once: its field was dropped, its field moved category, or its product was
--- re-homed into a different top group and so reads a different category
--- altogether. Reconciling those cases one at a time leaves survivors - it left
--- four on the first measured pass - so the set is cleared here and section 7
--- writes it back in full, which makes the row count a statement rather than a
--- residue. truvio-pdp.sql runs later in the same phase and re-adds its four.
-DELETE FROM EcomProductCategoryFieldValue
- WHERE FieldValueFieldCategoryId LIKE 'tc[_]%'
-   AND FieldValueProductId LIKE 'TCPROD%';
+-- ONE FACT CARRIED ACROSS THE BATCH BOUNDARY, read BEFORE the deletes below have
+-- run: did the sibling script's values exist when this run started? SESSION_CONTEXT
+-- rather than a temp table or a variable - a variable does not survive a GO, and a
+-- temp table filled in one batch and READ in another does not resolve at compile time,
+-- so a SET NOEXEC ON compile check of this file would fail on the guard rather than on
+-- anything real. sp_set_session_context is not transactional, which is what this needs:
+-- the fact is about the state the run STARTED from. On a clean install the count is 0
+-- and the phase-total guard stands down - truvio-catalog.sql is order 5 and
+-- truvio-pdp.sql is order 9, so three of seven is the correct state for this script to
+-- leave on a first apply. On a converged host it is 240, and the guard then demands
+-- seven of seven. Read here rather than beside the guard so the check cannot be
+-- disarmed by the very deletion it exists to catch.
+DECLARE @TcPdpValuesAtStart INT = (
+    SELECT COUNT(*)
+      FROM EcomProductCategoryFieldValue v
+      JOIN (VALUES
+    ('tc_data_models','tcDimensions'), ('tc_data_models','tcMaterialClass'), ('tc_data_models','tcRating'), ('tc_data_models','tcCompatibility'),
+    ('tc_commerce','tcVatGroup'), ('tc_commerce','tcDeliveryLeadTime'), ('tc_commerce','tcWarrantyTerm'), ('tc_commerce','tcReturnWindow'),
+    ('tc_content','tcDatasheetCode'), ('tc_content','tcCertification'), ('tc_content','tcLanguageCoverage'), ('tc_content','tcCatalogueSection'),
+    ('tc_users','tcCurrencyScope'), ('tc_users','tcContractScope'), ('tc_users','tcStockStatus'), ('tc_users','tcOrderChannel')
+           ) AS k(cat, fld)
+        ON k.cat = v.FieldValueFieldCategoryId AND k.fld = v.FieldValueFieldId
+     WHERE v.FieldValueProductId LIKE 'TCPROD%'
+       AND v.FieldValueProductVariantId = ''
+       AND ISNULL(v.FieldValueValue, N'') <> N'');
+EXEC sp_set_session_context @key = N'truvio_pdp_values_at_start', @value = @TcPdpValuesAtStart;
+
+-- THE VALUES ARE REBUILT, NOT PATCHED, AND THE REBUILD REACHES ONLY THIS SCRIPT'S OWN
+-- PAIRS (Foundry #1168). This section used to clear EVERY tc_* value on every TCPROD
+-- row, on the strength of a sentence in this comment saying that truvio-pdp.sql runs
+-- later in the same phase and re-adds its four. Nothing enforced that sentence.
+-- Running this script alone on a converged host - a retry, a partial replay, any order
+-- other than the first - therefore took EcomProductCategoryFieldValue from 420 to 180,
+-- dropped every PDP specification table from seven rows to three, exited 0 with every
+-- guard green and printed 180 as the target. The convergence contract is that each
+-- script is individually re-runnable in any order once the set has run once, so the
+-- delete is scoped BY PAIR: exactly the twelve (category, field) pairs section 7 writes
+-- back, in the same literal form the file already uses for the field and translation
+-- sets. The sixteen pairs truvio-pdp.sql owns are out of this statement's reach by
+-- construction rather than by convention.
+--
+-- The three staleness cases the wide delete was written for all survive the narrowing:
+-- a value whose field was DROPPED or MOVED is swept by the second statement below
+-- (anything under a tc_* category that is not one of the 28 fields this layer ships),
+-- and a value on a product RE-HOMED into another top group is still matched by pair, so
+-- it is cleared and rewritten exactly as before.
+DELETE v
+  FROM EcomProductCategoryFieldValue v
+  JOIN (VALUES
+    ('tc_data_models','tcUnitOfMeasure'), ('tc_data_models','tcPackQuantity'), ('tc_data_models','tcNetWeight'),
+    ('tc_commerce','tcPriceUnit'), ('tc_commerce','tcMinimumOrderQuantity'), ('tc_commerce','tcQuantityBreak'),
+    ('tc_content','tcDocumentSet'), ('tc_content','tcMediaSet'), ('tc_content','tcRevision'),
+    ('tc_users','tcAssortmentScope'), ('tc_users','tcCustomerNumber'), ('tc_users','tcAccountTerms')
+       ) AS k(cat, fld)
+    ON k.cat = v.FieldValueFieldCategoryId AND k.fld = v.FieldValueFieldId
+ WHERE v.FieldValueProductId LIKE 'TCPROD%';
+
+-- The orphan sweep the wide delete used to do as a side effect: a tc_* value whose
+-- field the re-screen dropped or moved has no field row left to join through, so it
+-- renders nothing while counting as coverage that is not there. Anti-join against the
+-- same 28-field kept set the two statements below use - every pdp-owned pair is one of
+-- those 28, so this statement can never reach one either.
+DELETE v
+  FROM EcomProductCategoryFieldValue v
+ WHERE v.FieldValueFieldCategoryId LIKE 'tc[_]%'
+   AND v.FieldValueProductId LIKE 'TCPROD%'
+   AND NOT EXISTS (SELECT 1 FROM (VALUES
+    ('tc_data_models','tcUnitOfMeasure'), ('tc_data_models','tcPackQuantity'), ('tc_data_models','tcNetWeight'), ('tc_data_models','tcDimensions'),
+    ('tc_data_models','tcMaterialClass'), ('tc_data_models','tcRating'), ('tc_data_models','tcCompatibility'), ('tc_commerce','tcPriceUnit'),
+    ('tc_commerce','tcMinimumOrderQuantity'), ('tc_commerce','tcQuantityBreak'), ('tc_commerce','tcVatGroup'), ('tc_commerce','tcDeliveryLeadTime'),
+    ('tc_commerce','tcWarrantyTerm'), ('tc_commerce','tcReturnWindow'), ('tc_content','tcDocumentSet'), ('tc_content','tcMediaSet'),
+    ('tc_content','tcRevision'), ('tc_content','tcDatasheetCode'), ('tc_content','tcCertification'), ('tc_content','tcLanguageCoverage'),
+    ('tc_content','tcCatalogueSection'), ('tc_users','tcAssortmentScope'), ('tc_users','tcCustomerNumber'), ('tc_users','tcAccountTerms'),
+    ('tc_users','tcCurrencyScope'), ('tc_users','tcContractScope'), ('tc_users','tcStockStatus'), ('tc_users','tcOrderChannel')
+       ) AS k(cat, fld) WHERE k.cat = v.FieldValueFieldCategoryId AND k.fld = v.FieldValueFieldId);
 
 DELETE t FROM EcomProductCategoryFieldTranslation t
  WHERE t.FieldTranslationFieldCategoryId LIKE 'tc[_]%'
@@ -2546,6 +2610,80 @@ IF @TcSpecsResolved = 0
 IF OBJECT_ID('tempdb..#TcSpecsFieldMembership') IS NOT NULL DROP TABLE #TcSpecsFieldMembership;
 GO
 
+-- A BATCH OF ITS OWN, for the reason set out at the taxonomy guard: this block only
+-- ASSERTS, and a compile error in a guard must never take the writes above with it.
+-- THE PER-PRODUCT VALUE GUARD (Foundry #1168). Every guard above this one asserts
+-- WIRING - fields against members, members against the denormalised column, the group
+-- resolving to at least one value SOMEWHERE - and all four are green on a catalogue
+-- where every master carries three of its seven specification values. That is exactly
+-- the state a re-run of this script used to leave, and the closing PRINT reported the
+-- damage as the target. Coverage is asserted PER PRODUCT here, and the short products
+-- are NAMED, the way the taxonomy and BOM guards name theirs.
+DECLARE @TcValueMsg NVARCHAR(2000);
+DECLARE @TcShortProducts NVARCHAR(900);
+
+-- (a) THIS SCRIPT'S OWN THREE. Section 7 writes three values on every master, so a
+--     master below three is this script failing to converge - no ordering with any
+--     sibling explains it, and it is asserted on a clean install too.
+SET @TcShortProducts = (
+    SELECT STRING_AGG(x.ProductId, N', ') WITHIN GROUP (ORDER BY x.ProductId)
+      FROM (SELECT TOP 20 p.ProductId
+              FROM EcomProducts p
+             WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = '' AND p.ProductLanguageId = 'ENU'
+               AND (SELECT COUNT(*)
+                      FROM EcomProductCategoryFieldValue v
+                      JOIN (VALUES
+                      ('tc_data_models','tcUnitOfMeasure'), ('tc_data_models','tcPackQuantity'), ('tc_data_models','tcNetWeight'),
+                      ('tc_commerce','tcPriceUnit'), ('tc_commerce','tcMinimumOrderQuantity'), ('tc_commerce','tcQuantityBreak'),
+                      ('tc_content','tcDocumentSet'), ('tc_content','tcMediaSet'), ('tc_content','tcRevision'),
+                      ('tc_users','tcAssortmentScope'), ('tc_users','tcCustomerNumber'), ('tc_users','tcAccountTerms')
+                           ) AS k(cat, fld)
+                        ON k.cat = v.FieldValueFieldCategoryId AND k.fld = v.FieldValueFieldId
+                     WHERE v.FieldValueProductId = p.ProductId
+                       AND v.FieldValueProductVariantId = ''
+                       AND v.FieldValueProductLanguageId = 'ENU'
+                       AND ISNULL(v.FieldValueValue, N'') <> N'') < 3
+             ORDER BY p.ProductId) x);
+IF @TcShortProducts IS NOT NULL
+BEGIN
+    SET @TcValueMsg = CONCAT(N'truvio-catalog.sql: a TCPROD master carries fewer than the THREE specification values section 7 writes for it. The spec table renders short on every one of them while every wiring guard above stays green, because none of those counts values per product. Short (first 20): ', @TcShortProducts, N'.');
+    RAISERROR(@TcValueMsg, 16, 1);
+END
+
+-- (b) THE PHASE TOTAL, SEVEN OF SEVEN, and only on a host where the sibling's values
+--     existed when this run STARTED - read off the session key set before the deletes
+--     in section 0. An absent key (a partial replay of this file, or a session that
+--     never ran section 0) reads as 0 and stands the check down rather than raising on
+--     a state it cannot judge.
+DECLARE @TcPdpValuesBefore INT = ISNULL(TRY_CAST(SESSION_CONTEXT(N'truvio_pdp_values_at_start') AS INT), 0);
+IF @TcPdpValuesBefore > 0
+BEGIN
+    SET @TcShortProducts = (
+        SELECT STRING_AGG(x.ProductId, N', ') WITHIN GROUP (ORDER BY x.ProductId)
+          FROM (SELECT TOP 20 p.ProductId
+                  FROM EcomProducts p
+                 WHERE p.ProductId LIKE 'TCPROD%' AND p.ProductVariantId = '' AND p.ProductLanguageId = 'ENU'
+                   AND (SELECT COUNT(*)
+                          FROM EcomProductCategoryFieldValue v
+                         WHERE v.FieldValueProductId = p.ProductId
+                           AND v.FieldValueProductVariantId = ''
+                           AND v.FieldValueProductLanguageId = 'ENU'
+                           AND v.FieldValueFieldCategoryId LIKE 'tc[_]%'
+                           AND ISNULL(v.FieldValueValue, N'') <> N'') < 7
+                 ORDER BY p.ProductId) x);
+    IF @TcShortProducts IS NOT NULL
+    BEGIN
+        SET @TcValueMsg = CONCAT(N'truvio-catalog.sql: the phase had already filled ', @TcPdpValuesBefore,
+            N' truvio-pdp.sql value(s) when this run started, and a TCPROD master is now below the seven values a specification table is meant to read. This run has destroyed coverage a sibling script owns - the 420 to 180 of Foundry #1168 - rather than converged its own. Short (first 20): ', @TcShortProducts, N'.');
+        RAISERROR(@TcValueMsg, 16, 1);
+    END
+END
+
+-- The key is cleared so a second script run in the SAME sqlcmd session judges its own
+-- starting state and never this one's.
+EXEC sp_set_session_context @key = N'truvio_pdp_values_at_start', @value = NULL;
+GO
+
 -- ---------------------------------------------------------------------------
 -- 8. Currency rates: every currency row, not just the default.
 --    EcomCurrencies.CurrencyRate is hundredths - the platform's own seed ships a
@@ -2586,4 +2724,4 @@ IF EXISTS (SELECT 1 FROM EcomCurrencies WHERE CurrencyRate = 1)
     UPDATE EcomCurrencies SET CurrencyRate = 100 WHERE CurrencyRate = 1;
 
 COMMIT TRAN;
-PRINT 'Done - truvio-demo catalogue: 16 groups (4 top + 12 re-screened sub), 60 masters + 36 variant rows bound to their 2 axes and proven renderable, 40 prices, 2 BOM slots, 4 categories / 28 buyer-readable fields / 180 values in SHOP1; 60 long descriptions and the tc_specs field display group the PDP spec table reads, its 28 members in the ProductCategory|<category>|<field> reference form and proven to resolve.';
+PRINT 'Done - truvio-demo catalogue: 16 groups (4 top + 12 re-screened sub), 60 masters + 36 variant rows bound to their 2 axes and proven renderable, 40 prices, 2 BOM slots, 4 categories / 28 buyer-readable fields / this script''s own 180 values in SHOP1 (three of the seven each master reads - truvio-pdp.sql owns the other four and takes the phase to 420, and the delete above no longer reaches them); 60 long descriptions and the tc_specs field display group the PDP spec table reads, its 28 members in the ProductCategory|<category>|<field> reference form and proven to resolve.';
