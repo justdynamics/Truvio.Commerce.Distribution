@@ -16,11 +16,41 @@
 -- sqlcmd variables (pass with `sqlcmd -v NAME="value"`; the Foundry harness
 -- substitutes them itself). Values are demo credentials, never production:
 --   BuyerUserName   frontend buyer login name (canonical: IMCUser)
---   BuyerPassword   buyer demo password
---   CsrPassword     CSR demo password
+--   BuyerPassword   PLATFORM HASH of the buyer demo password
+--   CsrPassword     PLATFORM HASH of the CSR demo password
+--
+-- CREDENTIALS
+--   BuyerPassword and CsrPassword carry the platform password HASH, not the
+--   password (layer.json valueShape: dw-password-hash). AccessUserPassword stores
+--   what the host compares a sign-in against, which with password encryption on
+--   is the 128-character hex SHA512 string (lowercase hex of
+--   SHA512(UTF8(password + "DwSecret"))). A plaintext value is written verbatim
+--   and yields a user that cannot sign in, with no error in SQL, in any log or on
+--   the sign-in page (Foundry #1104). The applier takes the plaintext and hashes
+--   it once. The shape guard below refuses any value that is not 128 hex
+--   characters, naming the variable, before a single row is written.
 -- ===========================================================================
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
+
+-- ---------------------------------------------------------------------------
+-- 0. The password shape guard, the same shape as truvio-identities.sql. Runs
+--    before BEGIN TRAN and ends the batch with RETURN, so a refused value writes
+--    nothing whether or not the runner passes sqlcmd -b; with -b the non-zero
+--    exit stops the apply as well. DATALENGTH rather than LEN, which ignores
+--    trailing spaces; a binary collation so the hex class means exactly 0-9, A-F
+--    and a-f.
+-- ---------------------------------------------------------------------------
+DECLARE @SdPasswordShape NVARCHAR(200) = N'';
+IF DATALENGTH(N'$(BuyerPassword)') <> 256 OR N'$(BuyerPassword)' COLLATE Latin1_General_BIN LIKE N'%[^0-9A-Fa-f]%'
+    SET @SdPasswordShape = @SdPasswordShape + N' BuyerPassword';
+IF DATALENGTH(N'$(CsrPassword)') <> 256 OR N'$(CsrPassword)' COLLATE Latin1_General_BIN LIKE N'%[^0-9A-Fa-f]%'
+    SET @SdPasswordShape = @SdPasswordShape + N' CsrPassword';
+IF @SdPasswordShape <> N''
+BEGIN
+    RAISERROR(N'identities.sql: sqlcmd variable(s)%s must carry the platform password hash, a 128-character hex string, and do not. AccessUserPassword stores the value verbatim; a plaintext value creates a user that can never sign in. Hash the password first and pass the hash. Nothing was written.', 16, 1, @SdPasswordShape);
+    RETURN;
+END
 
 BEGIN TRAN;
 

@@ -217,6 +217,12 @@
                   "type": "boolean",
                   "description": "The value is a credential the caller supplies at apply time. Secret values are never repo content and are never logged."
                 },
+                "valueShape": {
+                  "enum": [
+                    "dw-password-hash"
+                  ],
+                  "description": "The shape of the value the script receives. dw-password-hash: the variable carries the Dynamicweb platform password hash AccessUserPassword stores (lowercase hex of SHA512(UTF8(password + \"DwSecret\")), 128 characters), never the plaintext. The caller supplies the plaintext and the applier hashes it once; a script receiving any other shape must refuse before writing. Every sqlcmd variable whose name contains 'password' MUST declare it."
+                },
                 "description": {
                   "type": "string",
                   "description": "What the caller must supply."

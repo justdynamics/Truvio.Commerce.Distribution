@@ -1,5 +1,25 @@
 # Changelog — sample-data
 
+## 2.3.4
+
+### The password variables carry the platform hash (Foundry #1104, password half)
+
+`identities.sql` writes `BuyerPassword` and `CsrPassword` verbatim into `AccessUserPassword`,
+and the host stores a 128-character hex SHA512 string there. The descriptions said "demo
+password", so a caller passing the plaintext seeded buyer and CSR rows that could never sign
+in, with no error anywhere.
+
+- `layer.json`: both variables declare `valueShape: "dw-password-hash"` (new in
+  `layers/layer.schema.json`) and their descriptions state the value is the platform hash
+  (lowercase hex of SHA512 over UTF8(password + "DwSecret")), never the plaintext. The Foundry
+  composer `sql[]` applier (Foundry PR #1213, #1066) reads `valueShape`, takes the plaintext and
+  hashes it once.
+- `identities.sql`: the same shape guard `truvio-identities.sql` carries runs before
+  `BEGIN TRAN`. Any value that is not 128 hex characters raises an error naming the variable and
+  `RETURN`s, so nothing is written with or without `sqlcmd -b`. The header states the contract.
+- No row, id or count changes. A caller that still passes the plaintext now fails loudly
+  instead of seeding users that cannot sign in.
+
 ## 2.3.3
 
 **The fixtures stop being demo content, and not one row changes (Foundry #1074, #1174, #1127,

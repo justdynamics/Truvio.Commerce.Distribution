@@ -1,6 +1,6 @@
 {
   "name": "sample-data",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -23,12 +23,14 @@
         {
           "name": "BuyerPassword",
           "secret": true,
-          "description": "Buyer demo password. Never repo content, never logged."
+          "valueShape": "dw-password-hash",
+          "description": "The platform password HASH for the buyer (user 1328): the 128-character lowercase hex string AccessUserPassword stores (SHA512 over UTF8(password + \"DwSecret\")), never the plaintext password. The applier takes the plaintext and hashes it; the script refuses any other shape before writing. Demo credential, never repo content, never logged."
         },
         {
           "name": "CsrPassword",
           "secret": true,
-          "description": "CSR demo password. Never repo content, never logged."
+          "valueShape": "dw-password-hash",
+          "description": "The platform password HASH for the CSR (user 1326): the 128-character lowercase hex string AccessUserPassword stores (SHA512 over UTF8(password + \"DwSecret\")), never the plaintext password. The applier takes the plaintext and hashes it; the script refuses any other shape before writing. Demo credential, never repo content, never logged."
         }
       ]
     },

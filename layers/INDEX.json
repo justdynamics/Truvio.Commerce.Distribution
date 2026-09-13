@@ -75,7 +75,7 @@
     {
       "name": "sample-data",
       "kind": "sample-data",
-      "version": "2.3.3",
+      "version": "2.3.4",
       "status": "active"
     },
     {
@@ -105,7 +105,7 @@
     {
       "name": "truvio-demo",
       "kind": "sample-data",
-      "version": "1.7.1",
+      "version": "1.7.2",
       "status": "active"
     }
   ],
