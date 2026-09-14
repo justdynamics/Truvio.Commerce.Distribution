@@ -120,7 +120,6 @@
         "AreaEcomShopId",
         "AreaEcomCountryCode",
         "AreaEcomLanguageId",
-        "AreaEcomCurrencyId",
         "AreaStockLocationID",
         "AreaCreatedDate",
         "AreaUpdatedDate"

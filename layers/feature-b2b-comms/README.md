@@ -20,7 +20,7 @@ Under a new `/Newsletter Emails/Dealer Emails/` folder:
 
 Each is a `Swift-v2_Email` page with `1ColumnEmail` rows: **Header / Heading / Article /
 Product Catalog / Button / Footer**. Product rails reference the sample-data catalog SKUs
-(`FIXT*`); `HideProductPrice: True`; `Layout: "2"` (a numeric-string column count — non-numeric
+(sample-data `TCPROD*` masters); `HideProductPrice: True`; `Layout: "2"` (a numeric-string column count — non-numeric
 crashes the template with DivideByZero, report finding F3). `EmailButton` page-link targets are
 left blank because Swift page ids are assigned at deserialize and are not stable to hardcode.
 
@@ -63,5 +63,5 @@ not serializable — the swift-demo Foundry gate run (deserialize + recycle) is 
 
 ## Recipient-group mapping note
 The source solution used its own dealer user groups (1346/1354/1355). The Distribution's sample-data ships
-`Customers` (1325) / `Account Admin` (1270) / `CSR` (1292); the B2B buyer (1328) is a member of
+`Customers` (1325) / `Account Admin` (1270) / `CSR` (1292); the B2B buyer (`100101`) is a member of
 `Customers`. This pack targets **group 1325 (Customers)** as the dealer-network recipient group.

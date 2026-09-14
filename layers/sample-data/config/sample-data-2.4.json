@@ -1,8 +1,8 @@
 {
-  "_comment": "truvio-demo 1.8.0 SqlTable predicates, Serializer 1.0.1-beta config schema (docs/configuration.md SqlTable predicate fields). Intended home: layers/truvio-demo/config/truvio-demo-2.4.json, which Compose-Edition unions into the composed Serializer.config.json (Compose-Edition.ps1:731-741, keyed mode|name). Every predicate is Merge: the layer is kind sample-data and ships only its own TC* rows. Order is FK-safe (parents first) and is also the harvest order; the engine re-sorts SqlTable entries by sys.foreign_keys at deserialize (SerializerOrchestrator.cs:405-429) and disables constraints per table while writing (SqlTableWriter.cs:407). Underscore keys are annotations: ConfigLoader uses default System.Text.Json options (ConfigLoader.cs:18) and ignores them, and Compose-Edition skips top-level _* keys (Compose-Edition.ps1:723). No nameColumn anywhere: file names come from the PK joined with $$, which keeps the base/cross-layer filename collision checks meaningful (base.contract.json:179-188). No serviceCaches: none of the eighteen DwCacheServiceRegistry names is verified for these tables; the host restart the layer already requires covers the caches.",
+  "_comment": "sample-data 4.0.0 SqlTable predicates, Serializer 1.0.1-beta config schema (docs/configuration.md SqlTable predicate fields). Home: layers/sample-data/config/sample-data-2.4.json, which Compose-Edition unions into the composed Serializer.config.json (Compose-Edition.ps1:731-741, keyed mode|name). Every predicate is Merge: the layer is kind sample-data and ships only its own TC* rows. Order is FK-safe (parents first) and is also the harvest order; the engine re-sorts SqlTable entries by sys.foreign_keys at deserialize (SerializerOrchestrator.cs:405-429) and disables constraints per table while writing (SqlTableWriter.cs:407). Underscore keys are annotations: ConfigLoader uses default System.Text.Json options (ConfigLoader.cs:18) and ignores them, and Compose-Edition skips top-level _* keys (Compose-Edition.ps1:723). No nameColumn anywhere: file names come from the PK joined with $$, which keeps the base/cross-layer filename collision checks meaningful (base.contract.json). No serviceCaches: none of the eighteen DwCacheServiceRegistry names is verified for these tables; the host restart the layer already requires covers the caches. The two loose scripts the layer also ships (merge/_sql/demo-clock.sql, merge/_sql/email-stats.sql) are declared in layer.json sql[] and carry no predicate.",
   "predicates": [
     {
-      "name": "truvio-demo AccessUser",
+      "name": "sample-data AccessUser",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "AccessUser",
@@ -19,7 +19,7 @@
       "_why": "Merge: a re-deserialize must never reset a persona or the password UserSetPassword set. The identity key is written with IDENTITY_INSERT (SqlTableWriter.cs:45-64), so 100100..100103 survive. Password and runtime login columns are excluded; AccessUserPasswordSalt is deliberately absent because the column does not exist on DW 10.28.10 and a missing column fails config load."
     },
     {
-      "name": "truvio-demo AccessUserGroupRelation",
+      "name": "sample-data AccessUserGroupRelation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "AccessUserGroupRelation",
@@ -27,7 +27,7 @@
       "_why": "Merge: additive membership into the layer's account 100100 and the base-contract groups 1325/1292/1270."
     },
     {
-      "name": "truvio-demo EcomGroups",
+      "name": "sample-data EcomGroups",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomGroups",
@@ -35,7 +35,7 @@
       "_why": "Merge: sample-data rows under the layer's own prefix."
     },
     {
-      "name": "truvio-demo EcomShopGroupRelation",
+      "name": "sample-data EcomShopGroupRelation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomShopGroupRelation",
@@ -43,7 +43,7 @@
       "_why": "Merge, never Replace: the table is base-owned replaceWholeTable (base.contract.json:152-163); this layer only adds its four TCGRP-*$$SHOP1 rows, as feature-reordering-pricing already does."
     },
     {
-      "name": "truvio-demo EcomGroupRelations",
+      "name": "sample-data EcomGroupRelations",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomGroupRelations",
@@ -51,7 +51,7 @@
       "_why": "Merge: sample-data rows."
     },
     {
-      "name": "truvio-demo EcomVariantGroups",
+      "name": "sample-data EcomVariantGroups",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomVariantGroups",
@@ -59,7 +59,7 @@
       "_why": "Merge: sample-data rows."
     },
     {
-      "name": "truvio-demo EcomVariantsOptions",
+      "name": "sample-data EcomVariantsOptions",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomVariantsOptions",
@@ -67,7 +67,7 @@
       "_why": "Merge: sample-data rows."
     },
     {
-      "name": "truvio-demo EcomProducts",
+      "name": "sample-data EcomProducts",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProducts",
@@ -75,7 +75,7 @@
       "_why": "Merge: keeps a product a demo operator edited; derived counters and GETDATE stamps freeze at harvest."
     },
     {
-      "name": "truvio-demo EcomGroupProductRelation",
+      "name": "sample-data EcomGroupProductRelation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomGroupProductRelation",
@@ -83,7 +83,7 @@
       "_why": "Merge: sample-data rows."
     },
     {
-      "name": "truvio-demo EcomVariantGroupProductRelation",
+      "name": "sample-data EcomVariantGroupProductRelation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomVariantGroupProductRelation",
@@ -91,7 +91,7 @@
       "_why": "Merge: the axis binding the variant selector reads (truvio-catalog.sql:1214-1238); caller-named TCVGR-* key."
     },
     {
-      "name": "truvio-demo EcomVariantOptionsProductRelation",
+      "name": "sample-data EcomVariantOptionsProductRelation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomVariantOptionsProductRelation",
@@ -99,7 +99,7 @@
       "_why": "Merge: natural-pair PK on 10.28.10; on identity-PK builds the engine matches by the natural pair (IdentityPkRelationTables.cs:39-40)."
     },
     {
-      "name": "truvio-demo EcomPrices",
+      "name": "sample-data EcomPrices",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomPrices",
@@ -107,7 +107,7 @@
       "_why": "Merge: keeps a price an operator tuned. All 233 layer prices share the TC-PRICE- prefix."
     },
     {
-      "name": "truvio-demo EcomProductItems",
+      "name": "sample-data EcomProductItems",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProductItems",
@@ -115,7 +115,7 @@
       "_why": "Merge: sample-data BOM slots."
     },
     {
-      "name": "truvio-demo EcomProductCategory",
+      "name": "sample-data EcomProductCategory",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProductCategory",
@@ -123,7 +123,7 @@
       "_why": "Merge: sample-data rows. [_] because _ is a wildcard and the collation is case-insensitive."
     },
     {
-      "name": "truvio-demo EcomProductCategoryTranslation",
+      "name": "sample-data EcomProductCategoryTranslation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProductCategoryTranslation",
@@ -131,7 +131,7 @@
       "_why": "Merge: sample-data rows."
     },
     {
-      "name": "truvio-demo EcomProductCategoryField",
+      "name": "sample-data EcomProductCategoryField",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProductCategoryField",
@@ -139,7 +139,7 @@
       "_why": "Merge: sample-data rows."
     },
     {
-      "name": "truvio-demo EcomProductCategoryFieldTranslation",
+      "name": "sample-data EcomProductCategoryFieldTranslation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProductCategoryFieldTranslation",
@@ -147,7 +147,7 @@
       "_why": "Merge: sample-data rows."
     },
     {
-      "name": "truvio-demo EcomProductCategoryFieldValue",
+      "name": "sample-data EcomProductCategoryFieldValue",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProductCategoryFieldValue",
@@ -155,7 +155,7 @@
       "_why": "Merge: the 180 catalog + 240 pdp values as one set, which retires the #1168 ordering hazard."
     },
     {
-      "name": "truvio-demo EcomFieldDisplayGroups",
+      "name": "sample-data EcomFieldDisplayGroups",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomFieldDisplayGroups",
@@ -163,7 +163,7 @@
       "_why": "Merge by identity id. Harvest only AFTER the source-host rekey to 100120 (plan.md (b) step 12): the id is referenced by int columns in the next two tables and is never remapped by the engine."
     },
     {
-      "name": "truvio-demo EcomFieldDisplayGroupTranslation",
+      "name": "sample-data EcomFieldDisplayGroupTranslation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomFieldDisplayGroupTranslation",
@@ -171,7 +171,7 @@
       "_why": "Merge: carries the rekeyed group id in FieldDisplayGroupTranslationGroupId."
     },
     {
-      "name": "truvio-demo EcomFieldDisplayGroupFields",
+      "name": "sample-data EcomFieldDisplayGroupFields",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomFieldDisplayGroupFields",
@@ -179,7 +179,7 @@
       "_why": "Merge: 28 qualified members; key embeds the rekeyed group id; '|' is sanitised to '_' in file names only (FlatFileStore.cs:133-141)."
     },
     {
-      "name": "truvio-demo EcomDetailsGroup",
+      "name": "sample-data EcomDetailsGroup",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomDetailsGroup",
@@ -187,7 +187,7 @@
       "_why": "Merge by identity id. Harvest only AFTER the rekey to 100110 (Images) / 100111 (Manuals). Merge rather than Replace so a solution that already tuned a category at that id is filled, never re-shaped."
     },
     {
-      "name": "truvio-demo EcomDetails",
+      "name": "sample-data EcomDetails",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomDetails",
@@ -195,7 +195,7 @@
       "_why": "Merge: 192 image + 60 gallery + 120 document rows; keeps a brand-photograph swap made after deserialize (truvio-pdp.sql:387-392)."
     },
     {
-      "name": "truvio-demo EcomProductsRelatedGroups",
+      "name": "sample-data EcomProductsRelatedGroups",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProductsRelatedGroups",
@@ -203,7 +203,7 @@
       "_why": "Merge: sample-data rows."
     },
     {
-      "name": "truvio-demo EcomProductsRelated",
+      "name": "sample-data EcomProductsRelated",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProductsRelated",
@@ -211,7 +211,7 @@
       "_why": "Merge: sample-data rows."
     },
     {
-      "name": "truvio-demo EcomStockUnit",
+      "name": "sample-data EcomStockUnit",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomStockUnit",
@@ -219,7 +219,7 @@
       "_why": "Merge by identity-only key. Harvest only AFTER the rekey of Id to 100201..100260. StockUnitStockLocationId is the harvest host's Default stock location (3 on foundry-blank) and binds only on clones of the same Swift blank; drop this predicate if the online parity check shows a different location id."
     },
     {
-      "name": "truvio-demo EcomOrders",
+      "name": "sample-data EcomOrders",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomOrders",
@@ -234,7 +234,7 @@
       "_why": "Merge: keeps order-state changes a demo made. Excluded columns are session/token columns the script never sets."
     },
     {
-      "name": "truvio-demo EcomOrderLines",
+      "name": "sample-data EcomOrderLines",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomOrderLines",

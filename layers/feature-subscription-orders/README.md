@@ -22,7 +22,7 @@ the invoice path (any payment method with `PaymentAddInType != Checkout` resolve
 `RecurringSupported` returns true), the CartV2 frontend parses the recurring POST fields natively,
 and the platform's own scheduled task generates follow-up orders. PAY2/SHIP9/ScheduledTask are
 **declared configRow dependencies, not fragment rows** — the layer inserts nothing into those
-tables. **1.2.0 (Foundry 960):** the recurring product `PACK-SUB-PROD1`, its group `PACK-SUB-GRP1` and
+tables. **1.2.2:** the recurring product is the sample-data subscription plan `TCPROD0061` (`TC-SUB-0061`, list 49 EUR, in `TCGRP-PRICE-STRUCTURES`), a `base.contract.json` `sampleData.guaranteedRows` subject. **1.2.0 (Foundry 960):** the recurring product, its group and
 their group/shop relations moved to `sample-data` `merge/_sql/feature-fixtures.sql` with their ids
 unchanged. This layer ships zero catalogue rows; the checkout-recurring probe rides the same
 product id, now seeded by the sampleData toggle.
@@ -81,7 +81,7 @@ could be CSRF'd into ending *their own* subscription (never someone else's). `En
 
 ## Canonical buyer contract
 
-- Customer number **`98745621`**, username **`IMCUser`** — seeded per version by the gate
+- Customer number **`TC-100200`**, buyer **`TruvioBuyer`** (`AccessUser` `100101`) — a base-contract sample-data subject, seeded per version by the gate
   (`Invoke-SeedGating`, pre-host-start).
 - Password resolved from the `buyerPassword` secret in git-ignored
   `config/gate-secrets.local.json` (falling back to the documented demo default); never stored
@@ -102,7 +102,7 @@ ownership split.
 
 | Probe | Expectation |
 |-------|-------------|
-| `checkout-recurring` on `/en-us/subscribe` (product PACK-SUB-PROD1 × 1, PAY2/SHIP9, GotoStep1 — `CartV2.GotoStep{i}` is 0-BASED, so index 1 targets the second step, the `IsCheckout=true` Checkout step) | Authenticated multi-step checkout completes; IMCUser's count of `EcomRecurringOrder` rows with a non-empty `RecurringOrderBaseOrderID` **increases across the checkout POST** (before/after delta, Phase 8 WR-01 — pre-existing rows never satisfy the proof) |
+| `checkout-recurring` on `/en-us/subscribe` (product TCPROD0061 × 1, PAY2/SHIP9, GotoStep1 — `CartV2.GotoStep{i}` is 0-BASED, so index 1 targets the second step, the `IsCheckout=true` Checkout step) | Authenticated multi-step checkout completes; the buyer's count of `EcomRecurringOrder` rows with a non-empty `RecurringOrderBaseOrderID` **increases across the checkout POST** (before/after delta, Phase 8 WR-01 — pre-existing rows never satisfy the proof) |
 | criticalPath `/en-us/account/subscriptions` | 2xx via the account-gated sign-in redirect (302→sign-in 200, like base Orders — the page lives under Customer center/Account). The Subscribe page is deliberately NOT a criticalPath: anonymous + empty cart hits `EmptyCartRadioRedirect` with unverified target semantics (RESEARCH A4) |
 
 ## Authenticated list-render — real-host UAT (LRN-HARNESS-03)

@@ -376,6 +376,11 @@
                 },
                 "description": "bom-cart-lines only: one {group, product} per BOM slot the add POST selects, posted as <group>=<product> alongside cartcmd=add. Required at runtime for kind bom-cart-lines (fail-closed FAIL row when absent or empty) - the kind-conditional requiredness JSON Schema cannot express is enforced by the probe (section-6 registration-asymmetry precedent)."
               },
+              "groupId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9._-]+$",
+                "description": "bom-cart-lines only: OPTIONAL - the EcomGroups id the product page is addressed through. When present the kind builds ?GroupID={groupId}&ProductID={productId} for the render proof and posts the add to {path}?GroupID={groupId}. Declared as its own field because path stays PATH-ONLY (a query string in path is refused - the T-09-02 injection guard never loosens). Measured on DW 10.28.10 / Swift 2.4 (Foundry #1233): /en-us/kit-configurator?ProductID=TCPROD0042 answers 404 while /en-us/kit-configurator?GroupID=TCGRP-BUNDLES&ProductID=TCPROD0042 answers 200 with the js-product-bom-configurator marker. Conservative identifier charset re-validated at runtime before any request."
+              },
               "expectedChildLines": {
                 "type": "integer",
                 "minimum": 1,
@@ -404,7 +409,7 @@
                 "minItems": 1,
                 "uniqueItems": true,
                 "items": { "type": "string", "pattern": "^[A-Za-z0-9 ._-]+$" },
-                "description": "OPTIONAL, edition-level opt-in (Foundry #1074 / Distribution PR #41). The gate-fixture ids this probe's subject resolves through - FIXT-* / PACK-* rows that ship in the sample-data layer, never in a browsable catalogue. behaviorProbes are LAYER asserts, so they run for every edition composing the layer; a probe that declares requiresFixtures runs ONLY where the composition carries sample data (editions/gate-fixtures.json - the only composition setting sampleData:true on the Swift surface) and is recorded as a loud SKIP row naming those ids and the proving edition everywhere else. A probe is NEVER silently dropped: the SKIP row lands in pack-assert.json alongside the PASS rows. Declare it whenever the probe names an id the sample-data layer owns; omit it for probes that only assert page markup the feature layer itself ships."
+                "description": "OPTIONAL, edition-level opt-in. The sample-data ids this probe's subject resolves through - rows the sample-data layer ships, each one a subject named in base.contract.json sampleData.guaranteedRows, which is what the probe actually binds to. behaviorProbes are LAYER asserts, so they run for every edition composing the layer; a probe that declares requiresFixtures runs ONLY where the composition sets sampleData true, and is recorded as a loud SKIP row naming those ids and a proving edition everywhere else. A probe is NEVER silently dropped: the SKIP row lands in pack-assert.json alongside the PASS rows. Declare it whenever the probe names an id the sample-data layer owns; omit it for probes that only assert page markup the feature layer itself ships."
               }
             }
           },

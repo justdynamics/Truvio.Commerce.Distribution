@@ -1,6 +1,6 @@
 {
   "name": "feature-bom-configurator",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "csLedger": [],
@@ -23,21 +23,22 @@
       {
         "kind": "bom-cart-lines",
         "path": "/en-us/kit-configurator",
-        "productId": "PACK-BOM-0001",
+        "groupId": "TCGRP-BUNDLES",
+        "productId": "TCPROD0042",
         "cartPath": "/en-us/cart/",
         "selections": [
           {
-            "group": "PACK-BOM3-0002",
-            "product": "PACK-BOM-FORK-2"
+            "group": "TC-BOM-0042-1",
+            "product": "TCPROD0003"
           },
           {
-            "group": "PACK-BOM3-0003",
-            "product": "PACK-BOM-RACK-2"
+            "group": "TC-BOM-0042-2",
+            "product": "TCPROD0052"
           }
         ],
         "expectedChildLines": 2,
         "renderProof": false,
-        "requiresFixtures": [ "PACK-BOM-0001", "PACK-BOM-FORK-2", "PACK-BOM-RACK-2" ]
+        "requiresFixtures": [ "TCPROD0042", "TCPROD0003", "TCPROD0052" ]
       }
     ],
     "criticalPaths": [

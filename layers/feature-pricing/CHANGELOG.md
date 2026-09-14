@@ -1,6 +1,31 @@
 # Changelog — feature-pricing
 
+## 1.1.3
 
+Both `cart-price` probes move onto the brand catalogue, and the tier probe gets a stronger
+expected value. The subject moves from a row the sample-data layer used to ship as a marker-string fixture to a row of the browsable brand catalogue, and the probe now binds to a subject the base contract guarantees (`base.contract.json` `sampleData.guaranteedRows`, new in base 3.5.0) rather than to a layer. sample-data 4.0.0 is the merge of the two sample-data layers; the `gate-fixtures` edition is deleted and `swift-demo` sets `sampleData: true`, so this probe resolves in the demo edition itself.
+
+**Tier probe: `PACK-RPP-PROD1` qty 5 / 4500 becomes `TCPROD0020` qty 10 / 96.** The arithmetic.
+`TCPROD0020` ships a 120.00 list price (`TC-PRICE-LIST-0020`), a customer-group row
+`TC-PRICE-GRP-0020` at **108.00 for group 1325 at quantity 1**, and the ladder
+`TC-PRICE-Q05-0020` 108.00 at 5, `TC-PRICE-Q10-0020` 96.00 at 10, `TC-PRICE-Q25-0020` 84.00 at 25.
+The `cart-price` kind signs in as the buyer, and the buyer is a member of 1325, so the
+customer-group row is in scope for every rung. At quantity 5 the expected amount would be 108.00
+whether the tier ladder fired or not, which is a vacuous assert. Quantity 10 is the first rung the
+group row cannot produce: 96.00 is reachable only through `TC-PRICE-Q10-0020`, so the observed
+amount proves the ladder and not price resolution in general. Quantity 25 / 84.00 would prove the
+same thing; 10 is chosen because it is the middle rung and the cheapest cart to build.
+
+**Contract probe: `PACK-RPP-PROD2` qty 1 / 1399 becomes `TCPROD0046` qty 1 / 36.90.**
+`TC-PRICE-CTR-0046` carries 36.90 scoped by `PriceUserCustomerNumber` `TC-100200`, the demo
+account every persona belongs to, against a 45.00 list and a 39.60 customer-group row. All three
+amounts are distinct, so a cart charging the group or the list price fails loudly with the observed
+figure. This is still the zero-code headline: Dynamicweb's stock `DefaultPriceProvider` resolves and
+charges it with no compile.
+
+`customCode.withoutCompile` and `customCode.withCompile` are rewritten onto the same rows: without
+the provider a tiered cart charges the customer-group price, with it `TCPROD0020` charges
+108 / 96 / 84 at 5 / 10 / 25. The provider source is unchanged.
 
 ## 1.1.2
 

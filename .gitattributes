@@ -1,4 +1,4 @@
-# The generated concept and per-product SVG tiles (layers/truvio-demo/tools/make-tiles.py)
+# The generated concept and per-product SVG tiles (layers/sample-data/tools/make-tiles.py)
 # regenerate byte-identical, but a clone with core.autocrlf=true materialises them CRLF
 # while the generator and the committed blob are LF. A retest that diffs a fresh generator
 # run against the WORKING TREE then reports 120 of 120 files "different" on a line-ending

@@ -19,6 +19,7 @@ storefront leg.
 | `itemtypes/` | **Its own 128 `ItemType_Swift-v2_*.xml` definitions from the official Swift v2.4.0 design package** — the surface registers its item types itself (self-contained; the gate overlays them via `Deploy-LayerFilesOverlay` before deserialize). |
 | `config/swift-content-2.4.json` | The content predicates: `Site framework` (Deploy, areaId 3) + the 10 Seed content predicates + UrlPath + the content-scoped exclude maps (`excludeFieldsByItemType`, `excludeXmlElementsByType`). |
 | `surface.contract-notes.json` | The content-scoped contract bits that moved OUT of `base.contract.json`: content anchors (area 3, `/swift-2`), per-environment Area exclusions, protected Swift item types, navDepth obligation, title rules — and the UrlPath decision record. |
+| Area ecommerce currency | The `Swift 2` area ships `AreaEcomCurrencyId` `EUR` in both mode trees (1.13.3). EUR is a base-owned constant, not a per-environment value, and an unbound area on DW 10.28 resolves the request culture's currency - an `/en-us/` storefront then serves USD carts and every EUR `EcomPrices` row is inert (Foundry #1232). `AreaEcomShopId` deliberately stays per-environment: binding it makes DW enforce group-in-shop and every subgroup PDP dies in `IsGroupInCorrectShop`, because only the four top groups carry an `EcomShopGroupRelation` row. |
 
 ## The UrlPath decision (recorded here per RUN-SWIFT-24)
 

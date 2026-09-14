@@ -1,5 +1,58 @@
 # Changelog — base
 
+## 3.5.1
+
+Patch: the contract's `currencyRates.note` no longer states that USD is the currency the Swift
+storefront serves. `baseContractVersion` moves 2.3.0 -> 2.3.1. No SQL set, no base row, no row
+count and no guaranteed row changes.
+
+The sentence was written from a MEASUREMENT of an unbound area, not from a decision. On DW 10.28 an
+area with an empty `AreaEcomCurrencyId` resolves the request culture's currency, so an `/en-us/`
+storefront served USD carts — measured on foundry-sd4v.mydwsite4.com, cart `CART783`
+`OrderCurrencyCode USD` with an empty `OrderShopId`. Every `EcomPrices` row the Distribution ships
+is `PriceCurrency EUR`, so nothing matched and `TCPROD0046` served `EcomProducts.ProductPrice`
+45.00 instead of the contract price 36.90 (Foundry #1232). `surface-swift` 1.13.3 now ships the area
+currency (`EUR`) and the storefront serves EUR, the default currency. The note also
+records the distinction the old text blurred: `CurrencyRate` reasons about DISPLAY, while
+`EcomPrices.PriceCurrency` FILTERING is decided by the area binding.
+
+## 3.5.0
+
+Minor: the contract gains a `sampleData` block and its guaranteed rows change subject.
+`baseContractVersion` moves 2.2.2 -> 2.3.0. No SQL set, no base row and no base row count
+changes; the base still ships the framework sets plus the three permission groups.
+
+- **New `sampleData` block.** Beside `guaranteedRows`, the contract now states what the ONE
+  sample-data layer guarantees to an addition that binds to it: `layer` (`sample-data`),
+  `activatedBy` (`sampleData: true`), a `guaranteedRows` map naming every subject a shipped
+  probe addresses, and the catalogue `counts` an edition asserts (`EcomProducts` 97,
+  `EcomGroups` 16). The subjects are the buyer / CSR / account-admin personas, the
+  SKU-validation product `TC-VAR-0001` (`TCPROD0001`), the quantity-tier product `TCPROD0020`
+  with its ladder and customer-group row, the contract-price product `TCPROD0046` /
+  `TC-PRICE-CTR-0046`, the configurable Bundle Kit `TCPROD0042` with its two
+  `EcomProductItems` slots, the subscription plan `TCPROD0061`, the delivered order
+  `TCO-0001`, and the RMA `PACK-RMA-0001` that `feature-rma` owns and binds to that order.
+  Each entry carries a one-line note naming the probe that addresses it, so a feature layer
+  binds to the contract and never to the sample-data layer.
+- **Personas repointed to the brand identities.** `guaranteedRows.users` and
+  `guaranteedRows.memberships` name `100101` buyer / `100102` CSR / `100103` account admin,
+  all on customer number `TC-100200` and joined to `1325` / `1292` / `1270`. `anchors` follows.
+  The previous pair sat below the 100000 id floor and had to be excepted from it; these do not,
+  so `idRules.intIdentityNote` drops the persona exception and keeps only the base-owned
+  permission groups. `usersNote` records that the rows ship as merge-mode SqlTable YAML and
+  carry no password (the credential is set online through `UserSetPassword`).
+- **Reserved key family moved to `TC*`.** `idRules.reservedFixtureKeys` lists the fourteen `TC*`
+  prefixes the sample-data layer owns, and `reservedFixtureNote` states that an addition writing
+  its own rows into a base-owned table uses its `PACK-<NAME>-` prefix instead.
+- **`guaranteedRows.contractPrice`** names `TC-PRICE-CTR-0046` on `TCPROD0046` at `TC-100200`
+  (36.90 against a 45.00 list and a 39.60 customer-group row).
+- **Prose that named retired artefacts is rewritten**: `usersNote`,
+  `reservedFixtureNote`, `intIdentityNote`, `serializerTaughtSurfaceNote`,
+  `baseOwnedTables.replaceFiltered[0].note` and `BASE.md` no longer name the loose scripts, the
+  retired key families or the retired persona ids. Salvaged from the 3.4.3 draft (Distribution
+  PR #55): the `serializerTaughtSurfaceNote` rewrite that stops naming a layer version that never
+  shipped.
+
 ## 3.4.2
 
 Patch: the serializer floor rises and the id-floor rule names its exceptions. `baseContractVersion`

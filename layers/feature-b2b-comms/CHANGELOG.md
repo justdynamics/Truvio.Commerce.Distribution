@@ -1,5 +1,12 @@
 # Changelog — feature-b2b-comms
 
+## 1.0.4
+
+Patch: the five dealer emails' `Swift-v2_EmailProductCatalog` product pickers named `FIXT000N` rows
+that sample-data 4.0.0 no longer ships, so every rail would have rendered empty. Each id is
+repointed to the brand master at the same ordinal (`FIXT0001` -> `TCPROD0001`, and so on). Nothing
+else changes: the same four-or-two product selection per email, the same layout, aspect ratio and
+hidden-price settings, the same copy.
 
 ## 1.0.3
 

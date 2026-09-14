@@ -1,6 +1,6 @@
 {
   "name": "feature-pricing",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "files": [
@@ -26,8 +26,8 @@
     "sources": [
       "src/ReorderingPricingQtyBreakProvider.cs"
     ],
-    "withoutCompile": "Customer-contract pricing is the zero-code headline: the buyer-scoped EcomPrices row (PACK-RPP-0004, PriceUserCustomerNumber 98745621) is resolved and charged end-to-end by Dynamicweb's stock DefaultPriceProvider with NO custom code — PACK-RPP-PROD2 prices 1399 for customer 98745621 (base 1599). The quantity-tier EcomPrices rows (PACK-RPP-0001..0003 on PACK-RPP-PROD1) ship as data and render on tier-aware surfaces, but the stock cart resolver ignores tier quantities at cart time, so uncompiled the cart charges the base price for tiers.",
-    "withCompile": "Compiling ReorderingPricingQtyBreakProvider (PriceProvider, discovered by assembly-scan; non-exclusive, HandlePricesExclusively=false) ADDS cart-time enforcement of the quantity tiers: PACK-RPP-PROD1 prices 4500/4200/3900 at qty 5/10/25. The provider returns a price ONLY for real tiers (Quantity > 1); base and contract rows fall through to the default provider, so contract pricing is identical whether or not it is compiled.",
+    "withoutCompile": "Customer-contract pricing is the zero-code headline: the buyer-scoped EcomPrices row (TC-PRICE-CTR-0046, PriceUserCustomerNumber TC-100200) is resolved and charged end-to-end by Dynamicweb's stock DefaultPriceProvider with NO custom code — TCPROD0046 prices 36.90 for the demo account (list 45.00, customer-group row 39.60). The quantity-tier EcomPrices rows (TC-PRICE-Q05/Q10/Q25-0020 on TCPROD0020) ship as data and render on tier-aware surfaces, but the stock cart resolver ignores tier quantities at cart time, so uncompiled the cart charges the customer-group price for tiers.",
+    "withCompile": "Compiling ReorderingPricingQtyBreakProvider (PriceProvider, discovered by assembly-scan; non-exclusive, HandlePricesExclusively=false) ADDS cart-time enforcement of the quantity tiers: TCPROD0020 prices 108/96/84 at qty 5/10/25 against a 120 list. The provider returns a price ONLY for real tiers (Quantity > 1); base and contract rows fall through to the default provider, so contract pricing is identical whether or not it is compiled.",
     "compileStep": "Opt-in per the dynamicweb-skills feature-layer compile recipe (D3): add src/*.cs to the Swift solution's custom-code project and build; the provider self-registers via assembly scan (no config row required)."
   },
   "asserts": {
@@ -36,19 +36,19 @@
         "kind": "cart-price",
         "path": "/en-us/express-buy",
         "cartPath": "/en-us/cart/",
-        "productId": "PACK-RPP-PROD2",
+        "productId": "TCPROD0046",
         "quantity": 1,
-        "expectedAmount": 1399,
-        "requiresFixtures": [ "PACK-RPP-PROD2" ]
+        "expectedAmount": 36.9,
+        "requiresFixtures": [ "TCPROD0046" ]
       },
       {
         "kind": "cart-price",
         "path": "/en-us/express-buy",
         "cartPath": "/en-us/cart/",
-        "productId": "PACK-RPP-PROD1",
-        "quantity": 5,
-        "expectedAmount": 4500,
-        "requiresFixtures": [ "PACK-RPP-PROD1" ]
+        "productId": "TCPROD0020",
+        "quantity": 10,
+        "expectedAmount": 96,
+        "requiresFixtures": [ "TCPROD0020" ]
       }
     ]
   }

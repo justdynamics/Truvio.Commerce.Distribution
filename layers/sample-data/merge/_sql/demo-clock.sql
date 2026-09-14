@@ -21,8 +21,15 @@
 -- (a +1 then -1 test nets zero) and catch-up safe, so it runs unattended after
 -- idle days.
 --
--- Applies AFTER catalog.sql: the anchor is set to the date the fixtures were
--- seeded, and catalog.sql seeds them with GETDATE().
+-- Applies AFTER the merge deserialize that lands this layer's rows. Those rows
+-- are serialized YAML carrying ABSOLUTE dates frozen at the harvest day
+-- 2026-09-13: the twelve brand orders TCO-0001..TCO-0012 ladder back from
+-- 2026-09-12, and every product carries ProductCreated and
+-- ProductExpectedDelivery from the same harvest. The anchor is therefore seeded
+-- to that harvest day and NOT to GETDATE(): a GETDATE() anchor reads delta 0 on
+-- a fresh install, so the orders would stay frozen in 2026-09 forever while the
+-- task reported Success. With the harvest-day anchor the first run carries a
+-- real delta and moves the whole dataset onto the current calendar in one pass.
 --
 -- Idempotent: the tables, the seed rows, the procedure and the task row are all
 -- created only when absent (the procedure uses CREATE OR ALTER). Transactional
@@ -33,7 +40,7 @@
 --
 -- A SQL-inserted ScheduledTask row is invisible to a RUNNING app until a
 -- recycle: the scheduled-task service caches its task collection at application
--- start. sample-data already requires a host restart after catalog.sql, so the
+-- start. sample-data already requires a host restart after its deserialize, so the
 -- task is registered before that restart and is live from it. Prove the
 -- registration from GET /Admin/Api/Tasks (mind the 10-row default page size),
 -- never from the INSERT.
@@ -59,9 +66,11 @@ BEGIN
 END
 GO
 
+-- The harvest day the shipped rows carry, as a literal and never GETDATE() -
+-- see the header. Re-harvesting this layer's YAML moves this date with it.
 IF NOT EXISTS (SELECT 1 FROM dbo._demoClock WHERE Id = 1)
     INSERT INTO dbo._demoClock (Id, AnchoredTo, Label)
-    VALUES (1, CAST(GETDATE() AS date), N'sample-data demo clock');
+    VALUES (1, CAST('2026-09-13' AS date), N'sample-data demo clock');
 GO
 
 -- ---------------------------------------------------------------------------
@@ -336,7 +345,7 @@ BEGIN
          @addin, @settings,
          -- TaskComment is NVARCHAR(255): a longer literal fails the INSERT with
          -- Msg 2628 (String or binary data would be truncated).
-         N'Keeps sample-data fixtures anchored to today: shifts every operational date column by DATEDIFF(day, _demoClock.AnchoredTo, today), then re-anchors. Whole-day and uniform, so ordering and gaps survive. Skips _demoClockExclusion; guards _demoClockGuard.',
+         N'Keeps the sample-data rows anchored to today: shifts every operational date column by DATEDIFF(day, _demoClock.AnchoredTo, today), then re-anchors. Whole-day and uniform, so ordering and gaps survive. Skips _demoClockExclusion; guards _demoClockGuard.',
          0, 0, 1, 1);
 END
 GO
@@ -348,13 +357,14 @@ GO
 -- delta is legitimately 0 on that pass. "The task ran" is not evidence that
 -- "the task shifts", and a bare run reports Success while doing nothing.
 --
---   -- capture a known timestamp
---   SELECT TOP 1 OrderId, OrderDate FROM EcomOrders WHERE OrderId = 'FIXT-ORDER-RMA1';
+--   -- capture a known timestamp (TCO-0001 is the delivered order the RMA
+--   -- flow returns against)
+--   SELECT TOP 1 OrderId, OrderDate FROM EcomOrders WHERE OrderId = 'TCO-0001';
 --   -- rewind THIS shifter's anchor by one day, leaving any other anchor alone
 --   UPDATE dbo._demoClock SET AnchoredTo = DATEADD(day, -1, AnchoredTo) WHERE Id = 1;
 --   EXEC dbo.usp_DemoClockShift;
 --   -- assert: OrderDate advanced by exactly one day, AnchoredTo is today again
---   SELECT OrderId, OrderDate FROM EcomOrders WHERE OrderId = 'FIXT-ORDER-RMA1';
+--   SELECT OrderId, OrderDate FROM EcomOrders WHERE OrderId = 'TCO-0001';
 --   SELECT Id, AnchoredTo FROM dbo._demoClock;
 --
 -- Idempotency check: rewind +1, run, rewind -1, run - the timestamps net zero.

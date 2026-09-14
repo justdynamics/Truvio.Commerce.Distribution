@@ -14,10 +14,10 @@
   "Sort": 0
   "Title": "Placeholder — product rail heading (introductory product selection)"
   "Products":
-  - "FIXT0001"
-  - "FIXT0002"
-  - "FIXT0005"
-  - "FIXT0007"
+  - "TCPROD0001"
+  - "TCPROD0002"
+  - "TCPROD0005"
+  - "TCPROD0007"
   "ImageAspectRatio": "4-3"
   "Layout": "2"
   "HideProductPrice": "True"

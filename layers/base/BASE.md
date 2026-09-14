@@ -14,13 +14,13 @@ The machine-readable guarantees live in [`base.contract.json`](base.contract.jso
 |---|---|
 | **nvarchar PK** on a base-owned table (`PriceId`, `ProductId`, `PaymentId`, …) | Namespace with a **`PACK-<NAME>-`** prefix (uppercase layer name) |
 | **int-identity PK** on a SqlTable row | Reserve an id at or above the **`100000`** floor |
-| sample-data demo catalog | Reserves `FIXT*` / `FIXTGRP*` / `FIXT-PRICE-*` |
+| sample-data demo catalogue | Reserves the `TC*` family (`TCGRP-*`, `TCPROD*`, `TCVG-*`, `TCVGR-*`, `TCVO-*`, `TC-PRICE-*`, `TC-BOM-*`, `TC-DETAIL-*`, `TC-DOC-*`, `TC-GAL-*`, `TC-HOVER-*`, `TCREL-*`, `TCO-*`, `tc_*`) |
 
 The base ships **zero catalog** — `EcomGroups/EcomProducts/EcomPrices/EcomDiscount/EcomVariant*/EcomGroupProductRelation` are empty of base rows, so for those tables the collision surface is addition-vs-sample-data-vs-addition (arbitrated statically by the gate). There is deliberately **no per-itemType numeric range table** — the contract is prefix-based.
 
 The floor does not reach `_content` item-instance ids (`ItemType_<systemName>` rows written through a page or paragraph). `ItemType_*` `Id` is a non-identity nvarchar the platform allocates on insert, and the Serializer re-creates item rows by page/paragraph uniqueId, so the target assigns its own id: a YAML `fields.Id` is informational and never lands as the stored id.
 
-The floor applies to the int ids a layer **mints**. The `AccessUser` ids the contract names in `guaranteedRows` are explicit exceptions: the permission groups `1325` / `1270` / `1292` (base-owned) and the sample-data personas `1326` / `1328` sit below the floor by contract, and a layer MAY ship exactly those ids as SqlTable rows (the base ships the groups; `sample-data` ships the personas and their memberships). Any other id below `100000` is out of contract. No validator checks the int-identity floor; it is an authoring rule.
+The floor applies to the int ids a layer **mints**. The one explicit exception is the base's own permission groups `1325` / `1270` / `1292`, which sit below the floor by contract and ship as base SqlTable rows. Every identity the sample-data layer mints is above it: the B2B account `100100` and the personas `100101` / `100102` / `100103`. Any other id below `100000` is out of contract. No validator checks the int-identity floor; it is an authoring rule.
 
 ## Guaranteed anchors (additions may bind to these)
 
@@ -28,10 +28,15 @@ The floor applies to the int ids a layer **mints**. The `AccessUser` ids the con
 - `1325` Customers · `1270` Account Admin · `1292` CSR
 
 **Users** (`AccessUser`, type 5), **present only when an edition activates `sampleData: true`** (`presentOnlyWhen: sampleData` in the contract):
-- `1328` **IMCUser** (buyer, customer number `98745621`) — member of `1325`
-- `1326` **IMCSalesrep** (CSR, customer number `7789765`) — member of `1292`
+- `100101` **TruvioBuyer** (buyer, `buyer@truvio-demo.example`) — member of `1325`
+- `100102` **TruvioCsr** (CSR, `csr@truvio-demo.example`) — member of `1292`
+- `100103` **TruvioAdmin** (account admin, `admin@truvio-demo.example`) — member of `1270`
 
-These rows and their memberships ship in the sample-data layer's `identities.sql`, not in the base. An edition with `sampleData: false` has neither user nor membership, so a persona, sign-in or customer-number binding against them finds no row. A layer probe that needs them names the fixture in its `requiresFixtures`.
+All three are contacts on one B2B account (`AccessUser` `100100`, **customer number `TC-100200`**) and carry that same customer number: contract prices, account-wide favourites and the CSR account listing compare the string exactly, so a per-contact suffix would limit them to one contact. The rows and their memberships ship in the sample-data layer as merge-mode SqlTable YAML, not in the base, and carry **no password**: the layer's predicate excludes `AccessUserPassword` and the credential is set online through the Management API `UserSetPassword` command. An edition with `sampleData: false` has neither user nor membership, so a persona, sign-in or customer-number binding against them finds no row. A layer probe that needs one names it in its `requiresFixtures`.
+
+## What sample data guarantees (`sampleData` block)
+
+`base.contract.json` carries a `sampleData` block beside `guaranteedRows`: the subjects the one sample-data layer guarantees, so a feature layer binds to the contract and never to the layer. It names the three personas above, the SKU-validation product `TC-VAR-0001` (`TCPROD0001`), the quantity-tier product `TCPROD0020` with its ladder (120 list; 108 / 96 / 84 at 5 / 10 / 25) and its customer-group row, the contract-price product `TCPROD0046` / `TC-PRICE-CTR-0046` at `TC-100200`, the configurable Bundle Kit `TCPROD0042` with its two `EcomProductItems` slots, the subscription plan `TCPROD0061`, the delivered order `TCO-0001`, and the RMA `PACK-RMA-0001` that `feature-rma` itself owns and binds to that order. Each entry names the probe that addresses it. The block also pins the catalogue counts an edition asserts: `EcomProducts` 97, `EcomGroups` 16.
 
 **Content:** none — the base ships zero content areas (3.0.0). Content anchors (area 3, langPrefix `/swift-2`) are surface-swift-owned.
 
@@ -41,7 +46,7 @@ These rows and their memberships ship in the sample-data layer's `identities.sql
 
 **Currency rates:** `EcomCurrencies.CurrencyRate` is hundredths against the default currency. EUR is the default at `100`; USD, the currency the Swift storefront serves, ships at `100` (parity with the default, a demo value and not an exchange rate). No shipped row carries a rate at or below `1`, which renders every price a hundred times over.
 
-**Contract price:** `EcomPrices` row `FIXT-PRICE-CONTRACT` on `FIXT0001` (customer `98745621`, list × 0.8) — ships in the sample-data layer's `catalog.sql`, present when an edition activates `sampleData: true`.
+**Contract price:** `EcomPrices` row `TC-PRICE-CTR-0046` on `TCPROD0046` (customer number `TC-100200`, 36.90 against a 45.00 list and a 39.60 customer-group row) — ships in the sample-data layer, present when an edition activates `sampleData: true`.
 
 **Repository:** `ProductsFrontend` / `Products.index` / `Products.query` / `Products.facets`, at `wwwroot/Files/System/Repositories/ProductsFrontend/`. It ships with the host's Swift design package (present at the Swift 2.4.0 tag next to `ProductsBackend`), not with any layer in this Distribution, so `provisionedByGate` is `false`: the composition references it, the host supplies it. Every `eCom_ProductCatalog` surface the Distribution ships binds it by path (surface-swift Shop PLP, header search and Express Buy; surface-dap-portal Product Assets and Search results; feature-bom-configurator Kit Configurator). A PLP that cannot list products answers HTTP 200 in both failure shapes: with the repository present over an index of zero documents it carries an in-page Lucene `numHits must be > 0` error, and with the repository absent it renders an empty app div with no error text at all. Gate the PLP on a positive subject (at least one product card) plus `dw-error == 0`, never on status or on the absence of error text.
 

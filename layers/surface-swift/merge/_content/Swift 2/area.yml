@@ -33,7 +33,7 @@
   "AreaCulture": "en-US"
   "AreaApprovalType": 0
   "AreaEcomLanguageId": ""
-  "AreaEcomCurrencyId": ""
+  "AreaEcomCurrencyId": "EUR"
   "AreaActive": true
   "AreaMasterAreaId": 0
   "AreaRobotsTxt": ""

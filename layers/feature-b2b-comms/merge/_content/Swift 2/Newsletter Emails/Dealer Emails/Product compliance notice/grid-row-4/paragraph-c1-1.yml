@@ -14,8 +14,8 @@
   "Sort": 0
   "Title": "Placeholder — product rail heading (compliant replacement products)"
   "Products":
-  - "FIXT0006"
-  - "FIXT0008"
+  - "TCPROD0006"
+  - "TCPROD0008"
   "ImageAspectRatio": "4-3"
   "Layout": "2"
   "HideProductPrice": "True"

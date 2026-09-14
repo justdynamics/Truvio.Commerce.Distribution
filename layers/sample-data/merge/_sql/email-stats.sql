@@ -159,7 +159,7 @@ BEGIN
         (RecipientKey, RecipientName, RecipientEmailAddress, RecipientMessageId,
          RecipientSentTime, RecipientErrorMessage, RecipientErrorTime, RecipientSecret)
     SELECT
-        N'FIXT-RCPT-' + RIGHT(N'00' + CAST(n.i AS nvarchar(3)), 2),
+        N'TC-RCPT-' + RIGHT(N'00' + CAST(n.i AS nvarchar(3)), 2),
         N'Sample Recipient ' + RIGHT(N'00' + CAST(n.i AS nvarchar(3)), 2),
         N'sample-recipient-' + RIGHT(N'00' + CAST(n.i AS nvarchar(3)), 2) + N'@example.invalid',
         @messageId,
@@ -181,7 +181,7 @@ BEGIN
         FROM sys.all_objects
     )
     INSERT INTO OMCLink (LinkUrl, LinkReferenceType, LinkReferenceKey)
-    SELECT CASE l.i WHEN 1 THEN N'/shop' WHEN 2 THEN N'/shop?ProductID=FIXT0002' ELSE N'/contact' END,
+    SELECT CASE l.i WHEN 1 THEN N'/shop' WHEN 2 THEN N'/shop?GroupID=TCGRP-PRICE-STRUCTURES&ProductID=TCPROD0020' ELSE N'/contact' END,
            N'EmailMessaging',
            CAST(@messageId AS nvarchar(510))
     FROM l;

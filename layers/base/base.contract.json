@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "2.2.2",
+  "baseContractVersion": "2.3.1",
   "swiftVersion": "2.4.0",
   "compat": {
     "dw": {
@@ -27,21 +27,32 @@
   "compatNote": "COMPATIBILITY FLOOR the base states and every addition inherits (v5 version spine, V5-PLAN 2.2). Floors plus a single proven point, never a support matrix: rolling latest-only means the gate proves exactly one (dw, apps, swift tag) triple per run, and what it proved is recorded upward in layers/INDEX.json gateProven - written by the Foundry, never by hand. `dw.min` is the platform floor, `dw.tfm` the single target framework the host must build against, `swift.tag` the dynamicweb/Swift release tag (the 3-digit `swiftVersion` above is the same release without the tag form). `apps[].required: false` is an optional companion app: absent is fine, present below `min` is not. An addition MAY restate `compat` in its own layer.json to raise a floor; it may never lower one.",
   "minSerializerVersion": "1.0.2-beta",
   "minSerializerVersionDeprecated": "DEPRECATED ALIAS, not a second floor. The one serializer floor is compat.apps[id=Truvio.Commerce.Serializer].min: the Foundry compat leg (Test-CompatFloors) and the dw-demo-base install step read that key and nothing else. This field repeats the same value for prose readers that still name it (dynamicweb/skills dw-users-permissions page-gating.md); tools/ci/Validate-Distribution.ps1 fails when it disagrees with compat.apps, so it can never state a different number. Raise compat.apps and this field together; remove this field once no reader names it.",
-  "serializerTaughtSurfaceNote": "WHY THE FLOOR IS 1.0.2-beta (base 3.4.2). Layers now ship serialized SqlTable rows: truvio-demo 1.8.0 ships its commerce dataset as merge-mode SqlTable YAML with a per-document ownership header (Foundry #1215), and sample-data 3.0.0 follows. Three engine facts set the floor. (1) SqlTable NULL round trip: Truvio.Commerce.Serializer 1.0.1-beta and earlier wrote a NULL column as 1900-01-01 / '' / 0 in Merge mode on a row where an empty-string column came before the NULL (Serializer issue #18); 1.0.2-beta is the first release that writes it back as NULL, so an older engine silently corrupts shipped rows. (2) PackageUnzip, the transport an online build uses to move a layer's files, is available from 1.0.1-beta. (3) The ownership header needs 1.0.0-beta or later: a 0.9.x engine fails strict on the unknown ownership column. The engine's taught surface (the skills corpus and the Foundry harness) may run ahead of this floor; the floor rises only when a layer ships something an older engine drops, rejects or corrupts. Raise compat.apps[id=Truvio.Commerce.Serializer].min and minSerializerVersion together, not this note.",
+  "serializerTaughtSurfaceNote": "WHY THE FLOOR IS 1.0.2-beta (base 3.4.2). Layers ship serialized SqlTable rows: sample-data 4.0.0 ships its whole demo dataset as merge-mode SqlTable YAML with a per-document ownership header, and feature-rma ships its RMA rows the same way. Three engine facts set the floor. (1) SqlTable NULL round trip: Truvio.Commerce.Serializer 1.0.1-beta and earlier wrote a NULL column as 1900-01-01 / '' / 0 in Merge mode on a row where an empty-string column came before the NULL (Serializer issue #18); 1.0.2-beta is the first release that writes it back as NULL, so an older engine silently corrupts shipped rows. (2) PackageUnzip, the transport an online build uses to move a layer's files, is available from 1.0.1-beta. (3) The ownership header needs 1.0.0-beta or later: a 0.9.x engine fails strict on the unknown ownership column. The engine's taught surface (the skills corpus and the Foundry harness) may run ahead of this floor; the floor rises only when a layer ships something an older engine drops, rejects or corrupts. Raise compat.apps[id=Truvio.Commerce.Serializer].min and minSerializerVersion together, not this note.",
   "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution, base 3.0.0 FRAMEWORK-ONLY). The Swift 2.4 base split moved ALL content (both mode trees) and UrlPath to the surface-swift layer; the base now ships only the framework SQL sets + this contract + SQL-predicate config. Additions (feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Content-scoped contract bits (content areas, langPrefix, navDepth, page anchors, title rules, per-environment Area exclusions, protected Swift item types) moved to layers/surface-swift/surface.contract-notes.json. The gate reads this file for the base-contract collision check.",
   "idRules": {
     "nvarcharPkPrefix": "PACK-<NAME>-",
     "nvarcharPkNote": "When an addition writes rows into a base-owned table whose PK is nvarchar (most Ecom tables - PriceId, PaymentId, ProductId, etc.), it MUST namespace the PK with a PACK-<NAME>- prefix (uppercase layer name). Keeps additions disjoint from the base and from each other.",
     "intIdentityFloor": 100000,
-    "intIdentityNote": "When an addition writes SqlTable rows keyed by an int-identity PK, it MUST reserve an id at or above the 100000 floor. The floor does not reach _content item-instance ids (ItemType_<systemName> rows written through a page or paragraph): ItemType_* Id is a non-identity nvarchar the platform allocates on insert, and the Serializer content provider re-creates item rows by page/paragraph uniqueId, so the target assigns its own id and a YAML fields.Id never lands as the stored id. fields.Id in _content is informational only; no validator checks an item-id floor on _content. The floor applies to the int ids a layer MINTS. The AccessUser ids this contract names in guaranteedRows are explicit exceptions: the permission groups 1325 / 1270 / 1292 (base-owned) and the sample-data personas 1326 / 1328 sit below the floor by contract, and a layer MAY ship exactly those ids as SqlTable rows (the base ships the groups; sample-data ships the personas and their memberships). Any other id below 100000 is out of contract. No validator checks the int-identity floor; it is an authoring rule.",
+    "intIdentityNote": "When an addition writes SqlTable rows keyed by an int-identity PK, it MUST reserve an id at or above the 100000 floor. The floor does not reach _content item-instance ids (ItemType_<systemName> rows written through a page or paragraph): ItemType_* Id is a non-identity nvarchar the platform allocates on insert, and the Serializer content provider re-creates item rows by page/paragraph uniqueId, so the target assigns its own id and a YAML fields.Id never lands as the stored id. fields.Id in _content is informational only; no validator checks an item-id floor on _content. The floor applies to the int ids a layer MINTS. The AccessUser ids this contract names in guaranteedRows.permissionGroups are the one explicit exception: the permission groups 1325 / 1270 / 1292 are base-owned and sit below the floor by contract, and the base ships exactly those ids as SqlTable rows. Every identity the sample-data layer mints is above the floor (the B2B account 100100 and the personas 100101 / 100102 / 100103). Any other id below 100000 is out of contract. No validator checks the int-identity floor; it is an authoring rule.",
     "baseCatalog": "empty",
     "baseCatalogNote": "The base ships ZERO catalog (scaffolding-only, swift/2.3.2): EcomGroups, EcomProducts, EcomGroupProductRelation, EcomVariantGroups, EcomVariantsOptions, EcomVariantOptionsProductRelation, EcomDiscount, EcomDiscountTranslation, EcomPrices carry no base rows. The collision surface for these tables is addition-vs-sample-data-vs-addition, arbitrated statically by the gate.",
     "reservedFixtureKeys": [
-      "FIXT*",
-      "FIXTGRP*",
-      "FIXT-PRICE-*"
+      "TCGRP-*",
+      "TCPROD*",
+      "TCVG-*",
+      "TCVGR-*",
+      "TCVO-*",
+      "TC-PRICE-*",
+      "TC-BOM-*",
+      "TC-DETAIL-*",
+      "TC-DOC-*",
+      "TC-GAL-*",
+      "TC-HOVER-*",
+      "TCREL-*",
+      "TCO-*",
+      "tc_*"
     ],
-    "reservedFixtureNote": "The sample-data layer's demo catalog (merge/_sql/catalog.sql) reserves these key prefixes. Additions must not use them.",
+    "reservedFixtureNote": "The sample-data layer's demo catalogue, personas and orders reserve these key prefixes (the TC* family, mirrored in that layer's costHints.reservedKeyPrefixes). Additions must not use them. An addition writing rows of its own into a base-owned table uses its own PACK-<NAME>- prefix instead (nvarcharPkPrefix).",
     "noPerItemTypeNumericTable": true,
     "noPerItemTypeNumericTableNote": "The contract is prefix-based, not per-itemType-numeric. There is deliberately NO per-itemType numeric range table - do not invent one."
   },
@@ -71,37 +82,58 @@
       {
         "table": "AccessUser",
         "accessUserType": 5,
-        "id": 1328,
-        "name": "IMCUser",
-        "customerNumber": "98745621",
+        "id": 100101,
+        "name": "Truvio Buyer",
+        "userName": "TruvioBuyer",
+        "email": "buyer@truvio-demo.example",
+        "customerNumber": "TC-100200",
         "role": "buyer",
         "presentOnlyWhen": "sampleData"
       },
       {
         "table": "AccessUser",
         "accessUserType": 5,
-        "id": 1326,
-        "name": "IMCSalesrep",
-        "customerNumber": "7789765",
+        "id": 100102,
+        "name": "Truvio CSR",
+        "userName": "TruvioCsr",
+        "email": "csr@truvio-demo.example",
+        "customerNumber": "TC-100200",
         "role": "csr",
+        "presentOnlyWhen": "sampleData"
+      },
+      {
+        "table": "AccessUser",
+        "accessUserType": 5,
+        "id": 100103,
+        "name": "Truvio Account Admin",
+        "userName": "TruvioAdmin",
+        "email": "admin@truvio-demo.example",
+        "customerNumber": "TC-100200",
+        "role": "accountAdmin",
         "presentOnlyWhen": "sampleData"
       }
     ],
     "memberships": [
       {
         "table": "AccessUserGroupRelation",
-        "userId": 1328,
+        "userId": 100101,
         "groupId": 1325,
         "presentOnlyWhen": "sampleData"
       },
       {
         "table": "AccessUserGroupRelation",
-        "userId": 1326,
+        "userId": 100102,
         "groupId": 1292,
+        "presentOnlyWhen": "sampleData"
+      },
+      {
+        "table": "AccessUserGroupRelation",
+        "userId": 100103,
+        "groupId": 1270,
         "presentOnlyWhen": "sampleData"
       }
     ],
-    "usersNote": "users and memberships are NOT base rows. They ship in the sample-data layer (merge/_sql/identities.sql, sample-data layer.json sql[0]) and every entry carries presentOnlyWhen: sampleData - they exist only when an edition activates sampleData: true. An edition with sampleData: false has no AccessUser 1328 / 1326 and no memberships, so a sign-in, persona or customer-number binding against them finds no row. A layer probe that needs them names the fixture in its requiresFixtures. Only permissionGroups are base-owned (baseOwnedTables.replaceFiltered FILTER-01).",
+    "usersNote": "users and memberships are NOT base rows. They ship in the sample-data layer as merge-mode SqlTable YAML (merge/_sql/AccessUser, merge/_sql/AccessUserGroupRelation) and every entry carries presentOnlyWhen: sampleData - they exist only when an edition activates sampleData: true. An edition with sampleData: false has no AccessUser 100101 / 100102 / 100103 and no memberships, so a sign-in, persona or customer-number binding against them finds no row. All three personas belong to the one B2B account (AccessUser 100100, customer number TC-100200) and carry that same customer number, because contract prices, account-wide favourites and the CSR account listing compare the string exactly. No password is in the data: the sample-data predicate excludes AccessUserPassword and the credential is set online through the Management API UserSetPassword command. A layer probe that needs a persona names it in its requiresFixtures. Only permissionGroups are base-owned (baseOwnedTables.replaceFiltered FILTER-01).",
     "referenceCategory": {
       "parent": {
         "table": "EcomProductCategory",
@@ -118,20 +150,150 @@
     },
     "contractPrice": {
       "table": "EcomPrices",
-      "priceId": "FIXT-PRICE-CONTRACT",
-      "priceProductId": "FIXT0001",
-      "priceUserCustomerNumber": "98745621",
-      "unitRule": "list x 0.8",
+      "priceId": "TC-PRICE-CTR-0046",
+      "priceProductId": "TCPROD0046",
+      "priceUserCustomerNumber": "TC-100200",
+      "priceAmount": 36.9,
+      "listAmount": 45,
+      "customerGroupAmount": 39.6,
       "presentOnlyWhen": "sampleData",
-      "note": "Ships in the sample-data layer's catalog.sql, next to the product it scopes to; present only when an edition activates sampleData: true."
+      "note": "Ships in the sample-data layer next to the product it scopes to (merge/_sql/EcomPrices/TC-PRICE-CTR-0046.yml); present only when an edition activates sampleData: true. It is the subject of feature-pricing's cart-price contract probe: signed in as the buyer the cart charges 36.90 against a 45.00 list and a 39.60 customer-group row, with zero custom code."
     }
   },
+  "sampleData": {
+    "layer": "sample-data",
+    "activatedBy": "sampleData: true",
+    "note": "What the ONE sample-data layer guarantees to an addition that binds to it. Since sample-data 4.0.0 there is exactly one layer of kind sample-data and it carries the whole demo dataset: the browsable Truvio Commerce catalogue, the three personas on one B2B account, twelve orders, the storefront copy, the demo clock and the email-marketing statistics backfill. An addition NEVER binds to the layer directly - it binds to the subjects named here and declares them in its behaviorProbes requiresFixtures. Every subject is absent when an edition sets sampleData false, and a probe that names one is then recorded as a loud SKIP, never a silent pass.",
+    "guaranteedRows": {
+      "buyer": {
+        "table": "AccessUser",
+        "id": 100101,
+        "userName": "TruvioBuyer",
+        "customerNumber": "TC-100200",
+        "groupId": 1325,
+        "note": "feature-rma's authenticated my-returns probe signs in as this persona, and so does every cart-price and checkout-recurring probe."
+      },
+      "csr": {
+        "table": "AccessUser",
+        "id": 100102,
+        "userName": "TruvioCsr",
+        "customerNumber": "TC-100200",
+        "groupId": 1292,
+        "note": "The CSR customer-center surfaces surface-swift ships resolve against this persona; no probe addresses it by id."
+      },
+      "accountAdmin": {
+        "table": "AccessUser",
+        "id": 100103,
+        "userName": "TruvioAdmin",
+        "customerNumber": "TC-100200",
+        "groupId": 1270,
+        "note": "The account surfaces under Customer center/Account resolve against this persona; no probe addresses it by id."
+      },
+      "skuValidationProduct": {
+        "table": "EcomProducts",
+        "productId": "TCPROD0001",
+        "productNumber": "TC-VAR-0001",
+        "groupId": "TCGRP-VARIANTS",
+        "note": "feature-reordering's sku-validation probe types this ProductNumber into the Quick Order pad's validation feed."
+      },
+      "quantityTierProduct": {
+        "table": "EcomProducts",
+        "productId": "TCPROD0020",
+        "productNumber": "TC-PRC-0020",
+        "groupId": "TCGRP-PRICE-STRUCTURES",
+        "listAmount": 120,
+        "tiers": [
+          {
+            "priceId": "TC-PRICE-Q05-0020",
+            "quantity": 5,
+            "amount": 108
+          },
+          {
+            "priceId": "TC-PRICE-Q10-0020",
+            "quantity": 10,
+            "amount": 96
+          },
+          {
+            "priceId": "TC-PRICE-Q25-0020",
+            "quantity": 25,
+            "amount": 84
+          }
+        ],
+        "customerGroupAmount": 108,
+        "note": "feature-pricing's cart-price tier probe adds quantity 10 and expects 96. Quantity 10 is the only rung the customer-group row TC-PRICE-GRP-0020 (108 at quantity 1, group 1325) cannot also produce, so the observed amount proves the tier ladder rather than price resolution in general."
+      },
+      "contractPriceProduct": {
+        "table": "EcomProducts",
+        "productId": "TCPROD0046",
+        "productNumber": "TC-CTR-0046",
+        "groupId": "TCGRP-CONTRACT-PRICING",
+        "priceId": "TC-PRICE-CTR-0046",
+        "priceUserCustomerNumber": "TC-100200",
+        "amount": 36.9,
+        "listAmount": 45,
+        "note": "feature-pricing's cart-price contract probe adds quantity 1 signed in as the buyer and expects 36.90."
+      },
+      "bomKitProduct": {
+        "table": "EcomProducts",
+        "productId": "TCPROD0042",
+        "productNumber": "TC-BDL-0042",
+        "groupId": "TCGRP-BUNDLES",
+        "productType": 2,
+        "slots": [
+          {
+            "productItemId": "TC-BOM-0042-1",
+            "bomGroupId": "TCGRP-VARIANTS",
+            "defaultProductId": "TCPROD0002"
+          },
+          {
+            "productItemId": "TC-BOM-0042-2",
+            "bomGroupId": "TCGRP-DOCUMENTS",
+            "defaultProductId": "TCPROD0051"
+          }
+        ],
+        "note": "feature-bom-configurator's bom-cart-lines probe posts the two slot ids with a NON-default child in each (TCPROD0003, TCPROD0052) and expects two child lines. TCPROD0041 is the fixed Bundle Kit and carries no EcomProductItems slot, so the configurable kit TCPROD0042 is the subject."
+      },
+      "subscriptionProduct": {
+        "table": "EcomProducts",
+        "productId": "TCPROD0061",
+        "productNumber": "TC-SUB-0061",
+        "groupId": "TCGRP-PRICE-STRUCTURES",
+        "listAmount": 49,
+        "note": "feature-subscription-orders' checkout-recurring probe buys this plan on PAY2 / SHIP9 and asserts a new EcomRecurringOrder row for the buyer."
+      },
+      "deliveredOrder": {
+        "table": "EcomOrders",
+        "orderId": "TCO-0001",
+        "orderStateId": "OS2",
+        "orderCustomerAccessUserId": 100101,
+        "orderCustomerNumber": "TC-100200",
+        "orderLines": [
+          "TCO-0001-1",
+          "TCO-0001-2"
+        ],
+        "note": "feature-rma's authenticated my-returns probe returns against this completed order; its first line is what the RMA link points at."
+      },
+      "rma": {
+        "table": "EcomRmas",
+        "rmaId": "PACK-RMA-0001",
+        "ownedBy": "feature-rma",
+        "rmaOrderLineId": 100301,
+        "rmaOrderLineOrderLineId": "TCO-0001-1",
+        "note": "NOT a sample-data row: feature-rma ships EcomRmas PACK-RMA-0001 and its EcomRmaOrderLines link (id 100301, above the intIdentityFloor) and binds them to the deliveredOrder subject above. Listed here so the whole binding reads from one place."
+      }
+    },
+    "counts": {
+      "EcomProducts": 97,
+      "EcomGroups": 16
+    },
+    "countsNote": "EcomProducts 97 = 60 masters + 36 variant rows + the subscription plan TCPROD0061. EcomGroups 16 = 4 top groups + 12 subgroups. An edition that activates sampleData pins these in expectedCounts; a composition that does not activate it carries zero catalogue."
+  },
   "anchors": {
-    "buyerUsername": "IMCUser",
-    "buyerCustomerNumber": "98745621",
-    "csrUsername": "IMCSalesrep",
-    "csrCustomerNumber": "7789765",
-    "note": "The buyer and CSR anchors name the sample-data rows in guaranteedRows.users: present only when an edition activates sampleData: true. Content anchors (area 3, langPrefix /swift-2) moved to surface-swift (base 3.0.0 ships zero content areas)."
+    "buyerUsername": "TruvioBuyer",
+    "buyerCustomerNumber": "TC-100200",
+    "csrUsername": "TruvioCsr",
+    "csrCustomerNumber": "TC-100200",
+    "note": "The buyer and CSR anchors name the sample-data rows in guaranteedRows.users: present only when an edition activates sampleData: true. Buyer and CSR share one customer number because they are two contacts on one B2B account. Content anchors (area 3, langPrefix /swift-2) moved to surface-swift (base 3.0.0 ships zero content areas)."
   },
   "repositories": {
     "provisionedByGate": false,
@@ -146,7 +308,7 @@
   "currencyRates": {
     "defaultRate": 100,
     "minNonDefaultRateExclusive": 1,
-    "note": "EcomCurrencies.CurrencyRate is hundredths against the default currency. The default (EUR, CurrencyIsDefault true on every EUR$$<lang> row) carries 100. A non-default currency at rate 1 renders every price in it a hundred times over, with correct symbol and culture formatting, no error and no log entry (measured on DW 10.28.10: a stored 45.00 served as $4,500.00 at USD rate 1). USD, the currency the Swift storefront serves, ships at 100: one-to-one parity with the default, a deliberate demo value and not an exchange rate. No shipped row carries a rate at or below 1. The other non-default rows carry the values of the source solution and are not maintained exchange rates; a solution that needs real conversion sets real rates, keeping the default at 100 and every other rate relative to it."
+    "note": "EcomCurrencies.CurrencyRate is hundredths against the default currency. The default (EUR, CurrencyIsDefault true on every EUR$$<lang> row) carries 100. A non-default currency at rate 1 renders every price in it a hundred times over, with correct symbol and culture formatting, no error and no log entry (measured on DW 10.28.10: a stored 45.00 served as $4,500.00 at USD rate 1). USD ships at 100: one-to-one parity with the default, a deliberate demo value and not an exchange rate. USD is NOT the currency the Swift storefront serves - surface-swift 1.13.3 binds the Swift area to EUR (AreaEcomCurrencyId). It used to read that way because an UNBOUND area on DW 10.28 resolves the request culture's currency, so an /en-us/ storefront served USD carts and no EUR EcomPrices row matched (Foundry #1232, measured on foundry-sd4v.mydwsite4.com: cart CART783 OrderCurrencyCode USD, TCPROD0046 served 45.00 instead of the contract price 36.90). CurrencyRate reasons about display; EcomPrices.PriceCurrency filtering is what the area binding decides, and every EcomPrices row the Distribution ships is EUR. No shipped row carries a rate at or below 1. The other non-default rows carry the values of the source solution and are not maintained exchange rates; a solution that needs real conversion sets real rates, keeping the default at 100 and every other rate relative to it."
   },
   "baseOwnedTables": {
     "replaceWholeTable": [
@@ -170,7 +332,7 @@
       {
         "table": "AccessUser",
         "where": "AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')",
-        "note": "FILTER-01: only the three permission groups are base-owned on AccessUser; user rows (1328/1326) are seeded, not serialized into the base."
+        "note": "FILTER-01: only the three permission groups are base-owned on AccessUser; the sample-data account and personas (100100-100103) ship in that layer as merge rows, never serialized into the base."
       }
     ],
     "note": "Additions touching a base-owned table follow idRules (prefix / floor) and must pass the static intersection checks below. Base ships zero catalog (see idRules.baseCatalog) and zero content areas (base split 3.0.0). UrlPath is surface-swift-owned (its single row is a friendly-URL redirect bound to area 3 + a Swift page id - no route targets exist in a framework-only base)."

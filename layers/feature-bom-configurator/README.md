@@ -31,8 +31,6 @@ accept this equivalence (recorded here and in 09-02-SUMMARY.md per orchestrator 
 
 | Artifact | Purpose |
 |----------|---------|
-| `merge/_sql/EcomProductItems/PACK-BOM3-000{1,2,3}.yml` | BOM slot rows (Rule-A data, LRN-BASE-07 recipe) |
-| `merge/_sql/EcomProducts/PACK-BOM-0001.yml` | Rule-B multi-group parent product (ProductType 2) |
 | `merge/_content/.../Kit Configurator` | page A — hosts the `eCom_ProductCatalog` app |
 | `merge/_content/.../Kit Configurator Detail` | page B — hidden detail grid (stock BOM + AddToCart paragraphs) |
 | `templates/Designs/Swift-v2/eCom/ProductCatalog/PackBomDetailRenderGrid.cshtml` | layer Z-copy render-grid (new path only) |
@@ -53,17 +51,17 @@ id (that group's products become the radio options), `ProductItemDefaultProductI
 
 | Slot row | Parent | Group (layer-owned) | Default | (a non-default option) |
 |----------|--------|--------------------|---------|------------------------|
-| PACK-BOM3-0002 | `PACK-BOM-0001` | `PACK-BOM-FORKS` | `PACK-BOM-FORK-1` | `PACK-BOM-FORK-2` |
-| PACK-BOM3-0003 | `PACK-BOM-0001` | `PACK-BOM-RACKS` | `PACK-BOM-RACK-1` | `PACK-BOM-RACK-2` |
+| TC-BOM-0042-1 | `TCPROD0042` | `TCGRP-VARIANTS` | `TCPROD0002` | `TCPROD0003` |
+| TC-BOM-0042-2 | `TCPROD0042` | `TCGRP-DOCUMENTS` | `TCPROD0051` | `TCPROD0052` |
 
 - **The catalogue is sample-data's, not this layer's (1.2.0, Foundry 960).** The Rule-B parent
-  `PACK-BOM-0001` (`ProductNumber 10004kit`, `ProductType=2`), the two child groups
-  (`PACK-BOM-FORKS`, `PACK-BOM-RACKS`) with two child products each, the parent's group
-  `PACK-BOM-GRP1` and their `EcomShopGroupRelation` bindings all moved to
+  `TCPROD0042` (`TC-BDL-0042`, `ProductType=2`), its two group-bound slots, the groups they bind
+  (`TCGRP-VARIANTS`, `TCGRP-DOCUMENTS`) with five members each, the parent's own group
+  `TCGRP-BUNDLES` and their `EcomShopGroupRelation` bindings all live in
   `sample-data` `merge/_sql/feature-fixtures.sql` with their ids unchanged. This layer ships
   zero catalogue rows, so an edition with `sampleData: false` gets zero products from it. No
   base products/groups (PROD290/GROUP49/GROUP161/10028/10119) are referenced either.
-- **PK3-02** rides `PACK-BOM-0001` with two slots in the two layer-owned groups; the
+- **PK3-02** rides `TCPROD0042` with two slots in two sample-data groups; the
   `bom-cart-lines` probe selects the non-default child in each slot to prove per-child
   native disambiguation (`OrderLineBOMItemId` = slot id, `OrderLineProductId` = the chosen
   non-default).
@@ -95,7 +93,7 @@ exactly how the base Shop app / Product Details pages are split.
 
 ## Layer-parent PDP behavior
 
-Adding `PACK-BOM-0001` from a plain Shop PDP (no configurator UI) creates default child
+Adding `TCPROD0042` from a plain Shop PDP (no configurator UI) creates default child
 sub-lines from the slots' `ProductItemDefaultProductId`. This is acceptable — the cart
 renders them natively and the defaults are sensible — but route the demo journey through
 the layer "Kit Configurator" page, where the shopper actually chooses.

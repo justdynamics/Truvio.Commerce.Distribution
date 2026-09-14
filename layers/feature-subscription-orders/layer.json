@@ -1,6 +1,6 @@
 {
   "name": "feature-subscription-orders",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "csLedger": [],
@@ -44,12 +44,12 @@
       {
         "kind": "checkout-recurring",
         "path": "/en-us/subscribe",
-        "productId": "PACK-SUB-PROD1",
+        "productId": "TCPROD0061",
         "quantity": 1,
         "paymentMethodId": "PAY2",
         "shippingMethodId": "SHIP9",
         "checkoutStepIndex": 1,
-        "requiresFixtures": [ "PACK-SUB-PROD1" ]
+        "requiresFixtures": [ "TCPROD0061" ]
       }
     ],
     "criticalPaths": [

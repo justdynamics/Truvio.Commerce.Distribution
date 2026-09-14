@@ -24,7 +24,7 @@
     "note": "Title-integrity contract (gate Step 10c2): for every item-typed page, DB item Title == YAML fields.Title. Applies to this surface's replace/_content tree."
   },
   "perEnvironmentAreaExclusions": {
-    "note": "Per-environment Area configuration deliberately NOT serialized by the base (LRN-08). These Area columns/fields are excluded by config/swift-2.3.json (the 'Site framework' deploy predicate's excludeAreaColumns + excludeFields), so the base ships brand/content-neutral structure only and every consuming environment owns these values. A fresh deserialize therefore leaves them at whatever the target DB already holds - it does NOT overwrite them.",
+    "note": "Per-environment Area configuration deliberately NOT serialized by the base (LRN-08). These Area columns/fields are excluded by config/swift-2.3.json (the 'Site framework' deploy predicate's excludeAreaColumns + excludeFields), so the base ships brand/content-neutral structure only and every consuming environment owns these values. A fresh deserialize therefore leaves them at whatever the target DB already holds - it does NOT overwrite them. 1.13.3 narrows the exclusion by exactly ONE column: AreaEcomCurrencyId is no longer per-environment and is now SHIPPED as EUR in both area documents. It names a base-owned constant (EUR is CurrencyIsDefault on every EUR$$<lang> row the base ships), and an unbound area is not neutral: on DW 10.28 it resolves the REQUEST CULTURE's currency, so an /en-us/ storefront serves USD carts and every EUR EcomPrices row - contract, customer-group and quantity-tier - falls through to EcomProducts.ProductPrice (Foundry #1232, measured on foundry-sd4v.mydwsite4.com: cart CART783 OrderCurrencyCode USD, TCPROD0046 45.00 instead of 36.90). The obligation could not be discharged online either: a remote consumer reaching the host by URL and Admin API key has no SQL channel, and /Admin/Api/AreaSave refuses an area whose layoutTemplate is empty ('Default page template: The value is required.'), so a binding the price resolver depends on has to travel with the layer.",
     "excludeAreaColumns": [
       "AreaCdnHost",
       "AreaCookieWarningTemplate",
@@ -32,7 +32,6 @@
       "AreaEcomShopId",
       "AreaEcomCountryCode",
       "AreaEcomLanguageId",
-      "AreaEcomCurrencyId",
       "AreaStockLocationID",
       "AreaCreatedDate",
       "AreaUpdatedDate"
@@ -47,11 +46,18 @@
     ],
     "consumerObligation": {
       "bindSiteRoot": "After deserialize, set each area's AreaFrontpage to the environment's site-root page id.",
-      "bindShop": "After deserialize, set each area's AreaEcomShopId to the environment shop. The base ships exactly one shop: SHOP1 ('B2B Commerce Store').",
       "bindProductPrimaryPage": "After deserialize, set SHOP1's ShopProductPrimaryPageId (EcomShops) to the environment's product detail page id (the Shop/Product Details page this layer ships). The base ships it as 0 because page ids are allocated per environment; until it is set, a product URL generated outside a page context has no primary page to resolve against.",
-      "restart": "Restart the DW host after binding - Area routing, frontpage resolution, and shop resolution are cached at host startup."
+      "restart": "Restart the DW host after binding - Area routing, frontpage resolution, and shop resolution are cached at host startup. The same holds for the three columns 1.13.3 now ships: the deserialize writes them, the running application still serves the old binding until it restarts.",
+      "bindCountryAndStockLocation": "AreaEcomCountryCode and AreaStockLocationID stay per-environment and are still excluded: they drive VAT and stock resolution against the consumer's own market.",
+      "bindShop": "After deserialize, set each area's AreaEcomShopId to the environment shop. The base ships exactly one shop: SHOP1 ('B2B Commerce Store'). Relate every browsable group to it first - see shippedAreaEcomBinding.whyShopIdIsNotShipped."
     },
-    "source": "layers/surface-swift/config/swift-content-2.4.json -> predicates[name='Site framework'].excludeAreaColumns + .excludeFields"
+    "source": "layers/surface-swift/config/swift-content-2.4.json -> predicates[name='Site framework'].excludeAreaColumns + .excludeFields",
+    "shippedAreaEcomBinding": {
+      "AreaEcomCurrencyId": "EUR - CurrencyIsDefault on every EUR$$<lang> row the base ships. Shipped in BOTH mode trees (replace/_content/Swift 2/area.yml and merge/_content/Swift 2/area.yml). Every EcomPrices row the Distribution ships carries an EMPTY PriceShopId, so the currency is the only area binding price resolution needs.",
+      "whyShopIdIsNotShipped": "MEASURED, do not 'fix' this by shipping SHOP1. Binding AreaEcomShopId makes DW enforce group-in-shop on every product page, and only the FOUR top groups carry an EcomShopGroupRelation row: a subgroup PDP then dies with System.NullReferenceException at Dynamicweb.Ecommerce.ProductCatalog.ProductCatalogFrontend.IsGroupInCorrectShop, rendered as a dw-error module block (measured on foundry-sd4v.mydwsite4.com, DW 10.28.10, /en-us/shop?GroupID=TCGRP-VARIANTS&ProductID=TCPROD0001, 36 design probes red). AreaEcomShopId therefore stays per-environment and consumerObligation.bindShop stands. A consumer that binds the shop must relate every browsable group to it first.",
+      "consumerOverride": "A consumer on a different default currency overrides AreaEcomCurrencyId after deserialize, the same way it binds AreaFrontpage and AreaEcomShopId. The shipped value is the Distribution's own default, not a refusal to be re-pointed.",
+      "knownGap": "merge/merge-manifest.json carries no excludeAreaColumns, so the merge pass writes the merge document's AreaEcomShopId and AreaEcomLanguageId - both empty strings - and BLANKS a binding a consumer has set. Pre-existing and not changed by 1.13.3; a consumer binds the shop AFTER the last deserialize."
+    }
   },
   "protectedItemTypes": {
     "note": "Upstream DW/Swift identifiers - NEVER renamed by the vocabulary rewrite (plan section 3.1). PK tables are ItemType_<systemName> (hyphenated on DW 10.26.9). (Swift list owned by surface-swift since the base split; Headless list owned by surface-headless.)",

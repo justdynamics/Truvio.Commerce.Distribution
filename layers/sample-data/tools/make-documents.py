@@ -10,7 +10,7 @@ Helvetica face so nothing is embedded and every file stays around a kilobyte.
 They are DATA, like the concept tiles beside them: what a product row points at,
 never a style. Regenerate with
 
-    python layers/truvio-demo/tools/make-documents.py
+    python layers/sample-data/tools/make-documents.py
 
 from the repository root. Output is byte-identical on every run - no dates, no
 ids, no producer string - so a regeneration that changes nothing shows as no
@@ -47,7 +47,7 @@ KINDS = [
       'Truvio Commerce demo data. Illustrative, and deliberately generic.']),
 ]
 
-OUT_DIR = os.path.join('layers', 'truvio-demo', 'files', 'Documents', 'TruvioCommerce')
+OUT_DIR = os.path.join('layers', 'sample-data', 'files', 'Documents', 'TruvioCommerce')
 
 
 def esc(s):
@@ -88,7 +88,7 @@ def build_pdf(title, body):
 
 
 def main():
-    if not os.path.isdir(os.path.join('layers', 'truvio-demo')):
+    if not os.path.isdir(os.path.join('layers', 'sample-data')):
         sys.exit('run this from the repository root')
     os.makedirs(OUT_DIR, exist_ok=True)
     written = []
