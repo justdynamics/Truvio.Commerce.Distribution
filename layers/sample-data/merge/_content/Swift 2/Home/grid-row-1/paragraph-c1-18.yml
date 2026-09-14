@@ -10,13 +10,13 @@
 "moduleSystemName": ""
 "moduleSettings": ""
 "fields":
-  "AltText": "Truvio Commerce catalogue in industrial green"
+  "AltText": "An open road running straight through autumn forest, seen from above"
   "Eyebrow": "<p class=\"dw-paragraph\">Data models, price structures, content blocks</p>"
   "FirstButton": "{\r\n  \"SelectedValue\": \"50\",\r\n  \"Label\": \"Shop the catalogue\",\r\n  \"Link\": \"Default.aspx?ID=50\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
   "GlobalRecordPageGuid": "febabe52-c9a6-4983-b857-6c6c022d88fb"
   "Height": "4"
   "Id": "7"
-  "Image": ""
+  "Image": "/Files/Images/TruvioCommerce/scenic/product-shot-1.webp"
   "ItemInstanceType": ""
   "SecondButton": "{\r\n  \"SelectedValue\": \"50\",\r\n  \"Label\": \"Browse Data Models\",\r\n  \"Link\": \"Default.aspx?ID=50&GroupID=TCGRP-DATA-MODELS\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"outline-primary\"\r\n}"
   "Sort": 0

@@ -1,5 +1,57 @@
 # Changelog — sample-data
 
+## 4.1.0
+
+### The brand assets ship in the layer, and the logo and the home images are bound
+
+**MINOR. New files, new content bindings, no id or row change.** The demo came up with no
+logo and no picture on the front page: the header Logo paragraph and the three home
+paragraphs that carry an `Image` field all shipped `Image: ""`, and every path in
+`brand/brand-assets.manifest.json` answered 404 because no layer put the bytes on disk and no
+tool ever fetched them. The manifest described a brand step that did not exist.
+
+**What ships now.** The fifteen assets the manifest names are committed under
+`files/Images/TruvioCommerce/{brand,scenic,people}/` and declared in `files[]`, the same way
+the 264 product tiles and the 8 datasheets already are. Each was fetched from its
+`source` and verified byte count and sha256 against the manifest before it was committed;
+`.gitattributes` marks `*.webp`, `*.jpeg` and `*.jpg` binary so a checkout cannot rewrite a
+byte the pin depends on. The manifest stays where it is and keeps its role: it is the
+provenance and integrity record for what the layer ships, not a download list for a step a
+consumer has to run.
+
+**The bindings.** Seven paragraphs in `merge/_content`, `Image` field only (plus the `AltText`
+beside it where the new picture made the old sentence wrong):
+
+| Paragraph | Item type | Image |
+|---|---|---|
+| `Header _ Footer/Desktop Header/grid-row-3/paragraph-c1-17.yml` | `Swift-v2_Logo` | `brand/truvio-logo.svg` |
+| `Header _ Footer/Mobile Header/grid-row-2/paragraph-c2-4.yml` | `Swift-v2_Logo` | `brand/truvio-logo.svg` |
+| `Header _ Footer/Desktop Footer/grid-row-1/paragraph-c1-28.yml` | `Swift-v2_Logo` | `brand/truvio-logo.svg` |
+| `Header _ Footer/Mobile Footer/grid-row-1/paragraph-c1-15.yml` | `Swift-v2_Logo` | `brand/truvio-logo.svg` |
+| `Home/grid-row-1/paragraph-c1-18.yml` | `Swift-v2_Poster` | `scenic/product-shot-1.webp` |
+| `Home/grid-row-4/paragraph-c1-19.yml` | `Swift-v2_Image` | `scenic/abstract-patterns.jpeg` |
+| `Home/grid-row-7/paragraph-c1-8.yml` | `Swift-v2_Image` | `people/office-collaboration.webp` |
+
+**Why the logo is the SVG and the bands are raster.** `Swift-v2_Logo/Plain.cshtml` and
+`Swift-v2_Image/Plain.cshtml` both branch on `image.IsSvg()`: an SVG is inlined with
+`ReadFile(image.Path)` and never touches `GetImage.ashx`, so the ImageSharp "no SVG decoder"
+rule that puts the product tiles on PNG does not reach the logo. The item type says so itself
+("We recommend you to use a SVG file. SVG files are scalable and support theming"). The four
+logo paragraphs therefore get `truvio-logo.svg`, the monochrome primary, which reads on the
+light header and the light footer; `truvio-logo-footer.svg` is the white-on-dark variant and
+stays unbound because neither header nor footer carries a dark color scheme. The band images
+go through `image.ToGetImage()`, so they are raster, and **all three are opaque on purpose**:
+`GetImage.ashx` answers a `format=webp` and a no-format request with JPEG (Foundry #1240), so a
+picture with an alpha channel is flattened against whatever the encoder fills, and a hero whose
+white heading sits on it cannot be allowed to depend on that. `scenic/product-visual.png`,
+`scenic/ui-composite.webp`, `brand/truvio-symbol.png` and `brand/truvio-og-card.png` all carry
+alpha; all four ship in `files/` and none of them is bound to a paragraph.
+
+**The bands that have no `Image` field.** `Home/grid-row-6` c1-5, c2-6 and c3-7 are
+`Swift-v2_Feature`, which carries `Icon`, not `Image`, and all three already point at a bound
+`/Files/Images/Icons/*.svg`. They are left alone. No other paragraph in the layer's storefront
+copy carries an empty `Image`.
+
 ## 4.0.0
 
 ### One sample-data layer: the brand catalogue and the demo clock in the same layer

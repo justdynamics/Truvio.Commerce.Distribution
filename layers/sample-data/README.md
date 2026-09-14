@@ -237,15 +237,20 @@ band**, derived from that master's own `TC-DETAIL-*` default row so a row cannot
 band's picture. A master therefore carries three distinct pictures: its own tile at sort 0, its
 own detail image at sort 1, and its band's concept tile at sort 2.
 
-The photographic brand assets stay in the Distribution's
-[`brand/brand-assets.manifest.json`](../../brand/brand-assets.manifest.json), fetched at brand
-time and sha256-pinned; they are deliberately not committed here.
-`tools/truvio-gallery-photos.sql` converges the gallery rows onto them **by hand, after** the
-brand step has put the five `scenic/` files on disk. It lives under `tools/`, not under
-`merge/_sql/`, and is deliberately neither YAML nor a declared `sql[]` script: anything the
-layer ships is something the composer delivers, and delivering this before the files exist
-recreates exactly the defect it retires. SQL cannot test for a file on disk, so its gate is a
-human step and the script says so in its header.
+The photographic brand assets are **shipped in `files/`**, under
+`files/Images/TruvioCommerce/{brand,scenic,people}/`, and listed in the Distribution's
+[`brand/brand-assets.manifest.json`](../../brand/brand-assets.manifest.json), which stays the
+provenance and sha256 record for each of the fifteen: source URL, byte count and digest,
+verified before the bytes were committed. The logo the header and footer bind is
+`brand/truvio-logo.svg`, inlined by the Swift template and never handed to `GetImage.ashx`;
+the home hero, the catalogue band and the content band bind `scenic/product-shot-1.webp`,
+`scenic/abstract-patterns.jpeg` and `people/office-collaboration.webp`, all three opaque
+because the handler answers those requests with JPEG and flattens an alpha channel. `tools/truvio-gallery-photos.sql` converges the gallery
+rows onto the `scenic/` files **by hand**. Those files are now on disk the moment the layer
+deploys, so the precondition its header names is satisfied by the layer itself, but the
+script stays under `tools/` and stays out of `sql[]`: which photograph belongs on which
+master is a per-master editorial choice, not something a composition should decide for a
+consumer.
 
 ### Linking to a PDP
 
