@@ -800,10 +800,19 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
 /* --- #13 Header logo lockup width is inline-hardcoded (a 210px figure), and
  *     the img-era `[data-swift-logo-image] img` hook above misses an inline-SVG
  *     logo. Clamp the figure itself so the icon cluster fits a 390px viewport,
- *     and let the SVG scale inside it. --- */
+ *     and let the SVG scale inside it.
+ *     Foundry #1260: 150px became 6px too wide once the mobile header carried FOUR
+ *     action items. surface-swift 1.13.6 moved the MiniCart into the logo row so the
+ *     header stops wrapping to a second row; that squeezed the ANONYMOUS My account
+ *     column to 121px while its text-nowrap anchor needs 137px, overrunning a 390px
+ *     canvas by 6.4px and reddening COLLAPSE-01. Measured at 390 under a phone UA on
+ *     home, shop and the PDP: 150px overflows by 6px; 140px reaches 0 with only 3.6px
+ *     to spare; from 132px down the flex row plateaus at 8px of slack, so 132px is the
+ *     clamp and narrowing further buys nothing. The anonymous control is the WIDE case
+ *     (signed in it is a ~48px initials button), so this is the worst case. --- */
 [data-td-block="13"] { --td-block: 13; }
 @media (max-width: 767.98px) {
-  header [data-dw-itemtype="swift-v2_logo"] figure { width: 150px !important; }
+  header [data-dw-itemtype="swift-v2_logo"] figure { width: 132px !important; }
   header [data-dw-itemtype="swift-v2_logo"] svg { width: 100%; height: auto; }
 }
 

@@ -2,6 +2,32 @@
 
 
 
+## 2.3.4
+
+### The mobile header logo clamp makes room for a four-item header (Foundry #1260)
+
+The below-md logo figure clamp moves from 150px to 132px.
+
+surface-swift 1.13.6 fixes #1260 by moving the MiniCart out of its own grid row and into
+the row that already carried the off-canvas trigger, the logo and My account, so the mobile
+header paints ONE row instead of two. That is the right fix for the wrap, and it changes the
+row budget: four action items now share the 358px container at a 390px canvas.
+
+The anonymous My account control is the constraint, not the logo. Its anchor carries a
+text-nowrap label and measures 137px at every logo width tested; with the cart added its
+column fell to 121px, so the anchor overran its column by 16px and the canvas by 6.4px.
+documentElement and body both read 396 against a requested 390, which is a COLLAPSE-01 FAIL
+(the overflow clause is fixed at <= 1px and is not waivable, correctly).
+
+The width was measured, not chosen by arithmetic. At 390 under a phone UA on home, shop and
+the PDP: 150px overflows by 6px; 140px reaches 0 but leaves 3.6px of slack; 132px, 128px and
+120px all reach 0 and all plateau at the same 382px right edge, i.e. 8px of slack. 132px is
+therefore the smallest reduction that reaches the plateau. Signed in, Swift renders a ~48px
+initials button instead, so the anonymous state measured here is the worst case.
+
+No affordance is hidden: every control keeps its icon, its label and its accessible name.
+Disk-overlay only, one declaration in the existing block 13.
+
 ## 2.3.3
 
 ### The edge fill contrasts with the ground it sits on (Foundry #1262)
