@@ -1,10 +1,11 @@
 {
   "name": "truvio-demo",
-  "version": "1.8.0",
+  "version": "1.9.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
   "fragmentModes": [
+    "replace",
     "merge"
   ],
   "fragmentTables": [
