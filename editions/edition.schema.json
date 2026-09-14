@@ -39,7 +39,7 @@
     },
     "sampleData": {
       "type": "boolean",
-      "description": "OPTIONAL (default false). When true the edition activates the sample-data layer: demo buyer/CSR identities (applied pre-host-start) AND the demo shop catalog + contract pricing (applied after the base deserialize) - the layer ships both as SQL under merge/_sql/. When false the edition is the empty-shop scaffold (no identities, zero catalog) - base-only sets this false."
+      "description": "OPTIONAL (default false). When true the edition activates the sample-data layer: demo buyer/CSR identities AND the demo shop catalog + contract pricing + the delivered RMA order - the layer ships them as serialized merge-mode SqlTable rows under merge/_sql/<Table>/ (delivered by the merge deserialize, local and online alike), plus two local-install-only SQL scripts (email statistics, demo clock) declared in its sql[]. When false the edition is the empty-shop scaffold (no identities, zero catalog) - base-only sets this false."
     },
     "themes": {
       "type": "array",

@@ -1,65 +1,67 @@
 {
   "name": "sample-data",
-  "version": "2.3.4",
+  "version": "3.0.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
+  "fragmentModes": [
+    "merge"
+  ],
+  "fragmentTables": [
+    "AccessUser",
+    "AccessUserGroupRelation",
+    "EcomGroups",
+    "EcomShopGroupRelation",
+    "EcomVariantGroups",
+    "EcomVariantsOptions",
+    "EcomProducts",
+    "EcomGroupProductRelation",
+    "EcomVariantOptionsProductRelation",
+    "EcomPrices",
+    "EcomProductItems",
+    "EcomOrders",
+    "EcomOrderLines",
+    "EcomRmaOrderLines"
+  ],
+  "configRows": [
+    {
+      "table": "EcomProducts",
+      "where": "ProductId = 'FIXT0001' AND ProductLanguageId = 'ENU'",
+      "description": "The contract-price master Sample Product 01 the sku-validation and cart-price probes address. Proves the merge deserialize landed the fixture catalogue."
+    },
+    {
+      "table": "EcomProducts",
+      "where": "ProductId = 'PACK-BOM-0001' AND ProductLanguageId = 'ENU'",
+      "description": "The BOM kit master the feature-bom-configurator bom-cart-lines probe and the gate page list open."
+    },
+    {
+      "table": "AccessUser",
+      "where": "AccessUserId = '1328'",
+      "description": "Buyer IMCUser at the contract-named id 1328 (base.contract.json guaranteedRows.users). Its password is not in the data: it is set after the deserialize through Management API UserSetPassword."
+    },
+    {
+      "table": "EcomPrices",
+      "where": "PriceId = 'FIXT-PRICE-CONTRACT'",
+      "description": "The buyer contract price on FIXT0001 for customer number 98745621 (base.contract.json guaranteedRows.contractPrice)."
+    },
+    {
+      "table": "EcomOrders",
+      "where": "OrderId = 'FIXT-ORDER-RMA1'",
+      "description": "The delivered order the feature-rma my-returns flow returns against."
+    },
+    {
+      "table": "EcomProductItems",
+      "where": "ProductItemId = 'PACK-BOM3-0002'",
+      "description": "The first of the two BOM slots on PACK-BOM-0001."
+    }
+  ],
   "sql": [
-    {
-      "file": "_sql/identities.sql",
-      "mode": "merge",
-      "phase": "before-host-start",
-      "order": 1,
-      "description": "Permission groups 1325 Customers / 1270 Account Admin / 1292 CSR, buyer 1328 (customer number 98745621), CSR 1326 (customer number 7789765), and their group memberships.",
-      "idempotent": true,
-      "transactional": true,
-      "requiresHostRestart": false,
-      "sqlcmdVariables": [
-        {
-          "name": "BuyerUserName",
-          "secret": false,
-          "description": "Frontend buyer login name (canonical: IMCUser)."
-        },
-        {
-          "name": "BuyerPassword",
-          "secret": true,
-          "valueShape": "dw-password-hash",
-          "description": "The platform password HASH for the buyer (user 1328): the 128-character lowercase hex string AccessUserPassword stores (SHA512 over UTF8(password + \"DwSecret\")), never the plaintext password. The applier takes the plaintext and hashes it; the script refuses any other shape before writing. Demo credential, never repo content, never logged."
-        },
-        {
-          "name": "CsrPassword",
-          "secret": true,
-          "valueShape": "dw-password-hash",
-          "description": "The platform password HASH for the CSR (user 1326): the 128-character lowercase hex string AccessUserPassword stores (SHA512 over UTF8(password + \"DwSecret\")), never the plaintext password. The applier takes the plaintext and hashes it; the script refuses any other shape before writing. Demo credential, never repo content, never logged."
-        }
-      ]
-    },
-    {
-      "file": "_sql/catalog.sql",
-      "mode": "merge",
-      "phase": "after-replace-deserialize",
-      "order": 1,
-      "description": "Demo shop catalogue for SHOP1/ENU/EUR: 3 groups, 20 products (14 masters + 6 Size variants), the qty-tier ladder, the buyer contract price FIXT-PRICE-CONTRACT, and the delivered order FIXT-ORDER-RMA1 the RMA flow returns against.",
-      "idempotent": true,
-      "transactional": true,
-      "requiresHostRestart": true
-    },
-    {
-      "file": "_sql/feature-fixtures.sql",
-      "mode": "merge",
-      "phase": "after-replace-deserialize",
-      "order": 2,
-      "description": "Feature demo fixtures moved out of the feature layers (Foundry 960): the 5 groups, 8 products, 4 prices and 2 BOM slots that feature-pricing, feature-bom-configurator and feature-subscription-orders used to ship themselves, keys unchanged. Keeps the whole catalogue on the single sampleData toggle.",
-      "idempotent": true,
-      "transactional": true,
-      "requiresHostRestart": true
-    },
     {
       "file": "_sql/email-stats.sql",
       "mode": "merge",
-      "phase": "after-replace-deserialize",
-      "order": 3,
-      "description": "Email-marketing statistics backfill: per campaign email a send-log message, 24 recipients (2 bounced), 3 tracked links and 13 clicks, so the backend Marketing dashboards do not read 0 sent / 0 clicked. Discovery-driven, and a clean no-op when the composition ships no campaign emails.",
+      "phase": "after-merge-deserialize",
+      "order": 1,
+      "description": "Email-marketing statistics backfill: per campaign email a send-log message, 24 recipients (2 bounced), 3 tracked links and 13 clicks, so the backend Marketing dashboards do not read 0 sent / 0 clicked. Discovery-driven, and a clean no-op when the composition ships no campaign emails. Local installs only: an online build has no SQL surface and no route for this script (its effect ends in an UPDATE of a pre-existing EmailMarketingEmail row, which a merge SqlTable row cannot express).",
       "idempotent": true,
       "transactional": true,
       "requiresHostRestart": false
@@ -67,12 +69,45 @@
     {
       "file": "_sql/demo-clock.sql",
       "mode": "merge",
-      "phase": "after-replace-deserialize",
-      "order": 4,
-      "description": "The demo clock: the _demoClock anchor table, the exclusion and per-column guard tables, usp_DemoClockShift (discovers every operational date column from sys.columns and shifts it by whole days), and the daily RunSql scheduled task that runs it. Keeps every seeded date anchored to today after idle days.",
+      "phase": "after-merge-deserialize",
+      "order": 2,
+      "description": "The demo clock: the _demoClock anchor table (anchored to the day the FIXT-ORDER-RMA1 fixture dates were harvested, derived from that order, else the apply date), the exclusion and per-column guard tables, usp_DemoClockShift (discovers every operational date column from sys.columns and shifts it by whole days), and the daily RunSql scheduled task that runs it. Keeps every seeded date anchored to today after idle days. Local installs only: an online build has no SQL surface and no route for this script (DDL, a stored procedure and a RunSql task), so the 'Truvio demo clock' scheduled task exists on local-channel hosts only.",
       "idempotent": true,
       "transactional": true,
       "requiresHostRestart": true
     }
-  ]
+  ],
+  "costHints": {
+    "reservedKeyPrefixes": [
+      "FIXT*",
+      "FIXT-ORDER-*",
+      "FIXT-PRICE-*",
+      "FIXTGRP*",
+      "FIXTVG*",
+      "FIXTVO*",
+      "PACK-BOM-*",
+      "PACK-BOM3-*",
+      "PACK-RPP-*",
+      "PACK-SUB-*"
+    ],
+    "reservedKeyNote": "The FIXT* family (base.contract.json idRules.reservedFixtureKeys FIXT* / FIXTGRP* / FIXT-PRICE-*, of which FIXT-ORDER-*, FIXTVG* and FIXTVO* are sub-families) plus the feature fixture families PACK-RPP-*, PACK-BOM-*, PACK-BOM3-* and PACK-SUB-* this layer seeds on behalf of feature-pricing, feature-bom-configurator and feature-subscription-orders (Foundry 960), disjoint from truvio-demo's TC* family. Int ids written verbatim with IDENTITY_INSERT by the serializer: AccessUser 1326 (IMCSalesrep) and 1328 (IMCUser) sit below the base contract's intIdentityFloor 100000 by contract (the contract-named exceptions in idRules.intIdentityNote); EcomRmaOrderLines 100301 is the reserved id of the PACK-RMA-0001 / FIXT-ORDER-RMA1-1 link, rekeyed on the harvest host because RmaOrderLineId is an identity-only key the engine never remaps and never warns on. The PACK-* families are recorded here until a base release adds them to idRules.reservedFixtureKeys.",
+    "expectedRows": {
+      "AccessUser": 2,
+      "AccessUserGroupRelation": 2,
+      "EcomGroupProductRelation": 22,
+      "EcomGroups": 8,
+      "EcomOrderLines": 1,
+      "EcomOrders": 1,
+      "EcomPrices": 8,
+      "EcomProductItems": 2,
+      "EcomProducts": 28,
+      "EcomRmaOrderLines": 1,
+      "EcomShopGroupRelation": 8,
+      "EcomVariantGroups": 1,
+      "EcomVariantOptionsProductRelation": 6,
+      "EcomVariantsOptions": 3
+    },
+    "expectedRowsNote": "Rows arrive by merge deserialize of merge/_sql/<Table>/*.yml (3.0.0, Foundry #1215); every count equals the per-table SQL-route count measured on the harvest host (93 rows). EcomProducts 28 = 14 FIXT masters + 6 Size variant rows + 8 PACK fixture products. EcomGroups 8 = 3 FIXTGRP + 5 PACK. EcomPrices 8 = 3 qty tiers + FIXT-PRICE-CONTRACT + 4 PACK-RPP. The two local-only scripts add rows this count does not include (email statistics, the demo clock tables). Advisory: the gate derives its own counts from the composition.",
+    "usersNote": "Buyer 1328 IMCUser and CSR 1326 IMCSalesrep ship as merge rows without a password: AccessUserPassword and the login and recovery columns are excluded by the predicate, and merge never overwrites a password set later. Set each password after the deserialize through Management API UserSetPassword, then recycle and verify with /dwapi/users/authenticate. AccessUserUserName is fixed at IMCUser / IMCSalesrep, the base contract anchors."
+  }
 }

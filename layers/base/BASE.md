@@ -31,7 +31,7 @@ The floor applies to the int ids a layer **mints**. The `AccessUser` ids the con
 - `1328` **IMCUser** (buyer, customer number `98745621`) — member of `1325`
 - `1326` **IMCSalesrep** (CSR, customer number `7789765`) — member of `1292`
 
-These rows and their memberships ship in the sample-data layer's `identities.sql`, not in the base. An edition with `sampleData: false` has neither user nor membership, so a persona, sign-in or customer-number binding against them finds no row. A layer probe that needs them names the fixture in its `requiresFixtures`.
+These rows and their memberships ship in the sample-data layer as merge-mode SqlTable rows (`merge/_sql/AccessUser/`, `merge/_sql/AccessUserGroupRelation/`), not in the base, and carry no password: it is set after delivery through Management API `UserSetPassword`. An edition with `sampleData: false` has neither user nor membership, so a persona, sign-in or customer-number binding against them finds no row. A layer probe that needs them names the fixture in its `requiresFixtures`.
 
 **Content:** none — the base ships zero content areas (3.0.0). Content anchors (area 3, langPrefix `/swift-2`) are surface-swift-owned.
 
@@ -41,7 +41,7 @@ These rows and their memberships ship in the sample-data layer's `identities.sql
 
 **Currency rates:** `EcomCurrencies.CurrencyRate` is hundredths against the default currency. EUR is the default at `100`; USD, the currency the Swift storefront serves, ships at `100` (parity with the default, a demo value and not an exchange rate). No shipped row carries a rate at or below `1`, which renders every price a hundred times over.
 
-**Contract price:** `EcomPrices` row `FIXT-PRICE-CONTRACT` on `FIXT0001` (customer `98745621`, list × 0.8) — ships in the sample-data layer's `catalog.sql`, present when an edition activates `sampleData: true`.
+**Contract price:** `EcomPrices` row `FIXT-PRICE-CONTRACT` on `FIXT0001` (customer `98745621`, list × 0.8) — ships in the sample-data layer as the SqlTable row `merge/_sql/EcomPrices/FIXT-PRICE-CONTRACT.yml`, present when an edition activates `sampleData: true`.
 
 **Repository:** `ProductsFrontend` / `Products.index` / `Products.query` / `Products.facets`, at `wwwroot/Files/System/Repositories/ProductsFrontend/`. It ships with the host's Swift design package (present at the Swift 2.4.0 tag next to `ProductsBackend`), not with any layer in this Distribution, so `provisionedByGate` is `false`: the composition references it, the host supplies it. Every `eCom_ProductCatalog` surface the Distribution ships binds it by path (surface-swift Shop PLP, header search and Express Buy; surface-dap-portal Product Assets and Search results; feature-bom-configurator Kit Configurator). A PLP that cannot list products answers HTTP 200 in both failure shapes: with the repository present over an index of zero documents it carries an in-page Lucene `numHits must be > 0` error, and with the repository absent it renders an empty app div with no error text at all. Gate the PLP on a positive subject (at least one product card) plus `dw-error == 0`, never on status or on the absence of error text.
 

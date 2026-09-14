@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "2.2.2",
+  "baseContractVersion": "2.2.3",
   "swiftVersion": "2.4.0",
   "compat": {
     "dw": {
@@ -41,7 +41,7 @@
       "FIXTGRP*",
       "FIXT-PRICE-*"
     ],
-    "reservedFixtureNote": "The sample-data layer's demo catalog (merge/_sql/catalog.sql) reserves these key prefixes. Additions must not use them.",
+    "reservedFixtureNote": "The sample-data layer's demo catalog (merge-mode SqlTable rows under layers/sample-data/merge/_sql/<Table>/) reserves these key prefixes. Additions must not use them. sample-data also seeds the PACK-RPP-* / PACK-BOM-* / PACK-BOM3-* / PACK-SUB-* fixture families on behalf of the feature layers that own those prefixes (sample-data layer.json costHints.reservedKeyPrefixes).",
     "noPerItemTypeNumericTable": true,
     "noPerItemTypeNumericTableNote": "The contract is prefix-based, not per-itemType-numeric. There is deliberately NO per-itemType numeric range table - do not invent one."
   },
@@ -101,7 +101,7 @@
         "presentOnlyWhen": "sampleData"
       }
     ],
-    "usersNote": "users and memberships are NOT base rows. They ship in the sample-data layer (merge/_sql/identities.sql, sample-data layer.json sql[0]) and every entry carries presentOnlyWhen: sampleData - they exist only when an edition activates sampleData: true. An edition with sampleData: false has no AccessUser 1328 / 1326 and no memberships, so a sign-in, persona or customer-number binding against them finds no row. A layer probe that needs them names the fixture in its requiresFixtures. Only permissionGroups are base-owned (baseOwnedTables.replaceFiltered FILTER-01).",
+    "usersNote": "users and memberships are NOT base rows. They ship in the sample-data layer as merge-mode SqlTable rows (merge/_sql/AccessUser/1326.yml and 1328.yml, merge/_sql/AccessUserGroupRelation/1292$$1326.yml and 1325$$1328.yml), without a password: the password is set after delivery through Management API UserSetPassword. Every entry carries presentOnlyWhen: sampleData - they exist only when an edition activates sampleData: true. An edition with sampleData: false has no AccessUser 1328 / 1326 and no memberships, so a sign-in, persona or customer-number binding against them finds no row. A layer probe that needs them names the fixture in its requiresFixtures. Only permissionGroups are base-owned (baseOwnedTables.replaceFiltered FILTER-01).",
     "referenceCategory": {
       "parent": {
         "table": "EcomProductCategory",
@@ -123,7 +123,7 @@
       "priceUserCustomerNumber": "98745621",
       "unitRule": "list x 0.8",
       "presentOnlyWhen": "sampleData",
-      "note": "Ships in the sample-data layer's catalog.sql, next to the product it scopes to; present only when an edition activates sampleData: true."
+      "note": "Ships in the sample-data layer as the merge-mode SqlTable row merge/_sql/EcomPrices/FIXT-PRICE-CONTRACT.yml, next to the product it scopes to; present only when an edition activates sampleData: true."
     }
   },
   "anchors": {

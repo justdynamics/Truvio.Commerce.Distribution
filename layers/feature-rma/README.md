@@ -24,8 +24,8 @@ and seeds nothing that already exists** — it only seeds the demo instance data
 | Row | Where | Purpose |
 |-----|-------|---------|
 | **RMA return request** `PACK-RMA-0001` | this layer — `merge/_sql/EcomRmas/PACK-RMA-0001.yml` | a pre-existing Return (`RmaType 1`, state 1, buyer `98745621`) so the My returns page shows a real request, not the empty state |
-| **Delivered order** `FIXT-ORDER-RMA1` (+ its order line) | **sample-data** (`merge/_sql/catalog.sql`) | a completed order (`OrderStateId OS2`) owned by buyer `98745621` to return against — orders are demo content, so they live in sample-data (P3 interplay) |
-| **RMA ↔ order-line link** (`EcomRmaOrderLines`) | **sample-data** (`merge/_sql/catalog.sql`) | ties `PACK-RMA-0001` to the delivered order line so `Ecom:RMA.OrderID` resolves. `EcomRmaOrderLines.RmaOrderLineId` is an **int IDENTITY PK** — the serializer supports natural-key inserts only for four declared relation tables (base contract), not this one, so the link is seeded via sample-data raw SQL, which handles identity columns deterministically |
+| **Delivered order** `FIXT-ORDER-RMA1` (+ its order line) | **sample-data** (`merge/_sql/EcomOrders/FIXT-ORDER-RMA1.yml`, `merge/_sql/EcomOrderLines/FIXT-ORDER-RMA1-1.yml`) | a completed order (`OrderStateId OS2`) owned by buyer `98745621` to return against — orders are demo content, so they live in sample-data (P3 interplay) |
+| **RMA ↔ order-line link** (`EcomRmaOrderLines`) | **sample-data** (`merge/_sql/EcomRmaOrderLines/100301.yml`) | ties `PACK-RMA-0001` to the delivered order line so `Ecom:RMA.OrderID` resolves. `EcomRmaOrderLines.RmaOrderLineId` is an **int IDENTITY PK** — the serializer writes an int-identity key verbatim with IDENTITY_INSERT and never remaps it, so the row ships at the reserved id `100301` (above the base contract's 100000 floor) |
 
 ### sample-data dependency (noted per the schema mechanism)
 

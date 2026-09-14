@@ -9,15 +9,15 @@ D-D); the reordering half (Quick Order + Express Buy) moved to `feature-reorderi
 
 | Capability | How | Artifact |
 |------------|-----|----------|
-| Qty-break tier pricing | Anonymous-visible `EcomPrices` tier rows on **layer-owned** product `PACK-RPP-PROD1` (RPP-TIER-01, base 4995 EUR): qty 5 → 4500, qty 10 → 4200, qty 25 → 3900 | `sample-data` `merge/_sql/feature-fixtures.sql` |
-| Customer contract pricing | Buyer-scoped `EcomPrices` row on **layer-owned** product `PACK-RPP-PROD2` (RPP-CTR-01, base 1599 EUR): 1399 EUR for customer number `98745621` | `sample-data` `merge/_sql/feature-fixtures.sql` |
-| Catalogue the prices bind to | Group `PACK-RPP-GRP1` (bound to `SHOP1`) + products `PACK-RPP-PROD1/2` + group/shop relations — seeded by the `sample-data` layer since 1.1.0, not by this one (Foundry 960) | `sample-data` `merge/_sql/feature-fixtures.sql` |
+| Qty-break tier pricing | Anonymous-visible `EcomPrices` tier rows on **layer-owned** product `PACK-RPP-PROD1` (RPP-TIER-01, base 4995 EUR): qty 5 → 4500, qty 10 → 4200, qty 25 → 3900 | `sample-data` `merge/_sql/<Table>/` SqlTable rows |
+| Customer contract pricing | Buyer-scoped `EcomPrices` row on **layer-owned** product `PACK-RPP-PROD2` (RPP-CTR-01, base 1599 EUR): 1399 EUR for customer number `98745621` | `sample-data` `merge/_sql/<Table>/` SqlTable rows |
+| Catalogue the prices bind to | Group `PACK-RPP-GRP1` (bound to `SHOP1`) + products `PACK-RPP-PROD1/2` + group/shop relations — seeded by the `sample-data` layer since 1.1.0, not by this one (Foundry 960) | `sample-data` `merge/_sql/<Table>/` SqlTable rows |
 | Cart-enforced quantity tiers | `ReorderingPricingQtyBreakProvider` (**compile-optional**) — stock cart resolution ignores tier quantities at cart time, so tier rows render on PDP surfaces but the cart charges the base price without it | `src/ReorderingPricingQtyBreakProvider.cs` |
 
 
 > **Where the catalogue rows live (Foundry 960, this release).** This layer ships **zero**
 > catalogue rows. The products, groups, relations and prices it demonstrates against are seeded by
-> the `sample-data` layer (`merge/_sql/feature-fixtures.sql`), with every id unchanged, so they ride
+> the `sample-data` layer (`merge/_sql/<Table>/` SqlTable rows), with every id unchanged, so they ride
 > the single `sampleData` edition toggle like the rest of the catalogue. Composed with
 > `sampleData: false` this layer now adds no products and no groups; its behaviour probes are
 > meaningful only on an edition that also carries sample data.

@@ -40,7 +40,7 @@ accept this equivalence (recorded here and in 09-02-SUMMARY.md per orchestrator 
 
 > **Where the catalogue rows live (Foundry 960, this release).** This layer ships **zero**
 > catalogue rows. The products, groups, relations and prices it demonstrates against are seeded by
-> the `sample-data` layer (`merge/_sql/feature-fixtures.sql`), with every id unchanged, so they ride
+> the `sample-data` layer (`merge/_sql/<Table>/` SqlTable rows), with every id unchanged, so they ride
 > the single `sampleData` edition toggle like the rest of the catalogue. Composed with
 > `sampleData: false` this layer now adds no products and no groups; its behaviour probes are
 > meaningful only on an edition that also carries sample data.
@@ -60,7 +60,7 @@ id (that group's products become the radio options), `ProductItemDefaultProductI
   `PACK-BOM-0001` (`ProductNumber 10004kit`, `ProductType=2`), the two child groups
   (`PACK-BOM-FORKS`, `PACK-BOM-RACKS`) with two child products each, the parent's group
   `PACK-BOM-GRP1` and their `EcomShopGroupRelation` bindings all moved to
-  `sample-data` `merge/_sql/feature-fixtures.sql` with their ids unchanged. This layer ships
+  `sample-data` `merge/_sql/<Table>/` SqlTable rows with their ids unchanged. This layer ships
   zero catalogue rows, so an edition with `sampleData: false` gets zero products from it. No
   base products/groups (PROD290/GROUP49/GROUP161/10028/10119) are referenced either.
 - **PK3-02** rides `PACK-BOM-0001` with two slots in the two layer-owned groups; the

@@ -23,7 +23,7 @@ the invoice path (any payment method with `PaymentAddInType != Checkout` resolve
 and the platform's own scheduled task generates follow-up orders. PAY2/SHIP9/ScheduledTask are
 **declared configRow dependencies, not fragment rows** — the layer inserts nothing into those
 tables. **1.2.0 (Foundry 960):** the recurring product `PACK-SUB-PROD1`, its group `PACK-SUB-GRP1` and
-their group/shop relations moved to `sample-data` `merge/_sql/feature-fixtures.sql` with their ids
+their group/shop relations moved to `sample-data` `merge/_sql/<Table>/` SqlTable rows with their ids
 unchanged. This layer ships zero catalogue rows; the checkout-recurring probe rides the same
 product id, now seeded by the sampleData toggle.
 
@@ -126,7 +126,7 @@ proof for this real-host UAT — the same trade the BOM configurator render make
 
 > **Where the catalogue rows live (Foundry 960, this release).** This layer ships **zero**
 > catalogue rows. The products, groups, relations and prices it demonstrates against are seeded by
-> the `sample-data` layer (`merge/_sql/feature-fixtures.sql`), with every id unchanged, so they ride
+> the `sample-data` layer (`merge/_sql/<Table>/` SqlTable rows), with every id unchanged, so they ride
 > the single `sampleData` edition toggle like the rest of the catalogue. Composed with
 > `sampleData: false` this layer now adds no products and no groups; its behaviour probes are
 > meaningful only on an edition that also carries sample data.

@@ -21,8 +21,20 @@
 -- (a +1 then -1 test nets zero) and catch-up safe, so it runs unattended after
 -- idle days.
 --
--- Applies AFTER catalog.sql: the anchor is set to the date the fixtures were
--- seeded, and catalog.sql seeds them with GETDATE().
+-- Applies AFTER the merge deserialize (layer.json sql[] phase
+-- after-merge-deserialize): the fixture rows arrive as serialized SqlTable
+-- YAML whose dates were frozen on the day they were harvested, not on the day
+-- they are applied. The anchor is therefore DERIVED from a fixture, never taken
+-- from GETDATE(): FIXT-ORDER-RMA1 was harvested with OrderDate = harvest day
+-- minus 30, so the anchor is CAST(OrderDate AS date) + 30 days. Anchored to the
+-- apply day instead, the first shift would never make up the harvest age and
+-- every fixture date would stay that many days stale forever. When the order is
+-- absent (no merge rows yet, or a composition without them) the anchor falls
+-- back to the apply date; a derived anchor later than today is clamped to today.
+--
+-- LOCAL INSTALLS ONLY. An online build has no SQL surface, so this script, its
+-- tables, its procedure and the 'Truvio demo clock' scheduled task exist only on
+-- hosts built through the local SQL channel.
 --
 -- Idempotent: the tables, the seed rows, the procedure and the task row are all
 -- created only when absent (the procedure uses CREATE OR ALTER). Transactional
@@ -33,8 +45,8 @@
 --
 -- A SQL-inserted ScheduledTask row is invisible to a RUNNING app until a
 -- recycle: the scheduled-task service caches its task collection at application
--- start. sample-data already requires a host restart after catalog.sql, so the
--- task is registered before that restart and is live from it. Prove the
+-- start. The layer declares requiresHostRestart on this script, so the task is
+-- registered before that restart and is live from it. Prove the
 -- registration from GET /Admin/Api/Tasks (mind the 10-row default page size),
 -- never from the INSERT.
 -- ===========================================================================
@@ -60,8 +72,20 @@ END
 GO
 
 IF NOT EXISTS (SELECT 1 FROM dbo._demoClock WHERE Id = 1)
+BEGIN
+    -- Anchor to the harvest day of the fixture dates: FIXT-ORDER-RMA1 ships with
+    -- OrderDate = harvest day - 30. Fall back to the apply date without it.
+    DECLARE @today DATE = CAST(GETDATE() AS date);
+    DECLARE @anchoredTo DATE = NULL;
+    IF OBJECT_ID(N'dbo.EcomOrders', N'U') IS NOT NULL
+        EXEC sp_executesql
+            N'SELECT @a = DATEADD(day, 30, CAST(OrderDate AS date)) FROM dbo.EcomOrders WHERE OrderId = N''FIXT-ORDER-RMA1'' AND OrderDate IS NOT NULL;',
+            N'@a DATE OUTPUT', @a = @anchoredTo OUTPUT;
+    IF @anchoredTo IS NULL OR @anchoredTo > @today
+        SET @anchoredTo = @today;
     INSERT INTO dbo._demoClock (Id, AnchoredTo, Label)
-    VALUES (1, CAST(GETDATE() AS date), N'sample-data demo clock');
+    VALUES (1, @anchoredTo, N'sample-data demo clock');
+END
 GO
 
 -- ---------------------------------------------------------------------------

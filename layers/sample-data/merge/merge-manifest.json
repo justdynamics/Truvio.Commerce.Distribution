@@ -1,91 +1,10 @@
 {
   "schemaVersion": 2,
   "mode": "merge",
-  "writtenAtUtc": "2026-09-14T10:08:32.0214709Z",
+  "writtenAtUtc": "2026-09-14T10:08:32Z",
   "complete": true,
-  "excludeFieldsByItemType": {
-    "Swift-v2_Master": [
-      "GoogleTagManagerID",
-      "Favicon",
-      "AppleTouchIcon",
-      "FacebookAppId",
-      "Fb_app_id",
-      "Google_APIKey",
-      "Google_Site_Verification",
-      "P_domain_verify",
-      "TwitterSite",
-      "Twitter_Site",
-      "MetaSiteName",
-      "MetaImage",
-      "MetaImageALT"
-    ]
-  },
-  "excludeXmlElementsByType": {
-    "Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider, Dynamicweb.Ecommerce": [],
-    "eCom_CartV2": [
-      "EmptyCartRedirectPage",
-      "CustomerAcceptedErrorMessage",
-      "StockStatusErrorMessage",
-      "ErrorEmtyUsername",
-      "ErrorUsernameTaken",
-      "ErrorEmtyPassword",
-      "ErrorPasswordsNotMatch",
-      "ErrorPasswordLength",
-      "ErrorIllegalPasswordCharacters",
-      "ErrorMessage_VALIDATION1",
-      "ErrorMessage_VALIDATION2",
-      "ErrorMessage_VALIDATION4",
-      "Mail1SenderName",
-      "Mail1SenderEmail",
-      "Mail1Subject",
-      "Mail1Recipient",
-      "CreateNewUserGroupsHidden",
-      "DefaultPaymentId",
-      "DefaultShippingId",
-      "PaymetTypes",
-      "DeliveryTypes"
-    ],
-    "eCom_Catalog": [],
-    "eCom_ContextOrderRenderer": [],
-    "eCom_CustomerExperienceCenter": [
-      "ShoppingCartLink"
-    ],
-    "eCom_CustomerExperienceCenterFavorites": [],
-    "eCom_CustomerExperienceCenterSavedCards": [],
-    "eCom_ProductCatalog": [],
-    "QueryPublisher": [],
-    "UserAddresses": [],
-    "UserAuthentication": [
-      "OneTimeCodeSenderName",
-      "OneTimeCodeSenderEmail",
-      "OneTimeCodeEmailSubject",
-      "MagicLinkSenderName",
-      "MagicLinkSenderEmail",
-      "MagicLinkEmailSubject"
-    ],
-    "UserChangePassword": [],
-    "UserCreate": [
-      "SenderName",
-      "SenderEmail",
-      "EmailSubject"
-    ],
-    "UserEdit": [
-      "SenderName",
-      "SenderEmail",
-      "EmailSubject"
-    ],
-    "UserForgotPassword": [
-      "SenderName",
-      "SenderEmail",
-      "EmailSubject"
-    ],
-    "UserGroups": [],
-    "UserView": [
-      "SenderName",
-      "SenderEmail",
-      "EmailSubject"
-    ]
-  },
+  "excludeFieldsByItemType": {},
+  "excludeXmlElementsByType": {},
   "entries": [
     {
       "providerType": "SqlTable",

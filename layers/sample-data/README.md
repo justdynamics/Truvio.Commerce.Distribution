@@ -22,44 +22,71 @@ there is exactly one sample-data layer.
 
 ## What it contains
 
-All content ships as executable SQL under [`merge/_sql/`](merge/_sql/README.md):
+The identities, the catalogue, the contract price and the delivered order ship as
+serialized **merge-mode SqlTable rows** under `merge/_sql/<Table>/<key>.yml`, listed in
+[`merge/merge-manifest.json`](merge/merge-manifest.json) and selected by the 14 merge
+predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json). The ordinary
+merge deserialize delivers them, on a local install and on an online build alike. 93 rows
+over 14 tables:
 
-- **`identities.sql`** — permission groups `1325 Customers` / `1270 Account Admin` /
-  `1292 CSR` (`AccessUser` rows, type 2), buyer `1328` (customer number `98745621`) and
-  CSR `1326` (customer number `7789765`), and their group memberships. Apply **before
-  the host starts** (DW caches identity state at startup). Demo credentials are supplied
-  as `sqlcmd` variables — they are not repo content.
-- **`catalog.sql`** — the demo catalog for `SHOP1`/`ENU`/`EUR`: 3 groups
-  (`FIXTGRP1..3`), 20 products (14 masters `FIXT0001..0014` + 6 `Size` variants), a
-  qty-tier price ladder on `FIXT0002`, and the buyer-scoped contract price
-  `FIXT-PRICE-CONTRACT` on `FIXT0001`. Apply **after the base layer deserialize**, then
-  restart the host so the startup catalog cache includes the rows. Deterministic counts:
-  `EcomProducts` 20, `EcomGroups` 3.
-- **`email-stats.sql`** — the email-marketing statistics backfill. Per campaign email:
-  one `EmailMessage` send-log row, 24 `EmailRecipient` sends (2 of them bounced), 3
-  tracked `OMCLink` rows and 13 `OMCLinkClick` clicks split 5/4/4, so the backend
-  Marketing dashboards do not read 0 sent / 0 clicked. Discovery-driven over whatever
-  `EmailMarketingEmail` rows the composition has, and a clean no-op when it has none.
-- **`demo-clock.sql`** — the demo clock. Creates `_demoClock(Id, AnchoredTo)`, the
-  exclusion and per-column guard tables, `usp_DemoClockShift`, and the daily RunSql
-  scheduled task `Truvio demo clock`. Apply **last**, so it anchors everything the other
-  scripts seeded.
+| Table | Rows | What |
+|---|---:|---|
+| `AccessUser` | 2 | buyer `1328` IMCUser (customer number `98745621`) and CSR `1326` IMCSalesrep (customer number `7789765`), at the ids the base contract names |
+| `AccessUserGroupRelation` | 2 | `1328` in `1325 Customers`, `1326` in `1292 CSR` (the groups are base rows) |
+| `EcomGroups` | 8 | `FIXTGRP1..3` + the 5 `PACK-*` feature fixture groups |
+| `EcomShopGroupRelation` | 8 | each group bound to `SHOP1` |
+| `EcomVariantGroups` | 1 | the `Size` axis `FIXTVG1` |
+| `EcomVariantsOptions` | 3 | `FIXTVO1..3` |
+| `EcomProducts` | 28 | 14 masters `FIXT0001..0014` + 6 `Size` variant rows + 8 `PACK-*` feature fixture products |
+| `EcomGroupProductRelation` | 22 | one per master |
+| `EcomVariantOptionsProductRelation` | 6 | `FIXT0013` / `FIXT0014` x the three options |
+| `EcomPrices` | 8 | the qty-tier ladder on `FIXT0002`, the buyer contract price `FIXT-PRICE-CONTRACT` on `FIXT0001`, 4 `PACK-RPP-*` prices |
+| `EcomProductItems` | 2 | the two BOM slots on `PACK-BOM-0001` |
+| `EcomOrders` | 1 | the delivered order `FIXT-ORDER-RMA1` for buyer `98745621` |
+| `EcomOrderLines` | 1 | `FIXT-ORDER-RMA1-1` |
+| `EcomRmaOrderLines` | 1 | the link from `PACK-RMA-0001` (feature-rma) to that line, at reserved id `100301` |
 
-## Declaration (`layer.json` → `sql[]`)
+**Passwords are not data.** The `AccessUser` predicate excludes `AccessUserPassword` and the
+login and recovery columns, so no row file carries a password or a hash, and merge never
+overwrites a password set later. After the deserialize, set the buyer and CSR passwords
+through Management API `UserSetPassword`, recycle the host (the call does not invalidate the
+in-process user cache), and verify with `POST /dwapi/users/authenticate`.
 
-The serializer manifest has no provider for a whole script: its only `providerType`s are
-`Content` and `SqlTable`, and `SqlTable` is row-per-YAML under `_sql/<Table>/<key>.yml`.
-A loose `.sql` therefore carries no `merge-manifest.json` entry and the manifest-driven
-deserialize never executes it. A composer that reads only the manifests stages the four
-files and silently runs nothing, which is how `sampleData: true` could compose green and
-land an empty catalogue.
+**Dates are frozen at harvest.** `ProductCreated`, `ProductUpdated`, `OrderDate`,
+`OrderCompletedDate` and `OrderLineDate` carry the values of the harvest host: `FIXT-ORDER-RMA1`
+has `OrderDate` 2026-08-15 and `OrderCompletedDate` 2026-08-17 and ages from there. On a local
+install the demo clock moves them forward; an online build has no clock.
 
-`layer.json` `sql[]` is the discovery contract that replaces that guesswork: it names each
-script, the phase it must run in (`before-host-start` / `after-replace-deserialize`), the
-order within that phase, whether the host must be restarted afterwards, and every `sqlcmd`
-variable the caller has to supply. An applier that cannot supply a declared variable must
-fail before executing the script, never substitute a blank. The schema is
-[`layers/layer.schema.json`](../layer.schema.json) → `sql`.
+Two scripts stay SQL, declared in `layer.json` `sql[]`, **local installs only**:
+
+- **`email-stats.sql`**: the email-marketing statistics backfill. Per campaign email: one
+  `EmailMessage` send-log row, 24 `EmailRecipient` sends (2 of them bounced), 3 tracked
+  `OMCLink` rows and 13 `OMCLinkClick` clicks split 5/4/4, so the backend Marketing
+  dashboards do not read 0 sent / 0 clicked. Discovery-driven over whatever
+  `EmailMarketingEmail` rows the host has, and a clean no-op when it has none. Not
+  serializable in a useful form: the grid binding it writes is an UPDATE of a pre-existing
+  `EmailMarketingEmail` row no layer owns, which a merge row cannot express.
+- **`demo-clock.sql`**: the demo clock. Creates `_demoClock(Id, AnchoredTo)`, the exclusion
+  and per-column guard tables, `usp_DemoClockShift`, and the daily RunSql scheduled task
+  `Truvio demo clock`. Not serializable: DDL, a stored procedure, and a task that only works
+  with that procedure. The `Truvio demo clock` task therefore exists on local-channel hosts
+  only.
+
+## Declaration (`layer.json`)
+
+`fragmentModes: ["merge"]`, the 14 `fragmentTables` and six `configRows` (existence probes for
+`FIXT0001`, `PACK-BOM-0001`, user `1328`, `FIXT-PRICE-CONTRACT`, `FIXT-ORDER-RMA1` and the BOM
+slot `PACK-BOM3-0002`) describe the rows. `costHints` records the reserved key prefixes, the
+reserved int ids and the expected row counts.
+
+`sql[]` declares the two local-only scripts. The serializer manifest has no provider for a
+whole script: its only `providerType`s are `Content` and `SqlTable`. A loose `.sql` therefore
+carries no `merge-manifest.json` entry and the manifest-driven deserialize never executes it.
+`sql[]` names each script, its phase (`after-merge-deserialize`: both read rows the merge
+delivers), its order (email statistics first, so the clock anchors the seeded send dates) and
+whether the host must be restarted afterwards. An online build has no SQL surface and reports
+both scripts with no route. The schema is [`layers/layer.schema.json`](../layer.schema.json)
+-> `sql`.
 
 ## The demo clock
 
@@ -85,6 +112,10 @@ operational date column by `DATEDIFF(day, AnchoredTo, today)` and then re-anchor
 - **A second date-shifting task must own its own anchor row.** The shifter re-anchors to
   today, so a second task reading row `Id=1` at a later slot sees delta 0 and shifts
   nothing, forever, while reporting Success.
+- **The anchor is derived from the fixtures, not the apply date.** The rows ship with the
+  dates of the harvest day, so the first anchor is `FIXT-ORDER-RMA1`'s `OrderDate` + 30 days
+  (the order was harvested 30 days old), falling back to the apply date when the order is
+  absent. Anchored to the apply date, the clock would never make up the harvest age.
 - **Prove it with a rewind-and-run, never a bare run.** A fresh anchor is legitimately
   delta 0 on its first pass, so "the task ran" is not evidence that "the task shifts".
   Rewind the anchor by one day, run, and assert a known timestamp advanced by exactly one
@@ -115,6 +146,6 @@ returns against.
 numbers, prices, the variant structure and the row counts are the layer's determinism
 contract and never change with a rename.
 
-Both scripts are idempotent and transactional; every id is a base-contract anchor
+The two SQL scripts are idempotent and transactional; every id is a base-contract anchor
 ([`layers/base/base.contract.json`](../base/base.contract.json)), and the key prefixes
 `FIXT*` / `FIXTGRP*` / `FIXT-PRICE-*` are reserved for this layer.

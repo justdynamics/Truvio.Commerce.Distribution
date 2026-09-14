@@ -1,5 +1,96 @@
 # Changelog — sample-data
 
+## 3.0.0
+
+### The fixtures ship as serialized SqlTable YAML (Foundry #1215)
+
+`identities.sql`, `catalog.sql` and `feature-fixtures.sql` are gone. Their end state now ships
+as merge-mode SqlTable rows: `merge/_sql/<Table>/<key>.yml` for 14 tables (93 row files plus one
+`_meta.yml` per table), `merge/merge-manifest.json` (schemaVersion 2, complete, 14 `SqlTable`
+entries, host content exclusion maps emptied) and the 14 merge predicates in
+`config/sample-data-2.4.json`. `layer.json` declares `fragmentModes: ["merge"]`, the 14
+`fragmentTables` and six `configRows`, and gains `costHints` (reserved key prefixes, reserved int
+ids, expected rows).
+
+**Why major.** The declared script interface changes for existing consumers. The
+`before-host-start` script is gone, the `catalog.sql` path a caller executed is gone, the three
+`sqlcmdVariables` `BuyerUserName`, `BuyerPassword` and `CsrPassword` (and their `valueShape`
+declarations) are gone, and applying the layer no longer yields users who can sign in until
+their passwords are set through the Management API.
+
+**How the rows were produced.** On `foundry-sqlsrc2.mydwsite4.com` (DW 10.28.10, Serializer
+1.0.2-beta, MCP 0.6), `gate-fixtures` was composed from Distribution `dcb8e492` with sample-data
+2.3.4 applied locally: `identities.sql` before host start; replace deserialize 1190 / 10 / 33 / 0
+failed; `catalog.sql`, `feature-fixtures.sql`, `email-stats.sql` and `demo-clock.sql` after the
+replace; merge deserialize 279 / 17 / 0 / 0; recycle. The storefront baseline on that SQL route:
+`/en-us/shop` 12 products; the `PACK-BOM-0001` PDP HTTP 200 ("Truvio Kit Configurator (BOM)");
+IMCUser and IMCSalesrep authenticate through `/dwapi/users/authenticate`; IMCUser's my-returns
+page shows "Add new request". After the rekey below, one scoped Serialize per predicate wrote the
+YAML (harvest completed 2026-09-14T10:08:32Z).
+
+**Row parity, SQL route against YAML, table by table:**
+
+| Table | SQL rows | YAML rows |
+|---|---:|---:|
+| `AccessUser` | 2 | 2 |
+| `AccessUserGroupRelation` | 2 | 2 |
+| `EcomGroups` | 8 | 8 |
+| `EcomShopGroupRelation` | 8 | 8 |
+| `EcomVariantGroups` | 1 | 1 |
+| `EcomVariantsOptions` | 3 | 3 |
+| `EcomProducts` | 28 | 28 |
+| `EcomGroupProductRelation` | 22 | 22 |
+| `EcomVariantOptionsProductRelation` | 6 | 6 |
+| `EcomPrices` | 8 | 8 |
+| `EcomProductItems` | 2 | 2 |
+| `EcomOrders` | 1 | 1 |
+| `EcomOrderLines` | 1 | 1 |
+| `EcomRmaOrderLines` | 1 | 1 |
+| **Total** | **93** | **93** |
+
+The permission groups 1325 / 1270 / 1292 `identities.sql` inserted when absent are not shipped:
+the base replace tree owns them.
+
+**Rekeyed before harvest.** `EcomRmaOrderLines` has an identity-only key, which the serializer
+writes verbatim and never remaps or warns on. The row linking `PACK-RMA-0001` to
+`FIXT-ORDER-RMA1-1` moved from id 1 to the reserved id `100301` on the harvest host. Users 1326
+and 1328 keep their contract-named ids, which the base contract names as exceptions to the 100000
+id floor (base 3.4.2).
+
+**Checked on the harvest.** 93 row files equal the SQL counts in all 14 tables; every row file
+carries the ownership header; no row file contains `AccessUserPassword` or a 128-hex hash; no
+protected string; no `1900-01-01` value (Serializer 1.0.2-beta round-trips NULL, issue #18).
+
+**Persona passwords move to the Management API.** After the deserialize, set the passwords of
+1328 IMCUser and 1326 IMCSalesrep through `UserSetPassword`, recycle, and verify with
+`/dwapi/users/authenticate`. `AccessUserUserName` is fixed at `IMCUser`, the base anchor, so the
+buyer login name is no longer steerable.
+
+**Frozen at harvest.** `ProductCreated`, `ProductUpdated` and `GroupProductRelationCreated`,
+`OrderDate` (2026-08-15) and `OrderCompletedDate` (2026-08-17) of `FIXT-ORDER-RMA1`, and its
+`OrderLineDate`. The 24 host-born `ProductUniqueId` values and the users' `AccessUserUniqueId`
+freeze too; re-harvest only from a host deserialized from this YAML.
+
+**Dropped, because merge carries the end state only.** The DELETE-then-INSERT resets, the
+mojibake repair UPDATEs (YAML is UTF-8 and carries U+2014 directly) and the password shape guard.
+
+**Two scripts stay SQL, local installs only.** `sql[]` keeps `email-stats.sql` (order 1) and
+`demo-clock.sql` (order 2), both now in phase `after-merge-deserialize` because the rows they read
+arrive by the merge; every other flag is unchanged. Their descriptions state that an online build
+has no route for them. `email-stats.sql` ends in an UPDATE of a pre-existing
+`EmailMarketingEmail` row (the binding the statistics grid reads), which a merge row cannot move.
+`demo-clock.sql` is DDL, a stored procedure and a RunSql task that calls it; the scheduled task
+`Truvio demo clock` exists on local-channel hosts only.
+
+**The demo clock anchors to the harvested dates.** The first anchor was `GETDATE()` at apply
+time, correct while `catalog.sql` seeded the dates with `GETDATE()`. With the dates frozen at
+harvest, a clock anchored to the apply day never makes up the harvest age. `demo-clock.sql` now
+derives the anchor as `CAST(OrderDate AS date) + 30 days` of `FIXT-ORDER-RMA1` (harvested 30 days
+old), falls back to the apply date when the order is absent, and clamps a future anchor to today.
+An existing `_demoClock` row is left alone.
+
+**Not yet proven.** Online delivery on a fresh clone and the remote gate on `gate-fixtures`.
+
 ## 2.3.4
 
 ### The password variables carry the platform hash (Foundry #1104, password half)

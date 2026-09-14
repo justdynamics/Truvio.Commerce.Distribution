@@ -1,5 +1,26 @@
 # Changelog — base
 
+## 3.4.3
+
+Patch, text only: the contract names where the sample-data rows now live. `baseContractVersion`
+moves 2.2.2 -> 2.2.3. No key is added or removed, no value a machine reader reads changes, and no
+SQL, content or row count changes.
+
+sample-data 3.0.0 (Foundry #1215) ships its identities, catalogue, contract price and delivered
+order as merge-mode SqlTable rows instead of `identities.sql` and `catalog.sql`. The three notes
+that named those scripts now name the rows:
+
+- `guaranteedRows.usersNote`: buyer 1328 and CSR 1326 and their memberships ship as
+  `merge/_sql/AccessUser/` and `merge/_sql/AccessUserGroupRelation/` rows without a password; the
+  password is set after delivery through Management API `UserSetPassword`.
+- `guaranteedRows.contractPrice.note`: `FIXT-PRICE-CONTRACT` ships as
+  `merge/_sql/EcomPrices/FIXT-PRICE-CONTRACT.yml`.
+- `idRules.reservedFixtureNote`: names the SqlTable tree and records the `PACK-RPP-*`,
+  `PACK-BOM-*`, `PACK-BOM3-*` and `PACK-SUB-*` families sample-data seeds for the feature
+  layers. `reservedFixtureKeys` itself is unchanged.
+
+`BASE.md` follows. All six editions repin `base@3.4.3`.
+
 ## 3.4.2
 
 Patch: the serializer floor rises and the id-floor rule names its exceptions. `baseContractVersion`

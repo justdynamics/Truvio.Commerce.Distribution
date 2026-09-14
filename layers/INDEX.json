@@ -16,7 +16,7 @@
     {
       "name": "base",
       "kind": "base",
-      "version": "3.4.2",
+      "version": "3.4.3",
       "status": "active"
     },
     {
@@ -75,7 +75,7 @@
     {
       "name": "sample-data",
       "kind": "sample-data",
-      "version": "2.3.4",
+      "version": "3.0.0",
       "status": "active"
     },
     {
