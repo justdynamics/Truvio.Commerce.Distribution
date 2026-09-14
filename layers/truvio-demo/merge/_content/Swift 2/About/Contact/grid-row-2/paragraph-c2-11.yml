@@ -1,0 +1,21 @@
+﻿"ownership":
+  "mode": "replace"
+"paragraphUniqueId": 0c024fa0-07e8-4faa-947b-6da34c383d1b
+"sourceParagraphId": 310
+"sortOrder": 11
+"itemType": "Swift-v2_Feature"
+"header": "Contact detail: account support"
+"template": "IconBoxLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"224\",\r\n  \"Label\": \"Customer support\",\r\n  \"Link\": \"Default.aspx?ID=224\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"secondary\"\r\n}"
+  "GlobalRecordPageGuid": "ed181bea-b563-41ef-9fb2-a969068214e2"
+  "Icon": "/Files/Images/Icons/user.svg"
+  "Id": "29"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p class=\"dw-paragraph\">Account questions: support@truvio-demo.example, Monday to Friday, 08:00 to 17:00.</p>"
+  "Title": ""
+"columnId": 2

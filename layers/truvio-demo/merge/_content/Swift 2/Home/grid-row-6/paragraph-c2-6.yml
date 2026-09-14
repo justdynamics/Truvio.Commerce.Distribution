@@ -1,0 +1,20 @@
+﻿"ownership":
+  "mode": "replace"
+"paragraphUniqueId": 5a77d351-afd5-47f5-9b54-92eee554aff6
+"sourceParagraphId": 190
+"sortOrder": 6
+"itemType": "Swift-v2_Feature"
+"header": "Feature: contract and quantity pricing"
+"template": "IconLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "febabe52-c9a6-4983-b857-6c6c022d88fb"
+  "Icon": "/Files/Images/Icons/cart-shopping.svg"
+  "Id": "14"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p>Signed-in accounts see their contract price against list, and quantity breaks start at a single unit.<br></p>"
+  "Title": "<h3 class=\"dw-h6\">Contract and quantity pricing</h3>"
+"columnId": 2
