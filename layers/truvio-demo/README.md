@@ -92,6 +92,40 @@ does not move its group price. Edit the YAML, or re-harvest from a host that was
 FROM this YAML with the predicates in `config/`; never re-harvest from a fresh SQL run, or
 host-born values (GUIDs, timestamps, the `TC-PRICE-GRPV-*` ids) churn every file.
 
+## Storefront copy (1.9.0)
+
+surface-swift ships its demo-facing strings in the `Placeholder` marker form so that a
+composition with no brand layer fails the design gate (surface-swift README, CHANGELOG
+1.4.0). On `swift-demo` this layer is the brand layer, so it carries the copy that replaces
+the marker: 43 content documents, each surface-swift's own document at the same path under
+`merge/_content/Swift 2/` or `replace/_content/Swift 2/Navigation/`, with only the copy fields
+rewritten and an `ownership` header set to `replace`.
+
+| Where | What the prospect reads |
+|---|---|
+| Home hero | "One catalogue for every data model, price structure and content block"; buttons **Shop the catalogue** (Shop) and **Browse Data Models** (`GroupID=TCGRP-DATA-MODELS`) |
+| Home body | catalogue pitch with **Browse Commerce** (`GroupID=TCGRP-COMMERCE`), "Why buyers order from Truvio Commerce" over three features, an account call to action, the figures 60 / 12 / 36, **About Truvio Commerce** |
+| About, Contact, Employees, Posts | company intro, three values, figures 4 / 96 / 324, team heading, contact routes on `support@truvio-demo.example` |
+| Header, footer, mega-menu | the `Truvio Commerce` wordmark, the copyright line, the Variants and Price Structures promos |
+
+Rules for editing it:
+
+- **Same path, same ids.** A document here must stay a copy of surface-swift's document at
+  the identical path (same `paragraphUniqueId`, item type, template, colour scheme, column).
+  The composed SerializeRoot holds one file per path, so the brand copy wins by being the file
+  at that path; a copy under any other filename is read as a second paragraph with the same
+  GUID. When surface-swift changes one of these documents, re-derive this copy from it.
+- **Composition order.** The copy reaches the host only when the composer stages this layer
+  after surface-swift. Compose-Edition composes `add[]` before `surfaces[]`, so this depends
+  on sample-data `add[]` layers being composed after `surfaces[]` (see CHANGELOG 1.9.0).
+- **D-B and the design gate.** Brand and platform vocabulary only, no marker word, no lorem,
+  no stock Swift strings: every document is checked against the publish design config's
+  `placeholderRegex`. Figures quote this layer's own counts; change them with the rows.
+- **Links.** Page links stay `Default.aspx?ID=N` so the serializer's page-id remap resolves
+  them; a `GroupID` query tail survives the remap.
+
+`base-swift` does not compose this layer and keeps surface-swift's marker copy.
+
 ## Identities
 
 Three personas on the fictional `truvio-demo` domain — `buyer@`, `csr@`, `admin@` — all
