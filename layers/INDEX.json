@@ -128,7 +128,7 @@
     {
       "name": "sample-data",
       "kind": "sample-data",
-      "version": "4.1.1",
+      "version": "4.1.2",
       "status": "active"
     },
     {
@@ -146,13 +146,13 @@
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.13.3",
+      "version": "1.13.6",
       "status": "active"
     },
     {
       "name": "theme-default",
       "kind": "theme",
-      "version": "2.3.2",
+      "version": "2.3.4",
       "status": "active"
     }
   ],

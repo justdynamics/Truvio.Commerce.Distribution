@@ -69,11 +69,15 @@ gutter, never the width.
 
 The edge motif (block #22) paints one fill per instance: `--td-edge-fill-hero` (the home hero
 row's bottom edge), `--td-edge-fill-alt` (the first colour-scheme boundary after it) and
-`--td-edge-fill-footer` (the crest over the site footer). Unset, each one follows the scheme
-the band belongs to - the row below a bottom edge, the footer's own scheme for the crest - and
-`--td-edge-fill` is the last resort. **A brand sets all three in its own sheet**: where the
-grounds on both sides of an edge are the same colour, the default paints the ground the band
-sits on, and the edge is invisible while its mask is present.
+`--td-edge-fill-footer` (the crest over the site footer). Unset, each one follows a scheme that
+contrasts with the ground the band sits on: block 26 of `default_custom.js` copies onto the
+owner the first `--dw-color-background` that differs from the owner's own, reading the
+adjoining row, then the first scheme-bearing element inside the owner, then the first inside
+the adjoining row; the footer crest reads the footer's first scheme-bearing row, because the
+`<footer>` element itself is unpainted. `--td-edge-fill` is the last resort. **A brand sets the
+three tokens in its own sheet** when the derived colour is not the brand's edge colour, and must
+set one where no candidate differs from the ground, since then the edge is invisible while its
+mask is present.
 
 ## Not fixable from a theme — upstream asks
 

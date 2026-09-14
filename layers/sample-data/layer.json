@@ -1,6 +1,6 @@
 {
   "name": "sample-data",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -11,6 +11,7 @@
   "fragmentTables": [
     "AccessUser",
     "AccessUserGroupRelation",
+    "AccessUserSecondaryRelation",
     "EcomGroups",
     "EcomShopGroupRelation",
     "EcomGroupRelations",
@@ -44,6 +45,21 @@
       "table": "EcomProducts",
       "where": "ProductId = 'TCPROD0001' AND ProductLanguageId = 'ENU'",
       "description": "The first Variants master in the brand catalogue, the PDP the demo opens first (variant selector, spec table, documents, gallery, related strip). Proves the merge deserialize landed the catalogue rows."
+    },
+    {
+      "table": "AccessUser",
+      "where": "AccessUserId = '100100' AND AccessUserUserAndGroupType = 'SystemAccount'",
+      "description": "Foundry #1261 (arm B): the account group carries the SystemAccount user-and-group type, the ListGroupType the Swift CSR Accounts app (UserGroups) filters on. Untyped, the demo account never lists for the CSR persona."
+    },
+    {
+      "table": "AccessUserSecondaryRelation",
+      "where": "AccessUserSecondaryRelationUserId = '1292' AND AccessUserSecondaryRelationSecondaryUserId = '100100'",
+      "description": "Foundry #1261 (arm B): the impersonation grant of the base-contract CSR group 1292 over the account group 100100, which is what fills CSR Users and lets the CSR persona impersonate the buyer."
+    },
+    {
+      "table": "EcomPrices",
+      "where": "PriceId = 'TC-PRICE-VAR-0006' AND PriceProductVariantId = 'TCVO-TIER-ENT.TCVO-MODE-PUB' AND PriceAmount = '79.2'",
+      "description": "Foundry #1254 (arm B): the per-combination list row of TCPROD0001 ENT.PUB, which resolves only because the variant master ships no master-level list or customer-group row any more (the lowest matching row wins, and an unkeyed 45 undercut every combination)."
     },
     {
       "table": "AccessUser",

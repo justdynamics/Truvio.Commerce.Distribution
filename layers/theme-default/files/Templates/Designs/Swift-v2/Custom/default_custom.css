@@ -800,10 +800,19 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
 /* --- #13 Header logo lockup width is inline-hardcoded (a 210px figure), and
  *     the img-era `[data-swift-logo-image] img` hook above misses an inline-SVG
  *     logo. Clamp the figure itself so the icon cluster fits a 390px viewport,
- *     and let the SVG scale inside it. --- */
+ *     and let the SVG scale inside it.
+ *     Foundry #1260: 150px became 6px too wide once the mobile header carried FOUR
+ *     action items. surface-swift 1.13.6 moved the MiniCart into the logo row so the
+ *     header stops wrapping to a second row; that squeezed the ANONYMOUS My account
+ *     column to 121px while its text-nowrap anchor needs 137px, overrunning a 390px
+ *     canvas by 6.4px and reddening COLLAPSE-01. Measured at 390 under a phone UA on
+ *     home, shop and the PDP: 150px overflows by 6px; 140px reaches 0 with only 3.6px
+ *     to spare; from 132px down the flex row plateaus at 8px of slack, so 132px is the
+ *     clamp and narrowing further buys nothing. The anonymous control is the WIDE case
+ *     (signed in it is a ~48px initials button), so this is the worst case. --- */
 [data-td-block="13"] { --td-block: 13; }
 @media (max-width: 767.98px) {
-  header [data-dw-itemtype="swift-v2_logo"] figure { width: 150px !important; }
+  header [data-dw-itemtype="swift-v2_logo"] figure { width: 132px !important; }
   header [data-dw-itemtype="swift-v2_logo"] svg { width: 100%; height: auto; }
 }
 
@@ -1281,15 +1290,22 @@ main [data-td-full-bleed] [data-dw-container-width="4"] {
  *                   resolves.
  *   --td-edge-fill-hero, --td-edge-fill-alt, --td-edge-fill-footer
  *                   the colour of each of the three instances block 26 applies.
- *                   Unset, each one follows the scheme the band belongs to: the
- *                   two bottom edges take the --dw-color-background of the row
- *                   BELOW their owner (block 26 copies it onto the owner as
- *                   --td-edge-adjoin), and the footer crest takes the footer's
- *                   own --dw-color-background. A single fill for all three read
- *                   only against a dark hero; on white or near-white grounds the
- *                   mask was present and nothing painted. Where the grounds on
- *                   both sides of an edge are the same colour, no default can
- *                   make it visible, and the brand sets that edge's token.
+ *                   Unset, each one follows a scheme that CONTRASTS with the
+ *                   ground the band sits on, which is its owner's own
+ *                   --dw-color-background: block 26 copies the first background
+ *                   that resolves and differs from it onto the owner as
+ *                   --td-edge-adjoin, reading the adjoining row first, then the
+ *                   first scheme-bearing element inside the owner (the dark
+ *                   poster inside a white hero row), then the first inside the
+ *                   adjoining row. The footer crest reads the footer's first
+ *                   scheme-bearing row the same way, because Swift puts the
+ *                   footer's dark scheme on its inner grid rows while the
+ *                   <footer> element itself is unpainted (2.3.3, Foundry #1262):
+ *                   read from the element, the crest was white on white on a
+ *                   stock swift-demo, and so were the two Home edges, whose
+ *                   rows below were white. Where no candidate differs from the
+ *                   owner's ground no default can make the edge visible, and
+ *                   the brand sets that edge's token.
  *   --td-edge-h     the height. clamp(40px, 5vw, 75px) - 72px at 1440, 40px at
  *                   390, and the same expression drives every clearance below,
  *                   which is what keeps the two in step.
@@ -1350,7 +1366,10 @@ main [data-td-full-bleed] [data-dw-container-width="4"] {
  * is declared: a :root default would resolve --td-edge-adjoin before any owner
  * carried it, and every edge would paint the last-resort colour again. The alt
  * rule comes second so the alternate row, which is also a bottom edge, reads its
- * own token. */
+ * own token. All three read --td-edge-adjoin before anything else: block 26
+ * sets it on the footer too, from the footer's first scheme-bearing row, so
+ * the footer's own --dw-color-background is only the fallback for a footer
+ * with no scheme-bearing row at all. */
 main .td-edge-bottom::after {
   background-color: var(--td-edge-fill-hero, var(--td-edge-adjoin, var(--td-edge-fill)));
 }
@@ -1358,7 +1377,7 @@ main .td-edge-bottom.td-edge-alt::after {
   background-color: var(--td-edge-fill-alt, var(--td-edge-adjoin, var(--td-edge-fill)));
 }
 footer.td-edge-top::before {
-  background-color: var(--td-edge-fill-footer, var(--dw-color-background, var(--td-edge-fill)));
+  background-color: var(--td-edge-fill-footer, var(--td-edge-adjoin, var(--dw-color-background, var(--td-edge-fill))));
 }
 
 /* TOP: the motif sits ABOVE the owner's border box and rises into the section

@@ -5,8 +5,8 @@
 "container": "Grid"
 "containerWidth": 3
 "colorSchemeId": "light"
-"topSpacing": 2
-"bottomSpacing": 2
+"topSpacing": 0
+"bottomSpacing": 0
 "gapX": 3
 "gapY": 3
 "verticalAlignment": "Center"

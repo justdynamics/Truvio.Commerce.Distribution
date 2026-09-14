@@ -11,7 +11,7 @@
     "feature-baseline-guide@1.0.2"
   ],
   "surfaces": [
-    "surface-swift@1.13.3"
+    "surface-swift@1.13.6"
   ],
   "sampleData": true,
   "themes": [
@@ -30,5 +30,5 @@
     "EcomGroups": 16,
     "EcomCountries": 96
   },
-  "description": "Full Swift storefront demo on the split composition (Swift 2.4): framework-only base + the surface-swift content surface (en-US area + UrlPath + own item types) + seven feature layers (feature-reordering and feature-pricing - the split of the retired feature-reordering-pricing - plus feature-rma, feature-subscription-orders, feature-bom-configurator, feature-b2b-comms and feature-baseline-guide) + the sample-data layer on the default theme. The sample-data layer carries the whole browsable catalogue a prospect sees - 12 frontend-demonstrable subgroups under 4 top groups, 60 masters + 36 variant rows bound to their axes, one subscription plan, 96 customer-group prices, the Images and Manuals asset categories, 324 relations, 12 orders, three personas - and the storefront copy on Home, About, Contact, the header, the footer and the mega-menu. The composer stages it after surfaces[], so that copy wins the paths it shares with surface-swift."
+  "description": "Full Swift storefront demo on the split composition (Swift 2.4): framework-only base + the surface-swift content surface (en-US area + UrlPath + own item types) + seven feature layers (feature-reordering and feature-pricing - the split of the retired feature-reordering-pricing - plus feature-rma, feature-subscription-orders, feature-bom-configurator, feature-b2b-comms and feature-baseline-guide) + the sample-data layer on the default theme. The sample-data layer carries the whole browsable catalogue a prospect sees - 12 frontend-demonstrable subgroups under 4 top groups, 60 masters + 36 variant rows bound to their axes, one subscription plan, 90 customer-group prices, the Images and Manuals asset categories, 324 relations, 12 orders, three personas - and the storefront copy on Home, About, Contact, the header, the footer and the mega-menu. The composer stages it after surfaces[], so that copy wins the paths it shares with surface-swift."
 }

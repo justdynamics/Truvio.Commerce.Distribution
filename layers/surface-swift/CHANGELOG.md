@@ -1,7 +1,74 @@
 # Changelog — surface-swift
 
-## 1.13.3
-
+## 1.13.6
+
+Patch: the MOBILE header paints its action items on ONE row (Foundry #1260). The Mobile Header page
+shipped the MiniCart in a grid row of its own (`grid-row-3`, a `3ColumnsFlex` whose columns 1 and 2
+were empty), stacked under the `4ColumnsFlex` row carrying the off-canvas trigger, the logo and My
+account. Two stacked grid rows are two painted rows by construction, so at 390 anonymous the header
+measured 149.02px with `row@1493 [Navigation open button, My account]` and `row@1561 [Cart 0]`.
+
+This was read as a logo-width defect when it was filed from the arm B rebrand (a 640x96 wordmark at
+`LogoWidth` 140), and it is not: the wrap reproduces at the shipped `LogoWidth` 140 with the Truvio
+wordmark, and it reproduces with no logo at all, because nothing about the cart's row depends on how
+wide the logo is. theme-default 2.3.3 already clamps the mobile logo figure to 150px below md
+(`default_custom.css:806`), which is why the logo is not the offender here.
+
+The MiniCart paragraph now lives in column 3 of `grid-row-2`, the column the row already declared in
+`flexibleColumns` (`1,1,0,1`) and left empty, so the mobile header reads
+`[off-canvas] [logo] [cart] [account]` on one row. This is the shape `surface-dap-portal` already
+ships for its own Mobile Header (one `3ColumnsFlex` row) and the shape the corpus mobile pass asks
+for (`dw-demo-swift/references/mobile-pass.md`, method step 4). No affordance is removed or hidden:
+every control the header carried it still carries, at the same addresses.
+
+Column 3 is added to `grid-row-2`'s `columns` list as well as to the paragraph's `columnId`. Both are
+load-bearing: the reader distributes paragraph documents to columns by the document's `columnId` and
+falls back to the FIRST column when that id is absent from `grid-row.yml`
+(`FileSystemStore.ReconstructColumns`), so the move without the column declaration would have parked
+the cart beside the burger instead of failing.
+
+`grid-row-3` is RETAINED and collapsed to `topSpacing` 0 / `bottomSpacing` 0 rather than deleted. A
+merge deserialize is a keyed upsert with no delete branch, so a row removed from the tree survives on
+every host already carrying an earlier surface-swift; retaining it at zero spacing is what lets the
+redelivery collapse the emptied band on a standing host instead of leaving a dead ~68px strip. A
+consumer deserializing fresh gets the same collapsed no-op row. The paragraph itself relocates
+cleanly on both paths: it is keyed by `paragraphUniqueId`, and the update path assigns `GridRowId`
+and `GridRowColumn` from the tree position (`ContentDeserializer.cs:1492`), so no duplicate is
+created and no cart is orphaned.
+
+No item type, template, file or price change. sample-data's `replace` override of the mobile header
+logo paragraph is untouched and still wins its path.
+
+## 1.13.5
+
+Patch: the PDP gallery THUMBNAIL strip reads the asset's display name for its `alt` instead of the
+asset's key (Foundry #1246). `Swift-v2_ProductMedia.cshtml` built the thumbnail `alt` from
+`asset.Name`, which is the `EcomDetails` row key, so a serialized id such as `TC-DETAIL-TCPROD0001`
+was read out to a screen reader. sample-data 4.1.2 ships `DetailsName` on all 253 Images rows and
+that value surfaces on the asset as `DisplayName` (measured on the Delivery API: the asset carries
+`name` `TC-DETAIL-TCPROD0001` beside `displayName` `Truvio Variant Master 01`), so the data half of
+#1246 landed but never reached the rendered page. The thumbnail now prefers `DisplayName` and falls
+back to `Name` when a consumer ships an asset without one; the keyword suffix and every other
+surface are untouched. The large gallery images already used the product name. Measured red first:
+run 20260914-171139 on the standing host failed ALT-01 at all three viewports on exactly these
+three thumbnails.
+
+## 1.13.4
+
+Patch: the three footer-navigation pages `Frequently asked`, `Cookie notice` and `Privacy policy`
+ship their `Swift-v2_PageProperties` `Icon` empty instead of `/Files/Icons/1_none.svg`
+(Foundry #1249). The stock value is the Swift icon picker's placeholder sentinel, not a "no icon"
+instruction: the footer navigation template inlines whatever SVG the field names, and that file
+draws the words NO ICON, so the served home rendered a visible glyph beside each of the three
+links in the Help and info and About columns. Measured on arm B: clearing the three items left
+0 glyphs on the served home. The remaining page-properties rows in this layer that carry the
+sentinel (Home, About, the header and footer pages, the newsletter pages, Thank you, Secondary
+Navigation, Languages/Preferences) reach no rendered navigation on the measured pages and are
+left as shipped; a page that later joins a navigation with icons clears its own. No item type,
+template or file changes.
+
+## 1.13.3
+
 Patch: the Swift area now SHIPS its ecommerce CURRENCY. `AreaEcomCurrencyId` is written as `EUR`
 into both area documents (`replace/_content/Swift 2/area.yml`, `merge/_content/Swift 2/area.yml`)
 and removed from the `Site framework` predicate's `excludeAreaColumns` in

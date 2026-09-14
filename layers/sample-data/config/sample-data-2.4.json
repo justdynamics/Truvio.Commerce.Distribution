@@ -27,6 +27,14 @@
       "_why": "Merge: additive membership into the layer's account 100100 and the base-contract groups 1325/1292/1270."
     },
     {
+      "name": "sample-data AccessUserSecondaryRelation",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "AccessUserSecondaryRelation",
+      "where": "AccessUserSecondaryRelationUserId = 1292 AND AccessUserSecondaryRelationSecondaryUserId = 100100",
+      "_why": "Merge: the one impersonation grant the layer ships, the base-contract CSR group 1292 over the layer's account group 100100 (Foundry #1261). The column direction is DW's: UserId is the impersonator, SecondaryUserId the account being impersonated. Additive, so a consumer's own grants survive a re-deserialize."
+    },
+    {
       "name": "sample-data EcomGroups",
       "mode": "Merge",
       "providerType": "SqlTable",

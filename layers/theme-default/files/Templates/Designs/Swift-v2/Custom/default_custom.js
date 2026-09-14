@@ -157,23 +157,44 @@
      * token in its own sheet and all three instances change at once. Nothing
      * below knows or cares which path is in the token.
      *
-     * THE FILL FOLLOWS THE ADJOINING SCHEME. A bottom edge points down into the
-     * row below its owner, so the owner is given that row's
-     * --dw-color-background as --td-edge-adjoin, which block 22 paints unless
-     * the brand has set the instance's own --td-edge-fill-hero or
-     * --td-edge-fill-alt. The footer crest needs nothing here: it inherits the
-     * footer's own scheme. A row with no scheme of its own inherits main's, and
-     * a value that does not resolve leaves the token unset, so block 22 falls
-     * back to --td-edge-fill.
+     * THE FILL MUST CONTRAST WITH THE GROUND IT SITS ON (2.3.3, Foundry #1262).
+     * A band paints on its OWNER: a bottom edge inside the owner's own bottom
+     * padding, the footer crest on the footer. Its fill therefore has to differ
+     * from the owner's --dw-color-background, or the mask is present and nothing
+     * shows, which is exactly what a stock swift-demo measured: the hero row and
+     * the row below it are both white (the dark scheme is on the poster
+     * paragraph, not the row), and the <footer> element is unpainted while its
+     * dark scheme sits on the inner grid rows. adjoin() therefore takes the
+     * first candidate whose background resolves and differs from the owner's
+     * own: the adjoining element, then the first scheme-bearing element inside
+     * the owner, then the first inside the adjoining element. The winner is set
+     * on the owner as --td-edge-adjoin, which block 22 paints unless the brand
+     * has set the instance's own --td-edge-fill-hero, --td-edge-fill-alt or
+     * --td-edge-fill-footer. No candidate leaves the token unset, so block 22
+     * falls back to the footer's own scheme or to --td-edge-fill, and the brand
+     * sets the token.
      *
      * IDEMPOTENT and marker-free: classList.add twice is once, setting the same
      * property twice is once, and the classes are function, not proof-of-run.
      * -------------------------------------------------------------------- */
+    function ground(el) {
+        if (!el) { return ""; }
+        return window.getComputedStyle(el).getPropertyValue("--dw-color-background").trim();
+    }
+
+    function firstScheme(el) {
+        return el ? el.querySelector("[data-dw-colorscheme]") : null;
+    }
+
     function adjoin(owner, next) {
-        if (!next) { return; }
-        var fill = window.getComputedStyle(next).getPropertyValue("--dw-color-background").trim();
-        if (fill) {
-            owner.style.setProperty("--td-edge-adjoin", fill);
+        var own = ground(owner);
+        var candidates = [next, firstScheme(owner), firstScheme(next)];
+        for (var i = 0; i < candidates.length; i++) {
+            var fill = ground(candidates[i]);
+            if (fill && fill !== own) {
+                owner.style.setProperty("--td-edge-adjoin", fill);
+                return;
+            }
         }
     }
 
@@ -181,6 +202,7 @@
         var footer = document.querySelector("footer[data-swift-page-footer]");
         if (footer) {
             footer.classList.add("td-edge-top");
+            adjoin(footer, firstScheme(footer));
         }
 
         var main = document.querySelector("main");
