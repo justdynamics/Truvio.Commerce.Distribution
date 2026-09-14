@@ -1,0 +1,380 @@
+{
+  "schemaVersion": 2,
+  "mode": "merge",
+  "writtenAtUtc": "2026-09-14T10:08:32.0214709Z",
+  "complete": true,
+  "excludeFieldsByItemType": {
+    "Swift-v2_Master": [
+      "GoogleTagManagerID",
+      "Favicon",
+      "AppleTouchIcon",
+      "FacebookAppId",
+      "Fb_app_id",
+      "Google_APIKey",
+      "Google_Site_Verification",
+      "P_domain_verify",
+      "TwitterSite",
+      "Twitter_Site",
+      "MetaSiteName",
+      "MetaImage",
+      "MetaImageALT"
+    ]
+  },
+  "excludeXmlElementsByType": {
+    "Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider, Dynamicweb.Ecommerce": [],
+    "eCom_CartV2": [
+      "EmptyCartRedirectPage",
+      "CustomerAcceptedErrorMessage",
+      "StockStatusErrorMessage",
+      "ErrorEmtyUsername",
+      "ErrorUsernameTaken",
+      "ErrorEmtyPassword",
+      "ErrorPasswordsNotMatch",
+      "ErrorPasswordLength",
+      "ErrorIllegalPasswordCharacters",
+      "ErrorMessage_VALIDATION1",
+      "ErrorMessage_VALIDATION2",
+      "ErrorMessage_VALIDATION4",
+      "Mail1SenderName",
+      "Mail1SenderEmail",
+      "Mail1Subject",
+      "Mail1Recipient",
+      "CreateNewUserGroupsHidden",
+      "DefaultPaymentId",
+      "DefaultShippingId",
+      "PaymetTypes",
+      "DeliveryTypes"
+    ],
+    "eCom_Catalog": [],
+    "eCom_ContextOrderRenderer": [],
+    "eCom_CustomerExperienceCenter": [
+      "ShoppingCartLink"
+    ],
+    "eCom_CustomerExperienceCenterFavorites": [],
+    "eCom_CustomerExperienceCenterSavedCards": [],
+    "eCom_ProductCatalog": [],
+    "QueryPublisher": [],
+    "UserAddresses": [],
+    "UserAuthentication": [
+      "OneTimeCodeSenderName",
+      "OneTimeCodeSenderEmail",
+      "OneTimeCodeEmailSubject",
+      "MagicLinkSenderName",
+      "MagicLinkSenderEmail",
+      "MagicLinkEmailSubject"
+    ],
+    "UserChangePassword": [],
+    "UserCreate": [
+      "SenderName",
+      "SenderEmail",
+      "EmailSubject"
+    ],
+    "UserEdit": [
+      "SenderName",
+      "SenderEmail",
+      "EmailSubject"
+    ],
+    "UserForgotPassword": [
+      "SenderName",
+      "SenderEmail",
+      "EmailSubject"
+    ],
+    "UserGroups": [],
+    "UserView": [
+      "SenderName",
+      "SenderEmail",
+      "EmailSubject"
+    ]
+  },
+  "entries": [
+    {
+      "providerType": "SqlTable",
+      "table": "AccessUser",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/AccessUser",
+      "files": [
+        "_sql/AccessUser/1326.yml",
+        "_sql/AccessUser/1328.yml",
+        "_sql/AccessUser/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "AccessUserGroupRelation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/AccessUserGroupRelation",
+      "files": [
+        "_sql/AccessUserGroupRelation/1292$$1326.yml",
+        "_sql/AccessUserGroupRelation/1325$$1328.yml",
+        "_sql/AccessUserGroupRelation/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomGroups",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomGroups",
+      "files": [
+        "_sql/EcomGroups/FIXTGRP1$$ENU.yml",
+        "_sql/EcomGroups/FIXTGRP2$$ENU.yml",
+        "_sql/EcomGroups/FIXTGRP3$$ENU.yml",
+        "_sql/EcomGroups/PACK-BOM-FORKS$$ENU.yml",
+        "_sql/EcomGroups/PACK-BOM-GRP1$$ENU.yml",
+        "_sql/EcomGroups/PACK-BOM-RACKS$$ENU.yml",
+        "_sql/EcomGroups/PACK-RPP-GRP1$$ENU.yml",
+        "_sql/EcomGroups/PACK-SUB-GRP1$$ENU.yml",
+        "_sql/EcomGroups/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomShopGroupRelation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomShopGroupRelation",
+      "files": [
+        "_sql/EcomShopGroupRelation/FIXTGRP1$$SHOP1.yml",
+        "_sql/EcomShopGroupRelation/FIXTGRP2$$SHOP1.yml",
+        "_sql/EcomShopGroupRelation/FIXTGRP3$$SHOP1.yml",
+        "_sql/EcomShopGroupRelation/PACK-BOM-FORKS$$SHOP1.yml",
+        "_sql/EcomShopGroupRelation/PACK-BOM-GRP1$$SHOP1.yml",
+        "_sql/EcomShopGroupRelation/PACK-BOM-RACKS$$SHOP1.yml",
+        "_sql/EcomShopGroupRelation/PACK-RPP-GRP1$$SHOP1.yml",
+        "_sql/EcomShopGroupRelation/PACK-SUB-GRP1$$SHOP1.yml",
+        "_sql/EcomShopGroupRelation/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomVariantGroups",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomVariantGroups",
+      "files": [
+        "_sql/EcomVariantGroups/FIXTVG1$$ENU.yml",
+        "_sql/EcomVariantGroups/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomVariantsOptions",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomVariantsOptions",
+      "files": [
+        "_sql/EcomVariantsOptions/FIXTVO1$$ENU.yml",
+        "_sql/EcomVariantsOptions/FIXTVO2$$ENU.yml",
+        "_sql/EcomVariantsOptions/FIXTVO3$$ENU.yml",
+        "_sql/EcomVariantsOptions/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomProducts",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomProducts",
+      "files": [
+        "_sql/EcomProducts/FIXT0001$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0002$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0003$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0004$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0005$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0006$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0007$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0008$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0009$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0010$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0011$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0012$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0013$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0013$$ENU$$FIXTVO1.yml",
+        "_sql/EcomProducts/FIXT0013$$ENU$$FIXTVO2.yml",
+        "_sql/EcomProducts/FIXT0013$$ENU$$FIXTVO3.yml",
+        "_sql/EcomProducts/FIXT0014$$ENU$$.yml",
+        "_sql/EcomProducts/FIXT0014$$ENU$$FIXTVO1.yml",
+        "_sql/EcomProducts/FIXT0014$$ENU$$FIXTVO2.yml",
+        "_sql/EcomProducts/FIXT0014$$ENU$$FIXTVO3.yml",
+        "_sql/EcomProducts/PACK-BOM-0001$$ENU$$.yml",
+        "_sql/EcomProducts/PACK-BOM-FORK-1$$ENU$$.yml",
+        "_sql/EcomProducts/PACK-BOM-FORK-2$$ENU$$.yml",
+        "_sql/EcomProducts/PACK-BOM-RACK-1$$ENU$$.yml",
+        "_sql/EcomProducts/PACK-BOM-RACK-2$$ENU$$.yml",
+        "_sql/EcomProducts/PACK-RPP-PROD1$$ENU$$.yml",
+        "_sql/EcomProducts/PACK-RPP-PROD2$$ENU$$.yml",
+        "_sql/EcomProducts/PACK-SUB-PROD1$$ENU$$.yml",
+        "_sql/EcomProducts/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomGroupProductRelation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomGroupProductRelation",
+      "files": [
+        "_sql/EcomGroupProductRelation/FIXTGRP1$$FIXT0001.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP1$$FIXT0002.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP1$$FIXT0003.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP1$$FIXT0004.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP1$$FIXT0005.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP1$$FIXT0014.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP2$$FIXT0006.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP2$$FIXT0007.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP2$$FIXT0008.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP2$$FIXT0009.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP3$$FIXT0010.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP3$$FIXT0011.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP3$$FIXT0012.yml",
+        "_sql/EcomGroupProductRelation/FIXTGRP3$$FIXT0013.yml",
+        "_sql/EcomGroupProductRelation/PACK-BOM-FORKS$$PACK-BOM-FORK-1.yml",
+        "_sql/EcomGroupProductRelation/PACK-BOM-FORKS$$PACK-BOM-FORK-2.yml",
+        "_sql/EcomGroupProductRelation/PACK-BOM-GRP1$$PACK-BOM-0001.yml",
+        "_sql/EcomGroupProductRelation/PACK-BOM-RACKS$$PACK-BOM-RACK-1.yml",
+        "_sql/EcomGroupProductRelation/PACK-BOM-RACKS$$PACK-BOM-RACK-2.yml",
+        "_sql/EcomGroupProductRelation/PACK-RPP-GRP1$$PACK-RPP-PROD1.yml",
+        "_sql/EcomGroupProductRelation/PACK-RPP-GRP1$$PACK-RPP-PROD2.yml",
+        "_sql/EcomGroupProductRelation/PACK-SUB-GRP1$$PACK-SUB-PROD1.yml",
+        "_sql/EcomGroupProductRelation/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomVariantOptionsProductRelation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomVariantOptionsProductRelation",
+      "files": [
+        "_sql/EcomVariantOptionsProductRelation/FIXT0013$$FIXTVO1.yml",
+        "_sql/EcomVariantOptionsProductRelation/FIXT0013$$FIXTVO2.yml",
+        "_sql/EcomVariantOptionsProductRelation/FIXT0013$$FIXTVO3.yml",
+        "_sql/EcomVariantOptionsProductRelation/FIXT0014$$FIXTVO1.yml",
+        "_sql/EcomVariantOptionsProductRelation/FIXT0014$$FIXTVO2.yml",
+        "_sql/EcomVariantOptionsProductRelation/FIXT0014$$FIXTVO3.yml",
+        "_sql/EcomVariantOptionsProductRelation/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomPrices",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomPrices",
+      "files": [
+        "_sql/EcomPrices/FIXT-PRICE-CONTRACT.yml",
+        "_sql/EcomPrices/FIXT-PRICE-T05.yml",
+        "_sql/EcomPrices/FIXT-PRICE-T10.yml",
+        "_sql/EcomPrices/FIXT-PRICE-T25.yml",
+        "_sql/EcomPrices/PACK-RPP-0001.yml",
+        "_sql/EcomPrices/PACK-RPP-0002.yml",
+        "_sql/EcomPrices/PACK-RPP-0003.yml",
+        "_sql/EcomPrices/PACK-RPP-0004.yml",
+        "_sql/EcomPrices/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomProductItems",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomProductItems",
+      "files": [
+        "_sql/EcomProductItems/PACK-BOM3-0002.yml",
+        "_sql/EcomProductItems/PACK-BOM3-0003.yml",
+        "_sql/EcomProductItems/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomOrders",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomOrders",
+      "files": [
+        "_sql/EcomOrders/FIXT-ORDER-RMA1.yml",
+        "_sql/EcomOrders/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomOrderLines",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomOrderLines",
+      "files": [
+        "_sql/EcomOrderLines/FIXT-ORDER-RMA1-1.yml",
+        "_sql/EcomOrderLines/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomRmaOrderLines",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomRmaOrderLines",
+      "files": [
+        "_sql/EcomRmaOrderLines/100301.yml",
+        "_sql/EcomRmaOrderLines/_meta.yml"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,101 @@
+﻿"ownership":
+  "mode": "merge"
+"AccessUserId": 1328
+"AccessUserParentId": 0
+"AccessUserUserName": "IMCUser"
+"AccessUserName": "IMCUser"
+"AccessUserDepartment": 
+"AccessUserEmail": "IMCUser@testcompany.com"
+"AccessUserPhone": 
+"AccessUserFax": 
+"AccessUserGroups": 
+"AccessUserType": 5
+"AccessUserValidFrom": 2026-09-14T09:58:23.3830000
+"AccessUserValidTo": 2999-12-31T00:00:00.0000000
+"AccessUserPages": 
+"AccessUserAreas": 
+"AccessUserSettings": 
+"AccessUserModules": 
+"AccessUserInformation": 
+"AccessUserMyFolder": 
+"AccessUserAddress": "742 Evergreen Terrace"
+"AccessUserAddress2": 
+"AccessUserZip": "62704"
+"AccessUserCity": "Springfield"
+"AccessUserCountry": 
+"AccessUserJobTitle": 
+"AccessUserCompany": 
+"AccessUserPhonePriv": 
+"AccessUserMobile": 
+"AccessUserCustomerNumber": "98745621"
+"AccessUserRedirectOnLogin": 
+"AccessUserCurrencyCharacter": 
+"AccessUserRead": false
+"AccessUserAdsiMap": 
+"AccessUserLastName": 
+"AccessUserMiddleName": 
+"AccessUserActive": true
+"AccessUserImage": 
+"AccessUserBusiness": 
+"AccessUserInitials": 
+"AccessUserComment": 
+"AccessUserLevel": 0
+"AccessUserInheritAddress": true
+"AccessUserWeb": 
+"AccessUserSort": 0
+"AccessUserStatus": 0
+"AccessUserStatusBegin": 
+"AccessUserStatusEnd": 
+"AccessUserStatusComment": 
+"AccessUserEditorConfigurationId": 
+"AccessUserHideStat": false
+"AccessUserAllowBackend": 
+"AccessUserApprovalKey": 
+"AccessUserShopId": 
+"AccessUserExternalId": 
+"AccessUserSortXML": 
+"AccessUserGeoLocationLat": 
+"AccessUserGeoLocationLng": 
+"AccessUserGeoLocationIsCustom": 
+"AccessUserGeoLocationImage": 
+"AccessUserGeoLocationHash": 
+"AccessUserNewsletterAllowed": false
+"AccessUserCreatedOn": 
+"AccessUserUpdatedOn": 
+"AccessUserCreatedBy": 
+"AccessUserUpdatedBy": 
+"AccessUserEmailPermissionGivenOn": 
+"AccessUserEmailPermissionUpdatedOn": 
+"AccessUserState": 
+"AccessUserVatRegNumber": 
+"AccessUserDisableLivePrices": 
+"AccessUserAdministratorInGroups": 
+"AccessUserTitle": 
+"AccessUserFirstName": 
+"AccessUserHouseNumber": 
+"AccessUserLastOrderDate": 
+"AccessUserGroupSmartSearch": 
+"AccessUserGroupSmartSearchLastCalculatedTime": 
+"AccessUserExported": 
+"AccessUserItemType": 
+"AccessUserItemId": 
+"AccessUserDefaultUserItemType": 
+"AccessUserStockLocationID": 
+"AccessUserCountryCode": 
+"AccessUserPointBalance": 
+"AccessUserAddressTitle": 
+"AccessUserUserAndGroupType": 
+"AccessUserInformationSent": 
+"AccessUserReverseChargeForVat": false
+"AccessUserProfileCreatedDate": 
+"DefaultPermission": 
+"AccessUserTreeSection": 
+"AccessUserUniqueId": 1921020b-b4f9-42c6-b29a-2c8c9404119d
+"AccessUserShippingCode": 
+"AccessUserShippingAgentCode": 
+"AccessUserShippingAgentServiceCode": 
+"AccessUserLoginType": 
+"AccessUserInvitationSent": 
+"AccessUserDisableLiveDiscounts": 
+"AccessUserIsServiceAccount": false
+"AccessUserIsLogin": false

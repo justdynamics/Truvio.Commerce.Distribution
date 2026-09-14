@@ -1,0 +1,28 @@
+﻿"ownership":
+  "mode": "merge"
+"PriceId": "FIXT-PRICE-T10"
+"PriceProductId": "FIXT0002"
+"PriceProductVariantId": 
+"PriceProductLanguageId": 
+"PriceCurrency": "EUR"
+"PriceQuantity": 10
+"PriceAmount": 80
+"PriceUnitId": 
+"PricePeriodId": 
+"PriceCustomerGroupId": ""
+"PricePriority": 0
+"PriceUserCustomerNumber": ""
+"PriceCountry": 
+"PriceShopId": 
+"PriceValidFrom": 
+"PriceValidTo": 
+"PriceUserId": 
+"PriceUserGroupId": 
+"PriceAutoId": 22
+"PriceIsInformative": 
+"PriceStockLocationID": 
+"PriceIsWithVat": 
+"PriceExternalId": 
+"PriceDiscountPercentage": 0
+"PriceAllowOrderLineDiscounts": true
+"PriceAllowOrderDiscounts": true

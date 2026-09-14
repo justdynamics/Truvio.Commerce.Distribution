@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "PACK-SUB-PROD1"
+"ProductLanguageId": "ENU"
+"ProductVariantId": ""
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "SUB-PLAN-01"
+"ProductName": "Subscription Plan Product"
+"ProductShortDescription": "Placeholder product. Recurring / subscription order demo product."
+"ProductLongDescription": 
+"ProductImageSmall": 
+"ProductImageMedium": 
+"ProductImageLarge": 
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 49
+"ProductStock": 0
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-14T09:59:44.5100000
+"ProductUpdated": 2026-09-14T09:59:44.5100000
+"ProductCustomFieldsXml": 
+"ProductType": 0
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 0
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4694
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": true
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": c3b7e2c4-3333-4a1b-9c01-a3a3a3a3a303
+"ProductDiscontinuedDate": 

@@ -1,0 +1,58 @@
+﻿"ownership":
+  "mode": "merge"
+"OrderLineId": "FIXT-ORDER-RMA1-1"
+"OrderLineOrderId": "FIXT-ORDER-RMA1"
+"OrderLineParentLineId": 
+"OrderLineBOM": false
+"OrderLineDate": 2026-08-15T09:59:44.3400000
+"OrderLineModified": 
+"OrderLineProductNumber": "FIXT-0001"
+"OrderLineProductId": "FIXT0001"
+"OrderLineProductVariantId": 
+"OrderLineProductName": "Sample Product 01 — Contract Price"
+"OrderLineProductVariantText": 
+"OrderLineUnitPrice": 200
+"OrderLineVatPercent": 0
+"OrderLineVatPrice": 0
+"OrderLineQuantity": 1
+"OrderLineType": "0"
+"OrderLineReference": 
+"OrderLineBOMItemId": 
+"OrderLineUnitId": 
+"OrderLineWeight": 
+"OrderLineVolume": 
+"OrderLinePriceWithVAT": 200
+"OrderLinePriceWithoutVAT": 
+"OrderLinePriceVAT": 
+"OrderLinePriceVATPercent": 
+"OrderLineUnitPriceWithVAT": 
+"OrderLineUnitPriceWithoutVAT": 
+"OrderLineUnitPriceVAT": 
+"OrderLineUnitPriceVATPercent": 
+"OrderLinePageId": 
+"OrderLineDiscountId": 
+"OrderLineFieldValues": 
+"OrderLineAttachment": 
+"OrderLineAutoId": 1
+"OrderLineWishListId": 0
+"OrderLinePriceCalculationReference": 
+"OrderLineUnitPriceCalculationReference": 
+"OrderLineUnitPoints": 
+"OrderLineUnitRewardPoints": 
+"OrderLinePoints": 
+"OrderLineRewardPoints": 
+"OrderLineRewardId": 
+"OrderLineReverseChargeForVat": 
+"OrderLineTotalDiscountWithVAT": 
+"OrderLineTotalDiscountWithoutVAT": 
+"OrderLineTotalDiscountVAT": 
+"OrderLineTotalDiscountVATPercent": 
+"OrderLineGiftCardCode": 
+"OrderLineDiscountPercentage": 0
+"OrderLineUnitPriceBeforeDiscount": 0
+"OrderLineStockLocationId": 
+"OrderLineComment": 
+"OrderLineUnitPriceDiscountPercentage": 0
+"OrderLineCustomerComment": 
+"OrderLineAllowOrderDiscounts": true
+"OrderLineAllowOrderLineDiscounts": true

@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "PACK-BOM-0001"
+"ProductLanguageId": "ENU"
+"ProductVariantId": ""
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "10004kit"
+"ProductName": "Truvio Kit Configurator (BOM)"
+"ProductShortDescription": "Placeholder product. Multi-group bill-of-materials parent: pick a fork and a rack, add the configured kit to the cart."
+"ProductLongDescription": 
+"ProductImageSmall": 
+"ProductImageMedium": 
+"ProductImageLarge": 
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 0
+"ProductStock": 0
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-14T09:59:44.5100000
+"ProductUpdated": 2026-09-14T09:59:44.5100000
+"ProductCustomFieldsXml": 
+"ProductType": 2
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 0
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4689
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": true
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": 5e8f8b07-f01a-440b-bc24-ab8ad8eef14c
+"ProductDiscontinuedDate": 

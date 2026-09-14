@@ -1,0 +1,28 @@
+﻿"ownership":
+  "mode": "merge"
+"PriceId": "FIXT-PRICE-T25"
+"PriceProductId": "FIXT0002"
+"PriceProductVariantId": 
+"PriceProductLanguageId": 
+"PriceCurrency": "EUR"
+"PriceQuantity": 25
+"PriceAmount": 70
+"PriceUnitId": 
+"PricePeriodId": 
+"PriceCustomerGroupId": ""
+"PricePriority": 0
+"PriceUserCustomerNumber": ""
+"PriceCountry": 
+"PriceShopId": 
+"PriceValidFrom": 
+"PriceValidTo": 
+"PriceUserId": 
+"PriceUserGroupId": 
+"PriceAutoId": 23
+"PriceIsInformative": 
+"PriceStockLocationID": 
+"PriceIsWithVat": 
+"PriceExternalId": 
+"PriceDiscountPercentage": 0
+"PriceAllowOrderLineDiscounts": true
+"PriceAllowOrderDiscounts": true

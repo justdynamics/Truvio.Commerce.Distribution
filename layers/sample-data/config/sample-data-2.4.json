@@ -1,0 +1,133 @@
+{
+  "_comment": "sample-data 3.0.0 SqlTable predicates, Serializer 1.0.2-beta config schema (Truvio.Commerce.Serializer docs/configuration.md 'SqlTable predicate fields', lines 178-211). Intended home: layers/sample-data/config/sample-data-2.4.json, unioned by Compose-Edition keyed mode|name (Compose-Edition.ps1:715-745). Every predicate is Merge: the layer ships only its own FIXT* / PACK-RPP-* / PACK-BOM-* / PACK-SUB-* rows and the two contract-anchored users. FK-safe order (parents first), which is also the harvest order; the engine re-sorts by sys.foreign_keys at deserialize. WHERE clauses use only LIKE / IN / OR / AND and column identifiers, which the where validator accepts (docs/sql-tables.md:111-146). No nameColumn: file names are the PK joined with $$, keeping the base and cross-layer filename collision checks meaningful (base.contract.json:178-188; Validate-Distribution.ps1:151-179). Underscore keys are annotations. NEVER add a predicate for dbo._demoClock, _demoClockExclusion, _demoClockGuard, EmailMessage-marker rows or ScheduledTask 'Truvio demo clock' here: config load validates every SqlTable predicate's table against INFORMATION_SCHEMA (ConfigLoader.cs:217-223, SqlIdentifierValidator.cs:36-46), so a predicate on a table that exists only after a local SQL script breaks config load on every online host.",
+  "predicates": [
+    {
+      "name": "sample-data AccessUser",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "AccessUser",
+      "where": "AccessUserId IN (1326, 1328)",
+      "excludeFields": [
+        "AccessUserPassword",
+        "AccessUserPasswordDate",
+        "AccessUserPasswordRecoveryToken",
+        "AccessUserPasswordRecoveryTokenExpirationTime",
+        "AccessUserLastLoginOn",
+        "AccessUserLastLoginBackendOn",
+        "AccessUserCartId"
+      ],
+      "_why": "Buyer 1328 IMCUser and CSR 1326 IMCSalesrep at the exact ids the base contract names (base.contract.json:70-89). Written with IDENTITY_INSERT (SqlTableWriter.cs:46-48, 73-76). Groups 1325/1270/1292 are NOT here: the base replace tree owns them (base config swift-2.4.json:134-139). Every excluded column was measured on DW 10.28.10; AccessUserPasswordSalt is absent on that build and must not be listed. Merge keeps a password set by UserSetPassword on every re-delivery."
+    },
+    {
+      "name": "sample-data AccessUserGroupRelation",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "AccessUserGroupRelation",
+      "where": "AccessUserGroupRelationUserId IN (1326, 1328)",
+      "_why": "Memberships 1328 -> 1325 Customers and 1326 -> 1292 CSR (identities.sql:91-100). Natural-pair PK on 10.28.10."
+    },
+    {
+      "name": "sample-data EcomGroups",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomGroups",
+      "where": "GroupId LIKE 'FIXTGRP%' OR GroupId IN ('PACK-RPP-GRP1', 'PACK-BOM-GRP1', 'PACK-BOM-FORKS', 'PACK-BOM-RACKS', 'PACK-SUB-GRP1')",
+      "_why": "3 fixture groups (catalog.sql:80-84) + 5 feature fixture groups (feature-fixtures.sql:53-57). The PACK group ids are listed exactly, as the script deletes them (feature-fixtures.sql:49), rather than by prefix."
+    },
+    {
+      "name": "sample-data EcomShopGroupRelation",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomShopGroupRelation",
+      "where": "ShopGroupGroupId LIKE 'FIXTGRP%' OR ShopGroupGroupId IN ('PACK-RPP-GRP1', 'PACK-BOM-GRP1', 'PACK-BOM-FORKS', 'PACK-BOM-RACKS', 'PACK-SUB-GRP1')",
+      "_why": "Merge, never Replace: the table is base-owned replaceWholeTable (base.contract.json:152-168). Adds only the 8 SHOP1 bindings under this layer's keys, as truvio-demo 1.8.0 does for TCGRP-*."
+    },
+    {
+      "name": "sample-data EcomVariantGroups",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomVariantGroups",
+      "where": "VariantGroupId LIKE 'FIXTVG%'",
+      "_why": "The Size axis FIXTVG1 (catalog.sql:118)."
+    },
+    {
+      "name": "sample-data EcomVariantsOptions",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomVariantsOptions",
+      "where": "VariantOptionId LIKE 'FIXTVO%'",
+      "_why": "Small / Medium / Large (catalog.sql:119-121)."
+    },
+    {
+      "name": "sample-data EcomProducts",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomProducts",
+      "where": "ProductId LIKE 'FIXT%' OR ProductId LIKE 'PACK-RPP-%' OR ProductId LIKE 'PACK-BOM-%' OR ProductId LIKE 'PACK-SUB-%'",
+      "_why": "14 masters + 6 Size variant rows (catalog.sql:88-133) + 8 feature fixture products (feature-fixtures.sql:67-82) = 28. GETDATE stamps and host-born ProductUniqueId values freeze at harvest."
+    },
+    {
+      "name": "sample-data EcomGroupProductRelation",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomGroupProductRelation",
+      "where": "GroupProductRelationProductId LIKE 'FIXT%' OR GroupProductRelationProductId LIKE 'PACK-RPP-%' OR GroupProductRelationProductId LIKE 'PACK-BOM-%' OR GroupProductRelationProductId LIKE 'PACK-SUB-%'",
+      "_why": "14 master relations (catalog.sql:89-115) + 8 (feature-fixtures.sql:85-92) = 22."
+    },
+    {
+      "name": "sample-data EcomVariantOptionsProductRelation",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomVariantOptionsProductRelation",
+      "where": "VariantOptionsProductRelationProductId LIKE 'FIXT%'",
+      "_why": "FIXT0013 and FIXT0014 x FIXTVO1-3 (catalog.sql:122-132). Natural-pair PK on 10.28.10; identity-PK builds match by the natural pair (IdentityPkRelationTables.cs:39-40)."
+    },
+    {
+      "name": "sample-data EcomPrices",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomPrices",
+      "where": "PriceId LIKE 'FIXT-PRICE-%' OR PriceId LIKE 'PACK-RPP-%'",
+      "_why": "Qty ladder T05/T10/T25 + FIXT-PRICE-CONTRACT (catalog.sql:136-139) + PACK-RPP-0001..0004 (feature-fixtures.sql:104-107) = 8. Needs Serializer >= 1.0.2-beta so unset nullable columns stay NULL on merge (issue #18)."
+    },
+    {
+      "name": "sample-data EcomProductItems",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomProductItems",
+      "where": "ProductItemId LIKE 'PACK-BOM3-%'",
+      "_why": "The two BOM slots on PACK-BOM-0001 (feature-fixtures.sql:96-99) the bom-cart-lines probe selects (layers/feature-bom-configurator/layer.json:22-40)."
+    },
+    {
+      "name": "sample-data EcomOrders",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomOrders",
+      "where": "OrderId LIKE 'FIXT-ORDER-%'",
+      "excludeFields": [
+        "OrderSecret",
+        "OrderTransactionToken",
+        "OrderTransactionTokenCheckSum",
+        "OrderVisitorSessionId",
+        "OrderVisitorSessionDate"
+      ],
+      "_why": "The delivered order FIXT-ORDER-RMA1 for buyer 1328 (catalog.sql:155-156). Excluded columns are session and token columns the script never sets (measured on 10.28.10). OrderDate -30 days and OrderCompletedDate -28 days freeze at harvest."
+    },
+    {
+      "name": "sample-data EcomOrderLines",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomOrderLines",
+      "where": "OrderLineOrderId LIKE 'FIXT-ORDER-%'",
+      "_why": "FIXT-ORDER-RMA1-1 (catalog.sql:157-158); sys FK child of EcomOrders."
+    },
+    {
+      "name": "sample-data EcomRmaOrderLines",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomRmaOrderLines",
+      "where": "RmaOrderLineOrderLineId LIKE 'FIXT-ORDER-%'",
+      "_why": "The RMA-to-order-line link (catalog.sql:159-160). Identity-only PK RmaOrderLineId (measured): harvest ONLY after the source-host rekey to 100301 (plan.md (d) step 13). The engine writes the id verbatim and never remaps it; the name carries no 'Relation', so no collision warning fires (SqlTableProvider.cs:407-411). Selected by its own order-line key, never by RmaOrderLineRmaId, which is feature-rma's key."
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "AccessUserGroupRelation"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "AccessUserGroupRelationGroupId"
+- "AccessUserGroupRelationUserId"
+"identityColumns": []
+"allColumns":
+- "AccessUserGroupRelationUserId"
+- "AccessUserGroupRelationGroupId"
+- "AccessUserGroupRelationSort"
+"columnDefinitions":
+- "name": "AccessUserGroupRelationUserId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserGroupRelationGroupId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserGroupRelationSort"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "FIXT0014"
+"ProductLanguageId": "ENU"
+"ProductVariantId": "FIXTVO2"
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "FIXT-0014-FIXTVO2"
+"ProductName": "Sample Product 14 — Size Variants"
+"ProductShortDescription": "Placeholder product. Second master on the Size variant axis, so variant behaviour is visible on more than one product."
+"ProductLongDescription": 
+"ProductImageSmall": 
+"ProductImageMedium": 
+"ProductImageLarge": 
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 75
+"ProductStock": 100
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-14T09:59:44.3300000
+"ProductUpdated": 2026-09-14T09:59:44.3300000
+"ProductCustomFieldsXml": 
+"ProductType": 0
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 0
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4685
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": true
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": 6bf83902-23b0-f111-8d58-000d3a7e3238
+"ProductDiscontinuedDate": 
