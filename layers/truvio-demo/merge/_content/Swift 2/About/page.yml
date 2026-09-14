@@ -1,0 +1,46 @@
+﻿"ownership":
+  "mode": "replace"
+"pageUniqueId": 6fa6c6ff-ca41-41b5-b896-41d9e1ffe6e0
+"sourcePageId": 165
+"name": "About"
+"menuText": "About"
+"sortOrder": 4
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2020-12-07T15:15:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "description": "About Truvio Commerce: the catalogue, the pricing model and the team behind the storefront."
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "87"
+  "ItemInstanceType": ""
+  "Sort": 4
+  "Title": "About"
+"propertyFields":
+  "Id": "165"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "Icon": "/Files/Icons/1_none.svg"
+  "SubmenuType": "auto"

@@ -1,0 +1,21 @@
+﻿"ownership":
+  "mode": "replace"
+"paragraphUniqueId": 26291fb4-98e6-4ee6-b6d7-b38bea9c59f1
+"sourceParagraphId": 295
+"sortOrder": 61
+"itemType": "Swift-v2_Feature"
+"header": "About value: complete data"
+"template": "IconBoxTop.cshtml"
+"colorSchemeId": "lightgrey1"
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "Button": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"\",\r\n  \"Link\": \"\",\r\n  \"LinkType\": \"\",\r\n  \"Style\": \"outline-primary\"\r\n}"
+  "GlobalRecordPageGuid": "6fa6c6ff-ca41-41b5-b896-41d9e1ffe6e0"
+  "Icon": "/Files/Images/Icons/house.svg"
+  "Id": "25"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Text": "<p>Every product ships with its category fields, units and documents in place.</p>"
+  "Title": "<h3 class=\"dw-h5\">Complete data</h3>"
+"columnId": 1

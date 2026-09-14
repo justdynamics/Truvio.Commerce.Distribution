@@ -1,0 +1,18 @@
+﻿"ownership":
+  "mode": "replace"
+"paragraphUniqueId": ca207d34-94e8-4b1d-9e86-2e46d5747cd7
+"sourceParagraphId": 178
+"sortOrder": 14
+"itemType": "Swift-v2_Button"
+"header": "Button"
+"template": "ButtonCenter.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "FirstButton": "{\r\n  \"SelectedValue\": \"165\",\r\n  \"Label\": \"About Truvio Commerce\",\r\n  \"Link\": \"Default.aspx?ID=165\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "GlobalRecordPageGuid": "febabe52-c9a6-4983-b857-6c6c022d88fb"
+  "Id": "5"
+  "ItemInstanceType": ""
+  "Sort": 0
+"columnId": 1

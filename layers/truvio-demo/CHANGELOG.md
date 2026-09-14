@@ -1,5 +1,56 @@
 # Changelog — truvio-demo
 
+## 1.9.0
+
+### Truvio Commerce storefront copy over surface-swift's placeholder convention (Foundry 5.1, STOCKCOPY-01)
+
+surface-swift ships every demo-facing string in its `Placeholder` marker form on purpose: a
+composition with no brand layer fails the design gate instead of shipping template copy. On
+`swift-demo` the brand layer is this one, and until now it carried no content, so the home
+page rendered the marker copy and STOCKCOPY-01 stayed red. This release adds the copy. It is
+content added, so a minor release.
+
+**What ships.** 43 content documents, each a copy of surface-swift 1.13.1's document at the
+same mode-tree path with only the copy fields rewritten and an `ownership` header set to
+`replace` (ids, item types, templates, colour schemes, icons and grid structure are unchanged):
+
+| Page or block | Documents | Tree |
+|---|---:|---|
+| Home: hero, catalogue pitch, feature row, three features, account call to action, three figures, About button, two image alt texts, page meta | 14 | `merge/_content/Swift 2/Home/` |
+| About: intro, three values, partner band, three figures, team heading, contact band, page meta | 11 | `merge/_content/Swift 2/About/` |
+| Contact: intro, two contact details, page meta | 4 | `merge/_content/Swift 2/About/Contact/` |
+| About us page meta, Employees intro, Posts intro | 3 | `merge/_content/Swift 2/Navigation/...`, `.../Posts/` |
+| Four logo wordmarks, two footer copyright lines | 6 | `merge/_content/Swift 2/Header _ Footer/` |
+| Mega-menu: two promo images, two promos, editorial column | 5 | `replace/_content/Swift 2/Navigation/` |
+
+The copy follows D-B: the brand is Truvio Commerce and every noun is PIM, Commerce or CMS
+vocabulary. Figures are this layer's own counts (60 masters, 12 groups, 36 variant rows, 4 top
+groups, 96 customer-group prices, 324 relations). Calls to action point at real pages through
+`Default.aspx?ID=N` links, so the serializer's page-id remap resolves them: Shop (50), Shop with
+`GroupID=TCGRP-DATA-MODELS` and `GroupID=TCGRP-COMMERCE` (the query tail sits outside the link
+pattern and survives the remap), About (165) and Contact (166). Every document was scanned with
+the publish design config's `placeholderRegex`: zero matches.
+
+**How it wins, and the one dependency.** The composed SerializeRoot holds one file per path, and
+Compose-Edition copies layers in composition order with the later layer's file winning. The
+engine walks that tree and, at Serializer 933d4c2, writes paragraph item fields source-wins in
+both passes (`SaveItemFields`); only pages merge-fill. So whichever document sits at the path in
+the composed tree is the copy the host gets, on a fresh database and on a host that already
+holds the marker copy. The `ownership: replace` header additionally makes the four `page.yml`
+documents overwrite an existing meta description instead of merge-filling around it.
+surface-swift's existing manifest entries (`content/area-3/Home` and siblings) already list
+every one of these paths, so this layer adds no Content entry and no duplicate merge entry.
+
+Compose-Edition at Foundry `0cfc247f` composes `base -> add[] -> surfaces[]`. truvio-demo is
+an `add[]` ref and surface-swift a `surfaces[]` ref, so on that composer surface-swift's
+document wins every shared path and this release does not reach the storefront. It needs the
+composer to place `add[]` layers of kind `sample-data` after `surfaces[]`. With that one change
+applied to a scratch copy of the composer, `swift-demo` composes all 43 documents
+byte-identical and no document on a rendered path carries the marker; `base-swift` composes
+byte-identical to before (manifest timestamps aside).
+
+`layer.json`: `fragmentModes` gains `replace` for the mega-menu documents.
+
 ## 1.8.0
 
 ### The commerce dataset ships as serialized SqlTable YAML (Foundry #1215)
