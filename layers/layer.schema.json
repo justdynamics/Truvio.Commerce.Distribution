@@ -376,6 +376,11 @@
                 },
                 "description": "bom-cart-lines only: one {group, product} per BOM slot the add POST selects, posted as <group>=<product> alongside cartcmd=add. Required at runtime for kind bom-cart-lines (fail-closed FAIL row when absent or empty) - the kind-conditional requiredness JSON Schema cannot express is enforced by the probe (section-6 registration-asymmetry precedent)."
               },
+              "groupId": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9._-]+$",
+                "description": "bom-cart-lines only: OPTIONAL - the EcomGroups id the product page is addressed through. When present the kind builds ?GroupID={groupId}&ProductID={productId} for the render proof and posts the add to {path}?GroupID={groupId}. Declared as its own field because path stays PATH-ONLY (a query string in path is refused - the T-09-02 injection guard never loosens). Measured on DW 10.28.10 / Swift 2.4 (Foundry #1233): /en-us/kit-configurator?ProductID=TCPROD0042 answers 404 while /en-us/kit-configurator?GroupID=TCGRP-BUNDLES&ProductID=TCPROD0042 answers 200 with the js-product-bom-configurator marker. Conservative identifier charset re-validated at runtime before any request."
+              },
               "expectedChildLines": {
                 "type": "integer",
                 "minimum": 1,

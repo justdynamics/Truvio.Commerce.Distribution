@@ -1,6 +1,6 @@
 {
   "name": "dap-portal",
-  "from": "base@3.5.0",
+  "from": "base@3.5.1",
   "add": [],
   "surfaces": [
     "surface-dap-portal@1.0.4"

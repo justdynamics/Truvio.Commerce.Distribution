@@ -31,6 +31,9 @@
   "StyleId": 1
   "AreaMasterTemplate": ""
   "AreaCulture": "en-US"
+  "AreaEcomShopId": "SHOP1"
+  "AreaEcomCurrencyId": "EUR"
+  "AreaEcomLanguageId": "ENU"
   "AreaApprovalType": 0
   "AreaActive": true
   "AreaMasterAreaId": 0

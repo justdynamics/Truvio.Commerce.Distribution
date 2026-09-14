@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "2.3.0",
+  "baseContractVersion": "2.3.1",
   "swiftVersion": "2.4.0",
   "compat": {
     "dw": {
@@ -308,7 +308,7 @@
   "currencyRates": {
     "defaultRate": 100,
     "minNonDefaultRateExclusive": 1,
-    "note": "EcomCurrencies.CurrencyRate is hundredths against the default currency. The default (EUR, CurrencyIsDefault true on every EUR$$<lang> row) carries 100. A non-default currency at rate 1 renders every price in it a hundred times over, with correct symbol and culture formatting, no error and no log entry (measured on DW 10.28.10: a stored 45.00 served as $4,500.00 at USD rate 1). USD, the currency the Swift storefront serves, ships at 100: one-to-one parity with the default, a deliberate demo value and not an exchange rate. No shipped row carries a rate at or below 1. The other non-default rows carry the values of the source solution and are not maintained exchange rates; a solution that needs real conversion sets real rates, keeping the default at 100 and every other rate relative to it."
+    "note": "EcomCurrencies.CurrencyRate is hundredths against the default currency. The default (EUR, CurrencyIsDefault true on every EUR$$<lang> row) carries 100. A non-default currency at rate 1 renders every price in it a hundred times over, with correct symbol and culture formatting, no error and no log entry (measured on DW 10.28.10: a stored 45.00 served as $4,500.00 at USD rate 1). USD ships at 100: one-to-one parity with the default, a deliberate demo value and not an exchange rate. USD is NOT the currency the Swift storefront serves - surface-swift 1.13.3 binds the Swift area to EUR (AreaEcomCurrencyId). It used to read that way because an UNBOUND area on DW 10.28 resolves the request culture's currency, so an /en-us/ storefront served USD carts and no EUR EcomPrices row matched (Foundry #1232, measured on foundry-sd4v.mydwsite4.com: cart CART783 OrderCurrencyCode USD, TCPROD0046 served 45.00 instead of the contract price 36.90). CurrencyRate reasons about display; EcomPrices.PriceCurrency filtering is what the area binding decides, and every EcomPrices row the Distribution ships is EUR. No shipped row carries a rate at or below 1. The other non-default rows carry the values of the source solution and are not maintained exchange rates; a solution that needs real conversion sets real rates, keeping the default at 100 and every other rate relative to it."
   },
   "baseOwnedTables": {
     "replaceWholeTable": [

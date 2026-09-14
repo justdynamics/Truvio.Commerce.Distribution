@@ -1,5 +1,21 @@
 # Changelog — base
 
+## 3.5.1
+
+Patch: the contract's `currencyRates.note` no longer states that USD is the currency the Swift
+storefront serves. `baseContractVersion` moves 2.3.0 -> 2.3.1. No SQL set, no base row, no row
+count and no guaranteed row changes.
+
+The sentence was written from a MEASUREMENT of an unbound area, not from a decision. On DW 10.28 an
+area with an empty `AreaEcomCurrencyId` resolves the request culture's currency, so an `/en-us/`
+storefront served USD carts — measured on foundry-sd4v.mydwsite4.com, cart `CART783`
+`OrderCurrencyCode USD` with an empty `OrderShopId`. Every `EcomPrices` row the Distribution ships
+is `PriceCurrency EUR`, so nothing matched and `TCPROD0046` served `EcomProducts.ProductPrice`
+45.00 instead of the contract price 36.90 (Foundry #1232). `surface-swift` 1.13.3 now ships the
+binding (`SHOP1` / `EUR` / `ENU`) and the storefront serves EUR, the default currency. The note also
+records the distinction the old text blurred: `CurrencyRate` reasons about DISPLAY, while
+`EcomPrices.PriceCurrency` FILTERING is decided by the area binding.
+
 ## 3.5.0
 
 Minor: the contract gains a `sampleData` block and its guaranteed rows change subject.

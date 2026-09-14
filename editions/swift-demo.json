@@ -1,17 +1,17 @@
 ﻿{
   "name": "swift-demo",
-  "from": "base@3.5.0",
+  "from": "base@3.5.1",
   "add": [
     "feature-reordering@1.0.4",
     "feature-pricing@1.1.3",
     "feature-rma@1.0.2",
     "feature-subscription-orders@1.2.2",
-    "feature-bom-configurator@1.2.2",
+    "feature-bom-configurator@1.2.3",
     "feature-b2b-comms@1.0.4",
     "feature-baseline-guide@1.0.2"
   ],
   "surfaces": [
-    "surface-swift@1.13.2"
+    "surface-swift@1.13.3"
   ],
   "sampleData": true,
   "themes": [

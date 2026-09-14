@@ -1,6 +1,6 @@
 {
   "name": "feature-bom-configurator",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "csLedger": [],
@@ -23,6 +23,7 @@
       {
         "kind": "bom-cart-lines",
         "path": "/en-us/kit-configurator",
+        "groupId": "TCGRP-BUNDLES",
         "productId": "TCPROD0042",
         "cartPath": "/en-us/cart/",
         "selections": [

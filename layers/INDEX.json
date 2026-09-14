@@ -16,7 +16,7 @@
     {
       "name": "base",
       "kind": "base",
-      "version": "3.5.0",
+      "version": "3.5.1",
       "status": "active"
     },
     {
@@ -34,7 +34,7 @@
     {
       "name": "feature-bom-configurator",
       "kind": "feature",
-      "version": "1.2.2",
+      "version": "1.2.3",
       "status": "active"
     },
     {
@@ -93,7 +93,7 @@
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.13.2",
+      "version": "1.13.3",
       "status": "active"
     },
     {

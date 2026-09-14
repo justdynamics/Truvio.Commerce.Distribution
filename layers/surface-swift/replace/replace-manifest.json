@@ -135,10 +135,7 @@
         "AreaCdnHost",
         "AreaCookieWarningTemplate",
         "AreaFrontpage",
-        "AreaEcomShopId",
         "AreaEcomCountryCode",
-        "AreaEcomLanguageId",
-        "AreaEcomCurrencyId",
         "AreaStockLocationID",
         "AreaCreatedDate",
         "AreaUpdatedDate"

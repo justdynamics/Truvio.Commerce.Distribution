@@ -1,5 +1,39 @@
 # Changelog — surface-swift
 
+## 1.13.3
+
+Patch: the Swift area now SHIPS its ecommerce binding. `AreaEcomShopId` (`SHOP1`),
+`AreaEcomCurrencyId` (`EUR`) and `AreaEcomLanguageId` (`ENU`) are written into both area documents
+(`replace/_content/Swift 2/area.yml`, `merge/_content/Swift 2/area.yml`) and removed from the
+`Site framework` predicate's `excludeAreaColumns` in `config/swift-content-2.4.json` and
+`replace/replace-manifest.json`. `surface.contract-notes.json` records the narrowed exclusion and
+drops `bindShop` from `consumerObligation`. No content, item type, template or file changes.
+
+### Why the binding stopped being per-environment (Foundry #1232)
+
+An unbound area is not neutral. Through DW 10.26 it resolved the DEFAULT currency; on DW 10.28 it
+resolves the REQUEST CULTURE's currency, so an `/en-us/` storefront serves USD carts. Measured on
+foundry-sd4v.mydwsite4.com against Distribution 2c89fe6e: cart `CART783` carried
+`OrderCurrencyCode USD` and an empty `OrderShopId`, while all 233 `EcomPrices` rows sample-data
+ships are `PriceCurrency EUR`. A USD price context matches no EUR row, so the contract price
+(`TC-PRICE-CTR-0046`, 36.90), the customer-group price (`TC-PRICE-GRP-0046`, 39.60) and the
+quantity tiers on `TCPROD0020` were all inert and every subject fell through to
+`EcomProducts.ProductPrice` (TCPROD0046 served 45.00).
+
+The three columns name base-owned CONSTANTS, not environment values: the base ships exactly one
+shop, `EUR` is `CurrencyIsDefault` on every `EUR$$<lang>` row and `ENU` is the default language. And
+the obligation could not be discharged by a remote consumer at all: reaching a standing host by URL
+and Admin API key gives no SQL channel, and `/Admin/Api/AreaSave` refuses the area outright
+(`{"Default page template": ["The value is required."]}`) when `layoutTemplate` is empty. A binding
+the price resolver depends on therefore travels with the layer.
+
+The merge tree mattered on its own: `merge/merge-manifest.json` carries no `excludeAreaColumns`, so
+the old merge document's empty values BLANKED a binding a consumer had already set.
+
+`AreaEcomCountryCode`, `AreaFrontpage`, `AreaCdnHost`, `AreaStockLocationID` and the timestamps stay
+per-environment. A consumer on another shop, currency or default language overrides the three
+columns after deserialize exactly as it binds `AreaFrontpage`.
+
 ## 1.13.2
 
 Patch: the stock `Swift - Newsletter - Sale Email` product rail named `FIXT0002` / `FIXT0004` /
