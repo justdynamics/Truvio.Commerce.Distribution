@@ -160,6 +160,7 @@ foreach ($n in $manifests.Keys) {
     if ($manifests[$n].costHints -and $manifests[$n].costHints.deprecated) { $deprecatedLayers[$n] = $true }
 }
 $sqlOwners = @{}
+$sqlPaths  = @{}
 foreach ($d in $layerDirs) {
     if ($d.Name -eq 'base') { continue }
     $files = @(Get-ChildItem -LiteralPath $d.FullName -Recurse -File -Filter '*.yml' -ErrorAction SilentlyContinue |
@@ -167,16 +168,32 @@ foreach ($d in $layerDirs) {
     foreach ($f in $files) {
         $rel = $f.FullName.Substring($d.FullName.Length + 1) -replace '\\', '/'
         $rel = ($rel -replace '^(replace|merge)/', '')  # normalize mode-dir prefix
-        if (-not $sqlOwners.ContainsKey($rel)) { $sqlOwners[$rel] = @() }
+        if (-not $sqlOwners.ContainsKey($rel)) { $sqlOwners[$rel] = @(); $sqlPaths[$rel] = @() }
         $sqlOwners[$rel] += $d.Name
+        $sqlPaths[$rel]  += [pscustomobject]@{ Layer = $d.Name; Path = $f.FullName }
     }
 }
 # Count only ACTIVE (non-deprecated) owners per row: a deprecated tombstone shadowing its
 # supersededBy successor during the grace window is not a real collision.
-$clashes = @($sqlOwners.GetEnumerator() | Where-Object {
+$multiOwned = @($sqlOwners.GetEnumerator() | Where-Object {
     @($_.Value | Select-Object -Unique | Where-Object { -not $deprecatedLayers.ContainsKey($_) }).Count -gt 1
 })
+# A row file (_sql/<Table>/<key>.yml) shipped by two active layers is always a clash.
+# A table schema file (_sql/<Table>/_meta.yml) describes the table, not a row: two layers
+# writing rows into the same table each carry one. It is allowed in more than one active
+# layer ONLY when every active copy is byte-identical; any divergence FAILs, naming the
+# table and the layers, because the engine would deserialize the table against whichever
+# schema file it read last.
+$clashes     = @($multiOwned | Where-Object { $_.Key -notmatch '/_meta\.yml$' })
+$metaShared  = @($multiOwned | Where-Object { $_.Key -match '/_meta\.yml$' })
+$metaDiverge = @()
+foreach ($m in $metaShared) {
+    $copies = @($sqlPaths[$m.Key] | Where-Object { -not $deprecatedLayers.ContainsKey($_.Layer) })
+    $hashes = @($copies | ForEach-Object { (Get-FileHash -LiteralPath $_.Path -Algorithm SHA256).Hash } | Select-Object -Unique)
+    if ($hashes.Count -gt 1) { $metaDiverge += [pscustomobject]@{ Key = $m.Key; Layers = (($copies | ForEach-Object { $_.Layer } | Select-Object -Unique) -join ',') } }
+}
 & $log ($clashes.Count -eq 0) "cross-layer _sql collision: $($clashes.Count) clash(es)$(if($clashes.Count){' — ' + (($clashes | Select-Object -First 3 | ForEach-Object { $_.Key + ' <- ' + (($_.Value | Select-Object -Unique) -join ',') }) -join ' ; ')})"
+& $log ($metaDiverge.Count -eq 0) "cross-layer _sql schema files: $($metaShared.Count) _meta.yml shared by more than one layer, $($metaShared.Count - $metaDiverge.Count) byte-identical, $($metaDiverge.Count) divergent$(if($metaDiverge.Count){' — ' + (($metaDiverge | ForEach-Object { ($_.Key -replace '^_sql/', '' -replace '/_meta\.yml$', '') + ' differs between ' + $_.Layers }) -join ' ; ')})"
 
 # Protected strings (plan §3.1).
 $psRow = Test-ProtectedStrings -LayersRoot $layersRoot
