@@ -11,8 +11,8 @@ area with an empty `AreaEcomCurrencyId` resolves the request culture's currency,
 storefront served USD carts — measured on foundry-sd4v.mydwsite4.com, cart `CART783`
 `OrderCurrencyCode USD` with an empty `OrderShopId`. Every `EcomPrices` row the Distribution ships
 is `PriceCurrency EUR`, so nothing matched and `TCPROD0046` served `EcomProducts.ProductPrice`
-45.00 instead of the contract price 36.90 (Foundry #1232). `surface-swift` 1.13.3 now ships the
-binding (`SHOP1` / `EUR` / `ENU`) and the storefront serves EUR, the default currency. The note also
+45.00 instead of the contract price 36.90 (Foundry #1232). `surface-swift` 1.13.3 now ships the area
+currency (`EUR`) and the storefront serves EUR, the default currency. The note also
 records the distinction the old text blurred: `CurrencyRate` reasons about DISPLAY, while
 `EcomPrices.PriceCurrency` FILTERING is decided by the area binding.
 

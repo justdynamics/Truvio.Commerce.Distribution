@@ -135,7 +135,9 @@
         "AreaCdnHost",
         "AreaCookieWarningTemplate",
         "AreaFrontpage",
+        "AreaEcomShopId",
         "AreaEcomCountryCode",
+        "AreaEcomLanguageId",
         "AreaStockLocationID",
         "AreaCreatedDate",
         "AreaUpdatedDate"
