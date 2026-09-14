@@ -1,5 +1,27 @@
 # Changelog — base
 
+## 3.4.2
+
+Patch: the serializer floor rises and the id-floor rule names its exceptions. `baseContractVersion`
+moves 2.2.1 -> 2.2.2. No key is added or removed, so this follows the 3.4.1 patch precedent; the
+minor bumps (2.1.0, 2.2.0) were each triggered by keys additions read. No SQL, no content and no row
+counts change. **The effective floor does change: upgrade the host's `Truvio.Commerce.Serializer`
+to 1.0.2-beta or later before consuming this base.**
+
+- **Serializer floor 0.9.0-beta -> 1.0.2-beta.** `compat.apps[id=Truvio.Commerce.Serializer].min`
+  and the deprecated `minSerializerVersion` alias both carry `1.0.2-beta` (the validator enforces
+  equality). Layers now ship serialized SqlTable rows with a per-document ownership header
+  (truvio-demo 1.8.0, Foundry #1215; sample-data 3.0.0 follows). Serializer 1.0.1-beta and earlier
+  wrote a NULL column as `1900-01-01` / `''` / `0` in Merge mode on a row where an empty-string
+  column came before the NULL (Truvio.Commerce.Serializer issue #18); 1.0.2-beta is the first
+  release that writes it back as NULL. PackageUnzip, the online file transport, is available from
+  1.0.1-beta, and the ownership header needs 1.0.0-beta or later. `serializerTaughtSurfaceNote` is
+  rewritten to state these reasons.
+- **Id-floor exceptions stated.** `idRules.intIdentityNote` and `BASE.md` now say the 100000 floor
+  applies to the int ids a layer mints. The contract-named AccessUser ids (groups 1325 / 1270 /
+  1292, base-owned; personas 1326 / 1328, sample-data) are explicit exceptions a layer may ship as
+  SqlTable rows. The validator has no int-identity floor check, and none is added.
+
 ## 3.4.1
 
 Patch: the contract states one serializer floor. `baseContractVersion` moves 2.2.0 -> 2.2.1. The
