@@ -159,7 +159,10 @@ only on a Completed order.
 a simplification, it is what the page permits: the customer-centre page grants group `1325` and
 the *My orders* scope and nothing else, measured on DW 10.28.10, so an order stamped with the
 CSR or the admin is invisible to every persona that can open the page. **CSR and admin reach a
-buyer's orders by impersonating the buyer**, which is the platform's own path for it.
+buyer's orders by impersonating the buyer**, which is the platform's own path for it. The layer
+ships what that path needs: the account group `100100` is typed `SystemAccount`, so the Swift CSR
+Accounts app lists it, and the one `AccessUserSecondaryRelation` row `1292$$100100` grants the
+base-contract CSR group impersonation over the account, which is what fills CSR Users.
 
 `TCO-0001` is the completed order the RMA flow returns against: `feature-rma` ships the RMA
 `PACK-RMA-0001` and its `EcomRmaOrderLines` link (id `100301`) pointing at its first line.

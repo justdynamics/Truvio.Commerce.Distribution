@@ -84,7 +84,7 @@
 "AccessUserCountryCode": 
 "AccessUserPointBalance": 
 "AccessUserAddressTitle": 
-"AccessUserUserAndGroupType": 
+"AccessUserUserAndGroupType": "SystemAccount"
 "AccessUserInformationSent": 
 "AccessUserReverseChargeForVat": false
 "AccessUserProfileCreatedDate": 

@@ -1,5 +1,76 @@
 # Changelog — sample-data
 
+## 4.1.2
+
+### Variant price rows win, gallery rows carry a name, group buttons keep their group, the account group is a system account with a CSR grant
+
+**PATCH. Four data defects the 5.1 experiment arm B surfaced on a delivered swift-demo, fixed in
+the layer. 12 price rows removed and 20 re-keyed, 253 asset rows named, two buttons re-addressed,
+one group typed, one table added (`AccessUserSecondaryRelation`, one row). No id changes.**
+
+**1. A variant's own price never rendered (Foundry #1254).** Each of the six variant masters
+(`TCPROD0001`, `0011`, `0016`, `0031`, `0041`, `0051`) shipped a master-level list row
+(`TC-PRICE-LIST-*`, no variant id, 45) and a master-level customer-group row (`TC-PRICE-GRP-*`,
+group 1325, 39.60) beside the per-combination rows `TC-PRICE-VAR-*` (45 to 79.20) and
+`TC-PRICE-GRPV-*` (39.60 to 69.70). Dynamicweb resolves the lowest matching row, and a row with
+an empty `PriceProductVariantId` matches every combination, so `ENT.PUB` resolved 45 anonymously
+and all 36 combinations showed one price; signed in, the master-level contract row (36.90)
+undercut the lot.
+
+The shape now: **a variant master ships no master-level list or customer-group row.** The 12
+`TC-PRICE-LIST-*` and `TC-PRICE-GRP-*` rows of the six masters are removed; `TC-PRICE-VAR-*` and
+`TC-PRICE-GRPV-*` are the list and customer-group rows, one per combination. The rows that were
+derived from the master's `ProductPrice` 45 (the quantity ladders `TC-PRICE-Q05/Q10/Q25-*` at
+40.50 / 36 / 31.50 on the six masters, and the contract rows `TC-PRICE-CTR-0001` 36.90 and
+`TC-PRICE-CTR-0051` 35.10) are keyed to the combination that IS priced 45,
+`TCVO-TIER-STD.TCVO-MODE-DRAFT`, so the ladder and the contract price demonstrate on that
+combination and never undercut the other five. Chosen over variant-keyed copies of the list row
+because the copies would have duplicated the `VAR` rows exactly. With no variant selected the
+master falls through to `EcomProducts.ProductPrice` (45), unchanged.
+
+Gate subjects untouched: `TCPROD0046` contract 36.90 (`TC-PRICE-CTR-0046`) and the `TCPROD0020`
+ladder 120 / 108 / 96 / 84. The customer-group row count is 90 (54 `GRP` + 36 `GRPV`);
+`EcomPrices` ships 221 rows. A new `configRow` asserts `TC-PRICE-VAR-0006` at 79.20 on `ENT.PUB`.
+
+**A host delivered from 4.1.1 or earlier keeps the 12 removed rows**: a merge deserialize never
+deletes. Before a re-gate on such a host, delete `TC-PRICE-LIST-0001/0011/0016/0031/0041/0051`
+and `TC-PRICE-GRP-0001/0011/0016/0031/0041/0051`; a clean-room gate needs nothing.
+
+**2. The PDP gallery alt was the asset row id (Foundry #1246).** Arm B measured the Swift gallery
+thumbnail `img alt` equal to the `EcomDetails.DetailId` on every row whose `DetailsName` was
+empty, so `TC-DETAIL-*`, `TC-HOVER-*` and `TC-GAL-*` leaked onto every PDP, and no online verb
+renames an asset row. Every Images-group row (253: 97 `TC-DETAIL`, 96 `TC-HOVER`, 60 `TC-GAL`)
+now carries `DetailsName` = the product's `ProductName`; variant rows share the master's name. The
+120 Manuals rows already carried their document names. That Swift renders the name where one
+exists is what the re-gate proves.
+
+**3. The two group buttons opened the unfiltered shop (Foundry #1248).** Swift renders a
+`LinkType page` button as the page's friendly URL and drops the stored query, so
+`Default.aspx?ID=50&GroupID=TCGRP-DATA-MODELS` (Home hero, "Browse Data Models") and
+`...&GroupID=TCGRP-COMMERCE` (catalogue pitch, "Browse Commerce") both rendered `/en-us/shop`.
+Both buttons now ship `LinkType url` with the culture-segment address `/en-us/shop?GroupID=<group>`
+and an empty `SelectedValue`, which Swift passes through verbatim (measured by browser click in
+arm B). The address is bound to the `en-us` culture of the Swift 2 area surface-swift ships; a
+consumer on another culture re-points it like any other copy.
+
+**4. The account group was untyped and the CSR held no grant (Foundry #1261).** The Swift CSR
+Accounts app (`UserGroups`, `ListGroupType SystemAccount`) lists only groups whose user-and-group
+type is `SystemAccount`; group 100100 shipped `AccessUserUserAndGroupType` empty, so the CSR
+persona saw only the package's own sample accounts, and CSR Users was empty because group 1292
+(CSR) held no impersonation right over 100100. Now `AccessUser` 100100 carries
+`AccessUserUserAndGroupType: SystemAccount` (the system name of the user type the Swift package
+declares under `Files/System/UserTypes/SystemAccount.xml`), and the layer ships its first
+`AccessUserSecondaryRelation` row, `1292$$100100`: `AccessUserSecondaryRelationUserId` 1292 is
+the impersonator, `AccessUserSecondaryRelationSecondaryUserId` 100100 the account impersonated
+(DW's naming runs the other way from how it reads). The table is added to `fragmentTables`, to
+`config/sample-data-2.4.json` as a Merge predicate keyed on the pair, and to
+`merge/merge-manifest.json`. Its `_meta.yml` is authored from the documented three-column shape
+(`AutoId` identity, `UserId`, `SecondaryUserId`) rather than harvested; the gate's row-count
+parity is what proves it. Two `configRows` assert the type and the grant. Impersonation resolves
+through the Secondary users index and the user cache, so a host that receives this by merge needs
+that index rebuilt (`Secondary users` / `Users.index`) beside the restart the delivery already
+owes.
+
 ## 4.1.1
 
 ### The orders carry their price columns, and variant editing ships with the layer

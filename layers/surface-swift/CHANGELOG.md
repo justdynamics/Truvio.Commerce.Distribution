@@ -1,5 +1,19 @@
 # Changelog — surface-swift
 
+## 1.13.4
+
+Patch: the three footer-navigation pages `Frequently asked`, `Cookie notice` and `Privacy policy`
+ship their `Swift-v2_PageProperties` `Icon` empty instead of `/Files/Icons/1_none.svg`
+(Foundry #1249). The stock value is the Swift icon picker's placeholder sentinel, not a "no icon"
+instruction: the footer navigation template inlines whatever SVG the field names, and that file
+draws the words NO ICON, so the served home rendered a visible glyph beside each of the three
+links in the Help and info and About columns. Measured on arm B: clearing the three items left
+0 glyphs on the served home. The remaining page-properties rows in this layer that carry the
+sentinel (Home, About, the header and footer pages, the newsletter pages, Thank you, Secondary
+Navigation, Languages/Preferences) reach no rendered navigation on the measured pages and are
+left as shipped; a page that later joins a navigation with icons clears its own. No item type,
+template or file changes.
+
 ## 1.13.3
 
 Patch: the Swift area now SHIPS its ecommerce CURRENCY. `AreaEcomCurrencyId` is written as `EUR`

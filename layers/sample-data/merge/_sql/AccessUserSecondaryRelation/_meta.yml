@@ -1,0 +1,36 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "AccessUserSecondaryRelation"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "AccessUserSecondaryRelationUserId"
+- "AccessUserSecondaryRelationSecondaryUserId"
+"identityColumns":
+- "AccessUserSecondaryRelationAutoId"
+"allColumns":
+- "AccessUserSecondaryRelationAutoId"
+- "AccessUserSecondaryRelationUserId"
+- "AccessUserSecondaryRelationSecondaryUserId"
+"columnDefinitions":
+- "name": "AccessUserSecondaryRelationAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "AccessUserSecondaryRelationUserId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AccessUserSecondaryRelationSecondaryUserId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

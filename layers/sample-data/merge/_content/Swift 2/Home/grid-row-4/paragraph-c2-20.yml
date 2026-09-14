@@ -10,7 +10,7 @@
 "moduleSystemName": ""
 "moduleSettings": ""
 "fields":
-  "FirstButton": "{\r\n  \"SelectedValue\": \"50\",\r\n  \"Label\": \"Browse Commerce\",\r\n  \"Link\": \"Default.aspx?ID=50&GroupID=TCGRP-COMMERCE\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "FirstButton": "{\r\n  \"SelectedValue\": \"\",\r\n  \"Label\": \"Browse Commerce\",\r\n  \"Link\": \"/en-us/shop?GroupID=TCGRP-COMMERCE\",\r\n  \"LinkType\": \"url\",\r\n  \"Style\": \"primary\"\r\n}"
   "GlobalRecordPageGuid": "febabe52-c9a6-4983-b857-6c6c022d88fb"
   "Id": "42"
   "ItemInstanceType": ""

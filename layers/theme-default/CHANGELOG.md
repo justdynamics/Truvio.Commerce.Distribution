@@ -2,6 +2,28 @@
 
 
 
+## 2.3.3
+
+### The edge fill contrasts with the ground it sits on (Foundry #1262)
+
+On a stock swift-demo all three edge instances computed `background-color: rgb(255,255,255)`
+over a white ground: the footer crest read `--dw-color-background` from the `<footer>` element,
+which Swift leaves unpainted while the dark scheme sits on the footer's inner grid rows, and the
+two Home edges read the row below their owner, which is white like the owner (the hero's dark
+scheme is on the poster paragraph, not the row). The mask was present, nothing painted, and the
+design leg's PAINT-01 rows do not assert contrast.
+
+Block 26 of `default_custom.js` now derives every fill against the owner's own ground:
+`adjoin()` takes the first `--dw-color-background` that resolves and differs from the owner's,
+reading the adjoining element, then the first scheme-bearing element inside the owner, then the
+first inside the adjoining element, and sets it on the owner as `--td-edge-adjoin`. The footer is
+adjoined to its first scheme-bearing row the same way. Block 22 reads `--td-edge-adjoin` on the
+footer crest too, ahead of the footer's own `--dw-color-background`. The per-edge tokens
+`--td-edge-fill-hero`, `--td-edge-fill-alt` and `--td-edge-fill-footer` keep their meaning and
+still win when a brand sets them; `--td-edge-fill` stays the last resort where no candidate
+contrasts. Expected on a stock swift-demo: the hero edge in the poster's dark scheme, the footer
+crest in the footer row's dark scheme. The re-gate measures it; this fold ships no host proof.
+
 ## 2.3.2
 
 ### One edge fill per instance, following the adjoining scheme (Foundry #1186)
