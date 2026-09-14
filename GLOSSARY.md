@@ -13,7 +13,7 @@ commit messages, issues).
 | **edition** | A named, gate-proven **composition**: `from` a base + an ordered `add` of layers (+ `surfaces`, `sampleData`, `themes`). See `editions/`. |
 | **addition** | A non-base layer listed in an edition's `add` (feature layers). |
 | **surface** | A layer carrying what a frontend needs — the Swift storefront content (`surface-swift`: both areas + UrlPath + own item types), headless content + Delivery-API probes (`surface-headless`), or a content area (`surface-dap-portal`). |
-| **sample data** | Optional layer of demo content: buyer/CSR identities + the demo product catalog + contract prices, shipped as SQL under `merge/_sql/`. Toggled per edition by `sampleData`. |
+| **sample data** | The one optional layer of demo content and the whole demo dataset: the personas on their B2B account, the browsable catalogue with its prices, variants, specs and imagery, the orders, the storefront copy, the demo clock and the email statistics. Shipped as serialized SqlTable YAML plus two declared scripts. Toggled per edition by `sampleData`, never an `add` ref, and composed last so its copy wins the paths it shares with a surface. What an addition may bind to is the base contract's `sampleData` block. |
 | **catalog** | Layer kind reserved for standalone shop-catalog content; the demo catalog ships inside the `sample-data` layer. |
 | **theme** | A disk-overlay-only layer (SPEC-06): styles + CSS + assets under `files/`, no serialized DB content. Applied via `themes[]`. The distribution ships **one** default theme (`theme-default`) — the neutral starting point every customer re-skin overwrites. |
 | **`replace` / `merge`** | Serializer merge modes: source-wins / field-level merge. The mode dirs at each layer root. |
