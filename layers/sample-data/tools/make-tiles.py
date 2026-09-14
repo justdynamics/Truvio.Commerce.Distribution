@@ -38,8 +38,8 @@ width=180, relations strip at width=30, recommendation rail with no width - and
 the three hero slides read complete=true, naturalWidth=0, naturalHeight=0, box
 126x95. Swift's card and gallery components always route product imagery through
 that handler because they need its width and crop arguments, so every tc-* product
-image has been a broken image behind a correctly-counted img node since
-truvio-demo 1.2.0. The SVGs stay as the authoring sources and stay on disk; the
+image was a broken image behind a correctly-counted img node until the
+layer switched to PNG. The SVGs stay as the authoring sources and stay on disk; the
 product rows point at the PNGs.
 
 The PNG is not a rasterisation of the SVG - no rasteriser is available here and
@@ -75,7 +75,7 @@ recolouring the catalogue.
 
 Regenerate with
 
-    python layers/truvio-demo/tools/make-tiles.py
+    python layers/sample-data/tools/make-tiles.py
 
 from the repository root. Output is byte-identical on every run - the PNG carries
 no tIME chunk, a fixed filter byte and a pinned deflate configuration - so a

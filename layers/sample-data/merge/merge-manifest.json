@@ -260,6 +260,7 @@
         "_sql/EcomProducts/TCPROD0058$$ENU$$.yml",
         "_sql/EcomProducts/TCPROD0059$$ENU$$.yml",
         "_sql/EcomProducts/TCPROD0060$$ENU$$.yml",
+        "_sql/EcomProducts/TCPROD0061$$ENU$$.yml",
         "_sql/EcomProducts/_meta.yml"
       ]
     },
@@ -299,6 +300,7 @@
         "_sql/EcomGroupProductRelation/TCGRP-COMMERCE$$TCPROD0028.yml",
         "_sql/EcomGroupProductRelation/TCGRP-COMMERCE$$TCPROD0029.yml",
         "_sql/EcomGroupProductRelation/TCGRP-COMMERCE$$TCPROD0030.yml",
+        "_sql/EcomGroupProductRelation/TCGRP-COMMERCE$$TCPROD0061.yml",
         "_sql/EcomGroupProductRelation/TCGRP-CONTENT$$TCPROD0031.yml",
         "_sql/EcomGroupProductRelation/TCGRP-CONTENT$$TCPROD0032.yml",
         "_sql/EcomGroupProductRelation/TCGRP-CONTENT$$TCPROD0033.yml",
@@ -359,6 +361,7 @@
         "_sql/EcomGroupProductRelation/TCGRP-PRICE-STRUCTURES$$TCPROD0018.yml",
         "_sql/EcomGroupProductRelation/TCGRP-PRICE-STRUCTURES$$TCPROD0019.yml",
         "_sql/EcomGroupProductRelation/TCGRP-PRICE-STRUCTURES$$TCPROD0020.yml",
+        "_sql/EcomGroupProductRelation/TCGRP-PRICE-STRUCTURES$$TCPROD0061.yml",
         "_sql/EcomGroupProductRelation/TCGRP-RELATIONS$$TCPROD0056.yml",
         "_sql/EcomGroupProductRelation/TCGRP-RELATIONS$$TCPROD0057.yml",
         "_sql/EcomGroupProductRelation/TCGRP-RELATIONS$$TCPROD0058.yml",
@@ -641,6 +644,7 @@
         "_sql/EcomPrices/TC-PRICE-LIST-0058.yml",
         "_sql/EcomPrices/TC-PRICE-LIST-0059.yml",
         "_sql/EcomPrices/TC-PRICE-LIST-0060.yml",
+        "_sql/EcomPrices/TC-PRICE-LIST-0061.yml",
         "_sql/EcomPrices/TC-PRICE-Q05-0001.yml",
         "_sql/EcomPrices/TC-PRICE-Q05-0011.yml",
         "_sql/EcomPrices/TC-PRICE-Q05-0016.yml",
@@ -1288,7 +1292,14 @@
         "_sql/EcomProductCategoryFieldValue/tc_users$$tcStockStatus$$TCPROD0048$$ENU$$$$0.yml",
         "_sql/EcomProductCategoryFieldValue/tc_users$$tcStockStatus$$TCPROD0049$$ENU$$$$0.yml",
         "_sql/EcomProductCategoryFieldValue/tc_users$$tcStockStatus$$TCPROD0050$$ENU$$$$0.yml",
-        "_sql/EcomProductCategoryFieldValue/_meta.yml"
+        "_sql/EcomProductCategoryFieldValue/_meta.yml",
+        "_sql/EcomProductCategoryFieldValue/tc_commerce$$tcDeliveryLeadTime$$TCPROD0061$$ENU$$$$0.yml",
+        "_sql/EcomProductCategoryFieldValue/tc_commerce$$tcMinimumOrderQuantity$$TCPROD0061$$ENU$$$$0.yml",
+        "_sql/EcomProductCategoryFieldValue/tc_commerce$$tcPriceUnit$$TCPROD0061$$ENU$$$$0.yml",
+        "_sql/EcomProductCategoryFieldValue/tc_commerce$$tcQuantityBreak$$TCPROD0061$$ENU$$$$0.yml",
+        "_sql/EcomProductCategoryFieldValue/tc_commerce$$tcReturnWindow$$TCPROD0061$$ENU$$$$0.yml",
+        "_sql/EcomProductCategoryFieldValue/tc_commerce$$tcVatGroup$$TCPROD0061$$ENU$$$$0.yml",
+        "_sql/EcomProductCategoryFieldValue/tc_commerce$$tcWarrantyTerm$$TCPROD0061$$ENU$$$$0.yml"
       ]
     },
     {
@@ -1486,6 +1497,7 @@
         "_sql/EcomDetails/TC-DETAIL-TCPROD0058.yml",
         "_sql/EcomDetails/TC-DETAIL-TCPROD0059.yml",
         "_sql/EcomDetails/TC-DETAIL-TCPROD0060.yml",
+        "_sql/EcomDetails/TC-DETAIL-TCPROD0061.yml",
         "_sql/EcomDetails/TC-DOC-TCPROD0001-DS.yml",
         "_sql/EcomDetails/TC-DOC-TCPROD0001-IG.yml",
         "_sql/EcomDetails/TC-DOC-TCPROD0002-DS.yml",
@@ -2093,6 +2105,8 @@
         "_sql/EcomProductsRelated/TCREL-RELATED$$TCPROD0060$$TCPROD0056$$.yml",
         "_sql/EcomProductsRelated/TCREL-RELATED$$TCPROD0060$$TCPROD0057$$.yml",
         "_sql/EcomProductsRelated/TCREL-RELATED$$TCPROD0060$$TCPROD0058$$.yml",
+        "_sql/EcomProductsRelated/TCREL-RELATED$$TCPROD0061$$TCPROD0016$$.yml",
+        "_sql/EcomProductsRelated/TCREL-RELATED$$TCPROD0061$$TCPROD0020$$.yml",
         "_sql/EcomProductsRelated/TCREL-SPARES$$TCPROD0001$$TCPROD0041$$.yml",
         "_sql/EcomProductsRelated/TCREL-SPARES$$TCPROD0002$$TCPROD0021$$.yml",
         "_sql/EcomProductsRelated/TCREL-SPARES$$TCPROD0002$$TCPROD0042$$.yml",
@@ -2191,6 +2205,7 @@
         "_sql/EcomStockUnit/100258.yml",
         "_sql/EcomStockUnit/100259.yml",
         "_sql/EcomStockUnit/100260.yml",
+        "_sql/EcomStockUnit/100261.yml",
         "_sql/EcomStockUnit/_meta.yml"
       ]
     },

@@ -1,6 +1,6 @@
 ﻿-- ===========================================================================
 -- truvio-gallery-photos.sql - OPTIONAL, and deliberately NOT declared in
--- truvio-demo/layer.json sql[].
+-- sample-data/layer.json sql[].
 --
 -- WHY IT IS NOT DECLARED. A declared script is one the composer runs, and this
 -- one must not run by default: it repoints every gallery row at the five
@@ -89,4 +89,4 @@ IF @TcRepeatedPhoto > 0
     RAISERROR(N'truvio-gallery-photos.sql: a master carries the same photograph twice. The thumbnail strip renders and steps from an image to itself.', 16, 1);
 
 COMMIT TRAN;
-PRINT 'Done - truvio-demo gallery swapped onto the five brand-manifest scenic photographs. Confirm the files are on disk under Files/Images/TruvioCommerce/scenic/; this script cannot.';
+PRINT 'Done - sample-data gallery swapped onto the five brand-manifest scenic photographs. Confirm the files are on disk under Files/Images/TruvioCommerce/scenic/; this script cannot.';
