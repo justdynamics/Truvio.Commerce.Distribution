@@ -1,5 +1,19 @@
 # Changelog — surface-swift
 
+## 1.13.5
+
+Patch: the PDP gallery THUMBNAIL strip reads the asset's display name for its `alt` instead of the
+asset's key (Foundry #1246). `Swift-v2_ProductMedia.cshtml` built the thumbnail `alt` from
+`asset.Name`, which is the `EcomDetails` row key, so a serialized id such as `TC-DETAIL-TCPROD0001`
+was read out to a screen reader. sample-data 4.1.2 ships `DetailsName` on all 253 Images rows and
+that value surfaces on the asset as `DisplayName` (measured on the Delivery API: the asset carries
+`name` `TC-DETAIL-TCPROD0001` beside `displayName` `Truvio Variant Master 01`), so the data half of
+#1246 landed but never reached the rendered page. The thumbnail now prefers `DisplayName` and falls
+back to `Name` when a consumer ships an asset without one; the keyword suffix and every other
+surface are untouched. The large gallery images already used the product name. Measured red first:
+run 20260914-171139 on the standing host failed ALT-01 at all three viewports on exactly these
+three thumbnails.
+
 ## 1.13.4
 
 Patch: the three footer-navigation pages `Frequently asked`, `Cookie notice` and `Privacy policy`
