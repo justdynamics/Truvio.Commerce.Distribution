@@ -1,0 +1,28 @@
+﻿"ownership":
+  "mode": "merge"
+"FieldId": "tcPriceUnit"
+"FieldCategoryId": "tc_commerce"
+"FieldTemplateTag": "tcPriceUnit"
+"FieldType": 1
+"FieldDefaultValue": 
+"FieldPresentationType": 
+"FieldSortOrder": 1
+"FieldAutoId": 242
+"FieldDoNotRender": false
+"FieldHideEmpty": false
+"FieldForeignCategoryId": 
+"FieldValidationPattern": 
+"FieldIncludeAllExistingLanguage": false
+"FieldAllowChangesAcrossLanguages": false
+"FieldAllowChangesAcrossVariants": false
+"FieldRequired": false
+"FieldReadOnly": false
+"FieldValueConversionPreset": 
+"FieldValueConversionDecimals": 
+"FieldValueConversionDisplayRule": 
+"FieldShowFieldOnBothMasterAndVariant": false
+"FieldTypeSystemName": 
+"FieldUseAsFacet": false
+"FieldValueConversionGroupId": 
+"FieldEditorConfiguration": 
+"FieldMatrixAttributeGroupId": 

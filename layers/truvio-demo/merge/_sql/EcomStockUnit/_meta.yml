@@ -1,0 +1,131 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomStockUnit"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "Id"
+"identityColumns":
+- "Id"
+"allColumns":
+- "StockUnitProductId"
+- "StockUnitVariantId"
+- "StockUnitId"
+- "StockUnitQuantity"
+- "StockUnitWeight"
+- "StockUnitVolume"
+- "StockUnitStockLocationId"
+- "Id"
+- "StockUnitWidth"
+- "StockUnitHeight"
+- "StockUnitDepth"
+- "StockUnitNeverOutOfStock"
+- "StockUnitExpectedDelivery"
+- "StockUnitProductNumber"
+- "StockUnitDescription"
+"columnDefinitions":
+- "name": "StockUnitProductId"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockUnitVariantId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockUnitId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockUnitQuantity"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockUnitWeight"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockUnitVolume"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockUnitStockLocationId"
+  "dataType": "bigint"
+  "maxLength": 0
+  "precision": 19
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "Id"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "StockUnitWidth"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockUnitHeight"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockUnitDepth"
+  "dataType": "float"
+  "maxLength": 0
+  "precision": 53
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockUnitNeverOutOfStock"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockUnitExpectedDelivery"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockUnitProductNumber"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockUnitDescription"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

@@ -1,0 +1,101 @@
+﻿"ownership":
+  "mode": "merge"
+"AccessUserId": 100102
+"AccessUserParentId": 0
+"AccessUserUserName": "TruvioCsr"
+"AccessUserName": "Truvio CSR"
+"AccessUserDepartment": 
+"AccessUserEmail": "csr@truvio-demo.example"
+"AccessUserPhone": 
+"AccessUserFax": 
+"AccessUserGroups": 
+"AccessUserType": 5
+"AccessUserValidFrom": 2026-09-13T22:45:52.3470000
+"AccessUserValidTo": 2999-12-31T00:00:00.0000000
+"AccessUserPages": 
+"AccessUserAreas": 
+"AccessUserSettings": 
+"AccessUserModules": 
+"AccessUserInformation": 
+"AccessUserMyFolder": 
+"AccessUserAddress": "1 Placeholder Way"
+"AccessUserAddress2": 
+"AccessUserZip": "0000 TC"
+"AccessUserCity": "Truvio Demo"
+"AccessUserCountry": 
+"AccessUserJobTitle": 
+"AccessUserCompany": "Truvio Demo Account"
+"AccessUserPhonePriv": 
+"AccessUserMobile": 
+"AccessUserCustomerNumber": "TC-100200"
+"AccessUserRedirectOnLogin": 
+"AccessUserCurrencyCharacter": 
+"AccessUserRead": false
+"AccessUserAdsiMap": 
+"AccessUserLastName": 
+"AccessUserMiddleName": 
+"AccessUserActive": true
+"AccessUserImage": 
+"AccessUserBusiness": 
+"AccessUserInitials": 
+"AccessUserComment": 
+"AccessUserLevel": 0
+"AccessUserInheritAddress": true
+"AccessUserWeb": 
+"AccessUserSort": 0
+"AccessUserStatus": 0
+"AccessUserStatusBegin": 
+"AccessUserStatusEnd": 
+"AccessUserStatusComment": 
+"AccessUserEditorConfigurationId": 
+"AccessUserHideStat": false
+"AccessUserAllowBackend": 
+"AccessUserApprovalKey": 
+"AccessUserShopId": 
+"AccessUserExternalId": 
+"AccessUserSortXML": 
+"AccessUserGeoLocationLat": 
+"AccessUserGeoLocationLng": 
+"AccessUserGeoLocationIsCustom": 
+"AccessUserGeoLocationImage": 
+"AccessUserGeoLocationHash": 
+"AccessUserNewsletterAllowed": false
+"AccessUserCreatedOn": 
+"AccessUserUpdatedOn": 
+"AccessUserCreatedBy": 
+"AccessUserUpdatedBy": 
+"AccessUserEmailPermissionGivenOn": 
+"AccessUserEmailPermissionUpdatedOn": 
+"AccessUserState": 
+"AccessUserVatRegNumber": 
+"AccessUserDisableLivePrices": 
+"AccessUserAdministratorInGroups": 
+"AccessUserTitle": 
+"AccessUserFirstName": 
+"AccessUserHouseNumber": 
+"AccessUserLastOrderDate": 
+"AccessUserGroupSmartSearch": 
+"AccessUserGroupSmartSearchLastCalculatedTime": 
+"AccessUserExported": 
+"AccessUserItemType": 
+"AccessUserItemId": 
+"AccessUserDefaultUserItemType": 
+"AccessUserStockLocationID": 
+"AccessUserCountryCode": 
+"AccessUserPointBalance": 
+"AccessUserAddressTitle": 
+"AccessUserUserAndGroupType": 
+"AccessUserInformationSent": 
+"AccessUserReverseChargeForVat": false
+"AccessUserProfileCreatedDate": 
+"DefaultPermission": 
+"AccessUserTreeSection": 
+"AccessUserUniqueId": 0f93d23c-c5a2-4ce2-9055-43ac3d7efde2
+"AccessUserShippingCode": 
+"AccessUserShippingAgentCode": 
+"AccessUserShippingAgentServiceCode": 
+"AccessUserLoginType": 
+"AccessUserInvitationSent": 
+"AccessUserDisableLiveDiscounts": 
+"AccessUserIsServiceAccount": false
+"AccessUserIsLogin": false

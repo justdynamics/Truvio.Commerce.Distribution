@@ -1,0 +1,43 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomProductCategory"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "CategoryId"
+"identityColumns":
+- "CategoryAutoId"
+"allColumns":
+- "CategoryId"
+- "CategoryAutoId"
+- "CategoryProductProperties"
+- "CategoryType"
+"columnDefinitions":
+- "name": "CategoryId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "CategoryAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "CategoryProductProperties"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "CategoryType"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

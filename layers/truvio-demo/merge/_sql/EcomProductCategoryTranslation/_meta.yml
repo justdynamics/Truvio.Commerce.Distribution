@@ -1,0 +1,44 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomProductCategoryTranslation"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "CategoryTranslationCategoryId"
+- "CategoryTranslationLanguageId"
+"identityColumns":
+- "CategoryTranslationAutoId"
+"allColumns":
+- "CategoryTranslationCategoryId"
+- "CategoryTranslationLanguageId"
+- "CategoryTranslationCategoryName"
+- "CategoryTranslationAutoId"
+"columnDefinitions":
+- "name": "CategoryTranslationCategoryId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "CategoryTranslationLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "CategoryTranslationCategoryName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "CategoryTranslationAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true

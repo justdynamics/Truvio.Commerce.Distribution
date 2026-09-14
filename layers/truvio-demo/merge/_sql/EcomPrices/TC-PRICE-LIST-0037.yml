@@ -1,0 +1,28 @@
+﻿"ownership":
+  "mode": "merge"
+"PriceId": "TC-PRICE-LIST-0037"
+"PriceProductId": "TCPROD0037"
+"PriceProductVariantId": ""
+"PriceProductLanguageId": 
+"PriceCurrency": "EUR"
+"PriceQuantity": 1
+"PriceAmount": 60
+"PriceUnitId": 
+"PricePeriodId": 
+"PriceCustomerGroupId": ""
+"PricePriority": 0
+"PriceUserCustomerNumber": ""
+"PriceCountry": 
+"PriceShopId": 
+"PriceValidFrom": 
+"PriceValidTo": 
+"PriceUserId": 
+"PriceUserGroupId": ""
+"PriceAutoId": 227
+"PriceIsInformative": 
+"PriceStockLocationID": 
+"PriceIsWithVat": 
+"PriceExternalId": 
+"PriceDiscountPercentage": 0
+"PriceAllowOrderLineDiscounts": true
+"PriceAllowOrderDiscounts": true

@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "TCPROD0011"
+"ProductLanguageId": "ENU"
+"ProductVariantId": "TCVO-TIER-ADV.TCVO-MODE-DRAFT"
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "TC-UOM-0011-ADV-DRAFT"
+"ProductName": "Truvio Unit Measure 11"
+"ProductShortDescription": "Truvio demo data. Unit row in the Units & Measures band of the Truvio Commerce platform-vocabulary catalogue."
+"ProductLongDescription": 
+"ProductImageSmall": "/Files/Images/TruvioCommerce/products/tc-tile-units-0011.png"
+"ProductImageMedium": "/Files/Images/TruvioCommerce/products/tc-tile-units-0011.png"
+"ProductImageLarge": "/Files/Images/TruvioCommerce/products/tc-tile-units-0011.png"
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 56.25
+"ProductStock": 100
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-13T22:45:51.0500000
+"ProductUpdated": 2026-09-13T22:45:51.0500000
+"ProductCustomFieldsXml": 
+"ProductType": 0
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 0
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4735
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": true
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": d019d9dd-c4af-f111-8d58-000d3a7e3238
+"ProductDiscontinuedDate": 

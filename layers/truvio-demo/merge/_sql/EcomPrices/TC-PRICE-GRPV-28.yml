@@ -1,0 +1,28 @@
+﻿"ownership":
+  "mode": "merge"
+"PriceId": "TC-PRICE-GRPV-28"
+"PriceProductId": "TCPROD0011"
+"PriceProductVariantId": "TCVO-TIER-STD.TCVO-MODE-PUB"
+"PriceProductLanguageId": 
+"PriceCurrency": "EUR"
+"PriceQuantity": 1
+"PriceAmount": 43.56
+"PriceUnitId": 
+"PricePeriodId": 
+"PriceCustomerGroupId": ""
+"PricePriority": 0
+"PriceUserCustomerNumber": ""
+"PriceCountry": 
+"PriceShopId": 
+"PriceValidFrom": 
+"PriceValidTo": 
+"PriceUserId": 
+"PriceUserGroupId": "1325"
+"PriceAutoId": 128
+"PriceIsInformative": 
+"PriceStockLocationID": 
+"PriceIsWithVat": 
+"PriceExternalId": 
+"PriceDiscountPercentage": 0
+"PriceAllowOrderLineDiscounts": true
+"PriceAllowOrderDiscounts": true

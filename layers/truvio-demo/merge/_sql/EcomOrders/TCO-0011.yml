@@ -1,0 +1,178 @@
+﻿"ownership":
+  "mode": "merge"
+"OrderId": "TCO-0011"
+"OrderShopId": "SHOP1"
+"OrderDate": 2026-09-09T22:45:52.3530000
+"OrderModified": 
+"OrderComplete": true
+"OrderDeleted": false
+"OrderStateId": "OS1"
+"OrderVAT": 0
+"OrderIP": 
+"OrderReferrer": 
+"OrderTransactionValue": 
+"OrderTransactionType": 
+"OrderTransactionStatus": 
+"OrderTransactionAmount": 0
+"OrderTransactionPayGatewayCode": 
+"OrderTrackTraceNumber": 
+"OrderShippingMethod": 
+"OrderShippingMethodFee": 0
+"OrderPaymentMethod": 
+"OrderPaymentMethodFee": 0
+"OrderSalesDiscount": 0
+"OrderCurrencyName": 
+"OrderCurrencyRate": 0
+"OrderCurrencyCode": "EUR"
+"OrderCart": false
+"OrderFieldsXML": 
+"OrderReSendEmail": 
+"OrderCustomerNumber": "TC-100200"
+"OrderCustomerCompany": "Truvio Demo Account"
+"OrderCustomerName": "Truvio Buyer"
+"OrderCustomerAddress": 
+"OrderCustomerAddress2": 
+"OrderCustomerZip": 
+"OrderCustomerCity": 
+"OrderCustomerCountry": 
+"OrderCustomerRegion": 
+"OrderCustomerPhone": 
+"OrderCustomerFax": 
+"OrderCustomerEmail": "buyer@truvio-demo.example"
+"OrderCustomerCell": 
+"OrderCustomerRefId": 
+"OrderCustomerEAN": 
+"OrderCustomerVatRegNumber": 
+"OrderDeliveryCompany": 
+"OrderDeliveryName": 
+"OrderDeliveryAddress": 
+"OrderDeliveryAddress2": 
+"OrderDeliveryZip": 
+"OrderDeliveryCity": 
+"OrderDeliveryCountry": 
+"OrderDeliveryRegion": 
+"OrderDeliveryPhone": 
+"OrderDeliveryFax": 
+"OrderDeliveryEmail": 
+"OrderDeliveryCell": 
+"OrderTotalPrice": 195
+"OrderComment": 
+"OrderCustomerComment": 
+"OrderWeight": 
+"OrderVolume": 
+"OrderPriceWithVAT": 
+"OrderPriceWithoutVAT": 
+"OrderPriceVAT": 
+"OrderPriceVATPercent": 
+"OrderShippingFeeWithVAT": 
+"OrderShippingFeeWithoutVAT": 
+"OrderShippingFeeVAT": 
+"OrderShippingFeeVATPercent": 
+"OrderPaymentFeeWithVAT": 
+"OrderPaymentFeeWithoutVAT": 
+"OrderPaymentFeeVAT": 
+"OrderPaymentFeeVATPercent": 
+"OrderPriceBeforeFeesWithVAT": 
+"OrderPriceBeforeFeesWithoutVAT": 
+"OrderPriceBeforeFeesVAT": 
+"OrderPriceBeforeFeesVATPercent": 
+"OrderCustomerAccessUserId": 100101
+"OrderCustomerAccessUserUserName": 
+"OrderShippingMethodId": 
+"OrderPaymentMethodId": 
+"OrderGatewayResult": 
+"OrderStepNum": 
+"OrderTransactionNumber": 
+"OrderCustomerCountryCode": "NL"
+"OrderDeliveryCountryCode": 
+"OrderStepHistory": 
+"OrderLanguageId": "ENU"
+"OrderTransactionMailSend": false
+"OrderShippingMethodDescription": 
+"OrderPaymentMethodDescription": 
+"OrderCustomerNewsletterSubcribe": false
+"OrderGatewayPaymentStatus": 
+"OrderGatewayTransactionProblems": 
+"OrderGatewayUniqueId": 
+"OrderCaptureInfo": 
+"OrderCartV2StepIndex": 
+"OrderShippingCountrySelection": 
+"OrderPaymentCountrySelection": 
+"OrderCustomerAccepted": 
+"OrderDebuggingInfo": 
+"OrderHasSetUserDetails": 
+"OrderTrackAndTraceId": 
+"OrderTrackAndTraceParameters": 
+"OrderIntegrationOrderId": 
+"OrderRequisition": 
+"OrderAXOrderId": 
+"OrderIsExported": 
+"OrderVoucherCode": 
+"OrderCustomerSurname": 
+"OrderCustomerInitials": 
+"OrderCustomerPrefix": 
+"OrderDeliverySurname": 
+"OrderDeliveryInitials": 
+"OrderDeliveryPrefix": 
+"OrderShippingDocumentData": 
+"OrderShippingProviderData": 
+"OrderCompletedDate": 
+"OrderSecondaryUserId": 
+"OrderReceiptShowCount": 
+"OrderCaptureAmount": 
+"OrderTransactionCardType": 
+"OrderExternalPaymentFee": 
+"OrderAutoId": 11
+"OrderCustomerTitle": 
+"OrderCustomerFirstName": 
+"OrderCustomerMiddleName": 
+"OrderCustomerHouseNumber": 
+"OrderDeliveryTitle": 
+"OrderDeliveryFirstName": 
+"OrderDeliveryMiddleName": 
+"OrderDeliveryHouseNumber": 
+"OrderPriceCalculationDate": 
+"OrderTotalPoints": 
+"OrderTotalRewardPoints": 
+"OrderTotalDiscountWithVAT": 
+"OrderTotalDiscountWithoutVAT": 
+"OrderTotalDiscountVAT": 
+"OrderTotalDiscountVATPercent": 
+"OrderIsQuote": false
+"OrderTransactionCardNumber": 
+"OrderCheckoutPageID": 0
+"OrderPriceCalculatedByProvider": false
+"OrderTaxTransactionNumber": 
+"OrderVoucherUseType": 0
+"OrderContextID": 
+"OrderGiftcardTransactionFailed": false
+"OrderShippingFeeRuleName": 
+"OrderRecurringOrderId": 
+"OrderPaymentRecurringInfo": 
+"OrderSavedCardID": 
+"OrderIsRecurringOrderTemplate": 
+"OrderPointsToUse": 
+"OrderIsLedgerEntry": false
+"OrderIsPayable": true
+"OrderReturnOperations": 
+"OrderDisplayName": 
+"OrderDiscountPercentage": 0
+"OrderDiscountAmount": 0
+"OrderVATCountryCode": 
+"OrderReference": 
+"OrderShippingDate": 
+"OrderShippingAgent": 
+"OrderPaymentMethodCode": 
+"OrderPaymentMethodTermsCode": 
+"OrderShippingMethodCode": 
+"OrderShippingMethodAgentCode": 
+"OrderShippingMethodAgentServiceCode": 
+"OrderReverseChargeForVat": false
+"OrderParentOrderId": 
+"OrderLedgerType": 
+"OrderCustomerAddressId": 
+"OrderDeliveryAddressId": 
+"QuoteRequest": 
+"OrderShopName": 
+"OrderPurchaseOrderNumber": 
+"OrderDueDate": 

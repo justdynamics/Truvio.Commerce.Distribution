@@ -1,0 +1,58 @@
+﻿"ownership":
+  "mode": "merge"
+"OrderLineId": "TCO-0011-2"
+"OrderLineOrderId": "TCO-0011"
+"OrderLineParentLineId": 
+"OrderLineBOM": false
+"OrderLineDate": 2026-09-09T22:45:52.3530000
+"OrderLineModified": 
+"OrderLineProductNumber": "TC-VAR-0002"
+"OrderLineProductId": "TCPROD0002"
+"OrderLineProductVariantId": 
+"OrderLineProductName": "Truvio Variant Master 02"
+"OrderLineProductVariantText": 
+"OrderLineUnitPrice": 60
+"OrderLineVatPercent": 0
+"OrderLineVatPrice": 0
+"OrderLineQuantity": 1
+"OrderLineType": "0"
+"OrderLineReference": 
+"OrderLineBOMItemId": 
+"OrderLineUnitId": 
+"OrderLineWeight": 
+"OrderLineVolume": 
+"OrderLinePriceWithVAT": 60
+"OrderLinePriceWithoutVAT": 
+"OrderLinePriceVAT": 
+"OrderLinePriceVATPercent": 
+"OrderLineUnitPriceWithVAT": 
+"OrderLineUnitPriceWithoutVAT": 
+"OrderLineUnitPriceVAT": 
+"OrderLineUnitPriceVATPercent": 
+"OrderLinePageId": 
+"OrderLineDiscountId": 
+"OrderLineFieldValues": 
+"OrderLineAttachment": 
+"OrderLineAutoId": 18
+"OrderLineWishListId": 0
+"OrderLinePriceCalculationReference": 
+"OrderLineUnitPriceCalculationReference": 
+"OrderLineUnitPoints": 
+"OrderLineUnitRewardPoints": 
+"OrderLinePoints": 
+"OrderLineRewardPoints": 
+"OrderLineRewardId": 
+"OrderLineReverseChargeForVat": 
+"OrderLineTotalDiscountWithVAT": 
+"OrderLineTotalDiscountWithoutVAT": 
+"OrderLineTotalDiscountVAT": 
+"OrderLineTotalDiscountVATPercent": 
+"OrderLineGiftCardCode": 
+"OrderLineDiscountPercentage": 0
+"OrderLineUnitPriceBeforeDiscount": 0
+"OrderLineStockLocationId": 
+"OrderLineComment": 
+"OrderLineUnitPriceDiscountPercentage": 0
+"OrderLineCustomerComment": 
+"OrderLineAllowOrderDiscounts": true
+"OrderLineAllowOrderLineDiscounts": true

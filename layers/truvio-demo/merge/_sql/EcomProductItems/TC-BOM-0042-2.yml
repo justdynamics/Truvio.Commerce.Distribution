@@ -1,0 +1,17 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductItemId": "TC-BOM-0042-2"
+"ProductItemProductId": "TCPROD0042"
+"ProductItemBomProductId": ""
+"ProductItemBomGroupId": "TCGRP-DOCUMENTS"
+"ProductItemQuantity": 1
+"ProductItemName": "Documentation component"
+"ProductItemRequired": true
+"ProductItemDefaultProductId": "TCPROD0051"
+"ProductItemBomNoProductText": ""
+"ProductItemSortOrder": 2
+"ProductItemBomVariantId": ""
+"ProductItemAutoId": 53
+"ProductItemDefaultVariantId": ""
+"ProductItemDefaultUnitId": ""
+"ProductItemBomUnitId": ""

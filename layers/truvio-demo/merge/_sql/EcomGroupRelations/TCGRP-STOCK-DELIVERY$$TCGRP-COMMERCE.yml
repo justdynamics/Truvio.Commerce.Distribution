@@ -1,0 +1,8 @@
+﻿"ownership":
+  "mode": "merge"
+"GroupRelationsGroupId": "TCGRP-STOCK-DELIVERY"
+"GroupRelationsParentId": "TCGRP-COMMERCE"
+"GroupRelationsSorting": 3
+"GroupRelationsIsPrimary": true
+"GroupRelationsAutoId": 683
+"GroupRelationsInheritCategories": false

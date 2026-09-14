@@ -1,0 +1,35 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomFieldDisplayGroupFields"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "FieldDisplayGroupFieldGroupId"
+- "FieldDisplayGroupFieldSystemName"
+"identityColumns": []
+"allColumns":
+- "FieldDisplayGroupFieldSystemName"
+- "FieldDisplayGroupFieldGroupId"
+- "FieldDisplayGroupFieldSortOrder"
+"columnDefinitions":
+- "name": "FieldDisplayGroupFieldSystemName"
+  "dataType": "nvarchar"
+  "maxLength": 250
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldDisplayGroupFieldGroupId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldDisplayGroupFieldSortOrder"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

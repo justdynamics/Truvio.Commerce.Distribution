@@ -1,0 +1,67 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomFieldDisplayGroups"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "FieldDisplayGroupId"
+"identityColumns":
+- "FieldDisplayGroupId"
+"allColumns":
+- "FieldDisplayGroupId"
+- "FieldDisplayGroupName"
+- "FieldDisplayGroupFieldIds"
+- "FieldDisplayGroupSortIndex"
+- "FieldDisplayGroupShopIds"
+- "FieldDisplayGroupAvailableInFrontend"
+- "FieldDisplayGroupSystemName"
+"columnDefinitions":
+- "name": "FieldDisplayGroupId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "FieldDisplayGroupName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldDisplayGroupFieldIds"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldDisplayGroupSortIndex"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldDisplayGroupShopIds"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldDisplayGroupAvailableInFrontend"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldDisplayGroupSystemName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

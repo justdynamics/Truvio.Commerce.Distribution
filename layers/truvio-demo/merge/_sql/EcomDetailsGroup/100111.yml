@@ -1,0 +1,21 @@
+﻿"ownership":
+  "mode": "merge"
+"EcomDetailsGroupId": 100111
+"EcomDetailsGroupSystemName": "Manuals"
+"DetailsGroupInheritanceType": 3
+"DetailsGroupIcon": 
+"DetailsGroupIconColor": 
+"DetailsGroupExtensions": "pdf"
+"DetailsGroupControlType": 0
+"DetailsGroupIsSystemGroup": false
+"DetailsGroupCheckinPattern": 
+"DetailsGroupIsPrimaryImageRule": false
+"DetailsGroupPrimaryImageNameAdditionType": 
+"DetailsGroupPrimaryImageNameAddition": 
+"DetailsGroupSearchPattern": 
+"DetailsGroupHasPrimaryImageRule": false
+"DetailsGroupInheritDefaultImageAcrossVariants": true
+"DetailsGroupInheritDefaultImageAcrossLanguages": true
+"DetailsGroupDefaultUploadFolder": 
+"DetailsGroupRegularExpression": 
+"DetailsGroupSortingMode": 0

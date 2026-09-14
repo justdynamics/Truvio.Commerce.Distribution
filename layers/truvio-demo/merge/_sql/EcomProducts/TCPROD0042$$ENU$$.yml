@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "TCPROD0042"
+"ProductLanguageId": "ENU"
+"ProductVariantId": ""
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "TC-BDL-0042"
+"ProductName": "Truvio Bundle Kit 42"
+"ProductShortDescription": "Binds a group rather than a product, so the buyer picks the member."
+"ProductLongDescription": "A bundle is a product whose contents are other products, listed on the page and priced as a kit. This kit binds a group rather than a product, so a buyer picks the member and the kit configures itself. The package-contents section on this page lists every member as a full row, with its own number, stock and price."
+"ProductImageSmall": "/Files/Images/TruvioCommerce/products/tc-tile-bundles-0042.png"
+"ProductImageMedium": "/Files/Images/TruvioCommerce/products/tc-tile-bundles-0042.png"
+"ProductImageLarge": "/Files/Images/TruvioCommerce/products/tc-tile-bundles-0042.png"
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 60
+"ProductStock": 12
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-13T22:45:50.6570000
+"ProductUpdated": 2026-09-13T22:45:50.6570000
+"ProductCustomFieldsXml": 
+"ProductType": 2
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 0
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4708
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": false
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": b519d9dd-c4af-f111-8d58-000d3a7e3238
+"ProductDiscontinuedDate": 

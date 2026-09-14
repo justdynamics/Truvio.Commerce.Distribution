@@ -1,0 +1,79 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductId": "TCPROD0051"
+"ProductLanguageId": "ENU"
+"ProductVariantId": ""
+"ProductDefaultShopId": "SHOP1"
+"ProductNumber": "TC-DOC-0051"
+"ProductName": "Truvio Document Set 51"
+"ProductShortDescription": "Datasheet and install guide, both downloadable from the page."
+"ProductLongDescription": "Documents hang off a product as an asset category, so a datasheet and an install guide are rows on the record, not links in the copy. This row carries the full document set: a datasheet and an install guide, both downloadable from the page. The documents table on this page lists each file with its name, its type and its size."
+"ProductImageSmall": "/Files/Images/TruvioCommerce/products/tc-tile-documents-0051.png"
+"ProductImageMedium": "/Files/Images/TruvioCommerce/products/tc-tile-documents-0051.png"
+"ProductImageLarge": "/Files/Images/TruvioCommerce/products/tc-tile-documents-0051.png"
+"ProductLink1": 
+"ProductLink2": 
+"ProductPrice": 45
+"ProductStock": 148
+"ProductStockGroupId": 
+"ProductWeight": 0
+"ProductVolume": 0
+"ProductVatGrpId": 
+"ProductManufacturerId": 
+"ProductActive": true
+"ProductPeriodId": 
+"ProductCreated": 2026-09-13T22:45:50.6730000
+"ProductUpdated": 2026-09-13T22:45:50.6730000
+"ProductCustomFieldsXml": 
+"ProductType": 0
+"ProductPriceType": 0
+"ProductPriceCounter": 0
+"ProductVariantCounter": 0
+"ProductVariantProdCounter": 0
+"ProductVariantGroupCounter": 2
+"ProductRelatedCounter": 0
+"ProductUnitCounter": 0
+"ProductDefaultUnitId": 
+"ProductDefaultVariantComboId": 
+"ProductPriceMatrixUnit": 0
+"ProductPriceMatrixVariant": 0
+"ProductPriceMatrixPeriod": 0
+"ProductPriceMatrixMultiplePrices": 0
+"ProductPriceMatrixQuantitySpecification": 
+"ProductMetaTitle": 
+"ProductMetaKeywords": 
+"ProductMetaDescription": 
+"ProductMetaUrl": 
+"ProductCategoryFieldValues": 
+"ProductOptimizedFor": 
+"ProductCommentcount": 
+"ProductRating": 
+"ProductCost": 
+"ProductAutoId": 4717
+"ProductMetaCanonical": 
+"ProductExcludeFromIndex": false
+"ProductExcludeFromCustomizedUrls": false
+"ProductExcludeFromAllProducts": false
+"ProductPoints": 
+"ProductHidden": false
+"ProductShowInProductList": false
+"ProductApprovalState": 0
+"ProductWorkflowStateId": 0
+"ProductEAN": 
+"ProductWidth": 
+"ProductHeight": 
+"ProductDepth": 
+"ProductNeverOutOfStock": false
+"ProductPurchaseMinimumQuantity": 
+"ProductPurchaseQuantityStep": 
+"ProductExpectedDelivery": 
+"ProductDiscontinued": false
+"ProductReplacementProductId": 
+"ProductReplacementVariantId": 
+"ProductDiscontinuedAction": 0
+"MyVolume": 
+"MyDouble": 0
+"ProductExternalId": 
+"ProductExternalVariantId": 
+"ProductUniqueId": be19d9dd-c4af-f111-8d58-000d3a7e3238
+"ProductDiscontinuedDate": 

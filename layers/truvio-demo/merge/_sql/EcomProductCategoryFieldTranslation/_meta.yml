@@ -1,0 +1,77 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomProductCategoryFieldTranslation"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "FieldTranslationFieldCategoryId"
+- "FieldTranslationFieldId"
+- "FieldTranslationLanguageId"
+"identityColumns":
+- "FieldTranslationAutoId"
+"allColumns":
+- "FieldTranslationFieldId"
+- "FieldTranslationFieldCategoryId"
+- "FieldTranslationLanguageId"
+- "FieldTranslationFieldLabel"
+- "FieldTranslationFieldOptions"
+- "FieldTranslationAutoId"
+- "FieldTranslationDescription"
+- "FieldTranslationErrorMessage"
+"columnDefinitions":
+- "name": "FieldTranslationFieldId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldTranslationFieldCategoryId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldTranslationLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "FieldTranslationFieldLabel"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldTranslationFieldOptions"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldTranslationAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "FieldTranslationDescription"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "FieldTranslationErrorMessage"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
