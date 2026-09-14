@@ -1,0 +1,30 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductFieldId": "TCFIELD-PRODUCTSTOCK"
+"ProductFieldName": "Stock"
+"ProductFieldSystemName": "ProductStock"
+"ProductFieldTemplateName": ""
+"ProductFieldTypeId": 7
+"ProductFieldTypeName": "Kommatal"
+"ProductFieldLocked": false
+"ProductFieldSort": 0
+"ProductFieldListPresentationType": 1
+"ProductFieldAutoId": 100132
+"ProductFieldDoNotRender": false
+"ProductFieldValidationPattern": 
+"ProductFieldValidationErrorMessage": 
+"ProductFieldIsStandard": true
+"ProductFieldIsStandart": false
+"ProductFieldAllowChangesAcrossLanguages": true
+"ProductFieldAllowChangesAcrossVariants": true
+"ProductFieldRequired": false
+"ProductFieldReadOnly": false
+"ProductFieldValueConversionPreset": 
+"ProductFieldValueConversionDecimals": 0
+"ProductFieldValueConversionDisplayRule": 0
+"ProductFieldShowFieldOnBothMasterAndVariant": false
+"ProductFieldTypeSystemName": 
+"ProductFieldUseAsFacet": false
+"ProductFieldValueConversionGroupId": 
+"ProductFieldEditorConfiguration": 
+"ProductFieldMatrixAttributeGroupId": 

@@ -62,7 +62,7 @@ stays in `theme-default` (SPEC-06).
 
 Every row is **serialized SqlTable YAML** under [`merge/_sql/<Table>/`](merge/_sql/), one file
 per row key, listed in [`merge/merge-manifest.json`](merge/merge-manifest.json) and fenced by
-the 28 merge predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json), which
+the 29 merge predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json), which
 Compose-Edition unions into the composed `Serializer.config.json`. The rows land through the
 ordinary merge deserialize, so an online build (URL + Admin API key, no SQL channel) delivers
 the layer exactly as a local one does.
@@ -75,8 +75,9 @@ the layer exactly as a local one does.
 | Category fields and specs | `EcomProductCategory`, `EcomProductCategoryTranslation`, `EcomProductCategoryField`, `EcomProductCategoryFieldTranslation`, `EcomProductCategoryFieldValue`, `EcomFieldDisplayGroups`, `EcomFieldDisplayGroupTranslation`, `EcomFieldDisplayGroupFields` | 521 |
 | Imagery, documents, relations | `EcomDetailsGroup`, `EcomDetails`, `EcomProductsRelatedGroups`, `EcomProductsRelated` | 704 |
 | Identities and orders | `AccessUser`, `AccessUserGroupRelation`, `EcomOrders`, `EcomOrderLines` | 42 |
+| Product field settings | `EcomProductField` | 6 |
 
-1,871 rows in 28 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
+1,877 rows in 29 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
 counts an edition asserts are `EcomProducts` **97** and `EcomGroups` **16**.
 
 Two things do not fit a row file and ship as loose scripts under `merge/_sql/`, declared in
@@ -268,14 +269,52 @@ resolve in. A link that drops the `GroupID` is a broken link, not a slower one.
 
 This layer owns the `TC*` family: `TCGRP-*`, `TCPROD*`, `TCVG-*`, `TCVGR-*`, `TCVO-*`,
 `TC-PRICE-*`, `TC-BOM-*`, `TC-DETAIL-*`, `TC-HOVER-*`, `TC-GAL-*`, `TC-DOC-*`, `TCREL-*`,
-`TCO-*` and the `tc_*` product categories — the family
+`TCO-*`, `TCFIELD-*` and the `tc_*` product categories — the family
 [`base.contract.json`](../base/base.contract.json) `idRules.reservedFixtureKeys` reserves. Its
 int-identity rows sit at reserved ids above the contract's `100000` floor and the serializer
 writes them verbatim with `IDENTITY_INSERT`: `AccessUser` `100100`-`100103`, `EcomDetailsGroup`
 `100110` (`Images`) and `100111` (`Manuals`), `EcomFieldDisplayGroups` `100120` (`tc_specs`),
-`EcomStockUnit` `100201`-`100261`. The storefront binds the asset categories and the display
+`EcomStockUnit` `100201`-`100261`, `EcomProductField` `100130`-`100135`. The storefront binds the asset categories and the display
 group by system name, not by id. An addition writing its own rows into a base-owned table uses
 its `PACK-<NAME>-` prefix instead.
+
+## Variant editing on the six master-only fields
+
+DW 10.28 keeps six **standard** product fields master-only out of the box — `ProductNumber`,
+`ProductPrice`, `ProductStock`, `ProductShortDescription`, `ProductMetaTitle`,
+`ProductMetaDescription`. With the setting off, a save of a variant **master** through any
+route (the admin UI, Admin API `ProductSave`, MCP `patch_products_safe` / `update_products`)
+copies the master's values onto **every** variant row, and a save of a variant row is silently
+reverted while the tool echoes success (Foundry [#1253], [#1238], arm B).
+
+This layer ships **36 variant rows with their own `ProductNumber`, price and stock**, so it
+depends on that setting being ON. It therefore **ships the setting**, as six rows in
+`merge/_sql/EcomProductField/`.
+
+**Where DW keeps it.** Not in `GlobalSettings.Ecom.config`. The
+`/Ecom/ProductLanguageControl/Variant/<field>` nodes there are the **pre-migration** store —
+DW 10 carries a `/Ecom/ProductLanguageControl/MigrationToDatabaseDone` flag beside them and
+reads the live value from the database. The live store is one row per field in
+**`EcomProductField`**, column **`ProductFieldAllowChangesAcrossVariants`**, with
+`ProductFieldIsStandard = 1` marking a settings row that stands for a standard field rather
+than a custom one. Measured on `foundry.mydwsite4.com` (DW 10.28.10, Swift 2.4.0, 2026-09-14):
+the table is **empty** on a stock host — the config file still says
+`Variant/ProductNumber = True` while the behaviour is master-only — and Admin API
+`ProductAttributeSettingsSave` **creates** one row per field. Writing the six rows and then
+saving a master left all six variant rows of `TCPROD0001` byte-identical, with no host restart.
+
+**Why the PKs are `TCFIELD-*`.** `ProductFieldId` is minted by the `EcomNumbers` `FIELD`
+counter as `FIELD<n>`, and that counter is not advanced by a deserialize. A layer shipping
+`FIELD<n>` ids would hand the next host-minted field the same key. `TCFIELD-<SYSTEMNAME>` is
+outside the generator's shape, so the two never meet; the identities `100130`-`100135` sit in
+the layer's reserved range above the contract's `100000` floor.
+
+**Consumer note.** The rows are merge, so a host that already carries its own settings row for
+one of these six keeps it and gains a second row for the same system name. On a host built
+from these layers the table is empty and the six rows are the only ones.
+
+[#1253]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1253
+[#1238]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1238
 
 ## Traps the rows obey
 
@@ -293,6 +332,19 @@ its `PACK-<NAME>-` prefix instead.
   no service caches, so restart the host after the merge deserialize and before building the
   product index. The `sql[]` scripts run in the same phase and `demo-clock.sql` declares the
   restart (a SQL-inserted `ScheduledTask` row is invisible to a running app).
+- **Orders carry every price column, not just `OrderTotalPrice`.** Swift's My orders list and
+  order detail read the VAT-split columns (`OrderPriceWithVAT` / `WithoutVAT` / `VAT` /
+  `VATPercent`, the `OrderPriceBeforeFees*` set) and the line objects read
+  `OrderLinePriceWith(out)VAT` and `OrderLineUnitPrice*`; `OrderTotalPrice` alone renders as
+  zero (Foundry [#1239]). All 12 `TCO-*` orders and their 20 lines ship the full set at the
+  layer's `OrderVAT 0`: `WithVAT = WithoutVAT = ` the amount, VAT and VATPercent `0`, unit
+  prices from `OrderLineUnitPrice`, `BeforeFees` = the line sum, fees and discounts `0`.
+  **Do not repair an order with `OrderRecalculate`**: it re-prices every line from the LIVE
+  catalogue (measured: `TCO-0012-1` unit 60 -> 51, line 120 -> 102) and leaves
+  `OrderLineUnitPrice` stale, so a historical order stops being historical.
+
+[#1239]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1239
+
 - **Merge, never overwrite.** Every predicate is merge: a re-deserialize fills unset columns on
   its own keys and converges rather than duplicating, and never resets a persona, a price or the
   password `UserSetPassword` set. Merge cannot rename or delete, so a host seeded by an older

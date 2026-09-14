@@ -131,6 +131,14 @@
       "_why": "Merge: sample-data rows."
     },
     {
+      "name": "sample-data EcomProductField",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomProductField",
+      "where": "ProductFieldId LIKE 'TCFIELD-%'",
+      "_why": "Merge: the six STANDARD product fields DW 10.28 keeps master-only by default (variantEditing=false) - ProductNumber, ProductPrice, ProductStock, ProductShortDescription, ProductMetaTitle, ProductMetaDescription. The layer ships 36 variant rows carrying their own number, price and stock, so a master save with variant editing OFF copies the master's values onto every variant (Foundry #1253, arm B). DW 10.28 stores the per-field setting as an EcomProductField ROW (ProductFieldAllowChangesAcrossVariants; ProductFieldIsStandard = 1 marks a settings row for a standard field), NOT in GlobalSettings.Ecom.config - the /Ecom/ProductLanguageControl/Variant/* nodes are the pre-migration store and DW carries a MigrationToDatabaseDone flag beside them. Measured on foundry.mydwsite4.com 2026-09-14: the table is EMPTY on a stock Swift 2.4 host and Admin API ProductAttributeSettingsSave CREATES one row per field. PKs are TCFIELD-namespaced (base.contract.json idRules) so the layer never collides with the FIELDnnn ids the EcomNumbers 'FIELD' counter mints, and the identities are in the layer's reserved range at/above the 100000 floor."
+    },
+    {
       "name": "sample-data EcomProductCategoryField",
       "mode": "Merge",
       "providerType": "SqlTable",
