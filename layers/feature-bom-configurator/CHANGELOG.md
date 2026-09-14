@@ -1,5 +1,22 @@
 # Changelog — feature-bom-configurator
 
+## 1.2.2
+
+The `bom-cart-lines` probe moves from `PACK-BOM-0001` to `TCPROD0042`, the configurable Bundle Kit.
+The subject moves from a row the sample-data layer used to ship as a marker-string fixture to a row of the browsable brand catalogue, and the probe now binds to a subject the base contract guarantees (`base.contract.json` `sampleData.guaranteedRows`, new in base 3.5.0) rather than to a layer. sample-data 4.0.0 is the merge of the two sample-data layers; the `gate-fixtures` edition is deleted and `swift-demo` sets `sampleData: true`, so this probe resolves in the demo edition itself.
+
+**Why `TCPROD0042` and not `TCPROD0041`.** The brand catalogue's Bundles band carries both a fixed
+kit and configurable ones. `TCPROD0041` ("Truvio Bundle Kit 41") is `ProductType 0` and ships **no**
+`EcomProductItems` row: it is the fixed kit, the same members for every buyer, priced as one line,
+and there is nothing for a configurator to pick. `TCPROD0042` is `ProductType 2` with two
+group-bound slots, which is exactly the shape `PACK-BOM-0001` had.
+
+**The selections.** `selections[].group` is the BOM SLOT id (`EcomProductItems.ProductItemId`), not
+the `EcomGroups` id, so the two entries are `TC-BOM-0042-1` (binds `TCGRP-VARIANTS`, default
+`TCPROD0002`) and `TC-BOM-0042-2` (binds `TCGRP-DOCUMENTS`, default `TCPROD0051`). Each selects the
+**non-default** member of its slot — `TCPROD0003` and `TCPROD0052` — so the per-child disambiguation
+leg proves the selection was consumed rather than the slot default. `expectedChildLines` stays 2:
+two slots, two child lines. No page, template or fragment changes.
 
 ## 1.2.1
 

@@ -4,11 +4,11 @@
 "RmaClosed": false
 "RmaDeleted": false
 "RmaType": 1
-"RmaCustomerNumber": "98745621"
-"RmaCustomerCompany": "IMC Trading BV"
-"RmaCustomerName": "IMC User"
-"RmaCustomerEmail": "imcuser@example.com"
+"RmaCustomerNumber": "TC-100200"
+"RmaCustomerCompany": "Truvio Demo Account"
+"RmaCustomerName": "Truvio Buyer"
+"RmaCustomerEmail": "buyer@truvio-demo.example"
 "RmaCustomerCountryCode": "NL"
-"RmaDeliveryName": "IMC User"
-"RmaDeliveryCompany": "IMC Trading BV"
+"RmaDeliveryName": "Truvio Buyer"
+"RmaDeliveryCompany": "Truvio Demo Account"
 "RmaDeliveryCountryCode": "NL"

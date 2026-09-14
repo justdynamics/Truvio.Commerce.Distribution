@@ -19,6 +19,21 @@
       "files": [
         "_sql/EcomRmas/PACK-RMA-0001.yml"
       ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomRmaOrderLines",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomRmaOrderLines",
+      "files": [
+        "_sql/EcomRmaOrderLines/100301.yml",
+        "_sql/EcomRmaOrderLines/_meta.yml"
+      ]
     }
   ]
 }

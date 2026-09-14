@@ -14,10 +14,10 @@
   "Sort": 0
   "Title": "On sale now"
   "Products":
-  - "FIXT0002"
-  - "FIXT0004"
-  - "FIXT0006"
-  - "FIXT0010"
+  - "TCPROD0002"
+  - "TCPROD0004"
+  - "TCPROD0006"
+  - "TCPROD0010"
   "ImageAspectRatio": "4-3"
   "Layout": "2"
   "HideProductPrice": "False"

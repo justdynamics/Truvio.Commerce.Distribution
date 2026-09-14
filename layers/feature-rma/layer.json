@@ -1,6 +1,6 @@
 {
   "name": "feature-rma",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -8,13 +8,14 @@
     "merge"
   ],
   "fragmentTables": [
-    "EcomRmas"
+    "EcomRmas",
+    "EcomRmaOrderLines"
   ],
   "configRows": [
     {
       "table": "EcomRmas",
       "where": "RmaId = 'PACK-RMA-0001'",
-      "description": "seeded RMA return request (RmaType 1 = Return, RmaStateId 1 = 'Waiting for product(s) from customer', buyer 98745621) — the demo return the My returns customer-center page surfaces"
+      "description": "seeded RMA return request (RmaType 1 = Return, RmaStateId 1 = 'Waiting for product(s) from customer', account TC-100200, buyer 100101) — the demo return the My returns customer-center page surfaces"
     },
     {
       "table": "EcomRmaStates",
@@ -28,7 +29,7 @@
         "kind": "authenticated-body-contains",
         "path": "/en-us/customer-center/my-returns",
         "pattern": "Add new request",
-        "requiresFixtures": [ "FIXT-ORDER-RMA1" ]
+        "requiresFixtures": [ "TCO-0001" ]
       }
     ],
     "criticalPaths": [

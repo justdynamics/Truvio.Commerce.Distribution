@@ -23,14 +23,14 @@ and seeds nothing that already exists** — it only seeds the demo instance data
 
 | Row | Where | Purpose |
 |-----|-------|---------|
-| **RMA return request** `PACK-RMA-0001` | this layer — `merge/_sql/EcomRmas/PACK-RMA-0001.yml` | a pre-existing Return (`RmaType 1`, state 1, buyer `98745621`) so the My returns page shows a real request, not the empty state |
-| **Delivered order** `FIXT-ORDER-RMA1` (+ its order line) | **sample-data** (`merge/_sql/catalog.sql`) | a completed order (`OrderStateId OS2`) owned by buyer `98745621` to return against — orders are demo content, so they live in sample-data (P3 interplay) |
-| **RMA ↔ order-line link** (`EcomRmaOrderLines`) | **sample-data** (`merge/_sql/catalog.sql`) | ties `PACK-RMA-0001` to the delivered order line so `Ecom:RMA.OrderID` resolves. `EcomRmaOrderLines.RmaOrderLineId` is an **int IDENTITY PK** — the serializer supports natural-key inserts only for four declared relation tables (base contract), not this one, so the link is seeded via sample-data raw SQL, which handles identity columns deterministically |
+| **RMA return request** `PACK-RMA-0001` | this layer — `merge/_sql/EcomRmas/PACK-RMA-0001.yml` | a pre-existing Return (`RmaType 1`, state 1, account `TC-100200`) so the My returns page shows a real request, not the empty state |
+| **Delivered order** `TCO-0001` (+ its two order lines) | **sample-data** — a `base.contract.json` `sampleData.guaranteedRows` subject | a completed order (`OrderStateId OS2`) owned by buyer `100101` on account `TC-100200` to return against — orders are demo content, so they live in sample-data |
+| **RMA ↔ order-line link** `100301` (`EcomRmaOrderLines`) | this layer — `merge/_sql/EcomRmaOrderLines/100301.yml` | ties `PACK-RMA-0001` to `TCO-0001-1` so `Ecom:RMA.OrderID` resolves. `RmaOrderLineId` is an **int IDENTITY PK**, declared in the table's `_meta.yml` as an identity column so the engine writes `100301` verbatim under `IDENTITY_INSERT`; the id sits above the base contract's `100000` floor |
 
 ### sample-data dependency (noted per the schema mechanism)
 
-The seeded request is **surfaced** only when the buyer identity (`98745621`) and the delivered order
-exist — i.e. an edition with `sampleData: true`. The dependency is declared machine-readably via
+The seeded request is **surfaced** only when the buyer identity (`100101`) and the delivered order
+`TCO-0001` exist — i.e. an edition with `sampleData: true`. The dependency is declared machine-readably via
 `configRows` (the `EcomRmas` EXISTS probe fires after activation) and enforced by the gate. The layer
 ships **no `fragmentContent`**: it must not re-ship the surface-owned My returns page (base-contract
 content-path collision rule) — it references it and seeds against it.
@@ -40,7 +40,7 @@ content-path collision rule) — it references it and seeds against it.
 | Probe | Expectation |
 |-------|-------------|
 | `criticalPath /en-us/customer-center/my-returns` | the My RMA customer-center page responds 2xx |
-| `authenticated-body-contains /en-us/customer-center/my-returns` (`Add new request`) | signed in as buyer `98745621`, the My RMA customer-center app renders (its "+ Add new request" affordance) — proves the RMA CC surface is wired and live for the buyer |
+| `authenticated-body-contains /en-us/customer-center/my-returns` (`Add new request`) | signed in as buyer `100101`, the My RMA customer-center app renders (its "+ Add new request" affordance) — proves the RMA CC surface is wired and live for the buyer |
 | `configRows EcomRmas RmaId='PACK-RMA-0001'` | deterministic SQL proof the return request row was seeded |
 | `configRows EcomRmaStates RmaStateDefaultName='Rejected'` | the OOTB status flow is present (platform default) |
 
@@ -48,7 +48,7 @@ content-path collision rule) — it references it and seeds against it.
 
 The seeded request `PACK-RMA-0001` is present and **fully linked** (verified in the gate DB: EcomRmas +
 EcomRmaOrderLines → the delivered order line → an order the buyer owns), and the buyer's **My orders**
-page renders `FIXT-ORDER-RMA1` correctly. But the Swift **My returns** list shows "No Requests found":
+page renders `TCO-0001` correctly. But the Swift **My returns** list shows "No Requests found":
 the `eCom_CustomerCenter` RMA view (`RMASource=orders`, `RMAList.cshtml`) surfaces RMAs created through
 its own request flow, **not** RMA rows inserted directly by SQL/serializer. This is a DW platform
 behaviour, not a data defect — no amount of correct seeding makes the list render a raw row (a fabricated
@@ -60,7 +60,7 @@ seeded precisely so a human can drive it).
 
 ## Manual UAT (beyond the automated probes)
 
-Buyer signs in → My returns → "+ Add new request" → picks the delivered order `FIXT-ORDER-RMA1` → selects
+Buyer signs in → My returns → "+ Add new request" → picks the delivered order `TCO-0001` → selects
 items → chooses a request type → creates. The new request appears in the buyer's list and in the CSR's
 order-list Actions menu; the CSR advances the state through the OOTB flow. This flow is entirely OOTB
 (zero layer code); the layer's job is to seed the order to return against and one pre-existing request.

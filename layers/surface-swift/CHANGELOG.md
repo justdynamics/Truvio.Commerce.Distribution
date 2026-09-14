@@ -1,5 +1,13 @@
 # Changelog — surface-swift
 
+## 1.13.2
+
+Patch: the stock `Swift - Newsletter - Sale Email` product rail named `FIXT0002` / `FIXT0004` /
+`FIXT0006` / `FIXT0010`, rows sample-data 4.0.0 no longer ships, so the rail would have rendered
+empty on every composition. The four ids are repointed to the brand masters at the same ordinals
+(`TCPROD0002` / `TCPROD0004` / `TCPROD0006` / `TCPROD0010`). No other content, item type, template
+or file changes.
+
 ## 1.13.1
 
 ### Binding the shop's product primary page is a consumer obligation (Foundry #969)

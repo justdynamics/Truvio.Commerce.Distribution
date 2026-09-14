@@ -14,10 +14,10 @@
   "Sort": 0
   "Title": "Placeholder — product rail heading (seasonal product selection)"
   "Products":
-  - "FIXT0004"
-  - "FIXT0005"
-  - "FIXT0007"
-  - "FIXT0014"
+  - "TCPROD0004"
+  - "TCPROD0005"
+  - "TCPROD0007"
+  - "TCPROD0014"
   "ImageAspectRatio": "4-3"
   "Layout": "2"
   "HideProductPrice": "True"

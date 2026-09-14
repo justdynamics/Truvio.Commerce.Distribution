@@ -14,10 +14,10 @@
   "Sort": 0
   "Title": "Placeholder — product rail heading (items related to the abandoned cart)"
   "Products":
-  - "FIXT0001"
-  - "FIXT0003"
-  - "FIXT0009"
-  - "FIXT0013"
+  - "TCPROD0001"
+  - "TCPROD0003"
+  - "TCPROD0009"
+  - "TCPROD0013"
   "ImageAspectRatio": "4-3"
   "Layout": "2"
   "HideProductPrice": "True"

@@ -1,6 +1,6 @@
 {
   "name": "feature-reordering",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "repositoryName": "ProductsFrontend",
@@ -32,8 +32,8 @@
       {
         "kind": "sku-validation",
         "path": "/en-us/quick-order",
-        "sku": "FIXT-0001",
-        "requiresFixtures": [ "FIXT-0001" ]
+        "sku": "TC-VAR-0001",
+        "requiresFixtures": [ "TC-VAR-0001" ]
       }
     ],
     "criticalPaths": [

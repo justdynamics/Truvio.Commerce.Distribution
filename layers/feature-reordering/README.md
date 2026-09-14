@@ -26,7 +26,7 @@ The pad validates SKUs against the **ProductsFrontend** repository feed (the sam
 Shop PLP and the Kit Configurator use). `ProductsFrontend/Products.query` is what the Swift files
 overlay deploys and what every working sibling `eCom_ProductCatalog` paragraph binds; a
 `<IndexQuery>` naming a repository that is not on disk yields an empty feed body with HTTP 200 and no
-error, so every SKU reads "Unknown SKU". The `sku-validation` probe resolves the sample-data catalog SKU **`FIXT-0001`**, so the
+error, so every SKU reads "Unknown SKU". The `sku-validation` probe resolves the sample-data catalogue SKU **`TC-VAR-0001`**, so the
 layer's live probes require an edition with `sampleData: true` (e.g. `swift-demo`). The **content
 fragment deserialize is isolated** (the Quick Order pages attach only to base-provided structural
 ancestors — area, Navigation, Secondary Navigation — never re-shipping them, per the base-contract
@@ -50,7 +50,7 @@ matching `areaName`/`areaId` in `merge/merge-manifest.json` + `fragmentContent[]
 |-------|-------------|
 | `http-body-contains /en-us/quick-order` | addmulti form marker (`name="cartcmd" ... value="addmulti"`) |
 | `http-body-contains /en-us/express-buy` | `id="ExpressBuySearchForm"` (buy-it-again surface, anonymous) |
-| `sku-validation /en-us/quick-order` (sku `FIXT-0001`) | the Quick Order feed resolves the sample-data catalog SKU — proves the pad's index-feed wiring |
+| `sku-validation /en-us/quick-order` (sku `TC-VAR-0001`) | the Quick Order feed resolves the sample-data catalogue SKU (`TCPROD0001`, the first Variants master; a base-contract `sampleData.guaranteedRows` subject) — proves the pad's index-feed wiring |
 
 ## `Template file not found` on the Quick Order page is platform noise, not a layer defect (Foundry #143)
 
@@ -79,7 +79,7 @@ Swift-wide, not layer-scoped. The same gate host logs the identical entry for:
 | `ID=207` Quick Order | `ExpressBuySearchResponse.cshtml` | this layer |
 
 And the Quick Order feed demonstrably renders. The `sku-validation` probe reads the **module-only** feed
-body (`Content.CreateFeedContent`, not the page), and it PASSes with *"resolved ProductNumber `FIXT-0001`
+body (`Content.CreateFeedContent`, not the page), and it PASSes with *"resolved ProductNumber `TC-VAR-0001`
 in an ExpressBuySearchResponse article"* on the same host, in the same run that logged the error (Foundry
 run `20260727-193109`). A missing list template returns an empty feed body and FAILs that probe.
 

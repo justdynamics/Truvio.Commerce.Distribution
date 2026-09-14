@@ -1,5 +1,15 @@
 # Changelog — feature-subscription-orders
 
+## 1.2.2
+
+The `checkout-recurring` probe buys `TCPROD0061` instead of `PACK-SUB-PROD1`. The subject moves from a row the sample-data layer used to ship as a marker-string fixture to a row of the browsable brand catalogue, and the probe now binds to a subject the base contract guarantees (`base.contract.json` `sampleData.guaranteedRows`, new in base 3.5.0) rather than to a layer. sample-data 4.0.0 is the merge of the two sample-data layers; the `gate-fixtures` edition is deleted and `swift-demo` sets `sampleData: true`, so this probe resolves in the demo edition itself.
+
+`PACK-SUB-PROD1` was the one probe subject the brand catalogue had no equivalent for, so
+sample-data 4.0.0 authors one: `TCPROD0061` / `TC-SUB-0061` "Truvio Subscription Plan 61" in
+`TCGRP-PRICE-STRUCTURES`, EUR list 49, in stock, with the spec set its siblings carry. Everything
+else about the probe is unchanged — `PAY2`, `SHIP9`, `checkoutStepIndex` 1, the delta assert on
+`EcomRecurringOrder` — and so are the pages, the item types and the `Place recurring orders`
+scheduled-task row.
 
 ## 1.2.1
 

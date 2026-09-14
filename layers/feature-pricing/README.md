@@ -9,9 +9,9 @@ D-D); the reordering half (Quick Order + Express Buy) moved to `feature-reorderi
 
 | Capability | How | Artifact |
 |------------|-----|----------|
-| Qty-break tier pricing | Anonymous-visible `EcomPrices` tier rows on **layer-owned** product `PACK-RPP-PROD1` (RPP-TIER-01, base 4995 EUR): qty 5 → 4500, qty 10 → 4200, qty 25 → 3900 | `sample-data` `merge/_sql/feature-fixtures.sql` |
-| Customer contract pricing | Buyer-scoped `EcomPrices` row on **layer-owned** product `PACK-RPP-PROD2` (RPP-CTR-01, base 1599 EUR): 1399 EUR for customer number `98745621` | `sample-data` `merge/_sql/feature-fixtures.sql` |
-| Catalogue the prices bind to | Group `PACK-RPP-GRP1` (bound to `SHOP1`) + products `PACK-RPP-PROD1/2` + group/shop relations — seeded by the `sample-data` layer since 1.1.0, not by this one (Foundry 960) | `sample-data` `merge/_sql/feature-fixtures.sql` |
+| Qty-break tier pricing | `EcomPrices` tier rows on the sample-data product `TCPROD0020` (`TC-PRC-0020`, list 120 EUR): qty 5 → 108, qty 10 → 96, qty 25 → 84 | `sample-data` `merge/_sql/EcomPrices/TC-PRICE-Q{05,10,25}-0020.yml` |
+| Customer contract pricing | Account-scoped `EcomPrices` row on the sample-data product `TCPROD0046` (`TC-CTR-0046`, list 45 EUR): 36.90 EUR for customer number `TC-100200` | `sample-data` `merge/_sql/EcomPrices/TC-PRICE-CTR-0046.yml` |
+| Catalogue the prices bind to | The sample-data brand catalogue: `TCGRP-PRICE-STRUCTURES` → `TCPROD0020` and `TCGRP-CONTRACT-PRICING` → `TCPROD0046`, both bound to `SHOP1`. This layer ships zero catalogue rows and binds only to `base.contract.json` `sampleData.guaranteedRows` | `sample-data` `merge/_sql/` |
 | Cart-enforced quantity tiers | `ReorderingPricingQtyBreakProvider` (**compile-optional**) — stock cart resolution ignores tier quantities at cart time, so tier rows render on PDP surfaces but the cart charges the base price without it | `src/ReorderingPricingQtyBreakProvider.cs` |
 
 
@@ -28,8 +28,8 @@ Declared machine-readably in [`layer.json`](layer.json) under `customCode` (`com
 
 | | Without compiling (data-only) | With the opt-in compile |
 |---|---|---|
-| **Customer-contract pricing** — the **zero-code headline** | ✅ Enforced end-to-end by the stock `DefaultPriceProvider`. `PACK-RPP-0004` (`PriceUserCustomerNumber 98745621`) prices `PACK-RPP-PROD2` at **1399** for customer `98745621`. No custom code. | ✅ Identical — the provider returns `null` for base/contract rows, always falling through. |
-| **Quantity-tier pricing** | ⚠️ Tier rows ship as data and render on tier-aware surfaces, but the stock cart resolver ignores tier quantities — the cart charges the **base** price. | ✅ `ReorderingPricingQtyBreakProvider` (assembly-scan, non-exclusive) enforces tiers at cart time: `PACK-RPP-PROD1` prices **4500 / 4200 / 3900** at qty 5 / 10 / 25. |
+| **Customer-contract pricing** — the **zero-code headline** | ✅ Enforced end-to-end by the stock `DefaultPriceProvider`. `TC-PRICE-CTR-0046` (`PriceUserCustomerNumber TC-100200`) prices `TCPROD0046` at **36.90** for the demo account, against a 45.00 list and a 39.60 customer-group row. No custom code. | ✅ Identical — the provider returns `null` for base/contract rows, always falling through. |
+| **Quantity-tier pricing** | ⚠️ Tier rows ship as data and render on tier-aware surfaces, but the stock cart resolver ignores tier quantities — the cart charges the **customer-group** price (108). | ✅ `ReorderingPricingQtyBreakProvider` (assembly-scan, non-exclusive) enforces tiers at cart time: `TCPROD0020` prices **108 / 96 / 84** at qty 5 / 10 / 25 against a 120 list. |
 
 **Opt-in compile step:** add `src/*.cs` to the Swift solution's custom-code project and build; the
 provider self-registers via assembly scan (no config row). Compiling is **additive** — it never removes
@@ -52,23 +52,29 @@ independent of `feature-reordering`), and it processes the `cartcmd=addmulti` nu
 
 | Probe | Expectation |
 |-------|-------------|
-| `cart-price` PACK-RPP-PROD2 × 1 via `/en-us/express-buy` → `/en-us/cart/` | unit price **1399** as the signed-in buyer 98745621 (contract row applied at cart time — data-only) |
-| `cart-price` PACK-RPP-PROD1 × 5 via `/en-us/express-buy` → `/en-us/cart/` | unit price **4500** (tier applied end-to-end — requires the compiled provider) |
+| `cart-price` TCPROD0046 × 1 via `/en-us/express-buy` → `/en-us/cart/` | unit price **36.90** as the signed-in buyer on account `TC-100200` (contract row applied at cart time — data-only; list 45.00, customer-group 39.60) |
+| `cart-price` TCPROD0020 × 10 via `/en-us/express-buy` → `/en-us/cart/` | unit price **96** (tier applied end-to-end — requires the compiled provider) |
+
+**Why quantity 10 and not 5.** `TCPROD0020` also carries a customer-group row `TC-PRICE-GRP-0020`
+at 108 for group `1325` at quantity 1, and the probe signs in as the buyer, who is a member of
+that group. At quantity 5 the expected amount would be 108 whether or not the tier ladder fired,
+so the assert would be vacuous. 96 is reachable only through `TC-PRICE-Q10-0020`.
 
 Displayed cart prices are VAT/locale-dependent per shop configuration; the probe matches locale-tolerantly
 and reports observed price tokens on FAIL.
 
 ## Canonical buyer contract
 
-Customer number **`98745621`**, username **`IMCUser`** — seeded per edition by the gate
-(`Invoke-SeedGating`, pre-host-start; requires `sampleData: true`). Contract rows scope by
+Customer number **`TC-100200`**, buyer **`TruvioBuyer`** (`AccessUser` `100101`) — a
+`base.contract.json` `sampleData.guaranteedRows` subject, present when an edition sets
+`sampleData: true`. Contract rows scope by
 **`PriceUserCustomerNumber` only** (`PriceCustomerGroupId` scoping silently fails frontend resolution).
 
 ## CRITICAL: deactivate before re-serializing the base layer (Pitfall 6)
 
-The base owns `EcomPrices` as a whole-table predicate; any `Invoke-Serialize` run against a host with this
-layer ACTIVE captures the `PACK-RPP-*` rows into the base. **Always run `Invoke-LayerDeactivation` for
-this layer before any `Invoke-Serialize` run.**
+The base owns `EcomPrices` as a whole-table predicate; any `Invoke-Serialize` run against a host carrying
+sample data captures the `TC-PRICE-*` rows into the base. **Always run `Invoke-LayerDeactivation` for the
+composed layers before any `Invoke-Serialize` run.**
 
 ## Provenance
 
