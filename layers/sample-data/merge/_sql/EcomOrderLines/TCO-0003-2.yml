@@ -22,13 +22,13 @@
 "OrderLineWeight": 
 "OrderLineVolume": 
 "OrderLinePriceWithVAT": 0
-"OrderLinePriceWithoutVAT": 
-"OrderLinePriceVAT": 
-"OrderLinePriceVATPercent": 
-"OrderLineUnitPriceWithVAT": 
-"OrderLineUnitPriceWithoutVAT": 
-"OrderLineUnitPriceVAT": 
-"OrderLineUnitPriceVATPercent": 
+"OrderLinePriceWithoutVAT": 0
+"OrderLinePriceVAT": 0
+"OrderLinePriceVATPercent": 0
+"OrderLineUnitPriceWithVAT": 0
+"OrderLineUnitPriceWithoutVAT": 0
+"OrderLineUnitPriceVAT": 0
+"OrderLineUnitPriceVATPercent": 0
 "OrderLinePageId": 
 "OrderLineDiscountId": 
 "OrderLineFieldValues": 
@@ -43,10 +43,10 @@
 "OrderLineRewardPoints": 
 "OrderLineRewardId": 
 "OrderLineReverseChargeForVat": 
-"OrderLineTotalDiscountWithVAT": 
-"OrderLineTotalDiscountWithoutVAT": 
-"OrderLineTotalDiscountVAT": 
-"OrderLineTotalDiscountVATPercent": 
+"OrderLineTotalDiscountWithVAT": 0
+"OrderLineTotalDiscountWithoutVAT": 0
+"OrderLineTotalDiscountVAT": 0
+"OrderLineTotalDiscountVATPercent": 0
 "OrderLineGiftCardCode": 
 "OrderLineDiscountPercentage": 0
 "OrderLineUnitPriceBeforeDiscount": 0

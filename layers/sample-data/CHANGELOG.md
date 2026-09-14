@@ -1,5 +1,68 @@
 # Changelog — sample-data
 
+## 4.1.1
+
+### The orders carry their price columns, and variant editing ships with the layer
+
+**PATCH. Two data defects the live 5.1 arms surfaced, fixed in the layer. No id change, no
+row removed; six settings rows added.**
+
+**1. Orders landed with zero totals online (Foundry [#1239], arm B).** The 12 `TCO-*` orders
+shipped `OrderTotalPrice` and the lines shipped `OrderLinePriceWithVAT`, but every VAT-split
+column Swift actually reads was empty, so My orders and the order detail rendered `0` after a
+clean delivery. `OrderRecalculate` on a host repaired them, which is why the defect never
+reached a gate leg.
+
+The column set was derived by running `OrderRecalculate` on ONE order (`TCO-0012`) on
+`foundry.mydwsite4.com` and diffing the row before and after, not from guesswork. The price
+columns it writes, now shipped on all 12 orders and 20 lines:
+
+| `EcomOrders` | `EcomOrderLines` |
+|---|---|
+| `OrderPriceWithVAT`, `OrderPriceWithoutVAT`, `OrderPriceVAT`, `OrderPriceVATPercent` | `OrderLinePriceWithVAT`, `OrderLinePriceWithoutVAT`, `OrderLinePriceVAT`, `OrderLinePriceVATPercent` |
+| `OrderPriceBeforeFeesWithVAT`, `OrderPriceBeforeFeesWithoutVAT`, `OrderPriceBeforeFeesVAT`, `OrderPriceBeforeFeesVATPercent` | `OrderLineUnitPriceWithVAT`, `OrderLineUnitPriceWithoutVAT`, `OrderLineUnitPriceVAT`, `OrderLineUnitPriceVATPercent` |
+| `OrderShippingFeeWithVAT` / `WithoutVAT` / `VAT` / `VATPercent`, `OrderPaymentFeeWithVAT` / `WithoutVAT` / `VAT` / `VATPercent` | `OrderLineTotalDiscountWithVAT`, `OrderLineTotalDiscountWithoutVAT`, `OrderLineTotalDiscountVAT`, `OrderLineTotalDiscountVATPercent` |
+| `OrderTotalDiscountWithVAT` / `WithoutVAT` / `VAT` / `VATPercent` | |
+
+The values follow the layer's own VAT rule (`OrderVAT 0`) rather than the recalculated ones:
+`WithVAT = WithoutVAT =` the amount, `VAT = 0`, `VATPercent = 0`; line totals are
+`OrderLineUnitPrice x OrderLineQuantity`; unit columns are `OrderLineUnitPrice`;
+`OrderPriceBeforeFees*` is the line sum; the shipping and payment fees stay as shipped (`0` on
+every order). The line sum equals `OrderTotalPrice` on all 12 orders, so nothing moved:
+`TCO-0001` = 60 x 2 + 75 x 1 = **195**.
+
+`OrderRecalculate` is deliberately NOT the fix. It re-prices every line from the LIVE catalogue
+(`TCO-0012-1` came back unit 60 -> 51, line 120 -> 102) and leaves `OrderLineUnitPrice` stale,
+so a historical order would stop being historical on every host.
+
+A new `configRow` asserts `EcomOrders` `TCO-0001` `OrderPriceWithVAT = 195`, so the gate proves
+the totals from now on.
+
+**2. The six master-only product fields reset the variant rows (Foundry [#1253], [#1238], arm
+B).** DW 10.28 keeps `ProductNumber`, `ProductPrice`, `ProductStock`,
+`ProductShortDescription`, `ProductMetaTitle` and `ProductMetaDescription` master-only by
+default. This layer ships 36 variant rows with their own number, price and stock, so the first
+save of a variant master through any route wiped them.
+
+The setting lives in the DATABASE, not in `GlobalSettings.Ecom.config`: one row per field in
+**`EcomProductField`**, column **`ProductFieldAllowChangesAcrossVariants`**, with
+`ProductFieldIsStandard = 1`. The `/Ecom/ProductLanguageControl/Variant/*` nodes in the config
+file are the pre-migration store (DW carries a `MigrationToDatabaseDone` flag beside them) and
+still read `True` for `ProductNumber` on a host whose behaviour is master-only. So the layer
+SHIPS the setting: six `merge/_sql/EcomProductField/TCFIELD-*.yml` rows behind a new merge
+predicate, with a `configRow` on `TCFIELD-PRODUCTNUMBER` proving it landed. The PKs are
+`TCFIELD-<SYSTEMNAME>` rather than the `FIELD<n>` the `EcomNumbers` `FIELD` counter mints,
+because a deserialize does not advance that counter; the identities `100130`-`100135` are in
+the layer's reserved range above the `100000` floor.
+
+The base is untouched: it ships no `EcomProductField` row and owns no part of this setting.
+
+Rows 1,871 -> 1,877; tables 28 -> 29; predicates 28 -> 29.
+
+[#1239]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1239
+[#1253]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1253
+[#1238]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1238
+
 ## 4.1.0
 
 ### The brand assets ship in the layer, and the logo and the home images are bound

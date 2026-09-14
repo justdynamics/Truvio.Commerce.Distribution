@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "mode": "merge",
-  "writtenAtUtc": "2026-09-13T22:55:41Z",
+  "writtenAtUtc": "2026-09-14T15:03:01Z",
   "complete": true,
   "excludeFieldsByItemType": {},
   "excludeXmlElementsByType": {},
@@ -775,6 +775,26 @@
         "_sql/EcomProductCategoryTranslation/tc_data_models$$ENU.yml",
         "_sql/EcomProductCategoryTranslation/tc_users$$ENU.yml",
         "_sql/EcomProductCategoryTranslation/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomProductField",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomProductField",
+      "files": [
+        "_sql/EcomProductField/TCFIELD-PRODUCTMETADESCRIPTION.yml",
+        "_sql/EcomProductField/TCFIELD-PRODUCTMETATITLE.yml",
+        "_sql/EcomProductField/TCFIELD-PRODUCTNUMBER.yml",
+        "_sql/EcomProductField/TCFIELD-PRODUCTPRICE.yml",
+        "_sql/EcomProductField/TCFIELD-PRODUCTSHORTDESCRIPTION.yml",
+        "_sql/EcomProductField/TCFIELD-PRODUCTSTOCK.yml",
+        "_sql/EcomProductField/_meta.yml"
       ]
     },
     {

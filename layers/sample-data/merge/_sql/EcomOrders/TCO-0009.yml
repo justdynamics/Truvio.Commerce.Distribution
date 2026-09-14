@@ -60,22 +60,22 @@
 "OrderCustomerComment": 
 "OrderWeight": 
 "OrderVolume": 
-"OrderPriceWithVAT": 
-"OrderPriceWithoutVAT": 
-"OrderPriceVAT": 
-"OrderPriceVATPercent": 
-"OrderShippingFeeWithVAT": 
-"OrderShippingFeeWithoutVAT": 
-"OrderShippingFeeVAT": 
-"OrderShippingFeeVATPercent": 
-"OrderPaymentFeeWithVAT": 
-"OrderPaymentFeeWithoutVAT": 
-"OrderPaymentFeeVAT": 
-"OrderPaymentFeeVATPercent": 
-"OrderPriceBeforeFeesWithVAT": 
-"OrderPriceBeforeFeesWithoutVAT": 
-"OrderPriceBeforeFeesVAT": 
-"OrderPriceBeforeFeesVATPercent": 
+"OrderPriceWithVAT": 165
+"OrderPriceWithoutVAT": 165
+"OrderPriceVAT": 0
+"OrderPriceVATPercent": 0
+"OrderShippingFeeWithVAT": 0
+"OrderShippingFeeWithoutVAT": 0
+"OrderShippingFeeVAT": 0
+"OrderShippingFeeVATPercent": 0
+"OrderPaymentFeeWithVAT": 0
+"OrderPaymentFeeWithoutVAT": 0
+"OrderPaymentFeeVAT": 0
+"OrderPaymentFeeVATPercent": 0
+"OrderPriceBeforeFeesWithVAT": 165
+"OrderPriceBeforeFeesWithoutVAT": 165
+"OrderPriceBeforeFeesVAT": 0
+"OrderPriceBeforeFeesVATPercent": 0
 "OrderCustomerAccessUserId": 100101
 "OrderCustomerAccessUserUserName": 
 "OrderShippingMethodId": 
@@ -134,10 +134,10 @@
 "OrderPriceCalculationDate": 
 "OrderTotalPoints": 
 "OrderTotalRewardPoints": 
-"OrderTotalDiscountWithVAT": 
-"OrderTotalDiscountWithoutVAT": 
-"OrderTotalDiscountVAT": 
-"OrderTotalDiscountVATPercent": 
+"OrderTotalDiscountWithVAT": 0
+"OrderTotalDiscountWithoutVAT": 0
+"OrderTotalDiscountVAT": 0
+"OrderTotalDiscountVATPercent": 0
 "OrderIsQuote": false
 "OrderTransactionCardNumber": 
 "OrderCheckoutPageID": 0

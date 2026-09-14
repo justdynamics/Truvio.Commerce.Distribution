@@ -1,0 +1,30 @@
+﻿"ownership":
+  "mode": "merge"
+"ProductFieldId": "TCFIELD-PRODUCTNUMBER"
+"ProductFieldName": "Number"
+"ProductFieldSystemName": "ProductNumber"
+"ProductFieldTemplateName": ""
+"ProductFieldTypeId": 1
+"ProductFieldTypeName": "Tekst (255)"
+"ProductFieldLocked": false
+"ProductFieldSort": 0
+"ProductFieldListPresentationType": 1
+"ProductFieldAutoId": 100130
+"ProductFieldDoNotRender": false
+"ProductFieldValidationPattern": 
+"ProductFieldValidationErrorMessage": 
+"ProductFieldIsStandard": true
+"ProductFieldIsStandart": false
+"ProductFieldAllowChangesAcrossLanguages": true
+"ProductFieldAllowChangesAcrossVariants": true
+"ProductFieldRequired": false
+"ProductFieldReadOnly": false
+"ProductFieldValueConversionPreset": 
+"ProductFieldValueConversionDecimals": 0
+"ProductFieldValueConversionDisplayRule": 0
+"ProductFieldShowFieldOnBothMasterAndVariant": false
+"ProductFieldTypeSystemName": 
+"ProductFieldUseAsFacet": false
+"ProductFieldValueConversionGroupId": 
+"ProductFieldEditorConfiguration": 
+"ProductFieldMatrixAttributeGroupId": 
