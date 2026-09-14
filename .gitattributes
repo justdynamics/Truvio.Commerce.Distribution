@@ -15,3 +15,12 @@
 # Marking it binary stops both, and pairs with the LF pin above so one regeneration check
 # measures the generator on either kind of file.
 *.png binary
+
+# The brand assets sample-data 4.1.0 ships under
+# layers/sample-data/files/Images/TruvioCommerce/{brand,scenic,people}/. Each one is
+# sha256-pinned in brand/brand-assets.manifest.json, so any byte git rewrites on checkout or
+# commit breaks the pin the manifest is there to prove. The same reasoning as the *.png rule
+# above, applied to the raster formats the manifest names.
+*.webp binary
+*.jpeg binary
+*.jpg binary
