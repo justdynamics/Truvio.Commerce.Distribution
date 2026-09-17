@@ -24,6 +24,9 @@
 	links below are therefore emitted with the current path already in front of the
 	fragment, and the theme's JS re-points them again after any client-side URL change.
 	A raw fragment here would look correct in the markup and be wrong in the browser.
+	The QUERY is part of that path. This host serves a PDP as ?GroupID=..&ProductID=..,
+	so a base of AbsolutePath alone points every anchor at the product LIST instead of
+	the product the reader is on.
 
 	THE SHELL ALWAYS RENDERS, even with no links, because an element that disappears when
 	its data is missing is a section that cannot be measured, and a design assert bound to
@@ -37,7 +40,8 @@
 		ariaLabel = Translate("Jump to a section");
 	}
 
-	string basePath = Dynamicweb.Context.Current?.Request?.Url?.AbsolutePath ?? string.Empty;
+	var requestUrl = Dynamicweb.Context.Current?.Request?.Url;
+	string basePath = (requestUrl?.AbsolutePath ?? string.Empty) + (requestUrl?.Query ?? string.Empty);
 }
 
 <nav class="td-anchornav" data-td-anchornav="@Model.ID" aria-label="@ariaLabel">

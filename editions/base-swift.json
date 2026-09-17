@@ -3,7 +3,7 @@
   "from": "base@3.5.1",
   "add": [],
   "surfaces": [
-    "surface-swift@1.13.6"
+    "surface-swift@1.13.7"
   ],
   "sampleData": false,
   "themes": [
