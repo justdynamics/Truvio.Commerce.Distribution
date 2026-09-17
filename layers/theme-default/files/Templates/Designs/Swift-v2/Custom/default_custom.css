@@ -98,8 +98,15 @@
   color: var(--dw-color-accent, var(--dw-color-button-primary));
 }
 
-/* === Primary button hover — filled variant only (P4) === */
-[data-dw-button]:not([data-dw-button="outline"]):not([data-dw-button="ghost"]):not([data-dw-button="secondary"]):hover {
+/* === Primary button hover — filled variant only (P4) ===
+ * The :not() chain must name EVERY non-filled variant Swift can emit, and Swift 2.4
+ * emits more of them than the three below once a customer-center or CSR list is on
+ * the page (Foundry #1274): `link` (a text button), `outline-primary` and
+ * `outline-secondary`, and an EMPTY `data-dw-button` on the row action toggle
+ * (`<button class="btn btn-outline-secondary" data-dw-button>`). Each of those used to
+ * take the filled hover and paint a solid disc under same-colour text or an icon.
+ * Measured before the guard: link button bg rgb(50,63,75) under text rgb(10,46,91). === */
+[data-dw-button]:not([data-dw-button="outline"]):not([data-dw-button="ghost"]):not([data-dw-button="secondary"]):not([data-dw-button="link"]):not([data-dw-button=""]):not([data-dw-button^="outline-"]):hover {
   background-color: var(--td-ink-soft);
   border-color: var(--td-ink-soft);
   transition: background-color 0.1s ease, border-color 0.1s ease;
@@ -108,6 +115,26 @@
 /* === Outline/ghost button hover — soft neutral tint (P4 compliant) === */
 [data-dw-button="outline"]:hover,
 [data-dw-button="ghost"]:hover {
+  background-color: var(--td-accent-soft);
+  border-color: var(--td-accent);
+  color: var(--td-accent);
+  transition: background-color 0.1s ease, border-color 0.1s ease, color 0.1s ease;
+}
+
+/* === Text, icon and outline-* button hover — same soft tint (Foundry #1274) ===
+ * The variants excluded from the filled hover above need a hover of their own, or they
+ * have none at all. `link` is a text button, so it takes the tint and the accent colour
+ * but keeps a transparent border; the empty value and the `outline-*` family are icon
+ * and outline controls and take the accent border too. Keeping the icon on currentColor
+ * is deliberate: the tint is soft enough that the resting icon colour stays legible. === */
+[data-dw-button="link"]:hover {
+  background-color: var(--td-accent-soft);
+  border-color: transparent;
+  color: var(--td-accent);
+  transition: background-color 0.1s ease, color 0.1s ease;
+}
+[data-dw-button=""]:hover,
+[data-dw-button^="outline-"]:hover {
   background-color: var(--td-accent-soft);
   border-color: var(--td-accent);
   color: var(--td-accent);
@@ -184,9 +211,14 @@ body > footer a:hover,
   color: var(--td-white);
 }
 
-/* === Site header / top navigation — scoped via Swift data-attribute (P10) === */
-[data-swift-page-header] a:hover,
-[data-dw-navigation] a:hover {
+/* === Site header / top navigation — scoped via Swift data-attribute (P10) ===
+ * `a:not([data-dw-button])` is load-bearing (Foundry #1275). Swift renders header CTAs as
+ * anchors carrying `data-dw-button`, so an unqualified anchor hover here repaints BUTTON
+ * text to the accent and a re-skin whose accent is also its button fill lands accent on
+ * accent: measured on a filled header button, text rgb(10,46,91) on its own hover grey.
+ * Header buttons are styled by the button rules above, not by this navigation rule. === */
+[data-swift-page-header] a:not([data-dw-button]):hover,
+[data-dw-navigation] a:not([data-dw-button]):hover {
   color: var(--td-accent);
   text-decoration: none;
 }
@@ -1856,4 +1888,35 @@ main:has(+ footer.td-edge-top) {
     overflow: hidden;
     text-overflow: ellipsis;
   }
+}
+
+/* =============================================================================
+ * Block 29 — Feature tiles, boxed icon-top variant (Foundry #1276).
+ * Swift 2.4 renders the icon-top Feature with the icon figure carrying an INLINE
+ * `background-color:var(--bs-body-color)`, i.e. a solid black square, and its inner
+ * wrapper is not a full-height column, so every tile grows with its own copy and the
+ * buttons across a three-column row sit at different heights. Measured on a 13-tile
+ * customer-center overview: tile heights differed within each row before this block,
+ * and 241/266/217/192 px per row with one shared button bottom after it.
+ * The icon-LEFT variant renders `> div.d-flex` and must keep its inline layout, hence
+ * the `:not(.d-flex)` scope. `align-self: flex-start` is required: without it the column
+ * flexbox stretches the icon box to the full column width instead of a 56px square.
+ * The two !important declarations beat the template's inline style (G3).
+ * ========================================================================== */
+[data-td-block="29"] { --td-block: 29; }
+
+[data-dw-itemtype="swift-v2_feature"] > div:not(.d-flex) {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+[data-dw-itemtype="swift-v2_feature"] > div:not(.d-flex) > .d-flex:last-child {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+[data-dw-itemtype="swift-v2_feature"] figure.icon-4.p-3 {
+  background-color: var(--td-accent-soft) !important;
+  color: var(--td-accent) !important;
+  border-radius: var(--td-radius, 0.75rem);
+  align-self: flex-start;
 }

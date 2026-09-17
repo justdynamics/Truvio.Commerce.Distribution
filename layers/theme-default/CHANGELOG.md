@@ -1,6 +1,39 @@
 # theme-default changelog
 
 
+## 2.3.5
+
+### Button hover covers every Swift variant, and the header rule stops repainting button text (Foundry #1274 #1275 #1276)
+
+Three hover defects that the design gate cannot see, all reported by an owner during a re-skin
+sign-off rather than by a probe (Foundry #1277 proposes the missing probe).
+
+The filled-button hover named three non-filled variants in its :not() chain. Swift 2.4 emits more:
+`link` is a text button, `outline-primary` and `outline-secondary` are outline controls, and the
+customer-center row action toggle carries an EMPTY `data-dw-button` attribute
+(`<button class="btn btn-outline-secondary" data-dw-button>`). Each took the filled hover and painted
+a solid disc under same-colour text or an icon: the link button measured bg rgb(50,63,75) under text
+rgb(10,46,91), and the row chevron hovered to a filled disc with its chevron still at ink. The chain
+now excludes all three shapes and they take the outline/ghost tint instead, so every variant has a
+hover of its own.
+
+`[data-swift-page-header] a:hover` recoloured BUTTON text as well as navigation links, because Swift
+renders header CTAs as anchors carrying `data-dw-button`. On a re-skin whose accent is also its button
+fill that lands accent on accent: a filled header button measured navy text on its own hover grey. The
+header and navigation anchor hovers now carry `:not([data-dw-button])`; header buttons are styled by the
+button rules, which is where they belong.
+
+Block 29 is new: the icon-top Feature tile. Swift paints its icon figure on an inline
+`background-color:var(--bs-body-color)` black square and does not make the tile a full-height column, so
+the buttons across a three-column row sit at different heights. The tile becomes a column flexbox filling
+its grid cell with the button wrapper pinned to the bottom, and the icon box takes the soft accent tint
+at the theme radius. Measured on a 13-tile overview: one height per row (241/266/217/192 px) and one
+button bottom. `align-self: flex-start` is load-bearing, or the column stretches the 56px box to the full
+column width. The icon-LEFT variant renders `> div.d-flex` and is untouched.
+
+Disk-overlay only, tokens only, no brand colour.
+
+
 
 ## 2.3.4
 
