@@ -32,7 +32,7 @@
   "AreaMasterTemplate": ""
   "AreaCulture": "en-US"
   "AreaApprovalType": 0
-  "AreaEcomLanguageId": ""
+  "AreaEcomLanguageId": "ENU"
   "AreaEcomCurrencyId": "EUR"
   "AreaActive": true
   "AreaMasterAreaId": 0
@@ -48,7 +48,7 @@
   "AreaRedirectFirstPage": 1
   "AreaLockPagesToDomain": false
   "AreaEcomCountryCode": "  "
-  "AreaEcomShopId": ""
+  "AreaEcomShopId": "SHOP1"
   "AreaUrlIgnoreForChildren": false
   "AreaCookieCustomNotifications": false
   "AreaItemTypePageProperty": "Swift-v2_PageProperties"

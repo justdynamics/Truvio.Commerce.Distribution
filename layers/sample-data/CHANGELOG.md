@@ -1,5 +1,30 @@
 # Changelog — sample-data
 
+## 4.1.3
+
+Patch: all sixteen TCGRP groups are related to `SHOP1`, not just the four top
+groups (Foundry #1237, unblocking #1281).
+
+surface-swift 1.13.8 binds area 3 to `SHOP1` so the DW10 ecommerce URL provider
+can resolve `ContextShop`. A bound shop makes Dynamicweb enforce group-in-shop
+on every product page, and until now only `TCGRP-COMMERCE`, `TCGRP-CONTENT`,
+`TCGRP-DATA-MODELS` and `TCGRP-USERS` carried an `EcomShopGroupRelation` row —
+so every PDP reached through one of the twelve browsable SUBGROUPS rendered a
+`dw-error` block from `System.NullReferenceException` at
+`Dynamicweb.Ecommerce.ProductCatalog.ProductCatalogFrontend.IsGroupInCorrectShop`.
+
+Twelve rows added: `TCGRP-ASSORTMENTS`, `TCGRP-BUNDLES`,
+`TCGRP-CONTRACT-PRICING`, `TCGRP-CURRENCIES`, `TCGRP-DISCOUNTS`,
+`TCGRP-DOCUMENTS`, `TCGRP-MEDIA`, `TCGRP-PRICE-STRUCTURES`, `TCGRP-RELATIONS`,
+`TCGRP-STOCK-DELIVERY`, `TCGRP-UNITS`, `TCGRP-VARIANTS`.
+
+Measured on `foundry.mydwsite4.com` (DW 10.28.10): with the shop bound and the
+twelve rows absent, `/en-us/shop/data-models/bundles-bom/truvio-bundle-kit-41`
+renders `dw-error`; with them present the same address renders the product and
+its canonical. The rows do NOT affect the friendly-URL shape — dropping them
+leaves the paths intact and breaks only the PDP.
+
+
 ## 4.1.2
 
 ### Variant price rows win, gallery rows carry a name, group buttons keep their group, the account group is a system account with a CSR grant
