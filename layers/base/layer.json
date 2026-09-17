@@ -1,20 +1,10 @@
 {
   "name": "base",
-  "version": "3.5.2",
+  "version": "3.5.3",
   "kind": "base",
   "swiftVersion": "2.4.0",
   "repositoryName": "ProductsFrontend",
   "fragmentModes": [
     "replace"
-  ],
-  "files": [
-    "System/Truvio/globalsettings.url.fragment.config"
-  ],
-  "placeholders": [
-    {
-      "path": "System/Truvio/globalsettings.url.fragment.config",
-      "kind": "asset",
-      "why": "The ecommerce URL provider activation block, verbatim, for merging into the host's Files/GlobalSettings.config. /Globalsettings/System/Url/Providers is EMPTY on a stock DW10 install - friendly ecommerce URLs are opt-in - so without it every product and group link a composed storefront renders is a querystring (/en-us/shop?GroupID=...&ProductID=...) and no friendly PDP URL resolves (Foundry 1281). A layer cannot ship GlobalSettings.config itself - the files overlay is overwrite-wins and would replace the host's connection and licence configuration - so the block ships as a fragment with its apply, union and proof steps in-file. Merged by the Foundry harness as a comma-list UNION and live only after a host restart."
-    }
   ]
 }

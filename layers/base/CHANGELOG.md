@@ -1,5 +1,36 @@
 # Changelog — base
 
+## 3.5.3
+
+Patch: the base drops the one file 3.5.2 added —
+`files/System/Truvio/globalsettings.url.fragment.config` — and with it the `files[]` and
+`placeholders[]` registrations in `layer.json`. The base ships **no files at all** again. No SQL
+set, no base row, no row count, no guaranteed row and no `base.contract.json` change;
+`baseContractVersion` is unmoved.
+
+The fragment was shipped in 3.5.2 to fix Foundry #1281. It did not. #1281 was caused by area 3
+carrying neither `AreaEcomShopID` nor `AreaEcomLanguageID`, and was fixed by **surface-swift
+1.13.9** + **sample-data 4.1.3** (Distribution #69, #70), proven by gate run `20260917-154558`.
+
+The leaf is **inert on Dynamicweb 10**. Per
+<https://doc.dynamicweb.dev/manual/dynamicweb10/content/url-provider.html>, the DW9-era ecommerce
+URL providers (`eComGroupPathProvider`, `eComProductProvider`, `eComProductAndVariantProvider`) no
+longer exist in DW10; friendly ecommerce URLs come from a URL provider configured on the page's
+SEO tab (`Page.PageUrlDataProvider` = `ShopUrlDataProvider`). Measured on `foundry.mydwsite4.com`:
+the leaf was live on the host through every one of the nine isolation recycles of the #1281
+investigation and changed nothing on its own.
+
+Shipping dead configuration in the base is worse than shipping none — it is the wrong place a
+future reader looks first, and the base is the layer that must stay minimal. Foundry #1298.
+
+**No behaviour change.** The removal takes away an inert file, so no re-gate was run: the proof
+run `20260917-154558` covered base 3.5.2 with this file present and inert.
+
+Consumers: nothing to do. A host that already merged the leaf into its own
+`Files/GlobalSettings.config` keeps it; it is harmless and can be removed by hand. The Foundry's
+`GlobalSettings.Fragment.ps1` allowlist and its mechanism stay — feature-pricing still ships
+`Globalsettings/Features/Commerce/Newdiscountexperience` through it (Foundry #1291).
+
 ## 3.5.2
 
 Patch: the base ships its FIRST file - `files/System/Truvio/globalsettings.url.fragment.config`,
