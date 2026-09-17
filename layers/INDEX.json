@@ -31,16 +31,16 @@
     "swift": {
       "tag": "v2.4.0"
     },
-    "skills": "v5.1.4",
-    "skillsCommit": "954dc9721aa78d39757b32bf8be92d6c29291a70",
-    "gateRunId": "20260917-143728",
+    "skills": "v5.2.0",
+    "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
+    "gateRunId": "20260917-154558",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.28.11",
     "editions": {
-      "swift-demo": "20260917-143728"
+      "swift-demo": "20260917-154558"
     },
     "verdicts": {
-      "20260917-143728": {
+      "20260917-154558": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
