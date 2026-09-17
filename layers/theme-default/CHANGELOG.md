@@ -1,4 +1,30 @@
-# theme-default changelog
+﻿# theme-default changelog
+
+## 2.3.7
+
+### The stock column holds its width, so the columns beside it stop moving (Foundry #1279)
+
+2.3.6 removed the five phantom columns and pinned the image inside its own column, and the
+PLP still measured a drifting description: Foundry gate `20260917-140643` read
+`shortDescription` at x 681.39 / 646.36 / 681.39 at 1440 and 623.39 / 588.36 / 623.39 at
+1366 - a 35.03px spread on the middle row, at two viewports, with every cell present.
+
+THE CAUSE IS THE STOCK COLUMN, and it is a column that is not one. Block 27 left
+`swift-v2_productstock` at `flex: 0 0 auto` with a `min-width: 5.5rem` floor, and that floor
+never applied: the block's own `section > [data-swift-container] > * { min-width: 0 }`
+catch-all out-specifies it (0,3,2 against 0,3,1). So the cell computed to `min-width: 0px`
+and took its width from its content - 0px on a product with no stock row, 70.06px on one
+rendering "12 In stock". Those 70.06px come out of the two `flex: 1 1` columns beside it,
+35.03px each, which is the spread exactly. One row in three on this catalogue reports stock,
+so one row in three had a different layout, and a human reads that as a ragged list.
+
+A CONTENT DIFFERENCE MUST NOT BE A LAYOUT DIFFERENCE. The column now carries a real basis,
+`flex: 0 0 5.5rem`, which `min-width: 0` cannot defeat, and the floor is dropped because a
+basis does the job a floor was being asked to do. The column is 88px whether the product has
+stock to report or not, and the description starts at the same x on every card.
+
+Measured on foundry.mydwsite4.com before and after the rule: spread 35.03px -> 0px at both
+1440 and 1366, card height unchanged at 136px and 120px, well inside the 180px row cap.
 
 
 ## 2.3.6
