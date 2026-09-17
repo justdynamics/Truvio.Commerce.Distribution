@@ -1,5 +1,63 @@
 # Changelog — surface-swift
 
+## 1.13.7
+
+Patch: the PLP list card stops misaligning, and the anchor strip keeps the query
+(Foundry #1279, #1280).
+
+THE LIST CARD IMAGE. `Product Components/Product List Card/grid-row-1/paragraph-c1-1.yml`
+authored `Width` 120 while theme-default pins that column to 72px (56px between 992 and
+1440). A figure wider than its own column does not shrink it, it paints over the next one,
+so the SKU cell read under the right edge of every image. The authored width is now 72,
+the width the pin actually gives it; theme-default 2.3.6 makes the figure fill its column
+so the 56px band is covered too.
+
+THE PHANTOM COLUMNS ARE NOT FIXED IN CONTENT, and this is stated rather than implied. The
+card row is `12ColumnsFlex` with seven paragraphs, so Swift emits five empty
+`data-dw-itemtype=""` columns that each take a share of the wrapping line. The obvious fix
+is a seven-column flex definition and Swift 2.4 does not ship one: `Grid/Page/RowDefinitions`
+carries 1Column, 1ColumnFlex, 2/3/4/6 Columns and their Flex variants, 2Columns_3-9, _4-8,
+_8-4, _9-3, 10ColumnsFlex and 12ColumnsFlex, and nothing between 6 and 10. Dropping to
+6ColumnsFlex would drop a paragraph. The row therefore KEEPS `12ColumnsFlex` and
+theme-default 2.3.6 removes the empty columns in CSS, which is the only surface that can
+see them.
+
+THE GROUP-NAVIGATION SIDEBAR. `Shop/Product List/grid-row-3` was `2Columns_3-9` with
+`Swift-v2_ProductListNavigation` in column 1. For a group with no subgroups that paragraph
+renders four empty `ul.navbar-nav` inside a bordered block - a bare horizontal rule taking
+a quarter of the page. The paragraph is removed and the row becomes `1Column` with the
+`Swift-v2_ProductListComponentSelector` on column 1, so the list gets the full width
+instead of a blank gutter. The row keeps `Swift-v2_Row`: `1Column` and `2Columns_3-9`
+declare the same item type, so the definition change is a definition change only and the
+row's Item is untouched.
+
+THE FACET SIDEBAR IS OWED, not shipped. LRN #18's recipe puts facets in column 1 beside the
+repeater, and here the facets paragraph lives on the `Product Components/Product List`
+COMPONENT page (the ComponentSelector renders it), not on `Shop/Product List`. A paragraph
+cannot be moved between pages by this tree: `ContentDeserializer` builds its paragraph cache
+per page (`GetParagraphsByPageId`), so the same `paragraphUniqueId` under a new page misses
+the cache, INSERTs, and leaves the original in place on every standing host - one facet
+panel authored, two rendered. Expressing the sidebar inside the component page instead
+would have to change a row from `Swift-v2_RowFlex` to `Swift-v2_Row`, and the update path
+writes the new item type's fields against the OLD type's ItemId. Both need a live serialize
+to prove; neither is shipped here.
+
+THE ANCHOR STRIP. `files/Templates/Designs/Swift-v2/Paragraph/TC_AnchorNav.cshtml` built its
+base href from `Request.Url.AbsolutePath`. This host serves a PDP as
+`?GroupID=..&ProductID=..`, so every anchor pointed at the product LIST - the same shape as
+the group-href defect (Foundry #1248), a different element. The base is now
+`AbsolutePath + Query`. theme-default 2.3.6 fixes the client-side twin, which is the leg that
+actually fills the strip on a PDP.
+
+A PARAGRAPH REMOVED FROM THE TREE SURVIVES ON A STANDING HOST. A merge deserialize is a keyed
+upsert with no delete branch, so the ProductListNavigation paragraph stays on any host already
+carrying an earlier surface-swift and has to be deleted by hand there; a consumer deserializing
+fresh never gets it. The GRID ROW is retained (recoloured to `1Column`, not deleted) for the
+same reason 1.13.6 retained `grid-row-3` of the mobile header.
+
+No item type, template, file or price change beyond the anchor-nav template.
+
+
 ## 1.13.6
 
 Patch: the MOBILE header paints its action items on ONE row (Foundry #1260). The Mobile Header page

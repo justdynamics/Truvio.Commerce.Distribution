@@ -75,7 +75,10 @@
         var navs = document.querySelectorAll("[data-td-anchornav]");
         if (!navs.length) { return; }
 
-        var path = window.location.pathname || "";
+        /* The QUERY is part of the base. A PDP reached as ?GroupID=..&ProductID=..
+         * loses its product on every anchor click when the base is the path alone,
+         * and lands on the product LIST (Foundry #1280, same shape as #1248). */
+        var path = (window.location.pathname || "") + (window.location.search || "");
 
         Array.prototype.forEach.call(navs, function (nav) {
             var list = nav.querySelector(".td-anchornav__list");

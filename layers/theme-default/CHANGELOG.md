@@ -1,6 +1,38 @@
 # theme-default changelog
 
 
+## 2.3.6
+
+### The PLP list row drops its phantom columns, and the anchor strip keeps the query (Foundry #1279 #1280)
+
+Two defects an owner hit on the same visit, one in the stylesheet and one in the script.
+
+BLOCK 27 GAINS TWO RULES. The card row is `12ColumnsFlex` and the card fills seven columns,
+so Swift emits five empty `data-dw-itemtype=""` columns, each carrying `flex-fill`. Block 27
+makes the row WRAP - that is the fix for the width budget and it stays - and a wrapping row
+with five growable empties puts real cells on a second line at a different x per row, which
+is what made every card ~230px tall for ~120px of content. Swift 2.4 ships no seven-column
+flex row definition, so the empty columns cannot be removed in content (surface-swift 1.13.7
+records the definition inventory); they are removed here, where they are visible, with
+`display: none`. The rule names an EMPTY attribute value, so it can only ever match a column
+Swift itself declared empty.
+
+The second rule stops an authored image width from overflowing the column it is pinned in.
+The image column is `flex: 0 0 72px` and drops to 56px between 992 and 1440, while the figure
+carries a pixel width from content. surface-swift 1.13.7 brings that width to 72, and the
+figure is now told to fill its column instead, so the narrow band is covered as well and no
+image can paint over the SKU cell at any width.
+
+ANCHORSTRIP KEEPS THE QUERY. `anchorStrip()` built every href from `window.location.pathname`
+alone. On a PDP served as `?GroupID=..&ProductID=..` - the shape this host serves - each
+anchor therefore pointed at the product LIST, both on the links it discovers from `main h2[id]`
+and on the re-point pass over `[data-td-anchor]`, which share the one `path` variable. The base
+is now `pathname + search`. Same mechanism as the group-href defect (Foundry #1248), a different
+element; surface-swift 1.13.7 fixes the server-side twin in `TC_AnchorNav.cshtml`.
+
+Disk-overlay only, tokens only, no brand colour.
+
+
 ## 2.3.5
 
 ### Button hover covers every Swift variant, and the header rule stops repainting button text (Foundry #1274 #1275 #1276)
