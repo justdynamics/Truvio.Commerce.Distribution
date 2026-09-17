@@ -1,5 +1,41 @@
 # Changelog — base
 
+## 3.5.2
+
+Patch: the base ships its FIRST file - `files/System/Truvio/globalsettings.url.fragment.config`,
+the ecommerce URL provider activation block (Foundry #1281, owner decision 2026-09-17). No SQL
+set, no base row, no row count, no guaranteed row and no `base.contract.json` change;
+`baseContractVersion` is unmoved.
+
+`/Globalsettings/System/Url/Providers` is EMPTY on a stock Dynamicweb 10 install - friendly
+ecommerce URLs are opt-in, and no Distribution layer shipped any URL setting. With it empty,
+every product and group link a composed storefront renders is a querystring
+(`/en-us/shop?GroupID=TCGRP-BUNDLES&ProductID=TCPROD0041`), the PDP canonical is that same
+querystring, and no `/en-us/shop/<group>/<product>` URL resolves at all. Measured on
+`foundry.mydwsite4.com` (DW 10.28.10, Swift 2.4.0, edition `swift-demo`). The fragment sets the
+three ecommerce providers only - `eComGroupPathProvider`, `eComProductProvider`,
+`eComProductAndVariantProvider`; `NewsItemProvider` and `ForumUrlProvider` belong to modules this
+distribution does not ship. `UseCanonicalInEcommerce` and `IncludeProductIdInUrlNames` are already
+`True` by default and are not set here.
+
+Two things a consumer has to act on:
+
+- **The fragment requires a HOST RESTART.** It stages to `Files/System/Truvio/`, where nothing
+  reads it; the Foundry harness merges it into the host's `Files/GlobalSettings.config`
+  (`tools/harness/GlobalSettings.Fragment.ps1`, allowlisted leaf
+  `Globalsettings/System/Url/Providers`, merge rule **comma-union** - the host's existing
+  providers are kept and these three appended, nothing is dropped). The setting is read at
+  application start, so a running host keeps rendering querystring URLs until it is recycled.
+- **Page-list pointers move LATER, after the first rendered URL is read.** The exact friendly URL
+  shape is not knowable from configuration; it is whatever the host renders. So gate page lists,
+  critical paths and probe paths stay on their querystring pointers in this release and are
+  repointed in the run that first delivers + restarts a host and reads a product link out of the
+  rendered PLP. Note the caveat that comes with them: a group or product rename regenerates the
+  friendly URL and **no 301 is minted** for the old one (Foundry #112), so anything pinned to a
+  friendly product URL is invalidated by a rename, silently.
+
+Every edition moves its base pin 3.5.1 -> 3.5.2.
+
 ## 3.5.1
 
 Patch: the contract's `currencyRates.note` no longer states that USD is the currency the Swift

@@ -8,6 +8,40 @@ The machine-readable guarantees live in [`base.contract.json`](base.contract.jso
 
 `UrlPath` ships in **surface-swift**, not in base 3.0.0. Its single row is a 301 friendly-URL redirect (`products-*` → a Swift page id) bound to area 3 — friendly URLs resolve against pages, and a framework-only base has no route targets. A base-owned UrlPath row would dangle and force base re-proves on Swift page churn. Recorded in both layer docs (this file + `layers/surface-swift/README.md`).
 
+## The ecommerce URL providers (3.5.2, Foundry #1281)
+
+The base ships **one file**: `files/System/Truvio/globalsettings.url.fragment.config`, the
+activation block for `/Globalsettings/System/Url/Providers`. That element is **EMPTY on a stock
+Dynamicweb 10 install** - friendly ecommerce URLs are opt-in - so without it every product and
+group link a composed storefront renders is a querystring
+(`/en-us/shop?GroupID=...&ProductID=...`), the PDP canonical is the same querystring, and no
+`/en-us/shop/<group>/<product>` URL resolves. Measured on `foundry.mydwsite4.com` (DW 10.28.10,
+Swift 2.4.0, edition `swift-demo`).
+
+It is a **fragment**, not a settings file: it stages to `Files/System/Truvio/`, where nothing
+reads it, and has to be merged into the host's own `Files/GlobalSettings.config` - a layer cannot
+ship that file, because the `files/` overlay is overwrite-wins and would replace the host's
+connection, mail and licence configuration. The Foundry harness merges it
+(`tools/harness/GlobalSettings.Fragment.ps1`, allowlisted leaf
+`Globalsettings/System/Url/Providers`, merge rule **comma-union**: the host's existing providers
+are kept and the three ecom ones appended, so a host already carrying `NewsItemProvider` or
+`ForumUrlProvider` loses nothing).
+
+Three consequences an addition must know:
+
+- **A host restart is required.** The setting is read at application start; a running host keeps
+  rendering querystring URLs after the merge.
+- **The base carries it, not a feature layer.** URL shape is how every composed storefront
+  addresses its catalogue - PLP links, PDP canonical, every page-list pointer. An edition that
+  dropped a feature would otherwise silently drop friendly URLs from the whole storefront. It is
+  configuration, not custom code, so the base's zero-custom-code constraint holds.
+- **A rename mints no 301** (Foundry #112). Once friendly URLs are live, renaming a group or a
+  product regenerates the URL and the old one is not redirected. Anything pinned to a friendly
+  product URL - a page list, a link, a bookmark - is invalidated by a rename, silently.
+
+The companion settings `UseCanonicalInEcommerce` and `IncludeProductIdInUrlNames` are already
+`True` by DW10 default and are deliberately **not** set by the fragment.
+
 ## ID rules
 
 | Key type | Rule |
