@@ -1,5 +1,48 @@
 # Changelog — surface-swift
 
+## 1.13.8
+
+Patch: area 3 carries its ecommerce shop and language binding, so the DW10
+ecommerce URL provider has something to index (Foundry #1281).
+
+`AreaEcomShopId` = `SHOP1` and `AreaEcomLanguageId` = `ENU` are now SHIPPED in
+both mode trees, and both columns leave the `Site framework` predicate's
+`excludeAreaColumns`.
+
+The Swift Shop page already carried
+`Dynamicweb.Ecommerce.Frontend.UrlHandling.ShopUrlDataProvider` with
+`IncludeFrom=ContextShop` and `IncludeLanguage=ContextLanguage` — byte-identical
+parameter XML to two working reference sites on the same box. With area 3
+unbound on BOTH axes the provider resolved neither context, the URL index stayed
+empty, and every group and product link fell back to
+`/en-us/shop?GroupID=…&ProductID=…`.
+
+Measured on `foundry.mydwsite4.com` (DW 10.28.10, Swift 2.4), one variable per
+app-pool recycle: shop bound + language empty renders querystring; language
+bound + shop empty renders querystring; BOTH bound renders
+
+```
+/en-us/shop/data-models/bundles-bom                          (group)
+/en-us/shop/data-models/bundles-bom/truvio-bundle-kit-41     (product)
+<link rel="canonical" href="https://foundry.mydwsite4.com/en-us/shop/data-models/bundles-bom/truvio-bundle-kit-41">
+```
+
+The old querystring address still answers 200 and carries the path canonical.
+
+Not the cause, each disproved on the host and reverted:
+`IncludeProductIdInUrlNames`, `HighVolumeProductUrls`,
+`UniqueForEachMasterWebsite`, the website-scoped `Providers<hex>` siblings, and
+`UrlInlcudeAreaType` (it moves the area segment only). The DW9-era
+`/Globalsettings/System/Url/Providers` leaf that base 3.5.2 ships is INERT on
+DW10 — the documentation states the old ecommerce URL providers no longer exist
+and that friendly ecommerce URLs come from the page's SEO-tab URL provider.
+
+Binding the shop obliges every browsable group to carry an
+`EcomShopGroupRelation` row (Foundry #1237): sample-data 4.1.3 ships the twelve
+that were missing. The relation rows do not change the URL shape — they keep the
+subgroup PDP from dying in `IsGroupInCorrectShop`.
+
+
 ## 1.13.7
 
 Patch: the PLP list card stops misaligning, and the anchor strip keeps the query
