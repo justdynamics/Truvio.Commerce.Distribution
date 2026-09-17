@@ -1,4 +1,4 @@
-/* default_custom.css — the CSS that makes stock Swift look great.
+﻿/* default_custom.css — the CSS that makes stock Swift look great.
  * theme-default: the starting point of every customer re-skin — not a brand.
  * Tier 1 of the re-skin escalation ladder; customers overwrite the tokens below.
  * Loaded via DefaultHeadInclude.cshtml after swift.css and the Style asset sheets.
@@ -1850,9 +1850,21 @@ main:has(+ footer.td-edge-top) {
     text-overflow: clip;
     white-space: normal;
   }
+  /* The stock column is a COLUMN, so it is the same width on a row that has stock text
+   * and on a row that has none. `flex: 0 0 auto` sizes it from its content, and the
+   * `min-width: 5.5rem` that was meant to floor it is out-specified by this block's own
+   * `> * { min-width: 0 }` catch-all (0,3,2 beats 0,3,1), so the cell computed to 0px on
+   * a product with no stock row and to 70.06px on one with "12 In stock". Those 70px come
+   * out of the two `flex: 1 1` columns beside it, 35.03px each, which is exactly the drift
+   * PLP-ALIGN-01 measured on this list: shortDescription at x 681.39 / 646.36 / 681.39 at
+   * 1440 and 623.39 / 588.36 / 623.39 at 1366 (Foundry gate 20260917-140643).
+   * A real basis is not defeated by `min-width: 0`, so the column holds its width whether
+   * or not the product has stock to report, and the columns beside it stop moving.
+   * Measured after: spread 35.03px -> 0px at both widths, card height unchanged at
+   * 136px / 120px. Foundry #1279. */
   .product-list article.product [data-dw-itemtype="swift-v2_productstock"] {
-    flex: 0 0 auto !important;
-    min-width: 5.5rem;
+    flex: 0 0 5.5rem !important;
+    min-width: 0;
   }
   .product-list article.product [data-dw-itemtype="swift-v2_productprice"],
   .product-list article.product [data-dw-itemtype="swift-v2_productaddtocart"] {
