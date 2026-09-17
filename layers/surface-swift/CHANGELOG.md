@@ -1,5 +1,24 @@
 # Changelog — surface-swift
 
+## 1.13.9
+
+Patch: the 1.13.8 bindings actually reach the host — the exclusion also had to
+leave `replace/replace-manifest.json` (Foundry #1281).
+
+1.13.8 dropped `AreaEcomShopId` and `AreaEcomLanguageId` from
+`config/swift-content-2.4.json`, which is the **serialize-side** source. The
+**deserialize** reads `layers/<layer>/replace/replace-manifest.json`, and that
+file still excluded both columns, so delivery run `20260917-153803` landed
+sample-data's sixteen `EcomShopGroupRelation` rows and left area 3 unbound —
+querystring URLs again.
+
+Both columns now leave the manifest's `excludeAreaColumns` too. The manifest's
+single `/` entry is the only entry that writes the Area document: every
+`merge-manifest.json` entry is scoped to a sub-path (`/Home`, `/About`, …), so
+the merge tree's `area.yml` is never applied and the merge document is
+documentation, not a write.
+
+
 ## 1.13.8
 
 Patch: area 3 carries its ecommerce shop and language binding, so the DW10
