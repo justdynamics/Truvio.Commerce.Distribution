@@ -5,5 +5,5 @@
 "DynamicStructureLevelField": "GroupNames"
 "DynamicStructureLevelSortDirection": 0
 "DynamicStructureLevelIndex": 2
-"DynamicStructureLevelUseRelationOnProductCreate": true
-"DynamicStructureLevelUseCompleteness": true
+"DynamicStructureLevelUseRelationOnProductCreate": false
+"DynamicStructureLevelUseCompleteness": false
