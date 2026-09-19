@@ -1,6 +1,6 @@
 ﻿{
   "name": "swift-demo",
-  "from": "base@3.5.3",
+  "from": "base@3.6.0",
   "add": [
     "feature-reordering@1.0.4",
     "feature-pricing@1.1.3",
@@ -11,7 +11,7 @@
     "feature-baseline-guide@1.0.2"
   ],
   "surfaces": [
-    "surface-swift@1.13.9"
+    "surface-swift@1.14.0"
   ],
   "sampleData": true,
   "themes": [
@@ -24,10 +24,10 @@
     "/en-us/customer-center",
     "/en-us/sign-in/sign-in"
   ],
-  "comment": "expectedCounts is pinned rather than derived because Set-ConfigFromEdition derives EcomProducts/EcomGroups from the sampleData toggle alone and carries the pre-4.0.0 fixture figures. The sample-data layer IS the browsable catalogue this edition shows: 97 product rows (60 masters + 36 variant rows + the subscription plan TCPROD0061) across 16 groups (4 top + 12 sub), plus the three personas on one B2B account, the twelve orders TCO-0001..TCO-0012, the Truvio Commerce storefront copy that replaces surface-swift's Placeholder marker convention, the demo clock and the email-marketing statistics backfill. behaviorProbes are LAYER asserts, so they run for every edition composing the layer, and all five fixture legs resolve HERE: feature-reordering sku-validation TC-VAR-0001, feature-pricing cart-price TCPROD0020 (quantity 10, 96) and TCPROD0046 (36.90 at TC-100200), feature-bom-configurator bom-cart-lines TCPROD0042 with its two slots, feature-subscription-orders checkout-recurring TCPROD0061, and feature-rma's authenticated /my-returns, which needs buyer 100101 and the delivered order TCO-0001. Every subject is named in base.contract.json sampleData.guaranteedRows, which is what the feature layers bind to. Setting sampleData false here leaves the storefront with an empty shop AND takes away the only composition those five legs can resolve in.",
+  "comment": "expectedCounts is pinned rather than derived because Set-ConfigFromEdition derives EcomProducts/EcomGroups from the sampleData toggle alone and carries the pre-4.0.0 fixture figures. The sample-data layer IS the browsable catalogue this edition shows: 97 product rows (60 masters + 36 variant rows + the subscription plan TCPROD0061) across 16 groups (4 top + 12 sub), plus the three personas on one B2B account, the twelve orders TCO-0001..TCO-0012, the Truvio Commerce storefront copy that replaces surface-swift's Placeholder marker convention, the demo clock and the email-marketing statistics backfill. behaviorProbes are LAYER asserts, so they run for every edition composing the layer, and all five fixture legs resolve HERE: feature-reordering sku-validation TC-VAR-0001, feature-pricing cart-price TCPROD0020 (quantity 10, 96) and TCPROD0046 (36.90 at TC-100200), feature-bom-configurator bom-cart-lines TCPROD0042 with its two slots, feature-subscription-orders checkout-recurring TCPROD0061, and feature-rma's authenticated /my-returns, which needs buyer 100101 and the delivered order TCO-0001. Every subject is named in base.contract.json sampleData.guaranteedRows, which is what the feature layers bind to. Setting sampleData false here leaves the storefront with an empty shop AND takes away the only composition those five legs can resolve in. 5.0.0 renames the catalogue band TCGRP-DATA-MODELS to TCGRP-PRODUCT-STRUCTURE (id AND name) and adds the PIM structure the categories always needed: the ShopType 4 shop TCSHOP-PIM \"Truvio PIM\", one GroupType 1 folder and four GroupType 2 data models, 61 master-to-data-model relations, the 28 reference_category mirror fields, four completion rules and one Dynamic Workspace. EcomGroups is therefore 21 (16 storefront + 1 folder + 4 data models), not 16 - the 16 browsable groups are unchanged, and EcomProducts stays 97. base 3.6.0 ships the reference_category parent row the mirrors hang off and neutral stock locations; surface-swift 1.14.0 builds the product index with SkipDataModels False, without which the workspace renders empty nodes.",
   "expectedCounts": {
     "EcomProducts": 97,
-    "EcomGroups": 16,
+    "EcomGroups": 21,
     "EcomCountries": 96
   },
   "description": "Full Swift storefront demo on the split composition (Swift 2.4): framework-only base + the surface-swift content surface (en-US area + UrlPath + own item types) + seven feature layers (feature-reordering and feature-pricing - the split of the retired feature-reordering-pricing - plus feature-rma, feature-subscription-orders, feature-bom-configurator, feature-b2b-comms and feature-baseline-guide) + the sample-data layer on the default theme. The sample-data layer carries the whole browsable catalogue a prospect sees - 12 frontend-demonstrable subgroups under 4 top groups, 60 masters + 36 variant rows bound to their axes, one subscription plan, 90 customer-group prices, the Images and Manuals asset categories, 324 relations, 12 orders, three personas - and the storefront copy on Home, About, Contact, the header, the footer and the mega-menu. The composer stages it after surfaces[], so that copy wins the paths it shares with surface-swift."
