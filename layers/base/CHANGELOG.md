@@ -1,5 +1,76 @@
 # Changelog — base
 
+## 3.6.0
+
+Minor: the base stops shipping a bike shop's warehouse names, stops shipping 31 rows that point at
+nothing, and finally ships the one row `BASE.md` has claimed since 3.0.0. Three tables are gained
+(`EcomStockLocation`, `EcomProductCategory`, `EcomProductCategoryTranslation`), 31 orphan rows are
+dropped, and `baseContractVersion` moves 2.3.1 -> 2.4.0 (additive). No layer.json `files[]`, no SQL
+set, no `sampleData` change.
+
+**`EcomStockLocation` becomes base-owned, whole-table `replace` (Foundry #1303).** The platform
+baseline carries the Swift demo's own rows - `1 BikeShop Copenhagen`, `2 BikeShop Aarhus`,
+`3 Default stock location` - and no predicate ever touched the table, so **every composed edition
+delivered a bike shop's warehouse names** on a host the Distribution otherwise scrubbed of Swift
+demo vocabulary. Measured on `foundry.mydwsite4.com`. The base now ships three neutral rows:
+
+| Id | Name | ExternalId | Sort |
+|---|---|---|---|
+| 1 | Central warehouse | `CENTRAL` | 1 |
+| 2 | Regional warehouse | `REGIONAL` | 2 |
+| 3 | Default stock location | `DEFAULT` | 3 |
+
+Language `ENU`, every other column empty or `0`. **The ids 1-3 are kept deliberately** and are not
+rekeyed above `idRules.intIdentityFloor`: all 61 `EcomStockUnit` rows in the sample-data layer carry
+`StockUnitStockLocationId` 3, and `EcomShops.ShopStockLocationID` addresses the same id space
+(`SHOP1` ships `0`). A rekey would orphan the stock units for a cosmetic win. Like the permission
+groups `1325`/`1270`/`1292`, these are rows the base **adopts** from the platform baseline rather
+than mints; the new `stockLocations` block in `base.contract.json` records that exception so a
+reader does not file it as a floor violation. `Replace`, not `Merge`, so a re-deserialize restores
+the neutral set instead of leaving a previously delivered `BikeShop Copenhagen` in place.
+
+**`reference_category` ships for real (Foundry #1304).** `BASE.md` line 65 has named
+`reference_category` (`EcomProductCategory`, CategoryType 2) plus its translation as a guaranteed
+anchor since 3.0.0, and `base.contract.json` has carried it in `guaranteedRows.referenceCategory`.
+**Neither row ever shipped.** No predicate covered either table, and the only thing producing the
+row was the Foundry gate, which synthesises it pre-host-start as Step 3b
+(`tools/harness/Invoke-SeedVerify.ps1`, the prerequisite for DemoVerifier Check 2). A consumer who
+deserialized the Distribution without the gate got a host with no template category - and DW's
+completeness-rule and category-field admin UI read that row. The base now ships both rows as
+**filtered** `Replace` predicates:
+
+- **FILTER-02** - `EcomProductCategory where CategoryId = 'reference_category'`
+  (`CategoryAutoId` 100136, `CategoryType` 2).
+- **FILTER-03** - `EcomProductCategoryTranslation where CategoryTranslationCategoryId = 'reference_category'`
+  (`ENU`, "Reference category", `CategoryTranslationAutoId` 100135).
+
+Filtered and never whole-table: the concrete `tc_*` categories and their `tc_*$$ENU` translations
+are sample-data-owned **merge** rows, and a whole-table `Replace` here would wipe the entire product
+category model on every re-deserialize. The contract's `translation.languageId` moves `LANG1` ->
+`ENU`, matching every other ENU-keyed display name in the Distribution; the gate's own seed stays
+and is `IF NOT EXISTS`-guarded on the category id, so a host it already seeded with a `LANG1` row
+keeps that row and simply gains the `ENU` one. Check 2 probes the parent row only, so it is
+unaffected either way.
+
+**`EcomShopGroupRelation` drops its 31 rows (Foundry #1198).** The base shipped
+`GROUP1`/`GROUP2`/`GROUP5` ... `GROUP252`$$`SHOP1` - 31 relations inherited from the platform
+baseline, every one binding `SHOP1` to a numeric `EcomGroups` id. **No layer in this Distribution
+ships any of those groups**: the base ships zero catalogue (`idRules.baseCatalog` = `empty`) and
+every group the sample-data and feature layers ship is `TCGRP-*` or `PACK-RPP-GRP1`. Verified by
+grepping every `_sql/EcomGroups/*.yml` in the tree before the delete. The rows therefore landed on
+each delivered host as 31 relations to groups that do not exist. The entry keeps its `_meta.yml`, so
+the whole-table `Replace` still **wipes** `EcomShopGroupRelation` on a target - the table stays
+base-owned - and the real rows arrive as merge rows from `sample-data` and
+`feature-reordering-pricing`.
+
+`layer.json` gains `fragmentTables`, which the base had never declared, now listing all 19 tables it
+ships (the static key-collision input the schema describes); the three new tables are in it.
+
+Consumers: a host delivered from 3.5.x and re-deserialized from 3.6.0 gets the neutral stock-location
+names, the `reference_category` pair, and an `EcomShopGroupRelation` wiped and refilled from the
+addition layers only. Nothing to run by hand. A host that was never gated gains a template category
+it was silently missing.
+
 ## 3.5.3
 
 Patch: the base drops the one file 3.5.2 added —

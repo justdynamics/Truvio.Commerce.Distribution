@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "2.3.1",
+  "baseContractVersion": "2.4.0",
   "swiftVersion": "2.4.0",
   "compat": {
     "dw": {
@@ -138,15 +138,17 @@
       "parent": {
         "table": "EcomProductCategory",
         "categoryId": "reference_category",
-        "categoryType": 2
+        "categoryType": 2,
+        "categoryAutoId": 100136
       },
       "translation": {
         "table": "EcomProductCategoryTranslation",
         "categoryId": "reference_category",
-        "languageId": "LANG1",
-        "name": "Reference category"
+        "languageId": "ENU",
+        "name": "Reference category",
+        "categoryTranslationAutoId": 100135
       },
-      "note": "Hidden template category (CategoryType 2) required by DemoVerifier Check 2. Seeded pre-host-start (DW caches at startup)."
+      "note": "Hidden template category (CategoryType 2) that Dynamicweb's completeness-rule and category-field admin UI reads; required by DemoVerifier Check 2. SHIPPED BY THE BASE since 3.6.0 as two filtered Replace predicates (baseOwnedTables.replaceFiltered FILTER-02 / FILTER-03). Before 3.6.0 the row was claimed here but never shipped: only the Foundry gate synthesised it pre-host-start (Invoke-SeedVerify.ps1 Step 3b), so a consumer deserializing the Distribution outside the gate never received it (Foundry #1304). The gate seed stays and is IF NOT EXISTS-guarded on the category id, so a host it already seeded with a LANG1 translation keeps that row; the base ships the ENU translation, matching every other ENU-keyed display name in the Distribution. Seeded pre-host-start matters because DW caches categories at startup."
     },
     "contractPrice": {
       "table": "EcomPrices",
@@ -321,6 +323,7 @@
       "EcomShops",
       "EcomShopLanguageRelation",
       "EcomShopGroupRelation",
+      "EcomStockLocation",
       "EcomPayments",
       "EcomShippings",
       "EcomMethodCountryRelation",
@@ -333,9 +336,46 @@
         "table": "AccessUser",
         "where": "AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')",
         "note": "FILTER-01: only the three permission groups are base-owned on AccessUser; the sample-data account and personas (100100-100103) ship in that layer as merge rows, never serialized into the base."
+      },
+      {
+        "table": "EcomProductCategory",
+        "where": "CategoryId = 'reference_category'",
+        "note": "FILTER-02: only the hidden reference_category template row (CategoryType 2) is base-owned on EcomProductCategory. The concrete tc_* product categories are sample-data merge rows, so this predicate is filtered and never whole-table - a whole-table Replace here would wipe the layer's categories on every re-deserialize (Foundry #1304)."
+      },
+      {
+        "table": "EcomProductCategoryTranslation",
+        "where": "CategoryTranslationCategoryId = 'reference_category'",
+        "note": "FILTER-03: the ENU display name 'Reference category' that belongs to the FILTER-02 row, on the same filtered reasoning. The tc_*$$ENU translations stay sample-data-owned (Foundry #1304)."
       }
     ],
     "note": "Additions touching a base-owned table follow idRules (prefix / floor) and must pass the static intersection checks below. Base ships zero catalog (see idRules.baseCatalog) and zero content areas (base split 3.0.0). UrlPath is surface-swift-owned (its single row is a friendly-URL redirect bound to area 3 + a Swift page id - no route targets exist in a framework-only base)."
+  },
+  "stockLocations": {
+    "table": "EcomStockLocation",
+    "ownedSince": "3.6.0",
+    "rows": [
+      {
+        "stockLocationId": 1,
+        "name": "Central warehouse",
+        "externalId": "CENTRAL",
+        "sortOrder": 1
+      },
+      {
+        "stockLocationId": 2,
+        "name": "Regional warehouse",
+        "externalId": "REGIONAL",
+        "sortOrder": 2
+      },
+      {
+        "stockLocationId": 3,
+        "name": "Default stock location",
+        "externalId": "DEFAULT",
+        "sortOrder": 3
+      }
+    ],
+    "languageId": "ENU",
+    "idsAreStable": true,
+    "note": "Neutral, brand-free stock locations shipped as a whole-table Replace. The baseline DB carried the Swift demo's own 'BikeShop Copenhagen' / 'BikeShop Aarhus' rows, so every composed edition delivered a bike shop's warehouse names; 3.6.0 corrects the names in the base instead of per-edition (Foundry #1303). The IDS 1-3 ARE DELIBERATELY KEPT: all 61 EcomStockUnit rows in the sample-data layer carry StockUnitStockLocationId 3, and EcomShops.ShopStockLocationID (SHOP1 ships 0, meaning 'no single location') addresses the same id space, so a rekey above the intIdentityFloor would orphan the stock units and silently change what a shop points at. These three ids are therefore the one further documented exception to idRules.intIdentityFloor, alongside the permission groups: they are base-owned rows the base does not mint but adopts from the platform baseline. An addition that needs its own stock location mints one at or above 100000."
   },
   "collisionChecks": [
     {
