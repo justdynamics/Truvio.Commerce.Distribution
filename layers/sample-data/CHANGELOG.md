@@ -1,5 +1,134 @@
 # Changelog — sample-data
 
+## 5.0.0
+
+### The catalogue band is renamed, and the PIM structure the category fields always needed ships with them
+
+**MAJOR. Two breaking id renames and 140 new rows in eleven tables, five of them new to the
+layer. `EcomGroups` goes 16 -> 21. No product is added, removed or re-homed, and the storefront
+is byte-for-byte the same page apart from the band's name. A host delivered from 4.x needs
+`tools/retire-4x-ids.sql` run once BEFORE the 5.0.0 delivery; a clean-room host needs nothing.**
+
+**1. The band is `Product Structure`, id and name (Foundry [#1303]).** `Data Models` is the name
+of a PLATFORM CONSTRUCT — `EcomGroups` `GroupType 2` under a `ShopType 4` shop — and the D-B
+naming rule is PIM, Commerce and CMS vocabulary, not platform internals dressed as merchandise. A
+storefront band named after the construct was tolerable while the layer shipped no construct; it
+is not tolerable now that it ships four of them, three clicks away in the same admin.
+
+| Was | Is |
+|---|---|
+| group `TCGRP-DATA-MODELS`, `GroupName`/`GroupNumber` `Data Models` | `TCGRP-PRODUCT-STRUCTURE`, `Product Structure` |
+| category `tc_data_models`, translation `Data Models` | `tc_product_structure`, `Product Structure` |
+| `tc-datasheet-data-models.pdf`, `tc-install-guide-data-models.pdf` | `…-product-structure.pdf` |
+
+The seven field ids under the category are unchanged, and so are the three subgroups
+(`TCGRP-VARIANTS`, `TCGRP-UNITS`, `TCGRP-BUNDLES`) and the fifteen masters — only their parent
+moves. 150 row and asset files renamed; every `FieldValue`, `FieldTranslation`,
+`DisplayGroupField` member, `EcomDetails` document row and `DetailsName` follows, as does
+surface-swift's `Products.index` facet `Source` (1.14.0) and its `surface.contract-notes.json`
+`scopeNote`. The two PDFs are regenerated from `tools/make-documents.py`, whose group tuple
+follows; the other six come out byte-identical, which is that script's own claim proved. The
+storefront copy follows too: the Home hero eyebrow, title, body and second button (**Browse
+Product Structure**, `GroupID=TCGRP-PRODUCT-STRUCTURE`), the Home SEO description, the About
+intro and the mega-menu column.
+
+**2. The PIM structure (Foundry [#1304]).** The layer shipped four product categories, 28 fields
+and 61 masters and nothing to attach them to: no `ShopType 4` shop, no `GroupType 2` data model,
+no `reference_category` mirror, no completion rule, no Dynamic Workspace. On a delivered host the
+admin's **Data models** tree was empty and the Data Completeness panel on every product was
+blank, while every row count, every API read and every gate leg was green — the categories were a
+set of fields nothing plumbed to a product.
+
+```
+EcomShops  TCSHOP-PIM  "Truvio PIM"  ShopType 4    ShopAutoId 100130   (+ ENU language relation 100131)
+└── TCDM-TRUVIO-COMMERCE   GroupType 1  folder, no category
+    ├── TCDM-COMMERCE          GroupType 2 -> tc_commerce           rule 100160   16 masters
+    ├── TCDM-CONTENT           GroupType 2 -> tc_content            rule 100161   15 masters
+    ├── TCDM-PRODUCT-STRUCTURE GroupType 2 -> tc_product_structure  rule 100162   15 masters
+    └── TCDM-USERS             GroupType 2 -> tc_users              rule 100163   15 masters
+```
+
+Five tables are new to the layer — `EcomShops`, `EcomShopLanguageRelation`,
+`EcomCompletionRules`, `DynamicStructures`, `DynamicStructureLevels` — each with a `_meta.yml`
+authored from the live DW 10.28 schema, row files, a Merge predicate with its `_why`, an entry in
+`merge/merge-manifest.json` and a line in `fragmentTables`. `EcomShops` and
+`EcomShopLanguageRelation` are base-owned `replaceWholeTable`, so this layer merges into them
+exactly as it already does with `EcomShopGroupRelation`: the base's Replace writes `SHOP1` first,
+and this layer adds one row beside it.
+
+Six tables gain rows: `EcomGroups` +5, `EcomGroupRelations` +4, `EcomShopGroupRelation` +5,
+`EcomGroupProductRelation` +61, `EcomProductCategoryField` +28 and
+`EcomProductCategoryFieldTranslation` +28. Five predicates are widened so the new keys are inside
+the where clause (`TCDM-%`, `TCSHOP-PIM`, and the `reference_category` mirrors fenced to
+`FieldId LIKE 'tc%'`). `EcomGroupProductRelation` needed no widening — its predicate is keyed on
+the product id.
+
+What each part is load-bearing for, and how each one fails silently when it is missing:
+
+- **Every group carries its own `EcomShopGroupRelation` row, the folder included.** DW resolves a
+  group to its shop through that table and does not walk the parent chain, so a group without one
+  renders in the tree and resolves zero products, with a live 200 and no error.
+- **`GroupType` is the only discriminator and no read surface reports it.** `NULL` means `0`
+  (Common), so a data model that lands untyped is an ordinary catalog group that nothing
+  distinguishes.
+- **The 61 master relations are `IsPrimary` false.** Each master relates to the data model of its
+  band, derived from the top-group relation it already carried; its primary home stays its
+  catalogue subgroup, so no storefront URL, PLP or canonical moves.
+- **The 28 `reference_category` mirror fields (+ 28 ENU translations)** are what makes the admin
+  completeness panel render at all. Without them rules validate, assignments persist,
+  `ProductCompletenessRulesByProductId` answers correctly — and the panel is empty. The PARENT
+  `reference_category` row and its translation are base-owned (base 3.6.0).
+- **The four rules name their fields in the AUTHORING form** `ProductCategory|<cat>|<field>`; the
+  index-side form is `CustomField_<name>` and matches nothing in a rule definition.
+- **The workspace field name comes from the SHOP NAME**, not its id:
+  `DATAMODEL_<name with spaces as underscores>`, here `DATAMODEL_Truvio_PIM`. Rename the shop and
+  level `100171` is orphaned, which is why the shop name is a `configRows` assertion.
+
+**3. One Dynamic Workspace, with its backing query.** `DynamicStructures` `100170` "Truvio PIM -
+by data model", levelled on `DATAMODEL_Truvio_PIM` then `GroupNames`, with the query file
+`repositories/TruvioCommerce/PimWorkspace.query` shipped in this layer beside the rows that name
+it — the first `repositories/` tree a `kind: sample-data` layer has carried. It goes here rather
+than in surface-swift because the rows that reference it are sample-data rows: query and rows
+arrive together or neither is useful, the same self-containment surface-swift's own repository
+has. **It needs surface-swift 1.14.0**, whose `Products.index` `Full` build sets
+`SkipDataModels` `False`; without that the `DATAMODEL_` field is never emitted and the workspace
+opens with empty nodes and no error. Both level sources are non-analysed keyword fields — an
+analysed free-text source enumerates lower-cased Lucene term fragments and a numeric one
+enumerates nodes that open onto zero rows, and neither errors, so a level is checked by the SUM
+of its node counts against the backing query's total.
+
+**4. `EcomGroups` is 21, and that is an edition-visible break.** 16 browsable storefront groups
+(4 top + 12 sub, on `SHOP1`) plus 5 PIM groups (1 folder + 4 data models, on `TCSHOP-PIM`). Every
+edition that sets `sampleData: true` re-pins `expectedCounts.EcomGroups` to 21: `swift-demo`,
+`headless-demo`, `dap-portal`. `EcomProducts` stays **97**. `base.contract.json` `sampleData`
+carries the new `counts`, a `countsNote` that says which 16 and which 5, and five new
+`guaranteedRows` subjects — `pimShop`, `dataModelFolder`, `dataModels`, `completenessRules`,
+`workspace` — so an addition that wants its own data model binds there rather than here.
+
+**5. Two operator scripts under `tools/`, neither declared in `sql[]`.**
+`tools/scrub-sample-catalogue.sql` removes the whole sample catalogue AND the PIM structure from
+a branded host, keeping the personas, the twelve orders, the storefront copy, the demo clock, the
+email statistics, the `Images`/`Manuals` asset categories, the six `TCFIELD-*` settings rows and
+every base row. It is idempotent and must be re-run after **every** delivery, because a merge
+deserialize re-inserts everything it removes. `tools/retire-4x-ids.sql` is the one-time script a
+**4.x host** needs before the 5.0.0 delivery: merge never deletes, so without it the host ends
+with two top groups in the menu, two categories in the field picker, fifteen duplicate spec
+values per master and two dead datasheet rows on thirty product pages — with no error anywhere.
+Same precedent as the twelve retired price rows in 4.1.2.
+
+**6. Declaration drift repaired in passing (Foundry [#1251]).** `merge/merge-manifest.json`
+`files[]` is regenerated from disk for all 35 tables and now matches the tree in both directions.
+Two `costHints.expectedRows` figures were wrong before this change and are corrected rather than
+changed: `EcomShopGroupRelation` read **4** while sixteen rows sat on disk (the twelve 4.1.3
+added and never declared — the manifest listed four, so a manifest-driven consumer staged four),
+and `EcomPrices` read **233** while 4.1.2 left **221**. The layer total is 2,018 rows in 35
+tables.
+
+[#1251]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1251
+[#1303]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1303
+[#1304]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1304
+
+
 ## 4.1.3
 
 Patch: all sixteen TCGRP groups are related to `SHOP1`, not just the four top

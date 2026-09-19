@@ -1,6 +1,6 @@
 {
   "name": "sample-data",
-  "version": "4.1.3",
+  "version": "5.0.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -100,6 +100,36 @@
       "table": "EcomProductField",
       "where": "ProductFieldId = 'TCFIELD-PRODUCTNUMBER' AND ProductFieldAllowChangesAcrossVariants = '1'",
       "description": "Foundry #1253 (arm B): variant editing ON for ProductNumber, one of the six product fields DW 10.28 keeps master-only by default. Without it the first master save through any API copies the master's number, price and stock onto all 36 variant rows this layer ships. Proves the six TCFIELD-* settings rows landed."
+    },
+    {
+      "table": "EcomShops",
+      "where": "ShopId = 'TCSHOP-PIM' AND ShopType = '4'",
+      "description": "5.0.0: the DataStructure shop that owns the data-model tree. ShopType 4 is the whole discriminator - the admin's Data models section lists ShopType 4 shops and nothing else, so a shop that lands as ShopType 1 puts the data models in the Channels tree beside the storefront and the PIM demo has no home."
+    },
+    {
+      "table": "EcomGroups",
+      "where": "GroupId = 'TCDM-COMMERCE' AND GroupType = '2' AND ProductCategoryId = 'tc_commerce'",
+      "description": "5.0.0: a DataModel group carries BOTH its type and its category. GroupType 2 is what makes it a data model rather than a catalog group (NULL defaults to 0, Common), and ProductCategoryId is what plumbs the category's seven fields to the products related to it. Either one missing and the group still renders, still relates products and still reads back through every MCP group tool - it just does nothing."
+    },
+    {
+      "table": "EcomGroupProductRelation",
+      "where": "GroupProductRelationGroupId = 'TCDM-COMMERCE' AND GroupProductRelationProductId = 'TCPROD0006' AND GroupProductRelationIsPrimary = '0'",
+      "description": "5.0.0: one of the 61 master-to-data-model relations, proving the band mapping landed AND that it is non-primary. A data-model relation that arrives primary would move the master's canonical home out of its catalogue subgroup and off the storefront URL."
+    },
+    {
+      "table": "EcomProductCategoryField",
+      "where": "FieldCategoryId = 'reference_category' AND FieldId = 'tcMaterialClass'",
+      "description": "5.0.0: one of the 28 reference_category mirror fields. The mirror is the half of DW's completeness plumbing with no visible symptom when it is missing - rules validate, assignments persist, the API answers correctly, and the admin completeness panel on the product renders EMPTY. The parent reference_category row is base-owned (base 3.6.0)."
+    },
+    {
+      "table": "EcomCompletionRules",
+      "where": "EcomCompletionRuleId = '100160' AND EcomCompletionRuleExcludeVariants = '1'",
+      "description": "5.0.0: the Commerce data model's completion rule at its reserved identity, with variants excluded. Its EcomCompletionRuleProductFields names the seven tc_commerce fields in the AUTHORING form ProductCategory|tc_commerce|<field>; the index-side form CustomField_<name> matches nothing in a rule definition."
+    },
+    {
+      "table": "DynamicStructures",
+      "where": "DynamicStructureId = '100170'",
+      "description": "5.0.0: the one Dynamic Workspace, 'Truvio PIM - by data model'. Its DynamicStructureQueryId is the Id GUID of repositories/TruvioCommerce/PimWorkspace.query, which this layer also ships, and its DynamicStructureUniqueId is what the two DynamicStructureLevels rows join on. A workspace whose query GUID resolves to no file opens and lists nothing."
     }
   ],
   "sql": [
@@ -425,34 +455,40 @@
       "TC-GAL-*",
       "TC-HOVER-*",
       "TC-PRICE-*",
+      "TCDM-*",
       "TCFIELD-*",
       "TCGRP-*",
       "TCO-*",
       "TCPROD*",
       "TCREL-*",
+      "TCSHOP-PIM",
       "TCVG-*",
       "TCVGR-*",
       "TCVO-*",
       "tc_*"
     ],
-    "reservedKeyNote": "The TC* family this layer owns, disjoint from the feature layers' PACK-<NAME>-* prefix (base.contract.json idRules.reservedFixtureKeys names the same TC* family). Reserved int ids, all at or above the base contract's intIdentityFloor 100000 and written verbatim with IDENTITY_INSERT by the serializer: AccessUser 100100-100103, EcomDetailsGroup 100110 (Images) and 100111 (Manuals), EcomFieldDisplayGroups 100120 (tc_specs), EcomStockUnit 100201-100261, EcomProductField 100130-100135 (the six TCFIELD-* variant-editing settings rows, 4.1.1).",
+    "reservedKeyNote": "The TC* family this layer owns, disjoint from the feature layers' PACK-<NAME>-* prefix (base.contract.json idRules.reservedFixtureKeys names the same TC* family). TCGRP-* and tc_* are the browsable storefront catalogue; TCSHOP-PIM and TCDM-* are the PIM tree 5.0.0 adds. Reserved int ids, all at or above the base contract's intIdentityFloor 100000 and written verbatim with IDENTITY_INSERT by the serializer: AccessUser 100100-100103, EcomDetailsGroup 100110 (Images) and 100111 (Manuals), EcomFieldDisplayGroups 100120 (tc_specs), EcomProductField 100130-100135 (the six TCFIELD-* variant-editing settings rows, 4.1.1), EcomStockUnit 100201-100261. 5.0.0 adds: EcomShops 100130, EcomShopLanguageRelation 100131, EcomGroups 100140-100144, EcomShopGroupRelation 100145-100149, EcomProductCategoryField 100150-100177, EcomCompletionRules 100160-100163, DynamicStructures 100170, DynamicStructureLevels 100171-100172, EcomGroupRelations 100178-100181, EcomGroupProductRelation 100200-100260, EcomProductCategoryFieldTranslation 100300-100327. The ranges are per TABLE, so EcomProductField 100130-100135 and EcomShops 100130 do not collide; base.contract.json reserves 100135 for its own EcomProductCategoryTranslation row on the same principle.",
     "expectedRows": {
       "AccessUser": 4,
       "AccessUserGroupRelation": 6,
+      "AccessUserSecondaryRelation": 1,
+      "DynamicStructureLevels": 2,
+      "DynamicStructures": 1,
+      "EcomCompletionRules": 4,
       "EcomDetails": 373,
       "EcomDetailsGroup": 2,
       "EcomFieldDisplayGroupFields": 28,
       "EcomFieldDisplayGroupTranslation": 1,
       "EcomFieldDisplayGroups": 1,
-      "EcomGroupProductRelation": 122,
-      "EcomGroupRelations": 12,
-      "EcomGroups": 16,
+      "EcomGroupProductRelation": 183,
+      "EcomGroupRelations": 16,
+      "EcomGroups": 21,
       "EcomOrderLines": 20,
       "EcomOrders": 12,
-      "EcomPrices": 233,
+      "EcomPrices": 221,
       "EcomProductCategory": 4,
-      "EcomProductCategoryField": 28,
-      "EcomProductCategoryFieldTranslation": 28,
+      "EcomProductCategoryField": 56,
+      "EcomProductCategoryFieldTranslation": 56,
       "EcomProductCategoryFieldValue": 427,
       "EcomProductCategoryTranslation": 4,
       "EcomProductField": 6,
@@ -460,13 +496,15 @@
       "EcomProducts": 97,
       "EcomProductsRelated": 326,
       "EcomProductsRelatedGroups": 3,
-      "EcomShopGroupRelation": 4,
+      "EcomShopGroupRelation": 21,
+      "EcomShopLanguageRelation": 1,
+      "EcomShops": 1,
       "EcomStockUnit": 61,
       "EcomVariantGroupProductRelation": 12,
       "EcomVariantGroups": 2,
       "EcomVariantOptionsProductRelation": 30,
       "EcomVariantsOptions": 5
     },
-    "expectedRowsNote": "Rows arrive by merge deserialize of merge/_sql/<Table>/*.yml (29 tables); every count equals the per-table row-file count in merge/merge-manifest.json (1,877 rows). 4.1.1 adds the 6 EcomProductField variant-editing settings rows to the 1,871 of 4.1.0. The subscription plan TCPROD0061 adds 15 of them over the 1,856 the brand harvest measured: 1 EcomProducts, 2 EcomGroupProductRelation (TCGRP-PRICE-STRUCTURES primary + TCGRP-COMMERCE), 1 EcomPrices (TC-PRICE-LIST-0061, EUR 49), 1 EcomDetails (the primary tile), 1 EcomStockUnit (100261), 2 EcomProductsRelated and 7 EcomProductCategoryFieldValue (the tc_commerce spec set its siblings carry). EcomDetails 372+1 = the 24 TC-GAL-*-3 gallery rows retired by the #1137 rekey are already out. EcomPrices 232+1 = 36 TC-PRICE-VAR + 60 TC-PRICE-GRP + 36 TC-PRICE-GRPV + 60 TC-PRICE-LIST + 30 TC-PRICE-Q + 3 TC-PRICE-T + 7 TC-PRICE-CTR + 1 TC-PRICE-CONTRACT; there is no list row for TCPROD0021, a ProductType 2 kit with ProductPrice 0. EcomVariantOptionsProductRelation 30 = 6 masters x 5 options. EcomProductItems 10 = TCPROD0021's 2 slots + 8 across the four Bundles-band kits (#1161). EcomDetailsGroup 2 = Manuals + Images (#1145). The two loose sql[] scripts write no catalogue row: demo-clock.sql creates its own _demoClock* tables and the scheduled task, email-stats.sql writes only telemetry rows. Advisory: the gate derives its own counts from the composition."
+    "expectedRowsNote": "Rows arrive by merge deserialize of merge/_sql/<Table>/*.yml (35 tables); every count equals the per-table row-file count in merge/merge-manifest.json (2,018 rows), which 5.0.0 regenerates from disk in both directions. 5.0.0 adds 140 rows in eleven tables for the PIM structure: EcomShops 1 (TCSHOP-PIM, ShopType 4), EcomShopLanguageRelation 1, EcomGroups +5 (16 -> 21: one GroupType 1 folder and four GroupType 2 data models), EcomGroupRelations +4, EcomShopGroupRelation +5, EcomGroupProductRelation +61 (every master to the data model of its band, IsPrimary false), EcomProductCategoryField +28 and EcomProductCategoryFieldTranslation +28 (the reference_category mirrors), EcomCompletionRules 4, DynamicStructures 1, DynamicStructureLevels 2. EcomProducts is UNCHANGED at 97 - the PIM tree adds relations, never products. Two figures here are corrections rather than changes: EcomShopGroupRelation read 4 while sixteen rows sat on disk (the twelve 4.1.3 added and never declared), and EcomPrices read 233 while 4.1.2 left 221 on disk. The two loose sql[] scripts write no catalogue row: demo-clock.sql creates its own _demoClock* tables and the scheduled task, email-stats.sql writes only telemetry rows. Advisory: the gate derives its own counts from the composition."
   }
 }
