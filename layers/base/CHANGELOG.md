@@ -1,4 +1,4 @@
-# Changelog — base
+﻿# Changelog — base
 
 ## 3.6.0
 
@@ -75,9 +75,16 @@ ships any of those groups**: the base ships zero catalogue (`idRules.baseCatalog
 every group the sample-data and feature layers ship is `TCGRP-*` or `PACK-RPP-GRP1`. Verified by
 grepping every `_sql/EcomGroups/*.yml` in the tree before the delete. The rows therefore landed on
 each delivered host as 31 relations to groups that do not exist. The entry keeps its `_meta.yml`, so
-the whole-table `Replace` still **wipes** `EcomShopGroupRelation` on a target - the table stays
-base-owned - and the real rows arrive as merge rows from `sample-data` and
-`feature-reordering-pricing`.
+the table stays base-owned, and the real rows arrive as merge rows from `sample-data` and
+`feature-reordering-pricing`. **Dropping the files stops the replay; it does not remove rows a host
+already carries.** Measured on the Serializer 1.0.2-beta source and on foundry.mydwsite4.com (gate
+run 20260919-153644): a `Replace` predicate is an upsert by key and never deletes a row absent from
+the tree (`docs/swift-replace-merge-analysis.md` D-5); only a table with no primary key is
+`DELETE FROM` + inserted (`SqlTableProvider.cs:345-360`). A host delivered from 3.5.3 or earlier
+keeps its 31 orphans until an operator deletes them; `sample-data/tools/retire-4x-ids.sql` carries
+that delete, and the Foundry `pim-structure` gate leg asserts zero orphans. The pristine
+`dw10-demo-empty` baseline carries no `EcomShopGroupRelation` row at all, so a fresh clone starts
+clean.
 
 `layer.json` gains `fragmentTables`, which the base had never declared, now listing all 20 tables it
 ships (the static key-collision input the schema describes); the three new tables are in it.

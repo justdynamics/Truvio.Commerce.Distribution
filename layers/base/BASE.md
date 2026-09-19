@@ -1,4 +1,4 @@
-# Base layer — the contract every edition builds on
+﻿# Base layer — the contract every edition builds on
 
 The **base** is the one privileged layer (`kind: base`). Since the Swift 2.4 base split (3.0.0) it is **framework-only**: shop structure, countries/currencies/languages/VAT, payment/shipping/order flow, stock locations, the hidden `reference_category` template row, and the three permission groups — **zero catalog, zero content areas, zero pages**. The Swift storefront content (areas 3 + 27, both mode trees) and `UrlPath` moved to the **`surface-swift`** layer; the headless content lives in `surface-headless`. Editions compose the base with additions (`feature`, `sample-data`, `surface`, `theme` layers).
 
@@ -76,7 +76,7 @@ All three are contacts on one B2B account (`AccessUser` `100100`, **customer num
 
 **Whole-table (`replace`), 17 tables:** EcomCountries, EcomCountryText, EcomCurrencies, EcomLanguages, EcomVatGroups, EcomVatCountryRelations, EcomShops, EcomShopLanguageRelation, EcomShopGroupRelation, **EcomStockLocation** (3.6.0), **EcomStockLocationTranslations** (3.6.0), EcomPayments, EcomShippings, EcomMethodCountryRelation, EcomOrderFlow, EcomOrderStates, EcomOrderStateRules. (UrlPath: surface-swift-owned since 3.0.0.)
 
-`EcomShopGroupRelation` is base-owned but ships **zero rows** from 3.6.0 (Foundry #1198). It carried 31 `GROUP<n>$$SHOP1` rows inherited from the platform baseline, every one of them pointing at a numeric `EcomGroups` id that **no layer in this Distribution ships** — the base ships zero catalogue and the sample-data groups are all `TCGRP-*`. The entry keeps its `_meta.yml`, so the whole-table Replace still wipes the table on a target and the real shop-group rows arrive as merge rows from `sample-data` and `feature-reordering-pricing`.
+`EcomShopGroupRelation` is base-owned but ships **zero rows** from 3.6.0 (Foundry #1198). It carried 31 `GROUP<n>$$SHOP1` rows inherited from the platform baseline, every one of them pointing at a numeric `EcomGroups` id that **no layer in this Distribution ships** — the base ships zero catalogue and the sample-data groups are all `TCGRP-*`. The entry keeps its `_meta.yml`, so the table stays base-owned, and the real shop-group rows arrive as merge rows from `sample-data` and `feature-reordering-pricing`. Dropping the files stops the replay only: a `Replace` predicate is an upsert by key and never deletes a row absent from the tree (Serializer 1.0.2-beta, `docs/swift-replace-merge-analysis.md` D-5; measured on foundry.mydwsite4.com, gate run 20260919-153644), so a host delivered from 3.5.3 or earlier keeps its orphans until `sample-data/tools/retire-4x-ids.sql` deletes them. The Foundry `pim-structure` leg asserts zero orphans.
 
 **Filtered (`replace`):**
 
