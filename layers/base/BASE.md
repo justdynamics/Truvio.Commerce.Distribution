@@ -1,8 +1,8 @@
-# Base layer — the contract every edition builds on
+﻿# Base layer — the contract every edition builds on
 
-The **base** is the one privileged layer (`kind: base`). Since the Swift 2.4 base split (3.0.0) it is **framework-only**: shop structure, countries/currencies/languages/VAT, payment/shipping/order flow, and the three permission groups — **zero catalog, zero content areas, zero pages**. The Swift storefront content (areas 3 + 27, both mode trees) and `UrlPath` moved to the **`surface-swift`** layer; the headless content lives in `surface-headless`. Editions compose the base with additions (`feature`, `sample-data`, `surface`, `theme` layers).
+The **base** is the one privileged layer (`kind: base`). Since the Swift 2.4 base split (3.0.0) it is **framework-only**: shop structure, countries/currencies/languages/VAT, payment/shipping/order flow, stock locations, the hidden `reference_category` template row, and the three permission groups — **zero catalog, zero content areas, zero pages**. The Swift storefront content (areas 3 + 27, both mode trees) and `UrlPath` moved to the **`surface-swift`** layer; the headless content lives in `surface-headless`. Editions compose the base with additions (`feature`, `sample-data`, `surface`, `theme` layers).
 
-The machine-readable guarantees live in [`base.contract.json`](base.contract.json) (v2.2.2); the gate reads that file for the base-contract collision check. Content-scoped contract bits (content anchors, per-environment Area exclusions, protected Swift item types, navDepth, title rules) moved to `layers/surface-swift/surface.contract-notes.json`. This doc is the human companion. **Additions bind only to the base contract — never to each other.**
+The machine-readable guarantees live in [`base.contract.json`](base.contract.json) (v2.4.0); the gate reads that file for the base-contract collision check. Content-scoped contract bits (content anchors, per-environment Area exclusions, protected Swift item types, navDepth, title rules) moved to `layers/surface-swift/surface.contract-notes.json`. This doc is the human companion. **Additions bind only to the base contract — never to each other.**
 
 ## The UrlPath decision (Swift 2.4 base split)
 
@@ -62,7 +62,7 @@ All three are contacts on one B2B account (`AccessUser` `100100`, **customer num
 
 **Content:** none — the base ships zero content areas (3.0.0). Content anchors (area 3, langPrefix `/swift-2`) are surface-swift-owned.
 
-**Reference category:** `reference_category` (`EcomProductCategory`, CategoryType 2) + `LANG1` translation — required by DemoVerifier Check 2.
+**Reference category:** `reference_category` (`EcomProductCategory`, CategoryType 2, `CategoryAutoId` 100136) + its `ENU` translation “Reference category” (`CategoryTranslationAutoId` 100135) — the hidden template category Dynamicweb's completeness-rule and category-field admin UI reads, and the subject of DemoVerifier Check 2. **The base actually ships both rows only from 3.6.0** (Foundry #1304): this doc claimed the row from 3.0.0, but no predicate carried it and the Foundry gate synthesised it pre-host-start instead (`tools/harness/Invoke-SeedVerify.ps1`, Step 3b), so a consumer deserializing the Distribution outside the gate never got it. They ship as two **filtered** Replace predicates (FILTER-02 / FILTER-03) — the concrete `tc_*` categories are sample-data merge rows and a whole-table Replace would wipe them. The gate seed stays, `IF NOT EXISTS`-guarded on the category id, so a host it already seeded with a `LANG1` translation keeps that row alongside the shipped `ENU` one.
 
 **Shop:** `SHOP1` (B2B Commerce Store) is the only shop and ships `ShopDefault` true, with no completion rules and no completion languages (no layer ships a completion rule). `ShopProductPrimaryPageId` ships `0` because the product page id is per-environment: binding it is a surface-swift consumer obligation.
 
@@ -74,9 +74,31 @@ All three are contacts on one B2B account (`AccessUser` `100100`, **customer num
 
 ## Base-owned tables
 
-**Whole-table (`replace`):** EcomCountries, EcomCountryText, EcomCurrencies, EcomLanguages, EcomVatGroups, EcomVatCountryRelations, EcomShops, EcomShopLanguageRelation, EcomShopGroupRelation, EcomPayments, EcomShippings, EcomMethodCountryRelation, EcomOrderFlow, EcomOrderStates, EcomOrderStateRules. (UrlPath: surface-swift-owned since 3.0.0.)
+**Whole-table (`replace`), 17 tables:** EcomCountries, EcomCountryText, EcomCurrencies, EcomLanguages, EcomVatGroups, EcomVatCountryRelations, EcomShops, EcomShopLanguageRelation, EcomShopGroupRelation, **EcomStockLocation** (3.6.0), **EcomStockLocationTranslations** (3.6.0), EcomPayments, EcomShippings, EcomMethodCountryRelation, EcomOrderFlow, EcomOrderStates, EcomOrderStateRules. (UrlPath: surface-swift-owned since 3.0.0.)
 
-**Filtered (`replace`, FILTER-01):** `AccessUser where AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')` — only the three groups are base-owned; user rows are seeded, not serialized.
+`EcomShopGroupRelation` is base-owned but ships **zero rows** from 3.6.0 (Foundry #1198). It carried 31 `GROUP<n>$$SHOP1` rows inherited from the platform baseline, every one of them pointing at a numeric `EcomGroups` id that **no layer in this Distribution ships** — the base ships zero catalogue and the sample-data groups are all `TCGRP-*`. The entry keeps its `_meta.yml`, so the table stays base-owned, and the real shop-group rows arrive as merge rows from `sample-data` and `feature-reordering-pricing`. Dropping the files stops the replay only: a `Replace` predicate is an upsert by key and never deletes a row absent from the tree (Serializer 1.0.2-beta, `docs/swift-replace-merge-analysis.md` D-5; measured on foundry.mydwsite4.com, gate run 20260919-153644), so a host delivered from 3.5.3 or earlier keeps its orphans until `sample-data/tools/retire-4x-ids.sql` deletes them. The Foundry `pim-structure` leg asserts zero orphans.
+
+**Filtered (`replace`):**
+
+- **FILTER-01** — `AccessUser where AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')`: only the three groups are base-owned; user rows are seeded, not serialized.
+- **FILTER-02** (3.6.0) — `EcomProductCategory where CategoryId = 'reference_category'`: the hidden template category only. The `tc_*` categories are sample-data merge rows.
+- **FILTER-03** (3.6.0) — `EcomProductCategoryTranslation where CategoryTranslationCategoryId = 'reference_category'`: its `ENU` display name, on the same reasoning.
+
+### Stock locations (3.6.0, Foundry #1303)
+
+Stock locations are framework configuration, not catalogue, and the base now owns **both** tables whole: `EcomStockLocation` and `EcomStockLocationTranslations`. The platform baseline shipped the Swift demo's own rows — `1 BikeShop Copenhagen`, `2 BikeShop Aarhus` (description `Warehouse west`), `3 Default stock location` — in both of them, so **every composed edition delivered a bike shop's warehouse names**. The translation table matters as much as the parent: **it is where the name Dynamicweb actually renders lives**, so correcting `EcomStockLocation.StockLocationName` alone would have changed nothing a user sees. The base ships three neutral rows in each, on **the same ids**:
+
+| Id | Name | ExternalId | Sort | Category |
+|---|---|---|---|---|
+| 1 | Central warehouse | `CENTRAL` | 1 | `STOCKLOCCAT1` |
+| 2 | Regional warehouse | `REGIONAL` | 2 | `STOCKLOCCAT2` |
+| 3 | Default stock location | `DEFAULT` | 3 | `STOCKLOCCAT1` |
+
+`EcomStockLocationTranslations` carries the same three ids keyed `ENU` with those same names and an empty description; it has **no identity column**, so the composite `StockLocationId` + `LanguageId` is the whole key. Language `ENU` throughout; every other column empty or `0`.
+
+`StockLocationCategoryId` is **kept exactly as the baseline carries it**, not blanked. `EcomStockLocationCategory` exists on every host with `STOCKLOCCAT1` “Click and collect” and `STOCKLOCCAT2` “Warehouse”, it stays **baseline-owned** — no layer in this Distribution serializes it — and the base's own Click & Collect delivery method needs pickup locations sitting in that category (the base ships that method as `EcomShippings/Click & Collect delivery method.yml`).
+
+**The ids 1-3 are deliberately kept, not rekeyed above the `intIdentityFloor`**: all 61 `EcomStockUnit` rows in the sample-data layer carry `StockUnitStockLocationId` 3, and `EcomShops.ShopStockLocationID` addresses the same id space (`SHOP1` ships `0`). A rekey would orphan the stock units. Like the permission groups `1325`/`1270`/`1292`, these are base-owned rows the base **adopts** from the platform baseline rather than mints; an addition that needs a stock location of its own mints one at or above `100000`. See `base.contract.json` → `stockLocations`.
 
 **Content:** none (framework-only).
 
