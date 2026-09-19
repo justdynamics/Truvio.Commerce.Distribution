@@ -85,6 +85,6 @@
     "knownWrongNames": {
       "tc_content|tcMedia": "tc_content|tcMediaSet"
     },
-    "scopeNote": "tc_specs spans four categories (tc_commerce, tc_content, tc_data_models, tc_users) and a product renders only the fields it carries a value for, so a product whose values all sit in one category shows that category's fields and no others. A data layer that wants the band fuller spreads values across the categories the group spans; it does not shorten the group."
+    "scopeNote": "tc_specs spans four categories (tc_commerce, tc_content, tc_product_structure, tc_users) and a product renders only the fields it carries a value for, so a product whose values all sit in one category shows that category's fields and no others. A data layer that wants the band fuller spreads values across the categories the group spans; it does not shorten the group. The same four categories are the four PIM data models sample-data 5.0.0 attaches under its TCSHOP-PIM shop, and each one's completion rule names exactly the seven fields of its category - so the spec table a product renders and the completeness score it carries are computed from the same set."
   }
 }

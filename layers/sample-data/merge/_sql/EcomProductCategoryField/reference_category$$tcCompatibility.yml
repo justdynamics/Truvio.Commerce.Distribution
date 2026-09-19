@@ -1,0 +1,28 @@
+﻿"ownership":
+  "mode": "merge"
+"FieldId": "tcCompatibility"
+"FieldCategoryId": "reference_category"
+"FieldTemplateTag": "tcCompatibility"
+"FieldType": 1
+"FieldDefaultValue": 
+"FieldPresentationType": 
+"FieldSortOrder": 7
+"FieldAutoId": 100164
+"FieldDoNotRender": false
+"FieldHideEmpty": false
+"FieldForeignCategoryId": 
+"FieldValidationPattern": 
+"FieldIncludeAllExistingLanguage": false
+"FieldAllowChangesAcrossLanguages": false
+"FieldAllowChangesAcrossVariants": false
+"FieldRequired": false
+"FieldReadOnly": false
+"FieldValueConversionPreset": 
+"FieldValueConversionDecimals": 
+"FieldValueConversionDisplayRule": 
+"FieldShowFieldOnBothMasterAndVariant": false
+"FieldTypeSystemName": 
+"FieldUseAsFacet": false
+"FieldValueConversionGroupId": 
+"FieldEditorConfiguration": 
+"FieldMatrixAttributeGroupId": 

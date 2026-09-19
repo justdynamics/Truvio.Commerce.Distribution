@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  TruvioCommerce/PimWorkspace.query — the query that backs the Dynamic Workspace
+  "Truvio PIM - by data model" (DynamicStructures 100170; this file's Id GUID is what
+  DynamicStructureQueryId names, and the two move together or the workspace opens empty).
+
+  WHY THIS LAYER SHIPS A REPOSITORY FILE AT ALL
+  A Dynamic Workspace is a PROJECTION, not storage: it is a backing query plus level
+  definitions. The rows that define it (DynamicStructures, DynamicStructureLevels) are
+  sample-data rows, so the query they point at ships in the same layer — query and rows
+  arrive together or neither is useful. It lands in the TruvioCommerce repository that
+  surface-swift already owns, beside Products.index, which is the index it sources.
+
+  WHY IT IS NOT Products.query
+  Products.query is the STOREFRONT query. It resolves Dynamicweb.Ecommerce.Context macros
+  (LanguageID, ShopID) that exist only on a server-rendered storefront request. A workspace
+  runs in the BACKEND, where those macros resolve to nothing and the query silently matches
+  nothing, so this file states its language as a constant and names no shop at all: the
+  workspace's shop scope comes from the DATAMODEL_Truvio_PIM level, not from a predicate.
+
+  THE PREDICATE, AND WHY EACH PART IS HERE
+    LanguageID = ENU   one document per product, not one per language. A level counts index
+                       DOCUMENTS under this predicate, so without it every node count is
+                       multiplied by the language fan-out and the level sum overshoots the
+                       query total. Narrow the query, never the level.
+    IsVariant = False   masters only. The catalogue ships 36 variant rows beside its 60
+                       masters; a workspace that lists both makes the enrichment worklist
+                       read as 97 items of work where there are 61.
+  There is deliberately NO Active filter: a PIM workbench must show the product that is
+  not live yet, which is exactly the product that still needs enriching.
+
+  LEVEL SOURCES (in DynamicStructureLevels, not here) are both NON-ANALYSED keyword fields:
+  DATAMODEL_Truvio_PIM (emitted only when the Products.index Full build carries
+  SkipDataModels=False) then GroupNames. An analysed free-text field would enumerate
+  lower-cased Lucene term fragments and a numeric field would enumerate nodes that open onto
+  zero rows; neither errors, so the check is the SUM of the node counts against this query's
+  own total.
+
+  COMPLETENESS. CompletionRules is deliberately EMPTY. The completeness percentage a product
+  editor shows comes from the QUERY's rule list, so a consumer that wants it adds the four
+  rule ids (100160-100163) and CompletionLanguages ENU here. Know what that costs before you
+  do: the helper's AppendCompletionExpressions default IS the "Exclude products with 100%
+  completeness" checkbox, so a rule list turns this workspace into a worklist of INCOMPLETE
+  products rather than the whole catalogue.
+-->
+<Query ID="5d8e3b27-91a4-4c6f-b0d2-7ae15f43c908" Name="PimWorkspace.query">
+  <Meta />
+  <Settings />
+  <Parameters />
+  <Source Repository="TruvioCommerce" Item="Products.index" Type="Dynamicweb.Indexing.Queries.IndexQueryProvider, Dynamicweb.Core" />
+  <SortOrder>
+    <Sort Field="NameForSort" Direction="Ascending" />
+  </SortOrder>
+  <Expressions>
+    <GroupExpression Operator="And">
+      <BinaryExpression Operator="Equal" Disabled="false">
+        <Left>
+          <FieldExpression Field="LanguageID" />
+        </Left>
+        <Right>
+          <ConstantExpression Value="ENU" Type="System.String" />
+        </Right>
+      </BinaryExpression>
+      <BinaryExpression Operator="Equal" Disabled="false">
+        <Left>
+          <FieldExpression Field="IsVariant" />
+        </Left>
+        <Right>
+          <ConstantExpression Value="False" Type="System.Boolean" />
+        </Right>
+      </BinaryExpression>
+    </GroupExpression>
+  </Expressions>
+  <ViewFields />
+  <ViewLanguages />
+  <Meta />
+  <CompletionRules />
+  <CompletionLanguages />
+  <ListViewFields />
+</Query>

@@ -1,0 +1,50 @@
+﻿"ownership":
+  "mode": "merge"
+"GroupId": "TCDM-CONTENT"
+"GroupLanguageId": "ENU"
+"GroupName": "Content"
+"GroupNumber": "TCDM-CONTENT"
+"GroupPageIDRel": 0
+"GroupSmallImage": 
+"GroupLargeImage": 
+"GroupDescription": 
+"GroupAssortment": false
+"GroupIcon": 
+"GroupNavigationShowInMenu": false
+"GroupNavigationShowInSiteMap": true
+"GroupNavigationClickable": true
+"GroupInheritOrderLineFields": 
+"ProductCategoryId": "tc_content"
+"GroupRelatedGroups": 
+"GroupRelatedProducts": 
+"GroupManufacturerId": 
+"GroupVatGroupId": 
+"GroupProductType": 
+"GroupStockGroupId": 
+"GroupMetaTitle": 
+"GroupMetaKeywords": 
+"GroupMetaDescription": 
+"GroupMetaUrl": 
+"GroupFilterPagedQueryMode": 
+"GroupMetaPrimaryPage": 
+"GroupMetaCanonical": 
+"GroupAutoId": 100142
+"GroupInheritCategoryFieldsFromParent": false
+"GroupMetaUrlIgnoreParent": false
+"GroupWorkflowId": 0
+"GroupCompletionRules": "100161"
+"GroupCompletionLanguageIds": "ENU"
+"GroupProductRelationRuleField1": 
+"GroupProductRelationRuleValue1": 
+"GroupProductRelationRuleField2": 
+"GroupProductRelationRuleValue2": 
+"ProductGroupPromotionImage": 
+"ProductGroupPromotionDescription": 
+"ProductGroupPromotionLinkLabel": 
+"ProductGroupPromotionLink": 
+"ProductGroupNavigationImage": 
+"SelectedGroup": false
+"GroupType": 2
+"ProductGroupRelatedContent": 
+"GroupCompletenessOnAllCategoryFields": false
+"GroupMetaUrlIgnoreForChildren": false

@@ -1,0 +1,7 @@
+﻿"ownership":
+  "mode": "merge"
+"EcomCompletionRuleId": 100162
+"EcomCompletionRuleName": "Product structure data complete"
+"EcomCompletionRuleDescription": "The seven Product Structure attributes a Product Structure-band master carries before its structure is described: unit of measure, pack quantity, net weight, dimensions, material class, rating, compatibility."
+"EcomCompletionRuleProductFields": "ProductCategory|tc_product_structure|tcUnitOfMeasure,ProductCategory|tc_product_structure|tcPackQuantity,ProductCategory|tc_product_structure|tcNetWeight,ProductCategory|tc_product_structure|tcDimensions,ProductCategory|tc_product_structure|tcMaterialClass,ProductCategory|tc_product_structure|tcRating,ProductCategory|tc_product_structure|tcCompatibility"
+"EcomCompletionRuleExcludeVariants": true

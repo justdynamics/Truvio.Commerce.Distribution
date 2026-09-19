@@ -35,28 +35,52 @@
       "_why": "Merge: the one impersonation grant the layer ships, the base-contract CSR group 1292 over the layer's account group 100100 (Foundry #1261). The column direction is DW's: UserId is the impersonator, SecondaryUserId the account being impersonated. Additive, so a consumer's own grants survive a re-deserialize."
     },
     {
+      "name": "sample-data EcomShops",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomShops",
+      "where": "ShopId = 'TCSHOP-PIM'",
+      "_why": "Merge, never Replace: EcomShops is base-owned replaceWholeTable (base.contract.json baseOwnedTables), and the base's Replace runs first and writes SHOP1 alone. This layer adds ONE row beside it, the ShopType 4 DataStructure shop that owns the data-model tree - the same shape as this layer's EcomShopGroupRelation predicate. ShopAutoId 100130 is written verbatim with IDENTITY_INSERT. The shop name is what names the workspace index field: DW derives DATAMODEL_<ShopName with spaces as underscores>, so 'Truvio PIM' gives DATAMODEL_Truvio_PIM, which DynamicStructureLevels 100171 and the Products.index SkipDataModels=False build both depend on. Rename the shop and that field name moves with it."
+    },
+    {
+      "name": "sample-data EcomShopLanguageRelation",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomShopLanguageRelation",
+      "where": "ShopId = 'TCSHOP-PIM'",
+      "_why": "Merge, never Replace: base-owned replaceWholeTable, same rule as EcomShops above. EVERY shop needs a language relation - without one DW renders the shop as a nameless node in the Data models tree - so the PIM shop carries its own ENU row at the reserved identity 100131."
+    },
+    {
+      "name": "sample-data EcomCompletionRules",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomCompletionRules",
+      "where": "EcomCompletionRuleId >= 100160 AND EcomCompletionRuleId <= 100163",
+      "_why": "Merge by identity id, keyed on the layer's reserved range 100160..100163 so a consumer's own rules are never touched. One rule per data model, naming its seven category fields in the AUTHORING system-name form ProductCategory|<category>|<field> (the index-side form is CustomField_<name> and matches nothing here). Ordered before EcomGroups because EcomGroups.GroupCompletionRules carries the rule id as a string - there is no FK, but a host restart reloads CompletionRuleService and ProductCategoryService together and the rule should exist when the group referencing it does."
+    },
+    {
       "name": "sample-data EcomGroups",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomGroups",
-      "where": "GroupId LIKE 'TCGRP-%'",
-      "_why": "Merge: sample-data rows under the layer's own prefix."
+      "where": "(GroupId LIKE 'TCGRP-%' OR GroupId LIKE 'TCDM-%')",
+      "_why": "Merge: sample-data rows under the layer's own prefixes. TCGRP-* is the browsable storefront catalogue (4 top groups + 12 subgroups); TCDM-* is the PIM tree under the TCSHOP-PIM DataStructure shop - one GroupType 1 folder and four GroupType 2 data models, each with its ProductCategoryId and its own completion rule. 21 rows."
     },
     {
       "name": "sample-data EcomShopGroupRelation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomShopGroupRelation",
-      "where": "ShopGroupGroupId LIKE 'TCGRP-%'",
-      "_why": "Merge, never Replace: the table is base-owned replaceWholeTable (base.contract.json:152-163); this layer only adds its four TCGRP-*$$SHOP1 rows, as feature-reordering-pricing already does."
+      "where": "(ShopGroupGroupId LIKE 'TCGRP-%' OR ShopGroupGroupId LIKE 'TCDM-%')",
+      "_why": "Merge, never Replace: the table is base-owned replaceWholeTable (base.contract.json); this layer only adds its own rows, as feature-reordering-pricing already does. 16 TCGRP-*$$SHOP1 rows bind the storefront catalogue to the commerce shop and 5 TCDM-*$$TCSHOP-PIM rows bind the PIM tree to the DataStructure shop. DW resolves a group to its shop through THIS table and does not walk the parent chain, so every group carries a row, folder and subgroups included."
     },
     {
       "name": "sample-data EcomGroupRelations",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomGroupRelations",
-      "where": "GroupRelationsGroupId LIKE 'TCGRP-%'",
-      "_why": "Merge: sample-data rows."
+      "where": "(GroupRelationsGroupId LIKE 'TCGRP-%' OR GroupRelationsGroupId LIKE 'TCDM-%')",
+      "_why": "Merge: sample-data rows. 12 storefront subgroup-to-top-group rows plus 4 data-model-to-folder rows under TCDM-TRUVIO-COMMERCE."
     },
     {
       "name": "sample-data EcomVariantGroups",
@@ -88,7 +112,7 @@
       "providerType": "SqlTable",
       "table": "EcomGroupProductRelation",
       "where": "GroupProductRelationProductId LIKE 'TCPROD%'",
-      "_why": "Merge: sample-data rows."
+      "_why": "Merge: sample-data rows. The predicate is keyed on the PRODUCT id, so it already fences the 61 TCDM-* data-model relations 5.0.0 adds beside the 122 TCGRP-* catalogue rows - no widening was needed. A master's data-model relation is IsPrimary false: its primary home stays its catalogue subgroup."
     },
     {
       "name": "sample-data EcomVariantGroupProductRelation",
@@ -151,16 +175,16 @@
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProductCategoryField",
-      "where": "FieldCategoryId LIKE 'tc[_]%'",
-      "_why": "Merge: sample-data rows."
+      "where": "(FieldCategoryId LIKE 'tc[_]%' OR (FieldCategoryId = 'reference_category' AND FieldId LIKE 'tc%'))",
+      "_why": "Merge: sample-data rows - the 28 concrete tc_* fields plus their 28 reference_category mirrors. reference_category is DW's hidden CategoryType 2 template category: without a mirror row per concrete field the admin completeness and rule screens resolve no field and render EMPTY while every API read answers correctly. The mirror half of the predicate is fenced to FieldId LIKE 'tc%' so it can never reach a mirror row another solution's fields put there; the reference_category PARENT row is base-owned."
     },
     {
       "name": "sample-data EcomProductCategoryFieldTranslation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomProductCategoryFieldTranslation",
-      "where": "FieldTranslationFieldCategoryId LIKE 'tc[_]%'",
-      "_why": "Merge: sample-data rows."
+      "where": "(FieldTranslationFieldCategoryId LIKE 'tc[_]%' OR (FieldTranslationFieldCategoryId = 'reference_category' AND FieldTranslationFieldId LIKE 'tc%'))",
+      "_why": "Merge: sample-data rows - 28 concrete ENU labels plus the 28 reference_category mirrors, the fourth row of the four-rows-per-field reference_category pattern. Same FieldId fence as the field predicate above."
     },
     {
       "name": "sample-data EcomProductCategoryFieldValue",
@@ -256,6 +280,22 @@
       "table": "EcomOrderLines",
       "where": "OrderLineOrderId LIKE 'TCO-%'",
       "_why": "Merge: sample-data rows; FK child of EcomOrders."
+    },
+    {
+      "name": "sample-data DynamicStructures",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "DynamicStructures",
+      "where": "DynamicStructureId = 100170",
+      "_why": "Merge by identity id at the layer's reserved 100170. The one Dynamic Workspace the layer ships. DynamicStructureQueryId is the Id GUID of repositories/TruvioCommerce/PimWorkspace.query, which this layer also ships; DynamicStructureUniqueId is the fixed GUID the level rows join on. HAZARD, MEASURED, AND NOT FIXABLE FROM THIS FILE: DynamicStructures has NO PRIMARY KEY on DW 10.28 - it is a heap - so the engine has no key to match a row on and falls back to DELETE FROM [table] plus insert-all, UNDER MERGE EXACTLY AS UNDER REPLACE (Truvio.Commerce.Serializer 1.0.2-beta, SqlTableProvider.cs:345-360 / SqlTableWriter.cs:364-407). This where clause fences what is SERIALIZED; it does not fence that wipe. Gate run 20260919-153644 on foundry.mydwsite4.com: delivering this one row deleted the host's three baseline workspaces (ids 1, 3, 4) and left their seven DynamicStructureLevels rows orphaned - the levels table HAS a primary key, so it was upserted. A consumer that owns workspaces removes THIS predicate from the composed Serializer.config.json before the deserialize, or recreates its workspaces afterwards; either way the orphaned level rows must be deleted by hand, which tools/scrub-sample-catalogue.sql and tools/retire-4x-ids.sql do idempotently. This is the only heap table the layer writes; check _meta.yml keyColumns against sys.indexes before adding another."
+    },
+    {
+      "name": "sample-data DynamicStructureLevels",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "DynamicStructureLevels",
+      "where": "DynamicStructureLevelId >= 100171 AND DynamicStructureLevelId <= 100172",
+      "_why": "Merge by identity id at the layer's reserved 100171..100172. Two levels: DATAMODEL_Truvio_PIM then GroupNames. DynamicStructureLevelStructureId is the DynamicStructures UniqueId GUID stored as nvarchar, not the int id. Both level sources are NON-ANALYSED keyword fields, which is the whole correctness question for a workspace level: an analysed free-text field enumerates lower-cased Lucene term fragments and a numeric field enumerates nodes that open onto zero rows, and neither errors."
     }
   ]
 }
