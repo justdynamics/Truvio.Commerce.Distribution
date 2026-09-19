@@ -1,0 +1,43 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "DynamicStructures"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "DynamicStructureId"
+"identityColumns":
+- "DynamicStructureId"
+"allColumns":
+- "DynamicStructureId"
+- "DynamicStructureTitle"
+- "DynamicStructureQueryId"
+- "DynamicStructureUniqueId"
+"columnDefinitions":
+- "name": "DynamicStructureId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "DynamicStructureTitle"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DynamicStructureQueryId"
+  "dataType": "nvarchar"
+  "maxLength": 36
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DynamicStructureUniqueId"
+  "dataType": "uniqueidentifier"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

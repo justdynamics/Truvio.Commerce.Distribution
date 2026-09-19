@@ -1,0 +1,50 @@
+﻿"ownership":
+  "mode": "merge"
+"GroupId": "TCDM-TRUVIO-COMMERCE"
+"GroupLanguageId": "ENU"
+"GroupName": "Truvio Commerce"
+"GroupNumber": "TCDM-TRUVIO-COMMERCE"
+"GroupPageIDRel": 0
+"GroupSmallImage": 
+"GroupLargeImage": 
+"GroupDescription": 
+"GroupAssortment": false
+"GroupIcon": 
+"GroupNavigationShowInMenu": false
+"GroupNavigationShowInSiteMap": true
+"GroupNavigationClickable": true
+"GroupInheritOrderLineFields": 
+"ProductCategoryId": 
+"GroupRelatedGroups": 
+"GroupRelatedProducts": 
+"GroupManufacturerId": 
+"GroupVatGroupId": 
+"GroupProductType": 
+"GroupStockGroupId": 
+"GroupMetaTitle": 
+"GroupMetaKeywords": 
+"GroupMetaDescription": 
+"GroupMetaUrl": 
+"GroupFilterPagedQueryMode": 
+"GroupMetaPrimaryPage": 
+"GroupMetaCanonical": 
+"GroupAutoId": 100140
+"GroupInheritCategoryFieldsFromParent": false
+"GroupMetaUrlIgnoreParent": false
+"GroupWorkflowId": 0
+"GroupCompletionRules": 
+"GroupCompletionLanguageIds": 
+"GroupProductRelationRuleField1": 
+"GroupProductRelationRuleValue1": 
+"GroupProductRelationRuleField2": 
+"GroupProductRelationRuleValue2": 
+"ProductGroupPromotionImage": 
+"ProductGroupPromotionDescription": 
+"ProductGroupPromotionLinkLabel": 
+"ProductGroupPromotionLink": 
+"ProductGroupNavigationImage": 
+"SelectedGroup": false
+"GroupType": 1
+"ProductGroupRelatedContent": 
+"GroupCompletenessOnAllCategoryFields": false
+"GroupMetaUrlIgnoreForChildren": false

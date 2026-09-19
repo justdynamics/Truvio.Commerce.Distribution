@@ -12,6 +12,9 @@
     "AccessUser",
     "AccessUserGroupRelation",
     "AccessUserSecondaryRelation",
+    "EcomShops",
+    "EcomShopLanguageRelation",
+    "EcomCompletionRules",
     "EcomGroups",
     "EcomShopGroupRelation",
     "EcomGroupRelations",
@@ -38,7 +41,9 @@
     "EcomProductsRelated",
     "EcomStockUnit",
     "EcomOrders",
-    "EcomOrderLines"
+    "EcomOrderLines",
+    "DynamicStructures",
+    "DynamicStructureLevels"
   ],
   "configRows": [
     {
@@ -408,7 +413,9 @@
     "Images/TruvioCommerce/scenic/product-visual.png",
     "Images/TruvioCommerce/scenic/ui-composite.webp"
   ],
-  "repositories": [],
+  "repositories": [
+    "System/Repositories/TruvioCommerce/PimWorkspace.query"
+  ],
   "itemtypes": [],
   "costHints": {
     "reservedKeyPrefixes": [

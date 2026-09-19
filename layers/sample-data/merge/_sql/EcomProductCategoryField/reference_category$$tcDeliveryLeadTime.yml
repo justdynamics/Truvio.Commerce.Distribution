@@ -1,0 +1,28 @@
+﻿"ownership":
+  "mode": "merge"
+"FieldId": "tcDeliveryLeadTime"
+"FieldCategoryId": "reference_category"
+"FieldTemplateTag": "tcDeliveryLeadTime"
+"FieldType": 1
+"FieldDefaultValue": 
+"FieldPresentationType": 
+"FieldSortOrder": 5
+"FieldAutoId": 100150
+"FieldDoNotRender": false
+"FieldHideEmpty": false
+"FieldForeignCategoryId": 
+"FieldValidationPattern": 
+"FieldIncludeAllExistingLanguage": false
+"FieldAllowChangesAcrossLanguages": false
+"FieldAllowChangesAcrossVariants": false
+"FieldRequired": false
+"FieldReadOnly": false
+"FieldValueConversionPreset": 
+"FieldValueConversionDecimals": 
+"FieldValueConversionDisplayRule": 
+"FieldShowFieldOnBothMasterAndVariant": false
+"FieldTypeSystemName": 
+"FieldUseAsFacet": false
+"FieldValueConversionGroupId": 
+"FieldEditorConfiguration": 
+"FieldMatrixAttributeGroupId": 

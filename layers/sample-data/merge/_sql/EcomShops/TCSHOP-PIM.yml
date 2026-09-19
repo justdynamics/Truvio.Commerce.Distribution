@@ -1,0 +1,32 @@
+﻿"ownership":
+  "mode": "merge"
+"ShopId": "TCSHOP-PIM"
+"ShopName": "Truvio PIM"
+"ShopCreated": 2026-09-13T00:00:00.0000000
+"ShopDefault": false
+"ShopIcon": ""
+"ShopOrderFlowId": 1
+"ShopStockStateId": ""
+"ShopOrderContextId": "0"
+"ShopAutoId": 100130
+"ShopStockLocationID": 0
+"ShopDefaultPrintTemplate": ""
+"ShopUseAlternativeImages": false
+"ShopImageFolder": "/Images/Products"
+"ShopImagePatternSmall": ""
+"ShopImagePatternMedium": ""
+"ShopImagePatternLarge": ""
+"ShopAlternativeImagePatterns": "[]"
+"ShopProductWarehouse": false
+"ShopProductPrimaryPageId": 0
+"ShopAutoBuildIndex": false
+"ShopIndexRepository": ""
+"ShopIndexName": ""
+"ShopImageSearchInSubFolders": false
+"ShopImageUploadFolder": ""
+"ShopAutoCreateUploadFolderPerProduct": false
+"ShopType": 4
+"ShopCompletionRules": ""
+"ShopCompletionLanguageIds": ""
+"ShopImagePatternMain": ""
+"ShopImagePatternVariant": ""
