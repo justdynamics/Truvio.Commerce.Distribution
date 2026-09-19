@@ -32,6 +32,10 @@
 --                            stock location) and SHOP1.ShopStockLocationID
 --                            references them. Renaming them is a BRAND step, not
 --                            a scrub step.
+--   workspaces it did not    it removes only workspace 100170, the one THIS layer
+--   ship                     ships. It DOES remove any LEVEL row left orphaned by the
+--                            heap-table wipe described beside the delete below, whoever
+--                            owned the structure.
 --   the baseline's own       the bike and clothing Dynamic Workspaces come from
 --   Dynamic Workspaces       the dw10-demo-empty BASELINE DB, not from any layer.
 --                            A delivery does not re-insert them, so removing them
@@ -68,6 +72,18 @@ DELETE FROM DynamicStructureLevels
  WHERE DynamicStructureLevelId BETWEEN 100171 AND 100172
     OR DynamicStructureLevelStructureId = N'7C0A1D2E-5B4F-4E8A-9C3D-2026091900A1';
 DELETE FROM DynamicStructures WHERE DynamicStructureId = 100170;
+
+-- --- orphaned workspace levels -------------------------------------------
+-- DynamicStructures is a HEAP on DW 10.28 (no primary key), so the serializer
+-- writes it with DELETE FROM [table] plus insert-all under Merge as well as
+-- Replace: delivering this layer removes every workspace the host already had.
+-- DynamicStructureLevels HAS a primary key, so it is upserted and the wiped
+-- structures' level rows survive as orphans - they render nowhere and nothing
+-- else removes them. Idempotent: a host with no orphans loses nothing.
+-- The join is the structure's UniqueId GUID held as nvarchar, never its int id.
+DELETE FROM DynamicStructureLevels
+ WHERE DynamicStructureLevelStructureId NOT IN
+       (SELECT CAST(DynamicStructureUniqueId AS nvarchar(50)) FROM DynamicStructures);
 
 DELETE FROM EcomCompletionRules WHERE EcomCompletionRuleId BETWEEN 100160 AND 100163;
 
@@ -123,6 +139,7 @@ UNION ALL SELECT 'tc categories',       CAST((SELECT COUNT(*) FROM EcomProductCa
 UNION ALL SELECT 'tc mirror fields',    CAST((SELECT COUNT(*) FROM EcomProductCategoryField WHERE FieldCategoryId = N'reference_category' AND FieldId LIKE 'tc%') AS nvarchar(20))
 UNION ALL SELECT 'TC completion rules', CAST((SELECT COUNT(*) FROM EcomCompletionRules WHERE EcomCompletionRuleId BETWEEN 100160 AND 100163) AS nvarchar(20))
 UNION ALL SELECT 'TC workspaces',       CAST((SELECT COUNT(*) FROM DynamicStructures WHERE DynamicStructureId = 100170) AS nvarchar(20))
+UNION ALL SELECT 'orphan workspace levels', CAST((SELECT COUNT(*) FROM DynamicStructureLevels WHERE DynamicStructureLevelStructureId NOT IN (SELECT CAST(DynamicStructureUniqueId AS nvarchar(50)) FROM DynamicStructures)) AS nvarchar(20))
 UNION ALL SELECT 'KEPT: personas',      CAST((SELECT COUNT(*) FROM AccessUser WHERE AccessUserId BETWEEN 100100 AND 100103) AS nvarchar(20))
 UNION ALL SELECT 'KEPT: orders',        CAST((SELECT COUNT(*) FROM EcomOrders WHERE OrderId LIKE 'TCO-%') AS nvarchar(20))
 UNION ALL SELECT 'KEPT: stock locations', ISNULL((SELECT STRING_AGG(StockLocationName, N', ') FROM EcomStockLocation), N'(none)')

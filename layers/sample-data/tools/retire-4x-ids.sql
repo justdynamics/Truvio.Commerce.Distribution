@@ -25,6 +25,13 @@
 -- IDEMPOTENT. Every statement is a keyed DELETE against the retired ids only. A
 -- second run deletes nothing.
 --
+-- TWO ORPHAN SWEEPS IT ALSO DOES, both unrelated to the rename and both
+-- idempotent: the DynamicStructureLevels rows left behind when the heap-table
+-- write of DynamicStructures wiped a structure, and the EcomShopGroupRelation
+-- rows whose group exists in no EcomGroups row (base 3.5.3 replayed 31 of them
+-- and Replace cannot take them back - it upserts and never deletes an absent
+-- row). Both are safe on a host that has neither.
+--
 -- WHAT IT DOES NOT TOUCH. The three subgroups TCGRP-VARIANTS, TCGRP-UNITS and
 -- TCGRP-BUNDLES keep their ids across the rename - only their PARENT changes, and
 -- the 5.0.0 deserialize rewrites their EcomGroupRelations rows in place. The
@@ -69,6 +76,27 @@ DELETE FROM EcomDetails
  WHERE DetailValue IN (N'/Files/Documents/TruvioCommerce/tc-datasheet-data-models.pdf',
                        N'/Files/Documents/TruvioCommerce/tc-install-guide-data-models.pdf');
 
+-- --- orphaned workspace levels -------------------------------------------
+-- DynamicStructures is a HEAP on DW 10.28 (no primary key), so the serializer
+-- writes it with DELETE FROM [table] plus insert-all under Merge as well as
+-- Replace: delivering this layer removes every workspace the host already had.
+-- DynamicStructureLevels HAS a primary key, so it is upserted and the wiped
+-- structures' level rows survive as orphans - they render nowhere and nothing
+-- else removes them. Idempotent: a host with no orphans loses nothing.
+-- The join is the structure's UniqueId GUID held as nvarchar, never its int id.
+DELETE FROM DynamicStructureLevels
+ WHERE DynamicStructureLevelStructureId NOT IN
+       (SELECT CAST(DynamicStructureUniqueId AS nvarchar(50)) FROM DynamicStructures);
+
+-- --- orphaned shop-group relations ----------------------------------------
+-- base 3.5.3 shipped 32 GROUP<n>$$SHOP1 rows for groups no layer ships. base
+-- 3.6.0 drops them from its replace tree, but REPLACE UPSERTS AND NEVER DELETES
+-- a row absent from the tree (docs/swift-replace-merge-analysis.md D-5), so 31
+-- of them replay on every delivery and survive the upgrade. They point at no
+-- EcomGroups row, so they resolve nothing and only pad the table. Idempotent.
+DELETE FROM EcomShopGroupRelation
+ WHERE NOT EXISTS (SELECT 1 FROM EcomGroups g WHERE g.GroupId = EcomShopGroupRelation.ShopGroupGroupId);
+
 COMMIT TRANSACTION;
 
 SELECT 'TCGRP-DATA-MODELS group'   AS what, CAST((SELECT COUNT(*) FROM EcomGroups WHERE GroupId = N'TCGRP-DATA-MODELS') AS nvarchar(20)) AS remaining
@@ -81,6 +109,8 @@ UNION ALL SELECT 'its field labels',        CAST((SELECT COUNT(*) FROM EcomProdu
 UNION ALL SELECT 'its field values',        CAST((SELECT COUNT(*) FROM EcomProductCategoryFieldValue WHERE FieldValueFieldCategoryId = N'tc_data_models') AS nvarchar(20))
 UNION ALL SELECT 'its display members',     CAST((SELECT COUNT(*) FROM EcomFieldDisplayGroupFields WHERE FieldDisplayGroupFieldSystemName LIKE 'ProductCategory|tc[_]data[_]models|%') AS nvarchar(20))
 UNION ALL SELECT 'old PDF asset rows',      CAST((SELECT COUNT(*) FROM EcomDetails WHERE DetailValue LIKE '%-data-models.pdf') AS nvarchar(20))
+UNION ALL SELECT 'orphan workspace levels',  CAST((SELECT COUNT(*) FROM DynamicStructureLevels WHERE DynamicStructureLevelStructureId NOT IN (SELECT CAST(DynamicStructureUniqueId AS nvarchar(50)) FROM DynamicStructures)) AS nvarchar(20))
+UNION ALL SELECT 'orphan shop-group rels',   CAST((SELECT COUNT(*) FROM EcomShopGroupRelation r WHERE NOT EXISTS (SELECT 1 FROM EcomGroups g WHERE g.GroupId = r.ShopGroupGroupId)) AS nvarchar(20))
 UNION ALL SELECT 'KEPT: 3 subgroups',       CAST((SELECT COUNT(*) FROM EcomGroups WHERE GroupId IN (N'TCGRP-VARIANTS', N'TCGRP-UNITS', N'TCGRP-BUNDLES')) AS nvarchar(20))
 UNION ALL SELECT 'KEPT: products on host',  CAST((SELECT COUNT(*) FROM EcomProducts WHERE ProductId LIKE 'TCPROD%') AS nvarchar(20));
 -- Every retired row above must read 0; KEPT: 3 subgroups must read 3 (one ENU row

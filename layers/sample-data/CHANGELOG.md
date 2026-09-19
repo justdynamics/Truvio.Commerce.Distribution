@@ -124,6 +124,26 @@ added and never declared — the manifest listed four, so a manifest-driven cons
 and `EcomPrices` read **233** while 4.1.2 left **221**. The layer total is 2,018 rows in 35
 tables.
 
+**7. The `DynamicStructures` row wipes the host's existing workspaces, and that is shipped
+behaviour.** Measured on gate run `20260919-153644` against `foundry.mydwsite4.com`: the merge
+deserialize of our one workspace row deleted the three baseline workspaces (`DynamicStructureId`
+1, 3, 4) and left their seven `DynamicStructureLevels` rows orphaned. `DynamicStructures` has **no
+primary key on DW 10.28** — it is a heap — so the engine has no key to match on and
+`SqlTableProvider.cs:345-360` / `SqlTableWriter.cs:364-407` fall back to `DELETE FROM [table]`
+plus insert-all **under Merge as well as Replace** (Truvio.Commerce.Serializer 1.0.2-beta). The
+predicate's `where` fences what is serialized, not that wipe. `DynamicStructureLevels` has a
+primary key and was upserted, which is why the orphans survive.
+
+On a consumer host this layer therefore **removes every Dynamic Workspace the customer created**.
+A consumer whose workspaces matter either drops the `sample-data DynamicStructures` predicate from
+the composed `Serializer.config.json` before the deserialize, or recreates the workspaces after
+delivery — and in both cases the level rows of a wiped structure must be deleted by hand.
+`tools/scrub-sample-catalogue.sql` and `tools/retire-4x-ids.sql` both carry an idempotent orphan
+level delete; the retire script also removes the `EcomShopGroupRelation` rows whose group exists
+in no `EcomGroups` row, which base 3.5.3 replayed 31 of and which Replace cannot take back
+(Replace upserts and never deletes an absent row). `DynamicStructures` is the only heap table this
+layer writes; the other 34 all have a primary key and delete nothing.
+
 [#1251]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1251
 [#1303]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1303
 [#1304]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1304

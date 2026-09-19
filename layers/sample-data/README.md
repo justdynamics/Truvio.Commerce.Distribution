@@ -372,6 +372,42 @@ nothing. So the workspace query states `LanguageID` as a constant, filters `IsVa
 every node count overshoot), and applies no `Active` filter: a PIM workbench must show the product
 that is not live yet, which is exactly the one that still needs enriching.
 
+
+### The one hazard this workspace row carries
+
+**Delivering this layer DELETES every Dynamic Workspace the host already had.** Measured on the
+`20260919-153644` gate run against `foundry.mydwsite4.com`: the merge deserialize of our single
+`DynamicStructures` row removed the three baseline workspaces (`DynamicStructureId` 1, 3 and 4)
+and left their seven `DynamicStructureLevels` rows behind as orphans.
+
+It is not a predicate mistake and merge mode does not prevent it. `DynamicStructures` has **no
+primary key on DW 10.28** — it is a heap — and the engine has no key to match a row on, so
+`SqlTableProvider.cs:345-360` / `SqlTableWriter.cs:364-407` fall back to `DELETE FROM [table]`
+followed by insert-all **under Merge exactly as under Replace**. The `where` clause fences what
+the layer SERIALIZES; it does not fence that wipe. `DynamicStructureLevels` *does* have a primary
+key, so it was upserted normally — which is why the orphans survive.
+
+**On a consumer host that means this layer wipes every workspace the customer built.** Before
+delivering to a host whose workspaces matter, do one of:
+
+- **Drop the predicate.** Remove the `sample-data DynamicStructures` entry from the composed
+  `Serializer.config.json` before the deserialize. The layer then ships no workspace and the
+  host's own are untouched; `DynamicStructureLevels` `100171`/`100172` land as orphans and
+  `tools/scrub-sample-catalogue.sql` removes them.
+- **Recreate them afterwards.** A workspace is two commands in the admin, and
+  `DynamicStructureSave` silently drops a `Levels` collection, so the levels are a second step.
+
+Either way, **the level rows of a wiped structure must be deleted by hand**: nothing removes
+them, they render nowhere, and they are what a later `Get-LayerRepositoryIndex`-style audit trips
+over. Both scripts under [`tools/`](tools/) carry an idempotent orphan-level delete for exactly
+this.
+
+`DynamicStructures` is the **only heap table this layer writes**. Every other one of its 35
+tables has a primary key, so every other predicate deletes nothing: a keyed merge upserts its own
+rows and leaves the rest of the table alone. Check `_meta.yml` `keyColumns` against the live
+`sys.indexes` before adding a table to this layer — a table with no PK index is a whole-table
+rewrite whatever mode it is declared in.
+
 ## Removing the catalogue from a branded demo
 
 A branded demo starts from a composed `swift-demo` host and then loads the customer's own
@@ -382,8 +418,8 @@ the sample catalogue is a per-delivery editorial decision.
 
 | Script | When | What it does |
 |---|---|---|
-| [`tools/scrub-sample-catalogue.sql`](tools/scrub-sample-catalogue.sql) | after **every** delivery onto a branded host | removes the whole sample catalogue **and** the PIM structure |
-| [`tools/retire-4x-ids.sql`](tools/retire-4x-ids.sql) | **once**, before delivering 5.0.0 onto a 4.x host | removes the ids 5.0.0 renamed |
+| [`tools/scrub-sample-catalogue.sql`](tools/scrub-sample-catalogue.sql) | after **every** delivery onto a branded host | removes the whole sample catalogue **and** the PIM structure, plus any orphaned workspace levels |
+| [`tools/retire-4x-ids.sql`](tools/retire-4x-ids.sql) | **once**, before delivering 5.0.0 onto a 4.x host | removes the ids 5.0.0 renamed, the orphan workspace levels and the orphan shop-group relations |
 
 **The scrub keeps what is not catalogue**: the three personas and their B2B account, the twelve
 orders `TCO-0001`-`TCO-0012`, the storefront copy on Home / About / Contact / header / footer /
