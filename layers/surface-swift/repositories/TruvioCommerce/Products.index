@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   TruvioCommerce/Products.index — the storefront product index this surface owns.
 
@@ -27,6 +27,15 @@
   SkipDetailImages is False for the same reason: an asset-category gallery and a hover
   alternative image are detail-image rows, and an index that skips them cannot serve
   either to a list surface.
+
+  SkipDataModels is False since 1.14.0. It is not a storefront setting - the storefront
+  reads none of the DATAMODEL_* fields - it is the one switch that makes the sample-data
+  layer's Dynamic Workspace work. A workspace level sourced on a data-model key enumerates
+  the index field DATAMODEL_<Shop Name with spaces as underscores>, here
+  DATAMODEL_Truvio_PIM for the TCSHOP-PIM DataStructure shop, and that field is emitted by
+  the Full build ONLY with this flag False. With it True the workspace still opens, the
+  level still renders, and every node is empty - no error anywhere. The Foundry gate treats
+  this flag as blocking rather than advisory on an edition that declares pimWorkspaces.
 
   FOUR ATTRIBUTE FACETS, ONE PER CATEGORY, AND WHY IT IS FOUR. The catalogue this
   distribution ships PARTITIONS its products across its four field categories - each
@@ -66,7 +75,7 @@
       <Setting Name="ShopsToIndex"></Setting>
       <Setting Name="SkipOrderhistory">True</Setting>
       <Setting Name="SkipAssortments">True</Setting>
-      <Setting Name="SkipDataModels">True</Setting>
+      <Setting Name="SkipDataModels">False</Setting>
       <Setting Name="SkipBomInfo">False</Setting>
       <Setting Name="SkipProductTranslations">True</Setting>
       <Notification SenderName="" SenderEmail="" Subject="" Template="" SendLog="false" NotificationType="Never"></Notification>
