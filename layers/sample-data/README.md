@@ -28,9 +28,9 @@ does not. Each of the twelve subgroups points at a component:
 
 | Top group | Subgroup | What Swift shows |
 |---|---|---|
-| Data Models | `Variants` | the variant selector |
-| Data Models | `Units & Measures` | the unit selector on add-to-cart |
-| Data Models | `Bundles & BOM` | the package-contents list |
+| Product Structure | `Variants` | the variant selector |
+| Product Structure | `Units & Measures` | the unit selector on add-to-cart |
+| Product Structure | `Bundles & BOM` | the package-contents list |
 | Commerce | `Price Structures` | the quantity price table |
 | Commerce | `Discounts` | the price-before-discount line |
 | Commerce | `Stock & Delivery` | the stock count, status and delivery line |
@@ -46,11 +46,11 @@ vocabulary, a material class, a rating, a compatibility note, a commercial term.
 
 | Shape | Example |
 |---|---|
-| Top group | `Data Models`, `Commerce`, `Content`, `Users` |
+| Top group | `Product Structure`, `Commerce`, `Content`, `Users` |
 | Product name | `Truvio <Concept> <Unit> <NN>` — `Truvio Variant Master 01`, `Truvio Price Matrix 20` |
 | SKU | `TC-<CONCEPT>-<nnnn>` — `TC-VAR-0001`, `TC-PRC-0020`, `TC-SUB-0061` |
 | Product id | `TCPROD0001` … `TCPROD0061` |
-| Group id | `TCGRP-VARIANTS`, `TCGRP-DATA-MODELS` |
+| Group id | `TCGRP-VARIANTS`, `TCGRP-PRODUCT-STRUCTURE` |
 | Order id | `TCO-0001` … `TCO-0012` |
 | Persona | `buyer@truvio-demo.example`, `csr@…`, `admin@…` |
 
@@ -110,7 +110,7 @@ header set to `replace`.
 
 | Where | What the prospect reads |
 |---|---|
-| Home hero | "One catalogue for every data model, price structure and content block"; buttons **Shop the catalogue** and **Browse Data Models** (`GroupID=TCGRP-DATA-MODELS`) |
+| Home hero | "One catalogue for every product structure, price structure and content block"; buttons **Shop the catalogue** and **Browse Product Structure** (`GroupID=TCGRP-PRODUCT-STRUCTURE`) |
 | Home body | catalogue pitch with **Browse Commerce** (`GroupID=TCGRP-COMMERCE`), three features, an account call to action, **About Truvio Commerce** |
 | About, Contact, Employees, Posts | company intro, three values, team heading, contact routes on `support@truvio-demo.example` |
 | Header, footer, mega-menu | the `Truvio Commerce` wordmark, the copyright line, the Variants and Price Structures promos |

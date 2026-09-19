@@ -82,7 +82,7 @@
         <Group Name="1500 +" From="1500" To="1000000" />
       </Grouping>
       <Field Source="ManufacturerName" Name="Manufacturer_Facet" SystemName="Manufacturer_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
-      <Field Source="ProductCategory|tc_data_models|tcMaterialClass" Name="MaterialClass_Facet" SystemName="MaterialClass_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
+      <Field Source="ProductCategory|tc_product_structure|tcMaterialClass" Name="MaterialClass_Facet" SystemName="MaterialClass_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
       <Field Source="ProductCategory|tc_commerce|tcDeliveryLeadTime" Name="LeadTime_Facet" SystemName="LeadTime_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
       <Field Source="ProductCategory|tc_content|tcLanguageCoverage" Name="LanguageCoverage_Facet" SystemName="LanguageCoverage_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
       <Field Source="ProductCategory|tc_users|tcAccountTerms" Name="AccountTerms_Facet" SystemName="AccountTerms_Facet" Type="System.String" Stored="true" Analyzed="false" Indexed="true" />
