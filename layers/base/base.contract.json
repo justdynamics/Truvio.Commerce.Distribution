@@ -324,6 +324,7 @@
       "EcomShopLanguageRelation",
       "EcomShopGroupRelation",
       "EcomStockLocation",
+      "EcomStockLocationTranslations",
       "EcomPayments",
       "EcomShippings",
       "EcomMethodCountryRelation",
@@ -352,6 +353,7 @@
   },
   "stockLocations": {
     "table": "EcomStockLocation",
+    "translationTable": "EcomStockLocationTranslations",
     "ownedSince": "3.6.0",
     "rows": [
       {
@@ -375,7 +377,7 @@
     ],
     "languageId": "ENU",
     "idsAreStable": true,
-    "note": "Neutral, brand-free stock locations shipped as a whole-table Replace. The baseline DB carried the Swift demo's own 'BikeShop Copenhagen' / 'BikeShop Aarhus' rows, so every composed edition delivered a bike shop's warehouse names; 3.6.0 corrects the names in the base instead of per-edition (Foundry #1303). The IDS 1-3 ARE DELIBERATELY KEPT: all 61 EcomStockUnit rows in the sample-data layer carry StockUnitStockLocationId 3, and EcomShops.ShopStockLocationID (SHOP1 ships 0, meaning 'no single location') addresses the same id space, so a rekey above the intIdentityFloor would orphan the stock units and silently change what a shop points at. These three ids are therefore the one further documented exception to idRules.intIdentityFloor, alongside the permission groups: they are base-owned rows the base does not mint but adopts from the platform baseline. An addition that needs its own stock location mints one at or above 100000."
+    "note": "Neutral, brand-free stock locations shipped as TWO whole-table Replace sets - EcomStockLocation and its EcomStockLocationTranslations rows, which is where the name Dynamicweb actually renders lives. Both carry the same three ids on ENU. The baseline DB carried the Swift demo's own 'BikeShop Copenhagen' / 'BikeShop Aarhus' rows, so every composed edition delivered a bike shop's warehouse names; 3.6.0 corrects the names in the base instead of per-edition (Foundry #1303). The IDS 1-3 ARE DELIBERATELY KEPT: all 61 EcomStockUnit rows in the sample-data layer carry StockUnitStockLocationId 3, and EcomShops.ShopStockLocationID (SHOP1 ships 0, meaning 'no single location') addresses the same id space, so a rekey above the intIdentityFloor would orphan the stock units and silently change what a shop points at. These three ids are therefore the one further documented exception to idRules.intIdentityFloor, alongside the permission groups: they are base-owned rows the base does not mint but adopts from the platform baseline. An addition that needs its own stock location mints one at or above 100000. StockLocationCategoryId stays as the baseline carries it (1 and 3 STOCKLOCCAT1 'Click and collect', 2 STOCKLOCCAT2 'Warehouse'): EcomStockLocationCategory is BASELINE-OWNED, serialized by no layer, and the base's Click & Collect delivery method needs pickup locations in that category."
   },
   "collisionChecks": [
     {

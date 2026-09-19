@@ -74,7 +74,7 @@ All three are contacts on one B2B account (`AccessUser` `100100`, **customer num
 
 ## Base-owned tables
 
-**Whole-table (`replace`), 16 tables:** EcomCountries, EcomCountryText, EcomCurrencies, EcomLanguages, EcomVatGroups, EcomVatCountryRelations, EcomShops, EcomShopLanguageRelation, EcomShopGroupRelation, **EcomStockLocation** (3.6.0), EcomPayments, EcomShippings, EcomMethodCountryRelation, EcomOrderFlow, EcomOrderStates, EcomOrderStateRules. (UrlPath: surface-swift-owned since 3.0.0.)
+**Whole-table (`replace`), 17 tables:** EcomCountries, EcomCountryText, EcomCurrencies, EcomLanguages, EcomVatGroups, EcomVatCountryRelations, EcomShops, EcomShopLanguageRelation, EcomShopGroupRelation, **EcomStockLocation** (3.6.0), **EcomStockLocationTranslations** (3.6.0), EcomPayments, EcomShippings, EcomMethodCountryRelation, EcomOrderFlow, EcomOrderStates, EcomOrderStateRules. (UrlPath: surface-swift-owned since 3.0.0.)
 
 `EcomShopGroupRelation` is base-owned but ships **zero rows** from 3.6.0 (Foundry #1198). It carried 31 `GROUP<n>$$SHOP1` rows inherited from the platform baseline, every one of them pointing at a numeric `EcomGroups` id that **no layer in this Distribution ships** — the base ships zero catalogue and the sample-data groups are all `TCGRP-*`. The entry keeps its `_meta.yml`, so the whole-table Replace still wipes the table on a target and the real shop-group rows arrive as merge rows from `sample-data` and `feature-reordering-pricing`.
 
@@ -86,15 +86,19 @@ All three are contacts on one B2B account (`AccessUser` `100100`, **customer num
 
 ### Stock locations (3.6.0, Foundry #1303)
 
-`EcomStockLocation` is framework configuration, not catalogue, and the base now owns the whole table. The platform baseline shipped the Swift demo's own rows — `1 BikeShop Copenhagen`, `2 BikeShop Aarhus`, `3 Default stock location` — so **every composed edition delivered a bike shop's warehouse names**. The base ships three neutral rows on **the same ids**:
+Stock locations are framework configuration, not catalogue, and the base now owns **both** tables whole: `EcomStockLocation` and `EcomStockLocationTranslations`. The platform baseline shipped the Swift demo's own rows — `1 BikeShop Copenhagen`, `2 BikeShop Aarhus` (description `Warehouse west`), `3 Default stock location` — in both of them, so **every composed edition delivered a bike shop's warehouse names**. The translation table matters as much as the parent: **it is where the name Dynamicweb actually renders lives**, so correcting `EcomStockLocation.StockLocationName` alone would have changed nothing a user sees. The base ships three neutral rows in each, on **the same ids**:
 
-| Id | Name | ExternalId | Sort |
-|---|---|---|---|
-| 1 | Central warehouse | `CENTRAL` | 1 |
-| 2 | Regional warehouse | `REGIONAL` | 2 |
-| 3 | Default stock location | `DEFAULT` | 3 |
+| Id | Name | ExternalId | Sort | Category |
+|---|---|---|---|---|
+| 1 | Central warehouse | `CENTRAL` | 1 | `STOCKLOCCAT1` |
+| 2 | Regional warehouse | `REGIONAL` | 2 | `STOCKLOCCAT2` |
+| 3 | Default stock location | `DEFAULT` | 3 | `STOCKLOCCAT1` |
 
-Language `ENU`; every other column empty or `0`. **The ids 1-3 are deliberately kept, not rekeyed above the `intIdentityFloor`**: all 61 `EcomStockUnit` rows in the sample-data layer carry `StockUnitStockLocationId` 3, and `EcomShops.ShopStockLocationID` addresses the same id space (`SHOP1` ships `0`). A rekey would orphan the stock units. Like the permission groups `1325`/`1270`/`1292`, these are base-owned rows the base **adopts** from the platform baseline rather than mints; an addition that needs a stock location of its own mints one at or above `100000`. See `base.contract.json` → `stockLocations`.
+`EcomStockLocationTranslations` carries the same three ids keyed `ENU` with those same names and an empty description; it has **no identity column**, so the composite `StockLocationId` + `LanguageId` is the whole key. Language `ENU` throughout; every other column empty or `0`.
+
+`StockLocationCategoryId` is **kept exactly as the baseline carries it**, not blanked. `EcomStockLocationCategory` exists on every host with `STOCKLOCCAT1` “Click and collect” and `STOCKLOCCAT2` “Warehouse”, it stays **baseline-owned** — no layer in this Distribution serializes it — and the base's own Click & Collect delivery method needs pickup locations sitting in that category (the base ships that method as `EcomShippings/Click & Collect delivery method.yml`).
+
+**The ids 1-3 are deliberately kept, not rekeyed above the `intIdentityFloor`**: all 61 `EcomStockUnit` rows in the sample-data layer carry `StockUnitStockLocationId` 3, and `EcomShops.ShopStockLocationID` addresses the same id space (`SHOP1` ships `0`). A rekey would orphan the stock units. Like the permission groups `1325`/`1270`/`1292`, these are base-owned rows the base **adopts** from the platform baseline rather than mints; an addition that needs a stock location of its own mints one at or above `100000`. See `base.contract.json` → `stockLocations`.
 
 **Content:** none (framework-only).
 

@@ -3,24 +3,40 @@
 ## 3.6.0
 
 Minor: the base stops shipping a bike shop's warehouse names, stops shipping 31 rows that point at
-nothing, and finally ships the one row `BASE.md` has claimed since 3.0.0. Three tables are gained
-(`EcomStockLocation`, `EcomProductCategory`, `EcomProductCategoryTranslation`), 31 orphan rows are
-dropped, and `baseContractVersion` moves 2.3.1 -> 2.4.0 (additive). No layer.json `files[]`, no SQL
+nothing, and finally ships the one row `BASE.md` has claimed since 3.0.0. Four tables are gained
+(`EcomStockLocation`, `EcomStockLocationTranslations`, `EcomProductCategory`,
+`EcomProductCategoryTranslation`), 31 orphan rows are dropped, and `baseContractVersion` moves 2.3.1 -> 2.4.0 (additive). No layer.json `files[]`, no SQL
 set, no `sampleData` change.
 
-**`EcomStockLocation` becomes base-owned, whole-table `replace` (Foundry #1303).** The platform
-baseline carries the Swift demo's own rows - `1 BikeShop Copenhagen`, `2 BikeShop Aarhus`,
-`3 Default stock location` - and no predicate ever touched the table, so **every composed edition
-delivered a bike shop's warehouse names** on a host the Distribution otherwise scrubbed of Swift
-demo vocabulary. Measured on `foundry.mydwsite4.com`. The base now ships three neutral rows:
+**`EcomStockLocation` AND `EcomStockLocationTranslations` become base-owned, whole-table
+`replace` (Foundry #1303).** The platform baseline carries the Swift demo's own rows in both -
+`1 BikeShop Copenhagen`, `2 BikeShop Aarhus` (description `Warehouse west`), `3 Default stock
+location` - and no predicate ever touched either table, so **every composed edition delivered a
+bike shop's warehouse names** on a host the Distribution otherwise scrubbed of Swift demo
+vocabulary. Measured on `foundry.mydwsite4.com`. The translation table is the one that matters
+for what a user sees: **`EcomStockLocationTranslations` is where the rendered name lives**, so
+correcting `EcomStockLocation.StockLocationName` alone would have shipped a cosmetic fix that
+changed nothing on screen. The base now ships three neutral rows in each:
 
-| Id | Name | ExternalId | Sort |
-|---|---|---|---|
-| 1 | Central warehouse | `CENTRAL` | 1 |
-| 2 | Regional warehouse | `REGIONAL` | 2 |
-| 3 | Default stock location | `DEFAULT` | 3 |
+| Id | Name | ExternalId | Sort | Category |
+|---|---|---|---|---|
+| 1 | Central warehouse | `CENTRAL` | 1 | `STOCKLOCCAT1` |
+| 2 | Regional warehouse | `REGIONAL` | 2 | `STOCKLOCCAT2` |
+| 3 | Default stock location | `DEFAULT` | 3 | `STOCKLOCCAT1` |
 
-Language `ENU`, every other column empty or `0`. **The ids 1-3 are kept deliberately** and are not
+`EcomStockLocationTranslations` mirrors the three ids on `ENU` with the same names and an empty
+description. It has **no identity column**: the composite `StockLocationId` + `LanguageId` is the
+whole key, so the `_meta.yml` carries `identityColumns: []`. Language `ENU` throughout, every
+other column empty or `0`.
+
+**`StockLocationCategoryId` is kept exactly as the baseline carries it** - `1` and `3` ->
+`STOCKLOCCAT1`, `2` -> `STOCKLOCCAT2` - and is NOT blanked. `EcomStockLocationCategory` exists on
+every host with `STOCKLOCCAT1` "Click and collect" and `STOCKLOCCAT2` "Warehouse", it stays
+**baseline-owned** (no layer here serializes it), and the base's own Click & Collect delivery
+method needs pickup locations sitting in that category. Blanking the column would have taken the
+pickup locations out of Click & Collect to no purpose.
+
+**The ids 1-3 are kept deliberately** and are not
 rekeyed above `idRules.intIdentityFloor`: all 61 `EcomStockUnit` rows in the sample-data layer carry
 `StockUnitStockLocationId` 3, and `EcomShops.ShopStockLocationID` addresses the same id space
 (`SHOP1` ships `0`). A rekey would orphan the stock units for a cosmetic win. Like the permission
@@ -63,11 +79,11 @@ the whole-table `Replace` still **wipes** `EcomShopGroupRelation` on a target - 
 base-owned - and the real rows arrive as merge rows from `sample-data` and
 `feature-reordering-pricing`.
 
-`layer.json` gains `fragmentTables`, which the base had never declared, now listing all 19 tables it
+`layer.json` gains `fragmentTables`, which the base had never declared, now listing all 20 tables it
 ships (the static key-collision input the schema describes); the three new tables are in it.
 
 Consumers: a host delivered from 3.5.x and re-deserialized from 3.6.0 gets the neutral stock-location
-names, the `reference_category` pair, and an `EcomShopGroupRelation` wiped and refilled from the
+names in both tables, the `reference_category` pair, and an `EcomShopGroupRelation` wiped and refilled from the
 addition layers only. Nothing to run by hand. A host that was never gated gains a template category
 it was silently missing.
 

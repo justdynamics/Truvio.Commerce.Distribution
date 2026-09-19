@@ -581,6 +581,23 @@
     },
     {
       "providerType": "SqlTable",
+      "table": "EcomStockLocationTranslations",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomStockLocationTranslations",
+      "files": [
+        "_sql/EcomStockLocationTranslations/1$$ENU.yml",
+        "_sql/EcomStockLocationTranslations/2$$ENU.yml",
+        "_sql/EcomStockLocationTranslations/3$$ENU.yml",
+        "_sql/EcomStockLocationTranslations/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
       "table": "EcomProductCategory",
       "nameColumn": null,
       "compareColumns": null,
