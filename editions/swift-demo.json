@@ -13,6 +13,9 @@
   "surfaces": [
     "surface-swift@1.14.0"
   ],
+  "compatAxes": [
+    "ring"
+  ],
   "sampleData": true,
   "themes": [
     "default"

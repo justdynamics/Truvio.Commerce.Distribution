@@ -2,7 +2,7 @@
 
 Everything needed to make **Dynamicweb 10** run as **Truvio Commerce** — as one git
 clone. Structured as versioned **layers** composed into gate-proven **editions**, proven
-on the current latest Swift release (**Swift 2.4**; rolling latest-only) — this cycle proven on **DW 10.28.1-PreRelease** (operator-approved; stable re-prove sweep due when DW 10.28 reaches NuGet stable).
+on the current latest Swift release (**Swift 2.4**; rolling latest-only) — this cycle proven on **Dynamicweb release ring R1**, which carried milestone **10.28.11** at the 2026-09-19 gate run. The ring is the claim and the milestone is the stamp: R0 is the current milestone under a 30-day soak, R1 the current milestone, R2 current+1, R3 current+2, R4 current+3, and milestones move first-in first-out one ring step per month ([release policy](https://doc.dynamicweb.dev/documentation/fundamentals/dw10release/releasepolicy.html)). The exact proven milestone stays stamped in `layers/INDEX.json` `gateProven`.
 
 > Themes and features ship as `theme` and `feature` layers under `layers/`. Truvio Commerce
 > is the platform formerly known as Dynamicweb; host binaries still carry the `Dynamicweb`
