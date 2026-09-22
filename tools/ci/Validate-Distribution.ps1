@@ -14,7 +14,10 @@ Checks (all fail-closed; any failure -> exit 1):
                          layers/theme-<name> (kind theme).
   5. Base contract     — layers/base/base.contract.json parses; compat.apps carries exactly one
                          Truvio.Commerce.Serializer floor, and the deprecated minSerializerVersion
-                         alias (when present) equals it (Foundry #1084).
+                         alias (when present) equals it (Foundry #1084). ReleaseRing: compat.dw.ring
+                         is present and is a release ring R0..R4, and compat.dw.min (the derived
+                         alias, kept one release) is at or below INDEX.json gateProven.dw.version -
+                         a floor above what the gate proved is a claim nobody measured.
   6. Cross-layer clash — no two non-base layers ship the same _sql/<Table>/<key>.yml ROW path
                          (a silent last-writer-wins collision at deserialize). A table SCHEMA
                          file (_sql/<Table>/_meta.yml) describes the table, not a row, so two
@@ -60,6 +63,34 @@ param(
     [switch]$RegenerateIndex
 )
 $ErrorActionPreference = 'Stop'
+
+# Ordered version comparison for the compat floor checks. Numeric per segment, and a
+# prerelease ranks BELOW its release (semver), so 10.28.1-PreRelease does not satisfy
+# 10.28.1. Returns -1 / 0 / 1. Same rule as the Foundry's Compare-CompatVersion, so the
+# validator and the gate can never disagree about which floor is higher.
+function Compare-DistVersion {
+    param([Parameter(Mandatory)][AllowEmptyString()][string]$A,
+          [Parameter(Mandatory)][AllowEmptyString()][string]$B)
+    function Split-DistVer([string]$v) {
+        $v = "$v".Trim().TrimStart('vV')
+        $core, $pre = ($v -split '-', 2)
+        $nums = @(($core -split '\.') | ForEach-Object { $n = 0; [void][int]::TryParse($_, [ref]$n); $n })
+        return @{ nums = $nums; pre = "$pre" }
+    }
+    $x = Split-DistVer $A
+    $y = Split-DistVer $B
+    $len = [Math]::Max($x.nums.Count, $y.nums.Count)
+    for ($i = 0; $i -lt $len; $i++) {
+        $a = if ($i -lt $x.nums.Count) { $x.nums[$i] } else { 0 }
+        $b = if ($i -lt $y.nums.Count) { $y.nums[$i] } else { 0 }
+        if ($a -ne $b) { return $(if ($a -gt $b) { 1 } else { -1 }) }
+    }
+    if ($x.pre -eq $y.pre) { return 0 }
+    if ([string]::IsNullOrEmpty($x.pre)) { return 1 }
+    if ([string]::IsNullOrEmpty($y.pre)) { return -1 }
+    return [string]::CompareOrdinal($x.pre, $y.pre)
+}
+
 . (Join-Path $PSScriptRoot 'Test-ProtectedStrings.ps1')
 
 $layersRoot   = Join-Path $RepoRoot 'layers'
@@ -149,6 +180,51 @@ if (-not (Test-Path $contractPath)) {
         & $log ($serApps.Count -eq 1 -and $serFloor -ne '') "base contract states exactly one serializer floor under compat.apps (found $($serApps.Count) entr$(if($serApps.Count -eq 1){'y'}else{'ies'}), min '$serFloor')"
         if ($contract.PSObject.Properties.Name -contains 'minSerializerVersion') {
             & $log ("$($contract.minSerializerVersion)" -eq $serFloor) "base contract deprecated alias minSerializerVersion ('$($contract.minSerializerVersion)') equals compat.apps serializer floor ('$serFloor')"
+        }
+
+        # ReleaseRing. The outward compat claim is the Dynamicweb HOSTING ring the layers
+        # were proven on, not a hand-typed version. Two things are enforced here:
+        #
+        #   compat.dw.ring    present and one of R0..R4 (optionally with the runtime suffix
+        #                     the demo VM writes, e.g. R1-NET10). The Foundry compat leg
+        #                     compares it as an ORDER, so a value that is not a ring cannot
+        #                     be compared at all and must never ship.
+        #   compat.dw.min     kept one release as the derived ALIAS of the proven milestone,
+        #                     so it may never claim MORE than the gate proved. A `min` above
+        #                     INDEX.json gateProven.dw.version is a floor nobody measured.
+        #
+        # Release policy: R0 is the current milestone under a 30-day soak, R1 the current
+        # milestone, R2 current+1, R3 current+2, R4 current+3; milestones move first-in
+        # first-out, one ring step per month.
+        # https://doc.dynamicweb.dev/documentation/fundamentals/dw10release/releasepolicy.html
+        $dwNode  = $contract.compat.dw
+        $dwRing  = if ($dwNode -and $dwNode.PSObject.Properties.Name -contains 'ring') { "$($dwNode.ring)".Trim() } else { '' }
+        & $log ($dwRing -match '^R[0-4](-[A-Za-z0-9]+)?$') ("base contract states compat.dw.ring as a Dynamicweb release ring R0..R4 " +
+            "(found '$dwRing'). The ring is the outward compatibility claim and the Foundry compat leg compares it as an " +
+            "order, so a missing or non-ring value cannot be compared. Remediation: set compat.dw.ring to the ring the " +
+            "layers were proven on, e.g. R1.")
+
+        $dwMin = if ($dwNode -and $dwNode.PSObject.Properties.Name -contains 'min') { "$($dwNode.min)".Trim() } else { '' }
+        if ($dwMin -ne '') {
+            $provenDw = ''
+            $idxForCompat = $null
+            $idxPathForCompat = Join-Path $layersRoot 'INDEX.json'
+            if (Test-Path -LiteralPath $idxPathForCompat) {
+                try { $idxForCompat = Get-Content -LiteralPath $idxPathForCompat -Raw -Encoding utf8 | ConvertFrom-Json } catch { $idxForCompat = $null }
+            }
+            if ($idxForCompat -and $idxForCompat.gateProven -and $idxForCompat.gateProven.dw) {
+                $provenDw = "$($idxForCompat.gateProven.dw.version)".Trim()
+            }
+            if ($provenDw -eq '') {
+                & $log $false ("base contract states compat.dw.min '$dwMin' but layers/INDEX.json carries no " +
+                    "gateProven.dw.version to check it against, so the floor is unmeasured. Remediation: let the Foundry " +
+                    "publish flow stamp gateProven before shipping a dw floor.")
+            } else {
+                & $log ((Compare-DistVersion -A $dwMin -B $provenDw) -le 0) ("base contract compat.dw.min '$dwMin' is at or " +
+                    "below the proven milestone INDEX.json gateProven.dw.version '$provenDw'. `min` is the derived alias of " +
+                    "what the gate proved and may never claim more than that. Remediation: lower compat.dw.min, or re-prove " +
+                    "on the milestone you want to claim.")
+            }
         }
     }
 }
