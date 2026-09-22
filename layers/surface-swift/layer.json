@@ -45,6 +45,7 @@
     "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RemoveFavoriteProductModal.cshtml",
     "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RenameFavoriteListEdit.cshtml",
     "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RenameFavoriteListModal.cshtml",
+    "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Orders/List/Orders_List.cshtml",
     "Templates/Designs/Swift-v2/eCom/ProductCatalog/RelatedProductsList.cshtml",
     "Templates/Designs/Swift-v2/eCom/ProductCatalog/VariantSelector.cshtml"
   ],

@@ -89,6 +89,23 @@ instead would orphan 374 sample-data `EcomDetails` rows on headless-demo, which 
 sample-data without this surface; and base is FRAMEWORK-ONLY by contract. `assetCategoriesBound`
 is therefore the honest carrier, and it is machine-readable.
 
+### My orders printed the product id where the product number belongs (Foundry #1263)
+
+Expanding an order on My orders showed `TCPROD0002` in the line's muted sub-heading, the
+internal product id, where the customer expects the SKU. The stored order line is correct:
+Admin API `GetOrderLineById` for `TCO-0001-1` returns `ProductNumber` `FF-VAR-0002`. Stock
+`eCom/CustomerExperienceCenter/Orders/List/Orders_List.cshtml` renders `@(orderline.ProductId)`
+at line 279, while its sibling `Orders/Detail/Orders_Details.cshtml` renders
+`@orderline.ProductNumber`, so the list and the detail of one order disagree.
+
+The overridden template renders `@(orderline.ProductNumber)` on that line. That token is the
+whole diff: the rest of the file is byte-identical to stock Swift 2.4, taken from the same
+design package capture (`foundry.mydwsite4.com`) as `VariantSelector.cshtml` above. Every
+paragraph that names `Orders_List.cshtml` as its `OrderListTemplate` picks it up: My orders,
+My returns, and the Account and CSR order lists. An order line with an empty `ProductNumber`
+now renders an empty sub-heading instead of the id. Reporting it upstream to Dynamicweb Swift
+stays an owner call.
+
 
 ## 1.14.0
 
