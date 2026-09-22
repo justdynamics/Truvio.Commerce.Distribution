@@ -401,7 +401,7 @@ on the `20260919-153644` gate run against `foundry.mydwsite4.com`: the merge of 
 removed the three baseline workspaces (`DynamicStructureId` 1, 3 and 4) and left their seven
 `DynamicStructureLevels` rows behind as orphans.
 
-**From 5.0.1 the layer requires Serializer 1.0.3-beta** (the base-contract floor) and declares
+**From 5.0.1 the layer requires Serializer 1.0.5-beta** (the base-contract floor) and declares
 `keyColumns: ["DynamicStructureUniqueId"]` on the `sample-data DynamicStructures` predicate and
 its `merge-manifest.json` entry. 1.0.3-beta resolves a match key for a heap (primary key, then
 the declared `keyColumns`, then a unique index, then all columns), upserts, and a Merge never
@@ -413,8 +413,9 @@ Two consequences of the natural key:
 - The identity is **not** written. On a host with no row carrying this `UniqueId` the target
   assigns `DynamicStructureId`; on a host delivered before, the existing row keeps its id.
   Nothing joins on the int id: the levels join on `DynamicStructureUniqueId`.
-- The engine logs one `WARNING: [DynamicStructures] has no primary key; rows matched by
-  keyColumns` line per run.
+- The engine logs one info line (`[DynamicStructures] has no primary key; rows matched by the
+  declared keyColumns`) per run. 1.0.3-beta and 1.0.4-beta logged it as a WARNING, which fails a
+  strict-mode API deserialize (Serializer #30); that is why the floor is 1.0.5-beta.
 
 A host delivered by 1.0.2-beta already lost its workspaces, and nothing restores them. Its
 orphan level rows still need deleting by hand: both scripts under [`tools/`](tools/) carry an
