@@ -47,6 +47,13 @@ Checks (all fail-closed; any failure -> exit 1):
                         FAILs; [] is how a layer states it ships none. .gitkeep excluded.
                         Every placeholders[].path must appear in one of the three arrays,
                         so the placeholder assert has a declared universe.
+ 12. Theme baseline   - (Foundry #1285) every kind:theme layer ships a theme.json whose
+                        baselineTarget names the SAME Swift release its own layer.json
+                        swiftVersion declares, as 'swift/<major>.<minor>'. baselineTarget is
+                        the machine-readable answer to "which Swift release was this theme
+                        proven against"; Swift support here is rolling latest-only, so a
+                        stale value points a consumer at a release the distribution no
+                        longer ships. Drift in either direction FAILs.
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -288,6 +295,43 @@ foreach ($d in $layerDirs) {
     $bad = @(Get-ChildItem -LiteralPath $d.FullName -Recurse -File -ErrorAction SilentlyContinue |
         Where-Object { $_.Extension -in '.yml', '.yaml', '.sql', '.bacpac', '.bak', '.mdf', '.ldf' })
     & $log ($bad.Count -eq 0) "$k '$($d.Name)': SPEC-06 disk-overlay-only ($($bad.Count) forbidden file(s))"
+}
+
+# ---------------------------------------------------------------------------
+# 12. Theme baselineTarget agrees with the layer's own swiftVersion (Foundry #1285).
+#     theme.json baselineTarget is the machine-readable statement of WHICH Swift
+#     release a theme was proven against. Swift support in this distribution is
+#     rolling latest-only, so a value that was never rolled forward points a
+#     consumer at a release nothing here ships any more — and the drift is
+#     invisible: theme-default carried swift/2.3 against a 2.4.0 layer for a whole
+#     release, observed only in a Foundry file header. Compared as
+#     'swift/<major>.<minor>' against layer.json swiftVersion; the patch segment is
+#     deliberately out of scope, because the design-package baseline moves per minor.
+# ---------------------------------------------------------------------------
+foreach ($d in $layerDirs) {
+    if (-not $manifests.ContainsKey($d.Name)) { continue }
+    if ("$($manifests[$d.Name].kind)" -ne 'theme') { continue }
+    $themePath = Join-Path $d.FullName 'theme.json'
+    if (-not (Test-Path -LiteralPath $themePath)) {
+        & $log $false "theme '$($d.Name)': theme.json missing — a theme layer must state the Swift release it was proven against in baselineTarget"
+        continue
+    }
+    $themeDoc = $null
+    try { $themeDoc = Get-Content -LiteralPath $themePath -Raw -Encoding utf8 | ConvertFrom-Json }
+    catch { & $log $false "theme '$($d.Name)': theme.json invalid JSON: $_"; continue }
+
+    $declaredSwift = "$($manifests[$d.Name].swiftVersion)".Trim()
+    $expectedTarget = ''
+    if ($declaredSwift -match '^(\d+)\.(\d+)') { $expectedTarget = "swift/$($Matches[1]).$($Matches[2])" }
+    $actualTarget = "$($themeDoc.baselineTarget)".Trim()
+
+    if ($expectedTarget -eq '') {
+        & $log $false "theme '$($d.Name)': layer.json swiftVersion '$declaredSwift' is not a <major>.<minor>... version, so baselineTarget cannot be checked against it"
+        continue
+    }
+    & $log ($actualTarget -eq $expectedTarget) ("theme '$($d.Name)': theme.json baselineTarget '$actualTarget' matches layer.json " +
+        "swiftVersion '$declaredSwift' (expected '$expectedTarget'). Remediation: roll baselineTarget forward with the Swift bump — " +
+        "it is what a consumer reads to learn which Swift release this theme was proven against.")
 }
 
 # ---------------------------------------------------------------------------

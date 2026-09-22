@@ -49,6 +49,29 @@ DELETE FROM [EcomCurrencies];
 DELETE FROM [EcomCountryText];
 DELETE FROM [EcomCountries];
 
+-- Stock Swift sample company accounts + orphan group relations (Foundry #1206).
+-- A pristine dw10-demo-empty restore carries four stock SystemAccount company rows with
+-- @test.com contacts, and AccessUserGroupRelation rows pointing at user ids that no longer
+-- exist. base-swift is content-free BY CONTRACT and ships neither: the base AccessUser
+-- predicate is scoped to the three permission groups
+-- (AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')), so no
+-- layer in this repo can add or remove them. They arrive with the blank clone and survive
+-- the deserialize untouched, which is why they show up on the CSR Accounts page of a build
+-- that ships no people at all.
+-- Scope discipline: ONLY rows whose e-mail is on the stock sample domain, and ONLY relation
+-- rows whose user or group side does not resolve. Nothing here touches a backend user, the
+-- three base-owned groups, or any row a layer ships.
+DELETE FROM [AccessUserGroupRelation]
+WHERE  AccessUserGroupRelationUserId IN (
+           SELECT AccessUserId FROM [AccessUser] WHERE AccessUserEmail LIKE '%@test.com'
+       );
+DELETE FROM [AccessUser] WHERE AccessUserEmail LIKE '%@test.com';
+
+-- Orphan relations: a row on either side pointing at an AccessUser that does not exist.
+DELETE FROM [AccessUserGroupRelation]
+WHERE  AccessUserGroupRelationUserId  NOT IN (SELECT AccessUserId FROM [AccessUser])
+   OR  AccessUserGroupRelationGroupId NOT IN (SELECT AccessUserId FROM [AccessUser]);
+
 -- Reseed identity columns where present (ignore failures)
 BEGIN TRY DBCC CHECKIDENT ('Area',            RESEED, 0); END TRY BEGIN CATCH END CATCH
 BEGIN TRY DBCC CHECKIDENT ('Page',            RESEED, 0); END TRY BEGIN CATCH END CATCH
@@ -75,5 +98,11 @@ UNION ALL SELECT 'GridRow',       COUNT(*) FROM [GridRow]
 UNION ALL SELECT 'EcomShops',     COUNT(*) FROM [EcomShops]
 UNION ALL SELECT 'EcomCountries', COUNT(*) FROM [EcomCountries]
 UNION ALL SELECT 'EcomProducts',  COUNT(*) FROM [EcomProducts]
-UNION ALL SELECT 'UrlPath',       COUNT(*) FROM [UrlPath];
+UNION ALL SELECT 'UrlPath',       COUNT(*) FROM [UrlPath]
+-- Foundry #1206 - both of these must read 0 on a blank build; a non-zero row is the
+-- sample-account leak or an orphaned group relation, not a count to be explained away.
+UNION ALL SELECT 'AccessUser@test.com', COUNT(*) FROM [AccessUser] WHERE AccessUserEmail LIKE '%@test.com'
+UNION ALL SELECT 'AccessUserGroupRelation orphans', COUNT(*) FROM [AccessUserGroupRelation]
+    WHERE AccessUserGroupRelationUserId  NOT IN (SELECT AccessUserId FROM [AccessUser])
+       OR AccessUserGroupRelationGroupId NOT IN (SELECT AccessUserId FROM [AccessUser]);
 

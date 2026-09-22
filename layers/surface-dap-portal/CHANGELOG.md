@@ -1,4 +1,25 @@
-# Changelog — digital-asset-portal/1.0
+﻿# Changelog — digital-asset-portal/1.0
+
+## 1.0.5
+
+### The MOBILE footer navigation renders on Vertical.cshtml (Foundry #728)
+
+`Header _ Footer/Mobile Footer/grid-row-2/paragraph-c1-2.yml` shipped
+`template: Horizontal.cshtml`. A horizontal list of root pages cannot shrink, and Chrome widens
+the LAYOUT VIEWPORT to fit content that cannot: measured on the sibling report, four of six
+pages rendered at `body.scrollWidth 652 / innerWidth 652` against a requested 390, i.e. visibly
+zoomed out on a phone. The shipped choice only ever survived because the source baseline this
+area was captured from has a SINGLE root page, so the row happened to fit; any real site with
+more than one breaks it. The two desktop footer navigations in the same area already use
+`Vertical.cshtml`, so this repoints the mobile one onto the template its own siblings use.
+
+The measurement half of that issue belongs to the harness and is NOT in this repo: an overflow
+check that compares `body.scrollWidth` with `window.innerWidth` can never fire once Chrome has
+widened the viewport, because the two are then equal by construction - the number that moved is
+`innerWidth`, and the assertion has to read it against the REQUESTED width. With
+`Horizontal.cshtml` in place the naive check reported zero offenders on a 652px-wide page, which
+is why the template defect and the probe defect were one report.
+
 
 ## 1.0.4
 

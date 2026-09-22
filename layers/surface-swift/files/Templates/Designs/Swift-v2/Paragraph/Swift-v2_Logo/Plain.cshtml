@@ -1,0 +1,45 @@
+@inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.ParagraphViewModel>
+@using Dynamicweb.Frontend
+
+@{
+	// Foundry #1185: stock hard-codes the fallback title as the design-package name.
+	// The area name is what a site is actually called, and it is what the raster <img>
+	// alt below falls back to when the logo paragraph carries no LogoName.
+	string title = Pageview?.Area?.Name ?? string.Empty;
+	if (Model.Item.TryGetString("LogoName", out string logoName))
+	{
+		title = logoName;
+	}
+
+	string homePageLink = "/";
+	if (Model.Item.TryGetLink("Link", out LinkViewModel link)) {
+		homePageLink = link.Url;
+	}
+}
+
+<div class="d-flex position-relative">
+	@if (Model.Item.TryGetImageFile("Image", out ImageFileViewModel image)) {	
+		if (Model.Item.TryGetString("LogoWidth", out string logoWidth)) {
+			logoWidth = $"width:{logoWidth}px";
+		}
+		if (image.IsSvg()) {
+			<figure class="icon-auto m-0" style="@logoWidth">
+				@ReadFile(image.Path)
+			</figure>
+		}
+		else 
+		{
+			<figure class="m-0">
+				@* Foundry #1185: stock writes alt="@image.Path", so a PNG wordmark announces
+				   "/Files/Images/.../logo.png" to a screen reader and trips every alt sweep.
+				   The SVG branch above already uses the title; the raster branch now does too. *@
+				<img src="@image.Path" alt="@title" style="@logoWidth">
+			</figure>
+		}
+	}
+	else 
+	{
+		<span class="fs-4">@title</span>
+	}
+	<a href="@homePageLink" class="stretched-link" title="@title"></a>
+</div>

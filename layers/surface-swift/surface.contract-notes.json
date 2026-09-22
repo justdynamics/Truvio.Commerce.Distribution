@@ -1,5 +1,5 @@
-{
-  "surfaceContractNotesVersion": "1.1.0",
+﻿{
+  "surfaceContractNotesVersion": "1.2.0",
   "swiftVersion": "2.4.0",
   "description": "Content-scoped contract bits moved OUT of base.contract.json by the Swift 2.4 base split (base 3.0.0 framework-only). surface-swift owns the Swift content surface: the Swift 2 content area (area 3, EN), the entire merge tree, UrlPath, and its own item-type XMLs (itemtypes/, from the official Swift v2.4.0 design package) so the surface is self-contained.",
   "anchors": {
@@ -86,5 +86,39 @@
       "tc_content|tcMedia": "tc_content|tcMediaSet"
     },
     "scopeNote": "tc_specs spans four categories (tc_commerce, tc_content, tc_product_structure, tc_users) and a product renders only the fields it carries a value for, so a product whose values all sit in one category shows that category's fields and no others. A data layer that wants the band fuller spreads values across the categories the group spans; it does not shorten the group. The same four categories are the four PIM data models sample-data 5.0.0 attaches under its TCSHOP-PIM shop, and each one's completion rule names exactly the seven fields of its category - so the spec table a product renders and the completeness score it carries are computed from the same set."
+  },
+  "assetCategoriesBound": {
+    "note": "CONSUMER PREREQUISITE (Foundry #1196). Three PDP paragraphs this surface ships bind product ASSET CATEGORIES by system name through their ImageAssets field. The categories themselves are catalogue-side configuration and NO layer in a base-swift composition ships them, so on a content-free build the PDP gallery and both document tables resolve nothing and render empty behind an HTTP 200. A tool-first build has to discover the dependency by reading paragraph settings, which is the defect this note closes.",
+    "table": "EcomDetailsGroup",
+    "requiredRows": [
+      {
+        "EcomDetailsGroupSystemName": "Images",
+        "purpose": "The PDP image gallery (Swift-v2_ProductMedia).",
+        "DetailsGroupExtensions": "bmp,jpeg,jpg,png,svg,tiff,webp",
+        "DetailsGroupHasPrimaryImageRule": true,
+        "DetailsGroupIsSystemGroup": true
+      },
+      {
+        "EcomDetailsGroupSystemName": "Manuals",
+        "purpose": "The PDP Documents table and its teaser (Swift-v2_ProductMediaTable).",
+        "DetailsGroupExtensions": "pdf",
+        "DetailsGroupHasPrimaryImageRule": false,
+        "DetailsGroupIsSystemGroup": false
+      }
+    ],
+    "boundBy": [
+      "replace/_content/Swift 2/Shop/Product Details/grid-row-2/paragraph-c1-7.yml -> fields.ImageAssets [\"Images\"]",
+      "replace/_content/Swift 2/Shop/Product Details/grid-row-14/paragraph-c1-15.yml -> fields.ImageAssets [\"Manuals\"]",
+      "replace/_content/Swift 2/Product Components/Product Info (right side)/grid-row-9/paragraph-c1-10.yml -> fields.ImageAssets [\"Manuals\"]"
+    ],
+    "satisfiedBy": "layers/sample-data merge/_sql/EcomDetailsGroup/100110.yml (Images) + 100111.yml (Manuals). Any edition with sampleData true - swift-demo, headless-demo, dap-portal - already meets this prerequisite and needs no consumer action. base-swift does NOT, by design.",
+    "whyNotShippedByThisLayer": "Not a table-safety problem: EcomDetailsGroup is NOT a heap (its _meta.yml declares keyColumns EcomDetailsGroupId, an identity PRIMARY KEY), so the Serializer truncate-on-heap defect (Truvio.Commerce.Serializer #21) does not apply and the table would carry rows safely. The blockers are ownership and composition. (1) sample-data already ships these two exact rows, and the merge gate's cross-layer collision guard (Validate-Distribution.ps1 check 6) FAILs when two ACTIVE layers ship the same _sql/<Table>/<key>.yml - a real last-writer-wins hazard, not a formality. (2) Moving them here instead is worse: headless-demo composes sample-data WITHOUT surface-swift, and 374 sample-data EcomDetails rows point at EcomDetailsGroupId 100110/100111, so the move would orphan every one of them on that edition. base cannot carry them either - it is FRAMEWORK-ONLY by contract (zero catalog) since the Swift 2.4 base split, and asset categories are catalogue-side configuration.",
+    "consumerObligation": {
+      "whenRequired": "Any composition that takes surface-swift WITHOUT sample-data - base-swift above all - must create the two categories before a PDP can render assets.",
+      "verb": "Management API AssetCategorySave. Dynamicweb.MCP 0.4.4 publishes NO tool for product asset categories (get_product_asset_categories reads them; nothing writes one), which is the other half of Foundry #1196; ProductItemAdd is the matching verb for the BOM items Swift-v2_ProductBom needs.",
+      "matchedBy": "System name, not id. The paragraphs name 'Images' and 'Manuals' as strings, so a consumer's own ids are fine as long as the system names match exactly, case included.",
+      "verify": "On a build with a product carrying a Manuals asset, the PDP Documents table renders rows with no SQL and no undocumented setup."
+    },
+    "source": "Foundry #1196 (foundry-base arm agent 2, 2026-09-13: categories Images id 7, Manuals id 8 on a base-swift build)."
   }
 }

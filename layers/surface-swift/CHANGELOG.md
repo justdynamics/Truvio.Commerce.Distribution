@@ -1,4 +1,94 @@
-# Changelog — surface-swift
+﻿# Changelog — surface-swift
+
+## 1.15.0
+
+### The variant-selector modal refused to sell a never-out-of-stock product (Foundry #1317)
+
+The PLP "Select" button, with add-to-cart set to `WhenVariantsExist=modal`, opened the variant
+modal with every option selectable and its Add to cart button disabled for every combination.
+Stock `eCom/ProductCatalog/VariantSelector.cshtml` sets `disableAddToCart = "disabled"` INSIDE
+`if (Model.NeverOutOfstock)` and puts the stock-level test in the `else`. The condition is
+inverted: a never-out-of-stock product is precisely the one that must always be buyable. Demo
+catalogues commonly load stock rows as never-out-of-stock, so the modal is dead on them - and
+the PDP add-to-cart (`Paragraph/Swift-v2_ProductAddToCart.cshtml`) has no such branch, which is
+why only the modal was affected and why the symptom reads as a broken variant picker.
+
+Measured on supherb (every product `ProductNeverOutOfstock=1`, stock 1000): POST to the variant
+service page returned add-to-cart disabled `true`; with `ProductNeverOutOfstock = 0` and stock
+unchanged it returned `false` and the cart badge moved.
+
+This layer already overrides stock Swift-v2 templates through its `files/` overlay, so the
+corrected template ships here. The never-out-of-stock branch now leaves `disableAddToCart`
+untouched and `maxQty` null (no ceiling); the stock-level check stays in the `else` branch,
+untouched. The rest of the file is byte-identical to stock Swift 2.4, so the comment block in
+the empty branch is the whole diff. The upstream report to Dynamicweb Swift stays an owner call.
+
+### A raster logo announced its own file path (Foundry #1185)
+
+`Paragraph/Swift-v2_Logo/Plain.cshtml` sets `alt="@image.Path"` in the raster branch, so a PNG
+wordmark renders `<img alt="/Files/Images/.../logo.png">` - read out by screen readers, flagged
+by any alt sweep, and unavoidable for a brand that needs a raster logo, because `GetImage.ashx`
+decodes with ImageSharp and ImageSharp has no SVG decoder. The SVG branch inlines the file and
+already uses the title.
+
+The overridden template uses `alt="@title"`, the same value the SVG branch and the stretched
+link use. The fallback moves with it: stock hard-codes `string title = "Swift"`, the design
+package's own name; it is now `Pageview?.Area?.Name`, matching the idiom stock Swift already
+uses in `eCom7/CartV2/Step/Helpers/Logo.cshtml`. A logo paragraph carrying a `LogoName` is
+unaffected either way. The issue is labelled `target:upstream` as well; only the layer override
+lands here.
+
+### `ImageAspectRatio` ships empty, not "0" (Foundry #1148, Serializer #15)
+
+Both `Swift-v2_ProductMediaTable` paragraphs shipped `ImageAspectRatio: "0"` to mean "no ratio".
+A deserialize rewrote that literal into a page id - measured 8453, a real page on the host -
+because the engine's id remap was treating a numeric-looking value in a non-reference field as
+an id; the sibling `ProductMedia` paragraph carrying `75%` was untouched, which is the tell. The
+template applies the value as `ratio != "0" ? ratio : ""`, so the remapped value would emit
+`style="--bs-aspect-ratio: 8453"`, masked today only because the component renders nothing at
+all.
+
+The engine half is `Truvio.Commerce.Serializer` #15 (restrict the raw-numeric short-circuit to
+reference-typed fields) and is being fixed in parallel. This is the layer half the issue asks
+for on its own terms: an empty string means the same thing to the template and gives a numeric
+heuristic nothing to bite on, so the two fixes are independent rather than sequenced.
+
+### The Account subtree is gated, not deny-listed (Foundry #630, the #486 shape)
+
+`Customer center/Account/page.yml` granted `Account Admin -> all` and denied CSR, Customers and
+Anonymous, with no `AuthenticatedFrontend` entry, while the `Customer center` parent grants
+`AuthenticatedFrontend -> read`. Permission resolution takes the HIGHEST level across
+identities, so a signed-in user in none of the denied groups matched no rule on Account,
+inherited the blanket parent read and reached the subtree. This is the same defect #486 fixed on
+the CSR page, and PR #33 fixed it with an explicit deny+grant PAIR; Account was outside that
+scope.
+
+The same pair now ships: an explicit `AuthenticatedFrontend -> none` beside the
+`Account Admin -> all` grant on the Account page, and the full explicit block on its six child
+pages (Addresses, Carts, Favorites, Orders, Quotes, Users), which shipped with no permission
+block at all - exactly the treatment the four CSR children were given. WHICH GROUPS LEGITIMATELY
+REACH ACCOUNT REMAINS AN OWNER DECISION; CSR parity is the precedent implemented here, and the
+grant list is one line to change if the owner rules otherwise.
+
+### The two product asset categories are named as a consumer prerequisite (Foundry #1196)
+
+Three PDP paragraphs bind asset categories `Images` and `Manuals` by system name through their
+`ImageAssets` field, and no layer in a base-swift composition ships them, so on a content-free
+build the gallery and both document tables render empty behind an HTTP 200 and a tool-first
+build has to discover the dependency by reading paragraph settings.
+
+They are now declared in `surface.contract-notes.json` as `assetCategoriesBound`: the table, the
+required rows and their field values, the three paragraphs that bind them, the editions that
+already satisfy the prerequisite (anything with `sampleData` true), the Management API verb
+(`AssetCategorySave` - Dynamicweb.MCP publishes no write tool, which is the other half of the
+issue), and why no layer here carries the rows. That last part is deliberate and recorded:
+`EcomDetailsGroup` is NOT a heap, so Serializer #21 does not apply and the table would carry
+rows safely - but sample-data already ships these two exact rows and the merge gate's
+cross-layer collision guard fails two active layers shipping one row path; moving them here
+instead would orphan 374 sample-data `EcomDetails` rows on headless-demo, which composes
+sample-data without this surface; and base is FRAMEWORK-ONLY by contract. `assetCategoriesBound`
+is therefore the honest carrier, and it is machine-readable.
+
 
 ## 1.14.0
 

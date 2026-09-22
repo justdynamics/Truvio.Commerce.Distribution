@@ -60,3 +60,7 @@
   "ownerType": "role"
   "level": "none"
   "levelValue": 1
+- "owner": "AuthenticatedFrontend"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1
