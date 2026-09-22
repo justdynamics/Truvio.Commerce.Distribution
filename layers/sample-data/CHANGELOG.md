@@ -70,7 +70,7 @@ host already had (gate run `20260919-153644`, workspaces 1, 3 and 4). Serializer
 (Serializer #21) resolves a match key instead, and a Merge never deletes. The `sample-data
 DynamicStructures` predicate and its `merge-manifest.json` entry now declare
 `keyColumns: ["DynamicStructureUniqueId"]`, the table's `NOT NULL` `uniqueidentifier` and the
-column the level rows join on. The base contract raises the Serializer floor to `1.0.5-beta` in
+column the level rows join on. The base contract raises the Serializer floor to `1.0.6-beta` in
 the same change: an engine before 1.0.3-beta ignores `keyColumns` and would still truncate, and
 1.0.3-beta / 1.0.4-beta warn on the declared key, which fails a strict-mode API deserialize
 (Serializer #30). On a fresh host
