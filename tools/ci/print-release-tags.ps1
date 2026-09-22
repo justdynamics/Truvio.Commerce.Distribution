@@ -16,7 +16,10 @@ Two modes:
                         release-tags.yml runs post-merge.
 
 Tag scheme: layers/<name>/<semver> and editions/<name>/<semver>, annotated with the gate run id
-+ swiftVersion. Layer tags use the layer.json version; edition tags use the per-edition release
++ swiftVersion. Both the gate run id and the Swift/DW versions are READ FROM
+layers/INDEX.json `gateProven` (Distribution #77) - never re-typed here. An edition absent from
+gateProven.editions is unproven and gets no tag; a layer no attested edition composes gets none
+either. Layer tags use the layer.json version; edition tags use the per-edition release
 version (bumped when the edition FILE changed this release).
 
 Usage:
@@ -30,37 +33,64 @@ param(
 )
 $ErrorActionPreference = 'Stop'
 
-$swift = '2.4.0'
-# Proven gate runs (Foundry harness) — the FULL COLD MATRIX that proved this release
-# (RUN-DISTRIBUTION-QUALITY P5, all four editions green, 2026-07-17).
-$runs = @{
-    'base-only'     = '20260717-032922'
-    'swift-demo'    = '20260717-030351'   # full run — framework base + surface-swift + 5 features + sample data + theme-default
-    'headless-demo' = '20260717-031817'   # A1–A9 PASS (gate-headless runner; ZERO Swift design files)
-    'dap-portal'    = '20260717-034401'   # DAP style-id migration re-proven (Step 10d3 clean)
-}
-# Per-edition RELEASE version. Bumped where the edition FILE changed this release:
-# swift-demo (re-pin to the split + rma), dap-portal (surface-dap-portal 1.0.3),
-# headless-demo (surface-headless 2.3.3). base-only is byte-unchanged — existing tag stands.
+# --- Provenance comes from layers/INDEX.json, never from a literal here (Distribution #77).
+# A tag message is an ATTESTATION: the Swift release, the DW milestone and the gate run a
+# layer or edition was proven on. Every one of those is already recorded, by the Foundry
+# publish flow, in layers/INDEX.json `gateProven` — the file CONTRIBUTING.md names as the
+# single source of truth and forbids hand-authoring. Re-typing them here produced exactly
+# the drift this reads them to end: a hard-coded Swift 2.4.0 and a July run-id table still
+# being stamped onto September artifacts.
+$indexPath = Join-Path $RepoRoot 'layers\INDEX.json'
+if (-not (Test-Path $indexPath)) { throw "layers/INDEX.json missing — release-tag provenance is read from it, never re-typed here (Distribution #77)." }
+$index = Get-Content $indexPath -Raw -Encoding utf8 | ConvertFrom-Json
+$gp = $index.gateProven
+if (-not $gp) { throw "layers/INDEX.json carries no gateProven marker — nothing here is attested, so no provenance tag may be cut." }
+
+$swift = "$($gp.swiftVersion)".Trim()
+if ($swift -eq '') { $swift = ("$($gp.swift.tag)".Trim() -replace '^v', '') }
+$dw = "$($gp.dw.version)".Trim()
+if ($dw -eq '') { $dw = "$($gp.dwPlatformVersion)".Trim() }
+$ring = "$($gp.dw.ring)".Trim()
+if ($swift -eq '' -or $dw -eq '') { throw "layers/INDEX.json gateProven names no Swift and/or DW version — a tag cannot attest what the index does not record." }
+
+# Proven gate runs: the gateProven.editions MAP, verbatim. An edition appears there only
+# once it has PASSed, so an absent edition means unproven and gets no tag — the same rule
+# INDEX.json states for itself. This is deliberately not a superset: a tag for an edition
+# the current index does not attest would be a fabricated attestation.
+$runs = @{}
+foreach ($p in @($gp.editions.PSObject.Properties)) { $runs[$p.Name] = "$($p.Value)" }
+if ($runs.Count -eq 0) { throw "layers/INDEX.json gateProven.editions is empty — no edition is attested, so no tag may be cut." }
+
+# Per-edition RELEASE version. This one is NOT derivable: it is the edition artifact's own
+# semver, bumped when the edition FILE changes, and nothing in INDEX.json records it. It
+# stays declared here, and an edition absent from the map keeps its existing tag.
 $editionVersion = @{
     'swift-demo'    = '3.1.0'
     'headless-demo' = '2.5.1'
     'dap-portal'    = '1.1.1'
 }
-# Which proven run each LAYER rides (the edition that exercised it). All layers are proven.
-$layerProof = @{
-    base                            = $runs['swift-demo']
-    'sample-data'                   = $runs['swift-demo']
-    'feature-reordering'            = $runs['swift-demo']
-    'feature-pricing'               = $runs['swift-demo']
-    'feature-rma'                   = $runs['swift-demo']
-    'feature-reordering-pricing'    = $runs['swift-demo']
-    'feature-subscription-orders'   = $runs['swift-demo']
-    'feature-bom-configurator'      = $runs['swift-demo']
-    'surface-swift'                 = $runs['swift-demo']
-    'surface-headless'              = $runs['headless-demo']
-    'surface-dap-portal'            = $runs['dap-portal']
-    'theme-default'                 = $runs['swift-demo']
+
+# Which proven run each LAYER rides: DERIVED from the edition compositions on disk, so a
+# layer added to (or dropped from) an edition never needs a second edit here. A layer is
+# proven by any attested edition that composes it; when more than one does, the first by
+# edition name wins, deterministically. A layer no attested edition composes is reported as
+# skipped rather than tagged against someone else's run.
+$layerProof = @{}
+foreach ($ef in (Get-ChildItem (Join-Path $RepoRoot 'editions') -File -Filter '*.json' |
+                 Where-Object { $_.Name -ne 'edition.schema.json' } | Sort-Object Name)) {
+    $spec = Get-Content $ef.FullName -Raw -Encoding utf8 | ConvertFrom-Json
+    $en = "$($spec.name)"
+    if (-not $runs.ContainsKey($en)) { continue }          # unproven edition proves no layer
+    $names = @()
+    foreach ($r in @($spec.from) + @($spec.add) + @($spec.surfaces)) {
+        if ($r -and "$r" -match '^(?<n>[a-z0-9-]+)@') { $names += $Matches['n'] }
+    }
+    foreach ($tn in @($spec.themes)) { if ($tn) { $names += "theme-$tn" } }
+    # sampleData is a toggle, not a ref: the one sample-data layer IS what it activates.
+    if ($spec.sampleData) { $names += 'sample-data' }
+    foreach ($n in ($names | Select-Object -Unique)) {
+        if (-not $layerProof.ContainsKey($n)) { $layerProof[$n] = $runs[$en] }
+    }
 }
 
 # --- Build the manifest: an ordered list of @{ Tag; Message } entries. ------------------------
@@ -71,11 +101,11 @@ foreach ($d in (Get-ChildItem (Join-Path $RepoRoot 'layers') -Directory | Sort-O
     $lj = Join-Path $d.FullName 'layer.json'
     if (-not (Test-Path $lj)) { continue }
     $m = Get-Content $lj -Raw | ConvertFrom-Json
-    if (-not $layerProof.ContainsKey($d.Name)) { $skipped += "layers/$($d.Name)/$($m.version) (no proof mapping)"; continue }
+    if (-not $layerProof.ContainsKey($d.Name)) { $skipped += "layers/$($d.Name)/$($m.version) (no gate-proven edition in INDEX.json composes it)"; continue }
     $run = $layerProof[$d.Name]
     $manifest.Add([pscustomobject]@{
         Tag     = "layers/$($d.Name)/$($m.version)"
-        Message = "layer $($d.Name) $($m.version) — proven on Swift $swift / DW 10.28.1-PreRelease, gate run $run (stable re-prove pending DW 10.28 stable)"
+        Message = "layer $($d.Name) $($m.version) — proven on Swift $swift / DW $dw$(if ($ring) { " ($ring)" }), gate run $run (provenance read from layers/INDEX.json gateProven)"
     })
 }
 
@@ -83,12 +113,12 @@ foreach ($ef in (Get-ChildItem (Join-Path $RepoRoot 'editions') -File -Filter '*
     $s = Get-Content $ef.FullName -Raw | ConvertFrom-Json
     $name = "$($s.name)"
     if (-not $editionVersion.ContainsKey($name)) { $skipped += "editions/$name (file unchanged — existing tag stands)"; continue }
-    if (-not $runs.ContainsKey($name))           { $skipped += "editions/$name (no proven run)"; continue }
+    if (-not $runs.ContainsKey($name))           { $skipped += "editions/$name (absent from INDEX.json gateProven.editions - unproven, so no tag)"; continue }
     $run = $runs[$name]
     $ver = $editionVersion[$name]
     $manifest.Add([pscustomobject]@{
         Tag     = "editions/$name/$ver"
-        Message = "edition $name $ver — proven on Swift $swift / DW 10.28.1-PreRelease, gate run $run (stable re-prove pending DW 10.28 stable)"
+        Message = "edition $name $ver — proven on Swift $swift / DW $dw$(if ($ring) { " ($ring)" }), gate run $run (provenance read from layers/INDEX.json gateProven)"
     })
 }
 
