@@ -66,9 +66,21 @@ scope.
 The same pair now ships: an explicit `AuthenticatedFrontend -> none` beside the
 `Account Admin -> all` grant on the Account page, and the full explicit block on its six child
 pages (Addresses, Carts, Favorites, Orders, Quotes, Users), which shipped with no permission
-block at all - exactly the treatment the four CSR children were given. WHICH GROUPS LEGITIMATELY
-REACH ACCOUNT REMAINS AN OWNER DECISION; CSR parity is the precedent implemented here, and the
-grant list is one line to change if the owner rules otherwise.
+block at all - exactly the treatment the four CSR children were given.
+
+**Owner ruling, 2026-09-22.** Account and its six children stay as above: `Account Admin` (group
+`1270`) reaches them, nobody else does. The same gap sat one level over, on the `Customer center`
+page that holds the buyer's My pages (source id 14): it granted `Customers -> all` and wrote
+`none` for CSR and Account Admin, but carried no `AuthenticatedFrontend` row, so the CSR persona
+(`100102`) and the account admin (`100103`) inherited the root's `AuthenticatedFrontend -> read`
+and reached My orders (source id 19) and every other My page. Page 14 now carries the explicit
+`AuthenticatedFrontend -> none` beside its `Customers -> all` grant, the deny+grant pair the
+Account page uses. Its ten children (Change password, My addresses, My carts, My favorites, My
+orders, My profile and Edit profile, My quotes, My returns, My wallet) ship no permission block
+and inherit it, so none of them needs a row of its own. Effective access: the buyer (`100101`,
+`Customers`) has all on page 14 and its children and none on Account; CSR and the account admin
+have none on page 14 and its children; the account admin keeps all on Account and its children.
+The `Overview` page, which grants all three groups, is unchanged.
 
 ### The two product asset categories are named as a consumer prerequisite (Foundry #1196)
 
