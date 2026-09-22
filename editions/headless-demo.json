@@ -1,16 +1,16 @@
 {
   "name": "headless-demo",
-  "from": "base@3.5.3",
+  "from": "base@3.6.0",
   "add": [],
   "surfaces": [
     "surface-headless@2.3.3"
   ],
   "sampleData": true,
-  "comment": "The sample-data layer is the brand catalogue, not a marker-string fixture set: with sampleData true this edition carries 97 product rows across 16 groups, the three personas on account TC-100200 and the twelve orders, which is what the Delivery-API probes read. expectedCounts is pinned rather than derived for the same reason swift-demo pins it - Set-ConfigFromEdition derives EcomProducts/EcomGroups from the toggle alone and carries the pre-4.0.0 figures. OPEN POINT, carried and not resolved here: the layer also ships merge/_content storefront copy authored at surface-swift's own paths under 'Swift 2'. This edition composes surface-headless and no Swift content area, so those documents are expected to be inert - the Foundry gate is what proves it, and until a run says so this comment is the record that nobody has measured it.",
+  "comment": "The sample-data layer is the brand catalogue, not a marker-string fixture set: with sampleData true this edition carries 97 product rows across 21 groups (16 browsable + the 5 PIM tree rows sample-data 5.0.0 adds), the three personas on account TC-100200 and the twelve orders, which is what the Delivery-API probes read. expectedCounts is pinned rather than derived for the same reason swift-demo pins it - Set-ConfigFromEdition derives EcomProducts/EcomGroups from the toggle alone and carries the pre-4.0.0 figures. OPEN POINT, carried and not resolved here: the layer also ships merge/_content storefront copy authored at surface-swift's own paths under 'Swift 2'. This edition composes surface-headless and no Swift content area, so those documents are expected to be inert - the Foundry gate is what proves it, and until a run says so this comment is the record that nobody has measured it.",
   "description": "Headless surface demo: framework-only base + the Headless_* content surface (own itemtypes + repositories - self-contained, ZERO Swift design package / surface-swift dependency, proven by the Swift 2.4 base split) + sample data. The headless A1-A9 probes are contributed by the surface layer's own assert set (gate -Edition dispatch to gate-headless). Proven on DW 10.28.1-PreRelease.",
   "expectedCounts": {
     "EcomProducts": 97,
-    "EcomGroups": 16,
+    "EcomGroups": 21,
     "EcomCountries": 96
   }
 }

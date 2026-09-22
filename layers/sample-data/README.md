@@ -28,9 +28,9 @@ does not. Each of the twelve subgroups points at a component:
 
 | Top group | Subgroup | What Swift shows |
 |---|---|---|
-| Data Models | `Variants` | the variant selector |
-| Data Models | `Units & Measures` | the unit selector on add-to-cart |
-| Data Models | `Bundles & BOM` | the package-contents list |
+| Product Structure | `Variants` | the variant selector |
+| Product Structure | `Units & Measures` | the unit selector on add-to-cart |
+| Product Structure | `Bundles & BOM` | the package-contents list |
 | Commerce | `Price Structures` | the quantity price table |
 | Commerce | `Discounts` | the price-before-discount line |
 | Commerce | `Stock & Delivery` | the stock count, status and delivery line |
@@ -46,11 +46,13 @@ vocabulary, a material class, a rating, a compatibility note, a commercial term.
 
 | Shape | Example |
 |---|---|
-| Top group | `Data Models`, `Commerce`, `Content`, `Users` |
+| Top group | `Product Structure`, `Commerce`, `Content`, `Users` |
 | Product name | `Truvio <Concept> <Unit> <NN>` — `Truvio Variant Master 01`, `Truvio Price Matrix 20` |
 | SKU | `TC-<CONCEPT>-<nnnn>` — `TC-VAR-0001`, `TC-PRC-0020`, `TC-SUB-0061` |
 | Product id | `TCPROD0001` … `TCPROD0061` |
-| Group id | `TCGRP-VARIANTS`, `TCGRP-DATA-MODELS` |
+| Group id | `TCGRP-VARIANTS`, `TCGRP-PRODUCT-STRUCTURE` |
+| Data model id | `TCDM-COMMERCE`, `TCDM-PRODUCT-STRUCTURE` — the PIM tree, never a storefront group |
+| PIM shop id | `TCSHOP-PIM` (`Truvio PIM`) |
 | Order id | `TCO-0001` … `TCO-0012` |
 | Persona | `buyer@truvio-demo.example`, `csr@…`, `admin@…` |
 
@@ -62,23 +64,32 @@ stays in `theme-default` (SPEC-06).
 
 Every row is **serialized SqlTable YAML** under [`merge/_sql/<Table>/`](merge/_sql/), one file
 per row key, listed in [`merge/merge-manifest.json`](merge/merge-manifest.json) and fenced by
-the 29 merge predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json), which
+the 35 merge predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json), which
 Compose-Edition unions into the composed `Serializer.config.json`. The rows land through the
 ordinary merge deserialize, so an online build (URL + Admin API key, no SQL channel) delivers
 the layer exactly as a local one does.
 
 | Row family | Tables | Rows |
 |---|---|---:|
-| Catalogue | `EcomGroups`, `EcomShopGroupRelation`, `EcomGroupRelations`, `EcomProducts`, `EcomGroupProductRelation` | 251 |
+| Catalogue | `EcomGroups`, `EcomShopGroupRelation`, `EcomGroupRelations`, `EcomProducts`, `EcomGroupProductRelation` | 338 |
 | Variants | `EcomVariantGroups`, `EcomVariantsOptions`, `EcomVariantGroupProductRelation`, `EcomVariantOptionsProductRelation` | 49 |
-| Prices, BOM, stock | `EcomPrices`, `EcomProductItems`, `EcomStockUnit` | 304 |
-| Category fields and specs | `EcomProductCategory`, `EcomProductCategoryTranslation`, `EcomProductCategoryField`, `EcomProductCategoryFieldTranslation`, `EcomProductCategoryFieldValue`, `EcomFieldDisplayGroups`, `EcomFieldDisplayGroupTranslation`, `EcomFieldDisplayGroupFields` | 521 |
+| Prices, BOM, stock | `EcomPrices`, `EcomProductItems`, `EcomStockUnit` | 292 |
+| Category fields and specs | `EcomProductCategory`, `EcomProductCategoryTranslation`, `EcomProductCategoryField`, `EcomProductCategoryFieldTranslation`, `EcomProductCategoryFieldValue`, `EcomFieldDisplayGroups`, `EcomFieldDisplayGroupTranslation`, `EcomFieldDisplayGroupFields` | 577 |
 | Imagery, documents, relations | `EcomDetailsGroup`, `EcomDetails`, `EcomProductsRelatedGroups`, `EcomProductsRelated` | 704 |
-| Identities and orders | `AccessUser`, `AccessUserGroupRelation`, `EcomOrders`, `EcomOrderLines` | 42 |
+| Identities and orders | `AccessUser`, `AccessUserGroupRelation`, `AccessUserSecondaryRelation`, `EcomOrders`, `EcomOrderLines` | 43 |
 | Product field settings | `EcomProductField` | 6 |
+| PIM structure | `EcomShops`, `EcomShopLanguageRelation`, `EcomCompletionRules`, `DynamicStructures`, `DynamicStructureLevels` | 9 |
 
-1,877 rows in 29 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
-counts an edition asserts are `EcomProducts` **97** and `EcomGroups` **16**.
+2,018 rows in 35 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
+counts an edition asserts are `EcomProducts` **97** and `EcomGroups` **21**.
+
+`EcomGroups` 21 is **16 browsable storefront groups + 5 PIM groups**, and the two trees sit in
+different shops — see [The PIM structure](#the-pim-structure). `EcomProducts` stays 97: the PIM
+tree adds relations, never products. Two of the figures above are *corrections* and not
+additions — `EcomShopGroupRelation` was declared as 4 while sixteen rows sat on disk (the twelve
+4.1.3 added), and `EcomPrices` was declared as 233 while 4.1.2 left 221. 5.0.0 regenerates
+`merge-manifest.json` `files[]` from disk, so the manifest, the declaration and the tree now
+agree in both directions.
 
 Two things do not fit a row file and ship as loose scripts under `merge/_sql/`, declared in
 `layer.json` `sql[]` (the serializer manifest has no provider for a whole script, so a
@@ -110,7 +121,7 @@ header set to `replace`.
 
 | Where | What the prospect reads |
 |---|---|
-| Home hero | "One catalogue for every data model, price structure and content block"; buttons **Shop the catalogue** and **Browse Data Models** (`GroupID=TCGRP-DATA-MODELS`) |
+| Home hero | "One catalogue for every product structure, price structure and content block"; buttons **Shop the catalogue** and **Browse Product Structure** (`GroupID=TCGRP-PRODUCT-STRUCTURE`) |
 | Home body | catalogue pitch with **Browse Commerce** (`GroupID=TCGRP-COMMERCE`), three features, an account call to action, **About Truvio Commerce** |
 | About, Contact, Employees, Posts | company intro, three values, team heading, contact routes on `support@truvio-demo.example` |
 | Header, footer, mega-menu | the `Truvio Commerce` wordmark, the copyright line, the Variants and Price Structures promos |
@@ -268,16 +279,185 @@ A demo link to a product detail page carries **both** ids:
 product through the group context, so a `ProductID` with no `GroupID` beside it has no group to
 resolve in. A link that drops the `GroupID` is a broken link, not a slower one.
 
+## The PIM structure
+
+The layer shipped four product categories, 28 fields and 61 masters and, until 5.0.0, **nothing
+to attach them to**: no `ShopType 4` shop, no `GroupType 2` data model, no `reference_category`
+mirror, no completion rule, no workspace. Every category was a set of fields nothing plumbed to a
+product, so a PIM demo on a delivered host opened an empty **Data models** tree and a blank
+completeness panel while every row count read green.
+
+**The tree**, in its own shop, separate from the storefront catalogue:
+
+```
+EcomShops  TCSHOP-PIM  "Truvio PIM"  ShopType 4 (DataStructure)   ShopAutoId 100130
+└── TCDM-TRUVIO-COMMERCE   "Truvio Commerce"    GroupType 1 (folder, no category)
+    ├── TCDM-COMMERCE          "Commerce"          GroupType 2 → tc_commerce           16 masters
+    ├── TCDM-CONTENT           "Content"           GroupType 2 → tc_content            15 masters
+    ├── TCDM-PRODUCT-STRUCTURE "Product Structure" GroupType 2 → tc_product_structure  15 masters
+    └── TCDM-USERS             "Users"             GroupType 2 → tc_users              15 masters
+```
+
+- **`ShopType` is the whole discriminator.** `4` (DataStructure) is the only value the admin's
+  **Data models** section lists; `1` (Shop) and `3` (Channel) sit together under **Channels**.
+  A data model tree parked on the commerce shop is in the wrong tree, not in a second one.
+- **`GroupType` is the other one, and no read surface reports it.** `2` (DataModel) is
+  indistinguishable from `0` (Common) through every MCP group tool: same shop, same relations,
+  same shape. `NULL` silently means `0`. Read it from `EcomGroups` before any group-tree audit.
+- **Every group carries its own `EcomShopGroupRelation` row, the folder included.** DW resolves a
+  group to its shop through that table and does **not** walk the parent chain, so a group without
+  one renders in the tree and resolves zero products — with a live 200, a right heading and no
+  error anywhere.
+- **Each DataModel group needs `ProductCategoryId`**, or its seven fields reach no product.
+- **The 61 master relations are `IsPrimary` false.** Each master relates to the data model of its
+  band, derived from the top-group relation it already carried. Its primary home stays its
+  catalogue subgroup, so no storefront URL, PLP or canonical moves.
+
+### Completion rules, and why the mirrors matter
+
+Four rules, `100160`-`100163`, one per data model, each naming its category's seven fields and
+excluding variants. They are assigned on the data-model group itself, through
+`EcomGroups.GroupCompletionRules` = the rule id plus `GroupCompletionLanguageIds` = `ENU`, which
+is the shape a measured DW 10.28 PIM host carries.
+
+The field names are the **authoring** system name, `ProductCategory|<category>|<field>`. The
+**index** name for the same field is `CustomField_<systemName>`; a rule holding the index form
+matches nothing, and a bare field id matches nothing on either side.
+
+The layer also ships **28 `reference_category` mirror fields and their 28 ENU translations**.
+`reference_category` is DW's hidden `CategoryType 2` template category, and it is where the admin
+resolves every rule and completeness lookup. **Its absence has no visible symptom except the one
+that matters**: rules validate, assignments persist, `ProductCompletenessRulesByProductId` returns
+correct data, and the Data Completeness panel on the product renders empty. The **parent**
+`reference_category` row and its translation are base-owned (base 3.6.0); the per-field mirrors
+are here.
+
+Two gates this layer cannot ship as rows, and does not claim: the **Completeness feature** flag
+(Settings → Feature management) and an index build with `SkipCompletionRules` `False`. Without
+both, `CompletionRule|<id>` index fields never populate and completeness is unusable as a query
+term. Rules written by SQL also need a **host restart** — `CompletionRuleService` and
+`ProductCategoryService` hold their `ServiceCache` rows until one.
+
+### The Dynamic Workspace
+
+One workspace, `DynamicStructures` `100170` **"Truvio PIM - by data model"**, levelled on
+`DATAMODEL_Truvio_PIM` (level `100171`) then `GroupNames` (level `100172`). Its backing query is
+[`repositories/TruvioCommerce/PimWorkspace.query`](repositories/TruvioCommerce/PimWorkspace.query),
+which this layer ships beside the rows that name it — `DynamicStructureQueryId` is that file's
+`Id` GUID, and `DynamicStructureLevels.DynamicStructureLevelStructureId` is the structure's
+`UniqueId` GUID held as text, never its int id.
+
+A workspace is a **projection, not storage**: it moves no product row. The canonical home of a
+product is still its `EcomGroupProductRelation` rows.
+
+**Why the field is called `DATAMODEL_Truvio_PIM`.** DW derives the data-model index field from the
+**shop name**, not its id: `DATAMODEL_<Shop Name with spaces as underscores>`. The shop is named
+`Truvio PIM`, so the field is `DATAMODEL_Truvio_PIM`. **Rename the shop and that field name moves
+with it**, orphaning level `100171` — which is why the shop name is a `configRows` assertion and
+not a free string.
+
+**What the index has to do.** The field is emitted by the `Products.index` `Full` build **only**
+with `SkipDataModels` `False`, which surface-swift ships from 1.14.0. With it `True` the workspace
+opens, the level renders, and every node is empty: no error, no warning, a correct document count.
+Both level sources are deliberately **non-analysed keyword** fields — an analysed free-text source
+enumerates lower-cased Lucene term fragments (`"Hot-Shot"` becomes `hot` and `shot`) and a numeric
+source enumerates nodes that open onto zero rows, and neither errors. Check a level by the **sum**
+of its node counts against the backing query's own total, never by drilling one node.
+
+`PimWorkspace.query` is not `Products.query`. The storefront query resolves
+`Dynamicweb.Ecommerce.Context` macros that exist only on a server-rendered storefront request; a
+workspace runs in the backend, where those resolve to nothing and the query silently matches
+nothing. So the workspace query states `LanguageID` as a constant, filters `IsVariant` false
+(masters only — a level counts index *documents*, so the variant and language fan-out would make
+every node count overshoot), and applies no `Active` filter: a PIM workbench must show the product
+that is not live yet, which is exactly the one that still needs enriching.
+
+
+### The one hazard this workspace row carries
+
+**Delivering this layer DELETES every Dynamic Workspace the host already had.** Measured on the
+`20260919-153644` gate run against `foundry.mydwsite4.com`: the merge deserialize of our single
+`DynamicStructures` row removed the three baseline workspaces (`DynamicStructureId` 1, 3 and 4)
+and left their seven `DynamicStructureLevels` rows behind as orphans.
+
+It is not a predicate mistake and merge mode does not prevent it. `DynamicStructures` has **no
+primary key on DW 10.28** — it is a heap — and the engine has no key to match a row on, so
+`SqlTableProvider.cs:345-360` / `SqlTableWriter.cs:364-407` fall back to `DELETE FROM [table]`
+followed by insert-all **under Merge exactly as under Replace**. The `where` clause fences what
+the layer SERIALIZES; it does not fence that wipe. `DynamicStructureLevels` *does* have a primary
+key, so it was upserted normally — which is why the orphans survive.
+
+**On a consumer host that means this layer wipes every workspace the customer built.** Before
+delivering to a host whose workspaces matter, do one of:
+
+- **Drop the predicate.** Remove the `sample-data DynamicStructures` entry from the composed
+  `Serializer.config.json` before the deserialize. The layer then ships no workspace and the
+  host's own are untouched; `DynamicStructureLevels` `100171`/`100172` land as orphans and
+  `tools/scrub-sample-catalogue.sql` removes them.
+- **Recreate them afterwards.** A workspace is two commands in the admin, and
+  `DynamicStructureSave` silently drops a `Levels` collection, so the levels are a second step.
+
+Either way, **the level rows of a wiped structure must be deleted by hand**: nothing removes
+them, they render nowhere, and they are what a later `Get-LayerRepositoryIndex`-style audit trips
+over. Both scripts under [`tools/`](tools/) carry an idempotent orphan-level delete for exactly
+this.
+
+`DynamicStructures` is the **only heap table this layer writes**. Every other one of its 35
+tables has a primary key, so every other predicate deletes nothing: a keyed merge upserts its own
+rows and leaves the rest of the table alone. Check `_meta.yml` `keyColumns` against the live
+`sys.indexes` before adding a table to this layer — a table with no PK index is a whole-table
+rewrite whatever mode it is declared in.
+
+## Removing the catalogue from a branded demo
+
+A branded demo starts from a composed `swift-demo` host and then loads the customer's own
+catalogue. The sample catalogue is then not a neutral placeholder — it is wrong data in the
+customer's channel. Two operator scripts under [`tools/`](tools/) handle it. **Neither is declared
+in `layer.json` `sql[]`**: a declared script is one the composer *runs*, and whether a host keeps
+the sample catalogue is a per-delivery editorial decision.
+
+| Script | When | What it does |
+|---|---|---|
+| [`tools/scrub-sample-catalogue.sql`](tools/scrub-sample-catalogue.sql) | after **every** delivery onto a branded host | removes the whole sample catalogue **and** the PIM structure, plus any orphaned workspace levels |
+| [`tools/retire-4x-ids.sql`](tools/retire-4x-ids.sql) | **once**, before delivering 5.0.0 onto a 4.x host | removes the ids 5.0.0 renamed, the orphan workspace levels and the orphan shop-group relations |
+
+**The scrub keeps what is not catalogue**: the three personas and their B2B account, the twelve
+orders `TCO-0001`-`TCO-0012`, the storefront copy on Home / About / Contact / header / footer /
+mega-menu, the demo clock and its tables, the email statistics, the `Images` and `Manuals` asset
+categories (infrastructure a branded catalogue's own assets need), the six `TCFIELD-*`
+variant-editing settings rows, and every base row. It removes the `TC*` / `tc_*` rows, the
+`TCSHOP-PIM` shop, the `TCDM-*` groups, the four completion rules, the workspace and its levels,
+and the 28 `reference_category` mirrors — **not** the `reference_category` parent row, which is
+base-owned, and **not** the stock locations, which base 3.6.0 ships neutral. It is idempotent and
+must be re-run after every delivery, because **a merge deserialize re-inserts every row it
+removes**. Rebuild the product index and restart the host afterwards.
+
+**The retire script exists because merge never deletes.** 5.0.0 renames the band id *and* name
+(`TCGRP-DATA-MODELS` → `TCGRP-PRODUCT-STRUCTURE`, `tc_data_models` → `tc_product_structure`, and
+the two PDFs). Delivering 5.0.0 onto a host that holds 4.x therefore *inserts* the new ids and
+*leaves* the old ones: two top groups in the menu, two categories in the field picker, fifteen
+duplicate spec values per master, two datasheet rows on thirty product pages — and no error
+anywhere. The three subgroups and the fifteen masters keep their ids across the rename; only their
+parent changes. A clean-room host needs nothing. (Same precedent as the twelve retired price rows
+in the 4.1.2 changelog.)
+
 ## Key families
 
-This layer owns the `TC*` family: `TCGRP-*`, `TCPROD*`, `TCVG-*`, `TCVGR-*`, `TCVO-*`,
-`TC-PRICE-*`, `TC-BOM-*`, `TC-DETAIL-*`, `TC-HOVER-*`, `TC-GAL-*`, `TC-DOC-*`, `TCREL-*`,
-`TCO-*`, `TCFIELD-*` and the `tc_*` product categories — the family
+This layer owns the `TC*` family: `TCGRP-*`, `TCDM-*`, `TCSHOP-PIM`, `TCPROD*`, `TCVG-*`,
+`TCVGR-*`, `TCVO-*`, `TC-PRICE-*`, `TC-BOM-*`, `TC-DETAIL-*`, `TC-HOVER-*`, `TC-GAL-*`,
+`TC-DOC-*`, `TCREL-*`, `TCO-*`, `TCFIELD-*` and the `tc_*` product categories — the family
 [`base.contract.json`](../base/base.contract.json) `idRules.reservedFixtureKeys` reserves. Its
 int-identity rows sit at reserved ids above the contract's `100000` floor and the serializer
 writes them verbatim with `IDENTITY_INSERT`: `AccessUser` `100100`-`100103`, `EcomDetailsGroup`
 `100110` (`Images`) and `100111` (`Manuals`), `EcomFieldDisplayGroups` `100120` (`tc_specs`),
-`EcomStockUnit` `100201`-`100261`, `EcomProductField` `100130`-`100135`. The storefront binds the asset categories and the display
+`EcomStockUnit` `100201`-`100261`, `EcomProductField` `100130`-`100135`, and for the PIM
+structure `EcomShops` `100130`, `EcomShopLanguageRelation` `100131`, `EcomGroups`
+`100140`-`100144`, `EcomShopGroupRelation` `100145`-`100149`, `EcomProductCategoryField`
+`100150`-`100177`, `EcomCompletionRules` `100160`-`100163`, `DynamicStructures` `100170`,
+`DynamicStructureLevels` `100171`-`100172`, `EcomGroupRelations` `100178`-`100181`,
+`EcomGroupProductRelation` `100200`-`100260`, `EcomProductCategoryFieldTranslation`
+`100300`-`100327`. **The ranges are per TABLE**, so `EcomProductField` `100130`-`100135` and
+`EcomShops` `100130` are not a collision. The storefront binds the asset categories and the display
 group by system name, not by id. An addition writing its own rows into a base-owned table uses
 its `PACK-<NAME>-` prefix instead.
 

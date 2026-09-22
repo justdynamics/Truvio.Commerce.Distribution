@@ -22,7 +22,7 @@ import os
 import sys
 
 GROUPS = [
-    ('data-models', 'Data Models'),
+    ('product-structure', 'Product Structure'),
     ('commerce', 'Commerce'),
     ('content', 'Content'),
     ('users', 'Users'),

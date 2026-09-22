@@ -1,5 +1,37 @@
 # Changelog — surface-swift
 
+## 1.14.0
+
+### The product index emits the data-model keys, and the facet follows the band rename
+
+**MINOR. Two settings, no template and no content document. The index is what a Dynamic
+Workspace reads, and sample-data 5.0.0 ships one.**
+
+**1. `SkipDataModels` is `False`.** The storefront reads none of the `DATAMODEL_*` index
+fields, so on its own this setting buys the shop nothing. It buys the BACKEND everything: a
+Dynamic Workspace level sourced on a data-model key enumerates the index field
+`DATAMODEL_<Shop Name with spaces as underscores>` — `DATAMODEL_Truvio_PIM` for the
+`TCSHOP-PIM` DataStructure shop sample-data 5.0.0 adds — and the `Full` build emits that
+field only with this flag `False`. With it `True` the workspace opens, the level renders and
+every node is empty, with no error in the log, no warning in the build report and a correct
+document count. The Foundry gate escalates this flag from advisory WARN to blocking FAIL on
+an edition that declares `pimWorkspaces`, which is why it is a settings change and not a
+note.
+
+**2. The `MaterialClass_Facet` source follows the catalogue band rename.** The facet is
+`ProductCategory|tc_product_structure|tcMaterialClass`; it was
+`ProductCategory|tc_data_models|tcMaterialClass`. The category id, not only its display
+name, changed in sample-data 5.0.0 (the band is `Product Structure`, because `Data Models`
+is the name of a platform construct and that construct now ships beside it). **A `Source`
+that names no indexed field builds without an error and indexes nothing**, so a facet left
+on the old id would have rendered empty on every PLP — the same silent class as the flag
+above. `surface.contract-notes.json` `scopeNote` names the four categories and follows.
+
+Measured shape this depends on, from a DW 10.28 PIM host: the index field name is derived
+from the shop NAME, not its id, so renaming `Truvio PIM` moves the field and orphans
+`DynamicStructureLevels` 100171 with it.
+
+
 ## 1.13.9
 
 Patch: the 1.13.8 bindings actually reach the host — the exclusion also had to

@@ -1,0 +1,41 @@
+﻿"tableName": "EcomStockLocationTranslations"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "StockLocationTranslationStockLocationId"
+- "StockLocationTranslationLanguageId"
+"identityColumns": []
+"allColumns":
+- "StockLocationTranslationStockLocationId"
+- "StockLocationTranslationLanguageId"
+- "StockLocationTranslationName"
+- "StockLocationTranslationDescription"
+"columnDefinitions":
+- "name": "StockLocationTranslationStockLocationId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockLocationTranslationLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockLocationTranslationName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockLocationTranslationDescription"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

@@ -1,0 +1,67 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "DynamicStructureLevels"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "DynamicStructureLevelId"
+"identityColumns":
+- "DynamicStructureLevelId"
+"allColumns":
+- "DynamicStructureLevelId"
+- "DynamicStructureLevelStructureId"
+- "DynamicStructureLevelField"
+- "DynamicStructureLevelSortDirection"
+- "DynamicStructureLevelIndex"
+- "DynamicStructureLevelUseRelationOnProductCreate"
+- "DynamicStructureLevelUseCompleteness"
+"columnDefinitions":
+- "name": "DynamicStructureLevelId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "DynamicStructureLevelStructureId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DynamicStructureLevelField"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "DynamicStructureLevelSortDirection"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DynamicStructureLevelIndex"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DynamicStructureLevelUseRelationOnProductCreate"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DynamicStructureLevelUseCompleteness"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

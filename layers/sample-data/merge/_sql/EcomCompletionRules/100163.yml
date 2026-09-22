@@ -1,0 +1,7 @@
+﻿"ownership":
+  "mode": "merge"
+"EcomCompletionRuleId": 100163
+"EcomCompletionRuleName": "Users data complete"
+"EcomCompletionRuleDescription": "The seven Users attributes a Users-band master carries before it is fit for an account context: assortment scope, customer number, account terms, currency scope, contract scope, stock status, order channel."
+"EcomCompletionRuleProductFields": "ProductCategory|tc_users|tcAssortmentScope,ProductCategory|tc_users|tcCustomerNumber,ProductCategory|tc_users|tcAccountTerms,ProductCategory|tc_users|tcCurrencyScope,ProductCategory|tc_users|tcContractScope,ProductCategory|tc_users|tcStockStatus,ProductCategory|tc_users|tcOrderChannel"
+"EcomCompletionRuleExcludeVariants": true

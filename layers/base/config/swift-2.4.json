@@ -78,6 +78,36 @@
       "table": "EcomShopGroupRelation"
     },
     {
+      "name": "EcomStockLocation",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomStockLocation",
+      "_why": "Replace, whole table: the stock locations are framework configuration, not catalogue. The baseline DB shipped the Swift demo's own rows (1 'BikeShop Copenhagen', 2 'BikeShop Aarhus', 3 'Default stock location'), so every composed edition carried a bike shop's warehouse names. The base now owns the table outright with neutral names on the SAME ids 1-3: the sample-data layer's EcomStockUnit rows and EcomShops.ShopStockLocationID reference those ids, so a rekey would orphan them (Foundry #1303). Replace rather than Merge so a re-deserialize restores the neutral set instead of leaving a previously delivered bike-shop name in place. StockLocationCategoryId is kept exactly as the baseline carries it (1 and 3 -> STOCKLOCCAT1 'Click and collect', 2 -> STOCKLOCCAT2 'Warehouse'): EcomStockLocationCategory exists on every host and stays BASELINE-OWNED - no layer serializes it - and the base's own Click & Collect delivery method needs pickup locations sitting in that category."
+    },
+    {
+      "name": "EcomStockLocationTranslations",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomStockLocationTranslations",
+      "_why": "Replace, whole table: the display name a Dynamicweb stock location actually renders lives here, not in EcomStockLocation.StockLocationName. The baseline ships 1|ENU 'BikeShop Copenhagen', 2|ENU 'BikeShop Aarhus' (description 'Warehouse west') and 3|ENU 'Default stock location', so correcting only the parent table would have left the bike shop's names on every delivered host (Foundry #1303). Same ids and the same ENU key as the parent predicate, names matched to it, descriptions empty. The table has no identity column, so the composite PK (StockLocationId + LanguageId) is the whole key."
+    },
+    {
+      "name": "Reference category",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomProductCategory",
+      "where": "CategoryId = 'reference_category'",
+      "_why": "Replace, filtered to the ONE hidden template category Dynamicweb's completeness-rule and category-field admin UI reads (CategoryType 2). BASE.md has claimed this row since 3.0.0 and it never shipped - the Foundry gate synthesised it as Step 3b instead (tools/harness/Invoke-SeedVerify.ps1, DemoVerifier Check 2), which means a consumer deserializing the Distribution without the gate never got it (Foundry #1304). Filtered, never whole-table: the tc_* concrete categories are sample-data-owned merge rows and a whole-table Replace here would wipe them."
+    },
+    {
+      "name": "Reference category translation",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomProductCategoryTranslation",
+      "where": "CategoryTranslationCategoryId = 'reference_category'",
+      "_why": "Replace, filtered to the reference_category rows only, for the same reason as the parent predicate: the ENU display name 'Reference category' ships with the row it belongs to, while the tc_* translations stay sample-data-owned merge rows. The Foundry gate's own seed is IF NOT EXISTS-guarded on the category id, so a gated host that already carries a LANG1 row is unaffected (Foundry #1304)."
+    },
+    {
       "name": "EcomPayments",
       "mode": "Replace",
       "providerType": "SqlTable",

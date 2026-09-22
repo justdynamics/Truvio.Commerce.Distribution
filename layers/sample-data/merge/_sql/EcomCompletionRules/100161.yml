@@ -1,0 +1,7 @@
+﻿"ownership":
+  "mode": "merge"
+"EcomCompletionRuleId": 100161
+"EcomCompletionRuleName": "Content data complete"
+"EcomCompletionRuleDescription": "The seven Content attributes a Content-band master carries before it is fit to publish: document set, media set, revision, datasheet code, certification, language coverage, catalogue section."
+"EcomCompletionRuleProductFields": "ProductCategory|tc_content|tcDocumentSet,ProductCategory|tc_content|tcMediaSet,ProductCategory|tc_content|tcRevision,ProductCategory|tc_content|tcDatasheetCode,ProductCategory|tc_content|tcCertification,ProductCategory|tc_content|tcLanguageCoverage,ProductCategory|tc_content|tcCatalogueSection"
+"EcomCompletionRuleExcludeVariants": true

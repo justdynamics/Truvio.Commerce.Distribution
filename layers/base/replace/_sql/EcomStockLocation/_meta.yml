@@ -1,0 +1,81 @@
+﻿"tableName": "EcomStockLocation"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "StockLocationId"
+"identityColumns":
+- "StockLocationId"
+"allColumns":
+- "StockLocationId"
+- "StockLocationName"
+- "StockLocationDescription"
+- "StockLocationLanguageId"
+- "StockSortOrder"
+- "StockLocationGroupId"
+- "StockLocationCategoryId"
+- "StockLocationUserId"
+- "StockLocationExternalId"
+"columnDefinitions":
+- "name": "StockLocationId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "StockLocationName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockLocationDescription"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockLocationLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockSortOrder"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockLocationGroupId"
+  "dataType": "bigint"
+  "maxLength": 0
+  "precision": 19
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockLocationCategoryId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockLocationUserId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockLocationExternalId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 2,
   "mode": "replace",
-  "writtenAtUtc": "2026-07-12T13:45:45.9263698Z",
+  "writtenAtUtc": "2026-09-19T00:00:00.0000000Z",
   "complete": true,
   "excludeFieldsByItemType": {},
   "excludeXmlElementsByType": {},
@@ -559,38 +559,71 @@
       "schemaSync": null,
       "entryId": "sql/EcomShopGroupRelation",
       "files": [
-        "_sql/EcomShopGroupRelation/GROUP1$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP130$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP131$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP132$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP136$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP137$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP138$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP139$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP143$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP155$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP156$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP157$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP158$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP159$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP160$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP161$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP162$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP2$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP252$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP32$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP35$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP46$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP47$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP49$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP5$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP52$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP55$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP58$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP59$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP61$$SHOP1.yml",
-        "_sql/EcomShopGroupRelation/GROUP9$$SHOP1.yml",
         "_sql/EcomShopGroupRelation/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomStockLocation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomStockLocation",
+      "files": [
+        "_sql/EcomStockLocation/1.yml",
+        "_sql/EcomStockLocation/2.yml",
+        "_sql/EcomStockLocation/3.yml",
+        "_sql/EcomStockLocation/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomStockLocationTranslations",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomStockLocationTranslations",
+      "files": [
+        "_sql/EcomStockLocationTranslations/1$$ENU.yml",
+        "_sql/EcomStockLocationTranslations/2$$ENU.yml",
+        "_sql/EcomStockLocationTranslations/3$$ENU.yml",
+        "_sql/EcomStockLocationTranslations/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomProductCategory",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomProductCategory",
+      "files": [
+        "_sql/EcomProductCategory/reference_category.yml",
+        "_sql/EcomProductCategory/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomProductCategoryTranslation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomProductCategoryTranslation",
+      "files": [
+        "_sql/EcomProductCategoryTranslation/reference_category$$ENU.yml",
+        "_sql/EcomProductCategoryTranslation/_meta.yml"
       ]
     },
     {
@@ -635,7 +668,7 @@
         "_sql/EcomShippings/Bring, DAO Pakkeshop.yml",
         "_sql/EcomShippings/Bring, DAO Parcelshop.yml",
         "_sql/EcomShippings/Business delivery.yml",
-        "_sql/EcomShippings/Click \u0026 Collect delivery method.yml",
+        "_sql/EcomShippings/Click & Collect delivery method.yml",
         "_sql/EcomShippings/DAO.yml",
         "_sql/EcomShippings/Firmalevering.yml",
         "_sql/EcomShippings/GLS Pakkeshop.yml",
