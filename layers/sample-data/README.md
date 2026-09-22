@@ -72,7 +72,7 @@ the layer exactly as a local one does.
 | Row family | Tables | Rows |
 |---|---|---:|
 | Catalogue | `EcomGroups`, `EcomShopGroupRelation`, `EcomGroupRelations`, `EcomProducts`, `EcomGroupProductRelation` | 338 |
-| Variants | `EcomVariantGroups`, `EcomVariantsOptions`, `EcomVariantGroupProductRelation`, `EcomVariantOptionsProductRelation` | 49 |
+| Variants | `EcomVariantGroups`, `EcomVariantsOptions`, `EcomVariantGroupProductRelation`, `EcomVariantOptionsProductRelation` | 55 |
 | Prices, BOM, stock | `EcomPrices`, `EcomProductItems`, `EcomStockUnit` | 292 |
 | Category fields and specs | `EcomProductCategory`, `EcomProductCategoryTranslation`, `EcomProductCategoryField`, `EcomProductCategoryFieldTranslation`, `EcomProductCategoryFieldValue`, `EcomFieldDisplayGroups`, `EcomFieldDisplayGroupTranslation`, `EcomFieldDisplayGroupFields` | 577 |
 | Imagery, documents, relations | `EcomDetailsGroup`, `EcomDetails`, `EcomProductsRelatedGroups`, `EcomProductsRelated` | 704 |
@@ -80,7 +80,7 @@ the layer exactly as a local one does.
 | Product field settings | `EcomProductField` | 6 |
 | PIM structure | `EcomShops`, `EcomShopLanguageRelation`, `EcomCompletionRules`, `DynamicStructures`, `DynamicStructureLevels` | 9 |
 
-2,018 rows in 35 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
+2,024 rows in 35 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
 counts an edition asserts are `EcomProducts` **97** and `EcomGroups` **21**.
 
 `EcomGroups` 21 is **16 browsable storefront groups + 5 PIM groups**, and the two trees sit in
@@ -91,7 +91,7 @@ additions — `EcomShopGroupRelation` was declared as 4 while sixteen rows sat o
 `merge-manifest.json` `files[]` from disk, so the manifest, the declaration and the tree now
 agree in both directions.
 
-Two things do not fit a row file and ship as loose scripts under `merge/_sql/`, declared in
+Three things do not fit a row file and ship as loose scripts under `merge/_sql/`, declared in
 `layer.json` `sql[]` (the serializer manifest has no provider for a whole script, so a
 composer that reads only the manifests would stage them and execute nothing):
 
@@ -99,8 +99,27 @@ composer that reads only the manifests would stage them and execute nothing):
 |---|---|---|
 | `email-stats.sql` | `after-replace-deserialize`, 1 | the email-marketing statistics backfill |
 | `demo-clock.sql` | `after-replace-deserialize`, 2 | the anchor table, the shifter and the daily task |
+| `number-counters.sql` | `after-merge-deserialize`, 1 | raises every `EcomNumbers` counter to the highest id in use |
 
-Neither takes a `sqlcmd` variable, and neither writes a catalogue row.
+None takes a `sqlcmd` variable, and none writes a catalogue row.
+
+**The number counters (Foundry #1322).** Dynamicweb mints a new id as `NumberPrefix` plus the
+next `EcomNumbers` counter value, and a deserialize writes ids verbatim without advancing the
+counter. A composed host therefore starts with counters behind the ids it holds (the base's
+`OS1`-`OS14`, `SHIP3`-`SHIP13`, `PAY1`-`PAY3`; measured on `foundry.mydwsite4.com`: `SHIP`
+counter 5 with `SHIP13` present), and a create without an explicit id overwrites a shipped
+row. `number-counters.sql` reads, for every counter whose `NumberTableName` and
+`NumberColumnName` are set, the highest id of the exact form `<prefix><digits><postfix>` and
+raises `NumberCounter` to it. It never lowers a counter and ignores ids outside that form, so
+the `TC*` keys this layer ships move nothing. It runs after the merge deserialize so every
+layer's rows are in place, and it is idempotent.
+
+**Local installs only.** Like every `sql[]` script, it runs where the applier has a SQL channel.
+An online host (URL + Admin API key) has none, and no MCP tool or Management API command
+writes `EcomNumbers`, so an online host applies the script through its own SQL route (the
+hosting provider's SQL access) or passes an explicit unused id on every create until it does.
+Editions without `sampleData` (`base-only`, `base-swift`) do not compose this layer and do not
+get the script; their base `OS`/`SHIP`/`PAY` counters lag the same way.
 
 **The YAML is the source of truth.** Several values were computed once by the pre-1.8.0 SQL
 scripts on the harvest host and are now literals: the customer-group, list and ladder prices
@@ -460,6 +479,29 @@ structure `EcomShops` `100130`, `EcomShopLanguageRelation` `100131`, `EcomGroups
 `EcomShops` `100130` are not a collision. The storefront binds the asset categories and the display
 group by system name, not by id. An addition writing its own rows into a base-owned table uses
 its `PACK-<NAME>-` prefix instead.
+
+## Variant combinations
+
+Each of the six variant masters (`TCPROD0001`, `0011`, `0016`, `0031`, `0041`, `0051`) carries
+two variant groups, `Tier` (3 options) and `Mode` (2 options), and six variant product rows
+whose `ProductVariantId` is the dotted combination, `TCVO-TIER-<t>.TCVO-MODE-<m>`.
+`EcomVariantOptionsProductRelation` holds exactly those combinations, one row per
+`ProductVariantId`, 36 in all, and **no bare option rows**. That is the shape Dynamicweb itself
+builds: on the stock Swift database (`dw10-demo`, `dw10-swift`) a master with two or more
+variant groups carries only dotted combination rows in this table, a single-group master
+carries its bare options, and every variant product row has its relation row.
+
+The relation row is what makes a combination sellable. Without it the cart refuses the line
+(`Not a valid variant combination for product TCPROD0001 with variant ID
+TCVO-TIER-ENT.TCVO-MODE-PUB` in the event log, while `cartcmd=add` answers 200 with no line)
+and Admin API `VariantCombinationsByProductId` answers 500 `Index was outside the bounds of the
+array` on the bare rows (Foundry #1255, #1269). The rows sit at the reserved identities
+`100400`-`100435`.
+
+**A host delivered from 5.0.0 or earlier** keeps its 30 bare option rows after a 5.0.1
+delivery, because a merge deserialize never deletes a row. Run
+[`tools/retire-bare-variant-options.sql`](tools/retire-bare-variant-options.sql) once, before
+or after the delivery. A clean-room host needs nothing.
 
 ## Variant editing on the six master-only fields
 

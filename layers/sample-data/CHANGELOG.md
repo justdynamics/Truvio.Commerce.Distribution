@@ -1,5 +1,68 @@
 # Changelog — sample-data
 
+## 5.0.1
+
+**PATCH. The six variant masters become sellable, and the layer raises the id counters a
+deserialize leaves behind. `EcomVariantOptionsProductRelation` goes 30 -> 36 (2,018 -> 2,024
+rows); one new `sql[]` script. A host delivered from 5.0.0 or earlier runs
+`tools/retire-bare-variant-options.sql` once; a clean-room host needs nothing.**
+
+### Variant combinations, not bare options (Foundry #1255, #1269)
+
+The six masters `TCPROD0001`, `0011`, `0016`, `0031`, `0041` and `0051` each carry two variant
+groups (`Tier`, `Mode`) and six variant product rows keyed `TCVO-TIER-<t>.TCVO-MODE-<m>`, but
+`EcomVariantOptionsProductRelation` shipped only their five BARE options each (30 rows). A
+two-group master is keyed by the dotted combination, so:
+
+- the PDP add to cart of any variant answered 200 with no line, and the event log carried
+  `Not a valid variant combination for product TCPROD0001 with variant ID
+  TCVO-TIER-ENT.TCVO-MODE-PUB` (#1269);
+- Admin API `VariantCombinationsByProductId` answered 500 `Index was outside the bounds of the
+  array` for `TCPROD0001` and `TCPROD0031` (#1255, measured on DW 10.28.11).
+
+The shape was read from the stock Swift databases on this machine (`dw10-demo`, `dw10-swift`):
+every master with two or more variant groups carries ONLY dotted combination rows in that table
+(`10059`: `VO1.VO11` ... `VO5.VO16`, 18 rows for 3 x 6 options), a single-group master carries
+its bare options, and every variant product row has a relation row keyed by its own
+`ProductVariantId`. The layer now ships exactly that: the 30 bare rows are removed and 36 rows
+land, one per shipped variant product row, at the reserved identities `100400`-`100435` (the
+bare rows sat at `1856`-`1885`, below the contract's `100000` floor). No variant product row,
+variant group or option changes; the predicate is unchanged, and `merge-manifest.json`
+`files[]` follows the tree.
+
+A merge deserialize never deletes a row, so a host delivered from 5.0.0 keeps the 30 bare rows.
+`tools/retire-bare-variant-options.sql` removes them, fenced to bare rows on `TCPROD` masters
+with two or more variant groups (30 on `foundry.mydwsite4.com`, counted read-only).
+
+The click half of #1255 (options update the URL but not the SKU and price) is Foundry #1316,
+the base-href provisioning fix, and is not in this layer.
+
+### EcomNumbers counters raised past the shipped ids (Foundry #1322)
+
+Dynamicweb mints a new id as `NumberPrefix` plus the next `EcomNumbers` counter, and a
+deserialize writes ids verbatim without advancing the counter. A composed host therefore holds
+the base's `OS1`-`OS14`, `SHIP3`-`SHIP13` and `PAY1`-`PAY3` with counters that lag them
+(`SHIP` counter 5 with `SHIP13` present on `foundry.mydwsite4.com`; the stock `dw10-demo`
+database lags the same way), and a create without an explicit id overwrites a shipped row: MCP
+`create_order_state` replaced `OS5` and `OS6`.
+
+`merge/_sql/number-counters.sql`, declared in `sql[]` at `after-merge-deserialize`, order 1,
+raises every counter whose `NumberTableName` and `NumberColumnName` are set to the highest id of
+the exact form `<prefix><digits><postfix>` in that column. It never lowers a counter, ignores
+ids outside that form (the `TC*` keys move nothing), skips a counter whose table or column is
+missing, and runs in one transaction under `XACT_ABORT`; a second run updates nothing. Dry runs
+(update removed, transaction rolled back) against four local databases raised `SHIP` 5 -> 13 on
+`foundry`, `foundry-armb` and `dw10-demo`, plus `PRICE` 16 -> 24 and `PROD` 0 -> 349 on
+`dw10-demo`, and found `heartstream` (already hand-corrected by the draft this script replaces)
+lagging only on `PROD` and `VATGRP`.
+
+It runs on local installs only, like every `sql[]` script: an online host has no SQL channel
+and no MCP tool or Management API command writes `EcomNumbers`, so an online host applies it
+through its own SQL route. Editions without `sampleData` (`base-only`, `base-swift`) do not
+compose this layer and keep the lag. `requiresHostRestart` is declared true as a precaution;
+`demo-clock.sql` already owes the layer's one restart, so it adds none.
+
+
 ## 5.0.0
 
 ### The catalogue band is renamed, and the PIM structure the category fields always needed ships with them

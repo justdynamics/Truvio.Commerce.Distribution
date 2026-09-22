@@ -1,6 +1,6 @@
 {
   "name": "sample-data",
-  "version": "5.0.0",
+  "version": "5.0.1",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -149,6 +149,16 @@
       "phase": "after-replace-deserialize",
       "order": 2,
       "description": "The demo clock: the _demoClock anchor table (anchored to the harvest day 2026-09-13 the serialized rows carry), the exclusion and per-column guard tables, usp_DemoClockShift (discovers every operational date column from sys.columns and shifts it by whole days), and the daily RunSql scheduled task that runs it. Keeps the brand orders TCO-0001..TCO-0012 and every other seeded date anchored to today.",
+      "idempotent": true,
+      "transactional": true,
+      "requiresHostRestart": true
+    },
+    {
+      "file": "_sql/number-counters.sql",
+      "mode": "merge",
+      "phase": "after-merge-deserialize",
+      "order": 1,
+      "description": "EcomNumbers counters raised past the ids the composition's layers ship (Foundry #1322): for every counter that names its table and id column, NumberCounter is raised to the highest <prefix><digits><postfix> id in use, never lowered. A deserialize writes ids verbatim and never advances a counter, so without it the next create without an explicit id (an order state, shipping, payment or price) mints an id that exists and overwrites the shipped row. Table-agnostic, so the base's OS/SHIP/PAY rows and every other counter are covered. Local installs only; an online host applies it through its own SQL route.",
       "idempotent": true,
       "transactional": true,
       "requiresHostRestart": true
@@ -502,9 +512,9 @@
       "EcomStockUnit": 61,
       "EcomVariantGroupProductRelation": 12,
       "EcomVariantGroups": 2,
-      "EcomVariantOptionsProductRelation": 30,
+      "EcomVariantOptionsProductRelation": 36,
       "EcomVariantsOptions": 5
     },
-    "expectedRowsNote": "Rows arrive by merge deserialize of merge/_sql/<Table>/*.yml (35 tables); every count equals the per-table row-file count in merge/merge-manifest.json (2,018 rows), which 5.0.0 regenerates from disk in both directions. 5.0.0 adds 140 rows in eleven tables for the PIM structure: EcomShops 1 (TCSHOP-PIM, ShopType 4), EcomShopLanguageRelation 1, EcomGroups +5 (16 -> 21: one GroupType 1 folder and four GroupType 2 data models), EcomGroupRelations +4, EcomShopGroupRelation +5, EcomGroupProductRelation +61 (every master to the data model of its band, IsPrimary false), EcomProductCategoryField +28 and EcomProductCategoryFieldTranslation +28 (the reference_category mirrors), EcomCompletionRules 4, DynamicStructures 1, DynamicStructureLevels 2. EcomProducts is UNCHANGED at 97 - the PIM tree adds relations, never products. Two figures here are corrections rather than changes: EcomShopGroupRelation read 4 while sixteen rows sat on disk (the twelve 4.1.3 added and never declared), and EcomPrices read 233 while 4.1.2 left 221 on disk. The two loose sql[] scripts write no catalogue row: demo-clock.sql creates its own _demoClock* tables and the scheduled task, email-stats.sql writes only telemetry rows. Advisory: the gate derives its own counts from the composition. ONE of the 35 tables is a HEAP: DynamicStructures has no primary key on DW 10.28, so the engine writes it with DELETE FROM [table] plus insert-all under Merge as well as Replace, and delivering the layer's single workspace row removes every Dynamic Workspace the host already had (measured, gate run 20260919-153644). The other 34 tables all carry a primary key and their merge deletes nothing. See the DynamicStructures predicate _why in config/sample-data-2.4.json and README 'The one hazard this workspace row carries'."
+    "expectedRowsNote": "Rows arrive by merge deserialize of merge/_sql/<Table>/*.yml (35 tables); every count equals the per-table row-file count in merge/merge-manifest.json (2,024 rows), which 5.0.0 regenerates from disk in both directions. 5.0.1 replaces the 30 bare-option EcomVariantOptionsProductRelation rows with the 36 full combinations the six two-group masters need (Foundry #1255, #1269), so that table goes 30 -> 36. 5.0.0 adds 140 rows in eleven tables for the PIM structure: EcomShops 1 (TCSHOP-PIM, ShopType 4), EcomShopLanguageRelation 1, EcomGroups +5 (16 -> 21: one GroupType 1 folder and four GroupType 2 data models), EcomGroupRelations +4, EcomShopGroupRelation +5, EcomGroupProductRelation +61 (every master to the data model of its band, IsPrimary false), EcomProductCategoryField +28 and EcomProductCategoryFieldTranslation +28 (the reference_category mirrors), EcomCompletionRules 4, DynamicStructures 1, DynamicStructureLevels 2. EcomProducts is UNCHANGED at 97 - the PIM tree adds relations, never products. Two figures here are corrections rather than changes: EcomShopGroupRelation read 4 while sixteen rows sat on disk (the twelve 4.1.3 added and never declared), and EcomPrices read 233 while 4.1.2 left 221 on disk. The three loose sql[] scripts write no catalogue row: demo-clock.sql creates its own _demoClock* tables and the scheduled task, email-stats.sql writes only telemetry rows, number-counters.sql only raises EcomNumbers counters. Advisory: the gate derives its own counts from the composition. ONE of the 35 tables is a HEAP: DynamicStructures has no primary key on DW 10.28, so the engine writes it with DELETE FROM [table] plus insert-all under Merge as well as Replace, and delivering the layer's single workspace row removes every Dynamic Workspace the host already had (measured, gate run 20260919-153644). The other 34 tables all carry a primary key and their merge deletes nothing. See the DynamicStructures predicate _why in config/sample-data-2.4.json and README 'The one hazard this workspace row carries'."
   }
 }
