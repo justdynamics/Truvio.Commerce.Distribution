@@ -2492,6 +2492,9 @@
     {
       "providerType": "SqlTable",
       "table": "DynamicStructures",
+      "keyColumns": [
+        "DynamicStructureUniqueId"
+      ],
       "nameColumn": null,
       "compareColumns": null,
       "xmlColumns": [],

@@ -392,40 +392,37 @@ every node count overshoot), and applies no `Active` filter: a PIM workbench mus
 that is not live yet, which is exactly the one that still needs enriching.
 
 
-### The one hazard this workspace row carries
+### The workspace row and the heap table it lands in (#1305)
 
-**Delivering this layer DELETES every Dynamic Workspace the host already had.** Measured on the
-`20260919-153644` gate run against `foundry.mydwsite4.com`: the merge deserialize of our single
-`DynamicStructures` row removed the three baseline workspaces (`DynamicStructureId` 1, 3 and 4)
-and left their seven `DynamicStructureLevels` rows behind as orphans.
+`DynamicStructures` has **no primary key on DW 10.28**: it is a heap, with no unique index
+either. Serializer 1.0.2-beta and earlier had no key to match a row on and wrote the table as
+`DELETE FROM [table]` followed by insert-all, **under Merge exactly as under Replace**. Measured
+on the `20260919-153644` gate run against `foundry.mydwsite4.com`: the merge of our single row
+removed the three baseline workspaces (`DynamicStructureId` 1, 3 and 4) and left their seven
+`DynamicStructureLevels` rows behind as orphans.
 
-It is not a predicate mistake and merge mode does not prevent it. `DynamicStructures` has **no
-primary key on DW 10.28** — it is a heap — and the engine has no key to match a row on, so
-`SqlTableProvider.cs:345-360` / `SqlTableWriter.cs:364-407` fall back to `DELETE FROM [table]`
-followed by insert-all **under Merge exactly as under Replace**. The `where` clause fences what
-the layer SERIALIZES; it does not fence that wipe. `DynamicStructureLevels` *does* have a primary
-key, so it was upserted normally — which is why the orphans survive.
+**From 5.0.1 the layer requires Serializer 1.0.3-beta** (the base-contract floor) and declares
+`keyColumns: ["DynamicStructureUniqueId"]` on the `sample-data DynamicStructures` predicate and
+its `merge-manifest.json` entry. 1.0.3-beta resolves a match key for a heap (primary key, then
+the declared `keyColumns`, then a unique index, then all columns), upserts, and a Merge never
+deletes: the host's own workspaces survive. The run log's summary carries a `Deleted` count,
+which the Foundry `pim-structure` leg asserts is 0 for the delivery.
 
-**On a consumer host that means this layer wipes every workspace the customer built.** Before
-delivering to a host whose workspaces matter, do one of:
+Two consequences of the natural key:
 
-- **Drop the predicate.** Remove the `sample-data DynamicStructures` entry from the composed
-  `Serializer.config.json` before the deserialize. The layer then ships no workspace and the
-  host's own are untouched; `DynamicStructureLevels` `100171`/`100172` land as orphans and
-  `tools/scrub-sample-catalogue.sql` removes them.
-- **Recreate them afterwards.** A workspace is two commands in the admin, and
-  `DynamicStructureSave` silently drops a `Levels` collection, so the levels are a second step.
+- The identity is **not** written. On a host with no row carrying this `UniqueId` the target
+  assigns `DynamicStructureId`; on a host delivered before, the existing row keeps its id.
+  Nothing joins on the int id: the levels join on `DynamicStructureUniqueId`.
+- The engine logs one `WARNING: [DynamicStructures] has no primary key; rows matched by
+  keyColumns` line per run.
 
-Either way, **the level rows of a wiped structure must be deleted by hand**: nothing removes
-them, they render nowhere, and they are what a later `Get-LayerRepositoryIndex`-style audit trips
-over. Both scripts under [`tools/`](tools/) carry an idempotent orphan-level delete for exactly
-this.
+A host delivered by 1.0.2-beta already lost its workspaces, and nothing restores them. Its
+orphan level rows still need deleting by hand: both scripts under [`tools/`](tools/) carry an
+idempotent orphan-level delete for exactly this.
 
 `DynamicStructures` is the **only heap table this layer writes**. Every other one of its 35
-tables has a primary key, so every other predicate deletes nothing: a keyed merge upserts its own
-rows and leaves the rest of the table alone. Check `_meta.yml` `keyColumns` against the live
-`sys.indexes` before adding a table to this layer — a table with no PK index is a whole-table
-rewrite whatever mode it is declared in.
+tables has a primary key. Check `_meta.yml` `keyColumns` against the live `sys.indexes` before
+adding a table to this layer, and declare `keyColumns` on any heap.
 
 ## Removing the catalogue from a branded demo
 

@@ -62,6 +62,20 @@ through its own SQL route. Editions without `sampleData` (`base-only`, `base-swi
 compose this layer and keep the lag. `requiresHostRestart` is declared true as a precaution;
 `demo-clock.sql` already owes the layer's one restart, so it adds none.
 
+### The workspace row stops deleting the host's workspaces (Foundry #1305)
+
+`DynamicStructures` is a heap on DW 10.28, and Serializer 1.0.2-beta wrote a heap as
+`DELETE FROM` plus insert in every mode: delivering 5.0.0 deleted every Dynamic Workspace the
+host already had (gate run `20260919-153644`, workspaces 1, 3 and 4). Serializer 1.0.3-beta
+(Serializer #21) resolves a match key instead, and a Merge never deletes. The `sample-data
+DynamicStructures` predicate and its `merge-manifest.json` entry now declare
+`keyColumns: ["DynamicStructureUniqueId"]`, the table's `NOT NULL` `uniqueidentifier` and the
+column the level rows join on. The base contract raises the Serializer floor to `1.0.3-beta` in
+the same change: an older engine ignores `keyColumns` and would still truncate. On a fresh host
+the target now assigns `DynamicStructureId` (no `IDENTITY_INSERT` on a heap); the manifest stays
+`schemaVersion` 2, which 1.0.3-beta reads with the new field. README "The workspace row and the
+heap table it lands in" replaces the old hazard section.
+
 
 ## 5.0.0
 

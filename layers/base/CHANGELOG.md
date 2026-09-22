@@ -2,6 +2,16 @@
 
 ## 3.6.0
 
+**Serializer floor `1.0.2-beta` -> `1.0.3-beta` (2026-09-22, Distribution #78, before 3.6.0 is
+merged, so no new base version).** `compat.apps[Truvio.Commerce.Serializer].min` and the
+`minSerializerVersion` alias move together, and `serializerTaughtSurfaceNote` gains the reason:
+1.0.2-beta wrote a table with no primary key (`DynamicStructures`, `Languages`) as `DELETE FROM`
+plus insert in every mode, so sample-data's one merged workspace row deleted every workspace the
+host had (Foundry #1305, Serializer #21). 1.0.3-beta resolves a match key, never deletes under
+Merge, and reports a `Deleted` count. sample-data 5.0.1 declares `keyColumns` on its
+`DynamicStructures` predicate, which only 1.0.3-beta reads. `baseContractVersion` stays 2.4.0:
+the 3.6.0 contract is not yet on main.
+
 Minor: the base stops shipping a bike shop's warehouse names, stops shipping 31 rows that point at
 nothing, and finally ships the one row `BASE.md` has claimed since 3.0.0. Four tables are gained
 (`EcomStockLocation`, `EcomStockLocationTranslations`, `EcomProductCategory`,
