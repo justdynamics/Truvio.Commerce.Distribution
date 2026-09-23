@@ -1,0 +1,50 @@
+﻿"ownership":
+  "mode": "merge"
+"EmailId": 100512
+"EmailPageId": 8552
+"EmailRecipientProviderConfiguration": "<?xml version=\"1.0\" encoding=\"utf-8\"?><Parameters addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\"><Parameter addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\" name=\"UnsubscribeEmailAllowed\" value=\"True\" /><Parameter addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\" name=\"UnsubscribeRemoveGroups\" value=\"\" /><Parameter addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\" name=\"UnsubscribeCustomFields\" value=\"\" /><Parameter addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\" name=\"UnsubscribeWithdrawConsentToActivity\" value=\"\" /><Parameter addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\" name=\"EmailAllowedConsentActivity\" value=\"\" /><Parameter addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\" name=\"IncludedUsers\" value=\"g1325\" /><Parameter addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\" name=\"ExcludedUsers\" value=\"\" /><Parameter addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\" name=\"SmartSearchId\" value=\"\" /><Parameter addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\" name=\"DisregardEmailAllowed\" value=\"False\" /><Parameter addin=\"Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider\" name=\"DisregardUserActiveState \" value=\"False\" /></Parameters>"
+"EmailTemplate": ""
+"EmailSenderName": "Placeholder — sender name"
+"EmailSenderEmail": "sender@example.invalid"
+"EmailSubject": "Placeholder — email subject (seasonal promotion)"
+"EmailFileAttachmentPath": ""
+"EmailEncoding": "utf-8"
+"EmailTrackingProviderConfiguration": 
+"EmailUnsubscribePageId": 8499
+"EmailMessageId": 100522
+"EmailDomainName": ""
+"EmailVariationName": 
+"EmailVariationEmail": 
+"EmailVariationSubject": 
+"EmailVariationPageId": 
+"EmailVariationMessageId": 
+"EmailSplitTestIsSent": 
+"EmailFolderId": 0
+"EmailCreatedDate": 2026-09-23T00:00:00.0000000
+"EmailTopFolderId": 1
+"EmailDeliveryProviderId": 
+"OriginalMessageId": 
+"EmailOriginalMessageId": 100522
+"EmailIsTemplate": false
+"EmailTemplateName": ""
+"EmailTemplateDescription": 
+"EmailUnsubscribeText": "Unsubscribe"
+"EmailVariationUnsubscribeText": 
+"EmailScheduledActive": false
+"EmailScheduledSendTime": 
+"EmailOriginalPreHeader": ""
+"EmailVariantPreHeader": 
+"EmailScheduledRepeatInterval": 0
+"EmailScheduledEndTime": 
+"EmailRequireUniqueRecipients": true
+"EmailRecipientSpecificContent": true
+"EmailLastExportDate": 
+"EmailQuarantinePeriod": 0
+"EmailIncludePlainTextContent": false
+"EmailPlainTextContent": ""
+"EmailName": "Onboarding 3 - Seasonal promotion"
+"EmailDisableUnsubscribeTag": false
+"EmailScheduledTimeZoneId": 
+"pageRefs":
+  "EmailPageId": "cfde73e4-d375-47f3-bfed-e14f05671fee"
+  "EmailUnsubscribePageId": "d2083e5e-5d8c-465a-bbf2-abbabdadec80"

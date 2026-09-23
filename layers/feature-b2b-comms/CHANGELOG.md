@@ -1,5 +1,58 @@
 # Changelog — feature-b2b-comms
 
+## 1.0.5
+
+The onboarding flow now has emails to send (Foundry #632, owner decision 2026-09-22). Since
+1.0.0 the three flow steps 100501-100503 pointed at `EmailId` 100510-100512, and no layer shipped
+those rows, so a delivered flow referenced three emails that did not exist and the operator had
+to create them by hand through `EmailSave`. 1.0.5 ships them, each with its `EmailMessage` row:
+
+- `EmailMarketingEmail` 100510 / 100511 / 100512: "Onboarding 1 - Welcome", "Onboarding 2 -
+  How to order", "Onboarding 3 - Seasonal promotion". Body pages are the layer's own
+  *Dealer welcome*, *How to order* and *Seasonal promotion*; the unsubscribe page is
+  surface-swift's *Unsubscribe confirmation page*.
+- `EmailMessage` 100520 / 100521 / 100522, one per email (`EmailMessageId` and
+  `EmailOriginalMessageId` point at them).
+
+**Page ids travel by GUID.** `EmailPageId` and `EmailUnsubscribePageId` are integer page ids, and
+the five layer pages carry `sourcePageId: 0`, so a source id means nothing on a target. The
+`EmailMarketingEmail` entry lists `EmailPageId`, `EmailUnsubscribePageId` and
+`EmailVariationPageId` in `resolveLinksInColumns`; Serialize writes a `pageRefs` block with each
+page's `PageUniqueId`, and Deserialize binds the column to the local page with that GUID first
+(Serializer #27, released in 1.0.4-beta). **Engine floor:** this needs Serializer 1.0.4-beta or
+later; the base contract floor is already 1.0.6-beta, and `costHints.minSerializerVersion` states
+1.0.6-beta as an advisory mirror of it (the schema has no per-layer floor field).
+
+**Where the rows came from.** A SQL-built source host (a fresh clone of foundry-blank with
+swift-demo delivered): the source solution's three onboarding emails and their messages copied
+in by SQL, rekeyed into the layer's `100500+` band, then one scoped merge Serialize on
+Serializer 1.0.6-beta. Treatment on the way in, same convention as 1.0.2:
+
+- sender name -> `Placeholder — sender name`; sender address -> `sender@example.invalid`
+- subjects -> `Placeholder — email subject (welcome to the dealer network)`,
+  `(how to place an order)`, `(seasonal promotion)`; the source subjects named the source brand,
+  a slogan and a product line
+- the third email's name dropped the source incentive-programme term for the page name
+- recipients: `IncludedUsers` -> `g1325` (the base contract's Customers group, the same group the
+  flow's `RecipientsIds` names), not the source's own dealer groups
+- folder: the source top folder is not shipped; the emails sit in top folder 1
+  (`DefaultTopFolder:default`, present on every Swift 2.4 database), `EmailFolderId` 0
+- `MessageDomainUrl` emptied (it named the source host); `EmailCreatedDate` fixed to
+  2026-09-23, the scheduled send time cleared (scheduling is off)
+
+**Known, not fixed here:** flow row 100500 sets `EmailMarketingFlowFolderId: 2`, and no layer ships
+an `EmailMarketingFlowFolder` row (the table is empty on a delivered swift-demo), so the flow's
+folder reference dangles. Unchanged from 1.0.0.
+
+Proven on a second fresh foundry-blank clone (Serializer 1.0.6-beta, DW 10.28.11, R1-NET10,
+swift-demo delivered online): 3 + 3 rows created with no warning; all 183 cells match the source
+host, NULLs included, page ids compared by GUID; flow steps 100501-100503 resolve to emails
+100510-100512 whose `EmailPageId` is the local id of *Dealer welcome*, *How to order* and
+*Seasonal promotion*, and whose message rows exist. A control re-deserialize with the YAML page
+ids overwritten by ids that exist on no page bound all six columns to the right pages, so the
+binding is by GUID. The three email pages and the unsubscribe page render identically on both
+hosts (cache-buster query strings aside).
+
 ## 1.0.4
 
 Patch: the five dealer emails' `Swift-v2_EmailProductCatalog` product pickers named `FIXT000N` rows

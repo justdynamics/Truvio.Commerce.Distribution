@@ -154,6 +154,44 @@
         "_sql/EmailMarketingFlowStep/100502.yml",
         "_sql/EmailMarketingFlowStep/100503.yml"
       ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EmailMessage",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EmailMessage",
+      "files": [
+        "_sql/EmailMessage/100520.yml",
+        "_sql/EmailMessage/100521.yml",
+        "_sql/EmailMessage/100522.yml",
+        "_sql/EmailMessage/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EmailMarketingEmail",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [
+        "EmailPageId",
+        "EmailUnsubscribePageId",
+        "EmailVariationPageId"
+      ],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EmailMarketingEmail",
+      "files": [
+        "_sql/EmailMarketingEmail/100510.yml",
+        "_sql/EmailMarketingEmail/100511.yml",
+        "_sql/EmailMarketingEmail/100512.yml",
+        "_sql/EmailMarketingEmail/_meta.yml"
+      ]
     }
   ]
 }

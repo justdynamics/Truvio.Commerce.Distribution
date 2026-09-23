@@ -1,0 +1,18 @@
+﻿"ownership":
+  "mode": "merge"
+"MessageId": 100522
+"MessageSubject": "Placeholder — email subject (seasonal promotion)"
+"MessageSenderName": "Placeholder — sender name"
+"MessageSenderEmail": "sender@example.invalid"
+"MessageDomainUrl": ""
+"MessageRecipientsSource": "Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider"
+"MessageHtmlBody": 
+"MessagePreprocessedHtmlBody": 
+"MessageFileAttachmentPaths": 
+"MessageDeliveryProviderId": 
+"MessageRequireUniqueRecipients": true
+"MessageRecipientSpecificContent": false
+"MessageRecipientContentProvider": 
+"MessageQuarantinePeriod": 
+"MessageIncludePlainTextBody": false
+"MessagePlainTextBody": 
