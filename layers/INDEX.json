@@ -35,14 +35,14 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20260923-102528",
+    "gateRunId": "20260923-122859",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.28.12",
     "editions": {
-      "swift-demo": "20260923-102528"
+      "swift-demo": "20260923-122859"
     },
     "verdicts": {
-      "20260923-102528": {
+      "20260923-122859": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
