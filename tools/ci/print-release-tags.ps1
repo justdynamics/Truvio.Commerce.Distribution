@@ -22,6 +22,13 @@ gateProven.editions is unproven and gets no tag; a layer no attested edition com
 either. Layer tags use the layer.json version; edition tags use the per-edition release
 version (bumped when the edition FILE changed this release).
 
+Proof key (owner ruling 2026-09-23, "proof rides with delivery"): a layer is tagged ONLY when its
+tree hash here (tools/ci/Get-LayerTreeHash.ps1, layer-tree/v1) equals the hash its proving run
+recorded in gateProven.proofs.<edition>.provenTree. Otherwise it is listed under "Not tagged here"
+with the reason "tree differs from proving run <run>". An edition whose proof carries a layer that
+no longer matches is not tagged either. An edition with no proof yet (legacy, stamped before the
+key) keeps the pre-key rule, with a notice, until the next restamp fills its provenTree.
+
 Usage:
   pwsh tools/ci/print-release-tags.ps1              # print the manifest (executes nothing)
   pwsh tools/ci/print-release-tags.ps1 -Execute     # CI actuator: cut + push missing tags
@@ -75,7 +82,7 @@ $editionVersion = @{
 # proven by any attested edition that composes it; when more than one does, the first by
 # edition name wins, deterministically. A layer no attested edition composes is reported as
 # skipped rather than tagged against someone else's run.
-$layerProof = @{}
+$layerEditions = @{}
 foreach ($ef in (Get-ChildItem (Join-Path $RepoRoot 'editions') -File -Filter '*.json' |
                  Where-Object { $_.Name -ne 'edition.schema.json' } | Sort-Object Name)) {
     $spec = Get-Content $ef.FullName -Raw -Encoding utf8 | ConvertFrom-Json
@@ -89,8 +96,38 @@ foreach ($ef in (Get-ChildItem (Join-Path $RepoRoot 'editions') -File -Filter '*
     # sampleData is a toggle, not a ref: the one sample-data layer IS what it activates.
     if ($spec.sampleData) { $names += 'sample-data' }
     foreach ($n in ($names | Select-Object -Unique)) {
-        if (-not $layerProof.ContainsKey($n)) { $layerProof[$n] = $runs[$en] }
+        if (-not $layerEditions.ContainsKey($n)) { $layerEditions[$n] = [System.Collections.Generic.List[string]]::new() }
+        $layerEditions[$n].Add($en)
     }
+}
+
+# --- The proof key: which proving run delivered THIS tree (tools/ci/ProvenTree.ps1). ------------
+. (Join-Path $PSScriptRoot 'ProvenTree.ps1')
+$proofStatus = @(Get-ProvenTreeStatus -RepoRoot $RepoRoot -GateProven $gp)
+$legacyEditions = @($proofStatus | Where-Object state -eq 'legacy' | ForEach-Object { $_.edition })
+$notices = @()
+if ($legacyEditions.Count -gt 0) {
+    $notices += "gateProven carries no provenTree yet for $($legacyEditions -join ', ') (legacy): those tags keep the pre-key rule until the next restamp fills it."
+}
+
+# A layer rides the first composing attested edition (by edition file name) whose provenTree hash
+# equals this tree. A proof that records the layer with another tree blocks it. Only when no proof
+# records the layer at all does a legacy edition carry it, as before the key.
+$layerProof = @{}      # layer -> @{ run; hash }  (hash $null for a legacy tag)
+$layerBlocked = @{}    # layer -> reason
+foreach ($n in $layerEditions.Keys) {
+    $chosen = $null; $legacy = $null; $reasons = @(); $recorded = $false
+    foreach ($en in $layerEditions[$n]) {
+        if ($legacyEditions -contains $en) { if (-not $legacy) { $legacy = $en }; continue }
+        $row = @($proofStatus | Where-Object { $_.edition -eq $en -and $_.layer -eq $n }) | Select-Object -First 1
+        if (-not $row) { $reasons += "proving run $($runs[$en]) ($en) recorded no provenTree entry for it"; continue }
+        $recorded = $true
+        if ($row.state -eq 'match') { $chosen = $row; break }
+        $reasons += "tree differs from proving run $($row.runId) ($en, $($row.state): proven $($row.provenVersion) $($row.provenHash), here $($row.currentVersion) $($row.currentHash))"
+    }
+    if ($chosen)                         { $layerProof[$n] = @{ run = $chosen.runId; hash = $chosen.currentHash } }
+    elseif ($legacy -and -not $recorded) { $layerProof[$n] = @{ run = $runs[$legacy]; hash = $null } }
+    else                                 { $layerBlocked[$n] = ($reasons -join '; ') }
 }
 
 # --- Build the manifest: an ordered list of @{ Tag; Message } entries. ------------------------
@@ -101,11 +138,13 @@ foreach ($d in (Get-ChildItem (Join-Path $RepoRoot 'layers') -Directory | Sort-O
     $lj = Join-Path $d.FullName 'layer.json'
     if (-not (Test-Path $lj)) { continue }
     $m = Get-Content $lj -Raw | ConvertFrom-Json
+    if ($layerBlocked.ContainsKey($d.Name)) { $skipped += "layers/$($d.Name)/$($m.version) ($($layerBlocked[$d.Name]))"; continue }
     if (-not $layerProof.ContainsKey($d.Name)) { $skipped += "layers/$($d.Name)/$($m.version) (no gate-proven edition in INDEX.json composes it)"; continue }
-    $run = $layerProof[$d.Name]
+    $run = $layerProof[$d.Name].run
+    $tree = if ($layerProof[$d.Name].hash) { ", tree $($layerProof[$d.Name].hash)" } else { '' }
     $manifest.Add([pscustomobject]@{
         Tag     = "layers/$($d.Name)/$($m.version)"
-        Message = "layer $($d.Name) $($m.version) — proven on Swift $swift / DW $dw$(if ($ring) { " ($ring)" }), gate run $run (provenance read from layers/INDEX.json gateProven)"
+        Message = "layer $($d.Name) $($m.version) — proven on Swift $swift / DW $dw$(if ($ring) { " ($ring)" }), gate run $run$tree (provenance read from layers/INDEX.json gateProven)"
     })
 }
 
@@ -116,9 +155,14 @@ foreach ($ef in (Get-ChildItem (Join-Path $RepoRoot 'editions') -File -Filter '*
     if (-not $runs.ContainsKey($name))           { $skipped += "editions/$name (absent from INDEX.json gateProven.editions - unproven, so no tag)"; continue }
     $run = $runs[$name]
     $ver = $editionVersion[$name]
+    # A proven edition is tagged only while every layer its run delivered is still that tree.
+    $edRows = @($proofStatus | Where-Object { $_.edition -eq $name -and $_.state -ne 'legacy' })
+    $edOff = @($edRows | Where-Object { $_.state -ne 'match' } | ForEach-Object { "$($_.layer) $($_.state)" })
+    if ($edOff.Count -gt 0) { $skipped += "editions/$name/$ver (tree differs from proving run ${run}: $($edOff -join ', '))"; continue }
+    $tree = if ($edRows.Count -gt 0) { ", provenTree verified ($($edRows.Count) layers)" } else { '' }
     $manifest.Add([pscustomobject]@{
         Tag     = "editions/$name/$ver"
-        Message = "edition $name $ver — proven on Swift $swift / DW $dw$(if ($ring) { " ($ring)" }), gate run $run (provenance read from layers/INDEX.json gateProven)"
+        Message = "edition $name $ver — proven on Swift $swift / DW $dw$(if ($ring) { " ($ring)" }), gate run $run$tree (provenance read from layers/INDEX.json gateProven)"
     })
 }
 
@@ -136,11 +180,17 @@ if (-not $Execute) {
         Write-Host "# Not tagged here:" -ForegroundColor Yellow
         $skipped | ForEach-Object { Write-Host "#   - $_" }
     }
+    if ($notices.Count -gt 0) {
+        Write-Host "# Notice:" -ForegroundColor Yellow
+        $notices | ForEach-Object { Write-Host "#   - $_" }
+    }
     return
 }
 
 # EXECUTE mode (CI actuator): idempotently cut + push any MISSING tag at HEAD.
 Write-Host "== Distribution release-tag actuator (D-CONSUME a — provenance-only) ==" -ForegroundColor Cyan
+foreach ($n in $notices) { Write-Host "::notice title=provenTree::$n" }
+foreach ($s in @($skipped | Where-Object { $_ -match 'tree differs from proving run' })) { Write-Host "  [hold] $s" -ForegroundColor Yellow }
 $created = @()
 $present = @()
 foreach ($e in $manifest) {

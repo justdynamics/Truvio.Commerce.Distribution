@@ -86,6 +86,28 @@ Versions order as SemVer 2.0 with the NuGet reading of prerelease labels: a prer
 below its release and labels compare case-insensitively, so a floor names the version as the
 package ships it (`0.6.0-beta`, not `0.6.0`).
 
+## Proof key (provenTree)
+
+A provenance tag names a gate run, and it may only name a run that delivered exactly the tagged
+tree (owner ruling 2026-09-23, "proof rides with delivery"). The Foundry's gateProven writer records,
+per proven edition, `gateProven.proofs.<edition>` = `{ runId, deliveryRunId, distributionCommit,
+checkSet, harnessCommit, algorithm, provenTree: { <layer>: { version, hash } } }`, hashing every
+layer the run composed from the Distribution tree it delivered with
+[`tools/ci/Get-LayerTreeHash.ps1`](tools/ci/Get-LayerTreeHash.ps1) (`layer-tree/v1`: every file of
+the layer directory except the layer-root `*.md` documentation, CR LF read as LF in text files).
+`gateProven.editions` is unchanged. CI (check 14 of the validator) recomputes each proven layer's hash
+on the PR tree:
+
+- same version, different tree: **FAIL**, "layer X changed since proving run Y without a version bump";
+- bumped version: passes with a notice that the layer is unproven; release-tags does not tag it until a
+  gate run delivers the new tree and restamps `gateProven`;
+- `gateProven` without `proofs` (stamped before the key): a notice, and the pre-key tag rule, until the
+  next restamp.
+
+Release tags ([`tools/ci/print-release-tags.ps1`](tools/ci/print-release-tags.ps1)) cut a layer tag only
+when the layer's tree hash equals its `provenTree` hash; otherwise it is listed under "Not tagged here"
+with "tree differs from proving run". Dry-run the script on the merge result before merging.
+
 ## Conventions
 
 - One layer per `layers/<name>/` directory; one edition per `editions/<name>.json`.
