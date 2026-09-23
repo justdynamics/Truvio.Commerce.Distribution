@@ -1,0 +1,18 @@
+﻿"ownership":
+  "mode": "merge"
+"MessageId": 100520
+"MessageSubject": "Placeholder — email subject (welcome to the dealer network)"
+"MessageSenderName": "Placeholder — sender name"
+"MessageSenderEmail": "sender@example.invalid"
+"MessageDomainUrl": ""
+"MessageRecipientsSource": "Dynamicweb.EmailMarketing.EmailRecipientProviders.AccessUserRecipientProvider"
+"MessageHtmlBody": 
+"MessagePreprocessedHtmlBody": 
+"MessageFileAttachmentPaths": 
+"MessageDeliveryProviderId": 
+"MessageRequireUniqueRecipients": true
+"MessageRecipientSpecificContent": false
+"MessageRecipientContentProvider": 
+"MessageQuarantinePeriod": 
+"MessageIncludePlainTextBody": false
+"MessagePlainTextBody": 

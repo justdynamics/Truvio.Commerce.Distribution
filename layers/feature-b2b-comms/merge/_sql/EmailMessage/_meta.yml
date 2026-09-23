@@ -1,0 +1,139 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EmailMessage"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "MessageId"
+"identityColumns":
+- "MessageId"
+"allColumns":
+- "MessageId"
+- "MessageSubject"
+- "MessageSenderName"
+- "MessageSenderEmail"
+- "MessageDomainUrl"
+- "MessageRecipientsSource"
+- "MessageHtmlBody"
+- "MessagePreprocessedHtmlBody"
+- "MessageFileAttachmentPaths"
+- "MessageDeliveryProviderId"
+- "MessageRequireUniqueRecipients"
+- "MessageRecipientSpecificContent"
+- "MessageRecipientContentProvider"
+- "MessageQuarantinePeriod"
+- "MessageIncludePlainTextBody"
+- "MessagePlainTextBody"
+"columnDefinitions":
+- "name": "MessageId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "MessageSubject"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "MessageSenderName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "MessageSenderEmail"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "MessageDomainUrl"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "MessageRecipientsSource"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "MessageHtmlBody"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "MessagePreprocessedHtmlBody"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "MessageFileAttachmentPaths"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "MessageDeliveryProviderId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "MessageRequireUniqueRecipients"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "MessageRecipientSpecificContent"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "MessageRecipientContentProvider"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "MessageQuarantinePeriod"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "MessageIncludePlainTextBody"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "MessagePlainTextBody"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

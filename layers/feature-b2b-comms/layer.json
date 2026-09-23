@@ -1,6 +1,6 @@
 {
   "name": "feature-b2b-comms",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "kind": "feature",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -9,7 +9,9 @@
   ],
   "fragmentTables": [
     "EmailMarketingFlow",
-    "EmailMarketingFlowStep"
+    "EmailMarketingFlowStep",
+    "EmailMessage",
+    "EmailMarketingEmail"
   ],
   "fragmentContent": [
     {
@@ -25,6 +27,8 @@
     "dependsOn": [
       "surface-swift"
     ],
-    "note": "Depends on surface-swift (composes under its area-3 '/Newsletter Emails' subtree and reuses its Swift-v2_Email* item types + the shipped Unsubscribe confirmation page). The layer.schema.json has no formal 'depends' field; the dependency is documented here (advisory) and enforced by edition composition order (surface before feature). Data-only: no customCode/src."
+    "note": "Depends on surface-swift (composes under its area-3 '/Newsletter Emails' subtree and reuses its Swift-v2_Email* item types + the shipped Unsubscribe confirmation page). The layer.schema.json has no formal 'depends' field; the dependency is documented here (advisory) and enforced by edition composition order (surface before feature). Data-only: no customCode/src.",
+    "minSerializerVersion": "1.0.6-beta",
+    "minSerializerVersionNote": "Advisory, not a second floor: the enforced floor is base.contract.json compat.apps[id=Truvio.Commerce.Serializer].min, which is 1.0.6-beta, and this value may never sit below it. What this layer itself needs: the three EmailMarketingEmail rows (1.0.5) carry integer page ids in EmailPageId / EmailUnsubscribePageId, which only Serializer 1.0.4-beta and later resolve through the page map and bind by the pageRefs PageUniqueId (Serializer #27); an older engine writes the source page ids verbatim and every email points at the wrong page or none. Harvested and proven on 1.0.6-beta."
   }
 }
