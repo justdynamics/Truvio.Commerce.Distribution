@@ -60,6 +60,29 @@ dropdowns.
 | class `td-header-overlay` on any element inside the page header | Turns the sticky bar into a floating/transparent overlay header with a hero-behind composition (block #16): fixed bar, one rounded pill painted by `::before` with **no** `overflow:hidden`, DOM-keyed clearance, top-anchored first-row poster crop. Tune with `--td-bar-top` / `--td-bar-inset` / `--td-bar-h` / `--td-bar-h-phone` / `--td-bar-radius` / `--td-bar-bg` / `--td-container-cap`. |
 | class `td-visually-hidden` on a label | The sanctioned visually-hidden idiom (`clip` + `clip-path`, no `overflow`) — safe inside the header, keeps the accessible name |
 | `data-td-full-bleed` on a grid row or any ancestor of one | Opts a width-4 row OUT of the main-scoped gutter restore (block #21), returning `--dw-container-gutter` to `0rem`. For rows that are meant to touch the viewport edge: posters, full-width image bands, maps. |
+| `--td-button-primary-ink-<scheme>` (or `--td-button-primary-ink` for all schemes) | Overrides the ink a **filled** primary button paints its label with, per colour scheme, without touching the generated `ColorSchemes` pair (block #30, Foundry #1184). Unset, it resolves to `--dw-color-button-primary-contrast` exactly as the generator wrote it. |
+
+### Button ink is chosen by lightness, not by contrast ratio (Foundry #1184)
+
+The platform colour-scheme generator picks `--dw-color-button-primary-contrast` from a
+**lightness threshold**, not by comparing the WCAG ratios of black and white against the fill.
+A mid-luminance brand primary therefore lands on the wrong side of it: `#B8860B` is generated
+with `#fff` ink at **3.25:1**, failing WCAG AA, where `#14181D` on the same fill measures
+**5.48:1**. Amber, orange and light green all do this. The generator fix is upstream.
+
+Until it lands, set the per-scheme hook in the brand sheet or the head include — anywhere that
+lands after `default_custom.css`:
+
+```css
+:root { --td-button-primary-ink-primary: #14181D; }
+```
+
+Per scheme, so a dark-on-amber `primary` scheme does not drag the neutral `light` scheme's
+white ink with it. Do **not** hand-edit `--dw-color-button-primary-contrast` in
+`ColorSchemes/default.css`: that file is generated (ladder step 2) and the next design save
+reverts the edit. Then **measure** the rendered label against the rendered fill — at least
+4.5:1. The token is a hook, not a correction; the wrong ink here fails as loudly as the
+generator's did.
 
 Block #21 also applies without any opt-in: in stock Swift, ContainerWidth 4 sets
 `--dw-container-gutter: 0rem` and re-adds `calc(2rem)` only under the header and footer, so a

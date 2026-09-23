@@ -1,4 +1,123 @@
-# Changelog — surface-swift
+﻿# Changelog — surface-swift
+
+## 1.15.0
+
+### The variant-selector modal refused to sell a never-out-of-stock product (Foundry #1317)
+
+The PLP "Select" button, with add-to-cart set to `WhenVariantsExist=modal`, opened the variant
+modal with every option selectable and its Add to cart button disabled for every combination.
+Stock `eCom/ProductCatalog/VariantSelector.cshtml` sets `disableAddToCart = "disabled"` INSIDE
+`if (Model.NeverOutOfstock)` and puts the stock-level test in the `else`. The condition is
+inverted: a never-out-of-stock product is precisely the one that must always be buyable. Demo
+catalogues commonly load stock rows as never-out-of-stock, so the modal is dead on them - and
+the PDP add-to-cart (`Paragraph/Swift-v2_ProductAddToCart.cshtml`) has no such branch, which is
+why only the modal was affected and why the symptom reads as a broken variant picker.
+
+Measured on supherb (every product `ProductNeverOutOfstock=1`, stock 1000): POST to the variant
+service page returned add-to-cart disabled `true`; with `ProductNeverOutOfstock = 0` and stock
+unchanged it returned `false` and the cart badge moved.
+
+This layer already overrides stock Swift-v2 templates through its `files/` overlay, so the
+corrected template ships here. The never-out-of-stock branch now leaves `disableAddToCart`
+untouched and `maxQty` null (no ceiling); the stock-level check stays in the `else` branch,
+untouched. The rest of the file is byte-identical to stock Swift 2.4, so the comment block in
+the empty branch is the whole diff. The upstream report to Dynamicweb Swift stays an owner call.
+
+### A raster logo announced its own file path (Foundry #1185)
+
+`Paragraph/Swift-v2_Logo/Plain.cshtml` sets `alt="@image.Path"` in the raster branch, so a PNG
+wordmark renders `<img alt="/Files/Images/.../logo.png">` - read out by screen readers, flagged
+by any alt sweep, and unavoidable for a brand that needs a raster logo, because `GetImage.ashx`
+decodes with ImageSharp and ImageSharp has no SVG decoder. The SVG branch inlines the file and
+already uses the title.
+
+The overridden template uses `alt="@title"`, the same value the SVG branch and the stretched
+link use. The fallback moves with it: stock hard-codes `string title = "Swift"`, the design
+package's own name; it is now `Pageview?.Area?.Name`, matching the idiom stock Swift already
+uses in `eCom7/CartV2/Step/Helpers/Logo.cshtml`. A logo paragraph carrying a `LogoName` is
+unaffected either way. The issue is labelled `target:upstream` as well; only the layer override
+lands here.
+
+### `ImageAspectRatio` ships empty, not "0" (Foundry #1148, Serializer #15)
+
+Both `Swift-v2_ProductMediaTable` paragraphs shipped `ImageAspectRatio: "0"` to mean "no ratio".
+A deserialize rewrote that literal into a page id - measured 8453, a real page on the host -
+because the engine's id remap was treating a numeric-looking value in a non-reference field as
+an id; the sibling `ProductMedia` paragraph carrying `75%` was untouched, which is the tell. The
+template applies the value as `ratio != "0" ? ratio : ""`, so the remapped value would emit
+`style="--bs-aspect-ratio: 8453"`, masked today only because the component renders nothing at
+all.
+
+The engine half is `Truvio.Commerce.Serializer` #15 (restrict the raw-numeric short-circuit to
+reference-typed fields) and is being fixed in parallel. This is the layer half the issue asks
+for on its own terms: an empty string means the same thing to the template and gives a numeric
+heuristic nothing to bite on, so the two fixes are independent rather than sequenced.
+
+### The Account subtree is gated, not deny-listed (Foundry #630, the #486 shape)
+
+`Customer center/Account/page.yml` granted `Account Admin -> all` and denied CSR, Customers and
+Anonymous, with no `AuthenticatedFrontend` entry, while the `Customer center` parent grants
+`AuthenticatedFrontend -> read`. Permission resolution takes the HIGHEST level across
+identities, so a signed-in user in none of the denied groups matched no rule on Account,
+inherited the blanket parent read and reached the subtree. This is the same defect #486 fixed on
+the CSR page, and PR #33 fixed it with an explicit deny+grant PAIR; Account was outside that
+scope.
+
+The same pair now ships: an explicit `AuthenticatedFrontend -> none` beside the
+`Account Admin -> all` grant on the Account page, and the full explicit block on its six child
+pages (Addresses, Carts, Favorites, Orders, Quotes, Users), which shipped with no permission
+block at all - exactly the treatment the four CSR children were given.
+
+**Owner ruling, 2026-09-22.** Account and its six children stay as above: `Account Admin` (group
+`1270`) reaches them, nobody else does. The same gap sat one level over, on the `Customer center`
+page that holds the buyer's My pages (source id 14): it granted `Customers -> all` and wrote
+`none` for CSR and Account Admin, but carried no `AuthenticatedFrontend` row, so the CSR persona
+(`100102`) and the account admin (`100103`) inherited the root's `AuthenticatedFrontend -> read`
+and reached My orders (source id 19) and every other My page. Page 14 now carries the explicit
+`AuthenticatedFrontend -> none` beside its `Customers -> all` grant, the deny+grant pair the
+Account page uses. Its ten children (Change password, My addresses, My carts, My favorites, My
+orders, My profile and Edit profile, My quotes, My returns, My wallet) ship no permission block
+and inherit it, so none of them needs a row of its own. Effective access: the buyer (`100101`,
+`Customers`) has all on page 14 and its children and none on Account; CSR and the account admin
+have none on page 14 and its children; the account admin keeps all on Account and its children.
+The `Overview` page, which grants all three groups, is unchanged.
+
+### The two product asset categories are named as a consumer prerequisite (Foundry #1196)
+
+Three PDP paragraphs bind asset categories `Images` and `Manuals` by system name through their
+`ImageAssets` field, and no layer in a base-swift composition ships them, so on a content-free
+build the gallery and both document tables render empty behind an HTTP 200 and a tool-first
+build has to discover the dependency by reading paragraph settings.
+
+They are now declared in `surface.contract-notes.json` as `assetCategoriesBound`: the table, the
+required rows and their field values, the three paragraphs that bind them, the editions that
+already satisfy the prerequisite (anything with `sampleData` true), the Management API verb
+(`AssetCategorySave` - Dynamicweb.MCP publishes no write tool, which is the other half of the
+issue), and why no layer here carries the rows. That last part is deliberate and recorded:
+`EcomDetailsGroup` is NOT a heap, so Serializer #21 does not apply and the table would carry
+rows safely - but sample-data already ships these two exact rows and the merge gate's
+cross-layer collision guard fails two active layers shipping one row path; moving them here
+instead would orphan 374 sample-data `EcomDetails` rows on headless-demo, which composes
+sample-data without this surface; and base is FRAMEWORK-ONLY by contract. `assetCategoriesBound`
+is therefore the honest carrier, and it is machine-readable.
+
+### My orders printed the product id where the product number belongs (Foundry #1263)
+
+Expanding an order on My orders showed `TCPROD0002` in the line's muted sub-heading, the
+internal product id, where the customer expects the SKU. The stored order line is correct:
+Admin API `GetOrderLineById` for `TCO-0001-1` returns `ProductNumber` `FF-VAR-0002`. Stock
+`eCom/CustomerExperienceCenter/Orders/List/Orders_List.cshtml` renders `@(orderline.ProductId)`
+at line 279, while its sibling `Orders/Detail/Orders_Details.cshtml` renders
+`@orderline.ProductNumber`, so the list and the detail of one order disagree.
+
+The overridden template renders `@(orderline.ProductNumber)` on that line. That token is the
+whole diff: the rest of the file is byte-identical to stock Swift 2.4, taken from the same
+design package capture (`foundry.mydwsite4.com`) as `VariantSelector.cshtml` above. Every
+paragraph that names `Orders_List.cshtml` as its `OrderListTemplate` picks it up: My orders,
+My returns, and the Account and CSR order lists. An order line with an empty `ProductNumber`
+now renders an empty sub-heading instead of the id. Reporting it upstream to Dynamicweb Swift
+stays an owner call.
+
 
 ## 1.14.0
 

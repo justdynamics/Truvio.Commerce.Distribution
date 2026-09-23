@@ -1953,3 +1953,74 @@ main:has(+ footer.td-edge-top) {
   border-radius: var(--td-radius, 0.75rem);
   align-self: flex-start;
 }
+
+/* =============================================================================
+ * Block 30 — Primary-button ink override hook (Foundry #1184).
+ * The platform colour-scheme generator picks the contrast ink for a button by a
+ * LIGHTNESS THRESHOLD, not by comparing the WCAG contrast ratios of black and
+ * white against the fill. Mid-luminance brand accents land on the wrong side of
+ * that threshold: measured, a #B8860B primary is generated with
+ * `--dw-color-button-primary-contrast: #fff`, which is 3.25:1 and fails WCAG AA,
+ * while dark ink #14181D on the same fill measures 5.48:1. Amber, orange and
+ * light green all do this. The generator fix itself is UPSTREAM; this block is
+ * the layer-side hook a brand uses until it lands.
+ *
+ * Why the hook and not a redeclaration: `--dw-color-button-primary-contrast` is
+ * written per scheme by System/Styles/ColorSchemes/<design>.css, a GENERATED file
+ * (block #19). Redeclaring it from this sheet leaves that file lying and the next
+ * design save reverts the site. A custom property also cannot be defined in terms
+ * of its own previous value, so there is no in-place "keep unless overridden"
+ * form. Instead each scheme resolves ONE theme token, per scheme, whose fallback
+ * is the generated value — so this sheet ships inert and paints exactly what the
+ * generator chose until a brand opts in.
+ *
+ * Brand-time edit, the whole of it: set the per-scheme token for the scheme whose
+ * primary is mid-luminance, anywhere that lands after this sheet (the brand sheet
+ * or the head include):
+ *     :root { --td-button-primary-ink-primary: #14181D; }
+ * Per scheme, so a dark-on-amber "primary" scheme does not drag the neutral
+ * "light" scheme's white ink with it. Set `--td-button-primary-ink` instead to
+ * override every scheme at once.
+ *
+ * Measure the result, never assume it: the rendered label contrast against the
+ * rendered fill must be at least 4.5:1. The token is a hook, not a correction —
+ * picking the wrong ink here fails just as loudly as the generator did.
+ * ========================================================================== */
+[data-td-block="30"] { --td-block: 30; }
+
+.dw-colorscheme-light,
+[data-dw-colorscheme="light"] {
+  --td-button-primary-ink: var(--td-button-primary-ink-light, var(--dw-color-button-primary-contrast));
+}
+.dw-colorscheme-lightgrey1,
+[data-dw-colorscheme="lightgrey1"] {
+  --td-button-primary-ink: var(--td-button-primary-ink-lightgrey1, var(--dw-color-button-primary-contrast));
+}
+.dw-colorscheme-lightgrey2,
+[data-dw-colorscheme="lightgrey2"] {
+  --td-button-primary-ink: var(--td-button-primary-ink-lightgrey2, var(--dw-color-button-primary-contrast));
+}
+.dw-colorscheme-dark,
+[data-dw-colorscheme="dark"] {
+  --td-button-primary-ink: var(--td-button-primary-ink-dark, var(--dw-color-button-primary-contrast));
+}
+.dw-colorscheme-darksubtle,
+[data-dw-colorscheme="darksubtle"] {
+  --td-button-primary-ink: var(--td-button-primary-ink-darksubtle, var(--dw-color-button-primary-contrast));
+}
+.dw-colorscheme-primary,
+[data-dw-colorscheme="primary"] {
+  --td-button-primary-ink: var(--td-button-primary-ink-primary, var(--dw-color-button-primary-contrast));
+}
+.dw-colorscheme-secondary,
+[data-dw-colorscheme="secondary"] {
+  --td-button-primary-ink: var(--td-button-primary-ink-secondary, var(--dw-color-button-primary-contrast));
+}
+
+/* The filled variant only, guarded by the same P4 :not() chain block #1 uses:
+ * an outline, ghost, link or empty `data-dw-button` paints its label from the
+ * fill colour, not from the contrast token, so repainting them here would invert
+ * a text button. */
+[data-dw-button]:not([data-dw-button="outline"]):not([data-dw-button="ghost"]):not([data-dw-button="secondary"]):not([data-dw-button="link"]):not([data-dw-button=""]):not([data-dw-button^="outline-"]) {
+  color: var(--td-button-primary-ink, var(--dw-color-button-primary-contrast));
+}

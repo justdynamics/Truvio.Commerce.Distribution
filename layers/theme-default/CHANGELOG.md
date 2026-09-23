@@ -1,5 +1,46 @@
 ﻿# theme-default changelog
 
+## 2.4.0
+
+### `baselineTarget` names the Swift release the layer is actually proven on (Foundry #1285)
+
+`theme.json` shipped `baselineTarget: swift/2.3` while `layer.json` declared `swiftVersion`
+2.4.0, and every other layer in the distribution declared 2.4.0. A consumer or tool that reads
+`baselineTarget` to decide which Swift release the theme was proven against read a release the
+distribution no longer supports - Swift support here is rolling latest-only. The field was
+simply never rolled forward with the 2.3 -> 2.4 bump, and nothing compared the two: the Foundry
+harness only observed the drift in an `Invoke-CompatAssert.ps1` file header.
+
+`baselineTarget` is now `swift/2.4`, and the drift can no longer recur silently:
+`tools/ci/Validate-Distribution.ps1` gains check 12, which compares every kind:theme layer's
+`theme.json` `baselineTarget` against its own `layer.json` `swiftVersion` major.minor and FAILs
+the merge gate on any disagreement.
+
+### A per-scheme hook for primary-button ink (Foundry #1184)
+
+Block #30 of `default_custom.css`. The platform colour-scheme generator picks
+`--dw-color-button-primary-contrast` by a LIGHTNESS THRESHOLD rather than by comparing the WCAG
+contrast ratios of black and white against the fill, so a mid-luminance brand primary is given
+the wrong ink: measured, `#B8860B` is generated with `#fff` at 3.25:1 (fails WCAG AA) where
+`#14181D` on the same fill measures 5.48:1. Amber, orange and light green all land on the wrong
+side. The generator fix is UPSTREAM and is not this layer's to make.
+
+The layer-side half is a hook, shipped inert. Each of the seven schemes resolves one theme
+token, `--td-button-primary-ink`, whose fallback is the generated value, and the filled-button
+paint rule reads it behind the same P4 `:not()` chain block #1 uses, so an outline, ghost, link
+or empty `data-dw-button` is untouched. Nothing changes until a brand sets
+`--td-button-primary-ink-<scheme>` (or `--td-button-primary-ink` for every scheme) in its own
+sheet or head include.
+
+The hook deliberately does NOT redeclare `--dw-color-button-primary-contrast`. That property is
+written per scheme by `System/Styles/ColorSchemes/<design>.css`, a GENERATED file (block #19);
+redeclaring it from this sheet leaves the generated file lying and the next design save reverts
+the site. A custom property also cannot be defined in terms of its own previous value, so there
+is no in-place "keep unless overridden" form - hence a token with the generated value as its
+`var()` fallback. The README documents the override beside the accent slot, including the
+instruction to MEASURE the result at 4.5:1 rather than assume it.
+
+
 ## 2.3.7
 
 ### The stock column holds its width, so the columns beside it stop moving (Foundry #1279)

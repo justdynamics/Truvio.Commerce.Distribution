@@ -3,7 +3,7 @@
 "sortOrder": 2
 "itemType": "Swift-v2_Navigation"
 "header": "Placeholder — footer nav column heading"
-"template": "Horizontal.cshtml"
+"template": "Vertical.cshtml"
 "colorSchemeId": ""
 "moduleSystemName": ""
 "moduleSettings": ""

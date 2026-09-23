@@ -1,9 +1,11 @@
 {
   "_comment": "Machine-readable layer index for Truvio.Commerce.Distribution (P3, RUN-VERSION-CURRENCY T3-01..T3-04). SOURCE OF TRUTH for what layers exist, their kind/version/status, and what a retired name was superseded by. Two consumers read it: (1) tools/ci/Validate-Distribution.ps1 regenerates the `layers` array from the live tree and diffs it clean (drift both directions FAILs), asserts `gateProven` is present, and rejects any edition ref or living-doc mention of a name absent from `layers` (a retired hit names its successor); (2) the DemoAgent currency preflight (Invoke-DemoGate.ps1 `currency` leg) asserts this file parses + carries `gateProven`, and that every layer the demo consumed is live here (a retired hit -> 'retired -> use <supersededBy>'). UPDATE MECHANICS: the `layers` array is regenerated from the tree by Validate-Distribution.ps1 -RegenerateIndex (deterministic); `retired` tombstones are authored on layer retirement (release checklist, FOLLOWUP.md T4-02); `gateProven` is stamped by the FOUNDRY publish flow at release time (tools/harness/Write-IndexGateProven.ps1) from the gate run(s) that proved this main -- never hand-authored as trusted. Consumers 'pin origin/main + assert INDEX.gateProven present' (D-CONSUME a). EDITIONS APPEAR IN gateProven.editions ONLY WHEN PROVEN: the map is a record of gate runs, stamped by Write-IndexGateProven.ps1, so a newly specified edition (base-swift, added in the v5 phase-2 baseline release) is absent from it until its first PASS. An absent edition means unproven, never missing; hand-writing a run id there would fabricate an attestation, which is the one thing this file exists to prevent.",
   "gateProven": {
-    "date": "2026-09-19",
+    "date": "2026-09-22",
     "dw": {
       "ring": "R1-NET10",
+      "ringNumber": 1,
+      "ringSource": "symlink",
       "version": "10.28.11"
     },
     "apps": [
@@ -25,7 +27,7 @@
       },
       {
         "id": "Truvio.Commerce.Serializer",
-        "version": "1.0.2-beta"
+        "version": "1.0.6-beta"
       }
     ],
     "swift": {
@@ -33,14 +35,14 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20260919-154239",
+    "gateRunId": "20260922-235605",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.28.11",
     "editions": {
-      "swift-demo": "20260919-154239"
+      "swift-demo": "20260922-235605"
     },
     "verdicts": {
-      "20260919-154239": {
+      "20260922-235605": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -62,7 +64,7 @@
         },
         "host": "https://foundry.mydwsite4.com",
         "delivered": true,
-        "sqlScriptsNotApplied": 2
+        "sqlScriptsNotApplied": 3
       }
     }
   },
@@ -82,7 +84,7 @@
     {
       "name": "feature-baseline-guide",
       "kind": "feature",
-      "version": "1.0.2",
+      "version": "1.0.3",
       "status": "active"
     },
     {
@@ -129,13 +131,13 @@
     {
       "name": "sample-data",
       "kind": "sample-data",
-      "version": "5.0.0",
+      "version": "5.0.1",
       "status": "active"
     },
     {
       "name": "surface-dap-portal",
       "kind": "surface",
-      "version": "1.0.4",
+      "version": "1.0.5",
       "status": "active"
     },
     {
@@ -147,13 +149,13 @@
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.14.0",
+      "version": "1.15.0",
       "status": "active"
     },
     {
       "name": "theme-default",
       "kind": "theme",
-      "version": "2.3.7",
+      "version": "2.4.0",
       "status": "active"
     }
   ],

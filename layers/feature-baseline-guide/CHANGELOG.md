@@ -1,4 +1,29 @@
-# Changelog — feature-baseline-guide
+﻿# Changelog — feature-baseline-guide
+
+## 1.0.3
+
+### Step 7's checkout assert names an address Swift publishes (Foundry #1113)
+
+Step 7 asked for a driven cart reaching `<site-root>/cart/checkout-user` and rendering at least
+one payment option and one shipping option. Driven exactly as written - browser UA, signed in,
+redirects followed, a line in the cart - `/en-us/cart/checkout-user` is 404. The three checkout
+pages (`Checkout anonymous`, `Checkout user`, `Quote checkout user`) are `Swift-v2_Checkout`
+SERVICE pages and ship `Active=false` by design: Swift reaches them from the cart flow by id and
+never by a friendly URL, so no such path can resolve on a stock Swift 2.4 install. The step was
+written against an address Swift does not publish, and the 404 it produced reads to an operator
+as a broken cart.
+
+The assert now drives the cart through the storefront's own checkout control and asserts on the
+page the flow lands on, capturing that URL rather than inventing one, and states in the same cell
+that the checkout pages are inactive service pages by design and that a 404 on a guessed checkout
+URL is the expected shape. The browser-User-Agent warning is kept verbatim - it is correct and
+separate, and curl or wget defaults fail the gate in a way that looks identical to a broken cart.
+
+The second half of #1113 is NOT settled here: reached by id, the checkout page returns 200 and
+renders zero payment names and zero shipping names, which is an unrelated defect and needs its own
+host probe. The cell says so and asserts nothing about method names, rather than leaving an
+unprovable clause inside a step whose address was also wrong.
+
 
 ## 1.0.2
 

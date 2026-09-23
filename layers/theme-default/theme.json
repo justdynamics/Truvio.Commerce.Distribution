@@ -4,6 +4,6 @@
   "brandId": "default",
   "defaultSchemeId": "light",
   "customHeadInclude": "Custom/DefaultHeadInclude.cshtml",
-  "baselineTarget": "swift/2.3",
+  "baselineTarget": "swift/2.4",
   "areaId": 3
 }
