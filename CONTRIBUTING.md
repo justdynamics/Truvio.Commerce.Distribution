@@ -66,8 +66,9 @@ opening the PR.
 ## Version floors
 
 [`versions/spine.json`](versions/spine.json) is the one record of every outward component's
-proven `current`, its per-consumer `floors` and its package `ids` (with aliases: the MCP add-in
-`Truvio.Commerce.MCP` was published as `Dynamicweb.MCP` up to 0.5.1-beta). The `compat` block in
+proven `current`, its per-consumer `floors` and its package `ids`: the package, its aliases, and
+its retired `predecessors`. `Dynamicweb.MCP` is the retired predecessor of `Truvio.Commerce.MCP`, so a
+host that carries only `Dynamicweb.MCP` is below the floor. The `compat` block in
 `layers/base/base.contract.json` is a copy of the floors of consumer `layers`: change the spine
 first, then copy. CI ([`tools/ci/Test-VersionSpine.ps1`](tools/ci/Test-VersionSpine.ps1)) fails when:
 
@@ -83,7 +84,7 @@ first, then copy. CI ([`tools/ci/Test-VersionSpine.ps1`](tools/ci/Test-VersionSp
 
 Versions order as SemVer 2.0 with the NuGet reading of prerelease labels: a prerelease ranks
 below its release and labels compare case-insensitively, so a floor names the version as the
-package ships it (`0.4.4-beta`, not `0.4.4`).
+package ships it (`0.6.0-beta`, not `0.6.0`).
 
 ## Conventions
 

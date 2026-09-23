@@ -1,5 +1,5 @@
 {
-  "_comment": "THE VERSION SPINE (redesign plan 4D). One machine-readable record per outward-facing component: `current` is the latest PROVEN version (for a component layers/INDEX.json gateProven records, it is taken from gateProven and may never run ahead of it), `floors` is the minimum each CONSUMER needs, with the reason that consumer needs it, and `ids` is the package id plus the aliases a host may install it under. Consumers legitimately differ: a floor belongs to the consumer that depends on it, never to the component. DERIVED COPIES: layers/base/base.contract.json `compat` copies the floors of the consumer `layers` (the spine is the source, the contract the copy) and tools/ci/Validate-Distribution.ps1 fails when they disagree. THE FLOOR RULE (owner ruling redesign-floors, 2026-09-23): a floor rises only when a consumer depends on the fix, never to the latest release. CI enforces it: a PR that raises any floor above the merge base must give the raised entry a NEW reason.ref naming the issue or PR the consumer depends on, and no floor may exceed `current`. VERSION ORDER: SemVer 2.0 with the NuGet reading of prerelease labels: a prerelease ranks below its release (0.4.4-beta < 0.4.4), labels compare case-insensitively (0.6.0-BETA == 0.6.0-beta), dot-separated identifiers compare numerically when both are numeric, a numeric identifier ranks below an alphanumeric one, and build metadata (+...) is ignored. A floor therefore names the version as the package ships it: a component released only as -beta states its floor as -beta. FLAGS: `flag` on a floor marks what the record could not settle: `untraced` (no issue or PR; the ref is the introducing commit), `no-reason-given` (the ref exists but states no dependency), `rule-violation` (raised to a release with no consumer dependency; the entry records the stated value, the correction belongs to the owning repo).",
+  "_comment": "THE VERSION SPINE (redesign plan 4D). One machine-readable record per outward-facing component: `current` is the latest PROVEN version (for a component layers/INDEX.json gateProven records, it is taken from gateProven and may never run ahead of it), `floors` is the minimum each CONSUMER needs, with the reason that consumer needs it, and `ids` is the package id, the aliases a host may install the SAME product under, and the `predecessors`: retired packages the product replaced (Dynamicweb.MCP before Truvio.Commerce.MCP). A predecessor is never an alias: a host that carries only a predecessor reads as BELOW the floor, never as matched and never as an absent optional app. Consumers legitimately differ: a floor belongs to the consumer that depends on it, never to the component. DERIVED COPIES: layers/base/base.contract.json `compat` copies the floors of the consumer `layers` (the spine is the source, the contract the copy) and tools/ci/Validate-Distribution.ps1 fails when they disagree. THE FLOOR RULE (owner ruling redesign-floors, 2026-09-23): a floor rises only when a consumer depends on the fix, never to the latest release. CI enforces it: a PR that raises any floor above the merge base must give the raised entry a NEW reason.ref naming the issue or PR the consumer depends on, and no floor may exceed `current`. VERSION ORDER: SemVer 2.0 with the NuGet reading of prerelease labels: a prerelease ranks below its release (0.6.0-beta < 0.6.0), labels compare case-insensitively (0.6.0-BETA == 0.6.0-beta), dot-separated identifiers compare numerically when both are numeric, a numeric identifier ranks below an alphanumeric one, and build metadata (+...) is ignored. A floor therefore names the version as the package ships it: a component released only as -beta states its floor as -beta. FLAGS: `flag` on a floor marks what the record could not settle: `untraced` (no issue or PR; the ref is the introducing commit), `no-reason-given` (the ref exists but states no dependency).",
   "spineVersion": "1.0.0",
   "rule": {
     "id": "redesign-floors",
@@ -140,18 +140,17 @@
       ]
     },
     "mcp": {
-      "ids": { "package": "Truvio.Commerce.MCP", "aliases": ["Dynamicweb.MCP"] },
+      "ids": { "package": "Truvio.Commerce.MCP", "aliases": [], "predecessors": ["Dynamicweb.MCP"] },
       "current": { "version": "0.6.0-beta", "source": "gateProven" },
       "floors": [
         {
           "consumer": "layers",
-          "min": "0.4.4-beta",
+          "min": "0.6.0-beta",
           "required": false,
           "reason": {
-            "ref": "justdynamics/Truvio.Commerce.Distribution@60aac43b",
-            "why": "Optional companion: no layer calls an MCP tool, the layers deserialize through the Serializer. The value is the host measured when the contract gained compat (Dynamicweb.MCP 0.4.4-BETA, Foundry docs/V5-PLAN.md), not a dependency. Stated as 0.4.4-beta because the add-in ships only as a prerelease: the bare 0.4.4 the contract carried until spine 1.0.0 ranks above every 0.4.4 build that exists, and named an id (Truvio.Commerce.MCP) that never shipped 0.4.4."
-          },
-          "flag": "untraced"
+            "ref": "dynamicweb/skills#137",
+            "why": "0.6.0 adds skills inside MCP and Dynamo, which the estate builds on (owner ruling, Justin Sjouw, 2026-09-23). The owner expects this floor to rise again soon on the same basis."
+          }
         },
         {
           "consumer": "skills",
@@ -159,9 +158,8 @@
           "required": false,
           "reason": {
             "ref": "dynamicweb/skills#137",
-            "why": "Raised when the add-in was renamed to Truvio.Commerce.MCP and measured on 0.6.0-beta. The 0.6.0 tool registry equals the 0.4.4 one (604 names, none added, none dropped), so no skill depends on 0.6: under redesign-floors this floor belongs at 0.4.4-beta with the Dynamicweb.MCP alias."
-          },
-          "flag": "rule-violation"
+            "why": "0.6.0 adds skills inside MCP and Dynamo, which the estate builds on (owner ruling, Justin Sjouw, 2026-09-23). The owner expects this floor to rise again soon on the same basis."
+          }
         }
       ]
     },

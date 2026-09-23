@@ -26,7 +26,7 @@ Version order: SemVer 2.0 with NuGet's prerelease reading (Compare-SpineVersion)
 # ---------------------------------------------------------------------------
 # Compare-SpineVersion: -1 / 0 / 1. SemVer 2.0 precedence with the NuGet reading of labels:
 #   * numeric core segments compare numerically (any count: 10.28.12.0 is fine; missing = 0);
-#   * a prerelease ranks BELOW its release (0.4.4-beta < 0.4.4, 10.28.1-PreRelease < 10.28.1);
+#   * a prerelease ranks BELOW its release (0.6.0-beta < 0.6.0, 10.28.1-PreRelease < 10.28.1);
 #   * prerelease labels split on '.', numeric identifiers compare numerically (beta.10 > beta.9),
 #     a numeric identifier ranks below an alphanumeric one, alphanumerics compare
 #     case-INSENSITIVELY (0.6.0-BETA == 0.6.0-beta, as NuGet treats package versions), and a
@@ -86,12 +86,17 @@ function Get-SpineRingNumber {
 }
 
 # Every id a component answers to (package + aliases), for resolving an observed or declared id.
+# -IncludePredecessors adds the retired packages the component replaced (ids.predecessors): they
+# belong to the component for uniqueness, but they never satisfy its floor.
 function Get-SpineIds {
-    param([Parameter(Mandatory)][object]$Component)
+    param([Parameter(Mandatory)][object]$Component, [switch]$IncludePredecessors)
     $ids = @()
     if ($Component.ids) {
         if ("$($Component.ids.package)".Trim()) { $ids += "$($Component.ids.package)".Trim() }
         foreach ($a in @($Component.ids.aliases)) { if ("$a".Trim()) { $ids += "$a".Trim() } }
+        if ($IncludePredecessors) {
+            foreach ($a in @($Component.ids.predecessors)) { if ("$a".Trim()) { $ids += "$a".Trim() } }
+        }
     }
     return , $ids
 }
@@ -164,10 +169,10 @@ function Test-VersionSpine {
         $v = $c.Value
         $okShape = ($v.ids -and "$($v.ids.package)".Trim() -and $null -ne $v.current -and $null -ne $v.PSObject.Properties['floors'])
         & $add $okShape "component '$($c.Name)' carries ids.package, current and floors[]"
-        foreach ($i in (Get-SpineIds -Component $v)) {
+        foreach ($i in (Get-SpineIds -Component $v -IncludePredecessors)) {
             $k = $i.ToLowerInvariant()
             if ($idOwner.ContainsKey($k) -and $idOwner[$k] -ne $c.Name) {
-                & $add $false "id '$i' is claimed by both '$($idOwner[$k])' and '$($c.Name)' - an alias must resolve to one component"
+                & $add $false "id '$i' is claimed by both '$($idOwner[$k])' and '$($c.Name)' - an alias or predecessor must resolve to one component"
             } else { $idOwner[$k] = $c.Name }
         }
     }
@@ -261,6 +266,9 @@ function Test-VersionSpine {
                 $comp = Resolve-SpineComponent -Spine $Spine -Id $id
                 $aliasHit = @($contractApps | Where-Object { (Resolve-SpineComponent -Spine $Spine -Id "$($_.id)") -eq $comp })
                 $extra = if ($aliasHit.Count) { " (found it under '$($aliasHit[0].id)': the contract names the canonical package id, the spine carries the aliases)" } else { '' }
+                $preds = @($Spine.components.$comp.ids.predecessors | Where-Object { $_ })
+                $predHit = @($contractApps | Where-Object { $p = "$($_.id)"; @($preds | Where-Object { [string]::Equals($_, $p, [System.StringComparison]::OrdinalIgnoreCase) }).Count -gt 0 })
+                if ($predHit.Count) { $extra = " (found the retired predecessor '$($predHit[0].id)': the contract names the current package '$id')" }
                 & $add $false "base contract compat.apps carries exactly one '$id' entry$extra"
                 continue
             }

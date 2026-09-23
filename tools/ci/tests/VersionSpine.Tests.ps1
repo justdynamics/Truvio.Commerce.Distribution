@@ -67,10 +67,20 @@ Describe 'the shipped spine' {
         $fails = Get-Fails (Invoke-Spine)
         ($fails | ForEach-Object { $_.msg }) -join "`n" | Should -BeNullOrEmpty
     }
-    It 'resolves the MCP add-in under both ids, so a Dynamicweb.MCP host is the same component' {
-        Resolve-SpineComponent -Spine $script:spine -Id 'Dynamicweb.MCP'      | Should -Be 'mcp'
+    It 'names Dynamicweb.MCP as the retired PREDECESSOR of the MCP add-in, never as an alias' {
         Resolve-SpineComponent -Spine $script:spine -Id 'truvio.commerce.mcp' | Should -Be 'mcp'
+        Resolve-SpineComponent -Spine $script:spine -Id 'Dynamicweb.MCP'      | Should -BeNullOrEmpty
         Resolve-SpineComponent -Spine $script:spine -Id 'Nope.Package'        | Should -BeNullOrEmpty
+        @($script:spine.components.mcp.ids.predecessors) | Should -Be @('Dynamicweb.MCP')
+        (Get-SpineIds -Component $script:spine.components.mcp -IncludePredecessors) | Should -Be @('Truvio.Commerce.MCP', 'Dynamicweb.MCP')
+    }
+    It 'states the MCP floor 0.6.0-beta for both consumers, with the owner reason' {
+        foreach ($cons in 'layers', 'skills') {
+            $f = Get-Floor $script:spine 'mcp' $cons
+            $f.min | Should -Be '0.6.0-beta'
+            $f.reason.ref | Should -Be 'dynamicweb/skills#137'
+            $f.PSObject.Properties.Name | Should -Not -Contain 'flag'
+        }
     }
     It 'gives every floor a reason ref' {
         foreach ($c in $script:spine.components.PSObject.Properties) {
@@ -90,7 +100,7 @@ Describe 'S2 reasons and S1 ids' {
         (Get-Floor $s 'serializer' 'layers').reason.ref = 'see the chat'
         (Get-Fails (Invoke-Spine -Spine $s)).Count | Should -BeGreaterThan 0
     }
-    It 'FAILs an alias claimed by two components' {
+    It 'FAILs an alias claimed by two components, a predecessor included' {
         $s = Copy-Doc $script:spine
         $s.components.serializer.ids.aliases = @('Dynamicweb.MCP')
         (Get-Fails (Invoke-Spine -Spine $s)).msg -join ' ' | Should -Match "id 'Dynamicweb\.MCP' is claimed by both"
@@ -133,13 +143,20 @@ Describe 'S4 current never runs ahead of gateProven' {
 Describe 'S5 the base contract copies the layers floors' {
     It 'FAILs a contract floor that differs from the spine' {
         $c = Copy-Doc $script:contract
-        ($c.compat.apps | Where-Object { $_.id -eq 'Truvio.Commerce.MCP' }).min = '0.4.4'
-        (Get-Fails (Invoke-Spine -Contract $c)).msg -join ' ' | Should -Match "compat\.apps 'Truvio\.Commerce\.MCP' min '0\.4\.4'"
+        ($c.compat.apps | Where-Object { $_.id -eq 'Truvio.Commerce.MCP' }).min = '0.6.0'
+        (Get-Fails (Invoke-Spine -Contract $c)).msg -join ' ' | Should -Match "compat\.apps 'Truvio\.Commerce\.MCP' min '0\.6\.0'"
     }
     It 'FAILs a contract that names an app by its alias, pointing at the canonical id' {
+        $s = Copy-Doc $script:spine
+        $s.components.mcp.ids.aliases = @('Truvio.MCP')
+        $c = Copy-Doc $script:contract
+        ($c.compat.apps | Where-Object { $_.id -eq 'Truvio.Commerce.MCP' }).id = 'Truvio.MCP'
+        (Get-Fails (Invoke-Spine -Spine $s -Contract $c)).msg -join ' ' | Should -Match "found it under 'Truvio\.MCP'"
+    }
+    It 'FAILs a contract that names the retired predecessor, naming the current package' {
         $c = Copy-Doc $script:contract
         ($c.compat.apps | Where-Object { $_.id -eq 'Truvio.Commerce.MCP' }).id = 'Dynamicweb.MCP'
-        (Get-Fails (Invoke-Spine -Contract $c)).msg -join ' ' | Should -Match "found it under 'Dynamicweb\.MCP'"
+        (Get-Fails (Invoke-Spine -Contract $c)).msg -join ' ' | Should -Match "found the retired predecessor 'Dynamicweb\.MCP'"
     }
     It 'FAILs a contract app with no spine floor behind it' {
         $c = Copy-Doc $script:contract
@@ -186,9 +203,9 @@ Describe 'S6 the floor rule: a floor rises only when a consumer depends on the f
         $fails = Get-Fails (Invoke-Spine -BaseSpine $b -BaseState 'present')
         $fails.msg -join ' ' | Should -Match 'floor raised without a consumer reason: dw floor for .skills. \(ring R2 -> R1\)'
     }
-    It 'does not count a prerelease case change as a raise (0.4.4-BETA == 0.4.4-beta)' {
+    It 'does not count a prerelease case change as a raise (0.6.0-BETA == 0.6.0-beta)' {
         $b = Copy-Doc $script:spine
-        (Get-Floor $b 'mcp' 'layers').min = '0.4.4-BETA'
+        (Get-Floor $b 'mcp' 'layers').min = '0.6.0-BETA'
         (Get-Fails (Invoke-Spine -BaseSpine $b -BaseState 'present')).Count | Should -Be 0
     }
     It 'FAILs closed when the merge base could not be read' {
