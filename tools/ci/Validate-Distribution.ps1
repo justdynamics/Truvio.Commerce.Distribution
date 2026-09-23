@@ -54,12 +54,21 @@ Checks (all fail-closed; any failure -> exit 1):
                         proven against"; Swift support here is rolling latest-only, so a
                         stale value points a consumer at a release the distribution no
                         longer ships. Drift in either direction FAILs.
+ 13. Version spine   - (redesign plan 4D, owner ruling redesign-floors 2026-09-23) versions/spine.json
+                        is the source of every floor (Test-VersionSpine.ps1): each floor names its
+                        consumer and a reason ref; no floor exceeds its component's current; a
+                        gateProven-sourced current never runs ahead of gateProven; base.contract.json
+                        compat equals the spine floors of consumer 'layers'; and a floor RAISED
+                        against the merge base (-SpineBaseRef, default origin/main) must carry a new
+                        reason.ref, else "floor raised without a consumer reason".
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
                         (the theme CSS matches [data-dw-colorscheme] by exact value).
 
 Usage: pwsh tools/ci/Validate-Distribution.ps1  (run from repo root; exits 0 pass / 1 fail)
+       pwsh tools/ci/Validate-Distribution.ps1 -SpineBaseRef origin/main  (the floor-rule base; CI
+       fetches the PR base branch first. '' skips the floor-rule comparison, local runs only)
        pwsh tools/ci/Validate-Distribution.ps1 -RegenerateIndex  (rewrite the layers/INDEX.json
        `layers` array from the live tree, preserving `retired` + `gateProven` + operator-authored
        entry fields such as `note`; then validate)
@@ -67,35 +76,21 @@ Usage: pwsh tools/ci/Validate-Distribution.ps1  (run from repo root; exits 0 pas
 [CmdletBinding()]
 param(
     [string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path,
-    [switch]$RegenerateIndex
+    [switch]$RegenerateIndex,
+    [string]$SpineBaseRef = 'origin/main'
 )
 $ErrorActionPreference = 'Stop'
 
-# Ordered version comparison for the compat floor checks. Numeric per segment, and a
-# prerelease ranks BELOW its release (semver), so 10.28.1-PreRelease does not satisfy
-# 10.28.1. Returns -1 / 0 / 1. Same rule as the Foundry's Compare-CompatVersion, so the
-# validator and the gate can never disagree about which floor is higher.
+# Ordered version comparison for the compat floor checks: SemVer 2.0 with the NuGet reading of
+# prerelease labels (Compare-SpineVersion in Test-VersionSpine.ps1). A prerelease ranks BELOW its
+# release, so 10.28.1-PreRelease does not satisfy 10.28.1; labels compare case-insensitively and
+# numeric identifiers numerically. Returns -1 / 0 / 1. Same rule as the Foundry's
+# Compare-CompatVersion, so the validator and the gate can never disagree about which floor is higher.
+. (Join-Path $PSScriptRoot 'Test-VersionSpine.ps1')
 function Compare-DistVersion {
     param([Parameter(Mandatory)][AllowEmptyString()][string]$A,
           [Parameter(Mandatory)][AllowEmptyString()][string]$B)
-    function Split-DistVer([string]$v) {
-        $v = "$v".Trim().TrimStart('vV')
-        $core, $pre = ($v -split '-', 2)
-        $nums = @(($core -split '\.') | ForEach-Object { $n = 0; [void][int]::TryParse($_, [ref]$n); $n })
-        return @{ nums = $nums; pre = "$pre" }
-    }
-    $x = Split-DistVer $A
-    $y = Split-DistVer $B
-    $len = [Math]::Max($x.nums.Count, $y.nums.Count)
-    for ($i = 0; $i -lt $len; $i++) {
-        $a = if ($i -lt $x.nums.Count) { $x.nums[$i] } else { 0 }
-        $b = if ($i -lt $y.nums.Count) { $y.nums[$i] } else { 0 }
-        if ($a -ne $b) { return $(if ($a -gt $b) { 1 } else { -1 }) }
-    }
-    if ($x.pre -eq $y.pre) { return 0 }
-    if ([string]::IsNullOrEmpty($x.pre)) { return 1 }
-    if ([string]::IsNullOrEmpty($y.pre)) { return -1 }
-    return [string]::CompareOrdinal($x.pre, $y.pre)
+    return Compare-SpineVersion -A $A -B $B
 }
 
 . (Join-Path $PSScriptRoot 'Test-ProtectedStrings.ps1')
@@ -234,6 +229,33 @@ if (-not (Test-Path $contractPath)) {
             }
         }
     }
+}
+
+# ---------------------------------------------------------------------------
+# 13. Version spine (redesign plan 4D; owner ruling redesign-floors, 2026-09-23).
+#     versions/spine.json is the source; base.contract.json compat is the copy. A floor rises
+#     only when a consumer depends on the fix, never to the latest release, so a raise against
+#     the merge base must cite a NEW reason.ref.
+# ---------------------------------------------------------------------------
+$spinePath = Join-Path $RepoRoot 'versions\spine.json'
+$spineDoc = $null
+if (Test-Path -LiteralPath $spinePath) {
+    try { $spineDoc = Get-Content -LiteralPath $spinePath -Raw -Encoding utf8 | ConvertFrom-Json }
+    catch { & $log $false "versions/spine.json invalid JSON: $_" }
+}
+$spineContract = $null
+if (Test-Path -LiteralPath $contractPath) { try { $spineContract = Get-Content -LiteralPath $contractPath -Raw -Encoding utf8 | ConvertFrom-Json } catch { $spineContract = $null } }
+$spineGp = $null
+$spineIdxPath = Join-Path $layersRoot 'INDEX.json'
+if (Test-Path -LiteralPath $spineIdxPath) { try { $spineGp = (Get-Content -LiteralPath $spineIdxPath -Raw -Encoding utf8 | ConvertFrom-Json).gateProven } catch { $spineGp = $null } }
+if ([string]::IsNullOrWhiteSpace($SpineBaseRef)) {
+    $spineBase = @{ state = 'skipped'; spine = $null; label = '(none)' }
+} else {
+    $spineBase = Get-BaseSpine -RepoRoot $RepoRoot -BaseRef $SpineBaseRef
+}
+foreach ($r in (Test-VersionSpine -Spine $spineDoc -Contract $spineContract -GateProven $spineGp `
+        -BaseSpine $spineBase.spine -BaseState $spineBase.state -BaseLabel $spineBase.label)) {
+    & $log $r.ok $r.msg
 }
 
 # Cross-layer collision: same _sql/<Table>/<key>.yml shipped by two non-base layers.
