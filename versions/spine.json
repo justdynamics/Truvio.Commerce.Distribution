@@ -1,0 +1,192 @@
+{
+  "_comment": "THE VERSION SPINE (redesign plan 4D). One machine-readable record per outward-facing component: `current` is the latest PROVEN version (for a component layers/INDEX.json gateProven records, it is taken from gateProven and may never run ahead of it), `floors` is the minimum each CONSUMER needs, with the reason that consumer needs it, and `ids` is the package id, the aliases a host may install the SAME product under, and the `predecessors`: retired packages the product replaced (Dynamicweb.MCP before Truvio.Commerce.MCP). A predecessor is never an alias: a host that carries only a predecessor reads as BELOW the floor, never as matched and never as an absent optional app. Consumers legitimately differ: a floor belongs to the consumer that depends on it, never to the component. DERIVED COPIES: layers/base/base.contract.json `compat` copies the floors of the consumer `layers` (the spine is the source, the contract the copy) and tools/ci/Validate-Distribution.ps1 fails when they disagree. THE FLOOR RULE (owner ruling redesign-floors, 2026-09-23): a floor rises only when a consumer depends on the fix, never to the latest release. CI enforces it: a PR that raises any floor above the merge base must give the raised entry a NEW reason.ref naming the issue or PR the consumer depends on, and no floor may exceed `current`. VERSION ORDER: SemVer 2.0 with the NuGet reading of prerelease labels: a prerelease ranks below its release (0.6.0-beta < 0.6.0), labels compare case-insensitively (0.6.0-BETA == 0.6.0-beta), dot-separated identifiers compare numerically when both are numeric, a numeric identifier ranks below an alphanumeric one, and build metadata (+...) is ignored. A floor therefore names the version as the package ships it: a component released only as -beta states its floor as -beta. FLAGS: `flag` on a floor marks what the record could not settle: `untraced` (no issue or PR; the ref is the introducing commit), `no-reason-given` (the ref exists but states no dependency).",
+  "spineVersion": "1.0.0",
+  "rule": {
+    "id": "redesign-floors",
+    "owner": "Justin Sjouw",
+    "date": "2026-09-23",
+    "text": "A floor rises only when a consumer depends on the fix, never to the latest release."
+  },
+  "components": {
+    "dw": {
+      "ids": { "package": "Dynamicweb.Suite", "aliases": ["Dynamicweb.Core"] },
+      "current": { "version": "10.28.12", "ring": "R1", "tfm": "net10.0", "source": "gateProven" },
+      "floors": [
+        {
+          "consumer": "layers",
+          "min": "10.28.1",
+          "ring": "R1",
+          "tfm": "net10.0",
+          "reason": {
+            "ref": "justdynamics/Truvio.Commerce.Foundry#1061",
+            "why": "The layers ship DW 10.28.1 column names: feature-b2b-comms failed strict-mode deserialize on a 10.27.6 host while the static gate stayed green, which is the case the compat leg (#1061) was built for. The ring R1 is the outward claim the owner ruled on 2026-09-21 (Distribution #76); tfm net10.0 is the host runtime of that ring. Introduced in the contract by Distribution 60aac43b."
+          }
+        },
+        {
+          "consumer": "skills",
+          "min": "10.28.1",
+          "ring": "R1",
+          "tfm": "net10.0",
+          "reason": {
+            "ref": "dynamicweb/skills#127",
+            "why": "versions.json worksOn.dw.floor, set by the first skills version spine; ring and tfm added by dynamicweb/skills#158. Neither PR names a dependency on 10.28.1."
+          },
+          "flag": "no-reason-given"
+        },
+        {
+          "consumer": "serializer",
+          "min": "10.17.5",
+          "reason": {
+            "ref": "justdynamics/Truvio.Commerce.Serializer@2ade56a",
+            "why": "The package is packed at DynamicwebVersion 10.17.5 so the App Store dependency filter shows it to older hosts; 10.17.5 was compile-probed across 10.8 to 10.28 and the Alert/AlertType APIs are missing below it. The ring sentence was added by Serializer #22."
+          },
+          "flag": "untraced"
+        },
+        {
+          "consumer": "storefront",
+          "min": "10.28.1",
+          "reason": {
+            "ref": "justdynamics/Truvio.Commerce.Storefront#10",
+            "why": "package.json compat.dw.min copies the base contract shape; the app reads /dwapi over HTTP and names no dependency of its own on 10.28.1."
+          },
+          "flag": "no-reason-given"
+        },
+        {
+          "consumer": "powertools",
+          "min": "10.8.4",
+          "reason": {
+            "ref": "justdynamics/Truvio.Commerce.PowerTools@9df4d4f",
+            "why": "DW_FLOOR 10.8.4: tested and packed at the floor, and verify-floor-binding.ps1 fails a DLL bound above it (releases 0.9.1 to 0.11.1 had shipped 10.28.1-bound). Compatible with 10.8 since the initial release (2f141da)."
+          },
+          "flag": "untraced"
+        },
+        {
+          "consumer": "dashboards",
+          "min": "10.27.13",
+          "reason": {
+            "ref": "justdynamics/Truvio.Commerce.Dashboards@1cb5982",
+            "why": "DW_FLOOR 10.27.13, the oldest host the app was verified on; a publish step checks the references stay at or below it."
+          },
+          "flag": "untraced"
+        },
+        {
+          "consumer": "buyingassistant",
+          "min": "10.27.9",
+          "reason": {
+            "ref": "justdynamics/Truvio.Commerce.BuyingAssistant@41f959f",
+            "why": "DW_FLOOR 10.27.9 from the initial release: every 10.27 host qualifies. No verify-floor-binding step."
+          },
+          "flag": "untraced"
+        }
+      ]
+    },
+    "swift": {
+      "ids": { "package": "dynamicweb/Swift", "aliases": [] },
+      "current": { "version": "2.4.0", "tag": "v2.4.0", "source": "gateProven" },
+      "floors": [
+        {
+          "consumer": "layers",
+          "min": "2.4.0",
+          "tag": "v2.4.0",
+          "match": "exact",
+          "reason": {
+            "ref": "justdynamics/Truvio.Commerce.Distribution@60aac43b",
+            "why": "Rolling latest-only: the layers are authored for exactly one Swift release, so the floor is an equality pin that rolls forward with the release, never a range."
+          },
+          "flag": "untraced"
+        },
+        {
+          "consumer": "skills",
+          "min": "2.4.0",
+          "match": "exact",
+          "reason": {
+            "ref": "dynamicweb/skills#127",
+            "why": "versions.json worksOn.swift ==2.4, the same rolling latest-only policy."
+          }
+        },
+        {
+          "consumer": "storefront",
+          "min": "2.4.0",
+          "match": "exact",
+          "reason": {
+            "ref": "justdynamics/Truvio.Commerce.Storefront#10",
+            "why": "package.json compat.swift ==2.4: owner instruction 2026-09-12 to roll the Swift target to 2.4."
+          }
+        }
+      ]
+    },
+    "serializer": {
+      "ids": { "package": "Truvio.Commerce.Serializer", "aliases": [] },
+      "current": { "version": "1.0.6-beta", "source": "gateProven" },
+      "floors": [
+        {
+          "consumer": "layers",
+          "min": "1.0.6-beta",
+          "required": true,
+          "reason": {
+            "ref": "justdynamics/Truvio.Commerce.Serializer#32",
+            "why": "1.0.3-beta to 1.0.5-beta stopped remapping page ids held in option-list fields (ProductListComponentSelector, ProductComponentSelector, ProductBom), so a delivered surface-swift storefront listed zero products (gate run 20260922-231413). The chain below it: #30 (strict mode failed on declared heap keys before 1.0.5-beta), #21 (a Merge deleted every row of a keyless table before 1.0.3-beta), #18 (NULL round trip before 1.0.2-beta). Raised with sample-data 5.0.1, Distribution #78."
+          }
+        },
+        {
+          "consumer": "skills",
+          "min": "1.0.0-beta",
+          "required": false,
+          "reason": {
+            "ref": "dynamicweb/skills#127",
+            "why": "The serializer skills teach the 1.0-beta command names (Serialize, Deserialize, PackageDownload). Scoped to the skills that cover the Serializer."
+          }
+        }
+      ]
+    },
+    "mcp": {
+      "ids": { "package": "Truvio.Commerce.MCP", "aliases": [], "predecessors": ["Dynamicweb.MCP"] },
+      "current": { "version": "0.6.0-beta", "source": "gateProven" },
+      "floors": [
+        {
+          "consumer": "layers",
+          "min": "0.6.0-beta",
+          "required": false,
+          "reason": {
+            "ref": "dynamicweb/skills#137",
+            "why": "0.6.0 adds skills inside MCP and Dynamo, which the estate builds on (owner ruling, Justin Sjouw, 2026-09-23). The owner expects this floor to rise again soon on the same basis."
+          }
+        },
+        {
+          "consumer": "skills",
+          "min": "0.6.0-beta",
+          "required": false,
+          "reason": {
+            "ref": "dynamicweb/skills#137",
+            "why": "0.6.0 adds skills inside MCP and Dynamo, which the estate builds on (owner ruling, Justin Sjouw, 2026-09-23). The owner expects this floor to rise again soon on the same basis."
+          }
+        }
+      ]
+    },
+    "skills": {
+      "ids": { "package": "dynamicweb/skills", "aliases": [] },
+      "current": { "version": "5.2.0", "tag": "v5.2.0", "source": "gateProven" },
+      "floors": []
+    },
+    "storefront": {
+      "ids": { "package": "Truvio.Commerce.Storefront", "aliases": [] },
+      "current": { "version": null, "source": "none" },
+      "floors": []
+    },
+    "powertools": {
+      "ids": { "package": "Truvio.Commerce.PowerTools", "aliases": [] },
+      "current": { "version": "0.12.0-beta", "source": "release" },
+      "floors": []
+    },
+    "dashboards": {
+      "ids": { "package": "Truvio.Commerce.Dashboards", "aliases": [] },
+      "current": { "version": "0.5.0-beta", "source": "csproj" },
+      "floors": []
+    },
+    "buyingassistant": {
+      "ids": { "package": "Truvio.Commerce.BuyingAssistant", "aliases": [] },
+      "current": { "version": "0.2.0-beta", "source": "release" },
+      "floors": []
+    }
+  }
+}

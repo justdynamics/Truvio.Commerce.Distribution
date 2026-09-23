@@ -19,6 +19,7 @@ A change to `layers/` or `editions/` is mergeable only when both hold:
      pinned semver; `themes[]` resolve to `layers/theme-<name>` (kind theme);
    - `layers/base/base.contract.json` parses; no two non-base layers ship the same
      `_sql/<Table>/<key>.yml` (silent-collision guard);
+   - the version spine holds (see [Version floors](#version-floors));
    - the protected-string guard passes (the layer/mode vocabulary never leaked into a
      DW/Swift identifier or path); theme layers carry no serialized content (SPEC-06).
      A mode word between slashes (`/replace/`, `\merge\`) fails the guard, except inside
@@ -61,6 +62,29 @@ carries a `layer.json` (correct `kind`), its `replace/`+`merge/` mode trees and/
 `files/` overlay, and a `BASELINE.md`. A new edition is a `editions/<name>.json`
 composition whose refs resolve. Run `tools/ci/Validate-Distribution.ps1` locally before
 opening the PR.
+
+## Version floors
+
+[`versions/spine.json`](versions/spine.json) is the one record of every outward component's
+proven `current`, its per-consumer `floors` and its package `ids`: the package, its aliases, and
+its retired `predecessors`. `Dynamicweb.MCP` is the retired predecessor of `Truvio.Commerce.MCP`, so a
+host that carries only `Dynamicweb.MCP` is below the floor. The `compat` block in
+`layers/base/base.contract.json` is a copy of the floors of consumer `layers`: change the spine
+first, then copy. CI ([`tools/ci/Test-VersionSpine.ps1`](tools/ci/Test-VersionSpine.ps1)) fails when:
+
+- a floor has no `reason.ref` (`<owner>/<repo>#<n>`, or `<owner>/<repo>@<sha>` when history has
+  no issue or PR) and `why`;
+- a floor exceeds its component's `current`, or a gateProven-sourced `current` runs ahead of
+  `layers/INDEX.json` `gateProven`;
+- the contract disagrees with the spine;
+- **a floor is raised without a consumer reason.** A floor rises only when a consumer depends on
+  the fix, never to the latest release (owner ruling `redesign-floors`, 2026-09-23). A PR that
+  raises a floor above the merge base must give it a new `reason.ref` naming the issue or PR the
+  consumer depends on.
+
+Versions order as SemVer 2.0 with the NuGet reading of prerelease labels: a prerelease ranks
+below its release and labels compare case-insensitively, so a floor names the version as the
+package ships it (`0.6.0-beta`, not `0.6.0`).
 
 ## Conventions
 

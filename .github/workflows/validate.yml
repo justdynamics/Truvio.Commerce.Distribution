@@ -8,6 +8,7 @@ on:
     paths:
       - 'layers/**'
       - 'editions/**'
+      - 'versions/**'
       - 'tools/ci/**'
       - '.github/workflows/validate.yml'
   push:
@@ -21,6 +22,21 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validate distribution contract (schema, edition refs, base contract, protected strings, SPEC-06, INDEX.json + gateProven + retired tombstones)
+      # The floor rule (versions/spine.json, owner ruling redesign-floors) compares this PR's floors
+      # with the base branch, so the base must be readable: a shallow checkout carries only the
+      # merge commit. On a push to main the base is main itself and nothing can be raised.
+      - name: Fetch the base branch for the floor rule
+        shell: bash
+        run: git fetch --no-tags --depth=50 origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
+        env:
+          BASE_REF: ${{ github.base_ref || 'main' }}
+
+      - name: Validate distribution contract (schema, edition refs, base contract, version spine + floor rule, protected strings, SPEC-06, INDEX.json + gateProven + retired tombstones)
         shell: pwsh
-        run: ./tools/ci/Validate-Distribution.ps1
+        run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF"
+        env:
+          BASE_REF: ${{ github.base_ref || 'main' }}
+
+      - name: Validator unit tests (tools/ci/tests, Pester)
+        shell: pwsh
+        run: Invoke-Pester -Path tools/ci/tests -CI
