@@ -1,0 +1,41 @@
+﻿"paragraphUniqueId": 682e955d-fd80-4ffa-831c-4dc8254807c5
+"sourceParagraphId": 90030
+"sortOrder": 1
+"itemType": "Swift-v2_App"
+"header": "VariantSelectorService"
+"template": ""
+"colorSchemeId": ""
+"container": ""
+"moduleSystemName": "eCom_ProductCatalog"
+"moduleSettings": |-
+  <?xml version="1.0" encoding="utf-8"?>
+  <Settings>
+    <IndexQuery>/Files/System/Repositories/TruvioCommerce/Products.query</IndexQuery>
+    <TrackQueries>0</TrackQueries>
+    <FacetGroups></FacetGroups>
+    <ShowFacetOptionsWithNoResults>0</ShowFacetOptionsWithNoResults>
+    <QueryConditions>[]</QueryConditions>
+    <QuerySortByParams>[]</QuerySortByParams>
+    <UseGroupSortInGroupContext>0</UseGroupSortInGroupContext>
+    <FieldToSpellCheck></FieldToSpellCheck>
+    <ParameterToSpellCheck></ParameterToSpellCheck>
+    <PageSize>10</PageSize>
+    <ProductListTemplate></ProductListTemplate>
+    <ProductTemplate>VariantSelector.cshtml</ProductTemplate>
+    <CompareTemplate></CompareTemplate>
+    <FeedTemplate></FeedTemplate>
+    <SelectedPriceProperties></SelectedPriceProperties>
+    <SelectedProductProperties></SelectedProductProperties>
+    <SelectedProductListProperties></SelectedProductListProperties>
+    <SelectedAssetCategories></SelectedAssetCategories>
+    <SelectedAssets></SelectedAssets>
+    <SelectedVariantInfo></SelectedVariantInfo>
+    <SelectedStockUnits></SelectedStockUnits>
+    <SelectedProductFields></SelectedProductFields>
+    <SelectedProductCategoryFields></SelectedProductCategoryFields>
+  </Settings>
+"fields":
+  "Id": "100708"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": ""

@@ -95,6 +95,10 @@
   - Search result page
   - Related products list
   - Related products slider/grid
+  - Content search results
+  - Product and content search results
+  - Variant Selector Service
+  - Favorites list service
 - path: Swift-v2_BreadcrumbNavigation
   kind: item-type
   referencedBy:

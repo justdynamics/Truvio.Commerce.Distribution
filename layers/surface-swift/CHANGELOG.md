@@ -1,5 +1,48 @@
 ﻿# Changelog — surface-swift
 
+## 1.15.1
+
+### The six Service Pages answered empty: the header type-ahead had nothing to call (Foundry #629, #1315, #579)
+
+Stock Swift places the paragraphs of its service pages directly on the page (`ParagraphGridRowId`
+0, container `dwcontent`, rendered through `Model.Placeholder("dwcontent")`), not in a grid row.
+Serializer releases before 1.0.3-beta dropped every such paragraph on serialize and had no slot
+to deserialize one (Serializer #24, fixed in #26), so this layer shipped the service pages as bare
+`page.yml` records. On every delivered site the header search field posted to the `Search`
+nav-tag page and got HTTP 200 with 0 bytes back, so the type-ahead dropdown never opened; the
+content-search, favorites and variant-selector services answered the same way.
+
+The four stock pages that carry gridless paragraphs are captured from the live stock Swift 2
+tree (dw10-demo area 3), five paragraphs in all, as page-level `paragraph-p<sort>.yml` files
+beside `page.yml`, the shape Serializer 1.0.6-beta writes and reads:
+
+| Page (stock id) | Paragraph (stock id) | Module | Container |
+|---|---|---|---|
+| Product and content search results (218), nav tag `Search` | Product search results (1117) | `eCom_ProductCatalog`, `ProductSearchDropdownResponse.cshtml`, 5 per page, spell-check `freetext` on `eq` | `dwcontent` |
+| | Content search results (8949) | `QueryPublisher`, `QueryPublisher/ContentDropdownResponse.cshtml` | `dwcontent` |
+| Content search results (1690) | Content search results (8955) | `QueryPublisher`, `QueryPublisher/ContentDropdownResponse.cshtml` | `dwcontent` |
+| Favorites list service (1287), nav tag `FavoriteServicePage` | Favorites list (6271) | `eCom_ProductCatalog`, product template `Favorites.cshtml` | empty (stock) |
+| Variant Selector Service (1685) | VariantSelectorService (8940) | `eCom_ProductCatalog`, product template `VariantSelector.cshtml` (this layer's corrected override) | empty (stock) |
+
+CartService and CartSummary carry no paragraph in stock Swift either and stay as they are.
+
+Identity: each paragraph keeps its stock `paragraphUniqueId` (the same GUID on every stock Swift
+2.4 install, as the six page GUIDs already are); `sourceParagraphId` 90026-90030 in the reserved
+90000+ band and item-instance ids 100704-100708, the layer convention for paragraphs this layer
+authors. Module settings are stock with ONE deliberate change: the three `eCom_ProductCatalog`
+paragraphs bind `IndexQuery` to `/Files/System/Repositories/TruvioCommerce/Products.query`, the
+repository this layer ships and the Shop page already reads, instead of the host-supplied
+`ProductsFrontend` query (1.6.0), so the type-ahead lists exactly what the Shop lists and the
+favorites / variant services resolve against the same index. The query declares every parameter
+the three templates send (`eq`, `q`, `MainProductID`, `IsVariant`, `ProductvariantId`). The two
+`QueryPublisher` paragraphs keep the stock `Content/Content search.query`, host-supplied as it is
+in stock Swift. No module setting holds a page id, so nothing depends on link resolution.
+
+The files are registered in `replace-manifest.json` and the four pages are added to the
+`Swift-v2_App` references in `templates.manifest.yml`. Needs Serializer 1.0.6-beta, which is
+already the base-contract floor: an engine before 1.0.3-beta ignores the page-level files and
+delivers the pages empty, exactly as before.
+
 ## 1.15.0
 
 ### The variant-selector modal refused to sell a never-out-of-stock product (Foundry #1317)
