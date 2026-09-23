@@ -23,17 +23,6 @@
           }
         },
         {
-          "consumer": "skills",
-          "min": "10.28.1",
-          "ring": "R1",
-          "tfm": "net10.0",
-          "reason": {
-            "ref": "dynamicweb/skills#127",
-            "why": "versions.json worksOn.dw.floor, set by the first skills version spine; ring and tfm added by dynamicweb/skills#158. Neither PR names a dependency on 10.28.1."
-          },
-          "flag": "no-reason-given"
-        },
-        {
           "consumer": "serializer",
           "min": "10.17.5",
           "reason": {

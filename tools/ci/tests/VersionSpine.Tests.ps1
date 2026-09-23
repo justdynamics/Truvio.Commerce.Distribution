@@ -115,7 +115,7 @@ Describe 'S3 a floor never exceeds current' {
     }
     It 'FAILs a ring floor newer than the current ring' {
         $s = Copy-Doc $script:spine
-        (Get-Floor $s 'dw' 'skills').ring = 'R0'
+        (Get-Floor $s 'dw' 'layers').ring = 'R0'
         (Get-Fails (Invoke-Spine -Spine $s)).msg -join ' ' | Should -Match "ring 'R0' is not newer than current ring 'R1'"
     }
     It 'FAILs a floor on a component with no current version' {
@@ -199,9 +199,9 @@ Describe 'S6 the floor rule: a floor rises only when a consumer depends on the f
     }
     It 'FAILs a ring moved to a NEWER ring with the base reason ref' {
         $b = Copy-Doc $script:spine
-        (Get-Floor $b 'dw' 'skills').ring = 'R2'
+        (Get-Floor $b 'dw' 'layers').ring = 'R2'
         $fails = Get-Fails (Invoke-Spine -BaseSpine $b -BaseState 'present')
-        $fails.msg -join ' ' | Should -Match 'floor raised without a consumer reason: dw floor for .skills. \(ring R2 -> R1\)'
+        $fails.msg -join ' ' | Should -Match 'floor raised without a consumer reason: dw floor for .layers. \(ring R2 -> R1\)'
     }
     It 'does not count a prerelease case change as a raise (0.6.0-BETA == 0.6.0-beta)' {
         $b = Copy-Doc $script:spine
