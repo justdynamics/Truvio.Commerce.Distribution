@@ -11,7 +11,7 @@
     "feature-baseline-guide@1.0.3"
   ],
   "surfaces": [
-    "surface-swift@1.15.0"
+    "surface-swift@1.15.1"
   ],
   "compatAxes": [
     "ring"
