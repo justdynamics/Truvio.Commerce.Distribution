@@ -6,7 +6,7 @@
       "ring": "R1-NET10",
       "ringNumber": 1,
       "ringSource": "symlink",
-      "version": "10.28.11"
+      "version": "10.28.12"
     },
     "apps": [
       {
@@ -35,14 +35,14 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20260923-002114",
+    "gateRunId": "20260923-102528",
     "swiftVersion": "2.4.0",
-    "dwPlatformVersion": "10.28.11",
+    "dwPlatformVersion": "10.28.12",
     "editions": {
-      "swift-demo": "20260923-002114"
+      "swift-demo": "20260923-102528"
     },
     "verdicts": {
-      "20260923-002114": {
+      "20260923-102528": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
