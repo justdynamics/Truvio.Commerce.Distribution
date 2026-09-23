@@ -31,7 +31,7 @@ jobs:
         env:
           BASE_REF: ${{ github.base_ref || 'main' }}
 
-      - name: Validate distribution contract (schema, edition refs, base contract, version spine + floor rule, protected strings, SPEC-06, INDEX.json + gateProven + retired tombstones)
+      - name: Validate distribution contract (schema, edition refs, base contract, version spine + floor rule, protected strings, SPEC-06, INDEX.json + gateProven + provenTree proof key + retired tombstones)
         shell: pwsh
         run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF"
         env:

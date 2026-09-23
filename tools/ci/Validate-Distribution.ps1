@@ -61,6 +61,13 @@ Checks (all fail-closed; any failure -> exit 1):
                         compat equals the spine floors of consumer 'layers'; and a floor RAISED
                         against the merge base (-SpineBaseRef, default origin/main) must carry a new
                         reason.ref, else "floor raised without a consumer reason".
+ 14. provenTree       - (owner ruling 2026-09-23, proof rides with delivery) gateProven.proofs is
+                        well-formed (tools/ci/ProvenTree.ps1), and every layer in a proof's
+                        provenTree is re-hashed on this tree (tools/ci/Get-LayerTreeHash.ps1,
+                        layer-tree/v1). Same version with a different tree FAILs: "layer X changed
+                        since proving run Y without a version bump". A bumped version is unproven:
+                        a NOTE, and release-tags does not tag it. An edition with no proof (legacy)
+                        is a NOTE and keeps the pre-key tag rule until the next restamp.
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -94,6 +101,7 @@ function Compare-DistVersion {
 }
 
 . (Join-Path $PSScriptRoot 'Test-ProtectedStrings.ps1')
+. (Join-Path $PSScriptRoot 'ProvenTree.ps1')
 
 $layersRoot   = Join-Path $RepoRoot 'layers'
 $editionsRoot = Join-Path $RepoRoot 'editions'
@@ -625,6 +633,24 @@ if ($index) {
             }
         }
         & $log ($hits.Count -eq 0) "living docs clean of retired name '$rn' (-> use $($retiredMap[$rn]))$(if($hits.Count){' — hit(s): ' + ($hits -join ', ')})"
+    }
+
+    # 14. provenTree proof key (owner ruling 2026-09-23, "proof rides with delivery"). Each proven
+    #     layer's tree hash (tools/ci/Get-LayerTreeHash.ps1, layer-tree/v1) is recomputed on THIS tree
+    #     and compared with gateProven.proofs.<edition>.provenTree. Same version + different tree FAILs;
+    #     a bumped version is unproven (NOTE, release-tags skips it); a legacy gateProven with no proofs
+    #     keeps the pre-key rule (NOTE) until the next restamp fills it.
+    if ($gp) {
+        foreach ($pr in @(Test-ProvenTreeShape -GateProven $gp)) { & $log $false "gateProven.proofs: $pr" }
+        $ptFindings = @(Get-ProvenTreeFinding -Status (Get-ProvenTreeStatus -RepoRoot $RepoRoot -GateProven $gp))
+        foreach ($f in $ptFindings) {
+            if ($f.level -eq 'NOTE') {
+                Write-Host "  [NOTE] $($f.message)" -ForegroundColor Yellow
+                if ($env:GITHUB_ACTIONS -eq 'true') { Write-Host "::notice title=provenTree::$($f.message)" }
+            } else {
+                & $log ($f.level -eq 'PASS') $f.message
+            }
+        }
     }
 }
 
