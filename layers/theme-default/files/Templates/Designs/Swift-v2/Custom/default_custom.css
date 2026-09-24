@@ -43,6 +43,12 @@
   --td-radius:       12px;                     /* surfaces: cards, media figures */
   --td-radius-sm:    8px;                      /* small chips, thumbnails, inputs */
   --td-shadow-soft:  0 1px 2px rgba(31, 41, 51, .06), 0 12px 28px -14px rgba(31, 41, 51, .22);
+  /* Sizing levers a brand sets from brand.tokens.json (2.5.0). Defaults are the
+   * values the rules carried before they became tokens, so nothing moves unset. */
+  --td-logo-h:        1.75rem;                  /* header logo img max-height */
+  --td-logo-w-phone:  132px;                    /* logo figure below 768 (block #13) */
+  --td-logo-w-laptop: 170px;                    /* logo figure 768 to 1439 (block #23) */
+  --td-hero-max-h:    60vh;                     /* image band and hero height cap */
 }
 
 /* === Retiring a token: ALIAS it, never delete it (Foundry #34) ===
@@ -225,7 +231,7 @@ body > footer a:hover,
 
 /* === Logo placement === */
 [data-swift-logo-image] img {
-  max-height: 1.75rem;
+  max-height: var(--td-logo-h, 1.75rem);
   width: auto;
 }
 
@@ -447,7 +453,7 @@ body > footer a:hover,
 /* --- Swift-v2_Image paragraph bands (figure > img.img-fluid) --- */
 [data-dw-itemtype="swift-v2_image"] figure {
   aspect-ratio: 16 / 9;
-  max-height: min(60vh, 640px);
+  max-height: min(var(--td-hero-max-h, 60vh), 640px);
   width: 100%;
   overflow: hidden;
 }
@@ -455,7 +461,7 @@ body > footer a:hover,
 [data-dw-itemtype="swift-v2_image"] figure > img {
   width: 100%;
   height: 100%;
-  max-height: min(60vh, 640px);
+  max-height: min(var(--td-hero-max-h, 60vh), 640px);
   object-fit: cover;
 }
 
@@ -844,7 +850,7 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
  *     (signed in it is a ~48px initials button), so this is the worst case. --- */
 [data-td-block="13"] { --td-block: 13; }
 @media (max-width: 767.98px) {
-  header [data-dw-itemtype="swift-v2_logo"] figure { width: 132px !important; }
+  header [data-dw-itemtype="swift-v2_logo"] figure { width: var(--td-logo-w-phone, 132px) !important; }
   header [data-dw-itemtype="swift-v2_logo"] svg { width: 100%; height: auto; }
 }
 
@@ -1554,7 +1560,7 @@ main:has(+ footer.td-edge-top) {
   /* The logo lockup. Block #13 clamps the figure below 768 because the icon
    * cluster needs the room; between 768 and 1440 the line needs it just as much,
    * and the SVG scales inside whatever the figure is given. */
-  header [data-dw-itemtype="swift-v2_logo"] figure { width: 170px !important; }
+  header [data-dw-itemtype="swift-v2_logo"] figure { width: var(--td-logo-w-laptop, 170px) !important; }
   header [data-dw-itemtype="swift-v2_logo"] svg { width: 100%; height: auto; }
 
   /* The header container's own gap, tightened the way block #13 tightens it below
@@ -2023,4 +2029,252 @@ main:has(+ footer.td-edge-top) {
  * a text button. */
 [data-dw-button]:not([data-dw-button="outline"]):not([data-dw-button="ghost"]):not([data-dw-button="secondary"]):not([data-dw-button="link"]):not([data-dw-button=""]):not([data-dw-button^="outline-"]) {
   color: var(--td-button-primary-ink, var(--dw-color-button-primary-contrast));
+}
+
+/* =============================================================================
+ * 2.5.0 ABSORBED DEMO FIXES (distribution ruling Q5, 2026-09-24).
+ * Blocks #31 to #35 are the generic header, hero, PDP and hover fixes that five
+ * to nine customer demos each re-derived by hand in their own sheets. Each block
+ * names the demos and Foundry issues it came from. Brand values, page ids and
+ * paragraph ids were removed; everything paints through the --td-* tokens, the
+ * generated --dw-color-* scheme values or currentColor. A demo that still carries
+ * its own copy of one of these fixes drops it from brand.css.
+ * ========================================================================== */
+
+/* =============================================================================
+ * #31 HEADER OVERFLOW - the header line wraps before it pushes the document
+ * Sources: leatherman (phone wrap, the most complete), hewitt (offcanvas labels),
+ * burco, target, marine (390); supherb, target, heartstream, burco (the nav bar
+ * between 992 and 1439). Foundry #1116, #549, #1260.
+ *
+ * PHONE, below 768. Every demo hit the same shape: a desktop user agent at phone
+ * width is served the wide desktop header (Dynamicweb picks the header content by
+ * user agent, block #16 note 3), and one header row carries more columns than 358px
+ * can hold. Block #13 budgets the stock row; this block is the safety net for the
+ * row a demo adds to: the row may wrap, and no column keeps an automatic minimum
+ * wider than the line. The columns keep their own flex basis (a spacer column with
+ * flex-fill still pushes the icon cluster right); only the floor and the ceiling
+ * change. Rejected from the demo sheets: hiding labels with display:none or
+ * font-size:0 (strips the accessible name, block #17), paragraph-id selectors
+ * (target), and overflow-x:hidden on html or body (masks the overflow from the
+ * probe instead of fixing it, see the MOBILE PASS note).
+ *
+ * OFFCANVAS. A long category label in the offcanvas tree wraps instead of widening
+ * the panel past the phone canvas (hewitt).
+ *
+ * THE BAR, 992 to 1439. Block #23 closes the width budget of the header line; it
+ * never lets the category bar itself wrap, so a bar with more or longer top items
+ * than the stock seven still overcommits the line. The bar wraps onto a second line
+ * inside its own column instead (supherb, target, heartstream, burco all did this),
+ * and its column gives up its automatic minimum so the wrap can trigger. The
+ * search field keeps block #23's basis-not-floor rule: supherb and heartstream put
+ * a 9rem to 228px floor back on it, which is the shape of the original bug, and
+ * that part is not taken.
+ *
+ * No overflow is set on any header element (the standing block #23 guard).
+ * ========================================================================== */
+[data-td-block="31"] { --td-block: 31; }
+
+@media (max-width: 767.98px) {
+  [data-swift-page-header] [data-swift-gridrow] > [data-swift-container],
+  body > header [data-swift-gridrow] > [data-swift-container] {
+    flex-wrap: wrap !important;
+  }
+  [data-swift-page-header] [data-swift-gridrow] > [data-swift-container] > [data-swift-gridcolumn],
+  body > header [data-swift-gridrow] > [data-swift-container] > [data-swift-gridcolumn] {
+    min-width: 0 !important;
+    max-width: 100% !important;
+  }
+  [data-swift-page-header] [data-dw-itemtype="swift-v2_searchfield"] { min-width: 0; }
+}
+
+.offcanvas .offcanvas-navigation .nav-link {
+  white-space: normal;
+}
+
+@media (min-width: 992px) and (max-width: 1439.98px) {
+  [data-swift-page-header] [data-dw-itemtype="swift-v2_menurelatedcontent"],
+  [data-swift-page-header] div:has(> .megamenu-wrapper) {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .megamenu-wrapper > nav.d-flex {
+    flex-wrap: wrap;
+    row-gap: 0;
+  }
+}
+
+/* =============================================================================
+ * #32 HERO HEIGHT - the poster is capped on phones
+ * Sources: leatherman (heights 3 and 4, the most complete), heartstream, target;
+ * hewitt, burco and marine capped the same band with page-scoped rules that are
+ * not taken. Foundry #572 (Swift honours Poster Height 2, 3 and 4 only).
+ *
+ * Swift sizes a poster from --swift-poster-height, set per [data-swift-poster-height]
+ * step. On a 390 x 844 phone the tallest step fills the whole first screen with
+ * one image, and every demo cut it back. The fix overrides Swift's own property
+ * rather than min-height or max-height with !important (target's version), so the
+ * poster's own layout, focal crop and overlay keep working unchanged.
+ *
+ * Height 4 takes --td-hero-max-h (60vh, the same token the Swift-v2_Image band cap
+ * reads, so a brand moves both with one value in brand.tokens.json). Height 3
+ * takes 50vh. Desktop heights are untouched: no demo capped them generically.
+ * ========================================================================== */
+[data-td-block="32"] { --td-block: 32; }
+
+@media (max-width: 767.98px) {
+  [data-swift-poster-height="4"] { --swift-poster-height: var(--td-hero-max-h, 60vh); }
+  [data-swift-poster-height="3"] { --swift-poster-height: 50vh; }
+}
+
+/* =============================================================================
+ * #33 PDP SECTIONS HIDE WHEN EMPTY - with the heading row in front of them
+ * Sources: hewitt (the most complete, and the lessons below), supherb (price
+ * table arm), marine (anchor strip arms), daye. Foundry #777.
+ *
+ * The surface layer's PDP is a heading row (Swift-v2_Text carrying an h2) followed
+ * by one component row per section: long description, specifications
+ * (Swift-v2_ProductFieldDisplayGroups), documents (ProductMediaTable), package
+ * contents (ProductBom) and related products (RelatedProductsList). A product
+ * with no BOM, no documents or no relations renders the heading over nothing,
+ * which reads as a broken page and gives the anchor strip a dead link.
+ *
+ * Hewitt's lessons, each one a defect that shipped first:
+ *   - DIRECT-CHILD CHAINS ONLY. A descendant match from the section hides every
+ *     section that CONTAINS an empty component, which on this page is main itself.
+ *   - :empty never matches a grid column: the column always holds whitespace.
+ *     "Rendered nothing" is "has no element child", written :not(:has(> *)).
+ *   - A :has() nested inside another :has() is invalid, and the browser drops the
+ *     WHOLE rule. The heading arm therefore uses :has(+ ...) at the top level.
+ *   - SCOPE TO THE PDP; an unscoped version hid the PLP grid. Hewitt scoped with
+ *     main:has(the component selector), an UNANCHORED :has() on a display:none
+ *     rule (Foundry CSS lint CSS-04, #84). Here the scope is structural instead:
+ *     only rows that FOLLOW the buy-box row (the one holding the component
+ *     selector) as siblings can match, so no ancestor and no PLP row ever does.
+ * The specification arm keys on the table rows (or list items, for a list layout)
+ * the component renders, because it always renders its wrapper and an empty table.
+ * default_custom.js drops the anchor-strip link of a section this block hides.
+ * ========================================================================== */
+[data-td-block="33"] { --td-block: 33; }
+
+/* A product component row that rendered nothing ... */
+section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_productcomponentselector"]) ~ section[data-swift-gridrow]:has(> [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype^="swift-v2_product"]):not(:has(> [data-swift-container] > [data-swift-gridcolumn] > *)),
+section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_productcomponentselector"]) ~ section[data-swift-gridrow]:has(> [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype="swift-v2_relatedproductslist"]):not(:has(> [data-swift-container] > [data-swift-gridcolumn] > *)),
+section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_productcomponentselector"]) ~ section[data-swift-gridrow]:has(> [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype=""]):not(:has(> [data-swift-container] > [data-swift-gridcolumn] > *)) {
+  display: none;
+}
+/* ... and the heading row immediately in front of it. */
+section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_productcomponentselector"]) ~ section[data-swift-gridrow]:has(> [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype="swift-v2_text"]):has(+ section[data-swift-gridrow] > [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype^="swift-v2_product"]):not(:has(+ section[data-swift-gridrow] > [data-swift-container] > [data-swift-gridcolumn] > *)),
+section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_productcomponentselector"]) ~ section[data-swift-gridrow]:has(> [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype="swift-v2_text"]):has(+ section[data-swift-gridrow] > [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype="swift-v2_relatedproductslist"]):not(:has(+ section[data-swift-gridrow] > [data-swift-container] > [data-swift-gridcolumn] > *)) {
+  display: none;
+}
+/* Specifications: the wrapper always renders, so the test is its rows. */
+section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_productcomponentselector"]) ~ section[data-swift-gridrow]:has(> [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype="swift-v2_productfielddisplaygroups"]):not(:has(> [data-swift-container] > [data-swift-gridcolumn] :is(tbody tr, li))),
+section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_productcomponentselector"]) ~ section[data-swift-gridrow]:has(> [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype="swift-v2_text"]):has(+ section[data-swift-gridrow] > [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype="swift-v2_productfielddisplaygroups"]):not(:has(+ section[data-swift-gridrow] > [data-swift-container] > [data-swift-gridcolumn] :is(tbody tr, li))) {
+  display: none;
+}
+/* A price table row that renders its wrapper with no table in it (supherb). */
+section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_productcomponentselector"]) ~ section[data-swift-gridrow]:has(> [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype="swift-v2_productpricetable"]):not(:has(> [data-swift-container] > [data-swift-gridcolumn] table)) {
+  display: none;
+}
+
+/* =============================================================================
+ * #34 MEGA-MENU HOVER GAP - the panel keeps its own apron (Foundry #717)
+ * Source: daye (masport and snapper sheets, block 10, 8 of 8 real-pointer PASS).
+ *
+ * The desktop bridge above (LRN-nav-03) hangs off the ITEM's ::after. A megamenu
+ * item carries .position-static, so that pseudo-element never anchors on the item
+ * and the roughly 16px Popper leaves between the trigger and the full-width panel
+ * hit-tests as the grid column: the pointer leaves the item on its way down and
+ * swift.js closes the menu. The apron is therefore painted by the PANEL, above its
+ * own top edge, sized off Swift's own --swift-dynamic-offset. The panel hit-tests
+ * as the panel, so the menu stays open across the gap.
+ *
+ * The apron sits outside the panel's box, and swift.css gives every dropdown
+ * max-height 80vh with overflow-y auto, which clips it. The megamenu panel drops
+ * that clip; its inner container scrolls at 70vh on its own, so a tall panel still
+ * scrolls. Rejected: hewitt's position:fixed panel, which fights Popper's inline
+ * positioning, and the rest of daye's block 10 (brand panel design).
+ * ========================================================================== */
+[data-td-block="34"] { --td-block: 34; }
+
+@media (min-width: 992px) {
+  .megamenu-wrapper .nav-item.dropdown > .dropdown-menu::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 100%;
+    height: var(--swift-dynamic-offset, 1rem);
+  }
+  .megamenu-wrapper .megamenu.dropdown-menu {
+    overflow: visible;
+    max-height: none;
+  }
+}
+
+/* =============================================================================
+ * #35 HOVER CONTRAST PER SCHEME - a hover never lands ink on its own ground
+ * Sources: hewitt (filled hover kept a dark ink on the slate hover, 1.95:1), daye
+ * (filled hover on the primary band, navy on navy, gate run 20260922-202443),
+ * target (outline-primary on a dark band), heartstream (link button slate on
+ * slate, 1.17:1). Foundry #1274, #1275, #1277, #1278, #1321; the demo-gate
+ * hover-contrast leg is the check that measures it.
+ *
+ * TWO GAPS LEFT AFTER 2.3.5, both per scheme.
+ *   1. The filled hover set a background (--td-ink-soft) and no ink. The label
+ *      kept its resting ink, and since block #30 a brand can make that ink dark
+ *      (the #1184 hook), so a dark label hovered onto dark slate. On a dark band
+ *      the same slate is the band's own colour, and the button vanished.
+ *   2. The soft-tint hovers (outline, ghost, link, outline-*, empty) paint
+ *      --td-accent, a slate that is correct on a light ground and fails on every
+ *      dark one.
+ *
+ * THE FIX IS FOUR TOKENS, RESOLVED ON THE SCHEME ELEMENT the way block #30 resolves
+ * the button ink, so the nearest colour scheme wins and a light row inside a dark
+ * band gets the light values:
+ *   --td-btn-hover-bg / --td-btn-hover-ink    the filled hover
+ *   --td-tint-bg      / --td-tint-ink         the soft-tint hovers
+ * Light schemes keep exactly the values the rules painted before (slate fill with
+ * white ink; accent tint), so the neutral site does not move. Dark schemes move
+ * the fill 18% toward the band and keep the ink the button was generated with,
+ * and tint with the scheme's own foreground. A brand overrides any of the four
+ * per scheme in brand.css. Measure the result: the gate's hover leg, 4.5:1.
+ * ========================================================================== */
+[data-td-block="35"] { --td-block: 35; }
+
+.dw-colorscheme-light, [data-dw-colorscheme="light"],
+.dw-colorscheme-lightgrey1, [data-dw-colorscheme="lightgrey1"],
+.dw-colorscheme-lightgrey2, [data-dw-colorscheme="lightgrey2"] {
+  --td-btn-hover-bg:  var(--td-ink-soft);
+  --td-btn-hover-ink: var(--td-white);
+  --td-tint-bg:       var(--td-accent-soft);
+  --td-tint-ink:      var(--td-accent);
+}
+.dw-colorscheme-dark, [data-dw-colorscheme="dark"],
+.dw-colorscheme-darksubtle, [data-dw-colorscheme="darksubtle"],
+.dw-colorscheme-primary, [data-dw-colorscheme="primary"],
+.dw-colorscheme-secondary, [data-dw-colorscheme="secondary"] {
+  --td-btn-hover-bg:  color-mix(in srgb, var(--dw-color-button-primary) 82%, var(--dw-color-background));
+  --td-btn-hover-ink: var(--td-button-primary-ink, var(--dw-color-button-primary-contrast));
+  --td-tint-bg:       rgba(var(--dw-color-foreground-rgb), .12);
+  --td-tint-ink:      var(--dw-color-foreground);
+}
+
+[data-dw-button]:not([data-dw-button="outline"]):not([data-dw-button="ghost"]):not([data-dw-button="secondary"]):not([data-dw-button="link"]):not([data-dw-button=""]):not([data-dw-button^="outline-"]):hover {
+  background-color: var(--td-btn-hover-bg, var(--td-ink-soft));
+  border-color: var(--td-btn-hover-bg, var(--td-ink-soft));
+  color: var(--td-btn-hover-ink, var(--td-white));
+}
+[data-dw-button="outline"]:hover,
+[data-dw-button="ghost"]:hover,
+[data-dw-button=""]:hover,
+[data-dw-button^="outline-"]:hover {
+  background-color: var(--td-tint-bg, var(--td-accent-soft));
+  border-color: var(--td-tint-ink, var(--td-accent));
+  color: var(--td-tint-ink, var(--td-accent));
+}
+[data-dw-button="link"]:hover {
+  background-color: var(--td-tint-bg, var(--td-accent-soft));
+  color: var(--td-tint-ink, var(--td-accent));
 }

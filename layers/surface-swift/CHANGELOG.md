@@ -1,5 +1,65 @@
 ﻿# Changelog — surface-swift
 
+## 1.16.0
+
+### The customer-center Overview is the Swift 2.4 dashboard (owner ruling Q1, 2026-09-24)
+
+`Customer center/Overview` shipped eleven `Swift-v2_Feature` IconBoxTop tiles in five rows. It now
+ships the Swift 2.4 dashboard widgets per role, the shape the marine demo built by hand, using the
+four `Swift-v2_Dashboard_*` item types and templates this layer has shipped since 1.5.0 and no page
+placed until now:
+
+| Row | Layout | Granted to | Widgets |
+|---|---|---|---|
+| 1, 2 | 1Column | page permissions | HelloUser, welcome text (unchanged) |
+| 3 | 3Columns | Customers 1325 | Number Orders, Number Spent this month, Number Open quotes |
+| 4 | 2Columns | Customers 1325 | Chart Monthly spending, List Pending quotes |
+| 5 | 2Columns | Customers 1325 | List Recent orders, List Favorites |
+| 6 | 2Columns | CSR 1292 | Feature tiles Accounts, Orders (the 1.15.x CSR tile row, unchanged) |
+| 7 | 3Columns | Customers 1325 | Feature tiles My addresses, My profile, My returns |
+
+Row 7 keeps ONE row of tiles as an example of the tile form, the three destinations no buyer widget
+covers. The kept tiles keep their paragraph ids; the row reuses the old row 4 identity. Each widget
+row and paragraph carries the permission block the tiles used (grant the role, deny the other
+role and Anonymous). Templates: `Orders.cshtml`, `MonthlySpent.cshtml`, `Quotes.cshtml`,
+`MonthlySpending.cshtml`, `QuotesPending.cshtml`, `Favorites.cshtml`. Fields: `Title` and
+`BaseLink`.
+
+`BaseLink` is a plain `Default.aspx?ID=<page>` string on the layer's own page ids (My orders 19,
+My quotes 22, My favorites 18), the form the serializer's page-id remap resolves.
+A `LinkEditor` value in the `ButtonEditor` JSON envelope makes `TryGetLink` return page id 0 and
+every widget throws `Get page requires a page ID greater than zero` (Foundry #205, marine P57).
+The CSR keeps its two tiles (owner ruling 2026-09-24): the stock Swift 2.4 widgets read only the
+signed-in user's own orders (Foundry #685) and a CSR places none, so CSR widgets rendered empty
+cards on the proving host. The CSR works on behalf of a buyer through impersonation, where the
+buyer's widgets show.
+
+New paragraphs sit at `sourceParagraphId` 90031-90040 and item-instance ids 100709-100722, the
+reserved bands this layer mints in. `replace-manifest.json` drops the 11 old buyer-tile files and
+registers the new ones (an unregistered Overview file is never staged, see 1.10.0);
+`templates.manifest.yml` gains the three dashboard item types. A content Replace does not delete a
+paragraph missing from the tree, so a host delivered from 1.15.x keeps its old tile rows until
+they are removed by hand; a clean-room host gets the new page only.
+
+The widgets read the signed-in user's own orders, quotes and favourite lists; sample-data 6.0.0
+ships that data for the buyer persona.
+
+### USD and US on the Swift 2 area (base 4.0.0)
+
+`AreaEcomCurrencyId` moves `EUR` -> `USD` in both area documents, following the base 4.0.0 default,
+and sample-data 6.0.0 moves every price to USD in the same change: the binding and the price rows
+must agree or every contract, customer-group and tier price falls through to the list price
+(Foundry #1232). The merge document's `AreaEcomCountryCode` moves from two spaces, which the merge
+pass wrote as a blank binding, to `US`; the replace pass still excludes the column.
+
+### The My returns probe moves here from feature-rma
+
+`asserts.behaviorProbes` gains the `authenticated-body-contains` probe on
+`/en-us/customer-center/my-returns` ("Add new request") with `requiresFixtures` `TCO-0001`, and
+`asserts.criticalPaths` gains the page, both from the retired `feature-rma` layer (owner ruling
+Q6). The page and its tile always lived here; the return request itself is a sample-data row now.
+With `requiresFixtures`, `base-swift` records the probe as a loud SKIP instead of a failure.
+
 ## 1.15.1
 
 ### The six Service Pages answered empty: the header type-ahead had nothing to call (Foundry #629, #1315, #579)

@@ -1,0 +1,24 @@
+﻿"PaymentId": "PAY2"
+"PaymentLanguageId": "DAN"
+"PaymentName": "På konto (netto 30)"
+"PaymentDescription": "Faktura på kundekontoen, netto 30 dage."
+"PaymentIcon": ""
+"PaymentGatewayId": ""
+"PaymentGatewayTemplate": ""
+"PaymentMerchantNum": ""
+"PaymentGatewayMD5Key": ""
+"PaymentCCITemplate": ""
+"PaymentGatewayParameters": ""
+"PaymentIconOrderList": ""
+"PaymentAddInType": "None"
+"PaymentCheckoutSystemName": ""
+"PaymentCheckoutParameters": ""
+"PaymentSorting": 0
+"PaymentAutoId": 2
+"PaymentActive": true
+"PaymentUserGroups": ""
+"PaymentAllowAnonymousUsers": false
+"PaymentCode": ""
+"PaymentTermsCode": "NET30"
+"PaymentTermsDescription": "Netto 30 dage"
+"PaymentDisableSavedCards": false

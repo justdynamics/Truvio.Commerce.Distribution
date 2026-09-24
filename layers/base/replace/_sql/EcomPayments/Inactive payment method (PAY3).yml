@@ -1,0 +1,24 @@
+﻿"PaymentId": "PAY3"
+"PaymentLanguageId": "ENU"
+"PaymentName": "Inactive payment method (PAY3)"
+"PaymentDescription": "Inactive. Kept so the id stays owned by the base; rename and activate to use it."
+"PaymentIcon": ""
+"PaymentGatewayId": ""
+"PaymentGatewayTemplate": ""
+"PaymentMerchantNum": ""
+"PaymentGatewayMD5Key": ""
+"PaymentCCITemplate": ""
+"PaymentGatewayParameters": ""
+"PaymentIconOrderList": ""
+"PaymentAddInType": "None"
+"PaymentCheckoutSystemName": ""
+"PaymentCheckoutParameters": ""
+"PaymentSorting": 1
+"PaymentAutoId": 5
+"PaymentActive": false
+"PaymentUserGroups": ""
+"PaymentAllowAnonymousUsers": false
+"PaymentCode": ""
+"PaymentTermsCode": ""
+"PaymentTermsDescription": ""
+"PaymentDisableSavedCards": false

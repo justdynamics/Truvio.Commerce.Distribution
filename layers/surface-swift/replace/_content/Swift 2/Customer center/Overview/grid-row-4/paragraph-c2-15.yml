@@ -1,21 +1,19 @@
-﻿"paragraphUniqueId": c638eef8-1586-50df-9f6f-ea50bbe8fedf
-"sourceParagraphId": 605
+﻿"paragraphUniqueId": 9b32b146-bafc-57fd-8881-57d70d962906
+"sourceParagraphId": 90035
 "sortOrder": 15
-"itemType": "Swift-v2_Feature"
-"header": ""
-"template": "IconBoxTop.cshtml"
+"itemType": "Swift-v2_Dashboard_List"
+"header": "Pending quotes"
+"template": "QuotesPending.cshtml"
 "colorSchemeId": ""
 "moduleSystemName": ""
 "moduleSettings": ""
 "fields":
-  "Button": "{\r\n  \"SelectedValue\": \"16\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=16\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "BaseLink": "Default.aspx?ID=22"
   "GlobalRecordPageGuid": "621cb250-a28d-45ac-bef2-893e0536078b"
-  "Icon": "/Files/Images/Icons/location-dot.svg"
-  "Id": "607"
+  "Id": "100715"
   "ItemInstanceType": ""
   "Sort": 0
-  "Text": "<p class=\"dw-paragraph\">Manage your delivery addresses.</p>"
-  "Title": "<h3 class=\"dw-h6\">My addresses</h3>"
+  "Title": "Pending quotes"
 "columnId": 2
 
 "permissions":

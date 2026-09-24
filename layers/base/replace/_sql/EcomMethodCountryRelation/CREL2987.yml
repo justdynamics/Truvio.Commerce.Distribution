@@ -3,6 +3,6 @@
 "MethodCountryRelCountryId": "US"
 "MethodCountryRelMethodId": "PAY2"
 "MethodCountryRelLanguageId": ""
-"MethodCountryRelIsDefault": false
+"MethodCountryRelIsDefault": true
 "MethodCountryRelRegionCode": ""
 "MethodCountryRelAutoId": 190

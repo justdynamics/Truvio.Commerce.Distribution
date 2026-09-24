@@ -1,8 +1,8 @@
 ﻿# Base layer — the contract every edition builds on
 
-The **base** is the one privileged layer (`kind: base`). Since the Swift 2.4 base split (3.0.0) it is **framework-only**: shop structure, countries/currencies/languages/VAT, payment/shipping/order flow, stock locations, the hidden `reference_category` template row, and the three permission groups — **zero catalog, zero content areas, zero pages**. The Swift storefront content (areas 3 + 27, both mode trees) and `UrlPath` moved to the **`surface-swift`** layer; the headless content lives in `surface-headless`. Editions compose the base with additions (`feature`, `sample-data`, `surface`, `theme` layers).
+The **base** is the one privileged layer (`kind: base`). Since the Swift 2.4 base split (3.0.0) it is **framework-only**: shop structure, countries/currencies/languages/VAT, payment/shipping/order flow with the quote states, a neutral US B2B market default, stock locations, the hidden `reference_category` template row, and the three permission groups — **zero catalog, zero content areas, zero pages**. The Swift storefront content (areas 3 + 27, both mode trees) and `UrlPath` moved to the **`surface-swift`** layer; the headless content lives in `surface-headless`. Editions compose the base with additions (`feature`, `sample-data`, `surface`, `theme` layers).
 
-The machine-readable guarantees live in [`base.contract.json`](base.contract.json) (v2.4.0); the gate reads that file for the base-contract collision check. Content-scoped contract bits (content anchors, per-environment Area exclusions, protected Swift item types, navDepth, title rules) moved to `layers/surface-swift/surface.contract-notes.json`. This doc is the human companion. **Additions bind only to the base contract — never to each other.**
+The machine-readable guarantees live in [`base.contract.json`](base.contract.json) (v3.0.0); the gate reads that file for the base-contract collision check. Content-scoped contract bits (content anchors, per-environment Area exclusions, protected Swift item types, navDepth, title rules) moved to `layers/surface-swift/surface.contract-notes.json`. This doc is the human companion. **Additions bind only to the base contract — never to each other.**
 
 ## The UrlPath decision (Swift 2.4 base split)
 
@@ -58,7 +58,7 @@ All three are contacts on one B2B account (`AccessUser` `100100`, **customer num
 
 ## What sample data guarantees (`sampleData` block)
 
-`base.contract.json` carries a `sampleData` block beside `guaranteedRows`: the subjects the one sample-data layer guarantees, so a feature layer binds to the contract and never to the layer. It names the three personas above, the SKU-validation product `TC-VAR-0001` (`TCPROD0001`), the quantity-tier product `TCPROD0020` with its ladder (120 list; 108 / 96 / 84 at 5 / 10 / 25) and its customer-group row, the contract-price product `TCPROD0046` / `TC-PRICE-CTR-0046` at `TC-100200`, the configurable Bundle Kit `TCPROD0042` with its two `EcomProductItems` slots, the subscription plan `TCPROD0061`, the delivered order `TCO-0001`, and the RMA `PACK-RMA-0001` that `feature-rma` itself owns and binds to that order. Each entry names the probe that addresses it. The block also pins the catalogue counts an edition asserts: `EcomProducts` 97, `EcomGroups` 16.
+`base.contract.json` carries a `sampleData` block beside `guaranteedRows`: the subjects the one sample-data layer guarantees, so a feature layer binds to the contract and never to the layer. It names the three personas above, the SKU-validation product `TC-VAR-0001` (`TCPROD0001`), the quantity-tier product `TCPROD0020` with its ladder (120 list; 108 / 96 / 84 at 5 / 10 / 25) and its customer-group row, the contract-price product `TCPROD0046` / `TC-PRICE-CTR-0046` at `TC-100200`, the configurable Bundle Kit `TCPROD0042` with its two `EcomProductItems` slots, the subscription plan `TCPROD0061`, the delivered order `TCO-0001`, the RMA `PACK-RMA-0001` bound to that order (a sample-data row since sample-data 6.0.0, when `feature-rma` was folded in), and `customerCenter`: the buyer's orders, quotes, carts and favourite lists the surface-swift dashboard draws, all in USD. Each entry names the probe that addresses it. The block also pins the catalogue counts an edition asserts: `EcomProducts` 97, `EcomGroups` 21.
 
 **Content:** none — the base ships zero content areas (3.0.0). Content anchors (area 3, langPrefix `/swift-2`) are surface-swift-owned.
 
@@ -66,7 +66,30 @@ All three are contacts on one B2B account (`AccessUser` `100100`, **customer num
 
 **Shop:** `SHOP1` (B2B Commerce Store) is the only shop and ships `ShopDefault` true, with no completion rules and no completion languages (no layer ships a completion rule). `ShopProductPrimaryPageId` ships `0` because the product page id is per-environment: binding it is a surface-swift consumer obligation.
 
-**Currency rates:** `EcomCurrencies.CurrencyRate` is hundredths against the default currency. EUR is the default at `100`; USD, the currency the Swift storefront serves, ships at `100` (parity with the default, a demo value and not an exchange rate). No shipped row carries a rate at or below `1`, which renders every price a hundred times over.
+**Currency rates:** `EcomCurrencies.CurrencyRate` is hundredths against the default currency. Since 4.0.0 USD is the default at `100`, flagged on every `USD$$<lang>` row; EUR ships at `100` as well (parity with the default, a demo value and not an exchange rate). No shipped row carries a rate at or below `1`, which renders every price a hundred times over. The currency a storefront serves is its area binding (`AreaEcomCurrencyId`), owned by the surface layer that ships the area, not this flag.
+
+## Market defaults (4.0.0): US / B2B
+
+The base ships a neutral US B2B market, so an edition with no market work checks out on account in USD. A demo for another market rewrites these rows the other way in a demo-local layer.
+
+| Table | Id | 4.0.0 | Active |
+|---|---|---|---|
+| `EcomCurrencies` | `USD` | default currency, rate 100 (EUR stays at 100) | |
+| `EcomPayments` | `PAY2` | On account (Net 30), terms `NET30`, gateway-less checkout handler, US default | yes |
+| `EcomPayments` | `PAY1` | Credit card, no gateway bound | no |
+| `EcomPayments` | `PAY3` | Inactive payment method (was MobilePay) | no |
+| `EcomShippings` | `SHIP9` | Standard ground, US default | yes |
+| `EcomShippings` | `SHIP11` | Express | yes |
+| `EcomShippings` | `SHIP6` | Freight / LTL | yes |
+| `EcomShippings` | `SHIP5` | Customer pickup (stock-location provider on `STOCKLOCCAT1`) | yes |
+| `EcomShippings` | `SHIP3`, `SHIP4`, `SHIP8`, `SHIP10`, `SHIP12`, `SHIP13` | Inactive shipping method (the Danish carriers) | no |
+| `EcomVatGroups` | `VATGRP1`, `VATGRP2` | Tax (DK), Tax default; VAT name `Tax` | |
+
+Every id is kept and only renamed, reconfigured or deactivated. A `Replace` predicate never deletes a row missing from the tree, so a dropped carrier would stay active on a host delivered from 3.x; shipped inactive, it is switched off there too. `PAY2` / `SHIP9` are also the ids `feature-subscription-orders` posts in its checkout probe. The `DAN` language rows of the same ids carry Danish translations of the neutral names. The base has no default-country column: the storefront's default country is the area's `AreaEcomCountryCode`, and the base makes US the default in the method-country relations (`CREL3001` / `CREL3002` added for `SHIP9` / `SHIP11`). See `base.contract.json` `marketDefaults`.
+
+## Quote states (4.0.0)
+
+The `Default Quote flow` (`OrderFlowId` 3) carries `QuotePending` (default), `QuoteSent`, `QuoteAccepted` and `QuoteRejected`. The ids are Swift's literal ids: the Swift 2.4 Pending quotes dashboard widget asks for `StateId=QuotePending`. The stock `OS8` New and `OS9` Price given stay in the flow without the default flag. No state rule is added, so every transition stays open. See `base.contract.json` `quoteStates`.
 
 **Contract price:** `EcomPrices` row `TC-PRICE-CTR-0046` on `TCPROD0046` (customer number `TC-100200`, 36.90 against a 45.00 list and a 39.60 customer-group row) — ships in the sample-data layer, present when an edition activates `sampleData: true`.
 
@@ -76,7 +99,7 @@ All three are contacts on one B2B account (`AccessUser` `100100`, **customer num
 
 **Whole-table (`replace`), 17 tables:** EcomCountries, EcomCountryText, EcomCurrencies, EcomLanguages, EcomVatGroups, EcomVatCountryRelations, EcomShops, EcomShopLanguageRelation, EcomShopGroupRelation, **EcomStockLocation** (3.6.0), **EcomStockLocationTranslations** (3.6.0), EcomPayments, EcomShippings, EcomMethodCountryRelation, EcomOrderFlow, EcomOrderStates, EcomOrderStateRules. (UrlPath: surface-swift-owned since 3.0.0.)
 
-`EcomShopGroupRelation` is base-owned but ships **zero rows** from 3.6.0 (Foundry #1198). It carried 31 `GROUP<n>$$SHOP1` rows inherited from the platform baseline, every one of them pointing at a numeric `EcomGroups` id that **no layer in this Distribution ships** — the base ships zero catalogue and the sample-data groups are all `TCGRP-*`. The entry keeps its `_meta.yml`, so the table stays base-owned, and the real shop-group rows arrive as merge rows from `sample-data` and `feature-reordering-pricing`. Dropping the files stops the replay only: a `Replace` predicate is an upsert by key and never deletes a row absent from the tree (Serializer 1.0.2-beta, `docs/swift-replace-merge-analysis.md` D-5; measured on foundry.mydwsite4.com, gate run 20260919-153644), so a host delivered from 3.5.3 or earlier keeps its orphans until `sample-data/tools/retire-4x-ids.sql` deletes them. The Foundry `pim-structure` leg asserts zero orphans.
+`EcomShopGroupRelation` is base-owned but ships **zero rows** from 3.6.0 (Foundry #1198). It carried 31 `GROUP<n>$$SHOP1` rows inherited from the platform baseline, every one of them pointing at a numeric `EcomGroups` id that **no layer in this Distribution ships** — the base ships zero catalogue and the sample-data groups are all `TCGRP-*`. The entry keeps its `_meta.yml`, so the table stays base-owned, and the real shop-group rows arrive as merge rows from `sample-data`. Dropping the files stops the replay only: a `Replace` predicate is an upsert by key and never deletes a row absent from the tree (Serializer 1.0.2-beta, `docs/swift-replace-merge-analysis.md` D-5; measured on foundry.mydwsite4.com, gate run 20260919-153644), so a host delivered from 3.5.3 or earlier keeps its orphans until `sample-data/tools/retire-4x-ids.sql` deletes them. The Foundry `pim-structure` leg asserts zero orphans.
 
 **Filtered (`replace`):**
 
@@ -96,7 +119,7 @@ Stock locations are framework configuration, not catalogue, and the base now own
 
 `EcomStockLocationTranslations` carries the same three ids keyed `ENU` with those same names and an empty description; it has **no identity column**, so the composite `StockLocationId` + `LanguageId` is the whole key. Language `ENU` throughout; every other column empty or `0`.
 
-`StockLocationCategoryId` is **kept exactly as the baseline carries it**, not blanked. `EcomStockLocationCategory` exists on every host with `STOCKLOCCAT1` “Click and collect” and `STOCKLOCCAT2` “Warehouse”, it stays **baseline-owned** — no layer in this Distribution serializes it — and the base's own Click & Collect delivery method needs pickup locations sitting in that category (the base ships that method as `EcomShippings/Click & Collect delivery method.yml`).
+`StockLocationCategoryId` is **kept exactly as the baseline carries it**, not blanked. `EcomStockLocationCategory` exists on every host with `STOCKLOCCAT1` “Click and collect” and `STOCKLOCCAT2` “Warehouse”, it stays **baseline-owned** — no layer in this Distribution serializes it — and the base's own Customer pickup delivery method needs pickup locations sitting in that category (the base ships that method as `EcomShippings/Customer pickup.yml`, `SHIP5`, named Click & Collect before 4.0.0).
 
 **The ids 1-3 are deliberately kept, not rekeyed above the `intIdentityFloor`**: all 61 `EcomStockUnit` rows in the sample-data layer carry `StockUnitStockLocationId` 3, and `EcomShops.ShopStockLocationID` addresses the same id space (`SHOP1` ships `0`). A rekey would orphan the stock units. Like the permission groups `1325`/`1270`/`1292`, these are base-owned rows the base **adopts** from the platform baseline rather than mints; an addition that needs a stock location of its own mints one at or above `100000`. See `base.contract.json` → `stockLocations`.
 

@@ -1,5 +1,71 @@
 ﻿# theme-default changelog
 
+## 2.5.0
+
+### The brand slot (distribution ruling Q5, 2026-09-24)
+
+Every branded demo appended its brand CSS to `default_custom.css` after delivery: SupHerb and
+Target through per-demo copies of `apply-brand.ps1` + `gen-brand.py`, CIL through a demo-local
+layer carrying a 3,221-line fork of the whole sheet. An appended sheet is a fork of the theme: a
+theme release either overwrites the brand or never reaches the demo.
+
+The theme now ships the slot the demo writes into instead:
+
+- `Custom/brand.css`, registered from `DefaultHeadInclude.cshtml` AFTER `default_custom.css`, so a
+  brand rule wins a cascade tie without `!important`. It ships a `[data-td-block="brand"]`
+  sentinel, a commented token block and the authoring guards, and paints nothing. Tokens go in
+  `:root:root`, which beats the head include's inline `:root` copy whatever the order of the two
+  in `<head>`; CIL needed `!important` on every token for that.
+- `Custom/brand.tokens.json`, the slot's input, holding this layer's own neutral values. It
+  covers what the demo scripts generate: the seven fixed scheme ids with background, foreground,
+  primary and secondary button and an optional accent; the Typography and Buttons model keys plus
+  the font import and the radius; logo, inverse and phone logo, favicon, apple-touch icon and edge
+  mask; and the `--td-*` token values. Nothing reads it at runtime.
+- Four sizing levers become tokens with the values the rules carried before, so nothing moves
+  unset: `--td-logo-h` (header logo max-height), `--td-logo-w-phone` (block #13),
+  `--td-logo-w-laptop` (block #23) and `--td-hero-max-h` (the image-band cap and block #32).
+
+The README documents the sequence: copy the layer into a demo-local layer, write the tokens,
+generate `brand.css` and the three Style pairs from them (both files of each pair), add brand-only
+rules, deliver the copy. It also records the accent defect found in the demo generator: the accent
+was written to the ColorSchemes `.css` and not to the `.json` `CustomColors`, so an admin Styles save
+dropped it.
+
+### Absorbed generic fixes (blocks #31 to #35)
+
+The fixes five to nine demos redid by hand, taken from the most complete demo version, with brand
+colours, page ids and paragraph ids removed:
+
+- **#31 header overflow.** Below 768 the header rows may wrap and no column keeps a minimum wider
+  than the line (leatherman; also burco, target, marine, hewitt); long offcanvas labels wrap
+  (hewitt). Between 992 and 1439 the category bar wraps inside its own column (supherb, target,
+  heartstream, burco), which block #23's budget never allowed. Not taken: label hiding by
+  `display:none` or `font-size:0`, a search-field floor, `overflow-x:hidden` on the roots.
+- **#32 hero height.** Below 768 Poster Height 4 takes `--td-hero-max-h` (60vh) and Height 3 takes
+  50vh, by overriding Swift's own `--swift-poster-height` (leatherman; heartstream, target;
+  Foundry #572).
+- **#33 PDP hide when empty.** A product component row that rendered nothing (BOM, documents,
+  long description), an empty related-products row, a specifications row with no rows and an
+  empty price table are hidden with the heading row in front of them (hewitt, supherb, marine,
+  daye; Foundry #777). Scoped structurally to the rows that follow the buy-box row, with anchored
+  `:has()` only, so no ancestor or PLP row can match (Foundry CSS lint CSS-04, #84). The anchor
+  strip in `default_custom.js` drops the link of a hidden section, both discovered and authored.
+- **#34 mega-menu hover gap (Foundry #717).** The panel paints its own apron above its top edge,
+  sized off `--swift-dynamic-offset`, and the megamenu panel drops the 80vh clip that hid it
+  (daye, 8 of 8 real-pointer PASS). The item bridge of LRN-nav-03 never anchored on a megamenu
+  item, which is `.position-static`.
+- **#35 hover contrast per scheme.** The filled hover now sets its ink, and both hover families
+  resolve per colour scheme through `--td-btn-hover-bg` / `-ink` and `--td-tint-bg` / `-ink`.
+  Light schemes keep the neutral values; dark schemes keep the generated button ink on a fill
+  moved 18% toward the band, and tint with the scheme foreground instead of the slate accent
+  (hewitt, daye, target, heartstream; Foundry #1274, #1275, #1277, #1278, #1321).
+
+Already in the theme and left as they are: the signed-in name cap (block #28, Foundry #1200), the
+phone mega-menu strip (block #8), the laptop header budget (block #23), the phone logo clamp (block
+#13) and the image-band cap. Not measured on a host in this change: the gate's design and
+hover-contrast legs on a composed edition are the proof owed before the tree is stamped.
+
+
 ## 2.4.0
 
 ### `baselineTarget` names the Swift release the layer is actually proven on (Foundry #1285)

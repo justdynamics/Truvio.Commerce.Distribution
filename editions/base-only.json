@@ -1,6 +1,6 @@
 {
   "name": "base-only",
-  "from": "base@3.6.0",
+  "from": "base@4.0.0",
   "add": [],
   "sampleData": false,
   "criticalPaths": [
@@ -13,11 +13,11 @@
     "EcomShops": 1,
     "EcomPayments": 5,
     "EcomShippings": 17,
-    "EcomOrderStates": 14,
+    "EcomOrderStates": 18,
     "EcomLanguages": 20,
     "EcomCurrencies": 169,
     "Page": 0,
     "Area": 1
   },
-  "description": "Framework-only proof (base split, Swift 2.4): base 3.0.0 alone - ZERO content areas, ZERO pages, ZERO catalog, no theme leg (nothing to skin). Smoke is API/DB-level: /Admin/ liveness + token auth + the framework row-count contract (shops/payments/shippings/order-states/languages/currencies + 0/0/96 catalog-free counts + Page=0/Area=0). Proven on DW 10.28.1-PreRelease."
+  "description": "Framework-only proof (base split, Swift 2.4): base alone - ZERO content areas, ZERO pages, ZERO catalog, no theme leg (nothing to skin). Smoke is API/DB-level: /Admin/ liveness + token auth + the framework row-count contract (shops/payments/shippings/order-states (18 since base 4.0.0: the 14 stock states plus the four quote states)/languages/currencies + 0/0/96 catalog-free counts + Page=0/Area=0). Not in layers/INDEX.json gateProven.editions: unproven until the Foundry publish flow stamps a gate run for it. INDEX gateProven is the record."
 }

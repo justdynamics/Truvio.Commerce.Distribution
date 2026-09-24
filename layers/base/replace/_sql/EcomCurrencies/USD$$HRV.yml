@@ -3,7 +3,7 @@
 "CurrencySymbol": "$"
 "CurrencyName": "US Dollar"
 "CurrencyRate": 100
-"CurrencyIsDefault": false
+"CurrencyIsDefault": true
 "CurrencyCultureInfo": "en-US"
 "CurrencyPayGatewayCode": 0
 "CurrencyRoundingId": 

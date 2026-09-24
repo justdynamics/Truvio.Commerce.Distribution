@@ -1,7 +1,7 @@
 ﻿"OrderStateId": "OS8"
 "OrderStateName": "New"
 "OrderStateDescription": ""
-"OrderStateIsDefault": true
+"OrderStateIsDefault": false
 "OrderStateDontUseInstatistics": false
 "OrderStateIsDeleted": false
 "OrderStateMailTemplate": ""
@@ -13,7 +13,7 @@
 "OrderStateSendToCustomer": true
 "OrderStateOthersMailTemplate": ""
 "OrderStateOthersRecipients": ""
-"OrderStateSortOrder": 0
+"OrderStateSortOrder": 5
 "OrderStateOrderType": 1
 "OrderStateAllowOrder": true
 "OrderStateSendToDeliveryEmail": false

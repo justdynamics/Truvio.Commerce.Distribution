@@ -1,21 +1,19 @@
-﻿"paragraphUniqueId": 65211b90-c696-5398-a6ca-526e4a6bc1a5
-"sourceParagraphId": 601
+﻿"paragraphUniqueId": 58174ec8-1e46-598d-aa31-0cb7687f2d30
+"sourceParagraphId": 90031
 "sortOrder": 11
-"itemType": "Swift-v2_Feature"
-"header": ""
-"template": "IconBoxTop.cshtml"
+"itemType": "Swift-v2_Dashboard_Number"
+"header": "Orders"
+"template": "Orders.cshtml"
 "colorSchemeId": ""
 "moduleSystemName": ""
 "moduleSettings": ""
 "fields":
-  "Button": "{\r\n  \"SelectedValue\": \"19\",\r\n  \"Label\": \"View\",\r\n  \"Link\": \"Default.aspx?ID=19\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
+  "BaseLink": "Default.aspx?ID=19"
   "GlobalRecordPageGuid": "621cb250-a28d-45ac-bef2-893e0536078b"
-  "Icon": "/Files/Images/Icons/clipboard-list.svg"
-  "Id": "602"
+  "Id": "100710"
   "ItemInstanceType": ""
   "Sort": 0
-  "Text": "<p class=\"dw-paragraph\">Review past and current orders.</p>"
-  "Title": "<h3 class=\"dw-h6\">My orders</h3>"
+  "Title": "Orders"
 "columnId": 1
 
 "permissions":

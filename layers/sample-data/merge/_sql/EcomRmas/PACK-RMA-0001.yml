@@ -1,0 +1,16 @@
+﻿"ownership":
+  "mode": "merge"
+"RmaId": "PACK-RMA-0001"
+"RmaEmailNotificationLanguage": "LANG1"
+"RmaStateId": 1
+"RmaClosed": false
+"RmaDeleted": false
+"RmaType": 1
+"RmaCustomerNumber": "TC-100200"
+"RmaCustomerCompany": "Truvio Demo Account"
+"RmaCustomerName": "Truvio Buyer"
+"RmaCustomerEmail": "buyer@truvio-demo.example"
+"RmaCustomerCountryCode": "US"
+"RmaDeliveryName": "Truvio Buyer"
+"RmaDeliveryCompany": "Truvio Demo Account"
+"RmaDeliveryCountryCode": "US"

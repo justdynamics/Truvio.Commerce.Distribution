@@ -1,6 +1,6 @@
-﻿"id": 372fb1c7-e3e4-4f6f-9268-275bae5aa5de
+﻿"id": ae227002-b00b-5e7b-9320-1cf5dbac3032
 "sortOrder": 5
-"definitionId": "3Columns"
+"definitionId": "2Columns"
 "itemType": "Swift-v2_Row"
 "container": "Grid"
 "containerWidth": 3
@@ -11,11 +11,13 @@
 "mobileLayout": "12,12,12"
 "verticalAlignment": "None"
 "fields":
-  "Id": "254"
+  "Id": "100716"
   "Sort": 0
   "ItemInstanceType": ""
 "columns":
 - "id": 1
+  "width": 0
+- "id": 2
   "width": 0
 
 "permissions":

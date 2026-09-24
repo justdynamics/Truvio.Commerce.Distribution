@@ -23,8 +23,9 @@
 --
 -- Applies AFTER the merge deserialize that lands this layer's rows. Those rows
 -- are serialized YAML carrying ABSOLUTE dates frozen at the harvest day
--- 2026-09-13: the twelve brand orders TCO-0001..TCO-0012 ladder back from
--- 2026-09-12, and every product carries ProductCreated and
+-- 2026-09-13: the brand orders, quotes and carts (TCO-0001..TCO-0026,
+-- TCO-Q001..TCO-Q007, TCO-C001..TCO-C002) and the favourite lists ladder back
+-- from 2026-09-12 as far as 2026-04-02, and every product carries ProductCreated and
 -- ProductExpectedDelivery from the same harvest. The anchor is therefore seeded
 -- to that harvest day and NOT to GETDATE(): a GETDATE() anchor reads delta 0 on
 -- a fresh install, so the orders would stay frozen in 2026-09 forever while the

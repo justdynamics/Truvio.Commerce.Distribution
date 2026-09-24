@@ -1,0 +1,23 @@
+﻿"OrderStateId": "QuoteRejected"
+"OrderStateName": "Quote rejected"
+"OrderStateDescription": "The quote was declined or withdrawn."
+"OrderStateIsDefault": false
+"OrderStateDontUseInstatistics": false
+"OrderStateIsDeleted": false
+"OrderStateMailTemplate": ""
+"OrderFlowId": 3
+"OrderStateMailSender": ""
+"OrderStateMailSenderName": ""
+"OrderStateMailSubject": ""
+"OrderStateAutoId": 18
+"OrderStateSendToCustomer": false
+"OrderStateOthersMailTemplate": ""
+"OrderStateOthersRecipients": ""
+"OrderStateSortOrder": 4
+"OrderStateOrderType": 1
+"OrderStateAllowOrder": false
+"OrderStateSendToDeliveryEmail": false
+"OrderStateSendToField": false
+"OrderStateCustomRecipientField": ""
+"OrderStateAllowEdit": false
+"OrderStateColor": "#DC2626"

@@ -1,16 +1,16 @@
 {
   "name": "dap-portal",
-  "from": "base@3.6.0",
+  "from": "base@4.0.0",
   "add": [],
   "surfaces": [
     "surface-dap-portal@1.0.5"
   ],
   "sampleData": true,
-  "comment": "The sample-data layer is the brand catalogue, not a marker-string fixture set: with sampleData true this edition carries 97 product rows across 21 groups (16 browsable + the 5 PIM tree rows sample-data 5.0.0 adds), the three personas on account TC-100200 and the twelve orders, which is what the Product Assets and Search results surfaces list. expectedCounts is pinned rather than derived because Set-ConfigFromEdition derives EcomProducts/EcomGroups from the toggle alone and carries the pre-4.0.0 figures. OPEN POINT, carried and not resolved here: the layer also ships merge/_content storefront copy authored at surface-swift's own paths under 'Swift 2'. This edition composes surface-dap-portal (area 26) and no Swift 2 content area, so those documents are expected to be inert - the Foundry gate is what proves it, and until a run says so this comment is the record that nobody has measured it.",
+  "comment": "The sample-data layer is the brand catalogue, not a marker-string fixture set: with sampleData true this edition carries 97 product rows across 21 groups (16 browsable + the 5 PIM tree rows sample-data 5.0.0 adds), the three personas on account TC-100200 and the buyer's orders, quotes, carts and favourite lists (sample-data 6.0.0, USD), which is what the Product Assets and Search results surfaces list. expectedCounts is pinned rather than derived because Set-ConfigFromEdition derives EcomProducts/EcomGroups from the toggle alone and carries the pre-4.0.0 figures. OPEN POINT, carried and not resolved here: the layer also ships merge/_content storefront copy authored at surface-swift's own paths under 'Swift 2'. This edition composes surface-dap-portal (area 26) and no Swift 2 content area, so those documents are expected to be inert - the Foundry gate is what proves it, and until a run says so this comment is the record that nobody has measured it.",
   "criticalPaths": [
     "/dap"
   ],
-  "description": "Digital Asset Portal edition: framework-only base + sample data + the Digital Assets Portal content surface (area 26, ~32 pages on Swift-v2 item types - the item-type definitions come from the host's Swift design-package overlay, not from base content). Proven on DW 10.28.1-PreRelease.",
+  "description": "Digital Asset Portal edition: framework-only base + sample data + the Digital Assets Portal content surface (area 26, ~32 pages on Swift-v2 item types - the item-type definitions come from the host's Swift design-package overlay, not from base content). Not in layers/INDEX.json gateProven.editions: unproven until the Foundry publish flow stamps a gate run for it. INDEX gateProven is the record.",
   "expectedCounts": {
     "EcomProducts": 97,
     "EcomGroups": 21,

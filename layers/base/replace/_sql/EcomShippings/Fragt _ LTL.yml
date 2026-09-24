@@ -1,0 +1,30 @@
+﻿"ShippingId": "SHIP6"
+"ShippingLanguageId": "DAN"
+"ShippingName": "Fragt / LTL"
+"ShippingDescription": "Pallefragt, levering efter aftale."
+"ShippingPriceOverMaxWeight": 0
+"ShippingFreeFeeAmount": 0
+"ShippingServiceSystemName": ""
+"ShippingServiceParameters": ""
+"ShippingSorting": 3
+"ShippingAutoId": 17
+"ShippingFeeSelection": "High"
+"ShippingIcon": ""
+"ShippingLimitsUseLogic": 1
+"ShippingFeeRulesSource": 2
+"ShippingUsePriceWithVat": false
+"ShippingTakeDiscountIntoAccount": true
+"ShippingEligibleForFreeShipping": false
+"ShippingActive": true
+"ShippingUserGroups": ""
+"ShippingAllowAnonymousUsers": false
+"ShippingCode": ""
+"ShippingAgentCode": ""
+"ShippingAgentName": ""
+"ShippingAgentServiceCode": ""
+"ShippingAgentServiceDescription": ""
+"ShippingMinWeight": 0
+"ShippingMaxWeight": 0
+"ShippingProductIds": ""
+"ShippingProductGroupIds": ""
+"ShippingProductFilterMode": 0

@@ -33,7 +33,7 @@
   "AreaCulture": "en-US"
   "AreaApprovalType": 0
   "AreaEcomLanguageId": "ENU"
-  "AreaEcomCurrencyId": "EUR"
+  "AreaEcomCurrencyId": "USD"
   "AreaActive": true
   "AreaMasterAreaId": 0
   "AreaRobotsTxt": ""
@@ -47,7 +47,7 @@
   "AreaNotFound": ""
   "AreaRedirectFirstPage": 1
   "AreaLockPagesToDomain": false
-  "AreaEcomCountryCode": "  "
+  "AreaEcomCountryCode": "US"
   "AreaEcomShopId": "SHOP1"
   "AreaUrlIgnoreForChildren": false
   "AreaCookieCustomNotifications": false

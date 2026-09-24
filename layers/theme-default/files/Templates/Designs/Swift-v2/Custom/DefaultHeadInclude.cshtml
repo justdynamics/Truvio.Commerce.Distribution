@@ -2,6 +2,11 @@
 @using Dynamicweb.Frontend
 @{
     AddStylesheet("/Files/Templates/Designs/Swift-v2/Custom/default_custom.css", "all");
+    // The brand slot. brand.css belongs to the demo: a build rewrites it (and
+    // brand.tokens.json beside it) in a demo-local copy of this layer instead of
+    // appending brand rules to default_custom.css. Registered AFTER the theme sheet
+    // so a brand rule wins a cascade tie without !important. Ships with no paint.
+    AddStylesheet("/Files/Templates/Designs/Swift-v2/Custom/brand.css", "all");
     // The theme's JavaScript entry point. It ships EMPTY and registering it changes
     // nothing about the rendered page — that is the point: a consumer adding behaviour
     // edits a file that is already served instead of creating one and wiring it up.

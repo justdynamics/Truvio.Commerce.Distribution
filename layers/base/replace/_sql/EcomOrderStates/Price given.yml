@@ -13,7 +13,7 @@
 "OrderStateSendToCustomer": true
 "OrderStateOthersMailTemplate": ""
 "OrderStateOthersRecipients": ""
-"OrderStateSortOrder": 0
+"OrderStateSortOrder": 6
 "OrderStateOrderType": 1
 "OrderStateAllowOrder": true
 "OrderStateSendToDeliveryEmail": false

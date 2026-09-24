@@ -1,5 +1,64 @@
 ﻿# Changelog — base
 
+## 4.0.0
+
+Major: the base ships the quote order states and a neutral US / B2B market default (owner rulings
+Q2 and Q9, 2026-09-24, distribution layer analysis). The default currency moves from EUR to USD and
+the payment, shipping and tax rows change meaning, which is a breaking change for any consumer that
+read them. `baseContractVersion` 2.4.0 -> 3.0.0. No floor in `versions/spine.json` moves, no table is
+added or removed, and every row key is kept.
+
+**Quote states (Q2).** Four `EcomOrderStates` rows in the `Default Quote flow` (`OrderFlowId` 3,
+order type 1): `QuotePending` "Quote pending" (the flow default, allow edit), `QuoteSent` "Quote
+sent" (allow order), `QuoteAccepted` "Quote accepted" (allow order) and `QuoteRejected` "Quote
+rejected". The ids are the literal ids Swift 2.4 uses: `Swift-v2_Dashboard_List/QuotesPending.cshtml`
+asks the order search for `StateId=QuotePending`, so without that exact id the Pending quotes widget
+renders its empty state forever. Five demos built these states by hand (marine, Leatherman, Hewitt,
+Burco, Team Horner). The stock `OS8` New loses the default flag, so a submitted quote lands in
+`QuotePending`; `OS8` and `OS9` Price given stay in the flow at sort 5 and 6. No
+`EcomOrderStateRules` row is added: the four states carry no rule, so every transition stays open,
+the shape the marine demo ran on. The whole-table `EcomOrderStates` predicate already covers the new
+rows. New contract block `quoteStates`.
+
+**Market defaults (Q9).** A neutral US B2B market instead of the Swift demo's Danish one:
+
+| Row | 3.6.0 | 4.0.0 |
+|---|---|---|
+| `EcomCurrencies` `USD$$*` (17 rows) | rate 100, not default | **default**, rate 100 |
+| `EcomCurrencies` `EUR$$*` (16 rows) | default, rate 100 | rate 100 (parity) |
+| `EcomPayments` `PAY2` ENU / DAN | Invoice / Faktura | **On account (Net 30)** / På konto (netto 30), terms `NET30`, active |
+| `EcomPayments` `PAY1` ENU / DAN | Creditcard / Kreditkort, QuickPay icon | Credit card / Kreditkort, no icon, **inactive** (no gateway) |
+| `EcomPayments` `PAY3` ENU | MobilePay | Inactive payment method (PAY3), **inactive** |
+| `EcomShippings` `SHIP9` ENU / DAN | Home delivery / Hjemmelevering | **Standard ground** / Standard levering |
+| `EcomShippings` `SHIP11` ENU / DAN | Business delivery / Firmalevering | **Express** / Ekspres |
+| `EcomShippings` `SHIP6` ENU / DAN | UPS | **Freight / LTL** / Fragt / LTL |
+| `EcomShippings` `SHIP5` ENU | Click & Collect delivery method, inactive | **Customer pickup**, active |
+| `EcomShippings` `SHIP3`, `SHIP4`, `SHIP8`, `SHIP10`, `SHIP12`, `SHIP13` | GLS, PostNord, DAO, Bring | Inactive shipping method (SHIPn), **inactive**, provider cleared |
+| `EcomVatGroups` `VATGRP1` / `VATGRP2` | Moms / VAT Default, VAT name Moms / VAT | Tax (DK) / Tax default, VAT name Tax |
+| `EcomMethodCountryRelation` US | PAY1 and SHIP6 default | **PAY2 and SHIP9 default**; `CREL3001` (SHIP9) and `CREL3002` (SHIP11) added |
+
+Rows are renamed and deactivated, never dropped. A `Replace` predicate is an upsert by key and never
+deletes a row missing from the tree, so a dropped carrier would stay active on every host delivered
+from 3.x; shipped inactive, it is switched off there too, and the row counts an edition pins
+(`EcomPayments` 5, `EcomShippings` 17) hold. `PAY2` and `SHIP9` keep their meaning for
+`feature-subscription-orders`, whose checkout probe posts both: `PAY2` stays the gateway-less
+checkout handler (`PaymentAddInType` None, `IRecurring`). The base has no default-country column,
+so "US as default country" is the method-country default here and the area's
+`AreaEcomCountryCode` in the surface layer that ships the area. New contract block
+`marketDefaults`; `currencyRates` gains `defaultCurrency` and a rewritten note.
+
+Editions: every edition pins `base@4.0.0`; `base-only` pins `EcomOrderStates` 18 (14 + the four
+quote states).
+
+**Contract `sampleData` block (with sample-data 6.0.0 and surface-swift 1.16.0, before 4.0.0 is
+merged).** `guaranteedRows.rma` is owned by `sample-data` (the `feature-rma` layer is retired and
+its rows moved), the my-returns probe that reads it is surface-swift's, and a new
+`guaranteedRows.customerCenter` names the buyer's dashboard data: 26 orders (21 completed), 7
+quotes in the quote states above, 2 carts and favourite lists `100401` / `100402`, all USD.
+`currencyRates.note` records that surface-swift binds the area to USD and every sample-data price
+and order is USD.
+
+
 ## 3.6.0
 
 **Serializer floor `1.0.2-beta` -> `1.0.6-beta` (2026-09-22, Distribution #78, before 3.6.0 is

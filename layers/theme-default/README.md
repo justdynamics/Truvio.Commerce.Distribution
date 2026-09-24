@@ -14,7 +14,9 @@ header menu bar that reads as a menu. A customer re-skin starts by overwriting t
 | `System/Styles/Buttons/default.{css,json}` | Quiet buttons: 0.35rem radius, 1px border |
 | `System/Styles/Typography/default.{css,json}` | Inter, 16px base, 1.2 scale — no uppercase shouting |
 | `Templates/Designs/Swift-v2/Custom/default_custom.css` | Polish layer: button/footer/nav/card refinement **+ the header menu-bar affordance** (carets, hover/active states, reachable dropdowns — LRN-nav-03/04/05) |
-| `Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml` | Links `default_custom.css` + inlines the render-critical tokens |
+| `Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml` | Links `default_custom.css`, then `brand.css`, + inlines the render-critical tokens |
+| `Templates/Designs/Swift-v2/Custom/brand.css` | **The brand slot**: the demo's sheet, loaded after `default_custom.css`. Ships with a sentinel and a commented token block, no paint |
+| `Templates/Designs/Swift-v2/Custom/brand.tokens.json` | The brand slot's input: colours per scheme, typography, buttons, logo, favicon, radius and the `--td-*` token values. Ships holding the theme's own neutral values |
 
 No serialized DB content, no custom code, no template forks, **no icon files** — the
 `data-nav-icon` hook in `default_custom.css` is opt-in and binds against the DW10 stock
@@ -27,9 +29,43 @@ Dropdown carets/panels only render when top navigation nodes HAVE children
 not a CSS defect. Author child nav nodes (the `save_groups` recipe) to exercise the
 dropdowns.
 
+## The brand slot
+
+A demo brands the site by rewriting two files the theme already ships and serves, never by
+appending to `default_custom.css`:
+
+| File | The demo writes | Theme ships |
+|------|-----------------|-------------|
+| `Custom/brand.tokens.json` | The brand's values: `schemes[]` (the seven fixed scheme ids with background, foreground, primary and secondary button, optional accent), `typography` (the Typography model keys plus the font import URL), `buttons` (the Buttons model keys plus the radius), `brand.logo` / `favicon` / `appleTouchIcon` / `edgeMask`, and `css` (the `--td-*` token values) | The neutral values of this layer, so the file is a true description of the unbranded site |
+| `Custom/brand.css` | The `css` token values in a `:root:root` block, then brand-only component rules | A sentinel rule, the commented token block and the authoring guards. No paint |
+
+The delivery sequence, in a demo-local copy of the layer (the `cil-brand` pattern):
+
+1. Copy `layers/theme-default` into the demo's layers folder.
+2. Write `brand.tokens.json`.
+3. Generate from it: the `css` section into the token block of `brand.css`; `schemes`,
+   `typography` and `buttons` into the three Style pairs (both `.css` and `.json` of each
+   pair, same pass; ladder step 2); `logo` and `favicon` into the `Swift-v2_Logo`
+   paragraphs and the `Swift-v2_Master` `Favicon` / `AppleTouchIcon` / `MetaImage` fields,
+   which are content, not theme files.
+4. Add brand-only rules to `brand.css` below the token block.
+5. Deliver the copy. A theme upgrade is a fresh copy plus the demo's two files, never a
+   re-append.
+
+`brand.css` loads after `default_custom.css`, so a brand rule wins a cascade tie without
+`!important`. Tokens go in `:root:root` (specificity 0,2,0): the head include inlines a
+`:root` copy of six tokens, and the doubled root beats it whatever the order of the two in
+`<head>`. A rule that would help every demo is not a brand rule; it is a theme fix and goes
+upstream into `default_custom.css`. The `css` section includes four sizing levers the theme
+reads: `--td-logo-h` (header logo max-height), `--td-logo-w-phone` (logo figure below 768),
+`--td-logo-w-laptop` (logo figure 768 to 1439) and `--td-hero-max-h` (the image-band and
+hero cap: the image-height caps and block #32). A generated scheme accent goes into the ColorSchemes `.json` as
+`CustomColors` `accent` and `accent-contrast` as well as into the `.css`, or an admin Styles
+save drops it.
+
 ## Re-skin ladder
 
-1. Override the `--td-*` tokens (accent, ink, hairline) in the customer's custom CSS.
+1. Override the `--td-*` tokens (accent, ink, hairline) in `brand.css` (the brand slot).
    **Retire a token by aliasing it, never by deleting it** — `:root { --td-legacy:
    var(--td-accent) !important; }`. DB-authored content can carry
    `style="...var(--td-legacy)"` inline, and the render-critical copy in
@@ -48,8 +84,9 @@ dropdowns.
    **edit both, in the same pass**, or a regeneration silently undoes the edit. Enumerate
    every literal of the outgoing colour in both notations across both files and assert an
    exact count, so a silent miss aborts the deploy instead of shipping a half-rebrand.
-3. Extend `default_custom.css` — the affordance section is brand-agnostic and survives
-   any palette swap (everything paints with `currentColor` / the `--td-accent` token).
+3. Add brand-only rules to `brand.css`. `default_custom.css` is the theme's file: the
+   affordance section is brand-agnostic and survives any palette swap (everything paints
+   with `currentColor` / the `--td-accent` token), and a generic fix goes upstream into it.
 
 ## Opt-in hooks (inert until a build opts in)
 
@@ -58,6 +95,7 @@ dropdowns.
 | `data-nav-icon="<name>"` on a nav node | Binds a stock DW10 icon into the menu bar (3-step recipe in the CSS) |
 | `--dw-color-accent` (+ `-rgb` / `-contrast`) per scheme | The brand accent slot consumed by `.text-accent` / `.bg-accent` / `.dw-eyebrow` |
 | class `td-header-overlay` on any element inside the page header | Turns the sticky bar into a floating/transparent overlay header with a hero-behind composition (block #16): fixed bar, one rounded pill painted by `::before` with **no** `overflow:hidden`, DOM-keyed clearance, top-anchored first-row poster crop. Tune with `--td-bar-top` / `--td-bar-inset` / `--td-bar-h` / `--td-bar-h-phone` / `--td-bar-radius` / `--td-bar-bg` / `--td-container-cap`. |
+| `--td-btn-hover-bg` / `--td-btn-hover-ink` / `--td-tint-bg` / `--td-tint-ink`, per scheme | The hover pair of a filled button and of the soft-tint variants (outline, ghost, link, `outline-*`, empty), resolved on the colour-scheme element so the nearest scheme wins (block #35). Light schemes keep the neutral values; dark schemes tint with the scheme foreground and keep the generated button ink. A brand overrides them per scheme in `brand.css`, then measures the hover at 4.5:1. |
 | class `td-visually-hidden` on a label | The sanctioned visually-hidden idiom (`clip` + `clip-path`, no `overflow`) — safe inside the header, keeps the accessible name |
 | `data-td-full-bleed` on a grid row or any ancestor of one | Opts a width-4 row OUT of the main-scoped gutter restore (block #21), returning `--dw-container-gutter` to `0rem`. For rows that are meant to touch the viewport edge: posters, full-width image bands, maps. |
 | `--td-button-primary-ink-<scheme>` (or `--td-button-primary-ink` for all schemes) | Overrides the ink a **filled** primary button paints its label with, per colour scheme, without touching the generated `ColorSchemes` pair (block #30, Foundry #1184). Unset, it resolves to `--dw-color-button-primary-contrast` exactly as the generator wrote it. |

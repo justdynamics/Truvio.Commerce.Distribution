@@ -2,7 +2,7 @@
 "PaymentLanguageId": "DAN"
 "PaymentName": "Kreditkort"
 "PaymentDescription": ""
-"PaymentIcon": "/Images/Payment/quickpay_logo.svg"
+"PaymentIcon": ""
 "PaymentGatewayId": ""
 "PaymentGatewayTemplate": ""
 "PaymentMerchantNum": ""
@@ -15,7 +15,7 @@
 "PaymentCheckoutParameters": ""
 "PaymentSorting": 1
 "PaymentAutoId": 4
-"PaymentActive": true
+"PaymentActive": false
 "PaymentUserGroups": ""
 "PaymentAllowAnonymousUsers": false
 "PaymentCode": ""

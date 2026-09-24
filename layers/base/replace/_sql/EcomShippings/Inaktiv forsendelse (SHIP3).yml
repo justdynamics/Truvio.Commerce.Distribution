@@ -1,0 +1,30 @@
+﻿"ShippingId": "SHIP3"
+"ShippingLanguageId": "DAN"
+"ShippingName": "Inaktiv forsendelse (SHIP3)"
+"ShippingDescription": "Inaktiv. Beholdt, så id ejes af base."
+"ShippingPriceOverMaxWeight": 0
+"ShippingFreeFeeAmount": 0
+"ShippingServiceSystemName": ""
+"ShippingServiceParameters": ""
+"ShippingSorting": 13
+"ShippingAutoId": 10
+"ShippingFeeSelection": "high"
+"ShippingIcon": "/Images/Shipping/gls_group_gls_logo_svg.svg"
+"ShippingLimitsUseLogic": 1
+"ShippingFeeRulesSource": 2
+"ShippingUsePriceWithVat": false
+"ShippingTakeDiscountIntoAccount": true
+"ShippingEligibleForFreeShipping": false
+"ShippingActive": false
+"ShippingUserGroups": ""
+"ShippingAllowAnonymousUsers": false
+"ShippingCode": ""
+"ShippingAgentCode": ""
+"ShippingAgentName": ""
+"ShippingAgentServiceCode": ""
+"ShippingAgentServiceDescription": ""
+"ShippingMinWeight": 0
+"ShippingMaxWeight": 0
+"ShippingProductIds": ""
+"ShippingProductGroupIds": ""
+"ShippingProductFilterMode": 0

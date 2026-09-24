@@ -1,0 +1,24 @@
+﻿"PaymentId": "PAY1"
+"PaymentLanguageId": "ENU"
+"PaymentName": "Credit card"
+"PaymentDescription": "Card payment. Inactive until a payment gateway is bound: without one the order is placed unpaid."
+"PaymentIcon": ""
+"PaymentGatewayId": ""
+"PaymentGatewayTemplate": ""
+"PaymentMerchantNum": ""
+"PaymentGatewayMD5Key": ""
+"PaymentCCITemplate": ""
+"PaymentGatewayParameters": ""
+"PaymentIconOrderList": ""
+"PaymentAddInType": "None"
+"PaymentCheckoutSystemName": ""
+"PaymentCheckoutParameters": ""
+"PaymentSorting": 1
+"PaymentAutoId": 1
+"PaymentActive": false
+"PaymentUserGroups": ""
+"PaymentAllowAnonymousUsers": false
+"PaymentCode": ""
+"PaymentTermsCode": ""
+"PaymentTermsDescription": ""
+"PaymentDisableSavedCards": false

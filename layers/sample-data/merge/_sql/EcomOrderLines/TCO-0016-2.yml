@@ -1,0 +1,58 @@
+﻿"ownership":
+  "mode": "merge"
+"OrderLineId": "TCO-0016-2"
+"OrderLineOrderId": "TCO-0016"
+"OrderLineParentLineId": 
+"OrderLineBOM": false
+"OrderLineDate": 2026-05-18T11:22:45.0000000
+"OrderLineModified": 
+"OrderLineProductNumber": "TC-CTR-0048"
+"OrderLineProductId": "TCPROD0048"
+"OrderLineProductVariantId": 
+"OrderLineProductName": "Truvio Contract Price 48"
+"OrderLineProductVariantText": 
+"OrderLineUnitPrice": 75
+"OrderLineVatPercent": 0
+"OrderLineVatPrice": 0
+"OrderLineQuantity": 2
+"OrderLineType": "0"
+"OrderLineReference": 
+"OrderLineBOMItemId": 
+"OrderLineUnitId": 
+"OrderLineWeight": 
+"OrderLineVolume": 
+"OrderLinePriceWithVAT": 150
+"OrderLinePriceWithoutVAT": 150
+"OrderLinePriceVAT": 0
+"OrderLinePriceVATPercent": 0
+"OrderLineUnitPriceWithVAT": 75
+"OrderLineUnitPriceWithoutVAT": 75
+"OrderLineUnitPriceVAT": 0
+"OrderLineUnitPriceVATPercent": 0
+"OrderLinePageId": 
+"OrderLineDiscountId": 
+"OrderLineFieldValues": 
+"OrderLineAttachment": 
+"OrderLineAutoId": 27
+"OrderLineWishListId": 0
+"OrderLinePriceCalculationReference": 
+"OrderLineUnitPriceCalculationReference": 
+"OrderLineUnitPoints": 
+"OrderLineUnitRewardPoints": 
+"OrderLinePoints": 
+"OrderLineRewardPoints": 
+"OrderLineRewardId": 
+"OrderLineReverseChargeForVat": 
+"OrderLineTotalDiscountWithVAT": 0
+"OrderLineTotalDiscountWithoutVAT": 0
+"OrderLineTotalDiscountVAT": 0
+"OrderLineTotalDiscountVATPercent": 0
+"OrderLineGiftCardCode": 
+"OrderLineDiscountPercentage": 0
+"OrderLineUnitPriceBeforeDiscount": 0
+"OrderLineStockLocationId": 
+"OrderLineComment": 
+"OrderLineUnitPriceDiscountPercentage": 0
+"OrderLineCustomerComment": 
+"OrderLineAllowOrderDiscounts": true
+"OrderLineAllowOrderLineDiscounts": true

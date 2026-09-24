@@ -1,0 +1,33 @@
+﻿"paragraphUniqueId": c90848d2-ac1e-5dd4-9b47-de93145836b0
+"sourceParagraphId": 90037
+"sortOrder": 17
+"itemType": "Swift-v2_Dashboard_List"
+"header": "Favorites"
+"template": "Favorites.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "BaseLink": "Default.aspx?ID=18"
+  "GlobalRecordPageGuid": "621cb250-a28d-45ac-bef2-893e0536078b"
+  "Id": "100718"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Favorites"
+"columnId": 2
+
+"permissions":
+- "owner": "Customers"
+  "ownerType": "group"
+  "ownerId": "1325"
+  "level": "all"
+  "levelValue": 1364
+- "owner": "CSR"
+  "ownerType": "group"
+  "ownerId": "1292"
+  "level": "none"
+  "levelValue": 1
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1

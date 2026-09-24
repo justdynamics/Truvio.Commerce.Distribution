@@ -1,0 +1,178 @@
+﻿"ownership":
+  "mode": "merge"
+"OrderId": "TCO-Q002"
+"OrderShopId": "SHOP1"
+"OrderDate": 2026-09-09T13:40:09.0000000
+"OrderModified": 
+"OrderComplete": false
+"OrderDeleted": false
+"OrderStateId": "QuotePending"
+"OrderVAT": 0
+"OrderIP": 
+"OrderReferrer": 
+"OrderTransactionValue": 
+"OrderTransactionType": 
+"OrderTransactionStatus": 
+"OrderTransactionAmount": 0
+"OrderTransactionPayGatewayCode": 
+"OrderTrackTraceNumber": 
+"OrderShippingMethod": "Standard ground"
+"OrderShippingMethodFee": 0
+"OrderPaymentMethod": "On account (Net 30)"
+"OrderPaymentMethodFee": 0
+"OrderSalesDiscount": 0
+"OrderCurrencyName": 
+"OrderCurrencyRate": 0
+"OrderCurrencyCode": "USD"
+"OrderCart": false
+"OrderFieldsXML": 
+"OrderReSendEmail": 
+"OrderCustomerNumber": "TC-100200"
+"OrderCustomerCompany": "Truvio Demo Account"
+"OrderCustomerName": "Truvio Buyer"
+"OrderCustomerAddress": 
+"OrderCustomerAddress2": 
+"OrderCustomerZip": 
+"OrderCustomerCity": 
+"OrderCustomerCountry": 
+"OrderCustomerRegion": 
+"OrderCustomerPhone": 
+"OrderCustomerFax": 
+"OrderCustomerEmail": "buyer@truvio-demo.example"
+"OrderCustomerCell": 
+"OrderCustomerRefId": 
+"OrderCustomerEAN": 
+"OrderCustomerVatRegNumber": 
+"OrderDeliveryCompany": 
+"OrderDeliveryName": 
+"OrderDeliveryAddress": 
+"OrderDeliveryAddress2": 
+"OrderDeliveryZip": 
+"OrderDeliveryCity": 
+"OrderDeliveryCountry": 
+"OrderDeliveryRegion": 
+"OrderDeliveryPhone": 
+"OrderDeliveryFax": 
+"OrderDeliveryEmail": 
+"OrderDeliveryCell": 
+"OrderTotalPrice": 450
+"OrderComment": 
+"OrderCustomerComment": 
+"OrderWeight": 
+"OrderVolume": 
+"OrderPriceWithVAT": 450
+"OrderPriceWithoutVAT": 450
+"OrderPriceVAT": 0
+"OrderPriceVATPercent": 0
+"OrderShippingFeeWithVAT": 0
+"OrderShippingFeeWithoutVAT": 0
+"OrderShippingFeeVAT": 0
+"OrderShippingFeeVATPercent": 0
+"OrderPaymentFeeWithVAT": 0
+"OrderPaymentFeeWithoutVAT": 0
+"OrderPaymentFeeVAT": 0
+"OrderPaymentFeeVATPercent": 0
+"OrderPriceBeforeFeesWithVAT": 450
+"OrderPriceBeforeFeesWithoutVAT": 450
+"OrderPriceBeforeFeesVAT": 0
+"OrderPriceBeforeFeesVATPercent": 0
+"OrderCustomerAccessUserId": 100101
+"OrderCustomerAccessUserUserName": 
+"OrderShippingMethodId": "SHIP9"
+"OrderPaymentMethodId": "PAY2"
+"OrderGatewayResult": 
+"OrderStepNum": 
+"OrderTransactionNumber": 
+"OrderCustomerCountryCode": "US"
+"OrderDeliveryCountryCode": 
+"OrderStepHistory": 
+"OrderLanguageId": "ENU"
+"OrderTransactionMailSend": false
+"OrderShippingMethodDescription": 
+"OrderPaymentMethodDescription": 
+"OrderCustomerNewsletterSubcribe": false
+"OrderGatewayPaymentStatus": 
+"OrderGatewayTransactionProblems": 
+"OrderGatewayUniqueId": 
+"OrderCaptureInfo": 
+"OrderCartV2StepIndex": 
+"OrderShippingCountrySelection": 
+"OrderPaymentCountrySelection": 
+"OrderCustomerAccepted": 
+"OrderDebuggingInfo": 
+"OrderHasSetUserDetails": 
+"OrderTrackAndTraceId": 
+"OrderTrackAndTraceParameters": 
+"OrderIntegrationOrderId": 
+"OrderRequisition": 
+"OrderAXOrderId": 
+"OrderIsExported": 
+"OrderVoucherCode": 
+"OrderCustomerSurname": 
+"OrderCustomerInitials": 
+"OrderCustomerPrefix": 
+"OrderDeliverySurname": 
+"OrderDeliveryInitials": 
+"OrderDeliveryPrefix": 
+"OrderShippingDocumentData": 
+"OrderShippingProviderData": 
+"OrderCompletedDate": 
+"OrderSecondaryUserId": 
+"OrderReceiptShowCount": 
+"OrderCaptureAmount": 
+"OrderTransactionCardType": 
+"OrderExternalPaymentFee": 
+"OrderAutoId": 28
+"OrderCustomerTitle": 
+"OrderCustomerFirstName": 
+"OrderCustomerMiddleName": 
+"OrderCustomerHouseNumber": 
+"OrderDeliveryTitle": 
+"OrderDeliveryFirstName": 
+"OrderDeliveryMiddleName": 
+"OrderDeliveryHouseNumber": 
+"OrderPriceCalculationDate": 
+"OrderTotalPoints": 
+"OrderTotalRewardPoints": 
+"OrderTotalDiscountWithVAT": 0
+"OrderTotalDiscountWithoutVAT": 0
+"OrderTotalDiscountVAT": 0
+"OrderTotalDiscountVATPercent": 0
+"OrderIsQuote": true
+"OrderTransactionCardNumber": 
+"OrderCheckoutPageID": 0
+"OrderPriceCalculatedByProvider": false
+"OrderTaxTransactionNumber": 
+"OrderVoucherUseType": 0
+"OrderContextID": 
+"OrderGiftcardTransactionFailed": false
+"OrderShippingFeeRuleName": 
+"OrderRecurringOrderId": 
+"OrderPaymentRecurringInfo": 
+"OrderSavedCardID": 
+"OrderIsRecurringOrderTemplate": 
+"OrderPointsToUse": 
+"OrderIsLedgerEntry": false
+"OrderIsPayable": true
+"OrderReturnOperations": 
+"OrderDisplayName": 
+"OrderDiscountPercentage": 0
+"OrderDiscountAmount": 0
+"OrderVATCountryCode": 
+"OrderReference": "RFQ-2026-030"
+"OrderShippingDate": 
+"OrderShippingAgent": 
+"OrderPaymentMethodCode": 
+"OrderPaymentMethodTermsCode": "NET30"
+"OrderShippingMethodCode": 
+"OrderShippingMethodAgentCode": 
+"OrderShippingMethodAgentServiceCode": 
+"OrderReverseChargeForVat": false
+"OrderParentOrderId": 
+"OrderLedgerType": 
+"OrderCustomerAddressId": 
+"OrderDeliveryAddressId": 
+"QuoteRequest": "Bundle kits for five new sites. Please confirm the lead time."
+"OrderShopName": 
+"OrderPurchaseOrderNumber": 
+"OrderDueDate": 

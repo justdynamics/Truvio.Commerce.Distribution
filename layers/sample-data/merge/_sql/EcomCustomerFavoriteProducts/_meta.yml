@@ -1,0 +1,93 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomCustomerFavoriteProducts"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "FavoriteListId"
+- "ProductId"
+- "ProductVariantId"
+"identityColumns":
+- "CustomerFavoriteProductAutoId"
+"allColumns":
+- "FavoriteListId"
+- "ProductId"
+- "ProductLanguageId"
+- "ProductVariantId"
+- "Note"
+- "ProductReferenceUrl"
+- "CustomerFavoriteProductAutoId"
+- "Quantity"
+- "SortOrder"
+- "UnitId"
+"columnDefinitions":
+- "name": "FavoriteListId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductId"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductVariantId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "Note"
+  "dataType": "ntext"
+  "maxLength": 1073741823
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductReferenceUrl"
+  "dataType": "ntext"
+  "maxLength": 1073741823
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "CustomerFavoriteProductAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "Quantity"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "SortOrder"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "UnitId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

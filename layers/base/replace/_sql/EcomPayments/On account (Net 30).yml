@@ -1,0 +1,24 @@
+﻿"PaymentId": "PAY2"
+"PaymentLanguageId": "ENU"
+"PaymentName": "On account (Net 30)"
+"PaymentDescription": "Invoice on the customer account, payment due 30 days net. No payment gateway."
+"PaymentIcon": ""
+"PaymentGatewayId": ""
+"PaymentGatewayTemplate": ""
+"PaymentMerchantNum": ""
+"PaymentGatewayMD5Key": ""
+"PaymentCCITemplate": ""
+"PaymentGatewayParameters": ""
+"PaymentIconOrderList": ""
+"PaymentAddInType": "None"
+"PaymentCheckoutSystemName": ""
+"PaymentCheckoutParameters": ""
+"PaymentSorting": 0
+"PaymentAutoId": 3
+"PaymentActive": true
+"PaymentUserGroups": ""
+"PaymentAllowAnonymousUsers": false
+"PaymentCode": ""
+"PaymentTermsCode": "NET30"
+"PaymentTermsDescription": "Net 30 days"
+"PaymentDisableSavedCards": false
