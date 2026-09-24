@@ -15,7 +15,7 @@ placed until now:
 | 3 | 3Columns | Customers 1325 | Number Orders, Number Spent this month, Number Open quotes |
 | 4 | 2Columns | Customers 1325 | Chart Monthly spending, List Pending quotes |
 | 5 | 2Columns | Customers 1325 | List Recent orders, List Favorites |
-| 6 | 3Columns | CSR 1292 | Number Open quotes, List Quotes needing attention, List Recent account orders |
+| 6 | 2Columns | CSR 1292 | Feature tiles Accounts, Orders (the 1.15.x CSR tile row, unchanged) |
 | 7 | 3Columns | Customers 1325 | Feature tiles My addresses, My profile, My returns |
 
 Row 7 keeps ONE row of tiles as an example of the tile form, the three destinations no buyer widget
@@ -26,14 +26,17 @@ role and Anonymous). Templates: `Orders.cshtml`, `MonthlySpent.cshtml`, `Quotes.
 `BaseLink`.
 
 `BaseLink` is a plain `Default.aspx?ID=<page>` string on the layer's own page ids (My orders 19,
-My quotes 22, My favorites 18, CSR Orders 12), the form the serializer's page-id remap resolves.
+My quotes 22, My favorites 18), the form the serializer's page-id remap resolves.
 A `LinkEditor` value in the `ButtonEditor` JSON envelope makes `TryGetLink` return page id 0 and
 every widget throws `Get page requires a page ID greater than zero` (Foundry #205, marine P57).
-The CSR row links its quote widgets to CSR Orders because the CSR subtree has no quotes page.
+The CSR keeps its two tiles (owner ruling 2026-09-24): the stock Swift 2.4 widgets read only the
+signed-in user's own orders (Foundry #685) and a CSR places none, so CSR widgets rendered empty
+cards on the proving host. The CSR works on behalf of a buyer through impersonation, where the
+buyer's widgets show.
 
 New paragraphs sit at `sourceParagraphId` 90031-90040 and item-instance ids 100709-100722, the
-reserved bands this layer mints in. `replace-manifest.json` drops the 16 old Overview files and
-registers the 18 new ones (an unregistered Overview file is never staged, see 1.10.0);
+reserved bands this layer mints in. `replace-manifest.json` drops the 11 old buyer-tile files and
+registers the new ones (an unregistered Overview file is never staged, see 1.10.0);
 `templates.manifest.yml` gains the three dashboard item types. A content Replace does not delete a
 paragraph missing from the tree, so a host delivered from 1.15.x keeps its old tile rows until
 they are removed by hand; a clean-room host gets the new page only.
