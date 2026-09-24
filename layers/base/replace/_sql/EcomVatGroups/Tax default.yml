@@ -1,6 +1,6 @@
 ﻿"VatGroupId": "VATGRP2"
-"VatGroupName": "VAT Default"
+"VatGroupName": "Tax default"
 "VatGroupLanguageId": "ENU"
-"VatGroupVatName": "VAT"
+"VatGroupVatName": "Tax"
 "VatGroupConfigurableVatProviderSettings": ""
 "VatGroupAutoId": 2

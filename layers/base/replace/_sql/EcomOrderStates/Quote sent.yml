@@ -1,6 +1,6 @@
-﻿"OrderStateId": "OS9"
-"OrderStateName": "Price given"
-"OrderStateDescription": ""
+﻿"OrderStateId": "QuoteSent"
+"OrderStateName": "Quote sent"
+"OrderStateDescription": "Priced quote sent to the customer for a decision."
 "OrderStateIsDefault": false
 "OrderStateDontUseInstatistics": false
 "OrderStateIsDeleted": false
@@ -9,15 +9,15 @@
 "OrderStateMailSender": ""
 "OrderStateMailSenderName": ""
 "OrderStateMailSubject": ""
-"OrderStateAutoId": 13
-"OrderStateSendToCustomer": true
+"OrderStateAutoId": 16
+"OrderStateSendToCustomer": false
 "OrderStateOthersMailTemplate": ""
 "OrderStateOthersRecipients": ""
-"OrderStateSortOrder": 6
+"OrderStateSortOrder": 2
 "OrderStateOrderType": 1
 "OrderStateAllowOrder": true
 "OrderStateSendToDeliveryEmail": false
 "OrderStateSendToField": false
 "OrderStateCustomRecipientField": ""
 "OrderStateAllowEdit": false
-"OrderStateColor": "#10B981"
+"OrderStateColor": "#2563EB"

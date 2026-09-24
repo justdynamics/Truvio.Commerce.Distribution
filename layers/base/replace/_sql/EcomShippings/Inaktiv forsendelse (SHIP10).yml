@@ -1,13 +1,13 @@
-﻿"ShippingId": "SHIP11"
+﻿"ShippingId": "SHIP10"
 "ShippingLanguageId": "DAN"
-"ShippingName": "Firmalevering"
-"ShippingDescription": "Dansk firmalevering"
+"ShippingName": "Inaktiv forsendelse (SHIP10)"
+"ShippingDescription": "Inaktiv. Beholdt, så id ejes af base."
 "ShippingPriceOverMaxWeight": 0
 "ShippingFreeFeeAmount": 0
 "ShippingServiceSystemName": ""
 "ShippingServiceParameters": ""
-"ShippingSorting": 7
-"ShippingAutoId": 6
+"ShippingSorting": 20
+"ShippingAutoId": 1
 "ShippingFeeSelection": "high"
 "ShippingIcon": ""
 "ShippingLimitsUseLogic": 1
@@ -15,7 +15,7 @@
 "ShippingUsePriceWithVat": false
 "ShippingTakeDiscountIntoAccount": true
 "ShippingEligibleForFreeShipping": false
-"ShippingActive": true
+"ShippingActive": false
 "ShippingUserGroups": ""
 "ShippingAllowAnonymousUsers": false
 "ShippingCode": ""

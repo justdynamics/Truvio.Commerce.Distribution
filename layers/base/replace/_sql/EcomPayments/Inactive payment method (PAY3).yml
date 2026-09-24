@@ -1,7 +1,7 @@
-﻿"PaymentId": "PAY2"
+﻿"PaymentId": "PAY3"
 "PaymentLanguageId": "ENU"
-"PaymentName": "Invoice"
-"PaymentDescription": "Invoice"
+"PaymentName": "Inactive payment method (PAY3)"
+"PaymentDescription": "Inactive. Kept so the id stays owned by the base; rename and activate to use it."
 "PaymentIcon": ""
 "PaymentGatewayId": ""
 "PaymentGatewayTemplate": ""
@@ -13,9 +13,9 @@
 "PaymentAddInType": "None"
 "PaymentCheckoutSystemName": ""
 "PaymentCheckoutParameters": ""
-"PaymentSorting": 0
-"PaymentAutoId": 3
-"PaymentActive": true
+"PaymentSorting": 1
+"PaymentAutoId": 5
+"PaymentActive": false
 "PaymentUserGroups": ""
 "PaymentAllowAnonymousUsers": false
 "PaymentCode": ""

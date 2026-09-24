@@ -1,0 +1,23 @@
+﻿"OrderStateId": "QuotePending"
+"OrderStateName": "Quote pending"
+"OrderStateDescription": "Quote requested by the customer and waiting for a price. The Swift 2.4 Pending quotes dashboard widget lists this state by its id."
+"OrderStateIsDefault": true
+"OrderStateDontUseInstatistics": false
+"OrderStateIsDeleted": false
+"OrderStateMailTemplate": ""
+"OrderFlowId": 3
+"OrderStateMailSender": ""
+"OrderStateMailSenderName": ""
+"OrderStateMailSubject": ""
+"OrderStateAutoId": 15
+"OrderStateSendToCustomer": false
+"OrderStateOthersMailTemplate": ""
+"OrderStateOthersRecipients": ""
+"OrderStateSortOrder": 1
+"OrderStateOrderType": 1
+"OrderStateAllowOrder": false
+"OrderStateSendToDeliveryEmail": false
+"OrderStateSendToField": false
+"OrderStateCustomRecipientField": ""
+"OrderStateAllowEdit": true
+"OrderStateColor": "#F59E0B"

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "2.4.0",
+  "baseContractVersion": "3.0.0",
   "swiftVersion": "2.4.0",
   "compat": {
     "dw": {
@@ -406,9 +406,145 @@
     "consumingApp": "eCom_ProductCatalog"
   },
   "currencyRates": {
+    "defaultCurrency": "USD",
     "defaultRate": 100,
     "minNonDefaultRateExclusive": 1,
-    "note": "EcomCurrencies.CurrencyRate is hundredths against the default currency. The default (EUR, CurrencyIsDefault true on every EUR$$<lang> row) carries 100. A non-default currency at rate 1 renders every price in it a hundred times over, with correct symbol and culture formatting, no error and no log entry (measured on DW 10.28.10: a stored 45.00 served as $4,500.00 at USD rate 1). USD ships at 100: one-to-one parity with the default, a deliberate demo value and not an exchange rate. USD is NOT the currency the Swift storefront serves - surface-swift 1.13.3 binds the Swift area to EUR (AreaEcomCurrencyId). It used to read that way because an UNBOUND area on DW 10.28 resolves the request culture's currency, so an /en-us/ storefront served USD carts and no EUR EcomPrices row matched (Foundry #1232, measured on foundry-sd4v.mydwsite4.com: cart CART783 OrderCurrencyCode USD, TCPROD0046 served 45.00 instead of the contract price 36.90). CurrencyRate reasons about display; EcomPrices.PriceCurrency filtering is what the area binding decides, and every EcomPrices row the Distribution ships is EUR. No shipped row carries a rate at or below 1. The other non-default rows carry the values of the source solution and are not maintained exchange rates; a solution that needs real conversion sets real rates, keeping the default at 100 and every other rate relative to it."
+    "note": "EcomCurrencies.CurrencyRate is hundredths against the default currency. Since base 4.0.0 the default is USD at 100, flagged CurrencyIsDefault true on every USD$$<lang> row: DW resolves the default currency per language context, and a single global default aborted the Products index at 0 documents (base 3.1.2). EUR ships at 100 as well, one-to-one parity with the default, a deliberate demo value and not an exchange rate, so a composition whose prices are EUR renders them unchanged. A non-default currency at rate 1 renders every price in it a hundred times over, with correct symbol and culture formatting, no error and no log entry (measured on DW 10.28.10: a stored 45.00 served as $4,500.00 at USD rate 1). No shipped row carries a rate at or below 1. The default flag is NOT what a storefront serves: the area binding (AreaEcomCurrencyId) decides the currency of a cart and which EcomPrices.PriceCurrency rows match, and an UNBOUND area on DW 10.28 resolves the request culture's currency (Foundry #1232, measured on foundry-sd4v.mydwsite4.com: cart CART783 OrderCurrencyCode USD, TCPROD0046 served 45.00 instead of the contract price 36.90). The area binding belongs to the surface layer that ships the area; a surface or sample-data layer that serves the default currency binds its area to USD and ships its prices in USD. The other non-default rows carry the values of the source solution and are not maintained exchange rates; a solution that needs real conversion sets real rates, keeping the default at 100 and every other rate relative to it."
+  },
+  "quoteStates": {
+    "table": "EcomOrderStates",
+    "ownedSince": "4.0.0",
+    "orderFlowId": 3,
+    "orderFlowName": "Default Quote flow",
+    "orderType": 1,
+    "states": [
+      {
+        "orderStateId": "QuotePending",
+        "name": "Quote pending",
+        "isDefault": true,
+        "allowOrder": false,
+        "allowEdit": true,
+        "sortOrder": 1
+      },
+      {
+        "orderStateId": "QuoteSent",
+        "name": "Quote sent",
+        "isDefault": false,
+        "allowOrder": true,
+        "allowEdit": false,
+        "sortOrder": 2
+      },
+      {
+        "orderStateId": "QuoteAccepted",
+        "name": "Quote accepted",
+        "isDefault": false,
+        "allowOrder": true,
+        "allowEdit": false,
+        "sortOrder": 3
+      },
+      {
+        "orderStateId": "QuoteRejected",
+        "name": "Quote rejected",
+        "isDefault": false,
+        "allowOrder": false,
+        "allowEdit": false,
+        "sortOrder": 4
+      }
+    ],
+    "retainedStates": [
+      "OS8",
+      "OS9"
+    ],
+    "note": "The quote lifecycle the Swift 2.4 customer-center dashboard reads. Swift's Pending quotes widget (Swift-v2_Dashboard_List/QuotesPending.cshtml) asks /dwapi/ecommerce/orders/search for Type=quote and StateId=QuotePending, so a state with that EXACT id must exist or the widget renders its empty state forever. The ids are the literal Swift ids, not prefixed: the base owns the table and the template hard-codes the id. QuotePending is the flow default, so a quote a customer submits lands in it; the stock OS8 'New' quote state is no longer the default and OS8 / OS9 'Price given' stay in the flow (sort 5 and 6) because a Replace predicate never deletes a row and an older host keeps them either way. No EcomOrderStateRules row is added: the two stock rules (OS8 <-> OS9) stay, and the four states carry no rule, which leaves every transition open, the shape the marine demo ran its quote lifecycle on. OrderStateAutoId is an identity column outside the key, so the host allocates it; the serialized value is informational. Quote orders of the sample-data layer bind here (OrderIsQuote true, OrderStateId one of these four)."
+  },
+  "marketDefaults": {
+    "ownedSince": "4.0.0",
+    "market": "US / B2B",
+    "currency": "USD",
+    "country": {
+      "code": "US",
+      "note": "The base has no default-country column: a storefront's default country is its area's AreaEcomCountryCode, owned by the surface layer that ships the area, and EcomCountries.US$$ carries CountryCurrencyCode USD. The base makes US the default for the country-scoped method relations below."
+    },
+    "payments": [
+      {
+        "paymentId": "PAY2",
+        "name": "On account (Net 30)",
+        "active": true,
+        "addInType": "None",
+        "termsCode": "NET30",
+        "defaultFor": [
+          "US"
+        ]
+      },
+      {
+        "paymentId": "PAY1",
+        "name": "Credit card",
+        "active": false,
+        "addInType": "None"
+      },
+      {
+        "paymentId": "PAY3",
+        "name": "Inactive payment method (PAY3)",
+        "active": false,
+        "addInType": "None"
+      }
+    ],
+    "shippings": [
+      {
+        "shippingId": "SHIP9",
+        "name": "Standard ground",
+        "active": true,
+        "defaultFor": [
+          "US"
+        ]
+      },
+      {
+        "shippingId": "SHIP11",
+        "name": "Express",
+        "active": true
+      },
+      {
+        "shippingId": "SHIP6",
+        "name": "Freight / LTL",
+        "active": true
+      },
+      {
+        "shippingId": "SHIP5",
+        "name": "Customer pickup",
+        "active": true,
+        "provider": "StockLocationShippingProvider",
+        "stockLocationCategory": "STOCKLOCCAT1"
+      },
+      {
+        "shippingIds": [
+          "SHIP3",
+          "SHIP4",
+          "SHIP8",
+          "SHIP10",
+          "SHIP12",
+          "SHIP13"
+        ],
+        "active": false
+      }
+    ],
+    "methodCountryRelations": {
+      "added": [
+        "CREL3001",
+        "CREL3002"
+      ],
+      "defaultChanged": [
+        "CREL73",
+        "CREL2956",
+        "CREL2987"
+      ]
+    },
+    "taxLabels": {
+      "VATGRP1": "Tax (DK)",
+      "VATGRP2": "Tax default",
+      "vatName": "Tax"
+    },
+    "idsAreStable": true,
+    "note": "The neutral market default an edition gets with no market work: USD, on-account invoicing with Net 30 terms, four generic delivery methods and Tax labels. Every PaymentId, ShippingId and VatGroupId is kept and only renamed, reconfigured or deactivated, for two reasons. (1) A Replace predicate is an upsert by key and never deletes a row absent from the tree, so a dropped Danish carrier would stay ACTIVE on every host delivered from base 3.x; shipped inactive, it is switched off there too. (2) Other layers post the ids: feature-subscription-orders' checkout-recurring probe buys on PAY2 / SHIP9, which is why those two are the on-account payment and the standard ground method. PaymentAddInType None is the gateway-less checkout handler, which also implements IRecurring. Credit card is inactive because it has no gateway: active, it placed orders unpaid. The Danish language rows (DAN) of the same ids carry Danish translations of the neutral names. A demo for another market rewrites these rows the other way in a demo-local layer."
   },
   "baseOwnedTables": {
     "replaceWholeTable": [
@@ -475,7 +611,7 @@
     ],
     "languageId": "ENU",
     "idsAreStable": true,
-    "note": "Neutral, brand-free stock locations shipped as TWO whole-table Replace sets - EcomStockLocation and its EcomStockLocationTranslations rows, which is where the name Dynamicweb actually renders lives. Both carry the same three ids on ENU. The baseline DB carried the Swift demo's own 'BikeShop Copenhagen' / 'BikeShop Aarhus' rows, so every composed edition delivered a bike shop's warehouse names; 3.6.0 corrects the names in the base instead of per-edition (Foundry #1303). The IDS 1-3 ARE DELIBERATELY KEPT: all 61 EcomStockUnit rows in the sample-data layer carry StockUnitStockLocationId 3, and EcomShops.ShopStockLocationID (SHOP1 ships 0, meaning 'no single location') addresses the same id space, so a rekey above the intIdentityFloor would orphan the stock units and silently change what a shop points at. These three ids are therefore the one further documented exception to idRules.intIdentityFloor, alongside the permission groups: they are base-owned rows the base does not mint but adopts from the platform baseline. An addition that needs its own stock location mints one at or above 100000. StockLocationCategoryId stays as the baseline carries it (1 and 3 STOCKLOCCAT1 'Click and collect', 2 STOCKLOCCAT2 'Warehouse'): EcomStockLocationCategory is BASELINE-OWNED, serialized by no layer, and the base's Click & Collect delivery method needs pickup locations in that category."
+    "note": "Neutral, brand-free stock locations shipped as TWO whole-table Replace sets - EcomStockLocation and its EcomStockLocationTranslations rows, which is where the name Dynamicweb actually renders lives. Both carry the same three ids on ENU. The baseline DB carried the Swift demo's own 'BikeShop Copenhagen' / 'BikeShop Aarhus' rows, so every composed edition delivered a bike shop's warehouse names; 3.6.0 corrects the names in the base instead of per-edition (Foundry #1303). The IDS 1-3 ARE DELIBERATELY KEPT: all 61 EcomStockUnit rows in the sample-data layer carry StockUnitStockLocationId 3, and EcomShops.ShopStockLocationID (SHOP1 ships 0, meaning 'no single location') addresses the same id space, so a rekey above the intIdentityFloor would orphan the stock units and silently change what a shop points at. These three ids are therefore the one further documented exception to idRules.intIdentityFloor, alongside the permission groups: they are base-owned rows the base does not mint but adopts from the platform baseline. An addition that needs its own stock location mints one at or above 100000. StockLocationCategoryId stays as the baseline carries it (1 and 3 STOCKLOCCAT1 'Click and collect', 2 STOCKLOCCAT2 'Warehouse'): EcomStockLocationCategory is BASELINE-OWNED, serialized by no layer, and the base's Customer pickup delivery method (SHIP5, the StockLocationShippingProvider on STOCKLOCCAT1, named Click & Collect before 4.0.0) needs pickup locations in that category."
   },
   "collisionChecks": [
     {

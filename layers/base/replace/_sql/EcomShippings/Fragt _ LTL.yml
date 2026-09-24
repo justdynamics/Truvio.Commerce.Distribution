@@ -1,13 +1,13 @@
 ﻿"ShippingId": "SHIP6"
-"ShippingLanguageId": "ENU"
-"ShippingName": "UPS"
-"ShippingDescription": "International shipping"
+"ShippingLanguageId": "DAN"
+"ShippingName": "Fragt / LTL"
+"ShippingDescription": "Pallefragt, levering efter aftale."
 "ShippingPriceOverMaxWeight": 0
 "ShippingFreeFeeAmount": 0
 "ShippingServiceSystemName": ""
 "ShippingServiceParameters": ""
-"ShippingSorting": 8
-"ShippingAutoId": 16
+"ShippingSorting": 3
+"ShippingAutoId": 17
 "ShippingFeeSelection": "High"
 "ShippingIcon": ""
 "ShippingLimitsUseLogic": 1

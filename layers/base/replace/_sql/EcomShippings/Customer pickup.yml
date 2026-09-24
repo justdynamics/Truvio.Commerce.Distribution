@@ -1,7 +1,7 @@
 ﻿"ShippingId": "SHIP5"
 "ShippingLanguageId": "ENU"
-"ShippingName": "Click & Collect delivery method"
-"ShippingDescription": ""
+"ShippingName": "Customer pickup"
+"ShippingDescription": "Collect the order at a pickup location."
 "ShippingPriceOverMaxWeight": 0
 "ShippingFreeFeeAmount": 0
 "ShippingServiceSystemName": "Dynamicweb.Ecommerce.Cart.ShippingProviders.StockLocationShippingProvider, Dynamicweb.Ecommerce"
@@ -14,7 +14,7 @@
     <Parameter addin="Dynamicweb.Ecommerce.Cart.ShippingProviders.StockLocationShippingProvider" name="Save pick up point address in delivery address" value="False" />
     <Parameter addin="Dynamicweb.Ecommerce.Cart.ShippingProviders.StockLocationShippingProvider" name="Use delivery address if specified" value="True" />
   </Parameters>
-"ShippingSorting": 6
+"ShippingSorting": 4
 "ShippingAutoId": 4
 "ShippingFeeSelection": "high"
 "ShippingIcon": ""
@@ -23,7 +23,7 @@
 "ShippingUsePriceWithVat": false
 "ShippingTakeDiscountIntoAccount": true
 "ShippingEligibleForFreeShipping": false
-"ShippingActive": false
+"ShippingActive": true
 "ShippingUserGroups": ""
 "ShippingAllowAnonymousUsers": false
 "ShippingCode": ""

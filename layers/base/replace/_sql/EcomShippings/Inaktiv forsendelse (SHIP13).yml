@@ -1,21 +1,21 @@
-﻿"ShippingId": "SHIP9"
+﻿"ShippingId": "SHIP13"
 "ShippingLanguageId": "DAN"
-"ShippingName": "Hjemmelevering"
-"ShippingDescription": "Dansk hjemmelevering"
+"ShippingName": "Inaktiv forsendelse (SHIP13)"
+"ShippingDescription": "Inaktiv. Beholdt, så id ejes af base."
 "ShippingPriceOverMaxWeight": 0
 "ShippingFreeFeeAmount": 0
 "ShippingServiceSystemName": ""
 "ShippingServiceParameters": ""
-"ShippingSorting": 0
-"ShippingAutoId": 11
+"ShippingSorting": 23
+"ShippingAutoId": 13
 "ShippingFeeSelection": "high"
-"ShippingIcon": ""
+"ShippingIcon": "/Images/Shipping/PostNord.svg"
 "ShippingLimitsUseLogic": 1
 "ShippingFeeRulesSource": 2
 "ShippingUsePriceWithVat": false
 "ShippingTakeDiscountIntoAccount": true
 "ShippingEligibleForFreeShipping": false
-"ShippingActive": true
+"ShippingActive": false
 "ShippingUserGroups": ""
 "ShippingAllowAnonymousUsers": false
 "ShippingCode": ""

@@ -1,12 +1,12 @@
 ﻿"ShippingId": "SHIP12"
 "ShippingLanguageId": "DAN"
-"ShippingName": "GLS Pakkeshop"
-"ShippingDescription": "Dansk pakkeshop"
+"ShippingName": "Inaktiv forsendelse (SHIP12)"
+"ShippingDescription": "Inaktiv. Beholdt, så id ejes af base."
 "ShippingPriceOverMaxWeight": 0
 "ShippingFreeFeeAmount": 0
 "ShippingServiceSystemName": ""
 "ShippingServiceParameters": ""
-"ShippingSorting": 3
+"ShippingSorting": 22
 "ShippingAutoId": 7
 "ShippingFeeSelection": "high"
 "ShippingIcon": "/Files/Images/Shipping/gls_logo.svg"
@@ -15,7 +15,7 @@
 "ShippingUsePriceWithVat": false
 "ShippingTakeDiscountIntoAccount": true
 "ShippingEligibleForFreeShipping": false
-"ShippingActive": true
+"ShippingActive": false
 "ShippingUserGroups": ""
 "ShippingAllowAnonymousUsers": false
 "ShippingCode": ""

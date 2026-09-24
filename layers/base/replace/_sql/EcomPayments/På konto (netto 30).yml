@@ -1,7 +1,7 @@
 ﻿"PaymentId": "PAY2"
 "PaymentLanguageId": "DAN"
-"PaymentName": "Faktura"
-"PaymentDescription": ""
+"PaymentName": "På konto (netto 30)"
+"PaymentDescription": "Faktura på kundekontoen, netto 30 dage."
 "PaymentIcon": ""
 "PaymentGatewayId": ""
 "PaymentGatewayTemplate": ""
@@ -19,6 +19,6 @@
 "PaymentUserGroups": ""
 "PaymentAllowAnonymousUsers": false
 "PaymentCode": ""
-"PaymentTermsCode": ""
-"PaymentTermsDescription": ""
+"PaymentTermsCode": "NET30"
+"PaymentTermsDescription": "Netto 30 dage"
 "PaymentDisableSavedCards": false

@@ -1,21 +1,21 @@
-﻿"ShippingId": "SHIP4"
+﻿"ShippingId": "SHIP8"
 "ShippingLanguageId": "ENU"
-"ShippingName": "PostNord Privat"
-"ShippingDescription": "PostNord Privat"
-"ShippingPriceOverMaxWeight": 50
+"ShippingName": "Inactive shipping method (SHIP8)"
+"ShippingDescription": "Inactive. Kept so the id stays owned by the base; rename and activate to use it."
+"ShippingPriceOverMaxWeight": 0
 "ShippingFreeFeeAmount": 0
 "ShippingServiceSystemName": ""
 "ShippingServiceParameters": ""
-"ShippingSorting": 2
-"ShippingAutoId": 15
+"ShippingSorting": 18
+"ShippingAutoId": 5
 "ShippingFeeSelection": "high"
-"ShippingIcon": "/Images/Shipping/PostNord.svg"
+"ShippingIcon": ""
 "ShippingLimitsUseLogic": 1
 "ShippingFeeRulesSource": 2
 "ShippingUsePriceWithVat": false
 "ShippingTakeDiscountIntoAccount": true
 "ShippingEligibleForFreeShipping": false
-"ShippingActive": true
+"ShippingActive": false
 "ShippingUserGroups": ""
 "ShippingAllowAnonymousUsers": false
 "ShippingCode": ""

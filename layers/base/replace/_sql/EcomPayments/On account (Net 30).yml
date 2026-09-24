@@ -1,8 +1,8 @@
-﻿"PaymentId": "PAY1"
+﻿"PaymentId": "PAY2"
 "PaymentLanguageId": "ENU"
-"PaymentName": "Creditcard"
-"PaymentDescription": "Creditcard"
-"PaymentIcon": "/Images/Payment/quickpay_logo.svg"
+"PaymentName": "On account (Net 30)"
+"PaymentDescription": "Invoice on the customer account, payment due 30 days net. No payment gateway."
+"PaymentIcon": ""
 "PaymentGatewayId": ""
 "PaymentGatewayTemplate": ""
 "PaymentMerchantNum": ""
@@ -13,12 +13,12 @@
 "PaymentAddInType": "None"
 "PaymentCheckoutSystemName": ""
 "PaymentCheckoutParameters": ""
-"PaymentSorting": 1
-"PaymentAutoId": 1
+"PaymentSorting": 0
+"PaymentAutoId": 3
 "PaymentActive": true
 "PaymentUserGroups": ""
 "PaymentAllowAnonymousUsers": false
 "PaymentCode": ""
-"PaymentTermsCode": ""
-"PaymentTermsDescription": ""
+"PaymentTermsCode": "NET30"
+"PaymentTermsDescription": "Net 30 days"
 "PaymentDisableSavedCards": false

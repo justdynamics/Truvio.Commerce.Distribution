@@ -1,15 +1,15 @@
-﻿"ShippingId": "SHIP3"
-"ShippingLanguageId": "DAN"
-"ShippingName": "GLS Privat"
-"ShippingDescription": "GLS Privat"
+﻿"ShippingId": "SHIP11"
+"ShippingLanguageId": "ENU"
+"ShippingName": "Express"
+"ShippingDescription": "Express delivery, 1 to 2 business days."
 "ShippingPriceOverMaxWeight": 0
 "ShippingFreeFeeAmount": 0
 "ShippingServiceSystemName": ""
 "ShippingServiceParameters": ""
-"ShippingSorting": 1
-"ShippingAutoId": 10
+"ShippingSorting": 2
+"ShippingAutoId": 3
 "ShippingFeeSelection": "high"
-"ShippingIcon": "/Images/Shipping/gls_group_gls_logo_svg.svg"
+"ShippingIcon": ""
 "ShippingLimitsUseLogic": 1
 "ShippingFeeRulesSource": 2
 "ShippingUsePriceWithVat": false

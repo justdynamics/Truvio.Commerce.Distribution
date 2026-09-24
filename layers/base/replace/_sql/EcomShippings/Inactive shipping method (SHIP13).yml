@@ -1,21 +1,21 @@
-﻿"ShippingId": "SHIP12"
+﻿"ShippingId": "SHIP13"
 "ShippingLanguageId": "ENU"
-"ShippingName": "GLS Parcelshop"
-"ShippingDescription": "Danish parcelshop"
+"ShippingName": "Inactive shipping method (SHIP13)"
+"ShippingDescription": "Inactive. Kept so the id stays owned by the base; rename and activate to use it."
 "ShippingPriceOverMaxWeight": 0
 "ShippingFreeFeeAmount": 0
 "ShippingServiceSystemName": ""
 "ShippingServiceParameters": ""
-"ShippingSorting": 3
-"ShippingAutoId": 8
+"ShippingSorting": 23
+"ShippingAutoId": 14
 "ShippingFeeSelection": "high"
-"ShippingIcon": "/Files/Images/Shipping/gls_logo.svg"
+"ShippingIcon": "/Images/Shipping/PostNord.svg"
 "ShippingLimitsUseLogic": 1
 "ShippingFeeRulesSource": 2
 "ShippingUsePriceWithVat": false
 "ShippingTakeDiscountIntoAccount": true
 "ShippingEligibleForFreeShipping": false
-"ShippingActive": true
+"ShippingActive": false
 "ShippingUserGroups": ""
 "ShippingAllowAnonymousUsers": false
 "ShippingCode": ""

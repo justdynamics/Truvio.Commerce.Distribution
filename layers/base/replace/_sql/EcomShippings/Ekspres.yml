@@ -1,13 +1,13 @@
-﻿"ShippingId": "SHIP10"
+﻿"ShippingId": "SHIP11"
 "ShippingLanguageId": "DAN"
-"ShippingName": "Bring, DAO Pakkeshop"
-"ShippingDescription": "Dansk pakkeshop"
+"ShippingName": "Ekspres"
+"ShippingDescription": "Ekspreslevering, 1 til 2 hverdage."
 "ShippingPriceOverMaxWeight": 0
 "ShippingFreeFeeAmount": 0
 "ShippingServiceSystemName": ""
 "ShippingServiceParameters": ""
-"ShippingSorting": 5
-"ShippingAutoId": 1
+"ShippingSorting": 2
+"ShippingAutoId": 6
 "ShippingFeeSelection": "high"
 "ShippingIcon": ""
 "ShippingLimitsUseLogic": 1

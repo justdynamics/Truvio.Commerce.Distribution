@@ -1,15 +1,15 @@
-﻿"ShippingId": "SHIP8"
+﻿"ShippingId": "SHIP4"
 "ShippingLanguageId": "ENU"
-"ShippingName": "DAO"
-"ShippingDescription": ""
-"ShippingPriceOverMaxWeight": 0
+"ShippingName": "Inactive shipping method (SHIP4)"
+"ShippingDescription": "Inactive. Kept so the id stays owned by the base; rename and activate to use it."
+"ShippingPriceOverMaxWeight": 50
 "ShippingFreeFeeAmount": 0
 "ShippingServiceSystemName": ""
 "ShippingServiceParameters": ""
-"ShippingSorting": 9
-"ShippingAutoId": 5
+"ShippingSorting": 14
+"ShippingAutoId": 15
 "ShippingFeeSelection": "high"
-"ShippingIcon": ""
+"ShippingIcon": "/Images/Shipping/PostNord.svg"
 "ShippingLimitsUseLogic": 1
 "ShippingFeeRulesSource": 2
 "ShippingUsePriceWithVat": false
