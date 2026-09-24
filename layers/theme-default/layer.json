@@ -1,6 +1,6 @@
 ﻿{
   "name": "theme-default",
-  "version": "2.4.0",
+  "version": "2.5.0",
   "kind": "theme",
   "swiftVersion": "2.4.0",
   "files": [
@@ -14,6 +14,8 @@
     "System/Styles/Typography/default.css",
     "System/Styles/Typography/default.json",
     "Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml",
+    "Templates/Designs/Swift-v2/Custom/brand.css",
+    "Templates/Designs/Swift-v2/Custom/brand.tokens.json",
     "Templates/Designs/Swift-v2/Custom/default_custom.css",
     "Templates/Designs/Swift-v2/Custom/default_custom.js",
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Image/Responsive.cshtml",
@@ -22,6 +24,16 @@
     "Templates/Designs/Swift-v2/Paragraph/Swift-v2_VideoPlayer/PosterLazy.cshtml"
   ],
   "placeholders": [
+    {
+      "path": "Templates/Designs/Swift-v2/Custom/brand.css",
+      "kind": "css",
+      "why": "The brand slot: the demo's own sheet, registered after default_custom.css so a brand rule wins without !important. A demo rewrites it (token block from brand.tokens.json, then brand-only rules) in a demo-local copy of this layer instead of appending to default_custom.css. Ships with a sentinel and a commented token block, no paint."
+    },
+    {
+      "path": "Templates/Designs/Swift-v2/Custom/brand.tokens.json",
+      "kind": "asset",
+      "why": "The brand slot's input: scheme colours, typography, buttons, logo, favicon, radius and the --td-* token values a demo generates brand.css and the three Style pairs from. Ships holding this layer's neutral values; nothing reads it at runtime."
+    },
     {
       "path": "Templates/Designs/Swift-v2/Custom/default_custom.css",
       "kind": "css",

@@ -91,6 +91,9 @@
                 Array.prototype.forEach.call(headings, function (heading) {
                     var label = (heading.textContent || "").trim();
                     if (!heading.id || !label) { return; }
+                    /* A heading block #33 of default_custom.css hid with its empty
+                     * section renders no box, and a link to it would jump nowhere. */
+                    if (!heading.getClientRects().length) { return; }
 
                     var li = document.createElement("li");
                     li.className = "td-anchornav__item";
@@ -108,6 +111,13 @@
 
             Array.prototype.forEach.call(list.querySelectorAll("[data-td-anchor]"), function (a) {
                 a.href = path + "#" + a.getAttribute("data-td-anchor");
+                /* An authored link whose section block #33 hid (an empty BOM, no
+                 * documents, no relations) is dropped with it. A link whose target
+                 * is not on the page at all is left alone: that is an authoring
+                 * gap to see, not a state to mask. */
+                var target = document.getElementById(a.getAttribute("data-td-anchor"));
+                var item = a.closest ? a.closest(".td-anchornav__item, li") : null;
+                if (target && item && !target.getClientRects().length) { item.hidden = true; }
             });
         });
     }

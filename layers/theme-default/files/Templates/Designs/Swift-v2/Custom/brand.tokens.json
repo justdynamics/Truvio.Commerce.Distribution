@@ -1,0 +1,67 @@
+{
+  "$comment": "THE BRAND SLOT'S INPUT. This file belongs to the demo, not to the theme. theme-default ships it holding its own neutral values, so it is a true description of the unbranded site. A demo rewrites it in a demo-local copy of the layer and generates three things from it before delivery: (1) the css section into the token block of brand.css beside this file; (2) schemes into System/Styles/ColorSchemes/default.css AND default.json, typography into the Typography pair and buttons into the Buttons pair, both files of each pair in the same pass (block #19 of default_custom.css: the .css is generated from the .json, and editing one alone is reverted by the next design save); (3) logo and favicon into the Swift-v2_Logo paragraphs and the Swift-v2_Master Favicon, AppleTouchIcon and MetaImage fields, which are content, not theme files. Scheme ids are fixed: they are the seven ids every serialized colorSchemeId in the Distribution names. accent is optional per scheme; when set, the generator writes --dw-color-accent, -rgb and -contrast into the scheme css AND CustomColors entries accent and accent-contrast into the json, or an admin Styles save drops it. Contrast inks are chosen by measured WCAG ratio (4.5:1 minimum against the fill), never by a lightness threshold (README, Foundry #1184). Nothing in the theme reads this file at runtime.",
+  "version": 1,
+  "brand": {
+    "name": "Default",
+    "logo": {
+      "image": "/Files/Images/Brand/logo.svg",
+      "imageInverse": null,
+      "imagePhone": null,
+      "alt": "Default",
+      "width": 210
+    },
+    "favicon": null,
+    "appleTouchIcon": null,
+    "edgeMask": "/Files/Images/Brand/edge.svg"
+  },
+  "css": {
+    "--td-ink": "#1F2933",
+    "--td-ink-soft": "#323F4B",
+    "--td-slate": "#3E4C59",
+    "--td-slate-mid": "#52606D",
+    "--td-slate-light": "#CBD2D9",
+    "--td-grey-light": "#F5F7FA",
+    "--td-hairline": "#E4E7EB",
+    "--td-white": "#FFFFFF",
+    "--td-accent": "#3E4C59",
+    "--td-accent-soft": "rgba(62, 76, 89, .07)",
+    "--td-radius": "12px",
+    "--td-radius-sm": "8px",
+    "--td-shadow-soft": "0 1px 2px rgba(31, 41, 51, .06), 0 12px 28px -14px rgba(31, 41, 51, .22)",
+    "--td-logo-h": "1.75rem",
+    "--td-logo-w-phone": "132px",
+    "--td-logo-w-laptop": "170px",
+    "--td-hero-max-h": "60vh"
+  },
+  "schemes": [
+    { "Id": "light",      "Name": "Light",        "BackgroundColor": "#FFFFFF", "ForegroundColor": "#1F2933", "PrimaryButtonColor": "#1F2933", "SecondaryButtonColor": "#52606D", "AccentColor": null },
+    { "Id": "lightgrey1", "Name": "Light Grey 1", "BackgroundColor": "#F5F7FA", "ForegroundColor": "#1F2933", "PrimaryButtonColor": "#1F2933", "SecondaryButtonColor": "#52606D", "AccentColor": null },
+    { "Id": "lightgrey2", "Name": "Light Grey 2", "BackgroundColor": "#E4E7EB", "ForegroundColor": "#1F2933", "PrimaryButtonColor": "#1F2933", "SecondaryButtonColor": "#3E4C59", "AccentColor": null },
+    { "Id": "dark",       "Name": "Dark",         "BackgroundColor": "#1F2933", "ForegroundColor": "#F5F7FA", "PrimaryButtonColor": "#F5F7FA", "SecondaryButtonColor": "#7B8794", "AccentColor": null },
+    { "Id": "darksubtle", "Name": "Dark Subtle",  "BackgroundColor": "#323F4B", "ForegroundColor": "#CBD2D9", "PrimaryButtonColor": "#F5F7FA", "SecondaryButtonColor": "#7B8794", "AccentColor": null },
+    { "Id": "primary",    "Name": "Primary",      "BackgroundColor": "#1F2933", "ForegroundColor": "#F5F7FA", "PrimaryButtonColor": "#F5F7FA", "SecondaryButtonColor": "#9AA5B1", "AccentColor": null },
+    { "Id": "secondary",  "Name": "Secondary",    "BackgroundColor": "#3E4C59", "ForegroundColor": "#F5F7FA", "PrimaryButtonColor": "#F5F7FA", "SecondaryButtonColor": "#9AA5B1", "AccentColor": null }
+  ],
+  "typography": {
+    "BaseFontSize": 16,
+    "BaseFontScale": 1.2,
+    "ParagraphFont": "Inter",
+    "ParagraphFontWeight": 400,
+    "ParagraphLineHeight": 1.5,
+    "HeadingFont": "Inter",
+    "HeadingFontWeight": 600,
+    "HeadingLetterSpacing": -0.02,
+    "HeadingLineHeight": 1.15,
+    "ButtonFont": "Inter",
+    "ButtonFontWeight": 600,
+    "ButtonLineHeight": 1.2,
+    "fontImport": "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+  },
+  "buttons": {
+    "Shape": 2,
+    "BorderSize": 1,
+    "PaddingY": 0.55,
+    "PaddingX": 1.4,
+    "borderRadius": "999px"
+  }
+}

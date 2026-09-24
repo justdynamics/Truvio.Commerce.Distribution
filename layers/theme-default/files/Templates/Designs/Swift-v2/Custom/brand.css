@@ -1,0 +1,86 @@
+/* brand.css - THE BRAND SLOT. This file belongs to the demo, not to the theme.
+ *
+ * WHAT IT IS
+ * theme-default ships this sheet with no paint in it. DefaultHeadInclude.cshtml
+ * registers it AFTER default_custom.css, so every rule a brand writes here wins a
+ * cascade tie against the theme without !important, and the theme's own sheet is
+ * never edited. A theme bump is then a file copy, not a re-copy plus re-append.
+ *
+ * WHO WRITES IT
+ * A demo copies theme-default into a demo-local layer (or its build folder), rewrites
+ * THIS file and brand.tokens.json beside it, and delivers the copy. It never appends
+ * brand CSS to default_custom.css: an appended sheet is a fork of the theme that the
+ * next theme release silently discards or silently fails to receive.
+ *
+ * WHAT GOES HERE, in this order
+ *   1. The token block below, filled from brand.tokens.json (css section). Only the
+ *      tokens the brand changes; an omitted token keeps the theme value.
+ *   2. Brand-only component rules: the logo lockup, a signature section, a motif.
+ *      A rule that would help every demo is not a brand rule: it is a theme fix and
+ *      belongs in default_custom.css upstream (Distribution PR), not here.
+ *
+ * WHAT DOES NOT GO HERE
+ *   - --dw-color-button-primary and the rest of the per-scheme palette. They live in
+ *     the GENERATED System/Styles/ColorSchemes pair (.css AND .json), block #19 of
+ *     default_custom.css. brand.tokens.json carries the scheme table a generator
+ *     writes into that pair; this sheet only consumes the result.
+ *   - Fonts. The Typography pair loads them (Google Fonts import) and sets
+ *     --dw-font-family per role. This sheet may reference a brand font by name.
+ *
+ * WHY :root:root
+ * DefaultHeadInclude.cshtml inlines a render-critical copy of six --td-* tokens in a
+ * head <style> element, and its position relative to this sheet's link element is up
+ * to the platform. A doubled :root (specificity 0,2,0) beats the inline :root (0,1,0)
+ * whatever the source order, so a brand token cannot lose to the neutral copy and no
+ * !important is needed.
+ *
+ * AUTHORING GUARDS (the same G1 to G4 as default_custom.css): never type the
+ * comment-close sequence inside comment prose; keep the sentinel rule below so a
+ * CSSOM assert can prove the sheet parsed; !important every override of a
+ * Bootstrap/Swift flex utility in every tier; never write a numeric-leading id
+ * selector. Never write a marker string into the page from here (no content: that
+ * names the brand file, no debug banner).
+ */
+
+/* The sentinel. Inert: nothing in a Swift document carries the attribute. */
+[data-td-block="brand"] { --td-block: brand; }
+
+/* 1. Brand tokens. Ships with every declaration commented out, so the slot paints
+ *    nothing until a demo fills it. Uncomment and set what the brand changes.
+ *
+ * :root:root {
+ *   --td-ink:          #1F2933;
+ *   --td-ink-soft:     #323F4B;
+ *   --td-slate:        #3E4C59;
+ *   --td-slate-mid:    #52606D;
+ *   --td-slate-light:  #CBD2D9;
+ *   --td-grey-light:   #F5F7FA;
+ *   --td-hairline:     #E4E7EB;
+ *   --td-white:        #FFFFFF;
+ *   --td-accent:       #3E4C59;
+ *   --td-accent-soft:  rgba(62, 76, 89, .07);
+ *   --td-radius:       12px;
+ *   --td-radius-sm:    8px;
+ *   --td-shadow-soft:  0 1px 2px rgba(31, 41, 51, .06), 0 12px 28px -14px rgba(31, 41, 51, .22);
+ *   --td-logo-h:       1.75rem;
+ *   --td-logo-w-phone: 132px;
+ *   --td-logo-w-laptop: 170px;
+ *   --td-hero-max-h:   60vh;
+ *   --td-edge-mask:    url("data:image/svg+xml,...");
+ *   --td-edge-fill-hero:   #RRGGBB;
+ *   --td-edge-fill-alt:    #RRGGBB;
+ *   --td-edge-fill-footer: #RRGGBB;
+ *   --td-button-primary-ink-primary: #RRGGBB;
+ * }
+ *
+ * The first thirteen are the theme's own token block (the first six also have the
+ * inline head copy). The logo and hero tokens size blocks #13, #23 and the
+ * image-height caps. The edge and button-ink tokens are the hooks of blocks #22 and
+ * #30; set them only when the brand needs them (README, "Opt-in hooks").
+ *
+ * The accent on dark grounds: a brand whose accent is dark on light schemes sets a
+ * lighter one per dark scheme, for example
+ *   [data-dw-colorscheme="dark"], [data-dw-colorscheme="darksubtle"] { --td-accent: #4FB184; }
+ */
+
+/* 2. Brand-only component rules go below this line. */

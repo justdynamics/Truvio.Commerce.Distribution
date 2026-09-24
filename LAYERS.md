@@ -36,7 +36,7 @@ and every layer traces to a lane of the ecosystem workflow (the Foundry's
 | `feature-baseline-guide` | feature | 1.0.3 | Content-only agent-facing guide to the Swift 2 baseline: the `/Baseline guide` page tree (root + 14 pages), `Swift-v2_Text` on 1Column rows, zero SQL. Its future on customer builds is open (Distribution #87). |
 | `surface-headless` | surface | 2.3.3 | Headless content surface: `Headless_*` item types, repository and Delivery-API content (areas Headless and Headless Nederlands). |
 | `surface-dap-portal` | surface | 1.0.5 | Digital Asset Portal content area (area 26, about 32 `Swift-v2` pages). |
-| `theme-default` | theme | 2.4.0 | The one presentation layer (disk-only, SPEC-06): neutral palette, quiet buttons, Inter typography, the header menu-bar affordance, mobile and PLP fixes. The starting point of every customer re-skin. |
+| `theme-default` | theme | 2.5.0 | The one presentation layer (disk-only, SPEC-06): neutral palette, quiet buttons, Inter typography, the header menu-bar affordance, mobile and PLP fixes. Since 2.5.0 it ships the brand slot (`Custom/brand.css`, loaded after `default_custom.css`, plus `Custom/brand.tokens.json`) that a demo rewrites in a demo-local copy, and absorbs the generic demo fixes (header wrap, phone poster cap, PDP sections that hide when empty, mega-menu hover apron, per-scheme hover contrast). The starting point of every customer re-skin. |
 
 ## Editions (`editions/<name>.json`)
 
