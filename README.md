@@ -37,11 +37,11 @@ storefront copy — which rides the `sampleData` toggle and is never an `add[]` 
 An **edition** is a composition — `from` a privileged base + an ordered `add` of layers,
 plus optional `surfaces`, `sampleData`, and `themes`. Additions bind ONLY to the
 [base contract](layers/base/base.contract.json), never to each other — including to the sample
-data, whose subjects the contract's `sampleData` block names. Four editions
-(`base-only`, `swift-demo`, `headless-demo`, `dap-portal`) are gate-proven from their specs;
-`base-swift` — the foundational baseline, one thing to clone that boots a Swift site — is
-specified and awaiting its first gate run, and appears in `INDEX.gateProven` only once the
-Foundry publish flow stamps the run id.
+data, whose subjects the contract's `sampleData` block names. Five editions are specified
+(`base-only`, `base-swift`, `swift-demo`, `headless-demo`, `dap-portal`). **Which of them is
+gate-proven is recorded in [`layers/INDEX.json`](layers/INDEX.json) `gateProven` and nowhere
+else**: the Foundry publish flow stamps an edition there from a gate run, and an edition absent
+from `gateProven.editions` is unproven, whatever a description says.
 
 ## Consuming
 

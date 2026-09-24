@@ -166,7 +166,7 @@
   "sampleData": {
     "layer": "sample-data",
     "activatedBy": "sampleData: true",
-    "note": "What the ONE sample-data layer guarantees to an addition that binds to it. Since sample-data 4.0.0 there is exactly one layer of kind sample-data and it carries the whole demo dataset: the browsable Truvio Commerce catalogue, the three personas on one B2B account, twelve orders, the storefront copy, the demo clock and the email-marketing statistics backfill. Since 5.0.0 it also carries the PIM STRUCTURE those category fields always needed - a ShopType 4 shop, a data-model folder, four data models, four completion rules with their reference_category mirrors, and one Dynamic Workspace - named below. An addition NEVER binds to the layer directly - it binds to the subjects named here and declares them in its behaviorProbes requiresFixtures. Every subject is absent when an edition sets sampleData false, and a probe that names one is then recorded as a loud SKIP, never a silent pass.",
+    "note": "What the ONE sample-data layer guarantees to an addition that binds to it. Since sample-data 4.0.0 there is exactly one layer of kind sample-data and it carries the whole demo dataset: the browsable Truvio Commerce catalogue, the three personas on one B2B account, the buyer's orders, quotes, carts and favourite lists, the storefront copy, the demo clock and the email-marketing statistics backfill. Since 5.0.0 it also carries the PIM STRUCTURE those category fields always needed - a ShopType 4 shop, a data-model folder, four data models, four completion rules with their reference_category mirrors, and one Dynamic Workspace - named below. An addition NEVER binds to the layer directly - it binds to the subjects named here and declares them in its behaviorProbes requiresFixtures. Every subject is absent when an edition sets sampleData false, and a probe that names one is then recorded as a loud SKIP, never a silent pass.",
     "guaranteedRows": {
       "buyer": {
         "table": "AccessUser",
@@ -174,7 +174,7 @@
         "userName": "TruvioBuyer",
         "customerNumber": "TC-100200",
         "groupId": 1325,
-        "note": "feature-rma's authenticated my-returns probe signs in as this persona, and so does every cart-price and checkout-recurring probe."
+        "note": "surface-swift's authenticated my-returns probe signs in as this persona, and so does every cart-price and checkout-recurring probe. The customer-center dashboard data (customerCenter below) belongs to this persona."
       },
       "csr": {
         "table": "AccessUser",
@@ -274,15 +274,57 @@
           "TCO-0001-1",
           "TCO-0001-2"
         ],
-        "note": "feature-rma's authenticated my-returns probe returns against this completed order; its first line is what the RMA link points at."
+        "note": "surface-swift's authenticated my-returns probe (moved there from the retired feature-rma layer) returns against this completed order; its first line is what the RMA link points at."
       },
       "rma": {
         "table": "EcomRmas",
         "rmaId": "PACK-RMA-0001",
-        "ownedBy": "feature-rma",
+        "ownedBy": "sample-data",
         "rmaOrderLineId": 100301,
         "rmaOrderLineOrderLineId": "TCO-0001-1",
-        "note": "NOT a sample-data row: feature-rma ships EcomRmas PACK-RMA-0001 and its EcomRmaOrderLines link (id 100301, above the intIdentityFloor) and binds them to the deliveredOrder subject above. Listed here so the whole binding reads from one place."
+        "note": "A sample-data row since sample-data 6.0.0: the retired feature-rma layer shipped EcomRmas PACK-RMA-0001 and its EcomRmaOrderLines link (id 100301, above the intIdentityFloor), and both moved into sample-data with their keys unchanged, beside the deliveredOrder subject they bind to. The PACK- prefix predates the move and stays, because a re-key would leave the old row on every delivered host. The my-returns probe that reads it is declared by surface-swift, the layer that ships the My returns page, with requiresFixtures TCO-0001."
+      },
+      "customerCenter": {
+        "table": "EcomOrders",
+        "customerAccessUserId": 100101,
+        "shopId": "SHOP1",
+        "currency": "USD",
+        "orders": {
+          "ids": "TCO-0001..TCO-0026",
+          "completed": 21,
+          "open": 4,
+          "rejected": 1,
+          "completedDateSpan": [
+            "2026-04-04",
+            "2026-09-12"
+          ]
+        },
+        "quotes": {
+          "ids": "TCO-Q001..TCO-Q007",
+          "orderIsQuote": true,
+          "states": {
+            "QuotePending": 3,
+            "QuoteSent": 2,
+            "QuoteAccepted": 1,
+            "QuoteRejected": 1
+          }
+        },
+        "carts": {
+          "ids": "TCO-C001..TCO-C002",
+          "orderCart": true,
+          "orderStateId": "OS5"
+        },
+        "favouriteLists": {
+          "table": "EcomCustomerFavoriteLists",
+          "ids": [
+            100401,
+            100402
+          ],
+          "productsTable": "EcomCustomerFavoriteProducts",
+          "products": 9
+        },
+        "harvestDay": "2026-09-13",
+        "note": "The data the surface-swift customer-center dashboard (Swift 2.4 Dashboard widgets, surface-swift 1.16.0) draws for the buyer persona, added in sample-data 6.0.0. Every order is USD because the Spent this month and Monthly spending widgets sum one currency only and print '-' when the result mixes currencies; the Swift area and every EcomPrices row are USD too, so an order the demo places joins the same sum. The order widgets filter on OrderCompletedDate, so completed orders carry one and span the six-month chart window; open orders (OS1) carry none and list only on My orders. Quotes sit in the base quoteStates, three of them in QuotePending, the state the Pending quotes widget asks for. Dates are absolute at the harvest day and the demo clock shifts them daily, so the relative ages hold; the current-month total depends on the day of the month the demo runs."
       },
       "pimShop": {
         "table": "EcomShops",
@@ -409,7 +451,7 @@
     "defaultCurrency": "USD",
     "defaultRate": 100,
     "minNonDefaultRateExclusive": 1,
-    "note": "EcomCurrencies.CurrencyRate is hundredths against the default currency. Since base 4.0.0 the default is USD at 100, flagged CurrencyIsDefault true on every USD$$<lang> row: DW resolves the default currency per language context, and a single global default aborted the Products index at 0 documents (base 3.1.2). EUR ships at 100 as well, one-to-one parity with the default, a deliberate demo value and not an exchange rate, so a composition whose prices are EUR renders them unchanged. A non-default currency at rate 1 renders every price in it a hundred times over, with correct symbol and culture formatting, no error and no log entry (measured on DW 10.28.10: a stored 45.00 served as $4,500.00 at USD rate 1). No shipped row carries a rate at or below 1. The default flag is NOT what a storefront serves: the area binding (AreaEcomCurrencyId) decides the currency of a cart and which EcomPrices.PriceCurrency rows match, and an UNBOUND area on DW 10.28 resolves the request culture's currency (Foundry #1232, measured on foundry-sd4v.mydwsite4.com: cart CART783 OrderCurrencyCode USD, TCPROD0046 served 45.00 instead of the contract price 36.90). The area binding belongs to the surface layer that ships the area; a surface or sample-data layer that serves the default currency binds its area to USD and ships its prices in USD. The other non-default rows carry the values of the source solution and are not maintained exchange rates; a solution that needs real conversion sets real rates, keeping the default at 100 and every other rate relative to it."
+    "note": "EcomCurrencies.CurrencyRate is hundredths against the default currency. Since base 4.0.0 the default is USD at 100, flagged CurrencyIsDefault true on every USD$$<lang> row: DW resolves the default currency per language context, and a single global default aborted the Products index at 0 documents (base 3.1.2). EUR ships at 100 as well, one-to-one parity with the default, a deliberate demo value and not an exchange rate, so a composition whose prices are EUR renders them unchanged. A non-default currency at rate 1 renders every price in it a hundred times over, with correct symbol and culture formatting, no error and no log entry (measured on DW 10.28.10: a stored 45.00 served as $4,500.00 at USD rate 1). No shipped row carries a rate at or below 1. The default flag is NOT what a storefront serves: the area binding (AreaEcomCurrencyId) decides the currency of a cart and which EcomPrices.PriceCurrency rows match, and an UNBOUND area on DW 10.28 resolves the request culture's currency (Foundry #1232, measured on foundry-sd4v.mydwsite4.com: cart CART783 OrderCurrencyCode USD, TCPROD0046 served 45.00 instead of the contract price 36.90). The area binding belongs to the surface layer that ships the area: surface-swift binds the Swift 2 area to USD from 1.16.0, and every EcomPrices and EcomOrders row the sample-data layer ships is USD from 6.0.0, so binding and prices move together. The other non-default rows carry the values of the source solution and are not maintained exchange rates; a solution that needs real conversion sets real rates, keeping the default at 100 and every other rate relative to it."
   },
   "quoteStates": {
     "table": "EcomOrderStates",

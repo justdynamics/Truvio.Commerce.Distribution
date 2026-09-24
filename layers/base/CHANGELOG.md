@@ -50,6 +50,15 @@ so "US as default country" is the method-country default here and the area's
 Editions: every edition pins `base@4.0.0`; `base-only` pins `EcomOrderStates` 18 (14 + the four
 quote states).
 
+**Contract `sampleData` block (with sample-data 6.0.0 and surface-swift 1.16.0, before 4.0.0 is
+merged).** `guaranteedRows.rma` is owned by `sample-data` (the `feature-rma` layer is retired and
+its rows moved), the my-returns probe that reads it is surface-swift's, and a new
+`guaranteedRows.customerCenter` names the buyer's dashboard data: 26 orders (21 completed), 7
+quotes in the quote states above, 2 carts and favourite lists `100401` / `100402`, all USD.
+`currencyRates.note` records that surface-swift binds the area to USD and every sample-data price
+and order is USD.
+
+
 ## 3.6.0
 
 **Serializer floor `1.0.2-beta` -> `1.0.6-beta` (2026-09-22, Distribution #78, before 3.6.0 is

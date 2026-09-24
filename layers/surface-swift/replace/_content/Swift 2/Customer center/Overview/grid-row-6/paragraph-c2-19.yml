@@ -1,0 +1,33 @@
+﻿"paragraphUniqueId": 6f289dde-493a-53de-a1fd-11e557e25d5a
+"sourceParagraphId": 90039
+"sortOrder": 19
+"itemType": "Swift-v2_Dashboard_List"
+"header": "Quotes needing attention"
+"template": "QuotesPending.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "BaseLink": "Default.aspx?ID=12"
+  "GlobalRecordPageGuid": "621cb250-a28d-45ac-bef2-893e0536078b"
+  "Id": "100721"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Title": "Quotes needing attention"
+"columnId": 2
+
+"permissions":
+- "owner": "CSR"
+  "ownerType": "group"
+  "ownerId": "1292"
+  "level": "all"
+  "levelValue": 1364
+- "owner": "Customers"
+  "ownerType": "group"
+  "ownerId": "1325"
+  "level": "none"
+  "levelValue": 1
+- "owner": "Anonymous"
+  "ownerType": "role"
+  "level": "none"
+  "levelValue": 1

@@ -1,4 +1,4 @@
-# surface-swift — the Swift storefront content surface
+﻿# surface-swift — the Swift storefront content surface
 
 **Kind:** `surface` · **Swift:** 2.4.0 · **Proven on DW 10.28.1-PreRelease**
 
@@ -16,10 +16,11 @@ storefront leg.
 | `replace/_sql/UrlPath` | The friendly-URL redirect table (see the UrlPath decision below). |
 | `repositories/TruvioCommerce` | The storefront product repository: `Products.index`, `Products.query`, `Products.facets` and `Build+Index.task`. On a host whose index builds are drained by the Repository task handler, a repository folder with no `Build+Index.task` is never rebuilt, whatever a build call reports. |
 | `files/` | Template overrides and the assets they read, including `Images/Icons/cube.svg`, the icon every `Swift-v2_Dashboard_*` template reads. |
+| Customer center dashboard | `Customer center/Overview` is the Swift 2.4 dashboard (1.16.0): HelloUser and the welcome text, then per-role widget rows. Buyer (`Customers` 1325): Number Orders / Spent this month / Open quotes; Chart Monthly spending + List Pending quotes; List Recent orders + List Favorites. CSR (1292): Number Open quotes, List Quotes needing attention, List Recent account orders. One 3Columns row of `Swift-v2_Feature` tiles stays below as an example of the tile form (My addresses, My profile, My returns). Widget `BaseLink` values are plain `Default.aspx?ID=<page>` strings: a JSON link envelope makes `TryGetLink` return page id 0 and every widget throws on `GetPage(0)` (Foundry #205). |
 | `itemtypes/` | **Its own 128 `ItemType_Swift-v2_*.xml` definitions from the official Swift v2.4.0 design package** — the surface registers its item types itself (self-contained; the gate overlays them via `Deploy-LayerFilesOverlay` before deserialize). |
 | `config/swift-content-2.4.json` | The content predicates: `Site framework` (Deploy, areaId 3) + the 10 Seed content predicates + UrlPath + the content-scoped exclude maps (`excludeFieldsByItemType`, `excludeXmlElementsByType`). |
 | `surface.contract-notes.json` | The content-scoped contract bits that moved OUT of `base.contract.json`: content anchors (area 3, `/swift-2`), per-environment Area exclusions, protected Swift item types, navDepth obligation, title rules — and the UrlPath decision record. |
-| Area ecommerce currency | The `Swift 2` area ships `AreaEcomCurrencyId` `EUR` in both mode trees (1.13.3). EUR is a base-owned constant, not a per-environment value, and an unbound area on DW 10.28 resolves the request culture's currency - an `/en-us/` storefront then serves USD carts and every EUR `EcomPrices` row is inert (Foundry #1232). `AreaEcomShopId` deliberately stays per-environment: binding it makes DW enforce group-in-shop and every subgroup PDP dies in `IsGroupInCorrectShop`, because only the four top groups carry an `EcomShopGroupRelation` row. |
+| Area ecommerce currency | The `Swift 2` area ships `AreaEcomCurrencyId` `USD` in both mode trees (EUR from 1.13.3, USD from 1.16.0 with base 4.0.0). USD is a base-owned constant, not a per-environment value, and an unbound area on DW 10.28 resolves the request culture's currency - an `/en-us/` storefront then serves carts in a currency no `EcomPrices` row carries and every price row is inert (Foundry #1232). The merge document also carries `AreaEcomCountryCode` `US` (1.16.0). `AreaEcomShopId` deliberately stays per-environment: binding it makes DW enforce group-in-shop and every subgroup PDP dies in `IsGroupInCorrectShop`, because only the four top groups carry an `EcomShopGroupRelation` row. |
 
 ## The UrlPath decision (recorded here per RUN-SWIFT-24)
 

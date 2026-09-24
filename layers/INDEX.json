@@ -106,23 +106,6 @@
       "status": "active"
     },
     {
-      "name": "feature-reordering-pricing",
-      "kind": "feature",
-      "version": "1.2.1",
-      "status": "deprecated",
-      "supersededBy": [
-        "feature-reordering@1.0.0",
-        "feature-pricing@1.0.0"
-      ],
-      "note": "TOMBSTONED (RUN-DISTRIBUTION-QUALITY D-D). Over-bundled layer split into feature-reordering@1.0.0 + feature-pricing@1.0.0. No edition composes it; retained one release for consumers still pinning 1.2.1, then removed. Do NOT add to new editions."
-    },
-    {
-      "name": "feature-rma",
-      "kind": "feature",
-      "version": "1.0.2",
-      "status": "active"
-    },
-    {
       "name": "feature-subscription-orders",
       "kind": "feature",
       "version": "1.2.2",
@@ -131,7 +114,7 @@
     {
       "name": "sample-data",
       "kind": "sample-data",
-      "version": "5.0.1",
+      "version": "6.0.0",
       "status": "active"
     },
     {
@@ -149,7 +132,7 @@
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.15.1",
+      "version": "1.16.0",
       "status": "active"
     },
     {
@@ -253,6 +236,23 @@
       "kind": "sample-data",
       "supersededBy": "sample-data",
       "note": "The Truvio Commerce brand catalogue, personas, orders, storefront copy and files. Merged into the one sample-data layer at sample-data 4.0.0 together with that layer's demo clock and email statistics; the two-layers-of-one-kind arrangement existed only to keep marker-string gate fixtures out of a browsable storefront, and the merged layer ships no such row. Every TC* id is unchanged. Successor: sample-data, activated by an edition's sampleData toggle rather than by an add[] ref."
+    },
+    {
+      "name": "feature-reordering-pricing",
+      "retired": true,
+      "kind": "feature",
+      "supersededBy": [
+        "feature-reordering@1.0.4",
+        "feature-pricing@1.1.3"
+      ],
+      "note": "Deprecated 2026-07-17 after the split into feature-reordering and feature-pricing, retained one release, deleted 2026-09-24 (owner ruling Q8, distribution layer analysis). No edition composed it. Its rows duplicated the two successors."
+    },
+    {
+      "name": "feature-rma",
+      "retired": true,
+      "kind": "feature",
+      "supersededBy": "sample-data",
+      "note": "Folded into sample-data 6.0.0 (owner ruling Q6, 2026-09-24). The layer was sample data in practice: one EcomRmas row PACK-RMA-0001 and its EcomRmaOrderLines link 100301 against the delivered order TCO-0001. Both rows move unchanged in key into sample-data; the authenticated /my-returns probe moves to surface-swift, the layer that ships the My returns page, and names TCO-0001 in requiresFixtures."
     }
   ]
 }

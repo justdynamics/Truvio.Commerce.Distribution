@@ -1,5 +1,72 @@
 # Changelog — sample-data
 
+## 6.0.0
+
+**MAJOR. The scrub script is gone, a rewrite guide takes its place, the buyer gets dashboard-grade
+customer-center data, feature-rma's return request moves in, and every price and order is USD.
+2,024 -> 2,098 rows, 35 -> 39 tables (owner rulings Q1, Q3 and Q6, 2026-09-24).**
+
+### Rewrite, do not scrub (Q3)
+
+`tools/scrub-sample-catalogue.sql` is deleted, with every reference to it. It removed the sample
+catalogue after a delivery onto a branded host, and three builds (CIL, SupHerb, Target) carried
+near-identical copies of it. The ruling replaces the pattern: a demo copies this layer into a
+demo-local layer, rewrites the YAML to the customer and delivers the copy, because a rich YAML set
+rewritten before the deserialize proved the most efficient build strategy. The new
+[`REWRITE.md`](REWRITE.md), linked from the README, is the guide: which files carry names, SKUs,
+prices, personas, orders, quotes, favourites, the return request, images and storefront copy;
+which keys must stay stable (the `TC*` key fences, the gate persona ids and user names, `TC-100200`,
+`TCO-0001` and `TCO-0001-1` for the RMA, the price ids `feature-pricing` probes, the BOM slots,
+the subscription plan, persona `100101` as the dashboard owner); how to re-key; what not to
+rename. The layer stays one layer and stays Truvio-branded.
+
+### Customer-center dashboard data (Q1)
+
+The buyer `100101` gets what the surface-swift 1.16.0 dashboard draws, on `SHOP1`:
+
+| Rows | Ids | Detail |
+|---|---|---|
+| 14 completed orders | `TCO-0013`-`TCO-0026` | `OS2`, `OrderCompletedDate` two days after the order, completions 2026-04-04 to 2026-09-12, 24 lines |
+| 7 quotes | `TCO-Q001`-`TCO-Q007` | `OrderIsQuote` true, `QuotePending` x3, `QuoteSent` x2, `QuoteAccepted`, `QuoteRejected` (base 4.0.0 states), `OrderReference` and `QuoteRequest` set, 10 lines |
+| 2 open carts | `TCO-C001`, `TCO-C002` | `OrderCart` true, `OS5` Draft, `OrderDisplayName` set, 4 lines |
+| 2 favourite lists | `EcomCustomerFavoriteLists` `100401` (default), `100402` | 9 `EcomCustomerFavoriteProducts` rows; two new tables with `_meta.yml` read from the DW 10.28 schema |
+
+With the twelve existing orders that is 26 orders, 21 of them completed across the six-month chart
+window. Quote and cart ids stay inside the `TCO-*` family, so the existing `EcomOrders` /
+`EcomOrderLines` predicates fence them. Every date sits on or before the harvest day 2026-09-13,
+so `demo-clock.sql` needs no new anchor: its header comment now names the new rows. Order lines
+use the product list price, the tier price 96 for `TCPROD0020` at quantity 10 and the contract
+price 36.90 for `TCPROD0046`, at `OrderVAT` 0 with every VAT-split column filled.
+
+### USD
+
+All 221 `EcomPrices` rows and all orders are USD (EUR before). The dashboard's Spent this month
+and Monthly spending widgets sum one currency and print `-` on a mixed result, and base 4.0.0 makes
+USD the default; surface-swift 1.16.0 binds the Swift area to USD in the same change, so contract,
+customer-group and tier prices keep resolving (Foundry #1232). Amounts are unchanged: 96 and 36.90
+still hold for the `feature-pricing` probes. The twelve existing orders also move to customer
+country `US`, payment `PAY2` "On account (Net 30)" and shipping `SHIP9` "Standard ground", the
+base 4.0.0 market default. The spec value text "EUR list, USD served" on the Currencies & VAT band
+is product copy and stays.
+
+### feature-rma folded in (Q6)
+
+`EcomRmas` `PACK-RMA-0001` and `EcomRmaOrderLines` `100301` (with its `_meta.yml`) move here from
+the retired `feature-rma` layer, next to `TCO-0001`, keys unchanged: a re-key would leave the old
+row on every delivered host. Customer and delivery country become `US`. Two predicates and two
+manifest entries are added, and the two `configRows` come along. The `/en-us/customer-center/my-returns`
+probe does not move into this layer: sample-data is also composed by `headless-demo` and
+`dap-portal`, which have no such page, so the probe moved to surface-swift (the layer that ships
+the page) with `requiresFixtures` `TCO-0001`.
+
+### Inventories
+
+`fragmentTables` gains `EcomRmas`, `EcomRmaOrderLines`, `EcomCustomerFavoriteLists`,
+`EcomCustomerFavoriteProducts`; `costHints.expectedRows` moves `EcomOrders` 12 -> 35 and
+`EcomOrderLines` 20 -> 58 and adds the four tables; `merge-manifest.json` names every new file;
+`reservedKeyPrefixes` adds `PACK-RMA-0001`. Editions pin nothing new: `EcomProducts` 97 and
+`EcomGroups` 21 are unchanged.
+
 ## 5.0.1
 
 **PATCH. The six variant masters become sellable, and the layer raises the id counters a

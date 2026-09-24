@@ -1,0 +1,99 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomCustomerFavoriteLists"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "Id"
+"identityColumns":
+- "Id"
+"allColumns":
+- "Id"
+- "AccessUserId"
+- "Name"
+- "IsPublished"
+- "PublishedToDate"
+- "Type"
+- "IsDefault"
+- "Description"
+- "PublishedId"
+- "IsShared"
+- "Created"
+"columnDefinitions":
+- "name": "Id"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "AccessUserId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "Name"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "IsPublished"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "PublishedToDate"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "Type"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "IsDefault"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "Description"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "PublishedId"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "IsShared"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "Created"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

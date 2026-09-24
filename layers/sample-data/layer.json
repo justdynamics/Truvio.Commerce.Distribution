@@ -1,6 +1,6 @@
 {
   "name": "sample-data",
-  "version": "5.0.1",
+  "version": "6.0.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -42,6 +42,10 @@
     "EcomStockUnit",
     "EcomOrders",
     "EcomOrderLines",
+    "EcomRmas",
+    "EcomRmaOrderLines",
+    "EcomCustomerFavoriteLists",
+    "EcomCustomerFavoriteProducts",
     "DynamicStructures",
     "DynamicStructureLevels"
   ],
@@ -84,7 +88,7 @@
     {
       "table": "EcomOrders",
       "where": "OrderId = 'TCO-0012'",
-      "description": "The last of the twelve buyer orders TCO-0001..TCO-0012 the my-orders page lists."
+      "description": "One of the buyer's completed orders TCO-0001..TCO-0026 the my-orders page and the dashboard order widgets list; since 6.0.0 every order row is USD."
     },
     {
       "table": "EcomProducts",
@@ -94,7 +98,7 @@
     {
       "table": "EcomOrders",
       "where": "OrderId = 'TCO-0001' AND OrderPriceWithVAT = '195'",
-      "description": "Foundry #1239: the first buyer order carries the VAT-split price columns Swift's My orders and order detail actually read, not only OrderTotalPrice. 195 EUR is the line sum (60 x 2 + 75 x 1) at the layer's OrderVAT 0, so WithVAT = WithoutVAT = 195 and VAT = 0. Proves the delivered rows already total without an OrderRecalculate pass."
+      "description": "Foundry #1239: the first buyer order carries the VAT-split price columns Swift's My orders and order detail actually read, not only OrderTotalPrice. 195 USD (EUR before 6.0.0) is the line sum (60 x 2 + 75 x 1) at the layer's OrderVAT 0, so WithVAT = WithoutVAT = 195 and VAT = 0. Proves the delivered rows already total without an OrderRecalculate pass."
     },
     {
       "table": "EcomProductField",
@@ -130,6 +134,26 @@
       "table": "DynamicStructures",
       "where": "DynamicStructureId = '100170'",
       "description": "5.0.0: the one Dynamic Workspace, 'Truvio PIM - by data model'. Its DynamicStructureQueryId is the Id GUID of repositories/TruvioCommerce/PimWorkspace.query, which this layer also ships, and its DynamicStructureUniqueId is what the two DynamicStructureLevels rows join on. A workspace whose query GUID resolves to no file opens and lists nothing."
+    },
+    {
+      "table": "EcomOrders",
+      "where": "OrderId = 'TCO-Q001' AND OrderIsQuote = '1' AND OrderStateId = 'QuotePending'",
+      "description": "6.0.0: a buyer quote in the base 4.0.0 state QuotePending, the one state id Swift 2.4's Pending quotes dashboard widget asks for. Proves both the quote row and the state binding landed; three of the seven quotes TCO-Q001..TCO-Q007 carry it."
+    },
+    {
+      "table": "EcomCustomerFavoriteLists",
+      "where": "Id = '100401' AND AccessUserId = '100101'",
+      "description": "6.0.0: the buyer persona's default favourite list 'Reorder staples' at its reserved identity; the dashboard Favorites widget lists it."
+    },
+    {
+      "table": "EcomRmas",
+      "where": "RmaId = 'PACK-RMA-0001'",
+      "description": "The demo return request (RmaType 1 Return, RmaStateId 1 'Waiting for product(s) from customer', account TC-100200, buyer 100101) against the delivered order TCO-0001, which the My returns customer-center page surfaces. Moved in from the retired feature-rma layer in 6.0.0 with its key unchanged."
+    },
+    {
+      "table": "EcomRmaStates",
+      "where": "RmaStateDefaultName = 'Rejected'",
+      "description": "OOTB status-flow proof: DW10 Order Management ships the RMA state machine (7 states). The layer seeds NO states; this assert documents the platform dependency the return request binds to (carried over from feature-rma)."
     }
   ],
   "sql": [
@@ -148,7 +172,7 @@
       "mode": "merge",
       "phase": "after-replace-deserialize",
       "order": 2,
-      "description": "The demo clock: the _demoClock anchor table (anchored to the harvest day 2026-09-13 the serialized rows carry), the exclusion and per-column guard tables, usp_DemoClockShift (discovers every operational date column from sys.columns and shifts it by whole days), and the daily RunSql scheduled task that runs it. Keeps the brand orders TCO-0001..TCO-0012 and every other seeded date anchored to today.",
+      "description": "The demo clock: the _demoClock anchor table (anchored to the harvest day 2026-09-13 the serialized rows carry), the exclusion and per-column guard tables, usp_DemoClockShift (discovers every operational date column from sys.columns and shifts it by whole days), and the daily RunSql scheduled task that runs it. Keeps the brand orders, quotes and carts TCO-*, the favourite lists and every other seeded date anchored to today.",
       "idempotent": true,
       "transactional": true,
       "requiresHostRestart": true
@@ -459,6 +483,7 @@
   "itemtypes": [],
   "costHints": {
     "reservedKeyPrefixes": [
+      "PACK-RMA-0001",
       "TC-BOM-*",
       "TC-DETAIL-*",
       "TC-DOC-*",
@@ -477,7 +502,7 @@
       "TCVO-*",
       "tc_*"
     ],
-    "reservedKeyNote": "The TC* family this layer owns, disjoint from the feature layers' PACK-<NAME>-* prefix (base.contract.json idRules.reservedFixtureKeys names the same TC* family). TCGRP-* and tc_* are the browsable storefront catalogue; TCSHOP-PIM and TCDM-* are the PIM tree 5.0.0 adds. Reserved int ids, all at or above the base contract's intIdentityFloor 100000 and written verbatim with IDENTITY_INSERT by the serializer: AccessUser 100100-100103, EcomDetailsGroup 100110 (Images) and 100111 (Manuals), EcomFieldDisplayGroups 100120 (tc_specs), EcomProductField 100130-100135 (the six TCFIELD-* variant-editing settings rows, 4.1.1), EcomStockUnit 100201-100261. 5.0.0 adds: EcomShops 100130, EcomShopLanguageRelation 100131, EcomGroups 100140-100144, EcomShopGroupRelation 100145-100149, EcomProductCategoryField 100150-100177, EcomCompletionRules 100160-100163, DynamicStructures 100170, DynamicStructureLevels 100171-100172, EcomGroupRelations 100178-100181, EcomGroupProductRelation 100200-100260, EcomProductCategoryFieldTranslation 100300-100327. The ranges are per TABLE, so EcomProductField 100130-100135 and EcomShops 100130 do not collide; base.contract.json reserves 100135 for its own EcomProductCategoryTranslation row on the same principle.",
+    "reservedKeyNote": "The TC* family this layer owns, disjoint from the feature layers' PACK-<NAME>-* prefix (base.contract.json idRules.reservedFixtureKeys names the same TC* family). TCGRP-* and tc_* are the browsable storefront catalogue; TCSHOP-PIM and TCDM-* are the PIM tree 5.0.0 adds. Reserved int ids, all at or above the base contract's intIdentityFloor 100000 and written verbatim with IDENTITY_INSERT by the serializer: AccessUser 100100-100103, EcomDetailsGroup 100110 (Images) and 100111 (Manuals), EcomFieldDisplayGroups 100120 (tc_specs), EcomProductField 100130-100135 (the six TCFIELD-* variant-editing settings rows, 4.1.1), EcomStockUnit 100201-100261. 5.0.0 adds: EcomShops 100130, EcomShopLanguageRelation 100131, EcomGroups 100140-100144, EcomShopGroupRelation 100145-100149, EcomProductCategoryField 100150-100177, EcomCompletionRules 100160-100163, DynamicStructures 100170, DynamicStructureLevels 100171-100172, EcomGroupRelations 100178-100181, EcomGroupProductRelation 100200-100260, EcomProductCategoryFieldTranslation 100300-100327. The ranges are per TABLE, so EcomProductField 100130-100135 and EcomShops 100130 do not collide; base.contract.json reserves 100135 for its own EcomProductCategoryTranslation row on the same principle. 6.0.0 adds: EcomCustomerFavoriteLists 100401-100402, EcomRmaOrderLines 100301 (with EcomRmas PACK-RMA-0001, moved in from the retired feature-rma layer; the PACK- prefix stays because a re-key would leave the old row on every delivered host), and the quote and cart ids TCO-Q001..TCO-Q007 and TCO-C001..TCO-C002 inside the existing TCO-* family.",
     "expectedRows": {
       "AccessUser": 4,
       "AccessUserGroupRelation": 6,
@@ -485,6 +510,8 @@
       "DynamicStructureLevels": 2,
       "DynamicStructures": 1,
       "EcomCompletionRules": 4,
+      "EcomCustomerFavoriteLists": 2,
+      "EcomCustomerFavoriteProducts": 9,
       "EcomDetails": 373,
       "EcomDetailsGroup": 2,
       "EcomFieldDisplayGroupFields": 28,
@@ -493,8 +520,8 @@
       "EcomGroupProductRelation": 183,
       "EcomGroupRelations": 16,
       "EcomGroups": 21,
-      "EcomOrderLines": 20,
-      "EcomOrders": 12,
+      "EcomOrderLines": 58,
+      "EcomOrders": 35,
       "EcomPrices": 221,
       "EcomProductCategory": 4,
       "EcomProductCategoryField": 56,
@@ -506,6 +533,8 @@
       "EcomProducts": 97,
       "EcomProductsRelated": 326,
       "EcomProductsRelatedGroups": 3,
+      "EcomRmaOrderLines": 1,
+      "EcomRmas": 1,
       "EcomShopGroupRelation": 21,
       "EcomShopLanguageRelation": 1,
       "EcomShops": 1,
@@ -515,6 +544,6 @@
       "EcomVariantOptionsProductRelation": 36,
       "EcomVariantsOptions": 5
     },
-    "expectedRowsNote": "Rows arrive by merge deserialize of merge/_sql/<Table>/*.yml (35 tables); every count equals the per-table row-file count in merge/merge-manifest.json (2,024 rows), which 5.0.0 regenerates from disk in both directions. 5.0.1 replaces the 30 bare-option EcomVariantOptionsProductRelation rows with the 36 full combinations the six two-group masters need (Foundry #1255, #1269), so that table goes 30 -> 36. 5.0.0 adds 140 rows in eleven tables for the PIM structure: EcomShops 1 (TCSHOP-PIM, ShopType 4), EcomShopLanguageRelation 1, EcomGroups +5 (16 -> 21: one GroupType 1 folder and four GroupType 2 data models), EcomGroupRelations +4, EcomShopGroupRelation +5, EcomGroupProductRelation +61 (every master to the data model of its band, IsPrimary false), EcomProductCategoryField +28 and EcomProductCategoryFieldTranslation +28 (the reference_category mirrors), EcomCompletionRules 4, DynamicStructures 1, DynamicStructureLevels 2. EcomProducts is UNCHANGED at 97 - the PIM tree adds relations, never products. Two figures here are corrections rather than changes: EcomShopGroupRelation read 4 while sixteen rows sat on disk (the twelve 4.1.3 added and never declared), and EcomPrices read 233 while 4.1.2 left 221 on disk. The three loose sql[] scripts write no catalogue row: demo-clock.sql creates its own _demoClock* tables and the scheduled task, email-stats.sql writes only telemetry rows, number-counters.sql only raises EcomNumbers counters. Advisory: the gate derives its own counts from the composition. ONE of the 35 tables is a HEAP: DynamicStructures has no primary key on DW 10.28, so the engine writes it with DELETE FROM [table] plus insert-all under Merge as well as Replace, and delivering the layer's single workspace row removes every Dynamic Workspace the host already had (measured, gate run 20260919-153644). The other 34 tables all carry a primary key and their merge deletes nothing. See the DynamicStructures predicate _why in config/sample-data-2.4.json and README 'The one hazard this workspace row carries'."
+    "expectedRowsNote": "6.0.0: 2,098 rows in 39 tables. EcomOrders 12 -> 35 (fourteen more completed orders TCO-0013..TCO-0026, seven quotes TCO-Q001..TCO-Q007 in the base 4.0.0 quote states, two open carts TCO-C001..TCO-C002), EcomOrderLines 20 -> 58, and four tables join: EcomRmas 1 and EcomRmaOrderLines 1 (moved in from feature-rma), EcomCustomerFavoriteLists 2 and EcomCustomerFavoriteProducts 9 (the buyer's favourite lists). Every EcomPrices and EcomOrders row is USD. Rows arrive by merge deserialize of merge/_sql/<Table>/*.yml; every count equals the per-table row-file count in merge/merge-manifest.json. 5.0.1 replaces the 30 bare-option EcomVariantOptionsProductRelation rows with the 36 full combinations the six two-group masters need (Foundry #1255, #1269), so that table goes 30 -> 36. 5.0.0 adds 140 rows in eleven tables for the PIM structure: EcomShops 1 (TCSHOP-PIM, ShopType 4), EcomShopLanguageRelation 1, EcomGroups +5 (16 -> 21: one GroupType 1 folder and four GroupType 2 data models), EcomGroupRelations +4, EcomShopGroupRelation +5, EcomGroupProductRelation +61 (every master to the data model of its band, IsPrimary false), EcomProductCategoryField +28 and EcomProductCategoryFieldTranslation +28 (the reference_category mirrors), EcomCompletionRules 4, DynamicStructures 1, DynamicStructureLevels 2. EcomProducts is UNCHANGED at 97 - the PIM tree adds relations, never products. Two figures here are corrections rather than changes: EcomShopGroupRelation read 4 while sixteen rows sat on disk (the twelve 4.1.3 added and never declared), and EcomPrices read 233 while 4.1.2 left 221 on disk. The three loose sql[] scripts write no catalogue row: demo-clock.sql creates its own _demoClock* tables and the scheduled task, email-stats.sql writes only telemetry rows, number-counters.sql only raises EcomNumbers counters. Advisory: the gate derives its own counts from the composition. ONE of the tables is a HEAP: DynamicStructures has no primary key on DW 10.28, so the engine writes it with DELETE FROM [table] plus insert-all under Merge as well as Replace, and delivering the layer's single workspace row removes every Dynamic Workspace the host already had (measured, gate run 20260919-153644). The other tables all carry a primary key and their merge deletes nothing. See the DynamicStructures predicate _why in config/sample-data-2.4.json and README 'The one hazard this workspace row carries'."
   }
 }

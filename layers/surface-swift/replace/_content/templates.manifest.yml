@@ -51,6 +51,7 @@
   referencedBy:
   - Product Details
   - Navigation
+  - Overview
 - path: 2Columns_3-9
   kind: grid-row
   referencedBy:
@@ -63,6 +64,7 @@
   kind: grid-row
   referencedBy:
   - Home preset
+  - Overview
 - path: Swift-v2_Accordion
   kind: item-type
   referencedBy:
@@ -154,7 +156,20 @@
   - User profile confirmed
   - User profile created
   - Home preset
+  - Overview
 - path: Swift-v2_HelloUser
+  kind: item-type
+  referencedBy:
+  - Overview
+- path: Swift-v2_Dashboard_Number
+  kind: item-type
+  referencedBy:
+  - Overview
+- path: Swift-v2_Dashboard_Chart
+  kind: item-type
+  referencedBy:
+  - Overview
+- path: Swift-v2_Dashboard_List
   kind: item-type
   referencedBy:
   - Overview

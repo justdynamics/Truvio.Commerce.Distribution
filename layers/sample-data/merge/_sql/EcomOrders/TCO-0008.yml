@@ -16,14 +16,14 @@
 "OrderTransactionAmount": 0
 "OrderTransactionPayGatewayCode": 
 "OrderTrackTraceNumber": 
-"OrderShippingMethod": 
+"OrderShippingMethod": "Standard ground"
 "OrderShippingMethodFee": 0
-"OrderPaymentMethod": 
+"OrderPaymentMethod": "On account (Net 30)"
 "OrderPaymentMethodFee": 0
 "OrderSalesDiscount": 0
 "OrderCurrencyName": 
 "OrderCurrencyRate": 0
-"OrderCurrencyCode": "EUR"
+"OrderCurrencyCode": "USD"
 "OrderCart": false
 "OrderFieldsXML": 
 "OrderReSendEmail": 
@@ -78,12 +78,12 @@
 "OrderPriceBeforeFeesVATPercent": 0
 "OrderCustomerAccessUserId": 100101
 "OrderCustomerAccessUserUserName": 
-"OrderShippingMethodId": 
-"OrderPaymentMethodId": 
+"OrderShippingMethodId": "SHIP9"
+"OrderPaymentMethodId": "PAY2"
 "OrderGatewayResult": 
 "OrderStepNum": 
 "OrderTransactionNumber": 
-"OrderCustomerCountryCode": "NL"
+"OrderCustomerCountryCode": "US"
 "OrderDeliveryCountryCode": 
 "OrderStepHistory": 
 "OrderLanguageId": "ENU"
@@ -163,7 +163,7 @@
 "OrderShippingDate": 
 "OrderShippingAgent": 
 "OrderPaymentMethodCode": 
-"OrderPaymentMethodTermsCode": 
+"OrderPaymentMethodTermsCode": "NET30"
 "OrderShippingMethodCode": 
 "OrderShippingMethodAgentCode": 
 "OrderShippingMethodAgentServiceCode": 

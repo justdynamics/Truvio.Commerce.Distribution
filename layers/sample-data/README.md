@@ -1,9 +1,11 @@
-# sample-data (kind: sample-data)
+﻿# sample-data (kind: sample-data)
 
 The one-shot **fully functioning demo shop**: the catalogue, the identities, the orders and
 the storefront copy that make a freshly composed Dynamicweb 10 site look and behave like a
 real Truvio Commerce store the moment it comes up. It is one layer, and it is the whole demo
-dataset — an agent rebrands it in place rather than assembling one.
+dataset — an agent rebrands it rather than assembling one. A customer demo copies this layer into a
+demo-local layer, rewrites the YAML to the customer and delivers the copy: [REWRITE.md](REWRITE.md) is the
+guide, with the files that carry names, prices and personas and the keys that must stay stable.
 
 **Activated by `sampleData: true`** in an edition (`editions/<name>.json`). Singleton: there
 is exactly one layer of kind `sample-data`, and it is never an `add[]` ref. The composer
@@ -53,7 +55,7 @@ vocabulary, a material class, a rating, a compatibility note, a commercial term.
 | Group id | `TCGRP-VARIANTS`, `TCGRP-PRODUCT-STRUCTURE` |
 | Data model id | `TCDM-COMMERCE`, `TCDM-PRODUCT-STRUCTURE` — the PIM tree, never a storefront group |
 | PIM shop id | `TCSHOP-PIM` (`Truvio PIM`) |
-| Order id | `TCO-0001` … `TCO-0012` |
+| Order id | `TCO-0001` … `TCO-0026`, quotes `TCO-Q001` … `TCO-Q007`, carts `TCO-C001` … `TCO-C002` |
 | Persona | `buyer@truvio-demo.example`, `csr@…`, `admin@…` |
 
 The accent colour is industrial green (~`#2E7D5B`) wherever a colour is *data* — the product
@@ -64,7 +66,7 @@ stays in `theme-default` (SPEC-06).
 
 Every row is **serialized SqlTable YAML** under [`merge/_sql/<Table>/`](merge/_sql/), one file
 per row key, listed in [`merge/merge-manifest.json`](merge/merge-manifest.json) and fenced by
-the 35 merge predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json), which
+the 39 merge predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json), which
 Compose-Edition unions into the composed `Serializer.config.json`. The rows land through the
 ordinary merge deserialize, so an online build (URL + Admin API key, no SQL channel) delivers
 the layer exactly as a local one does.
@@ -76,11 +78,12 @@ the layer exactly as a local one does.
 | Prices, BOM, stock | `EcomPrices`, `EcomProductItems`, `EcomStockUnit` | 292 |
 | Category fields and specs | `EcomProductCategory`, `EcomProductCategoryTranslation`, `EcomProductCategoryField`, `EcomProductCategoryFieldTranslation`, `EcomProductCategoryFieldValue`, `EcomFieldDisplayGroups`, `EcomFieldDisplayGroupTranslation`, `EcomFieldDisplayGroupFields` | 577 |
 | Imagery, documents, relations | `EcomDetailsGroup`, `EcomDetails`, `EcomProductsRelatedGroups`, `EcomProductsRelated` | 704 |
-| Identities and orders | `AccessUser`, `AccessUserGroupRelation`, `AccessUserSecondaryRelation`, `EcomOrders`, `EcomOrderLines` | 43 |
+| Identities, orders, quotes, carts, returns | `AccessUser`, `AccessUserGroupRelation`, `AccessUserSecondaryRelation`, `EcomOrders`, `EcomOrderLines`, `EcomRmas`, `EcomRmaOrderLines` | 106 |
+| Favourite lists | `EcomCustomerFavoriteLists`, `EcomCustomerFavoriteProducts` | 11 |
 | Product field settings | `EcomProductField` | 6 |
 | PIM structure | `EcomShops`, `EcomShopLanguageRelation`, `EcomCompletionRules`, `DynamicStructures`, `DynamicStructureLevels` | 9 |
 
-2,024 rows in 35 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
+2,098 rows in 39 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
 counts an edition asserts are `EcomProducts` **97** and `EcomGroups` **21**.
 
 `EcomGroups` 21 is **16 browsable storefront groups + 5 PIM groups**, and the two trees sit in
@@ -180,12 +183,37 @@ persona's password through the Management API `UserSetPassword` command with the
 sets the password, proves sign-in and stores the credential outside the repo. The route is the
 same for a local and an online build, and merge never overwrites the password it set.
 
-Their history is 12 orders across the `OrderFlowId 1` states — `OS1 New`, `OS2 Completed`,
-`OS3 Rejected`. States from another flow (`OS12`/`OS13`/`OS14`) are deliberately unused: an
-order carrying one reads as a broken record in the Commerce grids. `OrderCompletedDate` is set
-only on a Completed order.
+## The buyer's history: the customer-center dashboard data
 
-**All twelve orders belong to the buyer** (`OrderCustomerAccessUserId` = `100101`). This is not
+The buyer persona `100101` carries what the surface-swift customer-center dashboard (the Swift 2.4
+`Swift-v2_Dashboard_*` widgets) draws, all on `SHOP1` and **all in USD**:
+
+| Rows | Ids | State | Dashboard widget |
+|---|---|---|---|
+| 21 completed orders | `TCO-0001`-`TCO-0004`, `TCO-0006`-`TCO-0008`, `TCO-0013`-`TCO-0026` | `OS2` Completed, `OrderCompletedDate` set, completions 2026-04-04 to 2026-09-12 | Orders count, Spent this month, Monthly spending, Recent orders |
+| 4 open orders | `TCO-0009`-`TCO-0012` | `OS1` New, no completed date | My orders only |
+| 1 rejected order | `TCO-0005` | `OS3` Rejected | My orders only |
+| 7 quotes | `TCO-Q001`-`TCO-Q007` | `QuotePending` x3, `QuoteSent` x2, `QuoteAccepted`, `QuoteRejected` (base 4.0.0 quote states), `OrderIsQuote` true | Open quotes, Pending quotes |
+| 2 open carts | `TCO-C001`, `TCO-C002` | `OrderCart` true, `OS5` Draft | My carts |
+| 2 favourite lists, 9 products | `EcomCustomerFavoriteLists` `100401`, `100402` | `100401` is the default list | Favorites |
+
+**One currency, because the widgets sum one.** Spent this month and Monthly spending add up the
+order search result and print `-` ("Cannot display total in multiple currencies") the moment it
+mixes currencies. The Swift area serves USD (surface-swift 1.16.0) and every `EcomPrices` row is
+USD, so an order the demo places joins the same sum. `CurrencyRate` for USD is 100, the base
+default (base 4.0.0).
+
+**The order widgets filter on `OrderCompletedDate`.** A completed order carries it (two days after
+`OrderDate`); an open order carries none and lists only on My orders. The completions spread over
+the six-month chart window. The current-month figure depends on the day of the month the demo
+runs, because the demo clock moves every date by whole days.
+
+Every order uses the base 4.0.0 market default: payment `PAY2` "On account (Net 30)", shipping
+`SHIP9` "Standard ground", customer country `US`. States come from the order flow the row belongs
+to; states from another flow (`OS12`/`OS13`/`OS14`) are deliberately unused, because an order
+carrying one reads as a broken record in the Commerce grids.
+
+**Everything belongs to the buyer** (`OrderCustomerAccessUserId` = `100101`). This is not
 a simplification, it is what the page permits: the customer-centre page grants group `1325` and
 the *My orders* scope and nothing else, measured on DW 10.28.10, so an order stamped with the
 CSR or the admin is invisible to every persona that can open the page. **CSR and admin reach a
@@ -194,8 +222,11 @@ ships what that path needs: the account group `100100` is typed `SystemAccount`,
 Accounts app lists it, and the one `AccessUserSecondaryRelation` row `1292$$100100` grants the
 base-contract CSR group impersonation over the account, which is what fills CSR Users.
 
-`TCO-0001` is the completed order the RMA flow returns against: `feature-rma` ships the RMA
-`PACK-RMA-0001` and its `EcomRmaOrderLines` link (id `100301`) pointing at its first line.
+`TCO-0001` is the completed order the RMA flow returns against: the layer ships the return
+request `PACK-RMA-0001` and its `EcomRmaOrderLines` link (id `100301`) pointing at its first line.
+Both rows came from the retired `feature-rma` layer in 6.0.0 with their keys unchanged; the
+`PACK-` prefix predates the move and stays, because a re-key would leave the old row on every
+host already delivered.
 
 ## The contract subjects
 
@@ -212,8 +243,9 @@ These are the rows a shipped probe addresses. They are stated machine-readably i
 | contract price | `TCPROD0046` / `TC-PRICE-CTR-0046` at `TC-100200` | feature-pricing `cart-price` (qty 1 → 36.90) |
 | BOM kit | `TCPROD0042`, slots `TC-BOM-0042-1` / `TC-BOM-0042-2` | feature-bom-configurator `bom-cart-lines` |
 | subscription plan | `TCPROD0061` / `TC-SUB-0061` | feature-subscription-orders `checkout-recurring` |
-| delivered order | `TCO-0001` (`OS2`, buyer `100101`) | feature-rma `authenticated-body-contains` |
-| RMA | `PACK-RMA-0001` + link `100301` — **owned by feature-rma** | feature-rma `configRows` |
+| delivered order | `TCO-0001` (`OS2`, buyer `100101`) | surface-swift `authenticated-body-contains` on `/en-us/customer-center/my-returns` |
+| RMA | `PACK-RMA-0001` + link `100301` | the same probe (the page lists it); `configRows` |
+| customer-center data | the buyer's orders, quotes, carts and favourite lists above (`customerCenter`) | surface-swift dashboard widgets (rendered, not probed) |
 
 `TCPROD0041` is the *fixed* Bundle Kit and carries no `EcomProductItems` slot, so the
 configurable kit `TCPROD0042` is the BOM subject.
@@ -227,7 +259,7 @@ anchored to, and a procedure that moves every operational date column by
 `DATEDIFF(day, AnchoredTo, today)` and then re-anchors.
 
 - **The anchor is seeded to the harvest day, not to `GETDATE()`.** The rows are serialized YAML
-  with absolute dates, so a `GETDATE()` anchor reads delta 0 on a fresh install and the twelve
+  with absolute dates, so a `GETDATE()` anchor reads delta 0 on a fresh install and the
   orders stay frozen in 2026-09 forever while the task reports Success. With the harvest-day
   anchor the first run carries a real delta and moves the whole dataset onto today's calendar
   in one pass. **The brand orders ride the clock**, and so does every product date.
@@ -425,29 +457,21 @@ idempotent orphan-level delete for exactly this.
 tables has a primary key. Check `_meta.yml` `keyColumns` against the live `sys.indexes` before
 adding a table to this layer, and declare `keyColumns` on any heap.
 
-## Removing the catalogue from a branded demo
+## Rewriting for a customer demo
 
-A branded demo starts from a composed `swift-demo` host and then loads the customer's own
-catalogue. The sample catalogue is then not a neutral placeholder — it is wrong data in the
-customer's channel. Two operator scripts under [`tools/`](tools/) handle it. **Neither is declared
-in `layer.json` `sql[]`**: a declared script is one the composer *runs*, and whether a host keeps
-the sample catalogue is a per-delivery editorial decision.
+A branded demo does not deliver this layer and scrub it afterwards. It copies the layer into a
+demo-local layer, rewrites the YAML to the customer, and delivers the copy: a rich YAML set an
+agent rewrites before the deserialize proved faster than a deserialize followed by tool calls
+(owner ruling 2026-09-24). [REWRITE.md](REWRITE.md) is the guide: which files carry names,
+SKUs, prices, personas, orders, quotes, favourites, returns, images and storefront copy, which
+keys must stay stable, and how to re-key safely.
+
+One operator script remains under [`tools/`](tools/) for hosts delivered from an older version.
+It is **not declared in `layer.json` `sql[]`**: a declared script is one the composer *runs*.
 
 | Script | When | What it does |
 |---|---|---|
-| [`tools/scrub-sample-catalogue.sql`](tools/scrub-sample-catalogue.sql) | after **every** delivery onto a branded host | removes the whole sample catalogue **and** the PIM structure, plus any orphaned workspace levels |
-| [`tools/retire-4x-ids.sql`](tools/retire-4x-ids.sql) | **once**, before delivering 5.0.0 onto a 4.x host | removes the ids 5.0.0 renamed, the orphan workspace levels and the orphan shop-group relations |
-
-**The scrub keeps what is not catalogue**: the three personas and their B2B account, the twelve
-orders `TCO-0001`-`TCO-0012`, the storefront copy on Home / About / Contact / header / footer /
-mega-menu, the demo clock and its tables, the email statistics, the `Images` and `Manuals` asset
-categories (infrastructure a branded catalogue's own assets need), the six `TCFIELD-*`
-variant-editing settings rows, and every base row. It removes the `TC*` / `tc_*` rows, the
-`TCSHOP-PIM` shop, the `TCDM-*` groups, the four completion rules, the workspace and its levels,
-and the 28 `reference_category` mirrors — **not** the `reference_category` parent row, which is
-base-owned, and **not** the stock locations, which base 3.6.0 ships neutral. It is idempotent and
-must be re-run after every delivery, because **a merge deserialize re-inserts every row it
-removes**. Rebuild the product index and restart the host afterwards.
+| [`tools/retire-4x-ids.sql`](tools/retire-4x-ids.sql) | **once**, before delivering 5.0.0 or later onto a 4.x host | removes the ids 5.0.0 renamed, the orphan workspace levels and the orphan shop-group relations |
 
 **The retire script exists because merge never deletes.** 5.0.0 renames the band id *and* name
 (`TCGRP-DATA-MODELS` → `TCGRP-PRODUCT-STRUCTURE`, `tc_data_models` → `tc_product_structure`, and
@@ -473,7 +497,8 @@ structure `EcomShops` `100130`, `EcomShopLanguageRelation` `100131`, `EcomGroups
 `100150`-`100177`, `EcomCompletionRules` `100160`-`100163`, `DynamicStructures` `100170`,
 `DynamicStructureLevels` `100171`-`100172`, `EcomGroupRelations` `100178`-`100181`,
 `EcomGroupProductRelation` `100200`-`100260`, `EcomProductCategoryFieldTranslation`
-`100300`-`100327`. **The ranges are per TABLE**, so `EcomProductField` `100130`-`100135` and
+`100300`-`100327`, and for the customer-center data `EcomCustomerFavoriteLists` `100401`-`100402`
+and `EcomRmaOrderLines` `100301` (with `EcomRmas` `PACK-RMA-0001`). **The ranges are per TABLE**, so `EcomProductField` `100130`-`100135` and
 `EcomShops` `100130` are not a collision. The storefront binds the asset categories and the display
 group by system name, not by id. An addition writing its own rows into a base-owned table uses
 its `PACK-<NAME>-` prefix instead.
@@ -559,7 +584,7 @@ from these layers the table is empty and the six rows are the only ones.
   order detail read the VAT-split columns (`OrderPriceWithVAT` / `WithoutVAT` / `VAT` /
   `VATPercent`, the `OrderPriceBeforeFees*` set) and the line objects read
   `OrderLinePriceWith(out)VAT` and `OrderLineUnitPrice*`; `OrderTotalPrice` alone renders as
-  zero (Foundry [#1239]). All 12 `TCO-*` orders and their 20 lines ship the full set at the
+  zero (Foundry [#1239]). All 35 `TCO-*` orders, quotes and carts and their 58 lines ship the full set at the
   layer's `OrderVAT 0`: `WithVAT = WithoutVAT = ` the amount, VAT and VATPercent `0`, unit
   prices from `OrderLineUnitPrice`, `BeforeFees` = the line sum, fees and discounts `0`.
   **Do not repair an order with `OrderRecalculate`**: it re-prices every line from the LIVE

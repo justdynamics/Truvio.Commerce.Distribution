@@ -282,6 +282,38 @@
       "_why": "Merge: sample-data rows; FK child of EcomOrders."
     },
     {
+      "name": "sample-data EcomRmas",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomRmas",
+      "where": "RmaId = 'PACK-RMA-0001'",
+      "_why": "Merge: the one demo return request, against the delivered order TCO-0001 (moved in from the retired feature-rma layer in 6.0.0). The id keeps its PACK- prefix because a re-key would leave the old row on every host already delivered; the key is fenced by this predicate, not by the prefix."
+    },
+    {
+      "name": "sample-data EcomRmaOrderLines",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomRmaOrderLines",
+      "where": "RmaOrderLineId = 100301",
+      "_why": "Merge by identity id at the reserved 100301: the link of PACK-RMA-0001 to order line TCO-0001-1, written verbatim with IDENTITY_INSERT."
+    },
+    {
+      "name": "sample-data EcomCustomerFavoriteLists",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomCustomerFavoriteLists",
+      "where": "Id >= 100401 AND Id <= 100402",
+      "_why": "Merge by identity id at the reserved 100401..100402: the buyer persona 100101's two favourite lists, which the Swift 2.4 dashboard Favorites widget lists. Favourites have no Delivery API route for adding a product, so the rows are data."
+    },
+    {
+      "name": "sample-data EcomCustomerFavoriteProducts",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomCustomerFavoriteProducts",
+      "where": "FavoriteListId >= 100401 AND FavoriteListId <= 100402",
+      "_why": "Merge on the natural primary key (FavoriteListId, ProductId, ProductVariantId); CustomerFavoriteProductAutoId is an identity outside the key, so the host allocates it."
+    },
+    {
       "name": "sample-data DynamicStructures",
       "mode": "Merge",
       "providerType": "SqlTable",
