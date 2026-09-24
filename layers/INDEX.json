@@ -1,7 +1,7 @@
 {
   "_comment": "Machine-readable layer index for Truvio.Commerce.Distribution (P3, RUN-VERSION-CURRENCY T3-01..T3-04). SOURCE OF TRUTH for what layers exist, their kind/version/status, and what a retired name was superseded by. Two consumers read it: (1) tools/ci/Validate-Distribution.ps1 regenerates the `layers` array from the live tree and diffs it clean (drift both directions FAILs), asserts `gateProven` is present, and rejects any edition ref or living-doc mention of a name absent from `layers` (a retired hit names its successor); (2) the DemoAgent currency preflight (Invoke-DemoGate.ps1 `currency` leg) asserts this file parses + carries `gateProven`, and that every layer the demo consumed is live here (a retired hit -> 'retired -> use <supersededBy>'). UPDATE MECHANICS: the `layers` array is regenerated from the tree by Validate-Distribution.ps1 -RegenerateIndex (deterministic); `retired` tombstones are authored on layer retirement (release checklist, FOLLOWUP.md T4-02); `gateProven` is stamped by the FOUNDRY publish flow at release time (tools/harness/Write-IndexGateProven.ps1) from the gate run(s) that proved this main -- never hand-authored as trusted. Consumers 'pin origin/main + assert INDEX.gateProven present' (D-CONSUME a). EDITIONS APPEAR IN gateProven.editions ONLY WHEN PROVEN: the map is a record of gate runs, stamped by Write-IndexGateProven.ps1, so a newly specified edition (base-swift, added in the v5 phase-2 baseline release) is absent from it until its first PASS. An absent edition means unproven, never missing; hand-writing a run id there would fabricate an attestation, which is the one thing this file exists to prevent.",
   "gateProven": {
-    "date": "2026-09-23",
+    "date": "2026-09-24",
     "dw": {
       "ring": "R1-NET10",
       "ringNumber": 1,
@@ -35,14 +35,14 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20260923-122859",
+    "gateRunId": "20260924-105903",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.28.12",
     "editions": {
-      "swift-demo": "20260923-122859"
+      "swift-demo": "20260924-105903"
     },
     "verdicts": {
-      "20260923-122859": {
+      "20260924-105903": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -66,7 +66,60 @@
         "delivered": true,
         "sqlScriptsNotApplied": 3
       }
-    }
+    },
+    "proofs": {
+      "swift-demo": {
+        "runId": "20260924-105903",
+        "deliveryRunId": "20260924-105620",
+        "distributionCommit": "afdff124ba19292d0b322a1b8dfc1aeddd6b4d83",
+        "checkSet": 2,
+        "harnessCommit": "b7850b1508b7e3e517d71363e888c64a417231ed",
+        "algorithm": "layer-tree/v1",
+        "provenTree": {
+          "base": {
+            "version": "4.0.0",
+            "hash": "sha256:8a8fa251c32c2210c64a2247749c5e545cd87d657587c52d5362bdc2f4f95314"
+          },
+          "feature-b2b-comms": {
+            "version": "1.0.5",
+            "hash": "sha256:59b61ef1a4ca8d01bcea3047729fb89187ca5cc4302149689fbabf8052ecf8b0"
+          },
+          "feature-baseline-guide": {
+            "version": "1.0.3",
+            "hash": "sha256:e10423f408625e9379044bb950dfaf8d70351e34d68ce9eda56eccd412e535b1"
+          },
+          "feature-bom-configurator": {
+            "version": "1.2.3",
+            "hash": "sha256:7e33358cfa49b3a9037c3665c07e3904e6bbd9edc6656b5cf2f4d8408bf37dfe"
+          },
+          "feature-pricing": {
+            "version": "1.1.3",
+            "hash": "sha256:bae9894df372cd0b49228602a2bd801904d5c5ec0114a1ead09f726cdee618b0"
+          },
+          "feature-reordering": {
+            "version": "1.0.4",
+            "hash": "sha256:fb4f29860dd82261328ec53a1f3cba9ceef412dc81582e98db916361888bfe28"
+          },
+          "feature-subscription-orders": {
+            "version": "1.2.2",
+            "hash": "sha256:ef3c90209327e4e8d78e1099a891e52701ba440e37bd40605898f9dd5547afa1"
+          },
+          "sample-data": {
+            "version": "6.0.0",
+            "hash": "sha256:af57b92230599a863caf5ff817477ac808adebec427d51db67436cb44917440b"
+          },
+          "surface-swift": {
+            "version": "1.16.0",
+            "hash": "sha256:ac204bd535bd1ebf18b1d3cd872867986f487a7eb8330cbfd9087750a5f00c72"
+          },
+          "theme-default": {
+            "version": "2.5.0",
+            "hash": "sha256:41dc16bb46923bad2917a808835bb84947e4e6854f41dc82f8ae8e4d436ddda4"
+          }
+        }
+      }
+    },
+    "note": "Skills axis carried from run 20260923-122859: this run changed no skill. Delivery run 20260924-105620."
   },
   "layers": [
     {
