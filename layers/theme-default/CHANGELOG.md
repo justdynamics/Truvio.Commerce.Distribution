@@ -20,7 +20,8 @@ checkout and customer-center apps keep the page rhythm):
   breadcrumb row keeps .5rem from the header and the buy box row keeps 1.5rem below it; the PDP
   section rows below the buy box keep their presets;
 - the PLP card row centres its columns, the image figure drops its 16px bottom margin, and the
-  cards sit .5rem apart;
+  cards sit .5rem apart; the stock column stays stretched to the row and centres its own text, so
+  an empty stock cell is still a column (a centred row collapsed it to 0px, PLPROW-01);
 - block #33 reaches into the buy box: a price table row with no table and a variant selector row
   that rendered nothing are not painted. A product with variants keeps its selector.
 

@@ -2352,6 +2352,16 @@ main [data-dw-itemtype="swift-v2_app"] section[data-swift-gridrow]:has(> [data-s
 .product-list article.product [data-dw-itemtype="swift-v2_productdefaultimage"] figure {
   margin-bottom: 0 !important;
 }
+/* Centring the row stops the columns stretching, and a stock column on a product with
+ * no stock row then computes to 0px high: served, but collapsed. The stock column keeps
+ * the row height and centres its own text instead, so it is a column on every card
+ * (PLPROW-01 counts a cell painted by its height; gate 20260925-133712 measured 6 of 12). */
+.product-list article.product section > [data-swift-container] > [data-dw-itemtype="swift-v2_productstock"] {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
 .product-list > .grid {
   row-gap: .5rem;
 }
