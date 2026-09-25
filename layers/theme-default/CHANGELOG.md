@@ -1,5 +1,31 @@
 ﻿# theme-default changelog
 
+## 2.5.1
+
+### Catalog app density: the section padding stops compounding (Foundry #1373)
+
+The FRESH PASS gives every `main [data-swift-container]` 1.25rem top and bottom. The catalog app
+renders its component pages as rows nested inside the page row, and every PLP card is a row of its
+own, so that padding was paid three and four times over, on top of the row spacing presets the
+surface authors. Measured at 1440x900 on foundry.mydwsite4.com (theme-default 2.5.0, surface-swift
+1.16.1): first PLP card at 570px with 2 cards above the fold, a 136px card for a 72px image, and the
+PDP add-to-cart row at 941px, below the fold, behind an empty price table row (40px) and an empty
+variant selector row (104px).
+
+New block #36, scoped to the app column that holds a product list or the PDP buy box (cart,
+checkout and customer-center apps keep the page rhythm):
+
+- nested containers take .25rem;
+- the row spacing presets of the PLP app rows and of the rows inside the PDP buy box go to zero; the
+  breadcrumb row keeps .5rem from the header and the buy box row keeps 1.5rem below it; the PDP
+  section rows below the buy box keep their presets;
+- the PLP card row centres its columns, the image figure drops its 16px bottom margin, and the
+  cards sit .5rem apart;
+- block #33 reaches into the buy box: a price table row with no table and a variant selector row
+  that rendered nothing are not painted. A product with variants keeps its selector.
+
+The reference is the heartstream demo's scoped "PLP/PDP density pass" (2026-09-25).
+
 ## 2.5.0
 
 ### The brand slot (distribution ruling Q5, 2026-09-24)
