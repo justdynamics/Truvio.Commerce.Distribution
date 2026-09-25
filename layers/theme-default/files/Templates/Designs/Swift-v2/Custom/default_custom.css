@@ -2278,3 +2278,95 @@ section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="sw
   background-color: var(--td-tint-bg, var(--td-accent-soft));
   color: var(--td-tint-ink, var(--td-accent));
 }
+
+/* =============================================================================
+ * #36 CATALOG APP DENSITY - the section padding stops compounding on the PLP
+ * and the PDP (Foundry #1373)
+ *
+ * The FRESH PASS gives every `main [data-swift-container]` 1.25rem top and
+ * bottom (.5rem below 768). That budget was set for a page row. The catalog app
+ * renders its component pages as rows NESTED inside the page row, and every PLP
+ * card is a row of its own, so the padding is paid three and four times over on
+ * top of the row spacing presets the surface authors on those rows.
+ *
+ * MEASURED, before (1440x900, anonymous, foundry.mydwsite4.com, theme-default
+ * 2.5.0 on surface-swift 1.16.1):
+ *   PLP /en-us/shop/commerce/discounts: breadcrumb 265, h1 347, first card 570,
+ *     card 136px for a 72px image (figure margin 16 + container 40), pitch 160,
+ *     2 cards above the fold.
+ *   PDP: the add-to-cart row starts at 941, below the fold; the price table row
+ *     (no tiers for this visitor) paints 40px and the variant selector row (no
+ *     variants) 104px, both with nothing in them.
+ * MEASURED with this block injected into the same served pages: breadcrumb 225,
+ *   h1 251, first card 374, card 83px, pitch 91, 5 of 5 cards above the fold;
+ *   PDP add-to-cart column 481 (buyer: add to cart 417 on the discount ladder,
+ *   592 on the variant master, whose variant selector stays painted). At 390:
+ *   first card 325 -> 238, PDP add-to-cart column 1015 -> 758.
+ *
+ * THE SCOPE is the app column that holds a product list (the PLP, and the PDP's
+ * related-products list) or the PDP buy box, and nothing outside it. Cart,
+ * checkout and customer-center apps keep the page rhythm; they do not nest rows
+ * the way the catalog does. The :has() here only scopes padding and spacing,
+ * never a display:none, so it cannot collapse an ancestor (CSS-04).
+ *   1. Nested containers take .25rem instead of 1.25rem.
+ *   2. The row spacing presets of the rows above the fold go to zero: every row
+ *      of the PLP app, and the rows inside the PDP buy box. The breadcrumb row
+ *      keeps .5rem from the header; the buy box row keeps 1.5rem below it so the
+ *      overview sections read as a new part of the page. The PDP section rows
+ *      below the buy box keep their presets.
+ *   3. PLP card: its row centres the columns, the figure drops its 16px bottom
+ *      margin (it set every column to 88px for a 72px image), and the cards sit
+ *      .5rem apart.
+ *   4. Block #33 extended into the buy box: the price table and variant selector
+ *      rows that rendered nothing are not painted. Direct-child chains keyed on
+ *      the column's own item type, so a row with content never matches.
+ * Reference: the heartstream "PLP/PDP density pass" (2026-09-25), which scoped
+ * the same fix to one demo.
+ * ========================================================================== */
+[data-td-block="36"] { --td-block: 36; }
+
+main [data-dw-itemtype="swift-v2_app"]:has(.product-list, [data-dw-itemtype="swift-v2_productcomponentselector"]) [data-swift-container] {
+  padding-top: .25rem;
+  padding-bottom: .25rem;
+}
+
+main [data-dw-itemtype="swift-v2_app"]:has(.product-list):not(:has([data-dw-itemtype="swift-v2_productcomponentselector"])) [data-swift-gridrow],
+main [data-dw-itemtype="swift-v2_productcomponentselector"] [data-swift-gridrow] {
+  --dw-row-space-top: 0;
+  --dw-row-space-bottom: 0;
+}
+main [data-dw-itemtype="swift-v2_app"] section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_breadcrumbnavigation"]) {
+  --dw-row-space-top: .5rem;
+  --dw-row-space-bottom: 0;
+}
+main [data-dw-itemtype="swift-v2_app"] section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_productcomponentselector"]) {
+  --dw-row-space-top: 0;
+  --dw-row-space-bottom: 1.5rem;
+}
+
+.product-list article.product section > [data-swift-container] {
+  padding-top: .35rem;
+  padding-bottom: .35rem;
+  align-items: center;
+}
+.product-list article.product [data-dw-itemtype="swift-v2_productdefaultimage"] figure {
+  margin-bottom: 0 !important;
+}
+/* Centring the row stops the columns stretching, and a stock column on a product with
+ * no stock row then computes to 0px high: served, but collapsed. The stock column keeps
+ * the row height and centres its own text instead, so it is a column on every card
+ * (PLPROW-01 counts a cell painted by its height; gate 20260925-133712 measured 6 of 12). */
+.product-list article.product section > [data-swift-container] > [data-dw-itemtype="swift-v2_productstock"] {
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.product-list > .grid {
+  row-gap: .5rem;
+}
+
+main [data-dw-itemtype="swift-v2_productcomponentselector"] section[data-swift-gridrow]:has(> [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype="swift-v2_productpricetable"]):not(:has(> [data-swift-container] > [data-swift-gridcolumn] table)),
+main [data-dw-itemtype="swift-v2_productcomponentselector"] section[data-swift-gridrow]:has(> [data-swift-container] > [data-swift-gridcolumn]:only-child[data-dw-itemtype="swift-v2_productvariantselector"]):not(:has(> [data-swift-container] > [data-swift-gridcolumn] > *)) {
+  display: none;
+}

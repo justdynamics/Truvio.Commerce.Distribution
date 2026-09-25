@@ -72,9 +72,9 @@ if ($runs.Count -eq 0) { throw "layers/INDEX.json gateProven.editions is empty â
 # semver, bumped when the edition FILE changes, and nothing in INDEX.json records it. It
 # stays declared here, and an edition absent from the map keeps its existing tag.
 $editionVersion = @{
-    'swift-demo'    = '5.0.0'
+    'swift-demo'    = '5.0.1'
     'headless-demo' = '3.0.0'
-    'dap-portal'    = '2.1.0'
+    'dap-portal'    = '2.1.1'
 }
 
 # Which proven run each LAYER rides: DERIVED from the edition compositions on disk, so a
