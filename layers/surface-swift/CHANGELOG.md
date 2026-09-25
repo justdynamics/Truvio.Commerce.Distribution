@@ -1,5 +1,23 @@
 ﻿# Changelog — surface-swift
 
+## 1.16.1
+
+### The manifests name the paragraphs that are on disk (Distribution #89)
+
+Two paragraph moves reached the tree without reaching the manifests, and CI now compares Content
+`files[]` with disk:
+
+| Manifest | Named, not on disk | On disk, not named | Moved by |
+|---|---|---|---|
+| `replace-manifest.json`, `content/area-3` | `Shop/Product List/grid-row-3/paragraph-c1-8.yml`, `.../paragraph-c2-7.yml` | `Shop/Product List/grid-row-3/paragraph-c1-7.yml` | 1.13.7 (#65): grid-row-3 became `1Column`, the `Swift-v2_ProductListNavigation` paragraph was removed and the component selector moved to column 1 |
+| `merge-manifest.json`, `content/area-3/Header / Footer` | `Header _ Footer/Mobile Header/grid-row-3/paragraph-c3-6.yml` | `Header _ Footer/Mobile Header/grid-row-2/paragraph-c3-6.yml` | 1.13.6 (#62): the mini cart moved into row 2, column 3 |
+
+The disk side is right: it is the tree both PRs meant to ship, and the foundry host holds the
+component selector (`0e48b1f9`) in row 3 column 1 and the mini cart (`66d59906`) in row 2 column 3.
+The manifests now name those files. No document changes. The Serializer uses a Content entry's
+`files[]` to choose pages, and a kept page brings every grid row and paragraph under its folder, so
+this release deserializes exactly what 1.16.0 did. It is a patch because the layer tree changed.
+
 ## 1.16.0
 
 ### The customer-center Overview is the Swift 2.4 dashboard (owner ruling Q1, 2026-09-24)

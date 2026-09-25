@@ -19,6 +19,13 @@ A change to `layers/` or `editions/` is mergeable only when both hold:
      pinned semver; `themes[]` resolve to `layers/theme-<name>` (kind theme);
    - `layers/base/base.contract.json` parses; no two non-base layers ship the same
      `_sql/<Table>/<key>.yml` (silent-collision guard);
+   - every `replace-manifest.json` / `merge-manifest.json` names in `files[]` exactly the
+     documents its tree ships, both directions: each SqlTable entry the `*.yml` files of its
+     `_sql/<Table>/` directory, and the Content entries of a mode every `_content/*.yml` of that
+     mode. Two exceptions pass and are counted: a subtree entry may list its frame (`area.yml`,
+     the ancestor `page.yml` stubs, `templates.manifest.yml`) that the owning layer ships, and a
+     `sample-data` document at a path a `surface` manifest of the same mode declares is a
+     declared override, deserialized through the surface's entry;
    - the version spine holds (see [Version floors](#version-floors));
    - the protected-string guard passes (the layer/mode vocabulary never leaked into a
      DW/Swift identifier or path); theme layers carry no serialized content (SPEC-06).

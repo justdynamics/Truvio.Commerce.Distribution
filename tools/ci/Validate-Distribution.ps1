@@ -73,8 +73,15 @@ Checks (all fail-closed; any failure -> exit 1):
                         files[] exactly the *.yml files in its _sql/<table>/ directory
                         (Test-ManifestFiles.ps1), BOTH directions, ordinal names, _meta.yml
                         included when present. Serializer strict mode refuses a delivery whose
-                        directory holds a document files[] does not name. Content entries are
-                        not compared yet (#89 part 2).
+                        directory holds a document files[] does not name. (#89 part 2) Every
+                        mode directory's _content/*.yml is named by one of its Content entries,
+                        and every file an entry names is on disk inside that entry's subtree,
+                        BOTH directions. Two exceptions, both counted in the PASS line: a
+                        subtree entry's frame (area.yml, the ancestor page.yml stubs,
+                        templates.manifest.yml) may be listed and shipped by the layer that owns
+                        those pages; and a kind:sample-data document at a path a kind:surface
+                        manifest of the same mode declares is a declared override (ruling
+                        dla-q4), deserialized through the surface's entry.
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -443,7 +450,12 @@ foreach ($d in $layerDirs) {
 #     PR #88 renamed base row files (the name comes from the name column) and kept the old
 #     names in replace-manifest.json; this validator passed and the first remote delivery
 #     failed Serializer strict mode. Every SqlTable entry's files[] must equal the *.yml files
-#     in its _sql/<table>/ directory, both directions. Content entries: #89 part 2.
+#     in its _sql/<table>/ directory, both directions.
+#     Content entries (#89 part 2): the surface-swift manifests kept paragraph names that
+#     PR #62 and #65 moved on disk. Every _content/*.yml of a mode is named by one of its
+#     Content entries and every named file is on disk in the entry's subtree; the frame of a
+#     subtree entry and sample-data's declared overrides of surface paths are the two
+#     allowed, counted exceptions (Test-ManifestFiles.ps1 documents both).
 # ---------------------------------------------------------------------------
 foreach ($d in $layerDirs) {
     foreach ($mode in @('replace', 'merge')) {
@@ -453,6 +465,32 @@ foreach ($d in $layerDirs) {
         if ($mfResults.Count -eq 0) { continue }   # no SqlTable entry in this manifest
         $mf = Get-SqlTableManifestFilesFinding -Label "layer '$($d.Name)': $mode/$mode-manifest.json" -Results $mfResults
         & $log $mf.ok $mf.msg
+    }
+}
+
+# Content: the paths each surface layer's manifests declare, per mode, are the universe a
+# sample-data document may override (ruling dla-q4).
+$surfaceDeclared = @{ replace = @(); merge = @() }
+foreach ($d in $layerDirs) {
+    if ("$($manifests[$d.Name].kind)" -ne 'surface') { continue }
+    foreach ($mode in @('replace', 'merge')) {
+        $mp = Join-Path (Join-Path $d.FullName $mode) "$mode-manifest.json"
+        if (-not (Test-Path -LiteralPath $mp -PathType Leaf)) { continue }
+        try { $sd = Get-Content -LiteralPath $mp -Raw -Encoding utf8 | ConvertFrom-Json -ErrorAction Stop } catch { continue }
+        $surfaceDeclared[$mode] += @(@($sd.entries) | Where-Object { $_ -and "$($_.providerType)" -eq 'Content' } |
+            ForEach-Object { @($_.files) } | Where-Object { $null -ne $_ } | ForEach-Object { "$_" -replace '\\', '/' })
+    }
+}
+foreach ($d in $layerDirs) {
+    $isSampleData = "$($manifests[$d.Name].kind)" -eq 'sample-data'
+    foreach ($mode in @('replace', 'merge')) {
+        $modeDir = Join-Path $d.FullName $mode
+        if (-not (Test-Path -LiteralPath $modeDir -PathType Container)) { continue }
+        $override = if ($isSampleData) { $surfaceDeclared[$mode] } else { @() }
+        $cr = Test-ContentManifestFiles -ModeDir $modeDir -OverrideDeclared $override
+        if (-not $cr) { continue }   # no Content entry and no _content tree in this mode
+        $cf = Get-ContentManifestFilesFinding -Label "layer '$($d.Name)': $mode/" -Result $cr
+        & $log $cf.ok $cf.msg
     }
 }
 
