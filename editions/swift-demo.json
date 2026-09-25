@@ -6,7 +6,7 @@
     "feature-pricing@1.1.3",
     "feature-subscription-orders@1.2.2",
     "feature-bom-configurator@1.2.3",
-    "feature-b2b-comms@1.0.5",
+    "feature-b2b-comms@1.0.6",
     "feature-baseline-guide@1.0.3"
   ],
   "surfaces": [

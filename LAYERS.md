@@ -32,7 +32,7 @@ and every layer traces to a lane of the ecosystem workflow (the Foundry's
 | `feature-pricing` | feature | 1.1.3 | Quantity-break tiers and customer contract pricing on sample-data prices; carries the compile-optional `ReorderingPricingQtyBreakProvider`. Probes: `cart-price` on `TCPROD0020` (quantity 10, 96) and `TCPROD0046` (36.90 at `TC-100200`). |
 | `feature-subscription-orders` | feature | 1.2.2 | Subscribe page, subscriptions account page and the recurring-order scheduled task (disabled by default). Probe: `checkout-recurring` on `TCPROD0061`, `PAY2` / `SHIP9`. |
 | `feature-bom-configurator` | feature | 1.2.3 | Kit / BOM configurator pages. Probe: `bom-cart-lines` on the configurable kit `TCPROD0042`. |
-| `feature-b2b-comms` | feature | 1.0.5 | Five dealer emails and the email-marketing onboarding flow (`EmailMarketingFlow`, `EmailMarketingFlowStep`, campaign emails and messages); page ids bind by page GUID through `pageRefs`. |
+| `feature-b2b-comms` | feature | 1.0.6 | Five dealer emails and the email-marketing onboarding flow (`EmailMarketingFlowFolder`, `EmailMarketingFlow`, `EmailMarketingFlowStep`, campaign emails and messages); page ids bind by page GUID through `pageRefs`. |
 | `feature-baseline-guide` | feature | 1.0.3 | Content-only agent-facing guide to the Swift 2 baseline: the `/Baseline guide` page tree (root + 14 pages), `Swift-v2_Text` on 1Column rows, zero SQL. Its future on customer builds is open (Distribution #87). |
 | `surface-headless` | surface | 2.3.3 | Headless content surface: `Headless_*` item types, repository and Delivery-API content (areas Headless and Headless Nederlands). |
 | `surface-dap-portal` | surface | 1.0.5 | Digital Asset Portal content area (area 26, about 32 `Swift-v2` pages). |

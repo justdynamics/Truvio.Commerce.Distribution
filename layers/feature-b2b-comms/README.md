@@ -25,7 +25,10 @@ crashes the template with DivideByZero, report finding F3). `EmailButton` page-l
 left blank because Swift page ids are assigned at deserialize and are not stable to hardcode.
 
 ### Marketing objects — serialized via `SqlTable` predicates (`merge/_sql`)
-- `EmailMarketingFlow/100500.yml` — "Dealer onboarding", `Active`, `ScheduledRepeatInterval` 1440.
+- `EmailMarketingFlowFolder/100530.yml` (1.0.6): the top flow folder "Dealer onboarding" the flow
+  sits in.
+- `EmailMarketingFlow/100500.yml` — "Dealer onboarding", `Active`, `ScheduledRepeatInterval` 1440,
+  in folder 100530.
 - `EmailMarketingFlowStep/{100501,100502,100503}.yml` — three steps, delays +0 / +3 / +7 days
   (`DelayUnit` 0 = days), pointing at the campaign emails `EmailId` 100510-100512.
 - `EmailMarketingEmail/{100510,100511,100512}.yml` (1.0.5): the three onboarding emails, bodies =
@@ -42,10 +45,10 @@ these rows are **config, not an engine change** (same pattern as sample-data's `
 - **nvarchar PK prefix:** `PACK-B2BC-` (reserved for this layer; none consumed yet).
 - **item-instance `fields.Id`:** `100300+` band (pages/rows/paragraphs).
 - **marketing int-identity PKs:** `100500+` band: flow 100500, steps 100501-100503, `EmailId`
-  100510-100512, `MessageId` 100520-100522.
+  100510-100512, `MessageId` 100520-100522, flow folder 100530.
 
 All at/above `intIdentityFloor` (100000). No `_sql/<Table>/<key>` collides with any other layer
-(the four email-marketing tables are new to the Distribution).
+(the five email-marketing tables are new to the Distribution).
 
 ## Deferred to the Foundry demo bootstrap (residue)
 These need state the report did not capture as authoritative raw schema, or host config that is
