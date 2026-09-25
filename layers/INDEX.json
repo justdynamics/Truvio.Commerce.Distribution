@@ -35,14 +35,39 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20260925-103027",
+    "gateRunId": "20260925-115020",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.28.12",
     "editions": {
-      "swift-demo": "20260925-103027"
+      "dap-portal": "20260925-114643",
+      "swift-demo": "20260925-115020"
     },
     "verdicts": {
-      "20260925-103027": {
+      "20260925-114643": {
+        "overall": "PASS",
+        "mode": "remote",
+        "legs": {
+          "compose": "PASS",
+          "sql-online-routes": "SKIP",
+          "remote-delivery": "SKIP",
+          "persona-credentials": "SKIP",
+          "persona-sign-in": "PASS",
+          "theme-activation": "PASS",
+          "compat-floors": "PASS",
+          "placeholder-footprint": "SKIP",
+          "critical-paths": "PASS",
+          "gate-page-list-reachable": "PASS",
+          "non-page-routes": "PASS",
+          "design-default": "PASS",
+          "affordance-default": "PASS",
+          "scheduled-tasks": "SKIP",
+          "pim-structure": "PASS"
+        },
+        "host": "https://foundry-dap.mydwsite4.com",
+        "delivered": true,
+        "sqlScriptsNotApplied": 3
+      },
+      "20260925-115020": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -68,12 +93,38 @@
       }
     },
     "proofs": {
-      "swift-demo": {
-        "runId": "20260925-103027",
-        "deliveryRunId": "20260925-102704",
-        "distributionCommit": "dd7fbfe5ea546ba36d1e63d199766ac13d7866ee",
+      "dap-portal": {
+        "runId": "20260925-114643",
+        "deliveryRunId": "20260925-114508",
+        "distributionCommit": "de3659f3916ce46c82fa15ad2f28a0e0030ed5de",
         "checkSet": 2,
-        "harnessCommit": "82e89c3c50ee5c382beb872f398899e0829611b1",
+        "harnessCommit": "079b2484b4fd8489ecee7d425f3e1c93cfddd38f",
+        "algorithm": "layer-tree/v1",
+        "provenTree": {
+          "base": {
+            "version": "4.0.0",
+            "hash": "sha256:8a8fa251c32c2210c64a2247749c5e545cd87d657587c52d5362bdc2f4f95314"
+          },
+          "sample-data": {
+            "version": "6.1.0",
+            "hash": "sha256:8defc0e5633ca43215e07fdfd44d1b1610a54d816f7d987da526af2107ed0957"
+          },
+          "surface-dap-portal": {
+            "version": "1.1.0",
+            "hash": "sha256:eccfde48f9c2fe579830547bc16bc352b3f763a31070b426f81189b7998ae2d2"
+          },
+          "theme-default": {
+            "version": "2.5.0",
+            "hash": "sha256:41dc16bb46923bad2917a808835bb84947e4e6854f41dc82f8ae8e4d436ddda4"
+          }
+        }
+      },
+      "swift-demo": {
+        "runId": "20260925-115020",
+        "deliveryRunId": "20260925-114814",
+        "distributionCommit": "de3659f3916ce46c82fa15ad2f28a0e0030ed5de",
+        "checkSet": 2,
+        "harnessCommit": "079b2484b4fd8489ecee7d425f3e1c93cfddd38f",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -101,8 +152,8 @@
             "hash": "sha256:ef3c90209327e4e8d78e1099a891e52701ba440e37bd40605898f9dd5547afa1"
           },
           "sample-data": {
-            "version": "6.0.0",
-            "hash": "sha256:af57b92230599a863caf5ff817477ac808adebec427d51db67436cb44917440b"
+            "version": "6.1.0",
+            "hash": "sha256:8defc0e5633ca43215e07fdfd44d1b1610a54d816f7d987da526af2107ed0957"
           },
           "surface-swift": {
             "version": "1.16.1",
@@ -115,7 +166,7 @@
         }
       }
     },
-    "note": "Skills axis carried from run 20260923-122859: this run changed no skill. Delivery run 20260925-102704."
+    "note": "Skills axis carried from run 20260923-122859: this run changed no skill. swift-demo: delivery 20260925-114814, measure 20260925-115020 on foundry.mydwsite4.com. dap-portal: delivery 20260925-114508, measure 20260925-114643 on foundry-dap.mydwsite4.com (area 26). Both at Distribution de3659f3."
   },
   "layers": [
     {
