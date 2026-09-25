@@ -1,7 +1,7 @@
 {
   "_comment": "Machine-readable layer index for Truvio.Commerce.Distribution (P3, RUN-VERSION-CURRENCY T3-01..T3-04). SOURCE OF TRUTH for what layers exist, their kind/version/status, and what a retired name was superseded by. Two consumers read it: (1) tools/ci/Validate-Distribution.ps1 regenerates the `layers` array from the live tree and diffs it clean (drift both directions FAILs), asserts `gateProven` is present, and rejects any edition ref or living-doc mention of a name absent from `layers` (a retired hit names its successor); (2) the DemoAgent currency preflight (Invoke-DemoGate.ps1 `currency` leg) asserts this file parses + carries `gateProven`, and that every layer the demo consumed is live here (a retired hit -> 'retired -> use <supersededBy>'). UPDATE MECHANICS: the `layers` array is regenerated from the tree by Validate-Distribution.ps1 -RegenerateIndex (deterministic); `retired` tombstones are authored on layer retirement (release checklist, FOLLOWUP.md T4-02); `gateProven` is stamped by the FOUNDRY publish flow at release time (tools/harness/Write-IndexGateProven.ps1) from the gate run(s) that proved this main -- never hand-authored as trusted. Consumers 'pin origin/main + assert INDEX.gateProven present' (D-CONSUME a). EDITIONS APPEAR IN gateProven.editions ONLY WHEN PROVEN: the map is a record of gate runs, stamped by Write-IndexGateProven.ps1, so a newly specified edition (base-swift, added in the v5 phase-2 baseline release) is absent from it until its first PASS. An absent edition means unproven, never missing; hand-writing a run id there would fabricate an attestation, which is the one thing this file exists to prevent.",
   "gateProven": {
-    "date": "2026-09-24",
+    "date": "2026-09-25",
     "dw": {
       "ring": "R1-NET10",
       "ringNumber": 1,
@@ -35,14 +35,14 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20260924-105903",
+    "gateRunId": "20260925-103027",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.28.12",
     "editions": {
-      "swift-demo": "20260924-105903"
+      "swift-demo": "20260925-103027"
     },
     "verdicts": {
-      "20260924-105903": {
+      "20260925-103027": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -69,11 +69,11 @@
     },
     "proofs": {
       "swift-demo": {
-        "runId": "20260924-105903",
-        "deliveryRunId": "20260924-105620",
-        "distributionCommit": "afdff124ba19292d0b322a1b8dfc1aeddd6b4d83",
+        "runId": "20260925-103027",
+        "deliveryRunId": "20260925-102704",
+        "distributionCommit": "dd7fbfe5ea546ba36d1e63d199766ac13d7866ee",
         "checkSet": 2,
-        "harnessCommit": "b7850b1508b7e3e517d71363e888c64a417231ed",
+        "harnessCommit": "82e89c3c50ee5c382beb872f398899e0829611b1",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -81,12 +81,8 @@
             "hash": "sha256:8a8fa251c32c2210c64a2247749c5e545cd87d657587c52d5362bdc2f4f95314"
           },
           "feature-b2b-comms": {
-            "version": "1.0.5",
-            "hash": "sha256:59b61ef1a4ca8d01bcea3047729fb89187ca5cc4302149689fbabf8052ecf8b0"
-          },
-          "feature-baseline-guide": {
-            "version": "1.0.3",
-            "hash": "sha256:e10423f408625e9379044bb950dfaf8d70351e34d68ce9eda56eccd412e535b1"
+            "version": "1.0.6",
+            "hash": "sha256:f4eeb40df1b3fdfcd57e616fb9283fa9c2ea4c637a6b7ca41925cfb9d89e7a20"
           },
           "feature-bom-configurator": {
             "version": "1.2.3",
@@ -109,8 +105,8 @@
             "hash": "sha256:af57b92230599a863caf5ff817477ac808adebec427d51db67436cb44917440b"
           },
           "surface-swift": {
-            "version": "1.16.0",
-            "hash": "sha256:ac204bd535bd1ebf18b1d3cd872867986f487a7eb8330cbfd9087750a5f00c72"
+            "version": "1.16.1",
+            "hash": "sha256:4fa92cb578dade752032f86c6c2c2525e969de8d1e486975201748b62b03672e"
           },
           "theme-default": {
             "version": "2.5.0",
@@ -119,7 +115,7 @@
         }
       }
     },
-    "note": "Skills axis carried from run 20260923-122859: this run changed no skill. Delivery run 20260924-105620."
+    "note": "Skills axis carried from run 20260923-122859: this run changed no skill. Delivery run 20260925-102704."
   },
   "layers": [
     {
