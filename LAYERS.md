@@ -33,7 +33,6 @@ and every layer traces to a lane of the ecosystem workflow (the Foundry's
 | `feature-subscription-orders` | feature | 1.2.2 | Subscribe page, subscriptions account page and the recurring-order scheduled task (disabled by default). Probe: `checkout-recurring` on `TCPROD0061`, `PAY2` / `SHIP9`. |
 | `feature-bom-configurator` | feature | 1.2.3 | Kit / BOM configurator pages. Probe: `bom-cart-lines` on the configurable kit `TCPROD0042`. |
 | `feature-b2b-comms` | feature | 1.0.6 | Five dealer emails and the email-marketing onboarding flow (`EmailMarketingFlowFolder`, `EmailMarketingFlow`, `EmailMarketingFlowStep`, campaign emails and messages); page ids bind by page GUID through `pageRefs`. |
-| `feature-baseline-guide` | feature | 1.0.3 | Content-only agent-facing guide to the Swift 2 baseline: the `/Baseline guide` page tree (root + 14 pages), `Swift-v2_Text` on 1Column rows, zero SQL. Its future on customer builds is open (Distribution #87). |
 | `surface-headless` | surface | 2.3.3 | Headless content surface: `Headless_*` item types, repository and Delivery-API content (areas Headless and Headless Nederlands). |
 | `surface-dap-portal` | surface | 1.0.5 | Digital Asset Portal content area (area 26, about 32 `Swift-v2` pages). |
 | `theme-default` | theme | 2.5.0 | The one presentation layer (disk-only, SPEC-06): neutral palette, quiet buttons, Inter typography, the header menu-bar affordance, mobile and PLP fixes. Since 2.5.0 it ships the brand slot (`Custom/brand.css`, loaded after `default_custom.css`, plus `Custom/brand.tokens.json`) that a demo rewrites in a demo-local copy, and absorbs the generic demo fixes (header wrap, phone poster cap, PDP sections that hide when empty, mega-menu hover apron, per-scheme hover contrast). The starting point of every customer re-skin. |
@@ -46,7 +45,7 @@ A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampl
 |---------|-------------|
 | `base-only` | base alone: framework-only, no theme (nothing to skin). API and DB-level proof: the framework row-count contract and `/Admin/`, zero pages by design. |
 | `base-swift` | base + `surface-swift` + theme `default`, no sample data and no feature layers: an empty shop in a complete themed storefront. `compatAxes` names dw + apps + swift, so an unmet floor fails; `criticalPaths` sit under the culture segment (Foundry 965, 1005). |
-| `swift-demo` | base + `surface-swift` + six feature layers (`feature-reordering`, `feature-pricing`, `feature-subscription-orders`, `feature-bom-configurator`, `feature-b2b-comms`, `feature-baseline-guide`) + sample data + theme `default`. The demo a prospect sees (`EcomProducts` 97, `EcomGroups` 21, `EcomCountries` 96, pinned). Every layer-declared fixture probe resolves here. |
+| `swift-demo` | base + `surface-swift` + five feature layers (`feature-reordering`, `feature-pricing`, `feature-subscription-orders`, `feature-bom-configurator`, `feature-b2b-comms`) + sample data + theme `default`. The demo a prospect sees (`EcomProducts` 97, `EcomGroups` 21, `EcomCountries` 96, pinned). Every layer-declared fixture probe resolves here. |
 | `headless-demo` | base + `surface-headless` + sample data: the headless Delivery-API probes, no Swift design-package dependency. |
 | `dap-portal` | base + `surface-dap-portal` + sample data: the DAP content surface (area 26). |
 

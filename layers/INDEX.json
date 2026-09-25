@@ -135,12 +135,6 @@
       "status": "active"
     },
     {
-      "name": "feature-baseline-guide",
-      "kind": "feature",
-      "version": "1.0.3",
-      "status": "active"
-    },
-    {
       "name": "feature-bom-configurator",
       "kind": "feature",
       "version": "1.2.3",
@@ -306,6 +300,13 @@
       "kind": "feature",
       "supersededBy": "sample-data",
       "note": "Folded into sample-data 6.0.0 (owner ruling Q6, 2026-09-24). The layer was sample data in practice: one EcomRmas row PACK-RMA-0001 and its EcomRmaOrderLines link 100301 against the delivered order TCO-0001. Both rows move unchanged in key into sample-data; the authenticated /my-returns probe moves to surface-swift, the layer that ships the My returns page, and names TCO-0001 in requiresFixtures."
+    },
+    {
+      "name": "feature-baseline-guide",
+      "retired": true,
+      "kind": "feature",
+      "supersededBy": "none: deleted, no successor (Distribution #87)",
+      "note": "Deleted 2026-09-25 (owner ruling guide-layer-delete, Distribution #87). The agent-facing /Baseline guide page tree in area 3 (root + 14 pages, one Replace predicate). Every customer build that delivered swift-demo unpublished it by hand, and each re-delivery republished it. No layer or edition carries the guide any more; the tags layers/feature-baseline-guide/1.0.2 and 1.0.3 stay as history, and a demo that pins an older tag (CIL: 1.0.2) keeps it until it re-pins."
     }
   ]
 }
