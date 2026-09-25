@@ -21,6 +21,12 @@
   - My profile
   - Sign in
   - Forgot password
+  - Help
+  - Getting started
+  - Finding assets
+  - Downloading files
+  - About
+  - Contact the portal team
 - path: 1ColumnFlex
   kind: grid-row
   referencedBy:
@@ -88,6 +94,10 @@
   - Mobile Header
   - Desktop Footer
   - Mobile Footer
+- path: Swift-v2_MenuRelatedContent
+  kind: item-type
+  referencedBy:
+  - Desktop Header
 - path: Swift-v2_MiniCart
   kind: item-type
   referencedBy:
@@ -99,7 +109,6 @@
 - path: Swift-v2_Navigation
   kind: item-type
   referencedBy:
-  - Desktop Header
   - Desktop Footer
   - Mobile Footer
 - path: Swift-v2_OffCanvasNavigation
@@ -121,6 +130,12 @@
   - My account information
   - Sign in
   - Forgot password
+  - Help
+  - Getting started
+  - Finding assets
+  - Downloading files
+  - About
+  - Contact the portal team
 - path: Swift-v2_Poster
   kind: item-type
   referencedBy:
@@ -246,6 +261,12 @@
   - Empty cart
   - Sign in
   - Forgot password
+  - Help
+  - Getting started
+  - Finding assets
+  - Downloading files
+  - About
+  - Contact the portal team
 - path: Swift-v2_CustomerCenter.cshtml
   kind: page-layout
   referencedBy:

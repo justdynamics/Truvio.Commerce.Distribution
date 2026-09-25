@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": bf123aed-f8b7-43aa-973f-6fa0d7095481
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_Text"
+"header": "Help with the Digital Assets Portal"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "0862cade-952d-48f3-b017-03ba7c47ae8d"
+  "Id": "126004"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Subtitle": "<p class=\"dw-paragraph-1\">Everything you need to find, collect and download brand and product files.</p>"
+  "Text": "<p class=\"dw-paragraph\">The Digital Assets Portal is where partners, resellers and colleagues get the approved files for our products and our brand: product photography, technical documents, logos and company imagery.</p><p class=\"dw-paragraph\">The guides in this section walk through signing in, searching and filtering the asset library, and collecting files in the download cart so you can take everything you need in one archive.</p><p class=\"dw-paragraph\">If a file you expect is missing, or you need a format we do not publish, contact the portal team from the About section and we will get back to you within two working days.</p>"
+  "Title": "<h1 class=\"dw-h2\">Help with the Digital Assets Portal</h1>"
+"columnId": 1

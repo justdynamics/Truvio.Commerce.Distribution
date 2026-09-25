@@ -157,13 +157,13 @@
     {
       "name": "sample-data",
       "kind": "sample-data",
-      "version": "6.0.0",
+      "version": "6.1.0",
       "status": "active"
     },
     {
       "name": "surface-dap-portal",
       "kind": "surface",
-      "version": "1.0.5",
+      "version": "1.1.0",
       "status": "active"
     },
     {

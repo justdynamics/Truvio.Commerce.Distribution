@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": e0a9ebb6-9d3a-4754-8473-74bcd7d7a714
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_Text"
+"header": "About the Digital Assets Portal"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "c9be87ba-f8c1-4669-9268-59085f9ca2db"
+  "Id": "126020"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Subtitle": "<p class=\"dw-paragraph-1\">One approved source for every brand and product file.</p>"
+  "Text": "<p class=\"dw-paragraph\">The portal replaces shared drives and email attachments with a single library that is always current. When a product changes, its files change here first, so what you download is the version we stand behind.</p><p class=\"dw-paragraph\">Product files come straight from our product information system, which means names, numbers and descriptions match the catalogue your customers see. Brand files are maintained by the marketing team.</p><p class=\"dw-paragraph\">Access is personal. Each partner company has its own accounts, and every download is linked to the account that made it.</p>"
+  "Title": "<h1 class=\"dw-h2\">About the Digital Assets Portal</h1>"
+"columnId": 1
