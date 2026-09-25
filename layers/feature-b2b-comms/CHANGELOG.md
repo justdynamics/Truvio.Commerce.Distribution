@@ -1,5 +1,21 @@
 # Changelog — feature-b2b-comms
 
+## 1.0.6
+
+The onboarding flow has a folder (Foundry #1338, owner ruling 2026-09-25). Since 1.0.0 flow row
+100500 set `EmailMarketingFlowFolderId: 2`, and no layer shipped an `EmailMarketingFlowFolder`
+row. The table is empty on a Swift 2.4 database, so the reference pointed at nothing on every
+host. 1.0.6 ships the folder and points the flow at it:
+
+- `EmailMarketingFlowFolder` 100530 "Dealer onboarding", `EmailMarketingFlowFolderParentId` 0
+  (a top folder). The row has the three columns of the DW 10.28 table (identity key, nullable
+  parent, name) and the top-folder shape of a folder created in the admin.
+- `EmailMarketingFlow` 100500: `EmailMarketingFlowFolderId` 2 -> 100530.
+
+`merge-manifest.json` gains the `sql/EmailMarketingFlowFolder` entry, which names the one row
+file, and `layer.json` `fragmentTables` names the table. The table has a primary key, so merge
+deletes no folder the host already has. swift-demo pins 1.0.6.
+
 ## 1.0.5
 
 The onboarding flow now has emails to send (Foundry #632, owner decision 2026-09-22). Since
@@ -39,10 +55,6 @@ Serializer 1.0.6-beta. Treatment on the way in, same convention as 1.0.2:
   (`DefaultTopFolder:default`, present on every Swift 2.4 database), `EmailFolderId` 0
 - `MessageDomainUrl` emptied (it named the source host); `EmailCreatedDate` fixed to
   2026-09-23, the scheduled send time cleared (scheduling is off)
-
-**Known, not fixed here:** flow row 100500 sets `EmailMarketingFlowFolderId: 2`, and no layer ships
-an `EmailMarketingFlowFolder` row (the table is empty on a delivered swift-demo), so the flow's
-folder reference dangles. Unchanged from 1.0.0.
 
 Proven on a second fresh foundry-blank clone (Serializer 1.0.6-beta, DW 10.28.11, R1-NET10,
 swift-demo delivered online): 3 + 3 rows created with no warning; all 183 cells match the source

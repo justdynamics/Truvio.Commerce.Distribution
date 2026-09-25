@@ -127,6 +127,20 @@
     },
     {
       "providerType": "SqlTable",
+      "table": "EmailMarketingFlowFolder",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EmailMarketingFlowFolder",
+      "files": [
+        "_sql/EmailMarketingFlowFolder/100530.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
       "table": "EmailMarketingFlow",
       "nameColumn": null,
       "compareColumns": null,
