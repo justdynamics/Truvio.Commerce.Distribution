@@ -68,6 +68,13 @@ Checks (all fail-closed; any failure -> exit 1):
                         since proving run Y without a version bump". A bumped version is unproven:
                         a NOTE, and release-tags does not tag it. An edition with no proof (legacy)
                         is a NOTE and keeps the pre-key tag rule until the next restamp.
+ 15. Manifest files[] - (Distribution #89, part 1) every SqlTable entry of a layer's
+                        replace/replace-manifest.json and merge/merge-manifest.json names in
+                        files[] exactly the *.yml files in its _sql/<table>/ directory
+                        (Test-ManifestFiles.ps1), BOTH directions, ordinal names, _meta.yml
+                        included when present. Serializer strict mode refuses a delivery whose
+                        directory holds a document files[] does not name. Content entries are
+                        not compared yet (#89 part 2).
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -102,6 +109,7 @@ function Compare-DistVersion {
 
 . (Join-Path $PSScriptRoot 'Test-ProtectedStrings.ps1')
 . (Join-Path $PSScriptRoot 'ProvenTree.ps1')
+. (Join-Path $PSScriptRoot 'Test-ManifestFiles.ps1')
 
 $layersRoot   = Join-Path $RepoRoot 'layers'
 $editionsRoot = Join-Path $RepoRoot 'editions'
@@ -427,6 +435,24 @@ foreach ($d in $layerDirs) {
             if ($m.PSObject.Properties.Name -contains $t.key) { $universe += @($m.($t.key) | ForEach-Object { "$_" }) }
         }
         & $log ($universe -contains $path) "layer '$($d.Name)': placeholder '$path' is declared in files[]/repositories[]/itemtypes[]"
+    }
+}
+
+# ---------------------------------------------------------------------------
+# 15. Manifest files[] vs disk, SqlTable entries (Distribution #89, part 1).
+#     PR #88 renamed base row files (the name comes from the name column) and kept the old
+#     names in replace-manifest.json; this validator passed and the first remote delivery
+#     failed Serializer strict mode. Every SqlTable entry's files[] must equal the *.yml files
+#     in its _sql/<table>/ directory, both directions. Content entries: #89 part 2.
+# ---------------------------------------------------------------------------
+foreach ($d in $layerDirs) {
+    foreach ($mode in @('replace', 'merge')) {
+        $mp = Join-Path (Join-Path $d.FullName $mode) "$mode-manifest.json"
+        if (-not (Test-Path -LiteralPath $mp -PathType Leaf)) { continue }
+        $mfResults = @(Test-SqlTableManifestFiles -ManifestPath $mp)
+        if ($mfResults.Count -eq 0) { continue }   # no SqlTable entry in this manifest
+        $mf = Get-SqlTableManifestFilesFinding -Label "layer '$($d.Name)': $mode/$mode-manifest.json" -Results $mfResults
+        & $log $mf.ok $mf.msg
     }
 }
 
