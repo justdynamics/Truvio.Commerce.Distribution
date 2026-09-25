@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": e507318d-f30b-4eab-86ca-71c8a96025c8
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_Text"
+"header": "Contact the portal team"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "dfcf795c-3de5-48ca-9ad9-727e61fdcbec"
+  "Id": "126024"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Subtitle": "<p class=\"dw-paragraph-1\">Questions about access, files or usage rights.</p>"
+  "Text": "<p class=\"dw-paragraph\">Ask your company contact to request a new account or to change the people who have access for your organisation. Account requests are processed within two working days.</p><p class=\"dw-paragraph\">For a missing file, a wrong document or a format we do not publish, write to the portal team with the product number and the file you need, and we will add it to the library or tell you when it will be available.</p><p class=\"dw-paragraph\">Questions about how a logo or a photograph may be used go to the marketing team through the same address; include where and how you plan to use the file.</p>"
+  "Title": "<h1 class=\"dw-h2\">Contact the portal team</h1>"
+"columnId": 1

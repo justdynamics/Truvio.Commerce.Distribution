@@ -1,0 +1,42 @@
+﻿"pageUniqueId": 56964eb8-c1dc-4734-8ff8-da4a04fd61f4
+"sourcePageId": 0
+"name": "Downloading files"
+"menuText": "Downloading files"
+"sortOrder": 3
+"isActive": true
+"itemType": "Swift-v2_Page"
+"layoutApplyToSubPages": false
+"isFolder": false
+"isTemplate": false
+"isStructuralStub": false
+"hidden": false
+"allowclick": true
+"allowsearch": true
+"showInSitemap": true
+"showInLegend": true
+"sslMode": 0
+"displayMode": "Normal"
+"activeFrom": 2026-09-25T00:00:00.0000000
+"activeTo": 2999-12-31T23:59:59.0000000
+"permissionType": 2
+"seo":
+  "noindex": false
+  "nofollow": false
+  "robots404": false
+"urlSettings":
+  "urlIgnoreForChildren": false
+  "urlUseAsWritten": false
+"visibility":
+  "hideForPhones": false
+  "hideForTablets": false
+  "hideForDesktops": false
+"fields":
+  "Id": "126013"
+  "ItemInstanceType": ""
+  "Sort": 3
+  "Title": "Downloading files"
+"propertyFields":
+  "Id": "126014"
+  "Sort": 0
+  "ItemInstanceType": ""
+  "SubmenuType": "auto"

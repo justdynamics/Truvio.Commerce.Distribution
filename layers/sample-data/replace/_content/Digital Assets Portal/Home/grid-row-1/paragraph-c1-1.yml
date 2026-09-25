@@ -1,4 +1,6 @@
-﻿"paragraphUniqueId": 8ca4b56c-2898-45c2-a0e3-2dfc269f14d3
+﻿"ownership":
+  "mode": "replace"
+"paragraphUniqueId": 8ca4b56c-2898-45c2-a0e3-2dfc269f14d3
 "sourceParagraphId": 21990
 "sortOrder": 1
 "itemType": "Swift-v2_Poster"
@@ -8,16 +10,16 @@
 "moduleSystemName": ""
 "moduleSettings": ""
 "fields":
-  "AltText": ""
-  "Eyebrow": "<div class=\"dw-paragraph\">Your Central Hub for Brand and Product Files</div>"
+  "AltText": "Truvio Commerce products"
+  "Eyebrow": "<div class=\"dw-paragraph\">Truvio Commerce partner portal</div>"
   "FirstButton": "{\r\n  \"SelectedValue\": \"8309\",\r\n  \"Label\": \"Go to Product assets\",\r\n  \"Link\": \"Default.aspx?ID=8309\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"primary\"\r\n}"
   "GlobalRecordPageGuid": "47f447e2-bbb3-4f97-b75d-2ddb2afbab01"
   "Height": "4"
   "Id": "760"
-  "Image": "/Files/Images/Content/Environment/environment-8.jpg"
+  "Image": "/Files/Images/TruvioCommerce/scenic/product-visual.png"
   "ItemInstanceType": ""
   "SecondButton": "{\r\n  \"SelectedValue\": \"8312\",\r\n  \"Label\": \"Go to Digital assets\",\r\n  \"Link\": \"Default.aspx?ID=8312\",\r\n  \"LinkType\": \"page\",\r\n  \"Style\": \"outline-primary\"\r\n}"
   "Sort": 0
-  "Text": "<div class=\"dw-paragraph\">Download your product information and product assets that you need for commercial use.</div><div class=\"dw-paragraph\">You can also download logos, employee and company images in the Digital assets area.</div><div></div><div></div><p></p>"
+  "Text": "<div class=\"dw-paragraph\">Download the product information and product files you need to market and sell Truvio Commerce products.</div><div class=\"dw-paragraph\">Logos, employee portraits and company images are in the Digital assets library.</div>"
   "Title": "<h2 class=\"dw-h1\">Digital Assets Portal</h2>"
 "columnId": 1

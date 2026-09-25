@@ -1,5 +1,32 @@
 # Changelog — sample-data
 
+## 6.1.0
+
+**MINOR. Truvio copy for the Digital Assets Portal, as declared replace overrides of
+surface-dap-portal (Distribution #82).**
+
+surface-dap-portal ships its logo, footer contact block, copyright line and mobile footer nav
+heading as `Placeholder — <function>` slots, and no layer filled them, so the dap-portal edition
+served six Placeholder strings on every page and the Foundry design leg's placeholder scan had
+nothing else to find. This release fills them the way 4.x fills surface-swift's slots, with eight
+documents under `replace/_content/Digital Assets Portal/` at the surface's own paths (each one the
+surface document with an `ownership: replace` header and the copy fields changed):
+
+- the four logo paragraphs (desktop and mobile header, desktop and mobile footer): the Truvio
+  wordmark from this layer's `files/` (`truvio-logo.svg`, `truvio-logo-footer.svg`), alt
+  `Truvio Commerce`;
+- the desktop footer contact block: what the portal is and where to ask, with no postal address,
+  phone number or e-mail (the About section's Contact the portal team page carries the route);
+- the desktop footer copyright line and the mobile footer nav heading;
+- the home poster: a Truvio image from `files/` (`scenic/product-visual.png`; the surface pointed
+  at a stock Swift image the host does not carry, so the poster painted no image), a Truvio
+  eyebrow and body, and the two CTA links surface-dap-portal 1.1.0 wires.
+
+The validator counts them as declared overrides of a surface path. An edition that does not
+compose surface-dap-portal has no Content predicate for area 26, so the documents are inert there
+(the same measurement as the 'Swift 2' documents in dap-portal, Foundry run `20260925-105239`).
+No row changes: 2,098 rows, 39 tables.
+
 ## 6.0.0
 
 **MAJOR. The scrub script is gone, a rewrite guide takes its place, the buyer gets dashboard-grade

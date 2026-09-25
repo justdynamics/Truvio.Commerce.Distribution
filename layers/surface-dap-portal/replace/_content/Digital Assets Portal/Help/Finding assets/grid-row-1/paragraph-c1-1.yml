@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": 98610608-0f6b-482a-9fa7-1a01ea5a1b88
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_Text"
+"header": "Finding assets"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "84d32dbd-a3f9-449f-b56a-9abd999bb849"
+  "Id": "126012"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Subtitle": "<p class=\"dw-paragraph-1\">Browse by product group or search across the whole library.</p>"
+  "Text": "<p class=\"dw-paragraph\">Every product in the catalogue has its own asset page with photography, data sheets and manuals. Open Product Assets and choose a product group to narrow the list, then open a product to see all of its files.</p><p class=\"dw-paragraph\">The search field in the header searches product names, numbers and file descriptions at the same time. Results show the product and the files attached to it, so you can go straight to the document you need.</p><p class=\"dw-paragraph\">Filters on the list page narrow the results further by group and file type. The number next to each filter shows how many products match before you apply it.</p>"
+  "Title": "<h1 class=\"dw-h2\">Finding assets</h1>"
+"columnId": 1

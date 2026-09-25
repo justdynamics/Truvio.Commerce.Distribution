@@ -74,7 +74,7 @@ if ($runs.Count -eq 0) { throw "layers/INDEX.json gateProven.editions is empty â
 $editionVersion = @{
     'swift-demo'    = '5.0.0'
     'headless-demo' = '3.0.0'
-    'dap-portal'    = '2.0.0'
+    'dap-portal'    = '2.1.0'
 }
 
 # Which proven run each LAYER rides: DERIVED from the edition compositions on disk, so a

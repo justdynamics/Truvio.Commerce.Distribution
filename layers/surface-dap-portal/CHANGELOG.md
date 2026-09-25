@@ -1,5 +1,41 @@
 ﻿# Changelog — digital-asset-portal/1.0
 
+## 1.1.0
+
+### The header is the Swift mega-menu, with public Help and About sections (Distribution #82)
+
+The Desktop Header navigation paragraph (`Header _ Footer/Desktop Header/grid-row-3/paragraph-c1-2.yml`,
+same paragraph id) moves from `Swift-v2_Navigation` on `Horizontal.cshtml` with
+`ShowOnlyFirstNavLevel: true` to `Swift-v2_MenuRelatedContent`, the item type surface-swift's own
+header menu uses, rooted at the area (`NavigationRoot` empty). The old paragraph rendered an empty
+`<ul>` for every anonymous visitor: Product Assets and Digital Assets are Anonymous none /
+AuthenticatedFrontend all, and every other top-level page is a folder hidden on desktop, so the
+bar carried no item at all and nothing a menu-bar check could open.
+
+Six new pages give the portal a public face with real depth:
+
+- **Help** (`/help`) with **Getting started**, **Finding assets** and **Downloading files**
+  (signing in, browsing and searching the library, the download cart and usage rights);
+- **About** (`/about`) with **Contact the portal team** (access requests, missing files, usage
+  questions).
+
+Anonymous visitors see Help and About as two dropdowns; a signed-in partner also sees Product
+Assets (its product-group mega-menu) and Digital Assets. The copy is function-descriptive portal
+text with no real-world names, addresses or numbers. Item and paragraph ids start at 126001
+(`fields.Id` is informational, base.contract.json idRules).
+
+The home poster's two call-to-action buttons now link to Product Assets and Digital Assets
+(`LinkType page`, `Default.aspx?ID=8309` / `8312`); they shipped with empty links and rendered no
+anchor. `area.yml` sets `CustomHeadInclude` to the theme head include, as surface-swift does, so a
+composed theme's `default_custom.css` is linked on the first request.
+
+`templates.manifest.yml` names `Swift-v2_MenuRelatedContent` for the Desktop Header and the six
+pages under `1Column`, `Swift-v2_Page` and `Swift-v2_Text`; `replace-manifest.json` files[] lists
+the 18 new documents.
+
+Proven on foundry-dap.mydwsite4.com: delivery `20260925-113125`, measure `20260925-113340`
+(iteration tier: design 337 asserting probes 0 FAIL, affordance PASS with 2 dropdowns).
+
 ## 1.0.5
 
 ### The MOBILE footer navigation renders on Vertical.cshtml (Foundry #728)

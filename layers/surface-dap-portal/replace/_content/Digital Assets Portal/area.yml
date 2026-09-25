@@ -25,7 +25,7 @@
   "MetaImage": ""
   "MetaImageALT": ""
   "MediaQueryLimit": ""
-  "CustomHeadInclude": ""
+  "CustomHeadInclude": "/Files/Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml"
 "properties":
   "AreaStyleId": 0
   "AreaEncoding": ""

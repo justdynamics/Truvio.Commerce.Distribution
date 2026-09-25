@@ -1,0 +1,18 @@
+﻿"paragraphUniqueId": ef611d33-f014-4e58-8cc8-555d17483ada
+"sourceParagraphId": 0
+"sortOrder": 1
+"itemType": "Swift-v2_Text"
+"header": "Getting started"
+"template": "TextLeft.cshtml"
+"colorSchemeId": ""
+"moduleSystemName": ""
+"moduleSettings": ""
+"fields":
+  "GlobalRecordPageGuid": "648857c7-1b59-439e-b43c-9955d7b22de1"
+  "Id": "126008"
+  "ItemInstanceType": ""
+  "Sort": 0
+  "Subtitle": "<p class=\"dw-paragraph-1\">Sign in once and the whole asset library opens up.</p>"
+  "Text": "<p class=\"dw-paragraph\">Access to product and brand files is limited to registered partners. Use the account your company contact created for you and sign in from the account menu in the top right corner of every page.</p><p class=\"dw-paragraph\">After signing in you land on the portal home page. Product Assets lists files per product group, and Digital Assets holds the brand library: logos, employee portraits and company images.</p><p class=\"dw-paragraph\">Forgot your password? Use the reset link on the sign-in page. The reset email arrives within a few minutes and the link stays valid for one day.</p>"
+  "Title": "<h1 class=\"dw-h2\">Getting started</h1>"
+"columnId": 1
