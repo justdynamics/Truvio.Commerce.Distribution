@@ -35,39 +35,15 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20260925-115020",
+    "gateRunId": "20260925-134518",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.28.12",
     "editions": {
-      "dap-portal": "20260925-114643",
-      "swift-demo": "20260925-115020"
+      "dap-portal": "20260925-134655",
+      "swift-demo": "20260925-134518"
     },
     "verdicts": {
-      "20260925-114643": {
-        "overall": "PASS",
-        "mode": "remote",
-        "legs": {
-          "compose": "PASS",
-          "sql-online-routes": "SKIP",
-          "remote-delivery": "SKIP",
-          "persona-credentials": "SKIP",
-          "persona-sign-in": "PASS",
-          "theme-activation": "PASS",
-          "compat-floors": "PASS",
-          "placeholder-footprint": "SKIP",
-          "critical-paths": "PASS",
-          "gate-page-list-reachable": "PASS",
-          "non-page-routes": "PASS",
-          "design-default": "PASS",
-          "affordance-default": "PASS",
-          "scheduled-tasks": "SKIP",
-          "pim-structure": "PASS"
-        },
-        "host": "https://foundry-dap.mydwsite4.com",
-        "delivered": true,
-        "sqlScriptsNotApplied": 3
-      },
-      "20260925-115020": {
+      "20260925-134518": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -90,15 +66,39 @@
         "host": "https://foundry.mydwsite4.com",
         "delivered": true,
         "sqlScriptsNotApplied": 3
+      },
+      "20260925-134655": {
+        "overall": "PASS",
+        "mode": "remote",
+        "legs": {
+          "compose": "PASS",
+          "sql-online-routes": "SKIP",
+          "remote-delivery": "SKIP",
+          "persona-credentials": "SKIP",
+          "persona-sign-in": "PASS",
+          "theme-activation": "PASS",
+          "compat-floors": "PASS",
+          "placeholder-footprint": "SKIP",
+          "critical-paths": "PASS",
+          "gate-page-list-reachable": "PASS",
+          "non-page-routes": "PASS",
+          "design-default": "PASS",
+          "affordance-default": "PASS",
+          "scheduled-tasks": "SKIP",
+          "pim-structure": "PASS"
+        },
+        "host": "https://foundry-dap.mydwsite4.com",
+        "delivered": true,
+        "sqlScriptsNotApplied": 3
       }
     },
     "proofs": {
       "dap-portal": {
-        "runId": "20260925-114643",
-        "deliveryRunId": "20260925-114508",
-        "distributionCommit": "de3659f3916ce46c82fa15ad2f28a0e0030ed5de",
+        "runId": "20260925-134655",
+        "deliveryRunId": "20260925-134341",
+        "distributionCommit": "8f17d7f559097b151cdd09b28c6882d9ef6a8b30",
         "checkSet": 2,
-        "harnessCommit": "079b2484b4fd8489ecee7d425f3e1c93cfddd38f",
+        "harnessCommit": "83ef0699c16f446a8e95f2f7f05fa732ce4dfb9e",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -114,17 +114,17 @@
             "hash": "sha256:eccfde48f9c2fe579830547bc16bc352b3f763a31070b426f81189b7998ae2d2"
           },
           "theme-default": {
-            "version": "2.5.0",
-            "hash": "sha256:41dc16bb46923bad2917a808835bb84947e4e6854f41dc82f8ae8e4d436ddda4"
+            "version": "2.5.1",
+            "hash": "sha256:9be7902b82c55d8569d7b79b18562f143f1d87c1cd7c0e6355d7b0fea551b3ca"
           }
         }
       },
       "swift-demo": {
-        "runId": "20260925-115020",
-        "deliveryRunId": "20260925-114814",
-        "distributionCommit": "de3659f3916ce46c82fa15ad2f28a0e0030ed5de",
+        "runId": "20260925-134518",
+        "deliveryRunId": "20260925-134203",
+        "distributionCommit": "8f17d7f559097b151cdd09b28c6882d9ef6a8b30",
         "checkSet": 2,
-        "harnessCommit": "079b2484b4fd8489ecee7d425f3e1c93cfddd38f",
+        "harnessCommit": "83ef0699c16f446a8e95f2f7f05fa732ce4dfb9e",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -160,13 +160,13 @@
             "hash": "sha256:4fa92cb578dade752032f86c6c2c2525e969de8d1e486975201748b62b03672e"
           },
           "theme-default": {
-            "version": "2.5.0",
-            "hash": "sha256:41dc16bb46923bad2917a808835bb84947e4e6854f41dc82f8ae8e4d436ddda4"
+            "version": "2.5.1",
+            "hash": "sha256:9be7902b82c55d8569d7b79b18562f143f1d87c1cd7c0e6355d7b0fea551b3ca"
           }
         }
       }
     },
-    "note": "Skills axis carried from run 20260923-122859: this run changed no skill. swift-demo: delivery 20260925-114814, measure 20260925-115020 on foundry.mydwsite4.com. dap-portal: delivery 20260925-114508, measure 20260925-114643 on foundry-dap.mydwsite4.com (area 26). Both at Distribution de3659f3."
+    "note": "Skills axis carried from run 20260923-122859: this run changed no skill. swift-demo: delivery 20260925-134203, measure 20260925-134518 on foundry.mydwsite4.com (area 3). dap-portal: delivery 20260925-134341, measure 20260925-134655 on foundry-dap.mydwsite4.com (area 26). Both at Distribution 8f17d7f5 (theme-default 2.5.1, Foundry #1373)."
   },
   "layers": [
     {
