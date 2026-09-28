@@ -256,7 +256,7 @@
       "providerType": "SqlTable",
       "table": "EcomStockUnit",
       "where": "StockUnitProductId LIKE 'TCPROD%'",
-      "_why": "Merge by identity-only key. Harvest only AFTER the rekey of Id to 100201..100260. StockUnitStockLocationId is the harvest host's Default stock location (3 on foundry-blank) and binds only on clones of the same Swift blank; drop this predicate if the online parity check shows a different location id."
+      "_why": "Merge by identity-only key. Harvest only AFTER the rekey of Id to 100201..100260. StockUnitStockLocationId is 3, the base's own 'Default stock location' (base.contract.json stockLocations), so the units bind on every delivered host, a blank DW10 database included."
     },
     {
       "name": "sample-data EcomOrders",

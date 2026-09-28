@@ -1,0 +1,33 @@
+﻿"tableName": "EcomValidationGroupsTranslation"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "EcomValidationGroupsTranslationValidationGroupID"
+- "EcomValidationGroupsTranslationValidationGroupLanguageID"
+"identityColumns": []
+"allColumns":
+- "EcomValidationGroupsTranslationValidationGroupID"
+- "EcomValidationGroupsTranslationValidationGroupLanguageID"
+- "EcomValidationGroupsTranslationValidationGroupName"
+"columnDefinitions":
+- "name": "EcomValidationGroupsTranslationValidationGroupID"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "EcomValidationGroupsTranslationValidationGroupLanguageID"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "EcomValidationGroupsTranslationValidationGroupName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

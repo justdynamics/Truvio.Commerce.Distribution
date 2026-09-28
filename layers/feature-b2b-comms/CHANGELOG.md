@@ -1,5 +1,15 @@
 # Changelog — feature-b2b-comms
 
+## 1.1.0
+
+**MINOR. The layer ships the Email Marketing Flow Scheduler task (Foundry #1352).**
+
+The Dealer onboarding flow runs only when a scheduled task with
+`Dynamicweb.EmailMarketing.Flows.FlowScheduledTaskAddIn, Dynamicweb.EmailMarketing` exists. A
+Swift-derived database carried one; the stock DW10 setup wizard creates none, and Dynamicweb creates
+none for a deserialized flow. The layer ships it as a merge `ScheduledTask` row, `TaskId` 100540,
+every 5 minutes, enabled (declared in `configRows`). The README's operator step 5 is gone.
+
 ## 1.0.7
 
 `repositoryName: Products` is dropped from `layer.json` (Foundry #1409). No layer ships or binds a

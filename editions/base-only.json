@@ -1,6 +1,6 @@
 {
   "name": "base-only",
-  "from": "base@4.0.1",
+  "from": "base@4.1.0",
   "add": [],
   "sampleData": false,
   "criticalPaths": [

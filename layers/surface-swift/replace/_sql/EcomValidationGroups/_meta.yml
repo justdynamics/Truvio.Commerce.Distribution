@@ -1,0 +1,41 @@
+﻿"tableName": "EcomValidationGroups"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "ValidationGroupId"
+"identityColumns":
+- "ValidationGroupAutoId"
+"allColumns":
+- "ValidationGroupId"
+- "ValidationGroupName"
+- "ValidationGroupAutoId"
+- "ValidationGroupDoNotValidateIfAllFieldsAreEmpty"
+"columnDefinitions":
+- "name": "ValidationGroupId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ValidationGroupName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ValidationGroupAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "ValidationGroupDoNotValidateIfAllFieldsAreEmpty"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

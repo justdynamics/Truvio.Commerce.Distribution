@@ -1,0 +1,5 @@
+﻿"ValidationRuleId": "VALIDATIONRULE1"
+"ValidationRuleValidationId": "VALIDATION1"
+"ValidationRuleType": "Dynamicweb.Ecommerce.Orders.Validation.Rules.RequiredRule"
+"ValidationRuleParameters": "0"
+"ValidationRuleAutoId": 1

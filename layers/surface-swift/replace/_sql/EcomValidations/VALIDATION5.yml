@@ -1,0 +1,6 @@
+﻿"ValidationId": "VALIDATION5"
+"ValidationGroupId": "VALIDATIONGROUP2"
+"ValidationFieldName": "EcomOrderDeliveryAddress"
+"ValidationUseAndOperator": false
+"ValidationFieldType": "StandardOrderField"
+"ValidationAutoId": 5

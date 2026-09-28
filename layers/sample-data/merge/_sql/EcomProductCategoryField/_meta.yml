@@ -30,11 +30,9 @@
 - "FieldValueConversionDecimals"
 - "FieldValueConversionDisplayRule"
 - "FieldShowFieldOnBothMasterAndVariant"
-- "FieldTypeSystemName"
 - "FieldUseAsFacet"
 - "FieldValueConversionGroupId"
 - "FieldEditorConfiguration"
-- "FieldMatrixAttributeGroupId"
 "columnDefinitions":
 - "name": "FieldId"
   "dataType": "nvarchar"
@@ -183,13 +181,6 @@
   "scale": 0
   "isNullable": false
   "isIdentity": false
-- "name": "FieldTypeSystemName"
-  "dataType": "nvarchar"
-  "maxLength": 255
-  "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
 - "name": "FieldUseAsFacet"
   "dataType": "bit"
   "maxLength": 0
@@ -205,13 +196,6 @@
   "isNullable": true
   "isIdentity": false
 - "name": "FieldEditorConfiguration"
-  "dataType": "nvarchar"
-  "maxLength": 255
-  "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
-- "name": "FieldMatrixAttributeGroupId"
   "dataType": "nvarchar"
   "maxLength": 255
   "precision": 0

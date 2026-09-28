@@ -1,6 +1,6 @@
 {
   "name": "sample-data",
-  "version": "6.3.0",
+  "version": "6.4.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "fragmentModes": [

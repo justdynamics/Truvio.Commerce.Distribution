@@ -57,7 +57,7 @@
 "OrderDeliveryCell": 
 "OrderTotalPrice": 450
 "OrderComment": 
-"OrderCustomerComment": 
+"OrderCustomerComment": "Bundle kits for five new sites. Please confirm the lead time."
 "OrderWeight": 
 "OrderVolume": 
 "OrderPriceWithVAT": 450
@@ -161,7 +161,6 @@
 "OrderVATCountryCode": 
 "OrderReference": "RFQ-2026-030"
 "OrderShippingDate": 
-"OrderShippingAgent": 
 "OrderPaymentMethodCode": 
 "OrderPaymentMethodTermsCode": "NET30"
 "OrderShippingMethodCode": 
@@ -172,7 +171,6 @@
 "OrderLedgerType": 
 "OrderCustomerAddressId": 
 "OrderDeliveryAddressId": 
-"QuoteRequest": "Bundle kits for five new sites. Please confirm the lead time."
 "OrderShopName": 
 "OrderPurchaseOrderNumber": 
 "OrderDueDate": 

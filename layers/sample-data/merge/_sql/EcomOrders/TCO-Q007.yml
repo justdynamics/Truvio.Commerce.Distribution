@@ -57,7 +57,7 @@
 "OrderDeliveryCell": 
 "OrderTotalPrice": 225
 "OrderComment": 
-"OrderCustomerComment": 
+"OrderCustomerComment": "Unit conversion service for the pilot site. Withdrawn by the customer."
 "OrderWeight": 
 "OrderVolume": 
 "OrderPriceWithVAT": 225
@@ -161,7 +161,6 @@
 "OrderVATCountryCode": 
 "OrderReference": "RFQ-2026-017"
 "OrderShippingDate": 
-"OrderShippingAgent": 
 "OrderPaymentMethodCode": 
 "OrderPaymentMethodTermsCode": "NET30"
 "OrderShippingMethodCode": 
@@ -172,7 +171,6 @@
 "OrderLedgerType": 
 "OrderCustomerAddressId": 
 "OrderDeliveryAddressId": 
-"QuoteRequest": "Unit conversion service for the pilot site. Withdrawn by the customer."
 "OrderShopName": 
 "OrderPurchaseOrderNumber": 
 "OrderDueDate": 

@@ -1,0 +1,15 @@
+﻿"ProductGroupFieldId": "GROUPFIELD8"
+"ProductGroupFieldName": "Selected Group for Product Group List"
+"ProductGroupFieldSystemName": "SelectedGroup"
+"ProductGroupFieldTemplateName": "SelectedGroup"
+"ProductGroupFieldTypeId": 3
+"ProductGroupFieldTypeName": "Checkbox"
+"ProductGroupFieldLocked": false
+"ProductGroupFieldSort": 0
+"ProductGroupFieldListPresentationType": 1
+"ProductGroupFieldAutoId": 8
+"ProductGroupFieldRequired": false
+"ProductGroupFieldDescription": "Enable this, if you want to render the group in the Product Group List, on the product list pages."
+"ProductGroupFieldValueConversionPreset": 
+"ProductGroupFieldValueConversionDecimals": 0
+"ProductGroupFieldValueConversionDisplayRule": 0

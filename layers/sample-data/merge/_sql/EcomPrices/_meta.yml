@@ -16,7 +16,6 @@
 - "PriceQuantity"
 - "PriceAmount"
 - "PriceUnitId"
-- "PricePeriodId"
 - "PriceCustomerGroupId"
 - "PricePriority"
 - "PriceUserCustomerNumber"
@@ -85,13 +84,6 @@
   "isNullable": true
   "isIdentity": false
 - "name": "PriceUnitId"
-  "dataType": "nvarchar"
-  "maxLength": 50
-  "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
-- "name": "PricePeriodId"
   "dataType": "nvarchar"
   "maxLength": 50
   "precision": 0

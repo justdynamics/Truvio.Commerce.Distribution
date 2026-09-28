@@ -1,0 +1,6 @@
+﻿"ValidationId": "VALIDATION7"
+"ValidationGroupId": "VALIDATIONGROUP2"
+"ValidationFieldName": "EcomOrderDeliveryZip"
+"ValidationUseAndOperator": false
+"ValidationFieldType": "StandardOrderField"
+"ValidationAutoId": 7

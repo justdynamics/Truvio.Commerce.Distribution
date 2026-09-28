@@ -14,7 +14,6 @@
 "ProductFieldValidationPattern": 
 "ProductFieldValidationErrorMessage": 
 "ProductFieldIsStandard": true
-"ProductFieldIsStandart": false
 "ProductFieldAllowChangesAcrossLanguages": true
 "ProductFieldAllowChangesAcrossVariants": true
 "ProductFieldRequired": false
@@ -23,8 +22,6 @@
 "ProductFieldValueConversionDecimals": 0
 "ProductFieldValueConversionDisplayRule": 0
 "ProductFieldShowFieldOnBothMasterAndVariant": false
-"ProductFieldTypeSystemName": 
 "ProductFieldUseAsFacet": false
 "ProductFieldValueConversionGroupId": 
 "ProductFieldEditorConfiguration": 
-"ProductFieldMatrixAttributeGroupId": 

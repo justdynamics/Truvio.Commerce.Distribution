@@ -57,7 +57,7 @@
 "OrderDeliveryCell": 
 "OrderTotalPrice": 1440
 "OrderComment": 
-"OrderCustomerComment": 
+"OrderCustomerComment": "Annual contract volume on the contract-priced items."
 "OrderWeight": 
 "OrderVolume": 
 "OrderPriceWithVAT": 1440
@@ -161,7 +161,6 @@
 "OrderVATCountryCode": 
 "OrderReference": "RFQ-2026-024"
 "OrderShippingDate": 
-"OrderShippingAgent": 
 "OrderPaymentMethodCode": 
 "OrderPaymentMethodTermsCode": "NET30"
 "OrderShippingMethodCode": 
@@ -172,7 +171,6 @@
 "OrderLedgerType": 
 "OrderCustomerAddressId": 
 "OrderDeliveryAddressId": 
-"QuoteRequest": "Annual contract volume on the contract-priced items."
 "OrderShopName": 
 "OrderPurchaseOrderNumber": 
 "OrderDueDate": 

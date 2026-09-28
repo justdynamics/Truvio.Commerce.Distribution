@@ -175,13 +175,13 @@
     {
       "name": "base",
       "kind": "base",
-      "version": "4.0.1",
+      "version": "4.1.0",
       "status": "active"
     },
     {
       "name": "feature-b2b-comms",
       "kind": "feature",
-      "version": "1.0.7",
+      "version": "1.1.0",
       "status": "active"
     },
     {
@@ -217,7 +217,7 @@
     {
       "name": "sample-data",
       "kind": "sample-data",
-      "version": "6.3.0",
+      "version": "6.4.0",
       "status": "active"
     },
     {
@@ -235,7 +235,7 @@
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.17.0",
+      "version": "1.18.0",
       "status": "active"
     },
     {

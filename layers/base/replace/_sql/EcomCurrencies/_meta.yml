@@ -20,7 +20,6 @@
 - "CurrencyAutoId"
 - "CurrencyPositivePattern"
 - "CurrencyNegativePattern"
-- "CurrencyUseCurrencyCodeForFormat"
 "columnDefinitions":
 - "name": "CurrencyCode"
   "dataType": "nvarchar"
@@ -110,13 +109,6 @@
   "dataType": "int"
   "maxLength": 0
   "precision": 10
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
-- "name": "CurrencyUseCurrencyCodeForFormat"
-  "dataType": "bit"
-  "maxLength": 0
-  "precision": 0
   "scale": 0
   "isNullable": true
   "isIdentity": false

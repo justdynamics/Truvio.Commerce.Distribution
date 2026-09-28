@@ -564,6 +564,22 @@
     },
     {
       "providerType": "SqlTable",
+      "table": "EcomStockLocationCategory",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomStockLocationCategory",
+      "files": [
+        "_sql/EcomStockLocationCategory/STOCKLOCCAT1.yml",
+        "_sql/EcomStockLocationCategory/STOCKLOCCAT2.yml",
+        "_sql/EcomStockLocationCategory/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
       "table": "EcomStockLocation",
       "nameColumn": null,
       "compareColumns": null,
@@ -594,6 +610,27 @@
         "_sql/EcomStockLocationTranslations/2$$ENU.yml",
         "_sql/EcomStockLocationTranslations/3$$ENU.yml",
         "_sql/EcomStockLocationTranslations/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomProductGroupField",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": "EcomGroupFields",
+      "entryId": "sql/EcomProductGroupField",
+      "files": [
+        "_sql/EcomProductGroupField/GROUPFIELD1.yml",
+        "_sql/EcomProductGroupField/GROUPFIELD10.yml",
+        "_sql/EcomProductGroupField/GROUPFIELD2.yml",
+        "_sql/EcomProductGroupField/GROUPFIELD4.yml",
+        "_sql/EcomProductGroupField/GROUPFIELD5.yml",
+        "_sql/EcomProductGroupField/GROUPFIELD6.yml",
+        "_sql/EcomProductGroupField/GROUPFIELD8.yml",
+        "_sql/EcomProductGroupField/_meta.yml"
       ]
     },
     {
@@ -981,7 +1018,7 @@
     {
       "providerType": "SqlTable",
       "table": "EcomOrderStates",
-      "nameColumn": "OrderStateName",
+      "nameColumn": null,
       "compareColumns": null,
       "xmlColumns": [],
       "resolveLinksInColumns": [],
@@ -989,24 +1026,24 @@
       "schemaSync": null,
       "entryId": "sql/EcomOrderStates",
       "files": [
-        "_sql/EcomOrderStates/Approved.yml",
-        "_sql/EcomOrderStates/Cancelled.yml",
-        "_sql/EcomOrderStates/Completed.yml",
-        "_sql/EcomOrderStates/Deleted.yml",
-        "_sql/EcomOrderStates/Draft [f03ab1-1].yml",
-        "_sql/EcomOrderStates/Draft.yml",
-        "_sql/EcomOrderStates/New [03c2e7-1].yml",
-        "_sql/EcomOrderStates/New [03c2e7-2].yml",
-        "_sql/EcomOrderStates/New.yml",
-        "_sql/EcomOrderStates/Paid.yml",
-        "_sql/EcomOrderStates/Partial-paid.yml",
-        "_sql/EcomOrderStates/Price given.yml",
-        "_sql/EcomOrderStates/Quote accepted.yml",
-        "_sql/EcomOrderStates/Quote pending.yml",
-        "_sql/EcomOrderStates/Quote rejected.yml",
-        "_sql/EcomOrderStates/Quote sent.yml",
-        "_sql/EcomOrderStates/Rejected [d37b1f-1].yml",
-        "_sql/EcomOrderStates/Rejected.yml",
+        "_sql/EcomOrderStates/OS1.yml",
+        "_sql/EcomOrderStates/OS10.yml",
+        "_sql/EcomOrderStates/OS11.yml",
+        "_sql/EcomOrderStates/OS12.yml",
+        "_sql/EcomOrderStates/OS13.yml",
+        "_sql/EcomOrderStates/OS14.yml",
+        "_sql/EcomOrderStates/OS2.yml",
+        "_sql/EcomOrderStates/OS3.yml",
+        "_sql/EcomOrderStates/OS4.yml",
+        "_sql/EcomOrderStates/OS5.yml",
+        "_sql/EcomOrderStates/OS6.yml",
+        "_sql/EcomOrderStates/OS7.yml",
+        "_sql/EcomOrderStates/OS8.yml",
+        "_sql/EcomOrderStates/OS9.yml",
+        "_sql/EcomOrderStates/QuoteAccepted.yml",
+        "_sql/EcomOrderStates/QuotePending.yml",
+        "_sql/EcomOrderStates/QuoteRejected.yml",
+        "_sql/EcomOrderStates/QuoteSent.yml",
         "_sql/EcomOrderStates/_meta.yml"
       ]
     },
@@ -1040,6 +1077,8 @@
         "_sql/AccessUser/Account Admin.yml",
         "_sql/AccessUser/CSR.yml",
         "_sql/AccessUser/Customers.yml",
+        "_sql/AccessUser/Employees.yml",
+        "_sql/AccessUser/Find dealers.yml",
         "_sql/AccessUser/_meta.yml"
       ]
     }

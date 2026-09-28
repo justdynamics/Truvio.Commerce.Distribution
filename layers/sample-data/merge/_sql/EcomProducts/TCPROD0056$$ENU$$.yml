@@ -21,7 +21,6 @@
 "ProductVatGrpId": 
 "ProductManufacturerId": 
 "ProductActive": true
-"ProductPeriodId": 
 "ProductCreated": 2026-09-13T22:45:50.6800000
 "ProductUpdated": 2026-09-13T22:45:50.6800000
 "ProductCustomFieldsXml": 
@@ -30,14 +29,12 @@
 "ProductPriceCounter": 0
 "ProductVariantCounter": 0
 "ProductVariantProdCounter": 0
-"ProductVariantGroupCounter": 0
 "ProductRelatedCounter": 0
 "ProductUnitCounter": 0
 "ProductDefaultUnitId": 
 "ProductDefaultVariantComboId": 
 "ProductPriceMatrixUnit": 0
 "ProductPriceMatrixVariant": 0
-"ProductPriceMatrixPeriod": 0
 "ProductPriceMatrixMultiplePrices": 0
 "ProductPriceMatrixQuantitySpecification": 
 "ProductMetaTitle": 
@@ -45,7 +42,6 @@
 "ProductMetaDescription": 
 "ProductMetaUrl": 
 "ProductCategoryFieldValues": 
-"ProductOptimizedFor": 
 "ProductCommentcount": 
 "ProductRating": 
 "ProductCost": 
@@ -71,8 +67,6 @@
 "ProductReplacementProductId": 
 "ProductReplacementVariantId": 
 "ProductDiscontinuedAction": 0
-"MyVolume": 
-"MyDouble": 0
 "ProductExternalId": 
 "ProductExternalVariantId": 
 "ProductUniqueId": c319d9dd-c4af-f111-8d58-000d3a7e3238

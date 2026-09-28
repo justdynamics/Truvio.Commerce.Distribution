@@ -1,0 +1,4 @@
+﻿"ValidationGroupId": "VALIDATIONGROUP2"
+"ValidationGroupName": "Delivery"
+"ValidationGroupAutoId": 2
+"ValidationGroupDoNotValidateIfAllFieldsAreEmpty": false

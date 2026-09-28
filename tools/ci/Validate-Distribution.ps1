@@ -82,6 +82,11 @@ Checks (all fail-closed; any failure -> exit 1):
                         those pages; and a kind:sample-data document at a path a kind:surface
                         manifest of the same mode declares is a declared override (ruling
                         dla-q4), deserialized through the surface's entry.
+ 16. Blank target     - (Foundry #1352, #1421) base.contract.json deliveryTarget states the blank DW10
+                        database every edition delivers onto; its hostFiles.swiftRelease tag equals
+                        compat.swift.tag and carries asset + sha256; no layer's _sql row or _meta.yml
+                        carries a column listed in deliveryTarget.retiredColumns (columns a
+                        Swift-derived database carried that the stock setup wizard does not create).
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -492,6 +497,52 @@ foreach ($d in $layerDirs) {
         $cf = Get-ContentManifestFilesFinding -Label "layer '$($d.Name)': $mode/" -Result $cr
         & $log $cf.ok $cf.msg
     }
+}
+
+# ---------------------------------------------------------------------------
+# 16. Blank DW10 delivery target (Foundry #1352, #1421). Every edition delivers onto the
+#     database the stock DW10 setup wizard creates; base.contract.json deliveryTarget states it.
+#     deliveryTarget.retiredColumns names the columns a Swift-derived database carried and the
+#     wizard does not create: a layer row or _meta.yml that carries one fails strict mode on a
+#     blank database ("source column ... not present on target schema"), so no layer may ship
+#     one. This is the guard that stops a re-serialize from a Swift-derived host bringing them
+#     back: the Serializer's own excludeFields cannot carry them, because its config load
+#     rejects an excludeFields column the host schema lacks (Serializer issue named in the
+#     contract). deliveryTarget.hostFiles.swiftRelease.tag must equal compat.swift.tag.
+# ---------------------------------------------------------------------------
+if ($contract -and $contract.PSObject.Properties.Name -contains 'deliveryTarget') {
+    $dt = $contract.deliveryTarget
+    $sr = $dt.hostFiles.swiftRelease
+    & $log ($sr -and "$($sr.tag)" -eq "$($contract.compat.swift.tag)" -and "$($sr.sha256)" -match '^[0-9a-f]{64}$' -and "$($sr.asset)" -ne '') ("base contract deliveryTarget.hostFiles.swiftRelease names tag, asset and sha256, and its tag " +
+        "('$($sr.tag)') equals compat.swift.tag ('$($contract.compat.swift.tag)')")
+    $retired = @{}
+    if ($dt.retiredColumns) {
+        foreach ($p in $dt.retiredColumns.PSObject.Properties) {
+            if ($p.Name -like '_*') { continue }
+            $retired[$p.Name] = @($p.Value | ForEach-Object { "$_" })
+        }
+    }
+    $hits = @()
+    foreach ($d in $layerDirs) {
+        foreach ($mode in @('replace', 'merge')) {
+            foreach ($t in $retired.Keys) {
+                $td = Join-Path (Join-Path (Join-Path $d.FullName $mode) '_sql') $t
+                if (-not (Test-Path -LiteralPath $td -PathType Container)) { continue }
+                foreach ($f in @(Get-ChildItem -LiteralPath $td -File -Filter '*.yml')) {
+                    $text = [IO.File]::ReadAllText($f.FullName)
+                    foreach ($c in $retired[$t]) {
+                        $rx = '(?m)^﻿?(?:"' + [regex]::Escape($c) + '":|- "' + [regex]::Escape($c) + '"\s*$|- "name": "' + [regex]::Escape($c) + '"\s*$)'
+                        if ($text -match $rx) { $hits += "$($d.Name)/$mode/_sql/$t/$($f.Name): $c" }
+                    }
+                }
+            }
+        }
+    }
+    $nRetired = ($retired.Values | ForEach-Object { $_.Count } | Measure-Object -Sum).Sum
+    & $log ($hits.Count -eq 0) ("no layer ships a column the stock DW10 setup wizard does not create ($nRetired retired column(s) across " +
+        "$($retired.Count) table(s) in base.contract.json deliveryTarget.retiredColumns)$(if ($hits.Count) { ': ' + (($hits | Select-Object -First 20) -join '; ') + $(if ($hits.Count -gt 20) { " ... $($hits.Count) in all" }) })")
+} else {
+    & $log $false 'base contract carries deliveryTarget (the blank DW10 database every edition delivers onto, Foundry #1352)'
 }
 
 # ---------------------------------------------------------------------------
