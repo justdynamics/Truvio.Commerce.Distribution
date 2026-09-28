@@ -1,7 +1,26 @@
 @inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.PageViewModel>
 @using Dynamicweb.Frontend
+@using System.Linq
 @{
     AddStylesheet("/Files/Templates/Designs/Swift-v2/Custom/default_custom.css", "all");
+    // The add-on slot. An opt-in layer (kind feature) cannot edit this file: the theme's
+    // copy wins every shared path on delivery. So an add-on ships its own folder,
+    // Custom/Addons/<name>/, with addon.css and/or addon.js, and this include registers
+    // whatever is on disk, in folder-name order. No folder, nothing registered: a host
+    // without add-ons renders exactly as before. Add-on sheets load after the theme sheet
+    // and before brand.css, so the brand still wins a cascade tie.
+    const string addonRoot = "/Files/Templates/Designs/Swift-v2/Custom/Addons";
+    var addonDir = Dynamicweb.Context.Current.Server.MapPath(addonRoot);
+    var addons = System.IO.Directory.Exists(addonDir)
+        ? System.IO.Directory.GetDirectories(addonDir).Select(System.IO.Path.GetFileName).OrderBy(n => n, StringComparer.OrdinalIgnoreCase).ToList()
+        : new System.Collections.Generic.List<string>();
+    foreach (var addon in addons)
+    {
+        if (System.IO.File.Exists(System.IO.Path.Combine(addonDir, addon, "addon.css")))
+        {
+            AddStylesheet(addonRoot + "/" + addon + "/addon.css", "all");
+        }
+    }
     // The brand slot. brand.css belongs to the demo: a build rewrites it (and
     // brand.tokens.json beside it) in a demo-local copy of this layer instead of
     // appending brand rules to default_custom.css. Registered AFTER the theme sheet
@@ -15,6 +34,13 @@
     // on DW 10.28.10, and calling one does not compile: every page renders a dw-error
     // dump instead of the site (e2e v5, DW 10.28.10).
     AddScript("/Files/Templates/Designs/Swift-v2/Custom/default_custom.js", true);
+    foreach (var addon in addons)
+    {
+        if (System.IO.File.Exists(System.IO.Path.Combine(addonDir, addon, "addon.js")))
+        {
+            AddScript(addonRoot + "/" + addon + "/addon.js", true);
+        }
+    }
 }
 <style>
     /* Render-critical neutral tokens — inline to avoid cache-buster staleness (Pitfall 7).

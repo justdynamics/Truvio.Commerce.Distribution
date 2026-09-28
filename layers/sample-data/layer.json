@@ -1,6 +1,6 @@
 {
   "name": "sample-data",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
   "repositoryName": "Products",
@@ -512,7 +512,7 @@
       "EcomCompletionRules": 4,
       "EcomCustomerFavoriteLists": 2,
       "EcomCustomerFavoriteProducts": 9,
-      "EcomDetails": 373,
+      "EcomDetails": 378,
       "EcomDetailsGroup": 2,
       "EcomFieldDisplayGroupFields": 28,
       "EcomFieldDisplayGroupTranslation": 1,

@@ -1,6 +1,6 @@
 ﻿{
   "name": "theme-default",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "kind": "theme",
   "swiftVersion": "2.4.0",
   "files": [
@@ -47,7 +47,7 @@
     {
       "path": "Templates/Designs/Swift-v2/Custom/DefaultHeadInclude.cshtml",
       "kind": "template",
-      "why": "The raw head-injection point. The Swift master's CustomHeadInclude field HTML-encodes, so JSON-LD and meta can only be emitted from here."
+      "why": "The raw head-injection point. The Swift master's CustomHeadInclude field HTML-encodes, so JSON-LD and meta can only be emitted from here. Since 2.6.0 it is also the add-on slot: it registers addon.css and addon.js of every folder under Custom/Addons/, which is how an opt-in layer (feature-gallery-zoom) loads without editing a theme file."
     },
     {
       "path": "Templates/Designs/Swift-v2/Paragraph/Swift-v2_Poster/TextMiddleLeftLcp.cshtml",
