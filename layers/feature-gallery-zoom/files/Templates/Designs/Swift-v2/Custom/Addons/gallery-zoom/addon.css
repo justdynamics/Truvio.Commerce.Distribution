@@ -2,8 +2,12 @@
    ProductMediaGallery). Registered by theme-default's add-on slot after default_custom.css and
    before brand.css, so a brand rule still wins a tie. Every rule is scoped to the gallery item
    class; nothing here reaches another paragraph. The lightbox sheet (photoswipe/photoswipe.css)
-   is not registered here: addon.js loads it on the first open. */
+   is not registered here: addon.js loads it on the first open.
+   Each block opens with an inert [data-td-block] marker rule (theme-default authoring guard G2):
+   nothing in a Swift document carries the attribute, so it paints nothing, and a CSSOM probe can
+   prove the block parsed. */
 
+[data-td-block="gz-1"] { --td-block: gz-1; }
 /* 1. Mixed aspect ratios. The stock box letterboxes a non-matching image on a transparent
       background, which reads as a layout gap. A faint tint drawn from the colour scheme's own text
       colour makes the bars read as a frame, in every scheme, light or dark. */
@@ -13,6 +17,7 @@
 	cursor: zoom-in;
 }
 
+[data-td-block="gz-2"] { --td-block: gz-2; }
 /* 2. Thumbnails. Stock thumbnails are contain-fitted in 4:3 boxes, so a strip of mixed sources is
       ragged. Square, cover-fitted thumbnails keep the strip even whatever the sources are; the
       full image is one tap away. */
@@ -33,6 +38,7 @@
 	outline-offset: -2px;
 }
 
+[data-td-block="gz-3"] { --td-block: gz-3; }
 /* 3. Lightbox slides that are not images (a product video) keep their stock markup, centred. */
 .pswp .tcg-html-slide {
 	display: flex;
@@ -49,6 +55,7 @@
 	max-height: 100%;
 }
 
+[data-td-block="gz-4"] { --td-block: gz-4; }
 /* 4. The "Open original" toolbar button is an anchor; keep it the PhotoSwipe button colour. */
 .pswp a.pswp__button {
 	color: var(--pswp-icon-color, #fff);
