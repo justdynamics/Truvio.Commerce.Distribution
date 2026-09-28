@@ -1,0 +1,48 @@
+{
+  "name": "feature-gallery-zoom",
+  "version": "1.0.0",
+  "kind": "feature",
+  "swiftVersion": "2.4.0",
+  "files": [
+    "Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/addon.css",
+    "Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/addon.js",
+    "Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/photoswipe/LICENSE.txt",
+    "Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/photoswipe/photoswipe-lightbox.esm.min.js",
+    "Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/photoswipe/photoswipe.css",
+    "Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/photoswipe/photoswipe.esm.min.js"
+  ],
+  "placeholders": [
+    {
+      "path": "Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/addon.js",
+      "kind": "js",
+      "why": "Opens the Swift 2 product gallery (ProductMedia, ProductMediaGallery) in PhotoSwipe 5 instead of the stock Bootstrap modal: full screen, counter, swipe, pinch, double-tap, wheel and button zoom to 4x, pan, and an open-original button. It reads the slide list from the stock modal carousel, so no Swift template is forked; when it or PhotoSwipe fails to load, the stock modal opens as before. Registered by theme-default's add-on slot (2.6.0 or later)."
+    },
+    {
+      "path": "Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/addon.css",
+      "kind": "css",
+      "why": "Gallery presentation for mixed image sizes: a scheme-derived tint behind the letterboxed main image, square cover-fitted thumbnails, and a zoom-in cursor. Scoped to the gallery item class. Registered after default_custom.css and before brand.css, so a brand rule still wins."
+    }
+  ],
+  "asserts": {
+    "behaviorProbes": [
+      {
+        "kind": "http-body-contains",
+        "path": "/en-us/home",
+        "pattern": "Custom/Addons/gallery-zoom/addon\\.js"
+      },
+      {
+        "kind": "http-body-contains",
+        "path": "/Files/Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/photoswipe/photoswipe-lightbox.esm.min.js",
+        "pattern": "PhotoSwipe Lightbox 5\\.4\\.4"
+      }
+    ],
+    "criticalPaths": []
+  },
+  "costHints": {
+    "dependsOn": [
+      "theme-default"
+    ],
+    "note": "Opt-in: compose it only for image-heavy demos. Needs theme-default 2.6.0 or later, whose DefaultHeadInclude.cshtml registers Custom/Addons/<name>/addon.css and addon.js for every add-on folder on disk; on an older theme the files are delivered and never loaded, which the first behaviorProbe catches. The layer.schema.json has no formal 'depends' field; the dependency is advisory. Files only: no fragmentModes, no customCode (front-end assets, no C#). Browser proof of the zoom is the Foundry GALLERY-ZOOM design probe on the PDP, which reports N/A on editions that do not compose this layer.",
+    "vendored": "PhotoSwipe 5.4.4 (MIT, photoswipe/LICENSE.txt), dist/*.esm.min.js and photoswipe.css unmodified from the npm package. About 4 KB gzip loads with every page (addon.js 3 KB, addon.css 1 KB); the lightbox (4.5 KB), the core (16.4 KB) and the sheet (2.4 KB) load on the first open."
+  }
+}

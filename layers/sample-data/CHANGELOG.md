@@ -1,5 +1,17 @@
 # Changelog — sample-data
 
+## 6.2.0
+
+**MINOR. Five mixed-ratio photos on TCPROD0001, the gallery fixture (Foundry #1392).**
+
+Every gallery on the demo showed square 180px and 480px tiles, so nothing proved how the product
+gallery handles images of different sizes, or that a lightbox zoom shows detail. TCPROD0001 (the
+`swift-demo` PDP subject of the Foundry design leg) gains five `Images` rows,
+`TC-GAL-TCPROD0001-3` to `-7` (sort 3 to 7, DetailAutoId 3328 to 3332), pointing at photos this
+layer already ships under `Images/TruvioCommerce/scenic/`: 3:2 (`product-shot-1.webp`, 1920x1279),
+3:4 portrait (`product-shot-3.webp`, 1024x1365), about 2:1 (`ui-composite.webp`, 1619x773), near
+square (`product-visual.png`, 1503x1364) and about 9:4 (`abstract-patterns.jpeg`, 1338x596). No new
+file. `costHints` EcomDetails 373 to 378; the rows are in `merge-manifest.json`.
 ## 6.1.0
 
 **MINOR. Truvio copy for the Digital Assets Portal, as declared replace overrides of

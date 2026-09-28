@@ -1,0 +1,55 @@
+/* feature-gallery-zoom: presentation of the Swift 2 product gallery (ProductMedia and
+   ProductMediaGallery). Registered by theme-default's add-on slot after default_custom.css and
+   before brand.css, so a brand rule still wins a tie. Every rule is scoped to the gallery item
+   class; nothing here reaches another paragraph. The lightbox sheet (photoswipe/photoswipe.css)
+   is not registered here: addon.js loads it on the first open. */
+
+/* 1. Mixed aspect ratios. The stock box letterboxes a non-matching image on a transparent
+      background, which reads as a layout gap. A faint tint drawn from the colour scheme's own text
+      colour makes the bars read as a frame, in every scheme, light or dark. */
+[class*="item_swift-v2_productmedia"] a[data-bs-toggle="modal"][data-bs-target^="#modal_"] {
+	background-color: color-mix(in srgb, currentColor 4%, transparent);
+	border-radius: var(--bs-border-radius, .375rem);
+	cursor: zoom-in;
+}
+
+/* 2. Thumbnails. Stock thumbnails are contain-fitted in 4:3 boxes, so a strip of mixed sources is
+      ragged. Square, cover-fitted thumbnails keep the strip even whatever the sources are; the
+      full image is one tap away. */
+[class*="item_swift-v2_productmedia"] [id^="SmallScreenImagesThumbnails_"] > [data-bs-slide-to] {
+	--bs-aspect-ratio: 100%;
+	overflow: hidden;
+	border-radius: var(--bs-border-radius, .375rem);
+}
+
+[class*="item_swift-v2_productmedia"] [id^="SmallScreenImagesThumbnails_"] > [data-bs-slide-to] img {
+	object-fit: cover !important;
+	padding: 0 !important;
+}
+
+[class*="item_swift-v2_productmedia"] [id^="SmallScreenImagesThumbnails_"] > [data-bs-slide-to]:hover,
+[class*="item_swift-v2_productmedia"] [id^="SmallScreenImagesThumbnails_"] > [data-bs-slide-to]:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: -2px;
+}
+
+/* 3. Lightbox slides that are not images (a product video) keep their stock markup, centred. */
+.pswp .tcg-html-slide {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	padding: 3.5rem 1rem;
+}
+
+.pswp .tcg-html-slide video,
+.pswp .tcg-html-slide iframe {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+/* 4. The "Open original" toolbar button is an anchor; keep it the PhotoSwipe button colour. */
+.pswp a.pswp__button {
+	color: var(--pswp-icon-color, #fff);
+}

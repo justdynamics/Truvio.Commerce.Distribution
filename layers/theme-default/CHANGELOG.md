@@ -1,5 +1,15 @@
 ﻿# theme-default changelog
 
+## 2.6.0
+
+### The add-on slot: opt-in layers load without editing a theme file (Foundry #1392)
+
+An opt-in layer cannot add a script or a sheet to the page: the only head include is this theme's
+`DefaultHeadInclude.cshtml`, and on delivery the theme's copy wins every path a layer shares with it.
+The include now registers, for every folder under `Custom/Addons/` in folder-name order, its
+`addon.css` (after `default_custom.css`, before `brand.css`, so the brand still wins a tie) and its
+`addon.js` (deferred, after `default_custom.js`). With no `Custom/Addons/` folder nothing is
+registered and every page renders as in 2.5.1. The first consumer is `feature-gallery-zoom`.
 ## 2.5.1
 
 ### Catalog app density: the section padding stops compounding (Foundry #1373)
