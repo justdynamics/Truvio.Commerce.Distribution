@@ -1,5 +1,19 @@
 # Changelog — sample-data
 
+## 6.5.0
+
+**MINOR. Product images are filed under the wizard's Images group (owner ruling
+`vnext-images-detail-group`).**
+
+The 258 image rows of `EcomDetails` (`TC-DETAIL-*`, `TC-HOVER-*`, `TC-GAL-*`) move from
+`DetailsGroupId` `100110` to `1`, the `Images` system group the stock DW10 setup wizard creates, and
+`EcomDetailsGroup/100110.yml` is removed. On a blank DW10 database the admin listed two `Images`
+groups; it now lists the wizard's one and the layer's `Manuals` (`100111`, unchanged, 120 document
+rows). The config predicate harvests `Manuals` only. `base.contract.json`
+`deliveryTarget.retiredIds` retires `100110` and the validator fails a layer that ships it again.
+A host delivered from an earlier version keeps its `100110` row and, because a Merge never
+overwrites a set value, its image rows stay on it until the host is converged.
+
 ## 6.4.0
 
 **MINOR. The layer delivers onto a blank DW10 database (Foundry #1352).**

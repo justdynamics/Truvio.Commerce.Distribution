@@ -223,8 +223,8 @@
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomDetailsGroup",
-      "where": "EcomDetailsGroupSystemName IN ('Images','Manuals')",
-      "_why": "Merge by identity id. Harvest only AFTER the rekey to 100110 (Images) / 100111 (Manuals). Merge rather than Replace so a solution that already tuned a category at that id is filled, never re-shaped."
+      "where": "EcomDetailsGroupSystemName = 'Manuals'",
+      "_why": "Merge by identity id. Harvest only AFTER the rekey to 100111 (Manuals). Images is not harvested: product images are filed under the Images group the DW10 setup wizard creates (id 1, owner ruling vnext-images-detail-group), and the retired id 100110 must not come back (base.contract.json deliveryTarget.retiredIds). Merge rather than Replace so a solution that already tuned a category at that id is filled, never re-shaped."
     },
     {
       "name": "sample-data EcomDetails",

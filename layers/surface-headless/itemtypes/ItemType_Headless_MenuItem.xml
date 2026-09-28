@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<items>
+  <item category="Headless" name="Headless Menu Item" systemName="Headless_MenuItem" description="One navigation entry. Resolves to a Delivery API content path or a commerce group/product id; no template selection." icon="None" iconColor="None" image="" includeInUrlIndex="False" pageDefaultView="paragraph" paragraphDefaultModule="" fieldForTitle="Label" title="Headless Menu Item" inherits="">
+    <fields>
+      <field name="Label" systemName="Label" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Link type" systemName="LinkType" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.DropDownListEditor`1, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.DropDownListEditor`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" /></editorConfuguration>
+        </editor>
+        <options sourceType="Static">
+          <Static>
+            <option name="ContentPage" value="ContentPage" icon="" />
+            <option name="ProductGroup" value="ProductGroup" icon="" />
+            <option name="Product" value="Product" icon="" />
+            <option name="ExternalUrl" value="ExternalUrl" icon="" />
+          </Static>
+        </options>
+      </field>
+      <field name="Target ref" systemName="TargetRef" description="Page GUID/ID, EcomGroups.GroupId, EcomProducts.ProductId, or absolute URL depending on LinkType." type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Sort index" systemName="SortIndex" description="" type="System.Int32, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.IntegerEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.IntegerEditor" /></editorConfuguration>
+        </editor>
+      </field>
+    </fields>
+    <rules>
+      <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
+      <rule name="Enable item type for" type="Dynamicweb.Content.Items.Activation.StructureRestrictionRule, Dynamicweb" value="Pages" />
+    </rules>
+    <layout>
+      <groups>
+        <group name="General" systemName="General" sectionName="" collapsibleState="None" visibilityField="" visibilityCondition="" visibilityConditionValueType="" visibilityConditionValue="">
+          <fields>
+            <field systemName="Label" />
+            <field systemName="LinkType" />
+            <field systemName="TargetRef" />
+            <field systemName="SortIndex" />
+          </fields>
+        </group>
+      </groups>
+    </layout>
+  </item>
+</items>

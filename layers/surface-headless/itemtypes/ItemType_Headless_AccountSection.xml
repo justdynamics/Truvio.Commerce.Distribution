@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<items>
+  <item category="Headless" name="Headless Account Section" systemName="Headless_AccountSection" description="One customer-center section mapped to a Delivery API endpoint + role. reorder/impersonation are B2B behaviors documented as frontend contracts (feature-packs-as-docs)." icon="None" iconColor="None" image="" includeInUrlIndex="False" pageDefaultView="paragraph" paragraphDefaultModule="" fieldForTitle="Title" title="Headless Account Section" inherits="">
+    <fields>
+      <field name="Title" systemName="Title" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Section key" systemName="SectionKey" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.DropDownListEditor`1, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.DropDownListEditor`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" /></editorConfuguration>
+        </editor>
+        <options sourceType="Static">
+          <Static>
+            <option name="orders" value="orders" icon="" />
+            <option name="reorder" value="reorder" icon="" />
+            <option name="users" value="users" icon="" />
+            <option name="addresses" value="addresses" icon="" />
+            <option name="quotes" value="quotes" icon="" />
+            <option name="impersonation" value="impersonation" icon="" />
+          </Static>
+        </options>
+      </field>
+      <field name="Delivery API endpoint" systemName="DeliveryEndpoint" description="Generic Delivery API path the frontend calls, e.g. /dwapi/orders. Exact contract pending ADR-001." type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Required role" systemName="RequiredRole" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.DropDownListEditor`1, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.DropDownListEditor`1[[System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089]]" /></editorConfuguration>
+        </editor>
+        <options sourceType="Static">
+          <Static>
+            <option name="Customers" value="Customers" icon="" />
+            <option name="Account Admin" value="Account Admin" icon="" />
+            <option name="CSR" value="CSR" icon="" />
+          </Static>
+        </options>
+      </field>
+    </fields>
+    <rules>
+      <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
+      <rule name="Enable item type for" type="Dynamicweb.Content.Items.Activation.StructureRestrictionRule, Dynamicweb" value="Pages" />
+    </rules>
+    <layout>
+      <groups>
+        <group name="General" systemName="General" sectionName="" collapsibleState="None" visibilityField="" visibilityCondition="" visibilityConditionValueType="" visibilityConditionValue="">
+          <fields>
+            <field systemName="Title" />
+            <field systemName="SectionKey" />
+            <field systemName="DeliveryEndpoint" />
+            <field systemName="RequiredRole" />
+          </fields>
+        </group>
+      </groups>
+    </layout>
+  </item>
+</items>

@@ -33,7 +33,7 @@ baseline/headless/2.3/
 ├─ config/
 │  └─ headless-2.3.json          # serializer predicate list (Content + SqlTable)
 ├─ itemtypes/                     # D6 Headless_* item-type definitions (disk-overlay, zero code)
-│  └─ Headless_*.json
+│  └─ ItemType_Headless_*.xml     # staged to Files/System/Items as shipped
 ├─ repositories/                  # product search surface (disk-overlay, zero code) — see its README
 │  └─ Headless/                   # RepositoryName for /dwapi/ecommerce/products
 │     ├─ Products.index           # ProductIndexBuilder (Lucene), ENU/SHOP1 via Ecommerce.Context macros
@@ -235,15 +235,14 @@ The headless gate leg is wired and **PASSes clean-room on Swift 2.3**. Runner:
   comes from the Swift leg and is never touched by the headless POST. This honours U3's `_sql`
   serialize-capture deferral. **A6** is therefore *satisfied-by-shared-catalog*; the headless
   package's own `_sql` capture stays deferred.
-- **Item-type format = DW item XML under `Files/System/Items`.** DW10 does **not** consume the
-  shipped `itemtypes/Headless_*.json` directly — item types are materialized from
-  `wwwroot\Files\System\Items\ItemType_<systemName>.xml` at host startup (the ItemManager creates
-  the backing `ItemType_<systemName>` SQL table from the XML). `ConvertTo-HeadlessItemTypeXml`
-  (in `Invoke-Headless.ps1`) renders the JSON defs to the exact DW XML shape (editor map: Text→
-  TextEditor, LongText→LongTextEditor, Checkbox→CheckboxEditor, Integer→IntegerEditor, List→
-  DropDownListEditor + Static options, Link→LinkEditor); `Deploy-HeadlessItemTypes` stages them
-  pre-host-start (the `Deploy-VerifyIndexDefinition` disk-overlay precedent — gate tooling, zero
-  custom code). The shipped JSON stays the human-authored source of truth; the XML is generated.
+- **Item-type format = DW item XML under `Files/System/Items`.** The layer ships
+  `itemtypes/ItemType_Headless_<Name>.xml` (since 2.4.0), UTF-8 with BOM, in the shape Dynamicweb
+  writes; every route stages them as shipped to `Files/System/Items`. Dynamicweb loads a new
+  definition into its metadata at upload and creates the backing `ItemType_<systemName>` table at
+  the next application start, so a delivery that brings them to a host for the first time owes one
+  restart before its first Replace (the Foundry remote route stops and names it). The field set is
+  the D6 one: `Text` as `TextEditor`, `LongText` as `LongTextEditor`, `Checkbox`, `Integer`, `Link`
+  as `LinkEditor`, `List` as `DropDownListEditor` with static options.
 
 **Pinned Delivery-API contract (observed live — supersedes the ADR-001 sketch):**
 

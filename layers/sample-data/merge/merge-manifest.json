@@ -1605,7 +1605,6 @@
       "schemaSync": null,
       "entryId": "sql/EcomDetailsGroup",
       "files": [
-        "_sql/EcomDetailsGroup/100110.yml",
         "_sql/EcomDetailsGroup/100111.yml",
         "_sql/EcomDetailsGroup/_meta.yml"
       ]

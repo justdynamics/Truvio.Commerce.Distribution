@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<items>
+  <item category="Headless" name="Headless Site Master" systemName="Headless_Master" description="Site-level headless master. Menu references are page GUID/ID refs resolved by the frontend via the Delivery API; carries no template/layout/colorscheme fields." icon="None" iconColor="None" image="" includeInUrlIndex="False" pageDefaultView="item" paragraphDefaultModule="" fieldForTitle="SiteName" title="Headless Site Master" inherits="">
+    <fields>
+      <field name="Site name" systemName="SiteName" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Default locale" systemName="DefaultLocale" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Header menu (page ref)" systemName="HeaderMenuRef" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.LinkEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.LinkEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnablePageSelection" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableParagraphSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="SelectOnlyID" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableFileSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableProductSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableProductGroupSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableExternalLinkSelection" value="True" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Footer menu (page ref)" systemName="FooterMenuRef" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.LinkEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.LinkEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnablePageSelection" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableParagraphSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="SelectOnlyID" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableFileSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableProductSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableProductGroupSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableExternalLinkSelection" value="True" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Catalog menu (page ref)" systemName="CatalogMenuRef" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.LinkEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.LinkEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnablePageSelection" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableParagraphSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="SelectOnlyID" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableFileSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableProductSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableProductGroupSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableExternalLinkSelection" value="True" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Privacy policy (page ref)" systemName="PrivacyPolicyRef" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.LinkEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.LinkEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnablePageSelection" value="True" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableParagraphSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="SelectOnlyID" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableFileSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableProductSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableProductGroupSelection" value="False" /><Parameter addin="Dynamicweb.Content.Items.Editors.LinkEditor" name="EnableExternalLinkSelection" value="True" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Contact email" systemName="ContactEmail" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+    </fields>
+    <rules>
+      <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
+      <rule name="Enable item type for" type="Dynamicweb.Content.Items.Activation.StructureRestrictionRule, Dynamicweb" value="Websites" />
+    </rules>
+    <layout>
+      <groups>
+        <group name="General" systemName="General" sectionName="" collapsibleState="None" visibilityField="" visibilityCondition="" visibilityConditionValueType="" visibilityConditionValue="">
+          <fields>
+            <field systemName="SiteName" />
+            <field systemName="DefaultLocale" />
+            <field systemName="HeaderMenuRef" />
+            <field systemName="FooterMenuRef" />
+            <field systemName="CatalogMenuRef" />
+            <field systemName="PrivacyPolicyRef" />
+            <field systemName="ContactEmail" />
+          </fields>
+        </group>
+      </groups>
+    </layout>
+  </item>
+</items>
