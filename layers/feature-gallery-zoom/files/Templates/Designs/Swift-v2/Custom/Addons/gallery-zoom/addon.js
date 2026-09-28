@@ -59,14 +59,16 @@
 	});
 
 	// PhotoSwipe needs a size up front; GetImage keeps the source ratio and never upscales,
-	// so the real size is known once the large image has loaded.
+	// so the real size is known once the large image has loaded. Two routes, because PhotoSwipe
+	// dispatches loadComplete only when the content already has a slide: the first image is
+	// preloaded before its slide exists, and without the slide route it keeps the declared
+	// 2400px, so zoom level 2 rendered a 480px source at 4800px (measured at 390, 2026-09-28).
 	const fitToLoaded = ({ content, slide }) => {
 		const el = content && content.element;
 		if (!el || el.tagName !== 'IMG' || !el.naturalWidth) return;
-		if (content.width === el.naturalWidth && content.height === el.naturalHeight) return;
 		content.width = content.data.width = el.naturalWidth;
 		content.height = content.data.height = el.naturalHeight;
-		if (!slide) return;
+		if (!slide || (slide.width === content.width && slide.height === content.height)) return;
 		slide.width = content.width;
 		slide.height = content.height;
 		slide.calculateSize();
@@ -103,6 +105,15 @@
 			errorMsg: 'The image could not be loaded.'
 		});
 		lightbox.on('loadComplete', fitToLoaded);
+		const fitSlide = (slide) => {
+			const el = slide && slide.content && slide.content.element;
+			if (!el || el.tagName !== 'IMG') return;
+			if (el.complete && el.naturalWidth) fitToLoaded({ content: slide.content, slide });
+			else el.addEventListener('load', () => fitToLoaded({ content: slide.content, slide }), { once: true });
+		};
+		// The opening slide is created active, so it gets afterInit and no slideActivate.
+		lightbox.on('afterInit', () => fitSlide(lightbox.pswp.currSlide));
+		lightbox.on('slideActivate', ({ slide }) => fitSlide(slide));
 		lightbox.on('uiRegister', () => {
 			lightbox.pswp.ui.registerElement({
 				name: 'tcg-download',
