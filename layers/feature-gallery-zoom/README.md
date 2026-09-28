@@ -54,3 +54,14 @@ The Foundry GALLERY-ZOOM probe fails loud if either moves.
 
 PhotoSwipe 5.4.4, MIT (`photoswipe/LICENSE.txt`), unmodified `dist` files. To update: replace the
 three dist files and the licence from the npm package, and bump this layer.
+
+## Screenshots
+
+foundry.mydwsite4.com, `swift-demo`, TCPROD0001 with the 3:4 portrait photo selected (2026-09-28).
+The stock gallery for comparison is in the Foundry plan.
+
+| | Desktop 1440x900 | Mobile 390x844 |
+|---|---|---|
+| PDP | ![](docs/after-desktop-pdp.jpg) | ![](docs/after-mobile-pdp.jpg) |
+| Lightbox | ![](docs/after-desktop-lightbox.jpg) | ![](docs/after-mobile-lightbox.jpg) |
+| Zoomed (click, double-tap) | ![](docs/after-desktop-zoomed.jpg) | ![](docs/after-mobile-zoomed.jpg) |
