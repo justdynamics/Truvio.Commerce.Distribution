@@ -64,7 +64,7 @@ not serializable — the swift-demo Foundry gate run (deserialize + recycle) is 
 4. **Delivery provider** — SMTP is host-blocked; demos default to the Save provider (emails to
    disk). A host/global-settings decision, not layer content.
 5. **"Email Marketing Flow Scheduler" scheduled task** — shipped since 1.1.0 as
-   `merge/_sql/ScheduledTask/Email Marketing Flow Scheduler.yml` (`TaskId` 100540,
+   `replace/_sql/ScheduledTask/Email Marketing Flow Scheduler.yml` (`TaskId` 100540,
    `Dynamicweb.EmailMarketing.Flows.FlowScheduledTaskAddIn, Dynamicweb.EmailMarketing`, every 5
    minutes, enabled). The stock DW10 setup wizard creates no such task, so the layer carries it.
 

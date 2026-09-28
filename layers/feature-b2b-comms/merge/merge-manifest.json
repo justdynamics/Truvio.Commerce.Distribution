@@ -206,20 +206,6 @@
         "_sql/EmailMarketingEmail/100512.yml",
         "_sql/EmailMarketingEmail/_meta.yml"
       ]
-    },
-    {
-      "providerType": "SqlTable",
-      "table": "ScheduledTask",
-      "nameColumn": null,
-      "compareColumns": null,
-      "xmlColumns": [],
-      "resolveLinksInColumns": [],
-      "serviceCaches": [],
-      "schemaSync": null,
-      "entryId": "sql/ScheduledTask",
-      "files": [
-        "_sql/ScheduledTask/Email Marketing Flow Scheduler.yml"
-      ]
     }
   ]
 }

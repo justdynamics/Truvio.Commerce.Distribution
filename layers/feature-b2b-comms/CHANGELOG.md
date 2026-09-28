@@ -7,8 +7,12 @@
 The Dealer onboarding flow runs only when a scheduled task with
 `Dynamicweb.EmailMarketing.Flows.FlowScheduledTaskAddIn, Dynamicweb.EmailMarketing` exists. A
 Swift-derived database carried one; the stock DW10 setup wizard creates none, and Dynamicweb creates
-none for a deserialized flow. The layer ships it as a merge `ScheduledTask` row, `TaskId` 100540,
-every 5 minutes, enabled (declared in `configRows`). The README's operator step 5 is gone.
+none for a deserialized flow. The layer ships it as a `ScheduledTask` row in a new `replace` tree,
+`TaskId` 100540, every 5 minutes, enabled (declared in `configRows`). Replace, not merge: the Foundry
+composer keeps one merge entry per layer for a table two layers ship in the same mode, and
+feature-subscription-orders already ships its `ScheduledTask` row in merge, so two merge entries would
+each fail Serializer strict mode on the other's document (measured on foundry.mydwsite4.com, gate run
+20260928-192253). The README's operator step 5 is gone.
 
 ## 1.0.7
 
