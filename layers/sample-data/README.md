@@ -136,9 +136,9 @@ SQL run, or host-born values (GUIDs, timestamps, the `TC-PRICE-GRPV-*` ids) chur
 
 surface-swift ships its demo-facing strings in the `Placeholder` marker form on purpose, so a
 composition with no brand data fails the design gate instead of shipping template copy. This
-layer carries the copy that replaces the marker: 43 content documents, each surface-swift's own
-document at the same path under `merge/_content/Swift 2/` or
-`replace/_content/Swift 2/Navigation/`, with only the copy fields rewritten and an `ownership`
+layer carries the copy that replaces the marker: 47 content documents, each surface-swift's own
+document at the same path under `merge/_content/Swift 2/`, `replace/_content/Swift 2/Navigation/` or
+`replace/_content/Swift 2/Shop/Product Details/`, with only the copy fields rewritten and an `ownership`
 header set to `replace`.
 
 | Where | What the prospect reads |
@@ -147,6 +147,8 @@ header set to `replace`.
 | Home body | catalogue pitch with **Browse Commerce** (`GroupID=TCGRP-COMMERCE`), three features, an account call to action, **About Truvio Commerce** |
 | About, Contact, Employees, Posts | company intro, three values, team heading, contact routes on `support@truvio-demo.example` |
 | Header, footer, mega-menu | the `Truvio Commerce` wordmark, the copyright line, the Variants and Price Structures promos |
+| Product page | the Features list and the frequently asked questions under every product, which describe the Truvio Commerce price, stock, document and variant model |
+| Delivery | the email and phone contact cards: `support@truvio-demo.example` and the fictional `+1 555 0100` |
 
 Rules for editing it:
 
@@ -604,6 +606,7 @@ Every edition that sets `sampleData: true` composes it: `swift-demo`, `headless-
 `dap-portal`. `base-swift` and `base-only` set it false and stay catalogue-free —
 `base-swift` keeps surface-swift's marker copy, which is the point of that edition.
 
-The PLP and PDP read the `ProductsFrontend` product repository the host's Swift design package
-ships (`base.contract.json` `repositories`, `provisionedByGate: false`); an empty PLP on a host
-that lacks it is that gap, not a missing row here.
+The Shop PLP reads the `TruvioCommerce` product repository surface-swift ships, and the header
+search, Express Buy and the related-products lists read the `ProductsFrontend` repository the
+host's Swift design package ships (`base.contract.json` `repositories`); an empty PLP on a host
+that lacks either folder, or carries it under another name, is that gap, not a missing row here.

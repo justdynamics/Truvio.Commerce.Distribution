@@ -1,5 +1,25 @@
 # Changelog — sample-data
 
+## 6.3.0
+
+**MINOR. The storefront copy covers the PDP Features and FAQ and the Delivery contact cards
+(Foundry #1408).**
+
+surface-swift 1.17.0 ships those four paragraphs in the marker form, so this layer carries the
+copy that replaces them, the same way it replaces the Home, About, header and footer markers:
+
+- `replace/_content/Swift 2/Shop/Product Details/grid-row-10/paragraph-c1-20.yml` (Features) and
+  `grid-row-11/paragraph-c1-21.yml` (Frequently asked questions): the Truvio Commerce prose
+  surface-swift 1.16.1 shipped, unchanged, with an `ownership` header set to `replace`;
+- `merge/_content/Swift 2/Navigation/Footer Navigation/Help and info/Delivery/grid-row-4/`
+  `paragraph-c1-3.yml` and `paragraph-c3-5.yml`: `support@truvio-demo.example` and the fictional
+  `+1 555 0100`, replacing `noreply@noreply.com` and a stock Danish phone number.
+
+Each is surface-swift's document at the same path with only `Text` rewritten, delivered through
+surface-swift's manifest entries. The storefront copy is 47 documents (was 43). REWRITE.md lists
+the new path. `repositoryName: Products` is dropped from `layer.json`: no repository of that name
+is shipped or bound by any layer (Foundry #1409).
+
 ## 6.2.0
 
 **MINOR. Five mixed-ratio photos on TCPROD0001, the gallery fixture (Foundry #1392).**

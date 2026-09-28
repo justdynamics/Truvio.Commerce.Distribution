@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "3.0.0",
+  "baseContractVersion": "3.0.1",
   "swiftVersion": "2.4.0",
   "compat": {
     "dw": {
@@ -444,8 +444,35 @@
     "query": "Products.query",
     "facets": "Products.facets",
     "installPath": "wwwroot/Files/System/Repositories/ProductsFrontend/",
-    "note": "ProductsFrontend is the storefront search repository the Swift design package ships (Files/System/Repositories/ProductsFrontend/ at the Swift 2.4.0 tag, alongside ProductsBackend). No layer in this Distribution ships it: it arrives with the host's Swift Files overlay, which is why provisionedByGate is false. Every eCom_ProductCatalog surface this Distribution ships binds it by path - surface-swift Shop PLP (IndexQuery + FacetGroups), surface-swift desktop header search, surface-swift Express Buy, surface-dap-portal Product Assets and Search results, feature-bom-configurator Kit Configurator. A storefront PLP that cannot list products answers HTTP 200 in both of its failure shapes, never a 500. (1) Repository present over an index of zero documents: the page carries an in-page dw-error block with the Lucene 'numHits must be > 0' ArgumentException. (2) Repository absent: the catalog app renders an EMPTY swift-v2_app div with no product list, no facet rail and no error text of any kind, so the page passes a status scan AND an error-text scan while showing nothing. Gate the PLP on a positive subject (at least one product-card element) plus dw-error == 0, never on HTTP status or on the absence of error text alone.",
-    "consumingApp": "eCom_ProductCatalog"
+    "boundBy": [
+      "surface-swift: desktop header search field (Header _ Footer/Desktop Header, IndexQuery)",
+      "surface-swift: Express Buy (Navigation/Secondary Navigation/Express Buy, IndexQuery)",
+      "surface-swift: Related products list and Related products slider_grid service pages (IndexQuery)",
+      "surface-dap-portal: Product Assets (IndexQuery, FacetGroups Products.facets and Electricals.facets)",
+      "surface-dap-portal: Search results (IndexQuery)",
+      "feature-bom-configurator: Kit Configurator (IndexQuery, FacetGroups)",
+      "feature-reordering: Quick Order validation feed (IndexQuery)"
+    ],
+    "note": "ProductsFrontend is the storefront search repository the Swift design package ships (Files/System/Repositories/ProductsFrontend/ at the Swift 2.4.0 tag, alongside ProductsBackend). No layer in this Distribution ships it: it arrives with the host's Swift Files overlay, which is why provisionedByGate is false. boundBy lists every paragraph a layer ships that names it by path. It is NOT the repository the surface-swift Shop PLP binds: that is TruvioCommerce, which surface-swift ships itself (layerShipped below). A composition therefore needs both folders under their own names, and renaming one to the other empties the surfaces that bind the name that went missing. A storefront PLP that cannot list products answers HTTP 200 in both of its failure shapes, never a 500. (1) Repository present over an index of zero documents: the page carries an in-page dw-error block with the Lucene 'numHits must be > 0' ArgumentException. (2) Repository absent: the catalog app renders an EMPTY swift-v2_app div with no product list, no facet rail and no error text of any kind, so the page passes a status scan AND an error-text scan while showing nothing. Gate the PLP on a positive subject (at least one product-card element) plus dw-error == 0, never on HTTP status or on the absence of error text alone.",
+    "consumingApp": "eCom_ProductCatalog",
+    "layerShipped": [
+      {
+        "name": "TruvioCommerce",
+        "shippedBy": "surface-swift",
+        "index": "Products.index",
+        "query": "Products.query",
+        "facets": "Products.facets",
+        "installPath": "wwwroot/Files/System/Repositories/TruvioCommerce/",
+        "boundBy": [
+          "surface-swift: Shop PLP (IndexQuery, FacetGroups)",
+          "surface-swift: Product and content search results service page (IndexQuery)",
+          "surface-swift: Favorites list service page (IndexQuery)",
+          "surface-swift: Variant Selector Service page (IndexQuery)"
+        ],
+        "note": "The storefront product repository surface-swift ships in its repositories/ tree (Build+Index.task, Products.index, Products.query, Products.facets) and stages before host start. The Shop PLP and three service pages bind it by the literal path /Files/System/Repositories/TruvioCommerce/Products.query, so it is deployed under exactly this folder name: a copy renamed to ProductsFrontend leaves the Shop PLP empty (Foundry #1409). A layer's layer.json repositoryName is descriptive only and never the authority for a folder name; this block is.",
+        "consumingApp": "eCom_ProductCatalog"
+      }
+    ]
   },
   "currencyRates": {
     "defaultCurrency": "USD",

@@ -1,5 +1,17 @@
 ﻿# theme-default changelog
 
+## 2.6.1
+
+### A card that holds a dropdown or a modal does not lift on hover (Foundry #1396)
+
+The card hover lift (`transform: translateY(-2px)`) made every hovered card the containing block of
+its `position: fixed` descendants. The Swift customer-centre row menus are Bootstrap dropdowns with
+the Popper strategy `fixed`, so the menu was placed against the card, clipped by the card's
+`overflow: hidden` and moved when the pointer left the card (measured on a one-row CSR accounts
+table: menu cut off below the row). A light-scheme `.card` that contains a
+`[data-bs-toggle="dropdown"]` or a `.modal`, and a Feature tile that contains one, keep
+`transform: none`; the hover border and shadow stay. Every other card lifts as before.
+
 ## 2.6.0
 
 ### The add-on slot: opt-in layers load without editing a theme file (Foundry #1392)

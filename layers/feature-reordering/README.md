@@ -23,8 +23,8 @@ whatever user-scoped price the index feed returns and posts to the cart unchange
 ## Catalog dependency (sample-data)
 
 The pad validates SKUs against the **ProductsFrontend** repository feed (the same feed Express Buy, the
-Shop PLP and the Kit Configurator use). `ProductsFrontend/Products.query` is what the Swift files
-overlay deploys and what every working sibling `eCom_ProductCatalog` paragraph binds; a
+header search and the Kit Configurator use; the Shop PLP reads surface-swift's own `TruvioCommerce`
+repository). `ProductsFrontend/Products.query` is what the Swift files overlay deploys; a
 `<IndexQuery>` naming a repository that is not on disk yields an empty feed body with HTTP 200 and no
 error, so every SKU reads "Unknown SKU". The `sku-validation` probe resolves the sample-data catalogue SKU **`TC-VAR-0001`**, so the
 layer's live probes require an edition with `sampleData: true` (e.g. `swift-demo`). The **content

@@ -1,5 +1,49 @@
 ﻿# Changelog — surface-swift
 
+## 1.17.0
+
+### ProductMedia renders an empty slot for a product with no image (Foundry #1407)
+
+A product with no image asset and no default image crashed `Swift-v2_ProductMedia.cshtml` with a
+NullReferenceException, and the PDP answered HTTP 200 with the Razor source dump in place of its
+content. Three stock paths put a null into the asset list: `ImagePatternImages` on an empty list
+appends `product.DefaultImage`, which is null; the `Count(predicate)` then reads `asset.Value` on
+it; and the `DefaultImageFallback` branch builds `{ product.DefaultImage }` whether or not there is
+one. The override (already carrying the one-token `.svg` edit) now drops every asset that is null or
+has no path, and takes the default-image branches only when the default image has a path. A
+product with neither renders no media block. A product with images gets byte-identical output.
+
+### The PDP and the Delivery page ship marker copy, not Distribution copy (Foundry #1408)
+
+The Features and Frequently asked questions paragraphs under every product (`Shop/Product
+Details`, grid rows 10 and 11) carried prose about this Distribution's price, stock and variant
+model, and the Delivery page's email and phone cards carried `noreply@noreply.com` and a stock
+Danish phone number. Both reached every consumer's product pages unless a build rewrote them. They
+now read in the layer's marker form (`Placeholder - product feature 1`, `Placeholder - question 1`,
+`Placeholder - support email address`, `Placeholder - support phone number`), so the design gate
+flags a composition that never replaced them. The sample-data layer (6.3.0) carries the Truvio
+Commerce copy for these paths, so `swift-demo` reads as before. The Delivery cards are `merge`
+documents: a host that already holds the old values keeps them until a `replace` document (the
+sample-data copy) or a build writes them.
+
+### Account admins see the account on the dashboard (Foundry #1395)
+
+The Swift 2.4 dashboard widgets call `/dwapi/ecommerce/orders/search` with the user token and no
+`RetrieveMode`, so the API answers `useUserId` and every widget reads the signed-in user's own
+orders. The eight order widgets this layer ships (Number Orders, Spent this month, Open quotes and
+Active carts; Chart Monthly spending; List Recent orders, Quotes and Pending quotes) now prefix
+`RetrieveMode=useCustomerNumber&` when the user is in `Account Admin` (1270, a base-owned group) and
+carries a customer number, so the admin reads every order on the account. Every other user keeps
+the stock self scope. The three buyer widget rows on `Customer center/Overview` are granted to 1270
+as well (level all), since the admin persona is not a member of `Customers` 1325 and saw no widget
+row before. Favorites stays personal.
+
+### `repositoryName` names the repository this layer ships (Foundry #1409)
+
+`layer.json` declares `repositoryName: TruvioCommerce`, the repository this layer ships and its
+Shop PLP binds. The field is descriptive; `base.contract.json` `repositories` (base 4.0.1) lists
+every paragraph that binds `TruvioCommerce` or the host-supplied `ProductsFrontend`.
+
 ## 1.16.1
 
 ### The manifests name the paragraphs that are on disk (Distribution #89)

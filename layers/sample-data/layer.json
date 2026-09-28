@@ -1,9 +1,8 @@
 {
   "name": "sample-data",
-  "version": "6.2.0",
+  "version": "6.3.0",
   "kind": "sample-data",
   "swiftVersion": "2.4.0",
-  "repositoryName": "Products",
   "fragmentModes": [
     "replace",
     "merge"

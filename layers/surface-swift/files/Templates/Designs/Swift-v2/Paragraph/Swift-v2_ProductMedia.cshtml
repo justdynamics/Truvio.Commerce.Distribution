@@ -5,11 +5,24 @@
 @using System.Text.RegularExpressions;
 
 @*
-	Swift-v2_ProductMedia - a ONE-TOKEN OVERRIDE of the stock Swift 2.4 file of the same
+	Swift-v2_ProductMedia - a TWO-EDIT OVERRIDE of the stock Swift 2.4 file of the same
 	path. Like RelatedProductsList.cshtml beside it, this file is named by the render path
-	itself, so it takes effect the moment the layer is on disk; the whole delta is the
-	four characters ".svg" in supportedImageFormats plus this comment. Everything else is
-	stock, byte for byte, and a Swift version roll is a re-copy plus the same one edit.
+	itself, so it takes effect the moment the layer is on disk. The whole delta is (1) the
+	four characters ".svg" in supportedImageFormats, (2) the null guard described under
+	ZERO-ASSET PRODUCTS below, and this comment. Everything else is stock, byte for byte, and
+	a Swift version roll is a re-copy plus the same two edits.
+
+	ZERO-ASSET PRODUCTS (Foundry #1407). Stock Swift 2.4 throws a NullReferenceException
+	on a product with no image asset and no default image, and the PDP then answers HTTP
+	200 with the Razor source dump in place of its content. Three stock paths put a null
+	into the list: ImagePatternImages on an empty list appends product.DefaultImage, which
+	is null; the Count(predicate) then reads asset.Value on it; and the DefaultImageFallback
+	branch builds { product.DefaultImage } whether or not there is one. The guard drops
+	every asset that is null or carries no path (no format matches an empty path, so none
+	of them ever rendered a slide) and takes the default-image branches only when the
+	default image has a path. A product with neither renders no media block, the same
+	empty slot stock renders for a product whose assets match no format. A product with
+	images reaches the identical code path and gets byte-identical output to stock.
 
 	WHAT IT FIXES. The PDP hero gallery rendered ZERO images on every product while the
 	PLP card rendered the same rows fine. The asset plumbing was never the problem: this
@@ -186,6 +199,9 @@
 	assetsList = assetsList.Union(assetsImages);
 	assetsList = includeImagePatternImages ? assetsList.Union(product.ImagePatternImages) : assetsList;
 	assetsList = includeImagePatternImages && assetsList.Count() == 0 ? assetsList.Append(product.DefaultImage) : assetsList;
+	@* Truvio guard (Foundry #1407): no null asset and no asset without a path reaches the loops below. *@
+	assetsList = assetsList.Where(asset => asset != null && !string.IsNullOrEmpty(asset.Value)).ToList();
+	bool hasDefaultImage = product.DefaultImage != null && !string.IsNullOrEmpty(product.DefaultImage.Value);
 
 	bool defaultImageFallback = Model.Item.GetBoolean("DefaultImageFallback");
 	bool showOnlyPrimaryImage = Model.Item.GetBoolean("ShowOnlyPrimaryImage");
@@ -196,7 +212,7 @@
 		totalAssets = assetsList.Count(asset => MatchesFormat(asset.Value, allSupportedFormats));
 	}
 
-	if ((totalAssets == 0 && product.DefaultImage != null && selectedAssetCategories.Count() == 0) || (showOnlyPrimaryImage == true && product.DefaultImage != null) || totalAssets == 0 && defaultImageFallback)
+	if ((totalAssets == 0 && hasDefaultImage && selectedAssetCategories.Count() == 0) || (showOnlyPrimaryImage == true && hasDefaultImage) || totalAssets == 0 && defaultImageFallback && hasDefaultImage)
 	{
 		assetsList = new List<MediaViewModel>() { product.DefaultImage };
 		totalAssets = 1;

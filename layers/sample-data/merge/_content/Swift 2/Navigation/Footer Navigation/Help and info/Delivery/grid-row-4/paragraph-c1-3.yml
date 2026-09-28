@@ -1,4 +1,6 @@
-﻿"paragraphUniqueId": 1296c4ba-c7bc-4d9e-ac47-afdeb3834f08
+﻿"ownership":
+  "mode": "replace"
+"paragraphUniqueId": 1296c4ba-c7bc-4d9e-ac47-afdeb3834f08
 "sourceParagraphId": 446
 "sortOrder": 3
 "itemType": "Swift-v2_Feature"
@@ -13,6 +15,6 @@
   "Id": "35"
   "ItemInstanceType": ""
   "Sort": 0
-  "Text": "<p><strong>Send an email</strong><br>Placeholder - support email address</p>"
+  "Text": "<p><strong>Send an email</strong><br>support@truvio-demo.example</p>"
   "Title": ""
 "columnId": 1
