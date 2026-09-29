@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/justdynamics/Truvio.Commerce.Distribution/layers/bacpacs.schema.json",
+  "title": "Bacpac register (layers/INDEX.json bacpacs)",
+  "description": "The databases published as GitHub Release assets (Foundry #1422, owner ruling vnext-bacpac-artifacts). blank is the database the stock DW10 setup wizard creates at the DW pin; editions.<name> is that database with the edition delivered, exported before any measurement. No entry means the deserialize is the path. Written by the Foundry from the proving runs, never by hand as trusted; tools/ci/Bacpac.ps1 holds the rules a schema cannot state (entry bound to gateProven, tag and asset derived from the entry).",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "_comment": { "type": "string" },
+    "blank": { "$ref": "#/$defs/blank" },
+    "editions": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z0-9-]+$" },
+      "additionalProperties": { "$ref": "#/$defs/edition" }
+    }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "runId": { "type": "string", "pattern": "^[0-9]{8}-[0-9]{6}$" },
+    "scrubCheck": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verdict", "tool"],
+      "properties": {
+        "verdict": { "const": "CLEAN" },
+        "tool": { "type": "string" },
+        "knownSecrets": { "type": "integer", "minimum": 0 },
+        "secretNamedTables": { "type": "integer", "minimum": 0 },
+        "secretNamedColumns": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "blank": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dwVersion", "tag", "asset", "sha256", "sizeBytes", "gateRunId", "scrubCheck"],
+      "properties": {
+        "dwVersion": { "type": "string", "description": "The DW version whose stock setup wizard created the database; equals gateProven.dw.version." },
+        "tag": { "type": "string", "pattern": "^databases/blank/[0-9A-Za-z.+-]+$" },
+        "asset": { "type": "string", "pattern": "^blank-dw-[0-9A-Za-z.+-]+\\.bacpac$" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": { "type": "integer", "minimum": 1 },
+        "tables": { "type": "integer", "minimum": 1 },
+        "gateRunId": { "$ref": "#/$defs/runId", "description": "The gate run that proved the restored database: an edition delivered onto it and measured PASS." },
+        "deliveryRunId": { "$ref": "#/$defs/runId" },
+        "provedWith": { "type": "string", "description": "Which edition the proof delivered onto the restored database." },
+        "scrubCheck": { "$ref": "#/$defs/scrubCheck" }
+      }
+    },
+    "edition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["editionVersion", "tag", "asset", "sha256", "sizeBytes", "gateRunId", "deliveryRunId", "provenRunId", "distributionCommit", "dwVersion", "scrubCheck"],
+      "properties": {
+        "editionVersion": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "tag": { "type": "string", "pattern": "^editions/[a-z0-9-]+/[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "asset": { "type": "string", "pattern": "^[a-z0-9-]+-[0-9]+\\.[0-9]+\\.[0-9]+\\.bacpac$" },
+        "sha256": { "$ref": "#/$defs/sha256" },
+        "sizeBytes": { "type": "integer", "minimum": 1 },
+        "gateRunId": { "$ref": "#/$defs/runId", "description": "The gate run on the database restored from THIS file." },
+        "deliveryRunId": { "$ref": "#/$defs/runId", "description": "The delivery run that built the database the file was exported from." },
+        "provenRunId": { "$ref": "#/$defs/runId", "description": "gateProven.editions.<edition> when the file was built: the run that proved this edition version." },
+        "distributionCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "dwVersion": { "type": "string" },
+        "startsFrom": { "type": "string", "description": "The blank bacpac the delivery started from (asset and sha256)." },
+        "scrubCheck": { "$ref": "#/$defs/scrubCheck" }
+      }
+    }
+  }
+}

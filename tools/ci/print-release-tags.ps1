@@ -29,14 +29,28 @@ with the reason "tree differs from proving run <run>". An edition whose proof ca
 no longer matches is not tagged either. An edition with no proof yet (legacy, stamped before the
 key) keeps the pre-key rule, with a notice, until the next restamp fills its provenTree.
 
+Bacpac release assets (Foundry #1422): layers/INDEX.json `bacpacs` registers the blank database
+(tag databases/blank/<DW version>) and per-edition databases (on the edition tag). The blank tag is
+cut here like any other provenance tag, only while its dwVersion equals gateProven.dw.version. For
+every registered bacpac whose tag this manifest carries, -Execute then publishes the GitHub Release:
+the Foundry has uploaded the file to a DRAFT release on that tag (tools/bacpac/Publish-BacpacDraft.ps1);
+this script downloads the draft's asset, compares its sha256 with INDEX.json and only then publishes
+the draft (tools/ci/Bacpac.ps1 Publish-BacpacRelease). A missing draft or a sha256 mismatch fails the
+run after the tags are pushed, and leaves the release unpublished; re-run the workflow once fixed.
+The print mode lists each release asset under its tag.
+
 Usage:
   pwsh tools/ci/print-release-tags.ps1              # print the manifest (executes nothing)
+  pwsh tools/ci/print-release-tags.ps1 -CheckReleases  # dry run + verify each bacpac draft's sha256 (gh auth)
   pwsh tools/ci/print-release-tags.ps1 -Execute     # CI actuator: cut + push missing tags
 #>
 [CmdletBinding()]
 param(
     [string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path,
-    [switch]$Execute
+    [switch]$Execute,
+    # Dry run only: also download each draft asset and compare its sha256 (needs gh auth); publishes nothing.
+    [switch]$CheckReleases,
+    [string]$Repo = $(if ($env:GITHUB_REPOSITORY) { $env:GITHUB_REPOSITORY } else { 'justdynamics/Truvio.Commerce.Distribution' })
 )
 $ErrorActionPreference = 'Stop'
 
@@ -69,13 +83,11 @@ foreach ($p in @($gp.editions.PSObject.Properties)) { $runs[$p.Name] = "$($p.Val
 if ($runs.Count -eq 0) { throw "layers/INDEX.json gateProven.editions is empty — no edition is attested, so no tag may be cut." }
 
 # Per-edition RELEASE version. This one is NOT derivable: it is the edition artifact's own
-# semver, bumped when the edition FILE changes, and nothing in INDEX.json records it. It
-# stays declared here, and an edition absent from the map keeps its existing tag.
-$editionVersion = @{
-    'swift-demo'    = '5.3.0'
-    'headless-demo' = '3.2.0'
-    'dap-portal'    = '2.3.0'
-}
+# semver, bumped when the edition FILE changes, and nothing in INDEX.json records it. It is
+# declared once in tools/ci/Bacpac.ps1 (Get-EditionReleaseVersion), which the bacpac register
+# check reads too, and an edition absent from the map keeps its existing tag.
+. (Join-Path $PSScriptRoot 'Bacpac.ps1')
+$editionVersion = Get-EditionReleaseVersion
 
 # Which proven run each LAYER rides: DERIVED from the edition compositions on disk, so a
 # layer added to (or dropped from) an edition never needs a second edit here. A layer is
@@ -166,6 +178,24 @@ foreach ($ef in (Get-ChildItem (Join-Path $RepoRoot 'editions') -File -Filter '*
     })
 }
 
+# --- Blank database tag + the bacpac release plan (Foundry #1422). ---------------------------
+if ($index.bacpacs -and $index.bacpacs.blank) {
+    $b = $index.bacpacs.blank
+    if ("$($b.dwVersion)" -eq $dw) {
+        $manifest.Add([pscustomobject]@{
+            Tag     = "$($b.tag)"
+            Message = "blank DW10 database $($b.dwVersion), the database the stock setup wizard creates at DW $dw$(if ($ring) { " ($ring)" }), bacpac $($b.asset) sha256 $($b.sha256), proven by gate run $($b.gateRunId) (provenance read from layers/INDEX.json bacpacs)"
+        })
+    } else {
+        $skipped += "$($b.tag) (bacpacs.blank dwVersion $($b.dwVersion) is not gateProven.dw.version $dw)"
+    }
+}
+$manifestTags = @($manifest | ForEach-Object { $_.Tag })
+$releasePlan = @(Get-BacpacReleasePlan -Index $index | Where-Object { $manifestTags -contains $_.Tag })
+foreach ($r in @(Get-BacpacReleasePlan -Index $index | Where-Object { $manifestTags -notcontains $_.Tag })) {
+    $skipped += "release $($r.Tag) <- $($r.Asset) (held: this manifest does not carry the tag)"
+}
+
 # --- Emit. -----------------------------------------------------------------------------------
 if (-not $Execute) {
     # PRINT mode (default): show the commands, run nothing.
@@ -176,6 +206,14 @@ if (-not $Execute) {
     Write-Host ""
     Write-Host "git push origin --tags"
     Write-Host ""
+    if ($releasePlan.Count -gt 0) {
+        Write-Host "# Release assets (-Execute: download the Foundry's draft asset, verify sha256 against layers/INDEX.json, publish):" -ForegroundColor Cyan
+        foreach ($r in $releasePlan) { Write-Host "gh release: '$($r.Tag)' <- $($r.Asset) sha256 $($r.Sha256) ($($r.SizeBytes) bytes) '$($r.Title)'" }
+        if ($CheckReleases) {
+            foreach ($r in @(Publish-BacpacRelease -Plan $releasePlan -Repo $Repo -VerifyOnly)) { Write-Host "#   [$($r.result)] $($r.tag): $($r.detail)" }
+        }
+        Write-Host ""
+    }
     if ($skipped.Count -gt 0) {
         Write-Host "# Not tagged here:" -ForegroundColor Yellow
         $skipped | ForEach-Object { Write-Host "#   - $_" }
@@ -211,4 +249,17 @@ if ($created.Count -eq 0) {
         Write-Host "  [push] $t" -ForegroundColor Green
     }
     Write-Host "Cut + pushed $($created.Count) provenance tag(s): $($created -join ', ')" -ForegroundColor Green
+}
+
+# Bacpac release assets (Foundry #1422): after the tags exist, publish each registered bacpac.
+if ($releasePlan.Count -gt 0) {
+    Write-Host "== Bacpac release assets ($($releasePlan.Count)) ==" -ForegroundColor Cyan
+    $rel = @(Publish-BacpacRelease -Plan $releasePlan -Repo $Repo)
+    foreach ($r in $rel) {
+        if ($r.result -eq 'error') { Write-Host "::error title=bacpac release $($r.tag)::$($r.detail)" }
+        Write-Host "  [$($r.result)] $($r.tag): $($r.detail)" -ForegroundColor $(if ($r.result -eq 'error') { 'Red' } else { 'Green' })
+    }
+    if (@($rel | Where-Object result -eq 'error').Count -gt 0) {
+        throw "bacpac release: $(@($rel | Where-Object result -eq 'error').Count) release(s) not published; the tags stand. Fix the draft and re-run release-tags (workflow_dispatch)."
+    }
 }

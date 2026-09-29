@@ -115,6 +115,72 @@ Release tags ([`tools/ci/print-release-tags.ps1`](tools/ci/print-release-tags.ps
 when the layer's tree hash equals its `provenTree` hash; otherwise it is listed under "Not tagged here"
 with "tree differs from proving run". Dry-run the script on the merge result before merging.
 
+## Bacpac release assets
+
+The Distribution publishes databases as public GitHub Release assets (owner ruling
+`vnext-bacpac-artifacts`, Foundry #1422). They are a shortcut, never a second source: every edition
+still delivers onto a blank DW10 database by deserialize, and an edition with no bacpac entry has
+only that path.
+
+| Database | Tag | Asset |
+|---|---|---|
+| blank: what the stock DW10 setup wizard creates at the DW pin (`gateProven.dw.version`) | `databases/blank/<DW version>` | `blank-dw-<DW version>.bacpac` |
+| an edition delivered onto the blank database, exported before any measurement | `editions/<edition>/<version>` | `<edition>-<version>.bacpac` |
+
+`databases/<name>/<version>` is the tag family for databases, beside `layers/<name>/<semver>` and
+`editions/<name>/<semver>`; the blank database is versioned by the DW version its wizard ran at.
+
+**Register.** `layers/INDEX.json` `bacpacs` records each published file (shape:
+[`layers/bacpacs.schema.json`](layers/bacpacs.schema.json)): `blank` { dwVersion, tag, asset,
+sha256, sizeBytes, gateRunId, scrubCheck } and `editions.<edition>` { editionVersion, tag, asset,
+sha256, sizeBytes, gateRunId (the gate run on the database restored from this file),
+deliveryRunId, provenRunId (`gateProven.editions.<edition>` when the file was built),
+distributionCommit, dwVersion, scrubCheck }. The Foundry writes it from the proving runs; it is
+never hand-authored as trusted.
+
+**Proof.** A file is registered only after it was restored onto a fresh database and gated there:
+the edition file with the edition's gate, the blank file by delivering an edition onto it and
+gating that. Its scrub check (the Foundry's `tools/bacpac/Test-BacpacScrub.ps1`) reads the file
+itself and must be CLEAN.
+
+**CI (validator check 17).** The block validates against its schema, and every entry stays bound
+to what it was built from: `editionVersion` equals the edition release version, `provenRunId`
+equals `gateProven.editions.<edition>`, `dwVersion` equals `gateProven.dw.version`, and tag and
+asset follow from the entry. An edition that changes version or proving run while its entry does
+not **FAILs**: rebuild the bacpac from the new run, or remove the entry. The Foundry's gateProven
+writer removes a stale entry on a restamp.
+
+**Release.** The workflow cannot read the VM, so the Foundry uploads each file to a **draft**
+release on its tag (`tools/bacpac/Publish-BacpacDraft.ps1`; a draft is not public) before the PR
+that registers it merges. On the merge, `release-tags.yml` runs `print-release-tags.ps1 -Execute`:
+it cuts the tags, downloads each draft's asset, compares its sha256 with INDEX.json and only then
+publishes the release. A missing draft or a mismatch fails the run after the tags are pushed and
+leaves the release unpublished; fix the draft and re-run the workflow. A published asset is never
+replaced. The dry run lists each release asset under its tag; `print-release-tags.ps1 -CheckReleases`
+also downloads each draft and compares its sha256, publishing nothing.
+
+**Restoring one.** Verify the sha256 against INDEX.json, then import onto a NEW database (SqlPackage:
+`sqlpackage /Action:Import /SourceFile:<file> /TargetServerName:<server> /TargetDatabaseName:<db>`;
+the Foundry's `tools/bacpac/Import-Bacpac.ps1` does both and maps the host's app-pool login). The
+database only: the host still needs the Swift release Files (`hostFiles` in the base contract), the
+apps of `compat.apps`, a licence, and for an edition file the layer files the edition delivers
+(a deserialize of the same edition adds them).
+
+**First-login state.** A bacpac ships scrubbed: no password on any user, no API key, no database
+user, no command, application or mail log, no MCP configuration, no tracking or audit rows, no
+order secrets or payment tokens. The wizard administrator is `AccessUserID` 2, user name
+`Administrator`. Before the first sign-in set its password in the restored database, with the
+host's `<EncryptPassword>1</EncryptPassword>` (the stock default):
+
+```sql
+UPDATE AccessUser SET AccessUserPassword = '<hash>' WHERE AccessUserID = 2 AND AccessUserUserName = 'Administrator';
+```
+
+where `<hash>` is the lowercase hex SHA-512 of the UTF-8 bytes of `<password>DwSecret` (the
+platform's `Crypto.EncryptPassword`), then recycle the host. An edition's personas
+(`base.contract.json` `sampleData.guaranteedRows`) ship without a password in the same way; set
+theirs the same way or through the Management API `UserSetPassword`.
+
 ## Conventions
 
 - One layer per `layers/<name>/` directory; one edition per `editions/<name>.json`.
@@ -127,5 +193,5 @@ with "tree differs from proving run". Dry-run the script on the merge result bef
   resolved commit SHA, not a tag.
 - Modes are `replace` / `merge` everywhere (never `deploy` / `seed`).
 - Swift support is **rolling latest-only** — one maintained version at a time.
-- Large binary inputs (bacpacs, DBs) are **not** committed.
+- Large binary inputs (bacpacs, DBs) are **not** committed; published databases are release assets (see "Bacpac release assets").
 - Docs describe **current** behavior in the present tense — no fix history or phase numbers.

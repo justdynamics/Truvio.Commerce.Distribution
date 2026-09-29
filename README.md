@@ -57,6 +57,12 @@ carrying the gate run id + Swift version each artifact was proven against) are *
 audit history**, cut **automatically by CI on merge to main** — never a frozen consumption pin.
 Need to reproduce a past state for forensics? Record the resolved commit SHA, not a tag.
 
+A shortcut for a new host: the blank DW10 database and gate-proven edition databases are published as
+bacpac assets on GitHub Releases (tag `databases/blank/<DW version>` and the edition tags), each
+registered with its sha256 and gate run in `layers/INDEX.json` `bacpacs`. They ship scrubbed, with no
+password and no API key; see CONTRIBUTING.md, "Bacpac release assets". Without an entry, the
+deserialize is the path.
+
 ## Policy
 
 **Rolling latest-only Swift support.** This distribution targets the current latest Swift

@@ -412,5 +412,48 @@
       "supersededBy": "none: deleted, no successor (Distribution #87)",
       "note": "Deleted 2026-09-25 (owner ruling guide-layer-delete, Distribution #87). The agent-facing /Baseline guide page tree in area 3 (root + 14 pages, one Replace predicate). Every customer build that delivered swift-demo unpublished it by hand, and each re-delivery republished it. No layer or edition carries the guide any more; the tags layers/feature-baseline-guide/1.0.2 and 1.0.3 stay as history, and a demo that pins an older tag (CIL: 1.0.2) keeps it until it re-pins."
     }
-  ]
+  ],
+  "bacpacs": {
+    "_comment": "Databases published as GitHub Release assets (Foundry #1422, owner ruling vnext-bacpac-artifacts). Written by the Foundry from the proving runs; shape layers/bacpacs.schema.json, rules tools/ci/Bacpac.ps1, how to restore and the first-login state: CONTRIBUTING.md, 'Bacpac release assets'. No entry means the deserialize is the path.",
+    "blank": {
+      "dwVersion": "10.28.12",
+      "tag": "databases/blank/10.28.12",
+      "asset": "blank-dw-10.28.12.bacpac",
+      "sha256": "c393df037a0a9a780ea7230c72417c88ffb6a7719d851f5174b7161536a352fe",
+      "sizeBytes": 117191,
+      "tables": 388,
+      "gateRunId": "20260929-112321",
+      "deliveryRunId": "20260929-111938",
+      "provedWith": "swift-demo 5.3.0 delivered onto the database restored from this file, on foundry-blank-dw10.mydwsite4.com (R1-NET10), gate PASS",
+      "scrubCheck": {
+        "verdict": "CLEAN",
+        "tool": "Foundry tools/bacpac/Test-BacpacScrub.ps1 (Foundry #1431)",
+        "knownSecrets": 20,
+        "secretNamedTables": 14,
+        "secretNamedColumns": 81
+      }
+    },
+    "editions": {
+      "swift-demo": {
+        "editionVersion": "5.3.0",
+        "tag": "editions/swift-demo/5.3.0",
+        "asset": "swift-demo-5.3.0.bacpac",
+        "sha256": "693c8133354c7985c4dd48ff51b16032c53d7b66bc9b67584d1a05a61955fef5",
+        "sizeBytes": 305470,
+        "gateRunId": "20260929-112813",
+        "deliveryRunId": "20260929-111938",
+        "provenRunId": "20260928-233540",
+        "distributionCommit": "9a0074fb6df56091832fd7f9a70944bb638aa33f",
+        "dwVersion": "10.28.12",
+        "startsFrom": "blank-dw-10.28.12.bacpac (sha256 c393df037a0a9a780ea7230c72417c88ffb6a7719d851f5174b7161536a352fe)",
+        "scrubCheck": {
+          "verdict": "CLEAN",
+          "tool": "Foundry tools/bacpac/Test-BacpacScrub.ps1 (Foundry #1431)",
+          "knownSecrets": 20,
+          "secretNamedTables": 14,
+          "secretNamedColumns": 81
+        }
+      }
+    }
+  }
 }
