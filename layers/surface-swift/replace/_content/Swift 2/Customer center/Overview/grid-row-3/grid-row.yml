@@ -23,6 +23,11 @@
   "width": 0
 
 "permissions":
+- "owner": "Account Admin"
+  "ownerType": "group"
+  "ownerId": "1270"
+  "level": "all"
+  "levelValue": 1364
 - "owner": "Customers"
   "ownerType": "group"
   "ownerId": "1325"

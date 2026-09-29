@@ -3,6 +3,11 @@
 @using Dynamicweb.Frontend
 
 @{
+    // Truvio surface-swift (Foundry #1395): an account admin, base permission group 1270, reads the
+    // whole account, every order on the admin's customer number (RetrieveMode=useCustomerNumber).
+    // Every other user keeps the stock self scope, the API default useUserId.
+    var dashboardUser = Dynamicweb.Security.UserManagement.UserContext.Current.User;
+    var retrieveMode = dashboardUser != null && dashboardUser.HasGroup(1270) && !string.IsNullOrEmpty(dashboardUser.CustomerNumber) ? "RetrieveMode=useCustomerNumber&" : string.Empty;
     var widgetTitle = Model?.Item?.GetString("Title") ?? Translate("Spent this month");
     var baseUrl = string.Empty;
     var icon = "/Files/Images/Icons/dollar.svg";
@@ -28,7 +33,7 @@
             <span class="fs-7 fw-semibold text-body text-opacity-75">@(widgetTitle)</span>
         </div>
         <div data-swift-htmx-widget="@(Model?.ID)"
-            hx-get="/dwapi/ecommerce/orders/search?Type=order&PageSize=999&ShopId=@(Pageview?.Area?.EcomShopId)&ToCompletedDate=@(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))"
+            hx-get="/dwapi/ecommerce/orders/search?@(retrieveMode)Type=order&PageSize=999&ShopId=@(Pageview?.Area?.EcomShopId)&ToCompletedDate=@(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))"
             hx-vals='{"FromCompletedDate": "@(FromDate.ToString("yyyy-MM-dd"))"}'
             hx-headers='{"x-dw-template": "/Designs/Swift-v2/Paragraph/Swift-v2_Dashboard_Number/Numbers/MonthlySpent.cshtml", "accept": "text/html", "x-dw-culture": "@(Pageview?.Area?.CultureInfo?.Name)"}'
             hx-vals='{"ShowPricesWithVat": "@(Dynamicweb.Ecommerce.Common.Context.DisplayPricesWithVat)"}'

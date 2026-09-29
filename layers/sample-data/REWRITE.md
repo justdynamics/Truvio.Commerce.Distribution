@@ -38,7 +38,7 @@ Paths are relative to the layer root. Every row file is one row: the file name i
 | Favourite lists | `merge/_sql/EcomCustomerFavoriteLists/1004*.yml`, `merge/_sql/EcomCustomerFavoriteProducts/*.yml` | `Name`, `Description`; products are keys (list id, product id) |
 | Return request (RMA) | `merge/_sql/EcomRmas/PACK-RMA-0001.yml` | customer and delivery name / company / email / country columns |
 | PIM tree | `merge/_sql/EcomShops/TCSHOP-PIM.yml`, `EcomCompletionRules/`, `DynamicStructures/`, `DynamicStructureLevels/`, `repositories/TruvioCommerce/PimWorkspace.query` | display names only (see the PIM trap below) |
-| Storefront copy | `merge/_content/Swift 2/` (`Home`, `About`, `Header _ Footer`, `Navigation`, `Posts`) and `replace/_content/Swift 2/Navigation/` | paragraph `fields` text: `Title`, `Subtitle`, `Text`, button labels, image paths, alt text |
+| Storefront copy | `merge/_content/Swift 2/` (`Home`, `About`, `Header _ Footer`, `Navigation`, `Posts`), `replace/_content/Swift 2/Navigation/` and `replace/_content/Swift 2/Shop/Product Details/` (the PDP Features and FAQ) | paragraph `fields` text: `Title`, `Subtitle`, `Text`, button labels, image paths, alt text |
 | Images and documents on disk | `files/Images/TruvioCommerce/{brand,people,products,scenic}/`, `files/Documents/TruvioCommerce/` | replace the files; keep or rewrite every path that points at them |
 
 Product tiles are generated (`tools/make-tiles.py`, SVG authored, PNG shipped because

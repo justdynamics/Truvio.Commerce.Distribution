@@ -1,5 +1,11 @@
 # Changelog — feature-b2b-comms
 
+## 1.0.7
+
+`repositoryName: Products` is dropped from `layer.json` (Foundry #1409). No layer ships or binds a
+repository of that name, this layer's content binds none, and the layer schema now defines the
+field as descriptive and optional. No other change.
+
 ## 1.0.6
 
 The onboarding flow has a folder (Foundry #1338, owner ruling 2026-09-25). Since 1.0.0 flow row

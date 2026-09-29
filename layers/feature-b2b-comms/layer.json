@@ -1,9 +1,8 @@
 {
   "name": "feature-b2b-comms",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "kind": "feature",
   "swiftVersion": "2.4.0",
-  "repositoryName": "Products",
   "fragmentModes": [
     "merge"
   ],

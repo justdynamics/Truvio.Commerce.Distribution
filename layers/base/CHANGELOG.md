@@ -1,5 +1,21 @@
 ﻿# Changelog — base
 
+## 4.0.1
+
+### The repository claims match what the content binds (Foundry #1409)
+
+`base.contract.json` said every `eCom_ProductCatalog` surface binds the host-supplied
+`ProductsFrontend` repository, the surface-swift Shop PLP included, and `layer.json` declared
+`repositoryName: ProductsFrontend`. The Shop PLP, the product and content search results, the
+favorites list service and the variant selector service bind `TruvioCommerce`, which surface-swift
+ships; a consumer who deployed that folder as `ProductsFrontend` got an empty Shop. The
+`repositories` block keeps its `ProductsFrontend` keys, gains `boundBy` (the seven paragraphs that
+bind it) and `layerShipped` (`TruvioCommerce`, shipped by surface-swift, with the four paragraphs
+that bind it), and its note is corrected. `baseContractVersion` 3.0.0 -> 3.0.1: no guarantee
+changes, the record now matches the content. `repositoryName` is dropped from `layer.json`: the
+base ships no catalogue paragraph, and the layer schema now defines the field as descriptive and
+optional. BASE.md states both repositories.
+
 ## 4.0.0
 
 Major: the base ships the quote order states and a neutral US / B2B market default (owner rulings

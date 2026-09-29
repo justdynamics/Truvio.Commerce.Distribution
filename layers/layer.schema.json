@@ -41,7 +41,7 @@
     "repositoryName": {
       "type": "string",
       "pattern": "^[a-zA-Z0-9._-]+$",
-      "description": "Convention: the storefront search repository the layer's eCom_ProductCatalog surfaces (e.g. the Quick Order validation feed) query. The authority is base.contract.json 'repositories': 'ProductsFrontend' (Products.index + Products.query + Products.facets), which the host's Swift design package supplies - no layer here ships it. A layer declaring a repository the host does not carry renders HTTP 200 with an in-page Lucene 'numHits must be > 0' error, so the sku-validation probe (which exercises this feed) is what catches the mismatch, never an HTTP-status check."
+      "description": "Optional and descriptive only: the repository folder under Files/System/Repositories/ that this layer's own content binds by path (an eCom_ProductCatalog IndexQuery or FacetGroups value). No gate, composer or validator reads it, so it never decides a folder name. A layer whose content binds no repository omits it; a layer whose content binds more than one names the one it ships. The authority is base.contract.json 'repositories': ProductsFrontend is host-supplied by the Swift design package, and layerShipped lists the repositories a layer ships (TruvioCommerce, shipped by surface-swift and bound by its Shop PLP), each with the paragraphs that bind it. A paragraph whose repository the host does not carry renders HTTP 200 with an in-page Lucene 'numHits must be > 0' error or an empty app, so the sku-validation probe and the PLP product-card assert are what catch the mismatch, never an HTTP-status check."
     },
     "csLedger": {
       "type": "array",

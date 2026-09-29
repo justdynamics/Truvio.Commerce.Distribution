@@ -1,5 +1,11 @@
 # Changelog — feature-pricing
 
+## 1.1.4
+
+`repositoryName: Products` is dropped from `layer.json` (Foundry #1409). No layer ships or binds a
+repository of that name, this layer's content binds none, and the layer schema now defines the
+field as descriptive and optional. No other change.
+
 ## 1.1.3
 
 Both `cart-price` probes move onto the brand catalogue, and the tier probe gets a stronger

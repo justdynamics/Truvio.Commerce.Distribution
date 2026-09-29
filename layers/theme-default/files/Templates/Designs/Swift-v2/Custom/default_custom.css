@@ -262,6 +262,17 @@ body > footer a:hover,
   transform: translateY(-2px);
 }
 
+/* A card that holds a dropdown or a modal never lifts (Foundry #1396). A transformed
+ * ancestor becomes the containing block of every position:fixed descendant, so the
+ * Swift customer-centre row menu (a Bootstrap dropdown with Popper strategy "fixed")
+ * is placed against the card and clipped by its overflow:hidden, and it jumps when the
+ * pointer leaves the card. The hover border and shadow stay; only the lift is dropped. */
+[data-dw-colorscheme="light"] .card:has([data-bs-toggle="dropdown"], .modal),
+[data-dw-colorscheme="lightgrey1"] .card:has([data-bs-toggle="dropdown"], .modal),
+[data-dw-colorscheme="lightgrey2"] .card:has([data-bs-toggle="dropdown"], .modal) {
+  transform: none !important;
+}
+
 /* =============================================================================
  * Header menu-bar affordance — folded into theme-default.
  * Turns a flat Swift-v2_MenuRelatedContent megamenu bar into a bar that READS as
@@ -608,6 +619,7 @@ main .dropdown-toggle { border-radius: 999px; }
 /* --- Feature (USP) tiles: subtle lift like a headless value band. --- */
 main [data-dw-itemtype="swift-v2_feature"] { transition: transform .15s ease; }
 main [data-dw-itemtype="swift-v2_feature"]:hover { transform: translateY(-2px); }
+main [data-dw-itemtype="swift-v2_feature"]:has([data-bs-toggle="dropdown"], .modal) { transform: none !important; }
 
 /* =============================================================================
  * Structural template-gap mitigations (disk-overlay). Each mirrors a Part B

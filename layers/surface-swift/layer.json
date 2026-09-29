@@ -1,8 +1,9 @@
 ﻿{
   "name": "surface-swift",
-  "version": "1.16.1",
+  "version": "1.17.0",
   "kind": "surface",
   "swiftVersion": "2.4.0",
+  "repositoryName": "TruvioCommerce",
   "fragmentModes": [
     "replace",
     "merge"
@@ -221,7 +222,7 @@
     {
       "path": "Templates/Designs/Swift-v2/Paragraph/Swift-v2_ProductMedia.cshtml",
       "kind": "template",
-      "why": "The PDP hero gallery. A one-token override of the stock Swift 2.4 render path: \".svg\" added to the supportedImageFormats allowlist, and nothing else. Stock ProductMedia resolves images by asset-category system name (which matched all along) and then discards every asset whose path does not contain one of seven hardcoded raster extensions, so an SVG catalogue renders a carousel with no slides in it while the PLP card, which applies no format filter, renders the same rows. Inert on a raster catalogue: identical output to stock."
+      "why": "The PDP hero gallery. A two-edit override of the stock Swift 2.4 render path: \".svg\" added to the supportedImageFormats allowlist, and a null guard so a product with no image asset and no default image renders an empty media slot instead of a NullReferenceException (Foundry #1407). Stock ProductMedia resolves images by asset-category system name (which matched all along) and then discards every asset whose path does not contain one of seven hardcoded raster extensions, so an SVG catalogue renders a carousel with no slides in it while the PLP card, which applies no format filter, renders the same rows. Inert on a raster catalogue whose products carry images: identical output to stock."
     },
     {
       "path": "Templates/Designs/Swift-v2/eCom/ProductCatalog/RelatedProductsList.cshtml",

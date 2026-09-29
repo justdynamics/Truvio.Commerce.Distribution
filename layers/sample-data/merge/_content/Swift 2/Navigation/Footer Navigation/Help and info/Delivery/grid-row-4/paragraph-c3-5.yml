@@ -1,4 +1,6 @@
-﻿"paragraphUniqueId": a35d1363-95b9-44ec-a7ce-ab08b7a808bd
+﻿"ownership":
+  "mode": "replace"
+"paragraphUniqueId": a35d1363-95b9-44ec-a7ce-ab08b7a808bd
 "sourceParagraphId": 448
 "sortOrder": 5
 "itemType": "Swift-v2_Feature"
@@ -13,6 +15,6 @@
   "Id": "37"
   "ItemInstanceType": ""
   "Sort": 0
-  "Text": "<p><strong>Call us</strong><br>Placeholder - support phone number</p>"
+  "Text": "<p><strong>Call us</strong><br>+1 555 0100, Monday to Friday, 08:00 to 17:00</p>"
   "Title": ""
 "columnId": 3
