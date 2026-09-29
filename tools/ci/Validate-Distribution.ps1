@@ -90,6 +90,13 @@ Checks (all fail-closed; any failure -> exit 1):
                         no layer ships a row id listed in deliveryTarget.retiredIds, as the row or
                         as a reference column holding it (ids the Distribution retired in favour of
                         the wizard's own row, e.g. EcomDetailsGroup 100110 for Images group 1).
+ 17. Bacpac register - (Foundry #1422) layers/INDEX.json `bacpacs` (optional) validates vs
+                        layers/bacpacs.schema.json, and every entry is bound to what it was built
+                        from (tools/ci/Bacpac.ps1): an edition entry's editionVersion equals the
+                        edition release version and its provenRunId equals gateProven.editions.<e>,
+                        every entry's dwVersion equals gateProven.dw.version, and tag and asset name
+                        follow from the entry. An edition that changes version or proving run while
+                        its bacpac entry does not FAILs: rebuild the bacpac or remove the entry.
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -99,7 +106,7 @@ Usage: pwsh tools/ci/Validate-Distribution.ps1  (run from repo root; exits 0 pas
        pwsh tools/ci/Validate-Distribution.ps1 -SpineBaseRef origin/main  (the floor-rule base; CI
        fetches the PR base branch first. '' skips the floor-rule comparison, local runs only)
        pwsh tools/ci/Validate-Distribution.ps1 -RegenerateIndex  (rewrite the layers/INDEX.json
-       `layers` array from the live tree, preserving `retired` + `gateProven` + operator-authored
+       `layers` array from the live tree, preserving `retired` + `gateProven` + `bacpacs` + operator-authored
        entry fields such as `note`; then validate)
 #>
 [CmdletBinding()]
@@ -125,6 +132,7 @@ function Compare-DistVersion {
 . (Join-Path $PSScriptRoot 'Test-ProtectedStrings.ps1')
 . (Join-Path $PSScriptRoot 'ProvenTree.ps1')
 . (Join-Path $PSScriptRoot 'Test-ManifestFiles.ps1')
+. (Join-Path $PSScriptRoot 'Bacpac.ps1')
 
 $layersRoot   = Join-Path $RepoRoot 'layers'
 $editionsRoot = Join-Path $RepoRoot 'editions'
@@ -675,8 +683,9 @@ if ($RegenerateIndex) {
     }
     $doc.layers = $expected
     if ($existing -and $existing.PSObject.Properties.Name -contains 'retired') { $doc.retired = $existing.retired }
+    if ($existing -and $existing.PSObject.Properties.Name -contains 'bacpacs') { $doc.bacpacs = $existing.bacpacs }
     $doc | ConvertTo-Json -Depth 12 | Out-File -Encoding utf8 -LiteralPath $indexPath
-    Write-Host "  [regen] INDEX.json layers[] rewritten from live tree ($($expected.Count) entries; retired + gateProven preserved$(if ($carried.Count) { '; carried operator-authored: ' + ($carried -join ', ') }))" -ForegroundColor Yellow
+    Write-Host "  [regen] INDEX.json layers[] rewritten from live tree ($($expected.Count) entries; retired + gateProven + bacpacs preserved$(if ($carried.Count) { '; carried operator-authored: ' + ($carried -join ', ') }))" -ForegroundColor Yellow
 }
 
 $index = $null
@@ -801,6 +810,19 @@ if ($index) {
                 & $log ($f.level -eq 'PASS') $f.message
             }
         }
+    }
+
+    # 17. Bacpac register (Foundry #1422). Optional block; when present it validates against its
+    #     schema and every entry stays bound to the edition version, gateProven run and DW pin it was
+    #     built from (tools/ci/Bacpac.ps1). A stale entry FAILs: rebuild the bacpac or remove it.
+    if ($index.PSObject.Properties.Name -contains 'bacpacs') {
+        $bpSchema = Join-Path $layersRoot 'bacpacs.schema.json'
+        $bpJson = $index.bacpacs | ConvertTo-Json -Depth 12
+        $bpOk = $false
+        try { $bpOk = Test-Json -Json $bpJson -SchemaFile $bpSchema -ErrorAction Stop } catch { $bpOk = $false; $bpErr = $_.Exception.Message }
+        & $log $bpOk "INDEX.bacpacs validates vs layers/bacpacs.schema.json$(if (-not $bpOk) { ": $bpErr" })"
+        $edNames = @($editionFiles | ForEach-Object { $_.BaseName })
+        foreach ($r in @(Test-BacpacRegister -Index $index -EditionNames $edNames -EditionVersion (Get-EditionReleaseVersion))) { & $log $r.ok $r.message }
     }
 }
 

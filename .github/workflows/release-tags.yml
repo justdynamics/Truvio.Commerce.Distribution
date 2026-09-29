@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # required to push tags
+  contents: write   # required to push tags and to publish releases
 
 concurrency:
   group: release-tags
@@ -38,6 +38,10 @@ jobs:
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Cut + push missing provenance tags
+      # Bacpac release assets (Foundry #1422): after the tags, the script publishes each registered
+      # bacpac's release from the draft the Foundry uploaded, once its sha256 matches layers/INDEX.json.
+      - name: Cut + push missing provenance tags, publish bacpac releases
         shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: ./tools/ci/print-release-tags.ps1 -Execute
