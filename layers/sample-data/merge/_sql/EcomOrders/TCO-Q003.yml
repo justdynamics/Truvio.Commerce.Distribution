@@ -57,7 +57,7 @@
 "OrderDeliveryCell": 
 "OrderTotalPrice": 1440
 "OrderComment": 
-"OrderCustomerComment": 
+"OrderCustomerComment": "Media sets and relation sets for the catalogue relaunch."
 "OrderWeight": 
 "OrderVolume": 
 "OrderPriceWithVAT": 1440
@@ -161,7 +161,6 @@
 "OrderVATCountryCode": 
 "OrderReference": "RFQ-2026-028"
 "OrderShippingDate": 
-"OrderShippingAgent": 
 "OrderPaymentMethodCode": 
 "OrderPaymentMethodTermsCode": "NET30"
 "OrderShippingMethodCode": 
@@ -172,7 +171,6 @@
 "OrderLedgerType": 
 "OrderCustomerAddressId": 
 "OrderDeliveryAddressId": 
-"QuoteRequest": "Media sets and relation sets for the catalogue relaunch."
 "OrderShopName": 
 "OrderPurchaseOrderNumber": 
 "OrderDueDate": 

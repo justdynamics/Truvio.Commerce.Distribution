@@ -1,0 +1,17 @@
+"TaskId": 100540
+"TaskName": "Email Marketing Flow Scheduler"
+"TaskBegin": 1900-01-01T00:00:00.0000000
+"TaskEnd": 2999-12-31T00:00:00.0000000
+"TaskLastRun": 1900-01-01T00:00:00.0000000
+"TaskNextRun": 1900-01-01T00:00:00.0000000
+"TaskEnabled": true
+"TaskType": 0
+"TaskMinute": 5
+"TaskHour": -1
+"TaskDay": -1
+"TaskWday": -1
+"TaskStartFromLastRun": true
+"TaskAddInTypeName": "Dynamicweb.EmailMarketing.Flows.FlowScheduledTaskAddIn, Dynamicweb.EmailMarketing"
+"TaskAddInSettings": ""
+"TaskSort": 0
+"TaskComment": "Layer-owned (feature-b2b-comms): runs the email marketing flows every 5 minutes, the Dealer onboarding flow included. The stock DW10 setup wizard creates no such task and Dynamicweb does not create one for a deserialized flow, so the layer ships it."

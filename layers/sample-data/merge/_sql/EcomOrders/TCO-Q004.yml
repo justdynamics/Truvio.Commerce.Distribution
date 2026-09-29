@@ -57,7 +57,7 @@
 "OrderDeliveryCell": 
 "OrderTotalPrice": 720
 "OrderComment": 
-"OrderCustomerComment": 
+"OrderCustomerComment": "Assortment scope extension for the second warehouse."
 "OrderWeight": 
 "OrderVolume": 
 "OrderPriceWithVAT": 720
@@ -161,7 +161,6 @@
 "OrderVATCountryCode": 
 "OrderReference": "RFQ-2026-026"
 "OrderShippingDate": 
-"OrderShippingAgent": 
 "OrderPaymentMethodCode": 
 "OrderPaymentMethodTermsCode": "NET30"
 "OrderShippingMethodCode": 
@@ -172,7 +171,6 @@
 "OrderLedgerType": 
 "OrderCustomerAddressId": 
 "OrderDeliveryAddressId": 
-"QuoteRequest": "Assortment scope extension for the second warehouse."
 "OrderShopName": 
 "OrderPurchaseOrderNumber": 
 "OrderDueDate": 

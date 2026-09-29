@@ -78,11 +78,18 @@
       "table": "EcomShopGroupRelation"
     },
     {
+      "name": "EcomStockLocationCategory",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomStockLocationCategory",
+      "_why": "Replace, whole table: the two stock location categories the base's own rows point at (EcomStockLocation.StockLocationCategoryId STOCKLOCCAT1 and STOCKLOCCAT2, and the Customer pickup delivery method SHIP5 whose stock-location provider lists the STOCKLOCCAT1 locations). The stock DW10 setup wizard creates the table empty, so a blank DW10 database had pickup locations in a category that does not exist; the base now ships 'Click and collect' and 'Warehouse' on the same ids and identities (4, 5) the Swift-derived databases carried (Foundry #1352)."
+    },
+    {
       "name": "EcomStockLocation",
       "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomStockLocation",
-      "_why": "Replace, whole table: the stock locations are framework configuration, not catalogue. The baseline DB shipped the Swift demo's own rows (1 'BikeShop Copenhagen', 2 'BikeShop Aarhus', 3 'Default stock location'), so every composed edition carried a bike shop's warehouse names. The base now owns the table outright with neutral names on the SAME ids 1-3: the sample-data layer's EcomStockUnit rows and EcomShops.ShopStockLocationID reference those ids, so a rekey would orphan them (Foundry #1303). Replace rather than Merge so a re-deserialize restores the neutral set instead of leaving a previously delivered bike-shop name in place. StockLocationCategoryId is kept exactly as the baseline carries it (1 and 3 -> STOCKLOCCAT1 'Click and collect', 2 -> STOCKLOCCAT2 'Warehouse'): EcomStockLocationCategory exists on every host and stays BASELINE-OWNED - no layer serializes it - and the base's own Click & Collect delivery method needs pickup locations sitting in that category."
+      "_why": "Replace, whole table: the stock locations are framework configuration, not catalogue. The baseline DB shipped the Swift demo's own rows (1 'BikeShop Copenhagen', 2 'BikeShop Aarhus', 3 'Default stock location'), so every composed edition carried a bike shop's warehouse names. The base now owns the table outright with neutral names on the SAME ids 1-3: the sample-data layer's EcomStockUnit rows and EcomShops.ShopStockLocationID reference those ids, so a rekey would orphan them (Foundry #1303). Replace rather than Merge so a re-deserialize restores the neutral set instead of leaving a previously delivered bike-shop name in place. StockLocationCategoryId stays 1 and 3 -> STOCKLOCCAT1 'Click and collect', 2 -> STOCKLOCCAT2 'Warehouse'; both categories ship in the base's own EcomStockLocationCategory predicate, and the base's own Customer pickup delivery method needs pickup locations sitting in that category."
     },
     {
       "name": "EcomStockLocationTranslations",
@@ -90,6 +97,14 @@
       "providerType": "SqlTable",
       "table": "EcomStockLocationTranslations",
       "_why": "Replace, whole table: the display name a Dynamicweb stock location actually renders lives here, not in EcomStockLocation.StockLocationName. The baseline ships 1|ENU 'BikeShop Copenhagen', 2|ENU 'BikeShop Aarhus' (description 'Warehouse west') and 3|ENU 'Default stock location', so correcting only the parent table would have left the bike shop's names on every delivered host (Foundry #1303). Same ids and the same ENU key as the parent predicate, names matched to it, descriptions empty. The table has no identity column, so the composite PK (StockLocationId + LanguageId) is the whole key."
+    },
+    {
+      "name": "EcomProductGroupField",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomProductGroupField",
+      "schemaSync": "EcomGroupFields",
+      "_why": "Replace, whole table: the seven Swift 2 product group fields the Swift 2.4 navigation, group list and group poster templates read (ProductGroupPromotionImage, ProductGroupPromotionDescription, ProductGroupPromotionLink, ProductGroupPromotionLinkLabel, ProductGroupNavigationImage, ProductGroupRelatedContent, SelectedGroup), on Swift's own ids GROUPFIELD1..GROUPFIELD10 so a database that already carries Swift's definitions is updated in place and never gets a second definition of the same system name. DW10 stores each group field as a physical EcomGroups column that the stock setup wizard does not create; schemaSync EcomGroupFields makes the Serializer add every missing column right after these rows are written (Serializer CustomColumnSchemaSync, type from EcomFieldType), so the sample-data EcomGroups rows that carry the seven columns land on a blank DW10 database (Foundry #1352)."
     },
     {
       "name": "Reference category",
@@ -152,7 +167,7 @@
       "mode": "Replace",
       "providerType": "SqlTable",
       "table": "EcomOrderStates",
-      "nameColumn": "OrderStateName"
+      "_why": "Replace, whole table, NO nameColumn: the files are named by the key OrderStateId. Order state names repeat across flows (New is OS1, OS8 and OS11; Draft is OS5 and OS10; Rejected is OS3 and OS7), and Serializer 1.0.6-beta takes a nameColumn value as the row identity, so the same-name documents were merged later-wins and OS7, OS8, OS10 and OS11 never reached a blank DW10 database (measured on foundry-blank-dw10.mydwsite4.com, gate run 20260928-183202; justdynamics/Truvio.Commerce.Serializer#38). Keyed by id, every state is its own row."
     },
     {
       "name": "EcomOrderStateRules",
@@ -165,7 +180,7 @@
       "mode": "Replace",
       "providerType": "SqlTable",
       "table": "AccessUser",
-      "where": "AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')",
+      "where": "AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR','Employees','Find dealers')",
       "nameColumn": "AccessUserName"
     }
   ]

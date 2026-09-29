@@ -1,5 +1,16 @@
 ﻿# Changelog — surface-swift
 
+## 1.18.0
+
+**MINOR. The checkout validation the cart binds ships with the surface (Foundry #1352).**
+
+The Cart, Checkout user and Checkout anonymous paragraphs bind `ValidationGroups` `VALIDATIONGROUP1`
+and `SelectedValidations` `VALIDATION1,VALIDATION2,VALIDATION4`. The stock DW10 setup wizard creates
+the validation tables empty, so on a blank DW10 database the cart named a validation group that did
+not exist. The surface now ships them as whole-table Replace sets: `EcomValidationGroups` (Billing,
+Delivery), `EcomValidationGroupsTranslation` (ENU), `EcomValidations` (customer address, city, zip;
+delivery name, address, city, zip) and `EcomValidationRules` (RequiredRule each), on Swift's ids.
+
 ## 1.17.0
 
 ### ProductMedia renders an empty slot for a product with no image (Foundry #1407)

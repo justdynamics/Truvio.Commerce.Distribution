@@ -1,0 +1,49 @@
+﻿"tableName": "EcomValidationRules"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "ValidationRuleId"
+"identityColumns":
+- "ValidationRuleAutoId"
+"allColumns":
+- "ValidationRuleId"
+- "ValidationRuleValidationId"
+- "ValidationRuleType"
+- "ValidationRuleParameters"
+- "ValidationRuleAutoId"
+"columnDefinitions":
+- "name": "ValidationRuleId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ValidationRuleValidationId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ValidationRuleType"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ValidationRuleParameters"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ValidationRuleAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true

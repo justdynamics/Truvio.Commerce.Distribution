@@ -1,0 +1,6 @@
+﻿"ValidationId": "VALIDATION4"
+"ValidationGroupId": "VALIDATIONGROUP1"
+"ValidationFieldName": "EcomOrderCustomerZip"
+"ValidationUseAndOperator": false
+"ValidationFieldType": "StandardOrderField"
+"ValidationAutoId": 4

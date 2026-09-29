@@ -22,7 +22,6 @@
 - "ProductFieldValidationPattern"
 - "ProductFieldValidationErrorMessage"
 - "ProductFieldIsStandard"
-- "ProductFieldIsStandart"
 - "ProductFieldAllowChangesAcrossLanguages"
 - "ProductFieldAllowChangesAcrossVariants"
 - "ProductFieldRequired"
@@ -31,11 +30,9 @@
 - "ProductFieldValueConversionDecimals"
 - "ProductFieldValueConversionDisplayRule"
 - "ProductFieldShowFieldOnBothMasterAndVariant"
-- "ProductFieldTypeSystemName"
 - "ProductFieldUseAsFacet"
 - "ProductFieldValueConversionGroupId"
 - "ProductFieldEditorConfiguration"
-- "ProductFieldMatrixAttributeGroupId"
 "columnDefinitions":
 - "name": "ProductFieldId"
   "dataType": "nvarchar"
@@ -135,13 +132,6 @@
   "scale": 0
   "isNullable": false
   "isIdentity": false
-- "name": "ProductFieldIsStandart"
-  "dataType": "bit"
-  "maxLength": 0
-  "precision": 0
-  "scale": 0
-  "isNullable": false
-  "isIdentity": false
 - "name": "ProductFieldAllowChangesAcrossLanguages"
   "dataType": "bit"
   "maxLength": 0
@@ -198,13 +188,6 @@
   "scale": 0
   "isNullable": false
   "isIdentity": false
-- "name": "ProductFieldTypeSystemName"
-  "dataType": "nvarchar"
-  "maxLength": 255
-  "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
 - "name": "ProductFieldUseAsFacet"
   "dataType": "bit"
   "maxLength": 0
@@ -220,13 +203,6 @@
   "isNullable": true
   "isIdentity": false
 - "name": "ProductFieldEditorConfiguration"
-  "dataType": "nvarchar"
-  "maxLength": 255
-  "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
-- "name": "ProductFieldMatrixAttributeGroupId"
   "dataType": "nvarchar"
   "maxLength": 255
   "precision": 0

@@ -1,17 +1,26 @@
 {
   "name": "feature-b2b-comms",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "kind": "feature",
   "swiftVersion": "2.4.0",
+  "configRows": [
+    {
+      "table": "ScheduledTask",
+      "where": "TaskName = 'Email Marketing Flow Scheduler'",
+      "description": "Layer-owned Email Marketing Flow Scheduler task, shipped in the replace tree (TaskId 100540, Dynamicweb.EmailMarketing.Flows.FlowScheduledTaskAddIn, every 5 minutes, enabled): the flows only run when this task exists. The stock DW10 setup wizard creates no scheduled task for email marketing and Dynamicweb creates none for a deserialized flow, so a blank DW10 database had the flow and nothing to run it (Foundry #1352)."
+    }
+  ],
   "fragmentModes": [
-    "merge"
+    "merge",
+    "replace"
   ],
   "fragmentTables": [
     "EmailMarketingFlowFolder",
     "EmailMarketingFlow",
     "EmailMarketingFlowStep",
     "EmailMessage",
-    "EmailMarketingEmail"
+    "EmailMarketingEmail",
+    "ScheduledTask"
   ],
   "fragmentContent": [
     {

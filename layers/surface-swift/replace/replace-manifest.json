@@ -473,6 +473,80 @@
         "_sql/UrlPath/1.yml",
         "_sql/UrlPath/_meta.yml"
       ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomValidationGroups",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomValidationGroups",
+      "files": [
+        "_sql/EcomValidationGroups/VALIDATIONGROUP1.yml",
+        "_sql/EcomValidationGroups/VALIDATIONGROUP2.yml",
+        "_sql/EcomValidationGroups/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomValidationGroupsTranslation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomValidationGroupsTranslation",
+      "files": [
+        "_sql/EcomValidationGroupsTranslation/VALIDATIONGROUP1$$ENU.yml",
+        "_sql/EcomValidationGroupsTranslation/VALIDATIONGROUP2$$ENU.yml",
+        "_sql/EcomValidationGroupsTranslation/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomValidations",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomValidations",
+      "files": [
+        "_sql/EcomValidations/VALIDATION1.yml",
+        "_sql/EcomValidations/VALIDATION2.yml",
+        "_sql/EcomValidations/VALIDATION4.yml",
+        "_sql/EcomValidations/VALIDATION5.yml",
+        "_sql/EcomValidations/VALIDATION6.yml",
+        "_sql/EcomValidations/VALIDATION7.yml",
+        "_sql/EcomValidations/VALIDATION8.yml",
+        "_sql/EcomValidations/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomValidationRules",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomValidationRules",
+      "files": [
+        "_sql/EcomValidationRules/VALIDATIONRULE1.yml",
+        "_sql/EcomValidationRules/VALIDATIONRULE2.yml",
+        "_sql/EcomValidationRules/VALIDATIONRULE4.yml",
+        "_sql/EcomValidationRules/VALIDATIONRULE5.yml",
+        "_sql/EcomValidationRules/VALIDATIONRULE6.yml",
+        "_sql/EcomValidationRules/VALIDATIONRULE7.yml",
+        "_sql/EcomValidationRules/VALIDATIONRULE8.yml",
+        "_sql/EcomValidationRules/_meta.yml"
+      ]
     }
   ]
 }

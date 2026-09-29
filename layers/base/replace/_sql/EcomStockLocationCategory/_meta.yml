@@ -1,0 +1,49 @@
+﻿"tableName": "EcomStockLocationCategory"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "StockLocationCategoryId"
+"identityColumns":
+- "StockLocationCategoryAutoId"
+"allColumns":
+- "StockLocationCategoryId"
+- "StockLocationCategoryName"
+- "StockLocationCategoryDescription"
+- "StockLocationCategorySortOrder"
+- "StockLocationCategoryAutoId"
+"columnDefinitions":
+- "name": "StockLocationCategoryId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockLocationCategoryName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockLocationCategoryDescription"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "StockLocationCategorySortOrder"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "StockLocationCategoryAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true

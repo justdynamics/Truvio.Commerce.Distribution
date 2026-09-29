@@ -1,0 +1,5 @@
+﻿"ValidationRuleId": "VALIDATIONRULE8"
+"ValidationRuleValidationId": "VALIDATION8"
+"ValidationRuleType": "Dynamicweb.Ecommerce.Orders.Validation.Rules.RequiredRule"
+"ValidationRuleParameters": "0"
+"ValidationRuleAutoId": 8

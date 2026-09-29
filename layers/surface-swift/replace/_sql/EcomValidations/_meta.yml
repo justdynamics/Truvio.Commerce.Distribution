@@ -1,0 +1,57 @@
+﻿"tableName": "EcomValidations"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "ValidationId"
+"identityColumns":
+- "ValidationAutoId"
+"allColumns":
+- "ValidationId"
+- "ValidationGroupId"
+- "ValidationFieldName"
+- "ValidationUseAndOperator"
+- "ValidationFieldType"
+- "ValidationAutoId"
+"columnDefinitions":
+- "name": "ValidationId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ValidationGroupId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ValidationFieldName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ValidationUseAndOperator"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ValidationFieldType"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ValidationAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true

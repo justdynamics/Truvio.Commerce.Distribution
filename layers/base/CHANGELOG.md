@@ -1,5 +1,38 @@
 ﻿# Changelog — base
 
+## 4.1.0
+
+### Every edition delivers onto a blank DW10 database (Foundry #1352, #1421)
+
+Owner rulings `distribution-self-sufficient-blank-dw10` and `foundry-starting-db-retired`: the
+Distribution is the authority on everything beyond the database the stock DW10 setup wizard
+creates, and no Swift-derived starting database is assumed. Measured on a blank DW10 10.28.12
+database built by the stock wizard on the Foundry VM; what the base now declares that it relied on
+before:
+
+- **`EcomStockLocationCategory`** (whole-table Replace, 2 rows): `STOCKLOCCAT1` "Click and collect"
+  and `STOCKLOCCAT2` "Warehouse", on the ids and identities (4, 5) the base's own stock locations
+  and the Customer pickup method (`SHIP5`) already pointed at. The wizard creates the table empty.
+- **`EcomProductGroupField`** (whole-table Replace, 7 rows, `schemaSync: EcomGroupFields`): the seven
+  Swift 2 product group fields the Swift 2.4 templates read, on Swift's ids `GROUPFIELD1`..`GROUPFIELD10`.
+  The Serializer adds the matching `EcomGroups` columns right after the rows land, so the sample-data
+  groups that carry them deliver onto a blank database.
+- **Permission groups `Employees` (1249) and `Find dealers` (95)** join FILTER-01: surface-swift's
+  Employees and Find dealers pages list them by id.
+- **`EcomOrderStates` keyed by `OrderStateId`**: the predicate drops `nameColumn` and the 18 files
+  are named `OS1.yml` .. `QuoteSent.yml`. Order state names repeat across flows, and Serializer
+  1.0.6-beta takes a `nameColumn` value as the row identity, so `OS7`, `OS8`, `OS10` and `OS11`
+  never reached a blank database (justdynamics/Truvio.Commerce.Serializer#38).
+- **`EcomCurrencies.CurrencyUseCurrencyCodeForFormat` removed** from the 169 rows and `_meta.yml`: the
+  wizard does not create the column (every row carried `false`).
+
+`base.contract.json` gains `deliveryTarget` (the blank wizard database, the Swift release asset the
+host Files come from with its sha256, what the wizard seeds, what the Distribution declares on top,
+and `retiredColumns`), the two permission groups in `guaranteedRows`, `EcomStockLocationCategory` and
+`EcomProductGroupField` in `baseOwnedTables`, and corrected `stockLocations` wording.
+`baseContractVersion` 3.0.1 -> 3.1.0 (additive). The validator gains check 16. BASE.md states the
+delivery target and drops the wording that assumed a starting database.
+
 ## 4.0.1
 
 ### The repository claims match what the content binds (Foundry #1409)

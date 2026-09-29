@@ -57,7 +57,7 @@
 "OrderDeliveryCell": 
 "OrderTotalPrice": 1800
 "OrderComment": 
-"OrderCustomerComment": 
+"OrderCustomerComment": "Discount ladder items for the Q3 promotion."
 "OrderWeight": 
 "OrderVolume": 
 "OrderPriceWithVAT": 1800
@@ -161,7 +161,6 @@
 "OrderVATCountryCode": 
 "OrderReference": "RFQ-2026-021"
 "OrderShippingDate": 
-"OrderShippingAgent": 
 "OrderPaymentMethodCode": 
 "OrderPaymentMethodTermsCode": "NET30"
 "OrderShippingMethodCode": 
@@ -172,7 +171,6 @@
 "OrderLedgerType": 
 "OrderCustomerAddressId": 
 "OrderDeliveryAddressId": 
-"QuoteRequest": "Discount ladder items for the Q3 promotion."
 "OrderShopName": 
 "OrderPurchaseOrderNumber": 
 "OrderDueDate": 

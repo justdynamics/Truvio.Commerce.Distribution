@@ -45,10 +45,11 @@ these rows are **config, not an engine change** (same pattern as sample-data's `
 - **nvarchar PK prefix:** `PACK-B2BC-` (reserved for this layer; none consumed yet).
 - **item-instance `fields.Id`:** `100300+` band (pages/rows/paragraphs).
 - **marketing int-identity PKs:** `100500+` band: flow 100500, steps 100501-100503, `EmailId`
-  100510-100512, `MessageId` 100520-100522, flow folder 100530.
+  100510-100512, `MessageId` 100520-100522, flow folder 100530, scheduled task 100540.
 
 All at/above `intIdentityFloor` (100000). No `_sql/<Table>/<key>` collides with any other layer
-(the five email-marketing tables are new to the Distribution).
+(the five email-marketing tables are new to the Distribution; the `ScheduledTask` row is named
+`Email Marketing Flow Scheduler.yml`, beside feature-subscription-orders' `Place recurring orders.yml`).
 
 ## Deferred to the Foundry demo bootstrap (residue)
 These need state the report did not capture as authoritative raw schema, or host config that is
@@ -62,9 +63,10 @@ not serializable — the swift-demo Foundry gate run (deserialize + recycle) is 
    `recipientGroups` on the source solution (encoding unknown, report operator step); set in the admin UI.
 4. **Delivery provider** — SMTP is host-blocked; demos default to the Save provider (emails to
    disk). A host/global-settings decision, not layer content.
-5. **"Email Marketing Flow Scheduler" scheduled task** — the exact `AddInTypeName` is not
-   determinable from any available source; a wrong value creates a broken task, so it is left as
-   the one remaining operator step (nothing sends until it exists).
+5. **"Email Marketing Flow Scheduler" scheduled task**: shipped since 1.1.0 as
+   `replace/_sql/ScheduledTask/Email Marketing Flow Scheduler.yml` (`TaskId` 100540,
+   `Dynamicweb.EmailMarketing.Flows.FlowScheduledTaskAddIn, Dynamicweb.EmailMarketing`, every 5
+   minutes, enabled). The stock DW10 setup wizard creates no such task, so the layer carries it.
 
 ## Recipient-group mapping note
 The source solution used its own dealer user groups (1346/1354/1355). The Distribution's sample-data ships

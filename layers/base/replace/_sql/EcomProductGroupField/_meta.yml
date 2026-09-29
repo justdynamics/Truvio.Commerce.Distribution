@@ -1,0 +1,129 @@
+﻿"tableName": "EcomProductGroupField"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "ProductGroupFieldId"
+"identityColumns":
+- "ProductGroupFieldAutoId"
+"allColumns":
+- "ProductGroupFieldId"
+- "ProductGroupFieldName"
+- "ProductGroupFieldSystemName"
+- "ProductGroupFieldTemplateName"
+- "ProductGroupFieldTypeId"
+- "ProductGroupFieldTypeName"
+- "ProductGroupFieldLocked"
+- "ProductGroupFieldSort"
+- "ProductGroupFieldListPresentationType"
+- "ProductGroupFieldAutoId"
+- "ProductGroupFieldRequired"
+- "ProductGroupFieldDescription"
+- "ProductGroupFieldValueConversionPreset"
+- "ProductGroupFieldValueConversionDecimals"
+- "ProductGroupFieldValueConversionDisplayRule"
+"columnDefinitions":
+- "name": "ProductGroupFieldId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductGroupFieldName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductGroupFieldSystemName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductGroupFieldTemplateName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductGroupFieldTypeId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductGroupFieldTypeName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductGroupFieldLocked"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductGroupFieldSort"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "ProductGroupFieldListPresentationType"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductGroupFieldAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "ProductGroupFieldRequired"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductGroupFieldDescription"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductGroupFieldValueConversionPreset"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductGroupFieldValueConversionDecimals"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "ProductGroupFieldValueConversionDisplayRule"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

@@ -13,7 +13,6 @@
 - "GroupLanguageId"
 - "GroupName"
 - "GroupNumber"
-- "GroupPageIDRel"
 - "GroupSmallImage"
 - "GroupLargeImage"
 - "GroupDescription"
@@ -83,13 +82,6 @@
   "dataType": "nvarchar"
   "maxLength": 255
   "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
-- "name": "GroupPageIDRel"
-  "dataType": "int"
-  "maxLength": 0
-  "precision": 10
   "scale": 0
   "isNullable": true
   "isIdentity": false

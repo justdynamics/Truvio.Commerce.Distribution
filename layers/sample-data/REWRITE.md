@@ -34,7 +34,7 @@ Paths are relative to the layer root. Every row file is one row: the file name i
 | Related products | `merge/_sql/EcomProductsRelated/`, `EcomProductsRelatedGroups/` | related group names; the pairs themselves are keys |
 | Bundles and BOM slots | `merge/_sql/EcomProductItems/TC-BOM-*.yml` | `ProductItemName`; the slot keys stay |
 | Personas and the B2B account | `merge/_sql/AccessUser/100100.yml` to `100103.yml` | `AccessUserName`, `AccessUserEmail`, `AccessUserCompany`, `AccessUserAddress`, `AccessUserZip`, `AccessUserCity`, `AccessUserCountryCode`, `AccessUserPhone` |
-| Orders, quotes and carts | `merge/_sql/EcomOrders/TCO-*.yml`, `merge/_sql/EcomOrderLines/TCO-*.yml` | customer and delivery name / company / address columns, `OrderReference`, `QuoteRequest`, `OrderDisplayName`; lines: `OrderLineProductNumber`, `OrderLineProductName`, unit and line prices |
+| Orders, quotes and carts | `merge/_sql/EcomOrders/TCO-*.yml`, `merge/_sql/EcomOrderLines/TCO-*.yml` | customer and delivery name / company / address columns, `OrderReference`, `OrderCustomerComment` (the quote request text on `TCO-Q*`), `OrderDisplayName`; lines: `OrderLineProductNumber`, `OrderLineProductName`, unit and line prices |
 | Favourite lists | `merge/_sql/EcomCustomerFavoriteLists/1004*.yml`, `merge/_sql/EcomCustomerFavoriteProducts/*.yml` | `Name`, `Description`; products are keys (list id, product id) |
 | Return request (RMA) | `merge/_sql/EcomRmas/PACK-RMA-0001.yml` | customer and delivery name / company / email / country columns |
 | PIM tree | `merge/_sql/EcomShops/TCSHOP-PIM.yml`, `EcomCompletionRules/`, `DynamicStructures/`, `DynamicStructureLevels/`, `repositories/TruvioCommerce/PimWorkspace.query` | display names only (see the PIM trap below) |

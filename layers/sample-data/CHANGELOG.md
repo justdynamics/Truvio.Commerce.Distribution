@@ -1,5 +1,29 @@
 # Changelog — sample-data
 
+## 6.4.0
+
+**MINOR. The layer delivers onto a blank DW10 database (Foundry #1352).**
+
+Nineteen columns a Swift-derived database carried and the stock DW10 setup wizard does not create
+are gone from every row and `_meta.yml`: `EcomGroups.GroupPageIDRel`; `EcomPrices.PricePeriodId`;
+`EcomProducts.ProductPeriodId`, `ProductPriceMatrixPeriod`, `ProductVariantGroupCounter`, `MyDouble`,
+`MyVolume`, `ProductOptimizedFor`; `EcomProductField.ProductFieldIsStandart`,
+`ProductFieldMatrixAttributeGroupId`, `ProductFieldTypeSystemName`;
+`EcomProductCategoryField.FieldMatrixAttributeGroupId`, `FieldTypeSystemName`;
+`EcomProductCategoryFieldValue.FieldValueReferenceCategoryId`; `EcomDetailsGroup.DetailsGroupCheckinPattern`,
+`DetailsGroupIsPrimaryImageRule`; `EcomVariantGroups.VariantGroupExpandInProductIndex`;
+`EcomOrders.OrderShippingAgent`, `QuoteRequest`. Fourteen are DW9-era, three are unused test
+fields, two are Swift 1 order fields; only the seven quote texts and six DW9 counters carried a value.
+With them a Merge onto a blank database failed strict mode (26 escalated warnings, measured in
+Foundry PR #1351). The quote text moves to `OrderCustomerComment` on `TCO-Q001`..`TCO-Q007`, where
+Swift 2 posts it; Merge fills it on a host where the column is empty.
+
+The seven Swift group field columns on `EcomGroups` stay: base 4.1.0 ships their definitions with
+`schemaSync`, so the columns exist before this layer's Merge. `base.contract.json`
+`deliveryTarget.retiredColumns` lists the nineteen, and the validator fails a layer that ships one;
+the layer config does not carry them as `excludeFields`, because the Serializer rejects an
+`excludeFields` column the host schema lacks (justdynamics/Truvio.Commerce.Serializer#37).
+
 ## 6.3.0
 
 **MINOR. The storefront copy covers the PDP Features and FAQ and the Delivery contact cards

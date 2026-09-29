@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 2,
+  "mode": "replace",
+  "writtenAtUtc": "2026-07-18T00:00:00Z",
+  "complete": true,
+  "excludeFieldsByItemType": {},
+  "excludeXmlElementsByType": {},
+  "entries": [
+    {
+      "providerType": "SqlTable",
+      "table": "ScheduledTask",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/ScheduledTask",
+      "files": [
+        "_sql/ScheduledTask/Email Marketing Flow Scheduler.yml"
+      ]
+    }
+  ]
+}

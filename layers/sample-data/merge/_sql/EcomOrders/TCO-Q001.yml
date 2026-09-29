@@ -57,7 +57,7 @@
 "OrderDeliveryCell": 
 "OrderTotalPrice": 3600
 "OrderComment": 
-"OrderCustomerComment": 
+"OrderCustomerComment": "Volume pricing for the autumn replenishment run: stock items and unit measures."
 "OrderWeight": 
 "OrderVolume": 
 "OrderPriceWithVAT": 3600
@@ -161,7 +161,6 @@
 "OrderVATCountryCode": 
 "OrderReference": "RFQ-2026-031"
 "OrderShippingDate": 
-"OrderShippingAgent": 
 "OrderPaymentMethodCode": 
 "OrderPaymentMethodTermsCode": "NET30"
 "OrderShippingMethodCode": 
@@ -172,7 +171,6 @@
 "OrderLedgerType": 
 "OrderCustomerAddressId": 
 "OrderDeliveryAddressId": 
-"QuoteRequest": "Volume pricing for the autumn replenishment run: stock items and unit measures."
 "OrderShopName": 
 "OrderPurchaseOrderNumber": 
 "OrderDueDate": 

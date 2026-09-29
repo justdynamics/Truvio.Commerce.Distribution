@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "3.0.1",
+  "baseContractVersion": "3.1.0",
   "swiftVersion": "2.4.0",
   "compat": {
     "dw": {
@@ -30,11 +30,166 @@
   "minSerializerVersionDeprecated": "DEPRECATED ALIAS, not a second floor. The one serializer floor is compat.apps[id=Truvio.Commerce.Serializer].min: the Foundry compat leg (Test-CompatFloors) and the dw-demo-base install step read that key and nothing else. This field repeats the same value for prose readers that still name it (dynamicweb/skills dw-users-permissions page-gating.md); tools/ci/Validate-Distribution.ps1 fails when it disagrees with compat.apps, so it can never state a different number. Raise compat.apps and this field together; remove this field once no reader names it.",
   "serializerTaughtSurfaceNote": "WHY THE FLOOR IS 1.0.6-beta (raised 2026-09-22 with sample-data 5.0.1, Distribution #78; it was 1.0.2-beta from base 3.4.2). Layers ship serialized SqlTable rows: sample-data ships its whole demo dataset as merge-mode SqlTable YAML with a per-document ownership header, and feature-rma ships its RMA rows the same way. Four engine facts set the floor. (0) SqlTable tables with NO primary key: 1.0.2-beta and earlier wrote a heap table (DynamicStructures, Languages on DW 10.28) as DELETE FROM plus insert in EVERY mode, so the one Dynamic Workspace row sample-data 5.0.0 merges deleted every workspace the host already had (Foundry #1305, Serializer #21). 1.0.3-beta resolves a match key instead (primary key, then the predicate's declared keyColumns, then a unique index, then all columns), a Merge never deletes, a whole-table truncate happens only under an explicit replaceStrategy truncate, and the run log reports a Deleted count; sample-data declares keyColumns on its DynamicStructures predicate, which an older engine ignores. 1.0.5-beta is the floor rather than 1.0.3-beta because 1.0.3-beta and 1.0.4-beta log a WARNING for every heap entry, declared keyColumns included, and strict mode (the Management API default) fails the whole deserialize on it (Serializer #30, measured by Foundry gate run 20260922-223534); from 1.0.5-beta a declared key is an info line and only inferred keys warn. 1.0.6-beta rather than 1.0.5-beta because 1.0.3-beta to 1.0.5-beta stopped remapping page ids held in option-list fields (Swift's ProductListComponentSelector / ProductComponentSelector ComponentSource and ProductBom ListComponentSource, RadioButtonListEditor with valueField PageId), so a delivered storefront listed zero products (Serializer #32, gate run 20260922-231413); 1.0.6-beta resolves ItemType/Sql option sources with valueField PageId or ParagraphId through the page and paragraph maps whatever the editor. (1) SqlTable NULL round trip: Truvio.Commerce.Serializer 1.0.1-beta and earlier wrote a NULL column as 1900-01-01 / '' / 0 in Merge mode on a row where an empty-string column came before the NULL (Serializer issue #18); 1.0.2-beta is the first release that writes it back as NULL, so an older engine silently corrupts shipped rows. (2) PackageUnzip, the transport an online build uses to move a layer's files, is available from 1.0.1-beta. (3) The ownership header needs 1.0.0-beta or later: a 0.9.x engine fails strict on the unknown ownership column. The engine's taught surface (the skills corpus and the Foundry harness) may run ahead of this floor; the floor rises only when a layer ships something an older engine drops, rejects or corrupts. Raise compat.apps[id=Truvio.Commerce.Serializer].min and minSerializerVersion together, not this note.",
   "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution, base 3.0.0 FRAMEWORK-ONLY). The Swift 2.4 base split moved ALL content (both mode trees) and UrlPath to the surface-swift layer; the base now ships only the framework SQL sets + this contract + SQL-predicate config. Additions (feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Content-scoped contract bits (content areas, langPrefix, navDepth, page anchors, title rules, per-environment Area exclusions, protected Swift item types) moved to layers/surface-swift/surface.contract-notes.json. The gate reads this file for the base-contract collision check.",
+  "deliveryTarget": {
+    "rule": "Every edition delivers onto a BLANK DW10 database: the schema and seed rows the STOCK DW10 setup wizard creates at the pinned platform (compat.dw ring and tfm; proven at layers/INDEX.json gateProven.dw.version), and nothing else. No Swift-derived starting database is assumed or supported. The host carries the Swift release Files named in hostFiles, the apps compat.apps names, and a licence; the FIRST setup step after that is the edition deserialize, and everything the storefront needs beyond the wizard's database comes from the Distribution. A Replace never deletes, so a host that started from a Swift-derived database keeps its extra rows and columns; they are inert and no layer reads them.",
+    "rulings": [
+      {
+        "id": "distribution-self-sufficient-blank-dw10",
+        "date": "2026-09-28",
+        "ref": "justdynamics/Truvio.Commerce.Foundry#1352"
+      },
+      {
+        "id": "foundry-starting-db-retired",
+        "date": "2026-09-28",
+        "ref": "justdynamics/Truvio.Commerce.Foundry#1421"
+      }
+    ],
+    "database": {
+      "source": "stock DW10 setup wizard",
+      "steps": [
+        "Step2: files repository mapped to the host wwwroot/Files",
+        "Step3: database (the schema step; 260 tables at the step, 388 tables and 3856 columns once the host has started, DW 10.28.12)",
+        "Step4: administrator"
+      ],
+      "equivalentRoute": "The Foundry's wizardless bootstrap drives the same wizard forms over HTTP (Foundry docs/BOOTSTRAP.md); measured 2026-09-28 at DW 10.28.12, the database it produces on a Linux container and the one the wizard produces on the Foundry VM carry the same 388 tables and 3856 columns.",
+      "notApplied": "No bacpac, no restored template, no schema patch script, no SQL beyond what the wizard runs."
+    },
+    "hostFiles": {
+      "swiftRelease": {
+        "repo": "dynamicweb/Swift",
+        "tag": "v2.4.0",
+        "asset": "Swift_v2.4.0_Files.zip",
+        "url": "https://github.com/dynamicweb/Swift/releases/download/v2.4.0/Swift_v2.4.0_Files.zip",
+        "sha256": "d4c9892b1b1af07cc0e42b0de1e5d14205fe97b7c1fe783cf2c97e4e2ae9d2dc",
+        "extractTo": "wwwroot (the zip root is Files/)"
+      },
+      "note": "The host's Files tree is the Swift release asset, unmodified: templates, item type definitions, the ProductsFrontend and ProductsBackend repositories (repositories.provisionedByGate false) and GlobalSettings.config with the Swift defaults (Settings/Designs/DoNotIncludeBaseHref True; the variant selector resolves through the friendly product URLs without a base href, measured on the blank host). The layers' files/ trees are delivered on top. tag must equal compat.swift.tag (validator check 16); rolling the Swift version rolls this asset and its sha256 with it."
+    },
+    "wizardSeed": {
+      "note": "Rows the stock wizard creates that the layers build on or upsert over. Nothing here is deleted by a delivery.",
+      "rows": [
+        "Area 1 \"Standard\" (no shop, language or pages): the composition is delivered onto it",
+        "EcomLanguages LANG1 en-US (default); the base adds its 20 languages beside it",
+        "EcomShops SHOP1; the base Replace sets its name and ShopDefault",
+        "EcomOrderFlow 1 and EcomOrderStates OS1-OS4; the base Replace upserts its 4 flows and 18 states",
+        "EcomDetailsGroup 1 \"Images\" (IsSystemGroup) with its LANG1 translation",
+        "EcomFieldType 1-16 (the SQL types the group and product field schema sync reads)",
+        "EcomNumbers counters (59 rows, most at 0)",
+        "AccessUser 1 Angel, 2 Administrator, 3 Admin",
+        "EcomRmaStates 1-7 and EcomRmaEvents"
+      ]
+    },
+    "declaredByDistribution": [
+      {
+        "layer": "base",
+        "tables": [
+          "EcomStockLocationCategory"
+        ],
+        "why": "STOCKLOCCAT1 Click and collect and STOCKLOCCAT2 Warehouse: the base stock locations and the Customer pickup method (SHIP5) point at them; the wizard creates the table empty."
+      },
+      {
+        "layer": "base",
+        "tables": [
+          "EcomProductGroupField"
+        ],
+        "why": "The seven Swift 2 group fields (GROUPFIELD1..GROUPFIELD10) the Swift 2.4 templates read; schemaSync EcomGroupFields creates their EcomGroups columns, which the wizard does not."
+      },
+      {
+        "layer": "base",
+        "tables": [
+          "AccessUser"
+        ],
+        "why": "Permission groups Employees (1249) and Find dealers (95), listed by id by surface-swift's Employees and Find dealers pages."
+      },
+      {
+        "layer": "surface-swift",
+        "tables": [
+          "EcomValidationGroups",
+          "EcomValidationGroupsTranslation",
+          "EcomValidations",
+          "EcomValidationRules"
+        ],
+        "why": "The checkout validation (VALIDATIONGROUP1, VALIDATION1/2/4) the cart paragraphs bind; the wizard creates the tables empty."
+      },
+      {
+        "layer": "feature-b2b-comms",
+        "tables": [
+          "ScheduledTask"
+        ],
+        "why": "The Email Marketing Flow Scheduler task the Dealer onboarding flow needs; the wizard creates none and Dynamicweb creates none for a deserialized flow."
+      }
+    ],
+    "retiredColumns": {
+      "_note": "Columns a Swift-derived database carried that the stock DW10 setup wizard does not create. A row or _meta.yml that carries one fails Serializer strict mode on a blank database ('source column ... not present on target schema'), so no layer ships them (validator check 16). They are not carried as excludeFields in the layer configs: the Serializer rejects an excludeFields column the host schema lacks, which would break its configuration on every blank host (justdynamics/Truvio.Commerce.Serializer#37). Fourteen are DW9-era columns DW10 neither creates nor references, three are unused test fields, two are Swift 1 order fields (Swift 2 posts quote text to OrderCustomerComment), and CurrencyUseCurrencyCodeForFormat is absent from the 10.28.12 wizard schema.",
+      "EcomCurrencies": [
+        "CurrencyUseCurrencyCodeForFormat"
+      ],
+      "EcomDetailsGroup": [
+        "DetailsGroupCheckinPattern",
+        "DetailsGroupIsPrimaryImageRule"
+      ],
+      "EcomGroups": [
+        "GroupPageIDRel"
+      ],
+      "EcomOrders": [
+        "OrderShippingAgent",
+        "QuoteRequest"
+      ],
+      "EcomPrices": [
+        "PricePeriodId"
+      ],
+      "EcomProductCategoryField": [
+        "FieldMatrixAttributeGroupId",
+        "FieldTypeSystemName"
+      ],
+      "EcomProductCategoryFieldValue": [
+        "FieldValueReferenceCategoryId"
+      ],
+      "EcomProductField": [
+        "ProductFieldIsStandart",
+        "ProductFieldMatrixAttributeGroupId",
+        "ProductFieldTypeSystemName"
+      ],
+      "EcomProducts": [
+        "MyDouble",
+        "MyVolume",
+        "ProductOptimizedFor",
+        "ProductPeriodId",
+        "ProductPriceMatrixPeriod",
+        "ProductVariantGroupCounter"
+      ],
+      "EcomVariantGroups": [
+        "VariantGroupExpandInProductIndex"
+      ]
+    },
+    "customColumns": {
+      "EcomGroups": [
+        "ProductGroupNavigationImage",
+        "ProductGroupPromotionDescription",
+        "ProductGroupPromotionImage",
+        "ProductGroupPromotionLink",
+        "ProductGroupPromotionLinkLabel",
+        "ProductGroupRelatedContent",
+        "SelectedGroup"
+      ],
+      "note": "Created on the delivered database by the base EcomProductGroupField entry (schemaSync EcomGroupFields), before any Merge that writes them."
+    },
+    "knownEngineSteps": [
+      {
+        "ref": "justdynamics/Truvio.Commerce.Serializer#35",
+        "effect": "Serializer 1.0.6-beta writes the area before the package's own EcomLanguages rows in one Replace pass, so the first Replace onto a blank database fails strict mode on the ENU language although every row lands; a second, identical Replace passes. Fixed on the engine's main branch, not yet released."
+      },
+      {
+        "ref": "justdynamics/Truvio.Commerce.Serializer#38",
+        "effect": "A nameColumn value is taken as the row identity; tables whose names repeat are keyed by id in this Distribution (EcomOrderStates)."
+      }
+    ]
+  },
   "idRules": {
     "nvarcharPkPrefix": "PACK-<NAME>-",
     "nvarcharPkNote": "When an addition writes rows into a base-owned table whose PK is nvarchar (most Ecom tables - PriceId, PaymentId, ProductId, etc.), it MUST namespace the PK with a PACK-<NAME>- prefix (uppercase layer name). Keeps additions disjoint from the base and from each other.",
     "intIdentityFloor": 100000,
-    "intIdentityNote": "When an addition writes SqlTable rows keyed by an int-identity PK, it MUST reserve an id at or above the 100000 floor. The floor does not reach _content item-instance ids (ItemType_<systemName> rows written through a page or paragraph): ItemType_* Id is a non-identity nvarchar the platform allocates on insert, and the Serializer content provider re-creates item rows by page/paragraph uniqueId, so the target assigns its own id and a YAML fields.Id never lands as the stored id. fields.Id in _content is informational only; no validator checks an item-id floor on _content. The floor applies to the int ids a layer MINTS. The AccessUser ids this contract names in guaranteedRows.permissionGroups are the one explicit exception: the permission groups 1325 / 1270 / 1292 are base-owned and sit below the floor by contract, and the base ships exactly those ids as SqlTable rows. Every identity the sample-data layer mints is above the floor (the B2B account 100100 and the personas 100101 / 100102 / 100103). Any other id below 100000 is out of contract. No validator checks the int-identity floor; it is an authoring rule.",
+    "intIdentityNote": "When an addition writes SqlTable rows keyed by an int-identity PK, it MUST reserve an id at or above the 100000 floor. The floor does not reach _content item-instance ids (ItemType_<systemName> rows written through a page or paragraph): ItemType_* Id is a non-identity nvarchar the platform allocates on insert, and the Serializer content provider re-creates item rows by page/paragraph uniqueId, so the target assigns its own id and a YAML fields.Id never lands as the stored id. fields.Id in _content is informational only; no validator checks an item-id floor on _content. The floor applies to the int ids a layer MINTS. The AccessUser ids this contract names in guaranteedRows.permissionGroups are the one explicit exception: the permission groups 1325 / 1270 / 1292 / 1249 / 95 are base-owned and sit below the floor by contract, and the base ships exactly those ids as SqlTable rows. Every identity the sample-data layer mints is above the floor (the B2B account 100100 and the personas 100101 / 100102 / 100103). Any other id below 100000 is out of contract. No validator checks the int-identity floor; it is an authoring rule.",
     "baseCatalog": "empty",
     "baseCatalogNote": "The base ships ZERO catalog (scaffolding-only, swift/2.3.2): EcomGroups, EcomProducts, EcomGroupProductRelation, EcomVariantGroups, EcomVariantsOptions, EcomVariantOptionsProductRelation, EcomDiscount, EcomDiscountTranslation, EcomPrices carry no base rows. The collision surface for these tables is addition-vs-sample-data-vs-addition, arbitrated statically by the gate.",
     "reservedFixtureKeys": [
@@ -76,6 +231,18 @@
         "accessUserType": 2,
         "id": 1292,
         "name": "CSR"
+      },
+      {
+        "table": "AccessUser",
+        "accessUserType": 2,
+        "id": 1249,
+        "name": "Employees"
+      },
+      {
+        "table": "AccessUser",
+        "accessUserType": 2,
+        "id": 95,
+        "name": "Find dealers"
       }
     ],
     "permissionGroupsNote": "DW 10.26.9 has no AccessUserGroup table - groups ARE AccessUser rows of type 2.",
@@ -626,6 +793,7 @@
       "EcomShops",
       "EcomShopLanguageRelation",
       "EcomShopGroupRelation",
+      "EcomStockLocationCategory",
       "EcomStockLocation",
       "EcomStockLocationTranslations",
       "EcomPayments",
@@ -633,13 +801,14 @@
       "EcomMethodCountryRelation",
       "EcomOrderFlow",
       "EcomOrderStates",
-      "EcomOrderStateRules"
+      "EcomOrderStateRules",
+      "EcomProductGroupField"
     ],
     "replaceFiltered": [
       {
         "table": "AccessUser",
-        "where": "AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR')",
-        "note": "FILTER-01: only the three permission groups are base-owned on AccessUser; the sample-data account and personas (100100-100103) ship in that layer as merge rows, never serialized into the base."
+        "where": "AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR','Employees','Find dealers')",
+        "note": "FILTER-01: only the five permission groups are base-owned on AccessUser: Customers, Account Admin and CSR (the customer-center roles) and Employees and Find dealers (listed by id by surface-swift's Employees and Find dealers pages). The sample-data account and personas (100100-100103) ship in that layer as merge rows, never serialized into the base."
       },
       {
         "table": "EcomProductCategory",
@@ -680,7 +849,8 @@
     ],
     "languageId": "ENU",
     "idsAreStable": true,
-    "note": "Neutral, brand-free stock locations shipped as TWO whole-table Replace sets - EcomStockLocation and its EcomStockLocationTranslations rows, which is where the name Dynamicweb actually renders lives. Both carry the same three ids on ENU. The baseline DB carried the Swift demo's own 'BikeShop Copenhagen' / 'BikeShop Aarhus' rows, so every composed edition delivered a bike shop's warehouse names; 3.6.0 corrects the names in the base instead of per-edition (Foundry #1303). The IDS 1-3 ARE DELIBERATELY KEPT: all 61 EcomStockUnit rows in the sample-data layer carry StockUnitStockLocationId 3, and EcomShops.ShopStockLocationID (SHOP1 ships 0, meaning 'no single location') addresses the same id space, so a rekey above the intIdentityFloor would orphan the stock units and silently change what a shop points at. These three ids are therefore the one further documented exception to idRules.intIdentityFloor, alongside the permission groups: they are base-owned rows the base does not mint but adopts from the platform baseline. An addition that needs its own stock location mints one at or above 100000. StockLocationCategoryId stays as the baseline carries it (1 and 3 STOCKLOCCAT1 'Click and collect', 2 STOCKLOCCAT2 'Warehouse'): EcomStockLocationCategory is BASELINE-OWNED, serialized by no layer, and the base's Customer pickup delivery method (SHIP5, the StockLocationShippingProvider on STOCKLOCCAT1, named Click & Collect before 4.0.0) needs pickup locations in that category."
+    "note": "Neutral, brand-free stock locations shipped as TWO whole-table Replace sets - EcomStockLocation and its EcomStockLocationTranslations rows, which is where the name Dynamicweb actually renders lives. Both carry the same three ids on ENU. The IDS 1-3 ARE DELIBERATELY KEPT: all 61 EcomStockUnit rows in the sample-data layer carry StockUnitStockLocationId 3, and EcomShops.ShopStockLocationID (SHOP1 ships 0, meaning 'no single location') addresses the same id space, so a rekey above the intIdentityFloor would orphan the stock units and silently change what a shop points at. These three ids are therefore the one further documented exception to idRules.intIdentityFloor, alongside the permission groups: they are base-owned rows on the ids a Swift database used, kept so the sample-data stock units bind. An addition that needs its own stock location mints one at or above 100000. StockLocationCategoryId: 1 and 3 STOCKLOCCAT1 'Click and collect', 2 STOCKLOCCAT2 'Warehouse'. Since base 4.1.0 both categories ship in the base's own whole-table EcomStockLocationCategory set (the stock DW10 setup wizard creates the table empty), and the base's Customer pickup delivery method (SHIP5, the StockLocationShippingProvider on STOCKLOCCAT1, named Click & Collect before 4.0.0) needs pickup locations in that category.",
+    "categoryTable": "EcomStockLocationCategory"
   },
   "collisionChecks": [
     {

@@ -17,7 +17,6 @@
 - "VariantGroupAutoId"
 - "VariantGroupFamily"
 - "VariantGroupDisplayType"
-- "VariantGroupExpandInProductIndex"
 "columnDefinitions":
 - "name": "VariantGroupId"
   "dataType": "nvarchar"
@@ -74,11 +73,4 @@
   "precision": 0
   "scale": 0
   "isNullable": true
-  "isIdentity": false
-- "name": "VariantGroupExpandInProductIndex"
-  "dataType": "bit"
-  "maxLength": 0
-  "precision": 0
-  "scale": 0
-  "isNullable": false
   "isIdentity": false

@@ -161,7 +161,6 @@
 "OrderVATCountryCode": 
 "OrderReference": 
 "OrderShippingDate": 
-"OrderShippingAgent": 
 "OrderPaymentMethodCode": 
 "OrderPaymentMethodTermsCode": "NET30"
 "OrderShippingMethodCode": 
@@ -172,7 +171,6 @@
 "OrderLedgerType": 
 "OrderCustomerAddressId": 
 "OrderDeliveryAddressId": 
-"QuoteRequest": 
 "OrderShopName": 
 "OrderPurchaseOrderNumber": 
 "OrderDueDate": 

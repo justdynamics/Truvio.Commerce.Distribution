@@ -171,6 +171,34 @@
       ]
     },
     {
+      "name": "EcomValidationGroups",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomValidationGroups",
+      "_why": "Replace, whole table: the checkout validation the surface's own cart paragraphs bind by id (Shopping cart/Cart, Checkout user, Checkout anonymous: ValidationGroups VALIDATIONGROUP1, SelectedValidations VALIDATION1,VALIDATION2,VALIDATION4). The stock DW10 setup wizard creates these tables empty, so on a blank DW10 database the cart named a validation group that did not exist and validated nothing. The surface ships the Swift ids with neutral English names: Billing (customer address, city, zip required) and Delivery (delivery name, address, city, zip required) (Foundry #1352)."
+    },
+    {
+      "name": "EcomValidationGroupsTranslation",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomValidationGroupsTranslation",
+      "_why": "Replace, whole table: see EcomValidationGroups."
+    },
+    {
+      "name": "EcomValidations",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomValidations",
+      "_why": "Replace, whole table: see EcomValidationGroups."
+    },
+    {
+      "name": "EcomValidationRules",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomValidationRules",
+      "_why": "Replace, whole table: see EcomValidationGroups."
+    },
+    {
       "name": "Homepage",
       "mode": "Merge",
       "providerType": "Content",

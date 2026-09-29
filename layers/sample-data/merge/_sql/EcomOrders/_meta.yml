@@ -174,7 +174,6 @@
 - "OrderVATCountryCode"
 - "OrderReference"
 - "OrderShippingDate"
-- "OrderShippingAgent"
 - "OrderPaymentMethodCode"
 - "OrderPaymentMethodTermsCode"
 - "OrderShippingMethodCode"
@@ -185,7 +184,6 @@
 - "OrderLedgerType"
 - "OrderCustomerAddressId"
 - "OrderDeliveryAddressId"
-- "QuoteRequest"
 - "OrderShopName"
 - "OrderPurchaseOrderNumber"
 - "OrderDueDate"
@@ -1352,13 +1350,6 @@
   "scale": 0
   "isNullable": true
   "isIdentity": false
-- "name": "OrderShippingAgent"
-  "dataType": "nvarchar"
-  "maxLength": 255
-  "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
 - "name": "OrderPaymentMethodCode"
   "dataType": "nvarchar"
   "maxLength": 25
@@ -1426,13 +1417,6 @@
   "dataType": "int"
   "maxLength": 0
   "precision": 10
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
-- "name": "QuoteRequest"
-  "dataType": "nvarchar"
-  "maxLength": 255
-  "precision": 0
   "scale": 0
   "isNullable": true
   "isIdentity": false

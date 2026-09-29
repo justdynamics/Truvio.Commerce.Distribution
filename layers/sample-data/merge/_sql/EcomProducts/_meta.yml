@@ -31,7 +31,6 @@
 - "ProductVatGrpId"
 - "ProductManufacturerId"
 - "ProductActive"
-- "ProductPeriodId"
 - "ProductCreated"
 - "ProductUpdated"
 - "ProductCustomFieldsXml"
@@ -40,14 +39,12 @@
 - "ProductPriceCounter"
 - "ProductVariantCounter"
 - "ProductVariantProdCounter"
-- "ProductVariantGroupCounter"
 - "ProductRelatedCounter"
 - "ProductUnitCounter"
 - "ProductDefaultUnitId"
 - "ProductDefaultVariantComboId"
 - "ProductPriceMatrixUnit"
 - "ProductPriceMatrixVariant"
-- "ProductPriceMatrixPeriod"
 - "ProductPriceMatrixMultiplePrices"
 - "ProductPriceMatrixQuantitySpecification"
 - "ProductMetaTitle"
@@ -55,7 +52,6 @@
 - "ProductMetaDescription"
 - "ProductMetaUrl"
 - "ProductCategoryFieldValues"
-- "ProductOptimizedFor"
 - "ProductCommentcount"
 - "ProductRating"
 - "ProductCost"
@@ -81,8 +77,6 @@
 - "ProductReplacementProductId"
 - "ProductReplacementVariantId"
 - "ProductDiscontinuedAction"
-- "MyVolume"
-- "MyDouble"
 - "ProductExternalId"
 - "ProductExternalVariantId"
 - "ProductUniqueId"
@@ -235,13 +229,6 @@
   "scale": 0
   "isNullable": true
   "isIdentity": false
-- "name": "ProductPeriodId"
-  "dataType": "nvarchar"
-  "maxLength": 50
-  "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
 - "name": "ProductCreated"
   "dataType": "datetime"
   "maxLength": 0
@@ -298,13 +285,6 @@
   "scale": 0
   "isNullable": true
   "isIdentity": false
-- "name": "ProductVariantGroupCounter"
-  "dataType": "int"
-  "maxLength": 0
-  "precision": 10
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
 - "name": "ProductRelatedCounter"
   "dataType": "int"
   "maxLength": 0
@@ -341,13 +321,6 @@
   "isNullable": true
   "isIdentity": false
 - "name": "ProductPriceMatrixVariant"
-  "dataType": "int"
-  "maxLength": 0
-  "precision": 10
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
-- "name": "ProductPriceMatrixPeriod"
   "dataType": "int"
   "maxLength": 0
   "precision": 10
@@ -399,13 +372,6 @@
 - "name": "ProductCategoryFieldValues"
   "dataType": "nvarchar"
   "maxLength": -1
-  "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
-- "name": "ProductOptimizedFor"
-  "dataType": "nvarchar"
-  "maxLength": 255
   "precision": 0
   "scale": 0
   "isNullable": true
@@ -584,20 +550,6 @@
   "precision": 10
   "scale": 0
   "isNullable": false
-  "isIdentity": false
-- "name": "MyVolume"
-  "dataType": "nvarchar"
-  "maxLength": 50
-  "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
-- "name": "MyDouble"
-  "dataType": "float"
-  "maxLength": 0
-  "precision": 53
-  "scale": 0
-  "isNullable": true
   "isIdentity": false
 - "name": "ProductExternalId"
   "dataType": "nvarchar"

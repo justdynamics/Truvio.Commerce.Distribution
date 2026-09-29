@@ -1,0 +1,6 @@
+﻿"ValidationId": "VALIDATION1"
+"ValidationGroupId": "VALIDATIONGROUP1"
+"ValidationFieldName": "EcomOrderCustomerAddress"
+"ValidationUseAndOperator": false
+"ValidationFieldType": "StandardOrderField"
+"ValidationAutoId": 1

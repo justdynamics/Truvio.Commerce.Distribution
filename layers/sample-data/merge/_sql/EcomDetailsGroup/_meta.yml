@@ -16,8 +16,6 @@
 - "DetailsGroupExtensions"
 - "DetailsGroupControlType"
 - "DetailsGroupIsSystemGroup"
-- "DetailsGroupCheckinPattern"
-- "DetailsGroupIsPrimaryImageRule"
 - "DetailsGroupPrimaryImageNameAdditionType"
 - "DetailsGroupPrimaryImageNameAddition"
 - "DetailsGroupSearchPattern"
@@ -78,20 +76,6 @@
   "isNullable": true
   "isIdentity": false
 - "name": "DetailsGroupIsSystemGroup"
-  "dataType": "bit"
-  "maxLength": 0
-  "precision": 0
-  "scale": 0
-  "isNullable": false
-  "isIdentity": false
-- "name": "DetailsGroupCheckinPattern"
-  "dataType": "nvarchar"
-  "maxLength": 255
-  "precision": 0
-  "scale": 0
-  "isNullable": true
-  "isIdentity": false
-- "name": "DetailsGroupIsPrimaryImageRule"
   "dataType": "bit"
   "maxLength": 0
   "precision": 0
