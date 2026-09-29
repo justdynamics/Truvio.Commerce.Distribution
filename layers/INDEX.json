@@ -40,9 +40,35 @@
     "dwPlatformVersion": "10.28.12",
     "editions": {
       "dap-portal": "20260928-234223",
+      "headless-demo": "20260928-224356",
       "swift-demo": "20260928-233540"
     },
     "verdicts": {
+      "20260928-224356": {
+        "overall": "PASS",
+        "mode": "remote",
+        "legs": {
+          "compose": "PASS",
+          "sql-online-routes": "SKIP",
+          "remote-delivery": "SKIP",
+          "persona-credentials": "SKIP",
+          "persona-sign-in": "PASS",
+          "headless-surface-probes": "SKIP",
+          "theme-activation": "SKIP",
+          "compat-floors": "PASS",
+          "placeholder-footprint": "SKIP",
+          "critical-paths": "PASS",
+          "gate-page-list-reachable": "SKIP",
+          "non-page-routes": "PASS",
+          "design-no-theme": "SKIP",
+          "affordance-no-theme": "SKIP",
+          "scheduled-tasks": "SKIP",
+          "pim-structure": "PASS"
+        },
+        "host": "https://foundry-blank-dw10.mydwsite4.com",
+        "delivered": true,
+        "sqlScriptsNotApplied": 3
+      },
       "20260928-233540": {
         "overall": "PASS",
         "mode": "remote",
@@ -116,6 +142,28 @@
           "theme-default": {
             "version": "2.6.1",
             "hash": "sha256:3c16395a33a5abeb47b8b9234730ef88f59a822e57f4600bdbe36258cfa7ee34"
+          }
+        }
+      },
+      "headless-demo": {
+        "runId": "20260928-224356",
+        "deliveryRunId": "20260928-224236",
+        "distributionCommit": "2bd743dcbe44b433e914d5260423be30a4aed216",
+        "checkSet": 3,
+        "harnessCommit": "81e6e508806426e8f53428238dc8bdf335fd14e2",
+        "algorithm": "layer-tree/v1",
+        "provenTree": {
+          "base": {
+            "version": "4.2.0",
+            "hash": "sha256:6fa39f2b6c911aca9f0664dc2acddf8bf1e9eee2fd07c2456150ee06ee9285e6"
+          },
+          "sample-data": {
+            "version": "6.5.0",
+            "hash": "sha256:5e7b0499e997e5523a3413252c259ef296d4907cdd8fa79eb5c55df42c6bb29a"
+          },
+          "surface-headless": {
+            "version": "2.4.0",
+            "hash": "sha256:7c0c14ea50271ac1f8998dd73b6f2730ecf0f80d18239c0e55101b51d8582810"
           }
         }
       },
