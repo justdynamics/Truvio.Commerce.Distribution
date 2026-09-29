@@ -492,7 +492,8 @@ This layer owns the `TC*` family: `TCGRP-*`, `TCDM-*`, `TCSHOP-PIM`, `TCPROD*`, 
 [`base.contract.json`](../base/base.contract.json) `idRules.reservedFixtureKeys` reserves. Its
 int-identity rows sit at reserved ids above the contract's `100000` floor and the serializer
 writes them verbatim with `IDENTITY_INSERT`: `AccessUser` `100100`-`100103`, `EcomDetailsGroup`
-`100110` (`Images`) and `100111` (`Manuals`), `EcomFieldDisplayGroups` `100120` (`tc_specs`),
+`100111` (`Manuals`; the product images are filed under the `Images` group `1` the DW10 setup
+wizard creates, and `100110` is retired), `EcomFieldDisplayGroups` `100120` (`tc_specs`),
 `EcomStockUnit` `100201`-`100261`, `EcomProductField` `100130`-`100135`, and for the PIM
 structure `EcomShops` `100130`, `EcomShopLanguageRelation` `100131`, `EcomGroups`
 `100140`-`100144`, `EcomShopGroupRelation` `100145`-`100149`, `EcomProductCategoryField`

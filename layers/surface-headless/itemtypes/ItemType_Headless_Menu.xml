@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<items>
+  <item category="Headless" name="Headless Menu" systemName="Headless_Menu" description="Navigation menu container. Menu entries are Headless_MenuItem child pages; shape maps to Vercel Commerce Menu[]." icon="None" iconColor="None" image="" includeInUrlIndex="False" pageDefaultView="paragraph" paragraphDefaultModule="" fieldForTitle="Title" title="Headless Menu" inherits="">
+    <fields>
+      <field name="Menu key" systemName="MenuKey" description="Stable identifier the frontend queries (e.g. 'header', 'footer', 'catalog')." type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Title" systemName="Title" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+    </fields>
+    <rules>
+      <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
+      <rule name="Enable item type for" type="Dynamicweb.Content.Items.Activation.StructureRestrictionRule, Dynamicweb" value="Pages" />
+    </rules>
+    <layout>
+      <groups>
+        <group name="General" systemName="General" sectionName="" collapsibleState="None" visibilityField="" visibilityCondition="" visibilityConditionValueType="" visibilityConditionValue="">
+          <fields>
+            <field systemName="MenuKey" />
+            <field systemName="Title" />
+          </fields>
+        </group>
+      </groups>
+    </layout>
+  </item>
+</items>

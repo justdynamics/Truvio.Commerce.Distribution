@@ -1,5 +1,19 @@
 ﻿# Changelog — base
 
+## 4.2.0
+
+### Retired row ids: the Distribution builds on the wizard's Images group
+
+Owner ruling `vnext-images-detail-group` (2026-09-28): product images use the `Images` details
+group the stock DW10 setup wizard creates (id 1); the sample-data layer's own `Images` group
+`100110` is removed. `base.contract.json` (contract 3.2.0) gains `deliveryTarget.retiredIds`, the
+ids the Distribution retired in favour of a wizard row, with the tables that reference them:
+`EcomDetailsGroup` `100110` (referenced by `EcomDetails.DetailsGroupId`), use `1` instead. Validator
+check 16 fails a layer that ships a retired id as the row or as a reference, so a re-serialize from a
+host that still carries `100110` cannot bring it back. The `wizardSeed` entry for group 1 names
+sample-data as its user. A host delivered before the retirement keeps its `100110` row (a Replace
+never deletes); it is inert.
+
 ## 4.1.0
 
 ### Every edition delivers onto a blank DW10 database (Foundry #1352, #1421)

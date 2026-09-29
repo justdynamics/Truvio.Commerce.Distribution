@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-16" standalone="yes"?>
+<items>
+  <item category="Headless" name="Headless Spec Sheet" systemName="Headless_SpecSheet" description="Genuinely presentation-free semantic type (D6-permitted fresh definition). Not a Swift port." icon="None" iconColor="None" image="" includeInUrlIndex="False" pageDefaultView="paragraph" paragraphDefaultModule="" fieldForTitle="Title" title="Headless Spec Sheet" inherits="">
+    <fields>
+      <field name="Title" systemName="Title" description="" type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Product ref" systemName="ProductRef" description="EcomProducts.ProductId this spec sheet annotates." type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.TextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.TextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.TextEditor" name="ShowToggle" value="False" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+      <field name="Spec rows (JSON)" systemName="SpecRowsJson" description="Array of {label,value,unit}; presentation-free key/value spec data." type="System.String, System.Private.CoreLib" excludeFromSearch="False">
+        <editor type="Dynamicweb.Content.Items.Editors.LongTextEditor, Dynamicweb">
+          <editorConfuguration><Parameters addin="Dynamicweb.Content.Items.Editors.LongTextEditor"><Parameter addin="Dynamicweb.Content.Items.Editors.LongTextEditor" name="Rows" value="" /><Parameter addin="Dynamicweb.Content.Items.Editors.LongTextEditor" name="Cols" value="" /></Parameters></editorConfuguration>
+        </editor>
+      </field>
+    </fields>
+    <rules>
+      <rule name="Allow in websites" type="Dynamicweb.Content.Items.Activation.AreaRestrictionRule, Dynamicweb" value="*" />
+      <rule name="Enable item type for" type="Dynamicweb.Content.Items.Activation.StructureRestrictionRule, Dynamicweb" value="Pages" />
+    </rules>
+    <layout>
+      <groups>
+        <group name="General" systemName="General" sectionName="" collapsibleState="None" visibilityField="" visibilityCondition="" visibilityConditionValueType="" visibilityConditionValue="">
+          <fields>
+            <field systemName="Title" />
+            <field systemName="ProductRef" />
+            <field systemName="SpecRowsJson" />
+          </fields>
+        </group>
+      </groups>
+    </layout>
+  </item>
+</items>

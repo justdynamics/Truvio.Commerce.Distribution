@@ -86,7 +86,10 @@ Checks (all fail-closed; any failure -> exit 1):
                         database every edition delivers onto; its hostFiles.swiftRelease tag equals
                         compat.swift.tag and carries asset + sha256; no layer's _sql row or _meta.yml
                         carries a column listed in deliveryTarget.retiredColumns (columns a
-                        Swift-derived database carried that the stock setup wizard does not create).
+                        Swift-derived database carried that the stock setup wizard does not create);
+                        no layer ships a row id listed in deliveryTarget.retiredIds, as the row or
+                        as a reference column holding it (ids the Distribution retired in favour of
+                        the wizard's own row, e.g. EcomDetailsGroup 100110 for Images group 1).
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -541,6 +544,38 @@ if ($contract -and $contract.PSObject.Properties.Name -contains 'deliveryTarget'
     $nRetired = ($retired.Values | ForEach-Object { $_.Count } | Measure-Object -Sum).Sum
     & $log ($hits.Count -eq 0) ("no layer ships a column the stock DW10 setup wizard does not create ($nRetired retired column(s) across " +
         "$($retired.Count) table(s) in base.contract.json deliveryTarget.retiredColumns)$(if ($hits.Count) { ': ' + (($hits | Select-Object -First 20) -join '; ') + $(if ($hits.Count -gt 20) { " ... $($hits.Count) in all" }) })")
+
+    # Retired row ids: the row itself (<table>/<keyColumn>) and every reference column that would
+    # point at it (referencedBy). A retired id coming back re-creates the duplicate the retirement
+    # removed (EcomDetailsGroup 100110 beside the wizard's Images group 1).
+    $idChecks = @()
+    if ($dt.retiredIds) {
+        foreach ($p in $dt.retiredIds.PSObject.Properties) {
+            if ($p.Name -like '_*') { continue }
+            foreach ($r in @($p.Value)) {
+                $idChecks += [pscustomobject]@{ table = $p.Name; column = "$($r.keyColumn)"; id = "$($r.id)"; retired = "$($p.Name) $($r.id)" }
+                foreach ($ref in @($r.referencedBy | Where-Object { $_ })) {
+                    $idChecks += [pscustomobject]@{ table = "$($ref.table)"; column = "$($ref.column)"; id = "$($r.id)"; retired = "$($p.Name) $($r.id)" }
+                }
+            }
+        }
+    }
+    $idHits = @()
+    foreach ($d in $layerDirs) {
+        foreach ($mode in @('replace', 'merge')) {
+            foreach ($c in $idChecks) {
+                $td = Join-Path (Join-Path (Join-Path $d.FullName $mode) '_sql') $c.table
+                if (-not (Test-Path -LiteralPath $td -PathType Container)) { continue }
+                $rx = '(?m)^﻿?"' + [regex]::Escape($c.column) + '":\s*"?' + [regex]::Escape($c.id) + '"?\s*$'
+                foreach ($f in @(Get-ChildItem -LiteralPath $td -File -Filter '*.yml')) {
+                    if ([IO.File]::ReadAllText($f.FullName) -match $rx) { $idHits += "$($d.Name)/$mode/_sql/$($c.table)/$($f.Name): $($c.column) $($c.id) (retired $($c.retired))" }
+                }
+            }
+        }
+    }
+    $nIds = @($idChecks | Where-Object { $_ } | ForEach-Object { $_.retired } | Select-Object -Unique).Count
+    & $log ($idHits.Count -eq 0) ("no layer ships a retired row id or a reference to one ($nIds id(s) in base.contract.json deliveryTarget.retiredIds, " +
+        "$($idChecks.Count) table column(s) checked)$(if ($idHits.Count) { ': ' + (($idHits | Select-Object -First 20) -join '; ') + $(if ($idHits.Count -gt 20) { " ... $($idHits.Count) in all" }) })")
 } else {
     & $log $false 'base contract carries deliveryTarget (the blank DW10 database every edition delivers onto, Foundry #1352)'
 }

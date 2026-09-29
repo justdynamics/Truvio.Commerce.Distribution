@@ -1,6 +1,6 @@
 ﻿{
   "name": "swift-demo",
-  "from": "base@4.1.0",
+  "from": "base@4.2.0",
   "add": [
     "feature-reordering@1.0.4",
     "feature-pricing@1.1.4",
@@ -10,7 +10,7 @@
     "feature-gallery-zoom@1.0.0"
   ],
   "surfaces": [
-    "surface-swift@1.18.0"
+    "surface-swift@1.18.1"
   ],
   "compatAxes": [
     "ring"

@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "3.1.0",
+  "baseContractVersion": "3.2.0",
   "swiftVersion": "2.4.0",
   "compat": {
     "dw": {
@@ -42,6 +42,11 @@
         "id": "foundry-starting-db-retired",
         "date": "2026-09-28",
         "ref": "justdynamics/Truvio.Commerce.Foundry#1421"
+      },
+      {
+        "id": "vnext-images-detail-group",
+        "date": "2026-09-28",
+        "ref": "justdynamics/Truvio.Commerce.Distribution#102"
       }
     ],
     "database": {
@@ -68,11 +73,11 @@
     "wizardSeed": {
       "note": "Rows the stock wizard creates that the layers build on or upsert over. Nothing here is deleted by a delivery.",
       "rows": [
-        "Area 1 \"Standard\" (no shop, language or pages): the composition is delivered onto it",
+        "Area 1 \"Standard\" (no shop, language or pages): a one-area composition is delivered onto it; headless-demo's two areas are created beside it (the Foundry host profile's areaMap)",
         "EcomLanguages LANG1 en-US (default); the base adds its 20 languages beside it",
         "EcomShops SHOP1; the base Replace sets its name and ShopDefault",
         "EcomOrderFlow 1 and EcomOrderStates OS1-OS4; the base Replace upserts its 4 flows and 18 states",
-        "EcomDetailsGroup 1 \"Images\" (IsSystemGroup) with its LANG1 translation",
+        "EcomDetailsGroup 1 \"Images\" (IsSystemGroup) with its LANG1 translation: sample-data files every product image under it (EcomDetails DetailsGroupId 1)",
         "EcomFieldType 1-16 (the SQL types the group and product field schema sync reads)",
         "EcomNumbers counters (59 rows, most at 0)",
         "AccessUser 1 Angel, 2 Administrator, 3 Admin",
@@ -173,6 +178,24 @@
         "SelectedGroup"
       ],
       "note": "Created on the delivered database by the base EcomProductGroupField entry (schemaSync EcomGroupFields), before any Merge that writes them."
+    },
+    "retiredIds": {
+      "_note": "Row ids a layer shipped for something the stock DW10 setup wizard already creates. The Distribution builds on the wizard's row, so no layer may ship the retired id again, as the row or as a reference to it (validator check 16). A Replace never deletes, so a host delivered before the retirement keeps the old row until it is converged; it is inert.",
+      "EcomDetailsGroup": [
+        {
+          "id": 100110,
+          "keyColumn": "EcomDetailsGroupId",
+          "useInstead": 1,
+          "referencedBy": [
+            {
+              "table": "EcomDetails",
+              "column": "DetailsGroupId"
+            }
+          ],
+          "ruling": "vnext-images-detail-group",
+          "why": "A second system group named Images beside the wizard's group 1: the admin listed two. Product images are filed under group 1."
+        }
+      ]
     },
     "knownEngineSteps": [
       {

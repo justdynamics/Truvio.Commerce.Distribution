@@ -35,15 +35,41 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20260928-193919",
+    "gateRunId": "20260928-233540",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.28.12",
     "editions": {
-      "dap-portal": "20260928-194542",
-      "swift-demo": "20260928-193919"
+      "dap-portal": "20260928-234223",
+      "headless-demo": "20260928-224356",
+      "swift-demo": "20260928-233540"
     },
     "verdicts": {
-      "20260928-193919": {
+      "20260928-224356": {
+        "overall": "PASS",
+        "mode": "remote",
+        "legs": {
+          "compose": "PASS",
+          "sql-online-routes": "SKIP",
+          "remote-delivery": "SKIP",
+          "persona-credentials": "SKIP",
+          "persona-sign-in": "PASS",
+          "headless-surface-probes": "SKIP",
+          "theme-activation": "SKIP",
+          "compat-floors": "PASS",
+          "placeholder-footprint": "SKIP",
+          "critical-paths": "PASS",
+          "gate-page-list-reachable": "SKIP",
+          "non-page-routes": "PASS",
+          "design-no-theme": "SKIP",
+          "affordance-no-theme": "SKIP",
+          "scheduled-tasks": "SKIP",
+          "pim-structure": "PASS"
+        },
+        "host": "https://foundry-blank-dw10.mydwsite4.com",
+        "delivered": true,
+        "sqlScriptsNotApplied": 3
+      },
+      "20260928-233540": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -67,7 +93,7 @@
         "delivered": true,
         "sqlScriptsNotApplied": 3
       },
-      "20260928-194542": {
+      "20260928-234223": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -94,20 +120,20 @@
     },
     "proofs": {
       "dap-portal": {
-        "runId": "20260928-194542",
-        "deliveryRunId": "20260928-194104",
-        "distributionCommit": "0252336eda1e399f222c4ae2168f1a4805faf833",
+        "runId": "20260928-234223",
+        "deliveryRunId": "20260928-234000",
+        "distributionCommit": "2bd743dcbe44b433e914d5260423be30a4aed216",
         "checkSet": 3,
-        "harnessCommit": "9f27f482dbfe7a9e9d0269256fd19f51519038aa",
+        "harnessCommit": "81e6e508806426e8f53428238dc8bdf335fd14e2",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
-            "version": "4.1.0",
-            "hash": "sha256:eef6fede97188aff499d586bdd57f6a1743626459f9a9c18bec0443ec937218a"
+            "version": "4.2.0",
+            "hash": "sha256:6fa39f2b6c911aca9f0664dc2acddf8bf1e9eee2fd07c2456150ee06ee9285e6"
           },
           "sample-data": {
-            "version": "6.4.0",
-            "hash": "sha256:3ed4bae06bc2e7e807f0b8c26f2242fdce790e74d81e7be2857a0a031b7ad0ea"
+            "version": "6.5.0",
+            "hash": "sha256:5e7b0499e997e5523a3413252c259ef296d4907cdd8fa79eb5c55df42c6bb29a"
           },
           "surface-dap-portal": {
             "version": "1.1.0",
@@ -119,17 +145,39 @@
           }
         }
       },
-      "swift-demo": {
-        "runId": "20260928-193919",
-        "deliveryRunId": "20260928-193710",
-        "distributionCommit": "0252336eda1e399f222c4ae2168f1a4805faf833",
+      "headless-demo": {
+        "runId": "20260928-224356",
+        "deliveryRunId": "20260928-224236",
+        "distributionCommit": "2bd743dcbe44b433e914d5260423be30a4aed216",
         "checkSet": 3,
-        "harnessCommit": "9f27f482dbfe7a9e9d0269256fd19f51519038aa",
+        "harnessCommit": "81e6e508806426e8f53428238dc8bdf335fd14e2",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
-            "version": "4.1.0",
-            "hash": "sha256:eef6fede97188aff499d586bdd57f6a1743626459f9a9c18bec0443ec937218a"
+            "version": "4.2.0",
+            "hash": "sha256:6fa39f2b6c911aca9f0664dc2acddf8bf1e9eee2fd07c2456150ee06ee9285e6"
+          },
+          "sample-data": {
+            "version": "6.5.0",
+            "hash": "sha256:5e7b0499e997e5523a3413252c259ef296d4907cdd8fa79eb5c55df42c6bb29a"
+          },
+          "surface-headless": {
+            "version": "2.4.0",
+            "hash": "sha256:7c0c14ea50271ac1f8998dd73b6f2730ecf0f80d18239c0e55101b51d8582810"
+          }
+        }
+      },
+      "swift-demo": {
+        "runId": "20260928-233540",
+        "deliveryRunId": "20260928-233248",
+        "distributionCommit": "2bd743dcbe44b433e914d5260423be30a4aed216",
+        "checkSet": 3,
+        "harnessCommit": "81e6e508806426e8f53428238dc8bdf335fd14e2",
+        "algorithm": "layer-tree/v1",
+        "provenTree": {
+          "base": {
+            "version": "4.2.0",
+            "hash": "sha256:6fa39f2b6c911aca9f0664dc2acddf8bf1e9eee2fd07c2456150ee06ee9285e6"
           },
           "feature-b2b-comms": {
             "version": "1.1.0",
@@ -156,12 +204,12 @@
             "hash": "sha256:ef3c90209327e4e8d78e1099a891e52701ba440e37bd40605898f9dd5547afa1"
           },
           "sample-data": {
-            "version": "6.4.0",
-            "hash": "sha256:3ed4bae06bc2e7e807f0b8c26f2242fdce790e74d81e7be2857a0a031b7ad0ea"
+            "version": "6.5.0",
+            "hash": "sha256:5e7b0499e997e5523a3413252c259ef296d4907cdd8fa79eb5c55df42c6bb29a"
           },
           "surface-swift": {
-            "version": "1.18.0",
-            "hash": "sha256:f9f203a814c5fb394abb79daa6d65d30b6a8ab03ae095fea5644da8da1f44721"
+            "version": "1.18.1",
+            "hash": "sha256:15234651bbc0d1f4027c3ffc8898907dac7c45880e9961af09c898adf847f410"
           },
           "theme-default": {
             "version": "2.6.1",
@@ -175,7 +223,7 @@
     {
       "name": "base",
       "kind": "base",
-      "version": "4.1.0",
+      "version": "4.2.0",
       "status": "active"
     },
     {
@@ -217,7 +265,7 @@
     {
       "name": "sample-data",
       "kind": "sample-data",
-      "version": "6.4.0",
+      "version": "6.5.0",
       "status": "active"
     },
     {
@@ -229,13 +277,13 @@
     {
       "name": "surface-headless",
       "kind": "surface",
-      "version": "2.3.3",
+      "version": "2.4.0",
       "status": "active"
     },
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.18.0",
+      "version": "1.18.1",
       "status": "active"
     },
     {

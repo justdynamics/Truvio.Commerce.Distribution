@@ -1,9 +1,9 @@
 ﻿{
   "name": "base-swift",
-  "from": "base@4.1.0",
+  "from": "base@4.2.0",
   "add": [],
   "surfaces": [
-    "surface-swift@1.18.0"
+    "surface-swift@1.18.1"
   ],
   "sampleData": false,
   "themes": [

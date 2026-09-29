@@ -1,6 +1,6 @@
 {
   "name": "surface-headless",
-  "version": "2.3.3",
+  "version": "2.4.0",
   "kind": "surface",
   "swiftVersion": "2.4.0",
   "repositoryName": "Headless",
@@ -15,15 +15,15 @@
     "System/Repositories/README.md"
   ],
   "itemtypes": [
-    "System/Items/Headless_AccountSection.json",
-    "System/Items/Headless_ContentPage.json",
-    "System/Items/Headless_CustomerCenter.json",
-    "System/Items/Headless_DownloadableAsset.json",
-    "System/Items/Headless_Master.json",
-    "System/Items/Headless_Menu.json",
-    "System/Items/Headless_MenuItem.json",
-    "System/Items/Headless_Page.json",
-    "System/Items/Headless_PageProperties.json",
-    "System/Items/Headless_SpecSheet.json"
+    "System/Items/ItemType_Headless_AccountSection.xml",
+    "System/Items/ItemType_Headless_ContentPage.xml",
+    "System/Items/ItemType_Headless_CustomerCenter.xml",
+    "System/Items/ItemType_Headless_DownloadableAsset.xml",
+    "System/Items/ItemType_Headless_Master.xml",
+    "System/Items/ItemType_Headless_Menu.xml",
+    "System/Items/ItemType_Headless_MenuItem.xml",
+    "System/Items/ItemType_Headless_Page.xml",
+    "System/Items/ItemType_Headless_PageProperties.xml",
+    "System/Items/ItemType_Headless_SpecSheet.xml"
   ]
 }

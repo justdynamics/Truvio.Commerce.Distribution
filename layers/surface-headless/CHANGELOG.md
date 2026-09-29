@@ -1,5 +1,23 @@
 # Changelog — surface-headless baseline
 
+## 2.4.0
+
+**MINOR. The item types ship as `ItemType_Headless_*.xml`, the form Dynamicweb loads (owner ruling
+`vnext-headless-demo`).**
+
+The ten definitions under `itemtypes/` were `Headless_*.json`, a format no Dynamicweb 10 host reads:
+delivered through the remote route onto a blank DW 10.28.12 host they registered nothing (no
+`ItemType_Headless_*` table after five recycles), so headless-demo could not be delivered. They are
+now `ItemType_Headless_<Name>.xml`, UTF-8 with BOM, in the shape Dynamicweb writes (the shape of the
+Swift 2.4 item types surface-swift ships): the same systemNames, names, descriptions and fields,
+`Text` as `TextEditor`, `LongText` as `LongTextEditor`, `Checkbox`, `Integer`, `Link` as
+`LinkEditor`, `List` as `DropDownListEditor` with the static options, one `General` layout group,
+the area restriction `*` and the structure restriction `Websites` for `Headless_Master` and
+`Headless_PageProperties`, `Pages` for the rest. `layer.json` `itemtypes[]` names the XML files.
+Measured on the blank host: the ten types load into the metadata at upload and their tables are
+created at the next application start; headless-demo then delivers both areas (Headless,
+Headless Nederlands) with every page carrying its page-property item.
+
 ## 2.3.3
 
 Config predicate-mode migration (LRN-base232-03), mirroring the base + surface-swift

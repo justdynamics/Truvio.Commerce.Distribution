@@ -1,5 +1,20 @@
 ﻿# Changelog — surface-swift
 
+## 1.18.1
+
+**PATCH. Contract notes follow the Images group ruling.** `surface.contract-notes.json` names the
+wizard's `Images` group (id 1) as what satisfies the PDP's `ImageAssets ["Images"]` binding, and
+sample-data's `Manuals` (`100111`) for the documents binding; `100110` is retired
+(`vnext-images-detail-group`). base-swift has Images on a blank database and still lacks Manuals.
+No content change.
+
+The eight links the Replace quarantined on a blank database (`Unresolvable page ID` 224, 232, 151,
+225, 171: the area's privacy and cookie policy links, the Home preset button, the checkout logo and
+terms links) needed no layer change: the pages they name ship in this layer's Merge tree, and the
+Serializer defers such a link and rewrites it at the end of the Merge run when both trees are on
+the host before the first Deserialize. The Foundry's remote delivery route now stages them that way
+(Foundry `feat/remote-route-two-areas`).
+
 ## 1.18.0
 
 **MINOR. The checkout validation the cart binds ships with the surface (Foundry #1352).**
