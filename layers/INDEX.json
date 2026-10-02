@@ -1,12 +1,12 @@
 {
   "_comment": "Machine-readable layer index for Truvio.Commerce.Distribution (P3, RUN-VERSION-CURRENCY T3-01..T3-04). SOURCE OF TRUTH for what layers exist, their kind/version/status, and what a retired name was superseded by. Two consumers read it: (1) tools/ci/Validate-Distribution.ps1 regenerates the `layers` array from the live tree and diffs it clean (drift both directions FAILs), asserts `gateProven` is present, and rejects any edition ref or living-doc mention of a name absent from `layers` (a retired hit names its successor); (2) the DemoAgent currency preflight (Invoke-DemoGate.ps1 `currency` leg) asserts this file parses + carries `gateProven`, and that every layer the demo consumed is live here (a retired hit -> 'retired -> use <supersededBy>'). UPDATE MECHANICS: the `layers` array is regenerated from the tree by Validate-Distribution.ps1 -RegenerateIndex (deterministic); `retired` tombstones are authored on layer retirement (release checklist, FOLLOWUP.md T4-02); `gateProven` is stamped by the FOUNDRY publish flow at release time (tools/harness/Write-IndexGateProven.ps1) from the gate run(s) that proved this main -- never hand-authored as trusted. Consumers 'pin origin/main + assert INDEX.gateProven present' (D-CONSUME a). EDITIONS APPEAR IN gateProven.editions ONLY WHEN PROVEN: the map is a record of gate runs, stamped by Write-IndexGateProven.ps1, so a newly specified edition (base-swift, added in the v5 phase-2 baseline release) is absent from it until its first PASS. An absent edition means unproven, never missing; hand-writing a run id there would fabricate an attestation, which is the one thing this file exists to prevent.",
   "gateProven": {
-    "date": "2026-09-28",
+    "date": "2026-10-01",
     "dw": {
       "ring": "R1-NET10",
       "ringNumber": 1,
       "ringSource": "symlink",
-      "version": "10.28.12"
+      "version": "10.29.6"
     },
     "apps": [
       {
@@ -23,7 +23,7 @@
       },
       {
         "id": "Truvio.Commerce.MCP",
-        "version": "0.6.0-BETA"
+        "version": "0.6.1-BETA"
       },
       {
         "id": "Truvio.Commerce.Serializer",
@@ -35,16 +35,40 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20260928-233540",
+    "gateRunId": "20261001-164649",
     "swiftVersion": "2.4.0",
-    "dwPlatformVersion": "10.28.12",
+    "dwPlatformVersion": "10.29.6",
     "editions": {
-      "dap-portal": "20260928-234223",
-      "headless-demo": "20260928-224356",
-      "swift-demo": "20260928-233540"
+      "dap-portal": "20261001-164200",
+      "headless-demo": "20261001-164429",
+      "swift-demo": "20261001-164649"
     },
     "verdicts": {
-      "20260928-224356": {
+      "20261001-164200": {
+        "overall": "PASS",
+        "mode": "remote",
+        "legs": {
+          "compose": "PASS",
+          "sql-online-routes": "SKIP",
+          "remote-delivery": "SKIP",
+          "persona-credentials": "SKIP",
+          "persona-sign-in": "PASS",
+          "theme-activation": "PASS",
+          "compat-floors": "PASS",
+          "placeholder-footprint": "SKIP",
+          "critical-paths": "PASS",
+          "gate-page-list-reachable": "PASS",
+          "non-page-routes": "PASS",
+          "design-default": "PASS",
+          "affordance-default": "PASS",
+          "scheduled-tasks": "SKIP",
+          "pim-structure": "PASS"
+        },
+        "host": "https://foundry-dap.mydwsite4.com",
+        "delivered": true,
+        "sqlScriptsNotApplied": 3
+      },
+      "20261001-164429": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -69,7 +93,7 @@
         "delivered": true,
         "sqlScriptsNotApplied": 3
       },
-      "20260928-233540": {
+      "20261001-164649": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -92,39 +116,15 @@
         "host": "https://foundry.mydwsite4.com",
         "delivered": true,
         "sqlScriptsNotApplied": 3
-      },
-      "20260928-234223": {
-        "overall": "PASS",
-        "mode": "remote",
-        "legs": {
-          "compose": "PASS",
-          "sql-online-routes": "SKIP",
-          "remote-delivery": "SKIP",
-          "persona-credentials": "SKIP",
-          "persona-sign-in": "PASS",
-          "theme-activation": "PASS",
-          "compat-floors": "PASS",
-          "placeholder-footprint": "SKIP",
-          "critical-paths": "PASS",
-          "gate-page-list-reachable": "PASS",
-          "non-page-routes": "PASS",
-          "design-default": "PASS",
-          "affordance-default": "PASS",
-          "scheduled-tasks": "SKIP",
-          "pim-structure": "PASS"
-        },
-        "host": "https://foundry-dap.mydwsite4.com",
-        "delivered": true,
-        "sqlScriptsNotApplied": 3
       }
     },
     "proofs": {
       "dap-portal": {
-        "runId": "20260928-234223",
-        "deliveryRunId": "20260928-234000",
-        "distributionCommit": "2bd743dcbe44b433e914d5260423be30a4aed216",
-        "checkSet": 3,
-        "harnessCommit": "81e6e508806426e8f53428238dc8bdf335fd14e2",
+        "runId": "20261001-164200",
+        "deliveryRunId": "20261001-164056",
+        "distributionCommit": "221d75f5edb9f6291add5a1b8ed6837cb0b8bfa8",
+        "checkSet": 4,
+        "harnessCommit": "d2c2093ddb1c74838221f1327031bec41afc2891",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -146,11 +146,11 @@
         }
       },
       "headless-demo": {
-        "runId": "20260928-224356",
-        "deliveryRunId": "20260928-224236",
-        "distributionCommit": "2bd743dcbe44b433e914d5260423be30a4aed216",
-        "checkSet": 3,
-        "harnessCommit": "81e6e508806426e8f53428238dc8bdf335fd14e2",
+        "runId": "20261001-164429",
+        "deliveryRunId": "20261001-164330",
+        "distributionCommit": "221d75f5edb9f6291add5a1b8ed6837cb0b8bfa8",
+        "checkSet": 4,
+        "harnessCommit": "d2c2093ddb1c74838221f1327031bec41afc2891",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -168,11 +168,11 @@
         }
       },
       "swift-demo": {
-        "runId": "20260928-233540",
-        "deliveryRunId": "20260928-233248",
-        "distributionCommit": "2bd743dcbe44b433e914d5260423be30a4aed216",
-        "checkSet": 3,
-        "harnessCommit": "81e6e508806426e8f53428238dc8bdf335fd14e2",
+        "runId": "20261001-164649",
+        "deliveryRunId": "20261001-164516",
+        "distributionCommit": "221d75f5edb9f6291add5a1b8ed6837cb0b8bfa8",
+        "checkSet": 4,
+        "harnessCommit": "d2c2093ddb1c74838221f1327031bec41afc2891",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -415,45 +415,6 @@
   ],
   "bacpacs": {
     "_comment": "Databases published as GitHub Release assets (Foundry #1422, owner ruling vnext-bacpac-artifacts). Written by the Foundry from the proving runs; shape layers/bacpacs.schema.json, rules tools/ci/Bacpac.ps1, how to restore and the first-login state: CONTRIBUTING.md, 'Bacpac release assets'. No entry means the deserialize is the path.",
-    "blank": {
-      "dwVersion": "10.28.12",
-      "tag": "databases/blank/10.28.12",
-      "asset": "blank-dw-10.28.12.bacpac",
-      "sha256": "c393df037a0a9a780ea7230c72417c88ffb6a7719d851f5174b7161536a352fe",
-      "sizeBytes": 117191,
-      "tables": 388,
-      "gateRunId": "20260929-112321",
-      "deliveryRunId": "20260929-111938",
-      "provedWith": "swift-demo 5.3.0 delivered onto the database restored from this file, on foundry-blank-dw10.mydwsite4.com (R1-NET10), gate PASS",
-      "scrubCheck": {
-        "verdict": "CLEAN",
-        "tool": "Foundry tools/bacpac/Test-BacpacScrub.ps1 (Foundry #1431)",
-        "knownSecrets": 20,
-        "secretNamedTables": 14,
-        "secretNamedColumns": 81
-      }
-    },
-    "editions": {
-      "swift-demo": {
-        "editionVersion": "5.3.0",
-        "tag": "editions/swift-demo/5.3.0",
-        "asset": "swift-demo-5.3.0.bacpac",
-        "sha256": "693c8133354c7985c4dd48ff51b16032c53d7b66bc9b67584d1a05a61955fef5",
-        "sizeBytes": 305470,
-        "gateRunId": "20260929-112813",
-        "deliveryRunId": "20260929-111938",
-        "provenRunId": "20260928-233540",
-        "distributionCommit": "9a0074fb6df56091832fd7f9a70944bb638aa33f",
-        "dwVersion": "10.28.12",
-        "startsFrom": "blank-dw-10.28.12.bacpac (sha256 c393df037a0a9a780ea7230c72417c88ffb6a7719d851f5174b7161536a352fe)",
-        "scrubCheck": {
-          "verdict": "CLEAN",
-          "tool": "Foundry tools/bacpac/Test-BacpacScrub.ps1 (Foundry #1431)",
-          "knownSecrets": 20,
-          "secretNamedTables": 14,
-          "secretNamedColumns": 81
-        }
-      }
-    }
+    "editions": {}
   }
 }
