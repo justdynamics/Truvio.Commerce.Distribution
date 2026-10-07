@@ -1,0 +1,11 @@
+﻿"NumberId": "18"
+"NumberType": "SHOP"
+"NumberDescription": "Shop"
+"NumberCounter": 1
+"NumberPrefix": "SHOP"
+"NumberPostFix": ""
+"NumberAdd": 1
+"NumberEditable": false
+"NumberAutoId": 18
+"NumberTableName": "EcomShops"
+"NumberColumnName": "ShopID"

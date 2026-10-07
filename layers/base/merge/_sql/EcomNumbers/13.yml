@@ -1,0 +1,11 @@
+﻿"NumberId": "13"
+"NumberType": "VATGRP"
+"NumberDescription": "Moms grupper"
+"NumberCounter": 2
+"NumberPrefix": "VATGRP"
+"NumberPostFix": ""
+"NumberAdd": 1
+"NumberEditable": false
+"NumberAutoId": 13
+"NumberTableName": "EcomVatGroups"
+"NumberColumnName": "VatGroupID"

@@ -1,5 +1,29 @@
 ﻿# Changelog — base
 
+## 4.3.0
+
+### Id counters raised through `raiseOnlyColumns`; Serializer floor 1.0.7-beta (Distribution #103)
+
+Owner ruling `vnext-id-counters` (2026-09-28, Foundry #1322): a deserialize writes ids verbatim and
+never advances a counter, so on a blank DW10 database `EcomNumbers` stayed at the wizard's values
+(`PAY` 0, `SHIP` 0, `OS` 4, `GROUPFIELD` 0) while the base ships `PAY3`, `SHIP13`, `OS14` and
+`GROUPFIELD10`, and the next admin create of an order state, payment or shipping method minted an id
+the base ships and overwrote that row. The base gains its first `merge` tree: one SqlTable entry
+`EcomNumbers` with `raiseOnlyColumns: ["NumberCounter"]` and eight rows, keyed by the wizard's
+`NumberId`, one per counter that mints an id the base ships, at the highest suffix it ships:
+`PAY` 3, `SHIP` 13, `OS` 14, `GROUPFIELD` 10, `COUNTRYREL` 3002 (`CREL`), `VATGRP` 2, `SHOP` 1 and
+`LANG` 1. Each counter is written as the larger of the host's value and the shipped value, so a live
+host whose counter is ahead keeps it; Merge leaves the host's other columns alone. The base config
+gains the matching `EcomNumbers` Merge predicate, filtered to the eight counters; `layer.json`
+declares `fragmentModes` `replace` and `merge` and the `EcomNumbers` fragment table.
+
+`base.contract.json` 3.3.0 (additive): `compat.apps[Truvio.Commerce.Serializer].min` and
+`minSerializerVersion` rise from 1.0.6-beta to 1.0.7-beta, the first release that honours
+`raiseOnlyColumns` (justdynamics/Truvio.Commerce.Serializer#41); an older engine ignores the field and
+would never raise the counters. `versions/spine.json` records the floor with that reason.
+`baseOwnedTables.mergeRaiseOnly` (MERGE-01) and a `deliveryTarget.declaredByDistribution` entry name
+the counters.
+
 ## 4.2.0
 
 ### Retired row ids: the Distribution builds on the wizard's Images group

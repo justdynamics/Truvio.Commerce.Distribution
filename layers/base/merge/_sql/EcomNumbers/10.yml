@@ -1,0 +1,11 @@
+﻿"NumberId": "10"
+"NumberType": "COUNTRYREL"
+"NumberDescription": "Lande relationer"
+"NumberCounter": 3002
+"NumberPrefix": "CREL"
+"NumberPostFix": ""
+"NumberAdd": 1
+"NumberEditable": false
+"NumberAutoId": 10
+"NumberTableName": "EcomMethodCountryRelation"
+"NumberColumnName": "MethodCountryRelCode2"

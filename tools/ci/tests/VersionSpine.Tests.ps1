@@ -128,8 +128,8 @@ Describe 'S3 a floor never exceeds current' {
 Describe 'S4 current never runs ahead of gateProven' {
     It 'FAILs a gateProven-sourced current above gateProven' {
         $s = Copy-Doc $script:spine
-        $s.components.serializer.current.version = '1.0.7-beta'
-        (Get-Fails (Invoke-Spine -Spine $s)).msg -join ' ' | Should -Match "serializer current '1\.0\.7-beta' does not run ahead"
+        $s.components.serializer.current.version = '1.0.8-beta'
+        (Get-Fails (Invoke-Spine -Spine $s)).msg -join ' ' | Should -Match "serializer current '1\.0\.8-beta' does not run ahead"
     }
     It 'PASSes a current that lags gateProven, and says so (a lag is not a defect)' {
         $s = Copy-Doc $script:spine
@@ -174,19 +174,19 @@ Describe 'S6 the floor rule: a floor rises only when a consumer depends on the f
     BeforeAll {
         # The base: the shipped spine with the serializer layers floor one release lower.
         $script:base = Copy-Doc $script:spine
-        (Get-Floor $script:base 'serializer' 'layers').min = '1.0.5-beta'
-        (Get-Floor $script:base 'serializer' 'layers').reason.ref = 'justdynamics/Truvio.Commerce.Serializer#30'
+        (Get-Floor $script:base 'serializer' 'layers').min = '1.0.6-beta'
+        (Get-Floor $script:base 'serializer' 'layers').reason.ref = 'justdynamics/Truvio.Commerce.Serializer#32'
     }
     It 'FAILs a raised floor that keeps the base reason ref' {
         $head = Copy-Doc $script:spine
-        (Get-Floor $head 'serializer' 'layers').reason.ref = 'justdynamics/Truvio.Commerce.Serializer#30'
+        (Get-Floor $head 'serializer' 'layers').reason.ref = 'justdynamics/Truvio.Commerce.Serializer#32'
         $fails = Get-Fails (Invoke-Spine -Spine $head -BaseSpine $script:base -BaseState 'present')
-        $fails.msg -join ' ' | Should -Match 'floor raised without a consumer reason: serializer floor for .layers. \(min 1\.0\.5-beta -> 1\.0\.6-beta\)'
+        $fails.msg -join ' ' | Should -Match 'floor raised without a consumer reason: serializer floor for .layers. \(min 1\.0\.6-beta -> 1\.0\.7-beta\)'
     }
     It 'PASSes the same raise when it cites a new consumer reason' {
         $rows = Invoke-Spine -BaseSpine $script:base -BaseState 'present'
         (Get-Fails $rows).Count | Should -Be 0
-        ($rows | Where-Object { $_.msg -match 'floor rule' }).msg | Should -Match "with a new consumer reason 'justdynamics/Truvio\.Commerce\.Serializer#32'"
+        ($rows | Where-Object { $_.msg -match 'floor rule' }).msg | Should -Match "with a new consumer reason 'justdynamics/Truvio\.Commerce\.Serializer#41'"
     }
     It 'PASSes a floor that is lowered or unchanged with the same ref' {
         $head = Copy-Doc $script:base

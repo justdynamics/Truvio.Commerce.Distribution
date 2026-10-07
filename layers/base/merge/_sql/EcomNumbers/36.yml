@@ -1,0 +1,11 @@
+﻿"NumberId": "36"
+"NumberType": "GROUPFIELD"
+"NumberDescription": "Varegruppe felter"
+"NumberCounter": 10
+"NumberPrefix": "GROUPFIELD"
+"NumberPostFix": ""
+"NumberAdd": 1
+"NumberEditable": false
+"NumberAutoId": 36
+"NumberTableName": "EcomProductGroupField"
+"NumberColumnName": "ProductGroupFieldID"

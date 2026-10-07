@@ -1,0 +1,11 @@
+﻿"NumberId": "19"
+"NumberType": "LANG"
+"NumberDescription": "Sprog"
+"NumberCounter": 1
+"NumberPrefix": "LANG"
+"NumberPostFix": ""
+"NumberAdd": 1
+"NumberEditable": false
+"NumberAutoId": 19
+"NumberTableName": "EcomLanguages"
+"NumberColumnName": "LanguageID"

@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 2,
+  "mode": "merge",
+  "writtenAtUtc": "2026-10-07T00:00:00.0000000Z",
+  "complete": true,
+  "excludeFieldsByItemType": {},
+  "excludeXmlElementsByType": {},
+  "entries": [
+    {
+      "providerType": "SqlTable",
+      "table": "EcomNumbers",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "raiseOnlyColumns": [
+        "NumberCounter"
+      ],
+      "entryId": "sql/EcomNumbers",
+      "files": [
+        "_sql/EcomNumbers/10.yml",
+        "_sql/EcomNumbers/13.yml",
+        "_sql/EcomNumbers/18.yml",
+        "_sql/EcomNumbers/19.yml",
+        "_sql/EcomNumbers/2.yml",
+        "_sql/EcomNumbers/22.yml",
+        "_sql/EcomNumbers/3.yml",
+        "_sql/EcomNumbers/36.yml",
+        "_sql/EcomNumbers/_meta.yml"
+      ]
+    }
+  ]
+}
