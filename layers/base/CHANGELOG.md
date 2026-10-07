@@ -2,7 +2,7 @@
 
 ## 4.3.0
 
-### Id counters raised through `raiseOnlyColumns`; Serializer floor 1.0.7-beta (Distribution #103)
+### Id counters raised through `raiseOnlyColumns`; Serializer floor 1.0.8-beta (Distribution #103)
 
 Owner ruling `vnext-id-counters` (2026-09-28, Foundry #1322): a deserialize writes ids verbatim and
 never advances a counter, so on a blank DW10 database `EcomNumbers` stayed at the wizard's values
@@ -18,9 +18,13 @@ gains the matching `EcomNumbers` Merge predicate, filtered to the eight counters
 declares `fragmentModes` `replace` and `merge` and the `EcomNumbers` fragment table.
 
 `base.contract.json` 3.3.0 (additive): `compat.apps[Truvio.Commerce.Serializer].min` and
-`minSerializerVersion` rise from 1.0.6-beta to 1.0.7-beta, the first release that honours
-`raiseOnlyColumns` (justdynamics/Truvio.Commerce.Serializer#41); an older engine ignores the field and
-would never raise the counters. `versions/spine.json` records the floor with that reason.
+`minSerializerVersion` rise from 1.0.6-beta to 1.0.8-beta. 1.0.7-beta is the first release that
+honours `raiseOnlyColumns` (justdynamics/Truvio.Commerce.Serializer#41); an older engine ignores the
+field and would never raise the counters. 1.0.7-beta itself is not enough: it also fixed Serializer
+#35, which removed the second Replace that had masked Serializer #42, so its first Replace onto the
+wizard's area 1 reverts the area properties it writes (culture `da-DK`, no shop or language binding)
+and the delivered storefront answers 404 on a blank database (Foundry run 20261007-104454, a scratch
+host restored from the blank bacpac). 1.0.8-beta fixes #42 (Serializer #45). `versions/spine.json` records the floor with that reason.
 `baseOwnedTables.mergeRaiseOnly` (MERGE-01) and a `deliveryTarget.declaredByDistribution` entry name
 the counters.
 
