@@ -1,0 +1,97 @@
+﻿"tableName": "EcomNumbers"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "NumberId"
+"identityColumns":
+- "NumberAutoId"
+"allColumns":
+- "NumberId"
+- "NumberType"
+- "NumberDescription"
+- "NumberCounter"
+- "NumberPrefix"
+- "NumberPostFix"
+- "NumberAdd"
+- "NumberEditable"
+- "NumberAutoId"
+- "NumberTableName"
+- "NumberColumnName"
+"columnDefinitions":
+- "name": "NumberId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "NumberType"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "NumberDescription"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "NumberCounter"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "NumberPrefix"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "NumberPostFix"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "NumberAdd"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "NumberEditable"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 1
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "NumberAutoId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "NumberTableName"
+  "dataType": "nvarchar"
+  "maxLength": 128
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "NumberColumnName"
+  "dataType": "nvarchar"
+  "maxLength": 128
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

@@ -106,15 +106,15 @@
     },
     "serializer": {
       "ids": { "package": "Truvio.Commerce.Serializer", "aliases": [] },
-      "current": { "version": "1.0.6-beta", "source": "gateProven" },
+      "current": { "version": "1.0.8-beta", "source": "gateProven" },
       "floors": [
         {
           "consumer": "layers",
-          "min": "1.0.6-beta",
+          "min": "1.0.8-beta",
           "required": true,
           "reason": {
-            "ref": "justdynamics/Truvio.Commerce.Serializer#32",
-            "why": "1.0.3-beta to 1.0.5-beta stopped remapping page ids held in option-list fields (ProductListComponentSelector, ProductComponentSelector, ProductBom), so a delivered surface-swift storefront listed zero products (gate run 20260922-231413). The chain below it: #30 (strict mode failed on declared heap keys before 1.0.5-beta), #21 (a Merge deleted every row of a keyless table before 1.0.3-beta), #18 (NULL round trip before 1.0.2-beta). Raised with sample-data 5.0.1, Distribution #78."
+            "ref": "justdynamics/Truvio.Commerce.Serializer#42",
+            "why": "The base ships its EcomNumbers counters as a Merge SqlTable entry with raiseOnlyColumns [NumberCounter] (base 4.3.0, Distribution #103, ruling vnext-id-counters, Foundry #1322). 1.0.7-beta is the first release that honours the field; an older engine ignores it, so on a blank database the counters stay at the wizard's values and the next admin create of an order state, payment or shipping method overwrites a shipped row (under Replace it would lower a live counter). 1.0.8-beta rather than 1.0.7-beta: 1.0.7-beta also fixed Serializer #35, which removed the second Replace that had masked Serializer #42 on a blank database, so with 1.0.7-beta the first Replace onto the wizard's area 1 reverts the area properties it writes (AreaCulture stays da-DK, no shop or language binding) and the delivered storefront answers 404 (Foundry run 20261007-104454 on a scratch host restored from the blank bacpac); 1.0.8-beta fixes it (Serializer #45). Below it, 1.0.6-beta: 1.0.3-beta to 1.0.5-beta stopped remapping page ids held in option-list fields (ProductListComponentSelector, ProductComponentSelector, ProductBom), so a delivered surface-swift storefront listed zero products (gate run 20260922-231413). The chain below it: #30 (strict mode failed on declared heap keys before 1.0.5-beta), #21 (a Merge deleted every row of a keyless table before 1.0.3-beta), #18 (NULL round trip before 1.0.2-beta). Raised with sample-data 5.0.1, Distribution #78."
           }
         },
         {

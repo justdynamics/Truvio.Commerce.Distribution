@@ -1,6 +1,6 @@
 ﻿{
   "name": "base-swift",
-  "from": "base@4.2.0",
+  "from": "base@4.3.0",
   "add": [],
   "surfaces": [
     "surface-swift@1.18.1"

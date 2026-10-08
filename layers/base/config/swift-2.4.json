@@ -182,6 +182,17 @@
       "table": "AccessUser",
       "where": "AccessUserType = 2 AND AccessUserName IN ('Customers','Account Admin','CSR','Employees','Find dealers')",
       "nameColumn": "AccessUserName"
+    },
+    {
+      "name": "EcomNumbers",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomNumbers",
+      "where": "NumberType IN ('PAY','SHIP','OS','GROUPFIELD','COUNTRYREL','VATGRP','SHOP','LANG')",
+      "raiseOnlyColumns": [
+        "NumberCounter"
+      ],
+      "_why": "Merge, filtered to the eight counters that mint the ids the base ships (PAY3, SHIP13, OS14, GROUPFIELD10, CREL3002, VATGRP2, SHOP1, LANG1), keyed by the wizard's NumberId. raiseOnlyColumns NumberCounter (Serializer 1.0.7-beta, Foundry #1322): a counter is written as the larger of the host value and the shipped value, so a blank database mints the next unused id and a live host whose counter is ahead keeps it. The other columns follow Merge and never overwrite the host's row (Distribution #103)."
     }
   ]
 }

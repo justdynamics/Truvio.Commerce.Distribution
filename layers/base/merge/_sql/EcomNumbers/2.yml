@@ -1,0 +1,11 @@
+﻿"NumberId": "2"
+"NumberType": "SHIP"
+"NumberDescription": "Forsendelser"
+"NumberCounter": 13
+"NumberPrefix": "SHIP"
+"NumberPostFix": ""
+"NumberAdd": 1
+"NumberEditable": false
+"NumberAutoId": 2
+"NumberTableName": "EcomShippings"
+"NumberColumnName": "ShippingID"

@@ -1,0 +1,11 @@
+﻿"NumberId": "22"
+"NumberType": "OS"
+"NumberDescription": "Ordre stadier"
+"NumberCounter": 14
+"NumberPrefix": "OS"
+"NumberPostFix": ""
+"NumberAdd": 1
+"NumberEditable": false
+"NumberAutoId": 22
+"NumberTableName": "EcomOrderStates"
+"NumberColumnName": "OrderStateID"

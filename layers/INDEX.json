@@ -15,7 +15,7 @@
       },
       {
         "id": "Truvio.Commerce.Serializer",
-        "version": "1.0.6-beta"
+        "version": "1.0.8-beta"
       }
     ],
     "swift": {
@@ -23,16 +23,40 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20261007-082002",
+    "gateRunId": "20261007-110846",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.29.7",
     "editions": {
-      "dap-portal": "20261007-081430",
-      "headless-demo": "20261007-081719",
-      "swift-demo": "20261007-082002"
+      "dap-portal": "20261007-111218",
+      "headless-demo": "20261007-111539",
+      "swift-demo": "20261007-110846"
     },
     "verdicts": {
-      "20261007-081430": {
+      "20261007-110846": {
+        "overall": "PASS",
+        "mode": "remote",
+        "legs": {
+          "compose": "PASS",
+          "sql-online-routes": "SKIP",
+          "remote-delivery": "SKIP",
+          "persona-credentials": "SKIP",
+          "persona-sign-in": "PASS",
+          "theme-activation": "PASS",
+          "compat-floors": "PASS",
+          "placeholder-footprint": "PASS",
+          "critical-paths": "PASS",
+          "gate-page-list-reachable": "PASS",
+          "non-page-routes": "PASS",
+          "design-default": "PASS",
+          "affordance-default": "PASS",
+          "scheduled-tasks": "PASS",
+          "pim-structure": "PASS"
+        },
+        "host": "https://foundry.mydwsite4.com",
+        "delivered": true,
+        "sqlScriptsNotApplied": 3
+      },
+      "20261007-111218": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -56,7 +80,7 @@
         "delivered": true,
         "sqlScriptsNotApplied": 3
       },
-      "20261007-081719": {
+      "20261007-111539": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -80,44 +104,20 @@
         "host": "https://foundry-blank-dw10.mydwsite4.com",
         "delivered": true,
         "sqlScriptsNotApplied": 3
-      },
-      "20261007-082002": {
-        "overall": "PASS",
-        "mode": "remote",
-        "legs": {
-          "compose": "PASS",
-          "sql-online-routes": "SKIP",
-          "remote-delivery": "SKIP",
-          "persona-credentials": "SKIP",
-          "persona-sign-in": "PASS",
-          "theme-activation": "PASS",
-          "compat-floors": "PASS",
-          "placeholder-footprint": "PASS",
-          "critical-paths": "PASS",
-          "gate-page-list-reachable": "PASS",
-          "non-page-routes": "PASS",
-          "design-default": "PASS",
-          "affordance-default": "PASS",
-          "scheduled-tasks": "PASS",
-          "pim-structure": "PASS"
-        },
-        "host": "https://foundry.mydwsite4.com",
-        "delivered": true,
-        "sqlScriptsNotApplied": 3
       }
     },
     "proofs": {
       "dap-portal": {
-        "runId": "20261007-081430",
-        "deliveryRunId": "20261007-081110",
-        "distributionCommit": "1b811f3cd0338b86166ab27f3a5e32952f7ebe51",
-        "checkSet": 5,
-        "harnessCommit": "670fde2c987e6edca070710616835bb6d5edaa01",
+        "runId": "20261007-111218",
+        "deliveryRunId": "20261007-111032",
+        "distributionCommit": "abbabb3a22494974849eca6f7cf9504f347996e9",
+        "checkSet": 6,
+        "harnessCommit": "4842dc3512a99116773667dd9b2210ebd50d0029",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
-            "version": "4.2.0",
-            "hash": "sha256:6fa39f2b6c911aca9f0664dc2acddf8bf1e9eee2fd07c2456150ee06ee9285e6"
+            "version": "4.3.0",
+            "hash": "sha256:e4639e77788d9a41f44d7218e3d40f7f29bdd44d92da9f6a2b3cb45a9735ab93"
           },
           "sample-data": {
             "version": "6.5.0",
@@ -134,16 +134,16 @@
         }
       },
       "headless-demo": {
-        "runId": "20261007-081719",
-        "deliveryRunId": "20261007-081557",
-        "distributionCommit": "1b811f3cd0338b86166ab27f3a5e32952f7ebe51",
-        "checkSet": 5,
-        "harnessCommit": "670fde2c987e6edca070710616835bb6d5edaa01",
+        "runId": "20261007-111539",
+        "deliveryRunId": "20261007-111353",
+        "distributionCommit": "abbabb3a22494974849eca6f7cf9504f347996e9",
+        "checkSet": 6,
+        "harnessCommit": "4842dc3512a99116773667dd9b2210ebd50d0029",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
-            "version": "4.2.0",
-            "hash": "sha256:6fa39f2b6c911aca9f0664dc2acddf8bf1e9eee2fd07c2456150ee06ee9285e6"
+            "version": "4.3.0",
+            "hash": "sha256:e4639e77788d9a41f44d7218e3d40f7f29bdd44d92da9f6a2b3cb45a9735ab93"
           },
           "sample-data": {
             "version": "6.5.0",
@@ -156,16 +156,16 @@
         }
       },
       "swift-demo": {
-        "runId": "20261007-082002",
-        "deliveryRunId": "20261007-081807",
-        "distributionCommit": "1b811f3cd0338b86166ab27f3a5e32952f7ebe51",
-        "checkSet": 5,
-        "harnessCommit": "670fde2c987e6edca070710616835bb6d5edaa01",
+        "runId": "20261007-110846",
+        "deliveryRunId": "20261007-110633",
+        "distributionCommit": "abbabb3a22494974849eca6f7cf9504f347996e9",
+        "checkSet": 6,
+        "harnessCommit": "4842dc3512a99116773667dd9b2210ebd50d0029",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
-            "version": "4.2.0",
-            "hash": "sha256:6fa39f2b6c911aca9f0664dc2acddf8bf1e9eee2fd07c2456150ee06ee9285e6"
+            "version": "4.3.0",
+            "hash": "sha256:e4639e77788d9a41f44d7218e3d40f7f29bdd44d92da9f6a2b3cb45a9735ab93"
           },
           "feature-b2b-comms": {
             "version": "1.1.0",
@@ -211,7 +211,7 @@
     {
       "name": "base",
       "kind": "base",
-      "version": "4.2.0",
+      "version": "4.3.0",
       "status": "active"
     },
     {

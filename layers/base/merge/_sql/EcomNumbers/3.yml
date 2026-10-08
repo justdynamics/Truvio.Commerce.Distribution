@@ -1,0 +1,11 @@
+﻿"NumberId": "3"
+"NumberType": "PAY"
+"NumberDescription": "Betalingsmetoder"
+"NumberCounter": 3
+"NumberPrefix": "PAY"
+"NumberPostFix": ""
+"NumberAdd": 1
+"NumberEditable": false
+"NumberAutoId": 3
+"NumberTableName": "EcomPayments"
+"NumberColumnName": "PaymentID"

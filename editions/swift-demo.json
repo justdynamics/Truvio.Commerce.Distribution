@@ -1,6 +1,6 @@
 ﻿{
   "name": "swift-demo",
-  "from": "base@4.2.0",
+  "from": "base@4.3.0",
   "add": [
     "feature-reordering@1.0.4",
     "feature-pricing@1.1.4",
