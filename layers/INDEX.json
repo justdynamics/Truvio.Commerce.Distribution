@@ -1,7 +1,7 @@
 {
   "_comment": "Machine-readable layer index for Truvio.Commerce.Distribution (P3, RUN-VERSION-CURRENCY T3-01..T3-04). SOURCE OF TRUTH for what layers exist, their kind/version/status, and what a retired name was superseded by. Two consumers read it: (1) tools/ci/Validate-Distribution.ps1 regenerates the `layers` array from the live tree and diffs it clean (drift both directions FAILs), asserts `gateProven` is present, and rejects any edition ref or living-doc mention of a name absent from `layers` (a retired hit names its successor); (2) the DemoAgent currency preflight (Invoke-DemoGate.ps1 `currency` leg) asserts this file parses + carries `gateProven`, and that every layer the demo consumed is live here (a retired hit -> 'retired -> use <supersededBy>'). UPDATE MECHANICS: the `layers` array is regenerated from the tree by Validate-Distribution.ps1 -RegenerateIndex (deterministic); `retired` tombstones are authored on layer retirement (release checklist, FOLLOWUP.md T4-02); `gateProven` is stamped by the FOUNDRY publish flow at release time (tools/harness/Write-IndexGateProven.ps1) from the gate run(s) that proved this main -- never hand-authored as trusted. Consumers 'pin origin/main + assert INDEX.gateProven present' (D-CONSUME a). EDITIONS APPEAR IN gateProven.editions ONLY WHEN PROVEN: the map is a record of gate runs, stamped by Write-IndexGateProven.ps1, so a newly specified edition (base-swift, added in the v5 phase-2 baseline release) is absent from it until its first PASS. An absent edition means unproven, never missing; hand-writing a run id there would fabricate an attestation, which is the one thing this file exists to prevent.",
   "gateProven": {
-    "date": "2026-10-07",
+    "date": "2026-10-11",
     "dw": {
       "ring": "R1-NET10",
       "ringNumber": 1,
@@ -23,16 +23,16 @@
     },
     "skills": "v5.2.0",
     "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
-    "gateRunId": "20261007-110846",
+    "gateRunId": "20261011-210744",
     "swiftVersion": "2.4.0",
     "dwPlatformVersion": "10.29.7",
     "editions": {
-      "dap-portal": "20261007-111218",
-      "headless-demo": "20261007-111539",
-      "swift-demo": "20261007-110846"
+      "dap-portal": "20261011-211243",
+      "headless-demo": "20261011-212054",
+      "swift-demo": "20261011-210744"
     },
     "verdicts": {
-      "20261007-110846": {
+      "20261011-210744": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -56,7 +56,7 @@
         "delivered": true,
         "sqlScriptsNotApplied": 3
       },
-      "20261007-111218": {
+      "20261011-211243": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -80,7 +80,7 @@
         "delivered": true,
         "sqlScriptsNotApplied": 3
       },
-      "20261007-111539": {
+      "20261011-212054": {
         "overall": "PASS",
         "mode": "remote",
         "legs": {
@@ -108,11 +108,11 @@
     },
     "proofs": {
       "dap-portal": {
-        "runId": "20261007-111218",
-        "deliveryRunId": "20261007-111032",
-        "distributionCommit": "abbabb3a22494974849eca6f7cf9504f347996e9",
+        "runId": "20261011-211243",
+        "deliveryRunId": "20261011-211110",
+        "distributionCommit": "622d76a31ed624f88d4a933b5abfca729812018b",
         "checkSet": 6,
-        "harnessCommit": "4842dc3512a99116773667dd9b2210ebd50d0029",
+        "harnessCommit": "b946a41c7d87a08c6ecc7506d21be06904bdb162",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -134,11 +134,11 @@
         }
       },
       "headless-demo": {
-        "runId": "20261007-111539",
-        "deliveryRunId": "20261007-111353",
-        "distributionCommit": "abbabb3a22494974849eca6f7cf9504f347996e9",
+        "runId": "20261011-212054",
+        "deliveryRunId": "20261011-211535",
+        "distributionCommit": "622d76a31ed624f88d4a933b5abfca729812018b",
         "checkSet": 6,
-        "harnessCommit": "4842dc3512a99116773667dd9b2210ebd50d0029",
+        "harnessCommit": "b946a41c7d87a08c6ecc7506d21be06904bdb162",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -156,11 +156,11 @@
         }
       },
       "swift-demo": {
-        "runId": "20261007-110846",
-        "deliveryRunId": "20261007-110633",
-        "distributionCommit": "abbabb3a22494974849eca6f7cf9504f347996e9",
+        "runId": "20261011-210744",
+        "deliveryRunId": "20261011-210603",
+        "distributionCommit": "622d76a31ed624f88d4a933b5abfca729812018b",
         "checkSet": 6,
-        "harnessCommit": "4842dc3512a99116773667dd9b2210ebd50d0029",
+        "harnessCommit": "b946a41c7d87a08c6ecc7506d21be06904bdb162",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -196,8 +196,8 @@
             "hash": "sha256:5e7b0499e997e5523a3413252c259ef296d4907cdd8fa79eb5c55df42c6bb29a"
           },
           "surface-swift": {
-            "version": "1.18.1",
-            "hash": "sha256:15234651bbc0d1f4027c3ffc8898907dac7c45880e9961af09c898adf847f410"
+            "version": "1.18.2",
+            "hash": "sha256:231233f1fff988d904c4f8e50b7ace56eedd77aec29c6073120e7d09079ccb07"
           },
           "theme-default": {
             "version": "2.6.1",
