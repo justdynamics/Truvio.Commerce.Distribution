@@ -10,7 +10,7 @@
     "feature-gallery-zoom@1.0.0"
   ],
   "surfaces": [
-    "surface-swift@1.18.1"
+    "surface-swift@1.18.2"
   ],
   "compatAxes": [
     "ring"
