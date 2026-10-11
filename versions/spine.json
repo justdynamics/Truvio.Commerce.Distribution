@@ -10,7 +10,7 @@
   "components": {
     "dw": {
       "ids": { "package": "Dynamicweb.Suite", "aliases": ["Dynamicweb.Core"] },
-      "current": { "version": "10.28.12", "ring": "R1", "tfm": "net10.0", "source": "gateProven" },
+      "current": { "version": "10.29.7", "ring": "R1", "tfm": "net10.0", "source": "gateProven" },
       "floors": [
         {
           "consumer": "layers",
@@ -174,7 +174,7 @@
     },
     "buyingassistant": {
       "ids": { "package": "Truvio.Commerce.BuyingAssistant", "aliases": [] },
-      "current": { "version": "0.2.0-beta", "source": "release" },
+      "current": { "version": "0.2.1-beta", "source": "release" },
       "floors": []
     }
   }
