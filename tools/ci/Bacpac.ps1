@@ -28,7 +28,7 @@ and only then publishes the release. Functions only.
 # the bacpac register alike.
 function Get-EditionReleaseVersion {
     return @{
-        'swift-demo'    = '5.4.0'
+        'swift-demo'    = '5.4.1'
         'headless-demo' = '3.3.0'
         'dap-portal'    = '2.4.0'
     }

@@ -1,5 +1,26 @@
 ﻿# Changelog — surface-swift
 
+## 1.18.2
+
+**PATCH. Two stock Swift 2.4 checkout and cart defects, fixed by overriding the render path by name.**
+
+### Express Buy updates the header mini-cart count (Foundry #1499)
+
+Stock `Swift-v2_ExpressBuyApp.cshtml` adds through `swift.PageUpdater` (`cartcmd=addmulti`) and swaps
+only `#CartSummaryContainer`, so the header mini-cart badge (`.js-cart-qty`) kept its old count until
+a reload; only `swift.Cart`, which the product add-to-cart forms use, writes it. The override reads
+the `CartService` page id and, in the add form's `updated.swift.pageupdater` listener, fetches the
+count from that page with `Swift-v2_MiniCart.cshtml` and writes it into every `.js-cart-qty`, the
+request and target `swift.Cart` uses. Otherwise byte-identical to stock.
+
+### The checkout lists a saved address with its own region (Foundry #1495)
+
+Stock `eCom7/CartV2/Step/Helpers/AddressUser.cshtml` line 138 looked the region up with the outer
+template's `GetString("UserManagement:User.UserAddress.State")` instead of the loop item's, so a
+saved delivery address whose State differs from the account's read `Denver, United States, United
+States` on the Information step. The one-line override reads `userAddress.GetString(...)`, and the
+line reads `<city>, <region name>, <country>`.
+
 ## 1.18.1
 
 **PATCH. Contract notes follow the Images group ruling.** `surface.contract-notes.json` names the
