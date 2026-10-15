@@ -51,16 +51,19 @@ A build is a composition: `from` a base + an ordered `add` (+ `surfaces`, `sampl
 | `dap-portal` | base + `surface-dap-portal` + sample data: the DAP content surface (area 26). |
 
 Whether an edition is proven is recorded in [`layers/INDEX.json`](layers/INDEX.json) `gateProven.editions`,
-stamped by the Foundry publish flow from a gate run. An edition absent from it is unproven.
+a projection of the editions record (solution `truvio-editions`) written by the Foundry. An edition absent
+from it is unproven.
 
 ## Machine-readable index & retired layers ([`layers/INDEX.json`](layers/INDEX.json))
 
 [`layers/INDEX.json`](layers/INDEX.json) is the **single source of truth** for what this
 Distribution ships and what a dead layer name became. It carries three parts:
 
-- **`gateProven`** — the latest gate-proven state of `main`: the gate run id(s), date, and
-  edition set. **Stamped by the Foundry publish flow at release time** (`tools/harness/Write-IndexGateProven.ps1`),
-  never hand-authored. This is how *"main IS the version"* (D-CONSUME (a)) means **latest
+- **`gateProven`** — the latest proven state of `main`: per edition the proven release, its run id
+  and date. **A projection of the editions record** (the solution `truvio-editions`, ruling
+  std-q31-gateproven-from-record), written by the Foundry (`tools/harness/Write-IndexGateProven.ps1`)
+  with the record extract beside it in `layers/editions-record.json`; CI check 14 projects that file
+  again and compares. Never hand-authored. This is how *"main IS the version"* (D-CONSUME (a)) means **latest
   gate-proven main**, not raw tip: a consumer pins `origin/main` and **asserts `INDEX.gateProven` is present**.
 - **`layers`** — every live layer with `kind`, `version`, and `status` (`active` | `deprecated`).
   Regenerated from the live tree and **diffed clean** by `Validate-Distribution.ps1` (drift in
