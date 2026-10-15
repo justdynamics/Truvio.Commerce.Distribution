@@ -93,12 +93,38 @@ Versions order as SemVer 2.0 with the NuGet reading of prerelease labels: a prer
 below its release and labels compare case-insensitively, so a floor names the version as the
 package ships it (`0.6.0-beta`, not `0.6.0`).
 
+## gateProven is a projection of the editions record
+
+The Truvio editions are the increments of one solution record, `truvio-editions`, kept by the
+Workbench console `solution` (DEMO-TO-DELIVERY-STANDARD section 2a, phase 2; ruling
+std-q31-gateproven-from-record). An edition is proven when its record carries a `proven` line for a
+release: the proof set of the `edition` kind (the Foundry's `config/kinds.json`) measured on the
+rebuilt blank VM hosts (foundry, foundry-dap) by `Invoke-Measurements.ps1`, as a `results.json`
+bound to that release. Proofs made before the record are imported as `legacy-proof` lines (ruling
+std-q32-headless-stamp-legacy-proof); nothing is restamped. The Foundry gate composes no verdict.
+
+`gateProven.editions`, `gateProven.releases` and `gateProven.date` are that projection, nothing
+else: the Foundry's `tools/harness/Write-IndexGateProven.ps1` runs `solution status truvio-editions
+--json`, commits its deterministic extract (per edition the release tags with their `proven`,
+`legacy` and `confirmed` lines: run ids, hosts, digests, times) as `layers/editions-record.json` and
+writes the projection with [`tools/ci/GateProvenProjection.ps1`](tools/ci/GateProvenProjection.ps1).
+CI check 14 requires that file whenever `gateProven` names an edition (missing, invalid or null
+**FAILs**), checks that it is an extract, projects it with the same function and **FAILs** when
+`gateProven` differs. The CI runner cannot read the record itself, so the committed extract is what
+is checked. Edition provenance tags take their tag from `gateProven.releases.<edition>.tag`;
+`print-release-tags.ps1` refuses to tag when the release version map in `tools/ci/Bacpac.ps1`
+disagrees with it. The other keys (`dw`, `apps`,
+`swift`, `skills`, `proofs`) are observations of the proving host and the delivered tree written
+beside the projection; `bacpacs` and the provenance tags are bound to `gateProven` and so are
+projections of the record too.
+
 ## Proof key (provenTree)
 
 A provenance tag names a gate run, and it may only name a run that delivered exactly the tagged
 tree (owner ruling 2026-09-23, "proof rides with delivery"). The Foundry's gateProven writer records,
-per proven edition, `gateProven.proofs.<edition>` = `{ runId, deliveryRunId, distributionCommit,
-checkSet, harnessCommit, algorithm, provenTree: { <layer>: { version, hash } } }`, hashing every
+per proven edition, `gateProven.proofs.<edition>` = `{ runId, release, distributionCommit, algorithm,
+provenTree: { <layer>: { version, hash } } }` (proofs written before 2026-10-15 also carry
+`deliveryRunId`, `checkSet` and `harnessCommit`), hashing every
 layer the run composed from the Distribution tree it delivered with
 [`tools/ci/Get-LayerTreeHash.ps1`](tools/ci/Get-LayerTreeHash.ps1) (`layer-tree/v1`: every file of
 the layer directory except the layer-root `*.md` documentation, CR LF read as LF in text files).
@@ -135,8 +161,9 @@ only that path.
 sha256, sizeBytes, gateRunId, scrubCheck } and `editions.<edition>` { editionVersion, tag, asset,
 sha256, sizeBytes, gateRunId (the gate run on the database restored from this file),
 deliveryRunId, provenRunId (`gateProven.editions.<edition>` when the file was built),
-distributionCommit, dwVersion, scrubCheck }. The Foundry writes it from the proving runs; it is
-never hand-authored as trusted.
+distributionCommit, dwVersion, scrubCheck }. The Foundry writes it from the proving runs; because
+every entry is bound to `gateProven` (check 17), it is a projection of the editions record like
+`gateProven` itself, and it is never hand-authored as trusted.
 
 **Proof.** A file is registered only after it was restored onto a fresh database and gated there:
 the edition file with the edition's gate, the blank file by delivering an edition onto it and

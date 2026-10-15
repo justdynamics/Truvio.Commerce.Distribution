@@ -40,8 +40,10 @@ plus optional `surfaces`, `sampleData`, and `themes`. Additions bind ONLY to the
 data, whose subjects the contract's `sampleData` block names. Five editions are specified
 (`base-only`, `base-swift`, `swift-demo`, `headless-demo`, `dap-portal`). **Which of them is
 gate-proven is recorded in [`layers/INDEX.json`](layers/INDEX.json) `gateProven` and nowhere
-else**: the Foundry publish flow stamps an edition there from a gate run, and an edition absent
-from `gateProven.editions` is unproven, whatever a description says.
+else**: `gateProven` is a projection of the editions record (the solution `truvio-editions`, one
+increment per edition; its proven release lines), written by the Foundry beside
+[`layers/editions-record.json`](layers/editions-record.json), and an edition absent from
+`gateProven.editions` is unproven, whatever a description says.
 
 ## Consuming
 

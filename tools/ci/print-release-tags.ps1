@@ -163,10 +163,21 @@ foreach ($d in (Get-ChildItem (Join-Path $RepoRoot 'layers') -Directory | Sort-O
 foreach ($ef in (Get-ChildItem (Join-Path $RepoRoot 'editions') -File -Filter '*.json' | Where-Object { $_.Name -ne 'edition.schema.json' } | Sort-Object Name)) {
     $s = Get-Content $ef.FullName -Raw | ConvertFrom-Json
     $name = "$($s.name)"
-    if (-not $editionVersion.ContainsKey($name)) { $skipped += "editions/$name (file unchanged — existing tag stands)"; continue }
     if (-not $runs.ContainsKey($name))           { $skipped += "editions/$name (absent from INDEX.json gateProven.editions - unproven, so no tag)"; continue }
     $run = $runs[$name]
-    $ver = $editionVersion[$name]
+    # The proven release is the record's (gateProven.releases, a projection of the editions record): the tag is
+    # that release's, never re-typed. The release version map must agree with it, or nothing is tagged.
+    $release = if ($gp.releases -and @($gp.releases.PSObject.Properties.Name) -contains $name) { "$($gp.releases.$name.tag)" } else { '' }
+    if ($release) {
+        if ($release -notmatch "^editions/$([regex]::Escape($name))/(?<v>[0-9]+\.[0-9]+\.[0-9]+\S*)$") { throw "gateProven.releases.$name.tag '$release' is not editions/$name/<semver>." }
+        $ver = $Matches['v']
+        if ($editionVersion.ContainsKey($name) -and "$($editionVersion[$name])" -ne $ver) {
+            throw "edition ${name}: gateProven.releases names $release but tools/ci/Bacpac.ps1 Get-EditionReleaseVersion says $($editionVersion[$name]). Prove that release (the record's proven line) or set the version it proved; no tag is cut on a mismatch."
+        }
+    } else {
+        if (-not $editionVersion.ContainsKey($name)) { $skipped += "editions/$name (file unchanged — existing tag stands)"; continue }
+        $ver = $editionVersion[$name]
+    }
     # A proven edition is tagged only while every layer its run delivered is still that tree.
     $edRows = @($proofStatus | Where-Object { $_.edition -eq $name -and $_.state -ne 'legacy' })
     $edOff = @($edRows | Where-Object { $_.state -ne 'match' } | ForEach-Object { "$($_.layer) $($_.state)" })
