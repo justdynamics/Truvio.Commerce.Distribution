@@ -1,0 +1,84 @@
+{
+  "slug": "truvio-editions",
+  "increments": [
+    {
+      "id": "base-only",
+      "releases": []
+    },
+    {
+      "id": "dap-portal",
+      "releases": [
+        {
+          "tag": "editions/dap-portal/2.4.0",
+          "proven": {
+            "ts": "2026-10-15T09:58:46+00:00",
+            "runId": "20261011-211243",
+            "host": "foundry-dap",
+            "resultsDigest": null
+          },
+          "legacy": {
+            "ts": "2026-10-15T09:58:46+00:00",
+            "runId": "20261011-211243",
+            "host": "foundry-dap"
+          },
+          "confirmed": "2026-10-15T09:58:48+00:00"
+        }
+      ]
+    },
+    {
+      "id": "headless-demo",
+      "releases": [
+        {
+          "tag": "editions/headless-demo/3.2.0",
+          "proven": {
+            "ts": "2026-10-15T09:58:36+00:00",
+            "runId": "20260928-224356",
+            "host": "foundry-blank-dw10",
+            "resultsDigest": null
+          },
+          "legacy": {
+            "ts": "2026-10-15T09:58:36+00:00",
+            "runId": "20260928-224356",
+            "host": "foundry-blank-dw10"
+          },
+          "confirmed": "2026-10-15T09:58:38+00:00"
+        },
+        {
+          "tag": "editions/headless-demo/3.3.0",
+          "proven": {
+            "ts": "2026-10-15T09:58:51+00:00",
+            "runId": "20261011-212054",
+            "host": "foundry-blank-dw10",
+            "resultsDigest": null
+          },
+          "legacy": {
+            "ts": "2026-10-15T09:58:51+00:00",
+            "runId": "20261011-212054",
+            "host": "foundry-blank-dw10"
+          },
+          "confirmed": "2026-10-15T09:58:54+00:00"
+        }
+      ]
+    },
+    {
+      "id": "swift-demo",
+      "releases": [
+        {
+          "tag": "editions/swift-demo/5.4.1",
+          "proven": {
+            "ts": "2026-10-15T09:58:41+00:00",
+            "runId": "20261011-210744",
+            "host": "foundry",
+            "resultsDigest": null
+          },
+          "legacy": {
+            "ts": "2026-10-15T09:58:41+00:00",
+            "runId": "20261011-210744",
+            "host": "foundry"
+          },
+          "confirmed": "2026-10-15T09:58:43+00:00"
+        }
+      ]
+    }
+  ]
+}
