@@ -61,7 +61,12 @@ Checks (all fail-closed; any failure -> exit 1):
                         compat equals the spine floors of consumer 'layers'; and a floor RAISED
                         against the merge base (-SpineBaseRef, default origin/main) must carry a new
                         reason.ref, else "floor raised without a consumer reason".
- 14. provenTree       - (owner ruling 2026-09-23, proof rides with delivery) gateProven.proofs is
+ 14. edition proof   - (owner ruling std-q31-gateproven-from-record, 2026-10-15) gateProven
+                        editions, releases and date equal the projection of the editions record
+                        (solution truvio-editions) committed beside INDEX.json as
+                        layers/editions-record.json (tools/ci/GateProvenProjection.ps1); a
+                        gateProven that carries releases without that file FAILs, one with neither
+                        (stamped before the record) is a NOTE. Then gateProven.proofs is
                         well-formed (tools/ci/ProvenTree.ps1), and every layer in a proof's
                         provenTree is re-hashed on this tree (tools/ci/Get-LayerTreeHash.ps1,
                         layer-tree/v1). Same version with a different tree FAILs: "layer X changed
@@ -131,6 +136,7 @@ function Compare-DistVersion {
 
 . (Join-Path $PSScriptRoot 'Test-ProtectedStrings.ps1')
 . (Join-Path $PSScriptRoot 'ProvenTree.ps1')
+. (Join-Path $PSScriptRoot 'GateProvenProjection.ps1')
 . (Join-Path $PSScriptRoot 'Test-ManifestFiles.ps1')
 . (Join-Path $PSScriptRoot 'Bacpac.ps1')
 
@@ -794,12 +800,32 @@ if ($index) {
         & $log ($hits.Count -eq 0) "living docs clean of retired name '$rn' (-> use $($retiredMap[$rn]))$(if($hits.Count){' — hit(s): ' + ($hits -join ', ')})"
     }
 
-    # 14. provenTree proof key (owner ruling 2026-09-23, "proof rides with delivery"). Each proven
+    # 14. The edition proof. gateProven is a projection of the editions record (ruling
+    #     std-q31-gateproven-from-record): its editions, releases and date must equal the projection of
+    #     layers/editions-record.json, the `solution status truvio-editions --json` output the Foundry
+    #     writer commits beside this file (one function on both sides, tools/ci/GateProvenProjection.ps1).
+    #     The runner has no access to the record itself, so the committed extract is what is checked.
+    #     Then the provenTree proof key (owner ruling 2026-09-23, "proof rides with delivery"): each proven
     #     layer's tree hash (tools/ci/Get-LayerTreeHash.ps1, layer-tree/v1) is recomputed on THIS tree
     #     and compared with gateProven.proofs.<edition>.provenTree. Same version + different tree FAILs;
     #     a bumped version is unproven (NOTE, release-tags skips it); a legacy gateProven with no proofs
     #     keeps the pre-key rule (NOTE) until the next restamp fills it.
     if ($gp) {
+        $recordPath = Join-Path $layersRoot 'editions-record.json'
+        if (Test-Path -LiteralPath $recordPath -PathType Leaf) {
+            $record = $null
+            try { $record = Get-Content -LiteralPath $recordPath -Raw -Encoding utf8 | ConvertFrom-Json } catch { & $log $false "layers/editions-record.json invalid JSON: $_" }
+            if ($record) {
+                $projProblems = @(Test-GateProvenProjection -GateProven $gp -Status $record)
+                & $log ($projProblems.Count -eq 0) "gateProven is the projection of the editions record (layers/editions-record.json)$(if ($projProblems.Count) { ': ' + ($projProblems -join '; ') })"
+            }
+        } elseif ($gp.PSObject.Properties.Name -contains 'releases') {
+            & $log $false "gateProven carries releases but layers/editions-record.json is missing: a projection without its record cannot be checked"
+        } else {
+            $msg = 'gateProven predates the editions record (no releases, no layers/editions-record.json): the next projection run writes both'
+            Write-Host "  [NOTE] $msg" -ForegroundColor Yellow
+            if ($env:GITHUB_ACTIONS -eq 'true') { Write-Host "::notice title=gateProven::$msg" }
+        }
         foreach ($pr in @(Test-ProvenTreeShape -GateProven $gp)) { & $log $false "gateProven.proofs: $pr" }
         $ptFindings = @(Get-ProvenTreeFinding -Status (Get-ProvenTreeStatus -RepoRoot $RepoRoot -GateProven $gp))
         foreach ($f in $ptFindings) {

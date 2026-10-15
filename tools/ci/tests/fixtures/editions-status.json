@@ -1,0 +1,40 @@
+{
+  "slug": "truvio-editions",
+  "folder": "truvio-editions",
+  "account": null,
+  "increments": [
+    {
+      "id": "swift-demo",
+      "kinds": ["edition"],
+      "state": "delivery",
+      "releaseOnly": true,
+      "releases": [
+        { "tag": "editions/swift-demo/5.4.0", "built": true, "proven": null, "confirmed": true,
+          "legacy": { "ts": "2026-10-11T21:07:44+02:00", "runId": "20261011-210744", "host": "foundry", "resultsDigest": null } },
+        { "tag": "editions/swift-demo/5.4.1", "built": true,
+          "proven": { "ts": "2026-10-16T07:40:00+02:00", "runId": "20261016-073012", "host": "foundry", "resultsDigest": "sha256:1111111111111111111111111111111111111111111111111111111111111111" },
+          "confirmed": false, "legacy": false },
+        { "tag": "editions/swift-demo/5.5.0", "built": true, "proven": null, "confirmed": false, "legacy": false }
+      ]
+    },
+    {
+      "id": "headless-demo",
+      "kinds": ["edition"],
+      "state": "delivery",
+      "releaseOnly": true,
+      "releases": [
+        { "tag": "editions/headless-demo/3.3.0", "built": true, "proven": null, "confirmed": true,
+          "legacy": { "ts": "2026-10-11T21:20:54+02:00", "runId": "20261011-212054", "host": "foundry-blank-dw10", "resultsDigest": null } }
+      ]
+    },
+    {
+      "id": "base-swift",
+      "kinds": ["edition"],
+      "state": "demo",
+      "releaseOnly": true,
+      "releases": [
+        { "tag": "editions/base-swift/1.0.0", "built": true, "proven": null, "confirmed": false, "legacy": false }
+      ]
+    }
+  ]
+}
