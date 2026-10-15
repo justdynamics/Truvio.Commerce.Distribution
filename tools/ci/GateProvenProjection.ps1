@@ -9,10 +9,15 @@ The Truvio editions are the increments of one solution, truvio-editions, kept by
 std-q32-headless-stamp-legacy-proof). `solution status truvio-editions --json` lists per increment
 `releases: [{ tag, built, proven: { ts, runId, host, resultsDigest } | null, confirmed, legacy }]`.
 
-The Foundry writer (tools/harness/Write-IndexGateProven.ps1) commits that status output beside INDEX.json
-as layers/editions-record.json and projects it into gateProven with ConvertTo-GateProvenProjection below.
-CI (check 14 of Validate-Distribution.ps1) projects the committed file again and compares. One function,
-both sides, so the writer and the check cannot disagree.
+`legacy` is the legacy-proof line `{ts, runId, host}` or null; `proven` falls back to that line, so a release
+is legacy when `legacy` is set and carries the run of `proven`.
+
+The Foundry writer (tools/harness/Write-IndexGateProven.ps1) commits ConvertTo-EditionsRecordExtract of that
+status (only what the projection reads, so the file changes when a release line changes and never with the
+day) beside INDEX.json as layers/editions-record.json, and projects it into gateProven with
+ConvertTo-GateProvenProjection below. CI (check 14 of Validate-Distribution.ps1) requires the file whenever
+gateProven names editions, checks that it is an extract, projects it again and compares. One function, both
+sides, so the writer and the check cannot disagree.
 
 The projection is three keys of gateProven:
   editions  { <edition>: <runId> }   the run of the newest proven (else legacy) release; the map every
@@ -27,6 +32,22 @@ Functions only.
 
 $script:GateProvenRunIdPattern = '^[0-9]{8}-[0-9]{6}$'
 
+# The deterministic part of `solution status truvio-editions --json`: per increment (by id) its release lines
+# as the console lists them, without state, dwell or counters.
+function ConvertTo-EditionsRecordExtract {
+    [CmdletBinding()]
+    param([Parameter(Mandatory)]$Status)
+    $line = { param($l, [string[]]$Keys) if ($null -eq $l) { return $null }; $o = [ordered]@{}; foreach ($k in $Keys) { $o[$k] = $(if ($null -ne $l.$k) { $l.$k } else { $null }) }; $o }
+    $incs = foreach ($inc in @($Status.increments | Where-Object { $_ } | Sort-Object { "$($_.id)" })) {
+        [ordered]@{ id = "$($inc.id)"; releases = @(foreach ($r in @($inc.releases | Where-Object { $_ })) {
+            [ordered]@{ tag = "$($r.tag)"
+                        proven = (& $line $r.proven @('ts', 'runId', 'host', 'resultsDigest'))
+                        legacy = (& $line $r.legacy @('ts', 'runId', 'host'))
+                        confirmed = $(if ($null -ne $r.confirmed) { $r.confirmed } else { $null }) } }) }
+    }
+    return [ordered]@{ slug = "$($Status.slug)"; increments = @($incs) }
+}
+
 function ConvertTo-GateProvenProjection {
     [CmdletBinding()]
     param([Parameter(Mandatory)]$Status)
@@ -36,16 +57,15 @@ function ConvertTo-GateProvenProjection {
     foreach ($inc in @($Status.increments | Where-Object { $_ } | Sort-Object { "$($_.id)" })) {
         $best = $null; $bestAt = $null
         foreach ($r in @($inc.releases | Where-Object { $_ })) {
-            # A proven line wins; a legacy-proof line (an object with the same keys) counts while none exists.
-            $legacyLine = if ($r.legacy -and $r.legacy -isnot [bool]) { $r.legacy } else { $null }
-            $p = if ($r.proven) { $r.proven } else { $legacyLine }
+            $p = $r.proven
             if (-not $p -or "$($p.runId)" -notmatch $script:GateProvenRunIdPattern) { continue }
             $at = ConvertTo-GateProvenInstant $p.ts
-            if ($null -eq $bestAt -or $at -gt $bestAt) {
+            # The newest proven line wins; on equal times the later release in the record does.
+            if ($null -eq $bestAt -or $at -ge $bestAt) {
                 $bestAt = $at
                 $best = [ordered]@{ tag = "$($r.tag)"; runId = "$($p.runId)"; host = $(if ($p.host) { "$($p.host)" } else { $null })
                                     ts = $at.UtcDateTime.ToString('yyyy-MM-ddTHH:mm:ssZ'); resultsDigest = $(if ($p.resultsDigest) { "$($p.resultsDigest)" } else { $null })
-                                    legacy = (-not $r.proven) }
+                                    legacy = [bool]($r.legacy -and "$($r.legacy.runId)" -eq "$($p.runId)") }
             }
         }
         if (-not $best) { continue }
@@ -63,9 +83,13 @@ function ConvertTo-GateProvenProjection {
 # Problems (strings) between INDEX.json gateProven and the projection of the record; empty means equal.
 function Test-GateProvenProjection {
     [CmdletBinding()]
-    param($GateProven, [Parameter(Mandatory)]$Status)
-    $want = ConvertTo-GateProvenProjection -Status $Status
+    param($GateProven, $Status)
     $problems = @()
+    if ($null -eq $Status -or $null -eq $Status.increments) { return @('the editions record is missing or carries no increments') }
+    if ((ConvertTo-GateProvenCanonical (ConvertTo-EditionsRecordExtract -Status $Status)) -ne (ConvertTo-GateProvenCanonical $Status)) {
+        $problems += 'layers/editions-record.json is not an extract of the record (ConvertTo-EditionsRecordExtract): it carries keys the projection does not read, or lacks some'
+    }
+    $want = ConvertTo-GateProvenProjection -Status $Status
     if ($want.editions.Count -eq 0) { $problems += 'the editions record carries no proven or legacy-proof release: nothing is proven' }
     if ("$($GateProven.date)" -ne "$($want.date)") { $problems += "date '$($GateProven.date)' is not the projection's '$($want.date)'" }
     foreach ($key in 'editions', 'releases') {

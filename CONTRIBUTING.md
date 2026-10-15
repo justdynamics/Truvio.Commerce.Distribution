@@ -105,10 +105,15 @@ std-q32-headless-stamp-legacy-proof); nothing is restamped. The Foundry gate com
 
 `gateProven.editions`, `gateProven.releases` and `gateProven.date` are that projection, nothing
 else: the Foundry's `tools/harness/Write-IndexGateProven.ps1` runs `solution status truvio-editions
---json`, commits the output as `layers/editions-record.json` and writes the projection with
-[`tools/ci/GateProvenProjection.ps1`](tools/ci/GateProvenProjection.ps1). CI check 14 projects the
-committed file with the same function and **FAILs** when `gateProven` differs. The CI runner cannot
-read the record itself, so the committed extract is what is checked. The other keys (`dw`, `apps`,
+--json`, commits its deterministic extract (per edition the release tags with their `proven`,
+`legacy` and `confirmed` lines: run ids, hosts, digests, times) as `layers/editions-record.json` and
+writes the projection with [`tools/ci/GateProvenProjection.ps1`](tools/ci/GateProvenProjection.ps1).
+CI check 14 requires that file whenever `gateProven` names an edition (missing, invalid or null
+**FAILs**), checks that it is an extract, projects it with the same function and **FAILs** when
+`gateProven` differs. The CI runner cannot read the record itself, so the committed extract is what
+is checked. Edition provenance tags take their tag from `gateProven.releases.<edition>.tag`;
+`print-release-tags.ps1` refuses to tag when the release version map in `tools/ci/Bacpac.ps1`
+disagrees with it. The other keys (`dw`, `apps`,
 `swift`, `skills`, `proofs`) are observations of the proving host and the delivered tree written
 beside the projection; `bacpacs` and the provenance tags are bound to `gateProven` and so are
 projections of the record too.
