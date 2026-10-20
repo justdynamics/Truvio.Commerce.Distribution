@@ -14,12 +14,12 @@
       "floors": [
         {
           "consumer": "layers",
-          "min": "10.28.1",
+          "min": "10.29.0",
           "ring": "R1",
           "tfm": "net10.0",
           "reason": {
-            "ref": "justdynamics/Truvio.Commerce.Foundry#1061",
-            "why": "The layers ship DW 10.28.1 column names: feature-b2b-comms failed strict-mode deserialize on a 10.27.6 host while the static gate stayed green, which is the case the compat leg (#1061) was built for. The ring R1 is the outward claim the owner ruled on 2026-09-21 (Distribution #76); tfm net10.0 is the host runtime of that ring. Introduced in the contract by Distribution 60aac43b."
+            "ref": "dynamicweb/Swift@71e2bd0a29512bed98d5dc2c816d705c0d51d695",
+            "why": "Swift v2.5.0 requires DynamicWeb 10.29 or newer and .NET 10 (release notes of the v2.5.0 tag, commit 71e2bd0a); the layers are authored for exactly that Swift release (Foundry #1535, 2026-10-20), so the DW floor rises with it. Before that: the layers ship DW 10.28.1 column names: feature-b2b-comms failed strict-mode deserialize on a 10.27.6 host while the static gate stayed green, which is the case the compat leg (#1061) was built for. The ring R1 is the outward claim the owner ruled on 2026-09-21 (Distribution #76); tfm net10.0 is the host runtime of that ring. Introduced in the contract by Distribution 60aac43b."
           }
         },
         {
@@ -71,18 +71,17 @@
     },
     "swift": {
       "ids": { "package": "dynamicweb/Swift", "aliases": [] },
-      "current": { "version": "2.4.0", "tag": "v2.4.0", "source": "gateProven" },
+      "current": { "version": "2.5.0", "tag": "v2.5.0", "source": "gateProven" },
       "floors": [
         {
           "consumer": "layers",
-          "min": "2.4.0",
-          "tag": "v2.4.0",
+          "min": "2.5.0",
+          "tag": "v2.5.0",
           "match": "exact",
           "reason": {
-            "ref": "justdynamics/Truvio.Commerce.Distribution@60aac43b",
-            "why": "Rolling latest-only: the layers are authored for exactly one Swift release, so the floor is an equality pin that rolls forward with the release, never a range."
-          },
-          "flag": "untraced"
+            "ref": "justdynamics/Truvio.Commerce.Foundry#1535",
+            "why": "Rolling latest-only: the layers are authored for exactly one Swift release, so the floor is an equality pin that rolls forward with the release, never a range. Rolled from 2.4.0 to 2.5.0 on 2026-10-20 (owner answer on Foundry #1535): the templates, item types and the storefront query the layers overlay are the 2.5.0 ones (Switch Account, BOM order overviews, assortment-aware product lists, Column background height, hreflang)."
+          }
         },
         {
           "consumer": "skills",

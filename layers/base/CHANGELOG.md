@@ -1,5 +1,21 @@
 ﻿# Changelog — base
 
+## 4.4.0
+
+### Swift 2.5.0 (Foundry #1535, owner answer 2026-10-20)
+
+Rolling latest-only: the estate rolls from Swift v2.4.0 to v2.5.0 and drops 2.4.0. `layer.json`
+`swiftVersion` 2.5.0. `base.contract.json` 3.4.0: `compat.swift` tag `v2.5.0` version 2.5.0;
+`compat.dw.min` 10.29.0 (Swift 2.5.0 requires DynamicWeb 10.29 or newer and .NET 10, release notes
+of the v2.5.0 tag; the ring R1 and tfm are unchanged); `deliveryTarget.hostFiles.swiftRelease` names
+the v2.5.0 asset `Swift_v2.5.0_Files.zip` (sha256
+`05312fdb0fdfe013ce0ff098da8cdb7fd5bef3bfb5b448a2293b017afc887129`), so every new demo site built
+from blank installs the 2.5.0 Files. `versions/spine.json` records the two floors with that reason.
+The base ships no row change: the 2.5.0 features the editions show (Switch Account, BOM order
+overviews, assortment-aware product lists, Column background height, hreflang) live in surface-swift
+(templates, item types, the storefront query), theme-default and sample-data. The serializer config
+keeps its historical file name `config/swift-2.4.json` (the predicate set did not change).
+
 ## 4.3.0
 
 ### Id counters raised through `raiseOnlyColumns`; Serializer floor 1.0.8-beta (Distribution #103)

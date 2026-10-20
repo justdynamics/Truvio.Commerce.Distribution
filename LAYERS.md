@@ -1,6 +1,6 @@
 # Layers & Editions catalog
 
-Everything this Distribution ships, on the current latest Swift (**Swift 2.4**, rolling latest-only). Which
+Everything this Distribution ships, on the current latest Swift (**Swift 2.5**, rolling latest-only). Which
 editions a gate run proved, on which Dynamicweb milestone, is recorded in [`layers/INDEX.json`](layers/INDEX.json)
 `gateProven` and nowhere else. See
 [GLOSSARY.md](GLOSSARY.md) for the vocabulary. Every layer validates against

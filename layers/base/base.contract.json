@@ -1,16 +1,16 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "3.3.0",
-  "swiftVersion": "2.4.0",
+  "baseContractVersion": "3.4.0",
+  "swiftVersion": "2.5.0",
   "compat": {
     "dw": {
       "ring": "R1",
-      "min": "10.28.1",
+      "min": "10.29.0",
       "tfm": "net10.0"
     },
     "swift": {
-      "tag": "v2.4.0",
-      "version": "2.4.0"
+      "tag": "v2.5.0",
+      "version": "2.5.0"
     },
     "apps": [
       {
@@ -62,10 +62,10 @@
     "hostFiles": {
       "swiftRelease": {
         "repo": "dynamicweb/Swift",
-        "tag": "v2.4.0",
-        "asset": "Swift_v2.4.0_Files.zip",
-        "url": "https://github.com/dynamicweb/Swift/releases/download/v2.4.0/Swift_v2.4.0_Files.zip",
-        "sha256": "d4c9892b1b1af07cc0e42b0de1e5d14205fe97b7c1fe783cf2c97e4e2ae9d2dc",
+        "tag": "v2.5.0",
+        "asset": "Swift_v2.5.0_Files.zip",
+        "url": "https://github.com/dynamicweb/Swift/releases/download/v2.5.0/Swift_v2.5.0_Files.zip",
+        "sha256": "05312fdb0fdfe013ce0ff098da8cdb7fd5bef3bfb5b448a2293b017afc887129",
         "extractTo": "wwwroot (the zip root is Files/)"
       },
       "note": "The host's Files tree is the Swift release asset, unmodified: templates, item type definitions, the ProductsFrontend and ProductsBackend repositories (repositories.provisionedByGate false) and GlobalSettings.config with the Swift defaults (Settings/Designs/DoNotIncludeBaseHref True; the variant selector resolves through the friendly product URLs without a base href, measured on the blank host). The layers' files/ trees are delivered on top. tag must equal compat.swift.tag (validator check 16); rolling the Swift version rolls this asset and its sha256 with it."
@@ -97,7 +97,7 @@
         "tables": [
           "EcomProductGroupField"
         ],
-        "why": "The seven Swift 2 group fields (GROUPFIELD1..GROUPFIELD10) the Swift 2.4 templates read; schemaSync EcomGroupFields creates their EcomGroups columns, which the wizard does not."
+        "why": "The seven Swift 2 group fields (GROUPFIELD1..GROUPFIELD10) the Swift 2.5 templates read; schemaSync EcomGroupFields creates their EcomGroups columns, which the wizard does not."
       },
       {
         "layer": "base",
@@ -650,7 +650,7 @@
       "feature-bom-configurator: Kit Configurator (IndexQuery, FacetGroups)",
       "feature-reordering: Quick Order validation feed (IndexQuery)"
     ],
-    "note": "ProductsFrontend is the storefront search repository the Swift design package ships (Files/System/Repositories/ProductsFrontend/ at the Swift 2.4.0 tag, alongside ProductsBackend). No layer in this Distribution ships it: it arrives with the host's Swift Files overlay, which is why provisionedByGate is false. boundBy lists every paragraph a layer ships that names it by path. It is NOT the repository the surface-swift Shop PLP binds: that is TruvioCommerce, which surface-swift ships itself (layerShipped below). A composition therefore needs both folders under their own names, and renaming one to the other empties the surfaces that bind the name that went missing. A storefront PLP that cannot list products answers HTTP 200 in both of its failure shapes, never a 500. (1) Repository present over an index of zero documents: the page carries an in-page dw-error block with the Lucene 'numHits must be > 0' ArgumentException. (2) Repository absent: the catalog app renders an EMPTY swift-v2_app div with no product list, no facet rail and no error text of any kind, so the page passes a status scan AND an error-text scan while showing nothing. Gate the PLP on a positive subject (at least one product-card element) plus dw-error == 0, never on HTTP status or on the absence of error text alone.",
+    "note": "ProductsFrontend is the storefront search repository the Swift design package ships (Files/System/Repositories/ProductsFrontend/ at the Swift 2.5.0 tag, alongside ProductsBackend). No layer in this Distribution ships it: it arrives with the host's Swift Files overlay, which is why provisionedByGate is false. boundBy lists every paragraph a layer ships that names it by path. It is NOT the repository the surface-swift Shop PLP binds: that is TruvioCommerce, which surface-swift ships itself (layerShipped below). A composition therefore needs both folders under their own names, and renaming one to the other empties the surfaces that bind the name that went missing. A storefront PLP that cannot list products answers HTTP 200 in both of its failure shapes, never a 500. (1) Repository present over an index of zero documents: the page carries an in-page dw-error block with the Lucene 'numHits must be > 0' ArgumentException. (2) Repository absent: the catalog app renders an EMPTY swift-v2_app div with no product list, no facet rail and no error text of any kind, so the page passes a status scan AND an error-text scan while showing nothing. Gate the PLP on a positive subject (at least one product-card element) plus dw-error == 0, never on HTTP status or on the absence of error text alone.",
     "consumingApp": "eCom_ProductCatalog",
     "layerShipped": [
       {
