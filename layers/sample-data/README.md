@@ -55,8 +55,9 @@ vocabulary, a material class, a rating, a compatibility note, a commercial term.
 | Group id | `TCGRP-VARIANTS`, `TCGRP-PRODUCT-STRUCTURE` |
 | Data model id | `TCDM-COMMERCE`, `TCDM-PRODUCT-STRUCTURE` — the PIM tree, never a storefront group |
 | PIM shop id | `TCSHOP-PIM` (`Truvio PIM`) |
-| Order id | `TCO-0001` … `TCO-0026`, quotes `TCO-Q001` … `TCO-Q007`, carts `TCO-C001` … `TCO-C002` |
+| Order id | `TCO-0001` … `TCO-0027`, quotes `TCO-Q001` … `TCO-Q007`, carts `TCO-C001` … `TCO-C002` |
 | Persona | `buyer@truvio-demo.example`, `csr@…`, `admin@…` |
+| Assortment id | `TCASRT-DEALER` (`Truvio Dealer Assortment`) |
 
 The accent colour is industrial green (~`#2E7D5B`) wherever a colour is *data* — the product
 tiles under `files/Images/TruvioCommerce/`. This layer is **data, not theme**: presentation
@@ -66,7 +67,7 @@ stays in `theme-default` (SPEC-06).
 
 Every row is **serialized SqlTable YAML** under [`merge/_sql/<Table>/`](merge/_sql/), one file
 per row key, listed in [`merge/merge-manifest.json`](merge/merge-manifest.json) and fenced by
-the 39 merge predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json), which
+the 43 merge predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json), which
 Compose-Edition unions into the composed `Serializer.config.json`. The rows land through the
 ordinary merge deserialize, so an online build (URL + Admin API key, no SQL channel) delivers
 the layer exactly as a local one does.
@@ -77,13 +78,14 @@ the layer exactly as a local one does.
 | Variants | `EcomVariantGroups`, `EcomVariantsOptions`, `EcomVariantGroupProductRelation`, `EcomVariantOptionsProductRelation` | 55 |
 | Prices, BOM, stock | `EcomPrices`, `EcomProductItems`, `EcomStockUnit` | 292 |
 | Category fields and specs | `EcomProductCategory`, `EcomProductCategoryTranslation`, `EcomProductCategoryField`, `EcomProductCategoryFieldTranslation`, `EcomProductCategoryFieldValue`, `EcomFieldDisplayGroups`, `EcomFieldDisplayGroupTranslation`, `EcomFieldDisplayGroupFields` | 577 |
-| Imagery, documents, relations | `EcomDetailsGroup`, `EcomDetails`, `EcomProductsRelatedGroups`, `EcomProductsRelated` | 704 |
-| Identities, orders, quotes, carts, returns | `AccessUser`, `AccessUserGroupRelation`, `AccessUserSecondaryRelation`, `EcomOrders`, `EcomOrderLines`, `EcomRmas`, `EcomRmaOrderLines` | 106 |
+| Imagery, documents, relations | `EcomDetailsGroup`, `EcomDetails`, `EcomProductsRelatedGroups`, `EcomProductsRelated` | 708 |
+| Identities, orders, quotes, carts, returns | `AccessUser`, `AccessUserGroupRelation`, `AccessUserSecondaryRelation`, `EcomOrders`, `EcomOrderLines`, `EcomRmas`, `EcomRmaOrderLines` | 115 |
 | Favourite lists | `EcomCustomerFavoriteLists`, `EcomCustomerFavoriteProducts` | 11 |
 | Product field settings | `EcomProductField` | 6 |
 | PIM structure | `EcomShops`, `EcomShopLanguageRelation`, `EcomCompletionRules`, `DynamicStructures`, `DynamicStructureLevels` | 9 |
+| Assortment | `EcomAssortments`, `EcomAssortmentGroupRelations`, `EcomAssortmentPermissions`, `EcomAssortmentItems` | 8 |
 
-2,098 rows in 39 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
+2,119 rows in 43 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
 counts an edition asserts are `EcomProducts` **97** and `EcomGroups` **21**.
 
 `EcomGroups` 21 is **16 browsable storefront groups + 5 PIM groups**, and the two trees sit in
@@ -183,7 +185,51 @@ only in `AccessUser/_meta.yml`'s column list). After the deserialize and host re
 persona's password through the Management API `UserSetPassword` command with the Foundry's
 `tools/secrets/Set-DemoCredential.ps1`, once per persona `100101`, `100102` and `100103`. It
 sets the password, proves sign-in and stores the credential outside the repo. The route is the
-same for a local and an online build, and merge never overwrites the password it set.
+same for a local and an online build, and merge never overwrites the password it set. The
+buyer's second profile `100105` needs no password: DW authenticates the Login row of a user
+name, which is `100101` (see [Switch account](#switch-account-one-login-two-profiles)).
+
+## Switch account: one login, two profiles
+
+Swift 2.5.0 shows a **Switch account** button in the Customer Center for a user with more than
+one profile. The buyer has two. The DW10 accounts model, read from the 10.29.6 source and from a
+working multi-account host:
+
+- **Profiles are the `AccessUser` rows that share one `AccessUserUserName`.** Nothing else links
+  them: no parent id, no relation table. `AccessUserParentId` stays 0.
+- **The Login is the row with `AccessUserIsLogin` true**, at most one per user name. Sign-in
+  (`AuthenticationManager.Authenticate`) picks that row first and checks the password on it;
+  the profiles carry no password of their own.
+- **Every other valid row with the user name is a profile.** The Swift sign-in profile list
+  (`SelectableUsers.cshtml`) shows the Login as **Primary** plus every profile; choosing one posts
+  `DwSwitchUserUniqueId`, and DW switches only between rows that share the user name.
+- **Two profiles of one user name need two different, non-empty customer numbers**
+  (`UserService.IsValidUserName`), or an admin save of either fails validation.
+
+| Row | `AccessUser` | User name | Customer number | Account group | Role |
+|---|---|---|---|---|---|
+| Login and first profile | `100101` | `TruvioBuyer` | `TC-100200` | `100100` Truvio Demo Account | `AccessUserIsLogin` true; holds every order, quote, cart, favourite list and return |
+| Second profile | `100105` | `TruvioBuyer` | `TC-100300` | `100106` Truvio Demo Account North | member of `1325` too, so pricing and permissions behave |
+
+**Why the buyer row is the Login, not a profile beside an empty Login.** Sign-in lands on the
+Login row. A separate Login with no data would sign every gate persona leg into an empty
+Customer Center, and every probe that reads the buyer's orders would fail. With `100101` as the
+Login, sign-in lands exactly where it did before, and the switch page lists `100101` (Primary)
+and `100105`. `100104` is unused.
+
+`100106` is typed `SystemAccount` like `100100`, and the CSR group `1292` has the same
+impersonation grant over it (`AccessUserSecondaryRelation` `1292$$100106`). The North profile owns
+no orders: switching to it shows an empty order history, contract prices that do not apply
+(they resolve against `TC-100200`), and the catalogue without the dealer assortment below.
+
+**What the layer cannot ship.** The button needs the `SignIn` navigation tag on the Sign in page,
+and the switch page needs the Sign in paragraph's **List user profiles** setting with the
+`SelectableUsers.cshtml` template; both are surface-swift content. The SystemAccount type needs
+the **User accounts** feature (GlobalSettings `UserAccounts/Enableuseraccountfunctionality`, which
+Swift 2.5.0 ships `True`). A host delivered before this version keeps `AccessUserIsLogin` false on
+`100101`, because a merge never overwrites a set value: sign-in still works there (DW falls back to
+the first row with the user name), and the button shows, but the switch page lists no profiles
+until the column is set.
 
 ## The buyer's history: the customer-center dashboard data
 
@@ -192,7 +238,7 @@ The buyer persona `100101` carries what the surface-swift customer-center dashbo
 
 | Rows | Ids | State | Dashboard widget |
 |---|---|---|---|
-| 21 completed orders | `TCO-0001`-`TCO-0004`, `TCO-0006`-`TCO-0008`, `TCO-0013`-`TCO-0026` | `OS2` Completed, `OrderCompletedDate` set, completions 2026-04-04 to 2026-09-12 | Orders count, Spent this month, Monthly spending, Recent orders |
+| 22 completed orders | `TCO-0001`-`TCO-0004`, `TCO-0006`-`TCO-0008`, `TCO-0013`-`TCO-0027` | `OS2` Completed, `OrderCompletedDate` set, completions 2026-04-04 to 2026-09-12 | Orders count, Spent this month, Monthly spending, Recent orders |
 | 4 open orders | `TCO-0009`-`TCO-0012` | `OS1` New, no completed date | My orders only |
 | 1 rejected order | `TCO-0005` | `OS3` Rejected | My orders only |
 | 7 quotes | `TCO-Q001`-`TCO-Q007` | `QuotePending` x3, `QuoteSent` x2, `QuoteAccepted`, `QuoteRejected` (base 4.0.0 quote states), `OrderIsQuote` true | Open quotes, Pending quotes |
@@ -224,6 +270,17 @@ ships what that path needs: the account group `100100` is typed `SystemAccount`,
 Accounts app lists it, and the one `AccessUserSecondaryRelation` row `1292$$100100` grants the
 base-contract CSR group impersonation over the account, which is what fills CSR Users.
 
+**`TCO-0027` is the BOM order** (Swift 2.5.0 BOM product overviews): the configurable kit
+`TCPROD0042` `TC-BDL-0042`, completed 2026-09-10, 105 USD. Its parent line `TCO-0027-1` carries the
+kit at the calculated price (the kit's `ProductPriceType` is 0, Calculated, so its price is the sum
+of its parts), and two BOM item lines carry the slot defaults: `TCO-0027-2` `TCPROD0002`
+`TC-VAR-0002` at 60 (slot `TC-BOM-0042-1`) and `TCO-0027-3` `TCPROD0051` `TC-DOC-0051` at 45 (slot
+`TC-BOM-0042-2`). An item line has `OrderLineBOM` true, `OrderLineParentLineId` `TCO-0027-1`,
+`OrderLineBOMItemId` the slot and `OrderLineType` `0` (Product), which is what the cart writes for a
+BOM part; DW has no BOM line type. `OrderLineService.GetByOrder` attaches every line with a parent
+id to its parent's `BomOrderLines`, so the order total is the parent line alone, and the Swift
+2.5.0 My orders list and order detail render the two parts below the kit. No quote carries a kit.
+
 `TCO-0001` is the completed order the RMA flow returns against: the layer ships the return
 request `PACK-RMA-0001` and its `EcomRmaOrderLines` link (id `100301`) pointing at its first line.
 Both rows came from the retired `feature-rma` layer in 6.0.0 with their keys unchanged; the
@@ -238,6 +295,7 @@ These are the rows a shipped probe addresses. They are stated machine-readably i
 | Subject | Row | Probe that addresses it |
 |---|---|---|
 | buyer | `AccessUser` `100101` `TruvioBuyer`, `TC-100200`, group `1325` | every authenticated probe |
+| buyer login and profiles | `AccessUser` `100101` (`AccessUserIsLogin` true) and `100105` (`TC-100300`, account `100106`), both `TruvioBuyer` | none (Swift 2.5.0 Switch account, rendered) |
 | CSR | `AccessUser` `100102` `TruvioCsr`, group `1292` | — (customer-centre surfaces) |
 | account admin | `AccessUser` `100103` `TruvioAdmin`, group `1270` | — (account surfaces) |
 | SKU validation | `TCPROD0001` / `TC-VAR-0001` | feature-reordering `sku-validation` |
@@ -246,6 +304,8 @@ These are the rows a shipped probe addresses. They are stated machine-readably i
 | BOM kit | `TCPROD0042`, slots `TC-BOM-0042-1` / `TC-BOM-0042-2` | feature-bom-configurator `bom-cart-lines` |
 | subscription plan | `TCPROD0061` / `TC-SUB-0061` | feature-subscription-orders `checkout-recurring` |
 | delivered order | `TCO-0001` (`OS2`, buyer `100101`) | surface-swift `authenticated-body-contains` on `/en-us/customer-center/my-returns` |
+| BOM order | `TCO-0027`, parent line `TCO-0027-1`, item lines `TCO-0027-2` / `TCO-0027-3` | none (Swift 2.5.0 BOM product overview, rendered); `configRows` |
+| assortment | `TCASRT-DEALER` over `TCGRP-ASSORTMENTS`, permission `100100`, items `TCPROD0021`-`TCPROD0025` | none (Swift 2.5.0 assortment-based product lists, rendered); `configRows` |
 | RMA | `PACK-RMA-0001` + link `100301` | the same probe (the page lists it); `configRows` |
 | customer-center data | the buyer's orders, quotes, carts and favourite lists above (`customerCenter`) | surface-swift dashboard widgets (rendered, not probed) |
 
@@ -455,7 +515,7 @@ A host delivered by 1.0.2-beta already lost its workspaces, and nothing restores
 orphan level rows still need deleting by hand: both scripts under [`tools/`](tools/) carry an
 idempotent orphan-level delete for exactly this.
 
-`DynamicStructures` is the **only heap table this layer writes**. Every other one of its 35
+`DynamicStructures` is the **only heap table this layer writes**. Every other one of its 42
 tables has a primary key. Check `_meta.yml` `keyColumns` against the live `sys.indexes` before
 adding a table to this layer, and declare `keyColumns` on any heap.
 
@@ -488,10 +548,10 @@ in the 4.1.2 changelog.)
 
 This layer owns the `TC*` family: `TCGRP-*`, `TCDM-*`, `TCSHOP-PIM`, `TCPROD*`, `TCVG-*`,
 `TCVGR-*`, `TCVO-*`, `TC-PRICE-*`, `TC-BOM-*`, `TC-DETAIL-*`, `TC-HOVER-*`, `TC-GAL-*`,
-`TC-DOC-*`, `TCREL-*`, `TCO-*`, `TCFIELD-*` and the `tc_*` product categories — the family
+`TC-DOC-*`, `TCREL-*`, `TCO-*`, `TCFIELD-*`, `TCASRT-*` and the `tc_*` product categories — the family
 [`base.contract.json`](../base/base.contract.json) `idRules.reservedFixtureKeys` reserves. Its
 int-identity rows sit at reserved ids above the contract's `100000` floor and the serializer
-writes them verbatim with `IDENTITY_INSERT`: `AccessUser` `100100`-`100103`, `EcomDetailsGroup`
+writes them verbatim with `IDENTITY_INSERT`: `AccessUser` `100100`-`100103` and `100105`-`100106`, `EcomDetailsGroup`
 `100111` (`Manuals`; the product images are filed under the `Images` group `1` the DW10 setup
 wizard creates, and `100110` is retired), `EcomFieldDisplayGroups` `100120` (`tc_specs`),
 `EcomStockUnit` `100201`-`100261`, `EcomProductField` `100130`-`100135`, and for the PIM
@@ -501,10 +561,58 @@ structure `EcomShops` `100130`, `EcomShopLanguageRelation` `100131`, `EcomGroups
 `DynamicStructureLevels` `100171`-`100172`, `EcomGroupRelations` `100178`-`100181`,
 `EcomGroupProductRelation` `100200`-`100260`, `EcomProductCategoryFieldTranslation`
 `100300`-`100327`, and for the customer-center data `EcomCustomerFavoriteLists` `100401`-`100402`
-and `EcomRmaOrderLines` `100301` (with `EcomRmas` `PACK-RMA-0001`). **The ranges are per TABLE**, so `EcomProductField` `100130`-`100135` and
+and `EcomRmaOrderLines` `100301` (with `EcomRmas` `PACK-RMA-0001`), for Swift 2.5.0 `AccessUserSecondaryRelation` `100106`,
+`EcomOrders` `OrderAutoId` `100027` and `EcomOrderLines` `OrderLineAutoId` `100271`-`100273` (`TCO-0027`; both auto ids sit under a unique
+index), `EcomAssortments` `100500`, `EcomAssortmentGroupRelations` `100502`, `EcomAssortmentPermissions` `100503` and
+`EcomAssortmentItems` `100510`-`100514`. **The ranges are per TABLE**, so `EcomProductField` `100130`-`100135` and
 `EcomShops` `100130` are not a collision. The storefront binds the asset categories and the display
 group by system name, not by id. An addition writing its own rows into a base-owned table uses
 its `PACK-<NAME>-` prefix instead.
+
+## Assortments
+
+The `Users` subgroup `Assortments` (`TCGRP-ASSORTMENTS`, `TCPROD0021`-`TCPROD0025`) is where the
+catalogue shows "which rows a signed-in persona sees". Until Swift 2.5.0 it was a plain subgroup;
+it is now the content of one assortment, so the demo shows it:
+
+| Table | Row | What it does |
+|---|---|---|
+| `EcomAssortments` | `TCASRT-DEALER$$ENU` "Truvio Dealer Assortment" | active, `AllowAnonymousUsers` false, `RebuildRequired` false |
+| `EcomAssortmentGroupRelations` | `TCASRT-DEALER$$TCGRP-ASSORTMENTS` | the authoring relation an admin rebuild reads |
+| `EcomAssortmentPermissions` | `100100$$TCASRT-DEALER` | the grant: the account group `100100` |
+| `EcomAssortmentItems` | five rows, `TCPROD0021`-`TCPROD0025`, `ENU` | the materialised assortment the index and the product filters read |
+
+**The behaviour.** A product in an active assortment is shown only to a user with a permission
+on that assortment, directly or through one of the user's groups; **a product in no assortment
+stays visible to everyone.** Signed in as the buyer (`100101`, in `100100`), the CSR or the
+account admin, the Assortments subgroup lists its five products; an anonymous visitor's product
+lists and search omit them, and so does the buyer's second profile `100105` (account `100106`),
+which makes Switch account visibly change the catalogue. Every other product is unaffected.
+
+**Why the items ship.** The product index fills `AssortmentIDs` from
+`AssortmentService.GetAssortmentsByProductId`, which reads `EcomAssortmentItems`, never the
+relation tables. Those rows are what an admin **Rebuild assortments** writes from the relations,
+and no deserialize runs a rebuild, so the layer ships them in the rebuild's own shape
+(`RelationAutoID` -1, `RelationType` empty). A later rebuild rewrites the same five rows.
+
+**Why no shop relation.** The rebuild adds every product of a related shop
+(`EcomAssortmentShopRelations` joins the shop's groups), so a `SHOP1` relation would put the whole
+catalogue behind the assortment. The group relation alone fences the five products.
+
+**What the layer cannot ship, and the trap it carries.**
+
+- GlobalSettings `/Globalsettings/Ecom/Assortments/UseAssortments` must be `True`. While it is
+  `False`, DW strips every `AssortmentIDs` expression from a product query before it runs, and
+  everyone sees everything.
+- The product index must build with `SkipAssortments` `False` and the query must carry the
+  `AssortmentIDs` filter (`IsEmpty` OR `MatchAny` the `Dynamicweb.UserManagement.Context:AssortmentIDs`
+  macro). Swift 2.5.0's `ProductsFrontend` repository ships both, so the header search honours the
+  assortment; the Shop PLP reads surface-swift's `TruvioCommerce` repository, which until it is
+  aligned builds with `SkipAssortments` `True` and filters nothing. Rebuild the index after delivery.
+- **With `UseAssortments` on and an active assortment, DW's ecommerce group navigation lists only
+  the groups inside an assortment the visitor holds** (`GroupNavigationTreeNodeProvider.FilterGroups`).
+  A menu built on ecommerce groups therefore shrinks for every visitor; the product-list rule
+  above is the index query's, not the navigation's.
 
 ## Variant combinations
 
@@ -587,7 +695,7 @@ from these layers the table is empty and the six rows are the only ones.
   order detail read the VAT-split columns (`OrderPriceWithVAT` / `WithoutVAT` / `VAT` /
   `VATPercent`, the `OrderPriceBeforeFees*` set) and the line objects read
   `OrderLinePriceWith(out)VAT` and `OrderLineUnitPrice*`; `OrderTotalPrice` alone renders as
-  zero (Foundry [#1239]). All 35 `TCO-*` orders, quotes and carts and their 58 lines ship the full set at the
+  zero (Foundry [#1239]). All 36 `TCO-*` orders, quotes and carts and their 61 lines ship the full set at the
   layer's `OrderVAT 0`: `WithVAT = WithoutVAT = ` the amount, VAT and VATPercent `0`, unit
   prices from `OrderLineUnitPrice`, `BeforeFees` = the line sum, fees and discounts `0`.
   **Do not repair an order with `OrderRecalculate`**: it re-prices every line from the LIVE

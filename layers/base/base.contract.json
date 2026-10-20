@@ -219,7 +219,7 @@
     "nvarcharPkPrefix": "PACK-<NAME>-",
     "nvarcharPkNote": "When an addition writes rows into a base-owned table whose PK is nvarchar (most Ecom tables - PriceId, PaymentId, ProductId, etc.), it MUST namespace the PK with a PACK-<NAME>- prefix (uppercase layer name). Keeps additions disjoint from the base and from each other.",
     "intIdentityFloor": 100000,
-    "intIdentityNote": "When an addition writes SqlTable rows keyed by an int-identity PK, it MUST reserve an id at or above the 100000 floor. The floor does not reach _content item-instance ids (ItemType_<systemName> rows written through a page or paragraph): ItemType_* Id is a non-identity nvarchar the platform allocates on insert, and the Serializer content provider re-creates item rows by page/paragraph uniqueId, so the target assigns its own id and a YAML fields.Id never lands as the stored id. fields.Id in _content is informational only; no validator checks an item-id floor on _content. The floor applies to the int ids a layer MINTS. The AccessUser ids this contract names in guaranteedRows.permissionGroups are the one explicit exception: the permission groups 1325 / 1270 / 1292 / 1249 / 95 are base-owned and sit below the floor by contract, and the base ships exactly those ids as SqlTable rows. Every identity the sample-data layer mints is above the floor (the B2B account 100100 and the personas 100101 / 100102 / 100103). Any other id below 100000 is out of contract. No validator checks the int-identity floor; it is an authoring rule.",
+    "intIdentityNote": "When an addition writes SqlTable rows keyed by an int-identity PK, it MUST reserve an id at or above the 100000 floor. The floor does not reach _content item-instance ids (ItemType_<systemName> rows written through a page or paragraph): ItemType_* Id is a non-identity nvarchar the platform allocates on insert, and the Serializer content provider re-creates item rows by page/paragraph uniqueId, so the target assigns its own id and a YAML fields.Id never lands as the stored id. fields.Id in _content is informational only; no validator checks an item-id floor on _content. The floor applies to the int ids a layer MINTS. The AccessUser ids this contract names in guaranteedRows.permissionGroups are the one explicit exception: the permission groups 1325 / 1270 / 1292 / 1249 / 95 are base-owned and sit below the floor by contract, and the base ships exactly those ids as SqlTable rows. Every identity the sample-data layer mints is above the floor (the B2B accounts 100100 and 100106, the personas 100101 / 100102 / 100103 and the buyer's second profile 100105). Any other id below 100000 is out of contract. No validator checks the int-identity floor; it is an authoring rule.",
     "baseCatalog": "empty",
     "baseCatalogNote": "The base ships ZERO catalog (scaffolding-only, swift/2.3.2): EcomGroups, EcomProducts, EcomGroupProductRelation, EcomVariantGroups, EcomVariantsOptions, EcomVariantOptionsProductRelation, EcomDiscount, EcomDiscountTranslation, EcomPrices carry no base rows. The collision surface for these tables is addition-vs-sample-data-vs-addition, arbitrated statically by the gate.",
     "reservedFixtureKeys": [
@@ -236,6 +236,7 @@
       "TC-HOVER-*",
       "TCREL-*",
       "TCO-*",
+      "TCASRT-*",
       "tc_*"
     ],
     "reservedFixtureNote": "The sample-data layer's demo catalogue, personas and orders reserve these key prefixes (the TC* family, mirrored in that layer's costHints.reservedKeyPrefixes). Additions must not use them. An addition writing rows of its own into a base-owned table uses its own PACK-<NAME>- prefix instead (nvarcharPkPrefix).",
@@ -371,7 +372,35 @@
         "userName": "TruvioBuyer",
         "customerNumber": "TC-100200",
         "groupId": 1325,
-        "note": "surface-swift's authenticated my-returns probe signs in as this persona, and so does every cart-price and checkout-recurring probe. The customer-center dashboard data (customerCenter below) belongs to this persona."
+        "note": "surface-swift's authenticated my-returns probe signs in as this persona, and so does every cart-price and checkout-recurring probe. The customer-center dashboard data (customerCenter below) belongs to this persona. With the Swift 2.5.0 sample data this row is also the Login of the user name TruvioBuyer (AccessUserIsLogin true): DW authenticates the IsLogin row of a user name first, so sign-in still lands here.",
+        "isLogin": true
+      },
+      "buyerProfiles": {
+        "table": "AccessUser",
+        "userName": "TruvioBuyer",
+        "login": 100101,
+        "profiles": [
+          {
+            "id": 100101,
+            "customerNumber": "TC-100200",
+            "accountGroupId": 100100,
+            "company": "Truvio Demo Account"
+          },
+          {
+            "id": 100105,
+            "customerNumber": "TC-100300",
+            "accountGroupId": 100106,
+            "company": "Truvio Demo Account North",
+            "groupId": 1325
+          }
+        ],
+        "accountGroup": {
+          "id": 100106,
+          "userAndGroupType": "SystemAccount",
+          "customerNumber": "TC-100300",
+          "csrImpersonationRelation": "1292$$100106"
+        },
+        "note": "The Swift 2.5.0 Switch account subject. DW10 links a Login to its profiles by AccessUserUserName alone (UsersController info/profiles, UserAuthenticationFrontend profile list, AuthenticationManager.StartSwitchUser): the row with AccessUserIsLogin true is the Login and authenticates, every other valid row with the same user name is a profile, and two profiles need different non-empty customer numbers. The Customer Center shows the button when GetUsersByUserName returns more than one row and the page tagged SignIn exists; the switch page needs the Sign in paragraph's ListUserProfiles setting with SelectableUsers.cshtml (surface-swift content, not this layer). The second profile owns no orders. Rendered, not probed."
       },
       "csr": {
         "table": "AccessUser",
@@ -473,6 +502,42 @@
         ],
         "note": "surface-swift's authenticated my-returns probe (moved there from the retired feature-rma layer) returns against this completed order; its first line is what the RMA link points at."
       },
+      "bomOrder": {
+        "table": "EcomOrders",
+        "orderId": "TCO-0027",
+        "orderStateId": "OS2",
+        "orderCustomerAccessUserId": 100101,
+        "currency": "USD",
+        "orderPriceWithVAT": 105,
+        "parentLine": {
+          "orderLineId": "TCO-0027-1",
+          "productId": "TCPROD0042",
+          "productNumber": "TC-BDL-0042",
+          "unitPrice": 105
+        },
+        "bomLines": [
+          {
+            "orderLineId": "TCO-0027-2",
+            "productId": "TCPROD0002",
+            "productNumber": "TC-VAR-0002",
+            "bomItemId": "TC-BOM-0042-1",
+            "unitPrice": 60
+          },
+          {
+            "orderLineId": "TCO-0027-3",
+            "productId": "TCPROD0051",
+            "productNumber": "TC-DOC-0051",
+            "bomItemId": "TC-BOM-0042-2",
+            "unitPrice": 45
+          }
+        ],
+        "bomLineShape": {
+          "OrderLineBOM": true,
+          "OrderLineParentLineId": "TCO-0027-1",
+          "OrderLineType": "0"
+        },
+        "note": "The Swift 2.5.0 BOM product overview subject: a completed buyer order for the configurable kit (bomKitProduct) whose two item lines carry the slot defaults in the shape CartService.BomOrderlineBuilder writes (OrderLineBOM true, the parent's id in OrderLineParentLineId, the slot in OrderLineBOMItemId, OrderLineType 0 Product; DW has no BOM line type). OrderLineService.GetByOrder hangs them under the parent's BomOrderLines, so the order total is the parent line, the calculated kit price 105. Rendered by the My orders list and order detail, not probed."
+      },
       "rma": {
         "table": "EcomRmas",
         "rmaId": "PACK-RMA-0001",
@@ -487,8 +552,8 @@
         "shopId": "SHOP1",
         "currency": "USD",
         "orders": {
-          "ids": "TCO-0001..TCO-0026",
-          "completed": 21,
+          "ids": "TCO-0001..TCO-0027",
+          "completed": 22,
           "open": 4,
           "rejected": 1,
           "completedDateSpan": [
@@ -522,6 +587,29 @@
         },
         "harvestDay": "2026-09-13",
         "note": "The data the surface-swift customer-center dashboard (Swift 2.4 Dashboard widgets, surface-swift 1.16.0) draws for the buyer persona, added in sample-data 6.0.0. Every order is USD because the Spent this month and Monthly spending widgets sum one currency only and print '-' when the result mixes currencies; the Swift area and every EcomPrices row are USD too, so an order the demo places joins the same sum. The order widgets filter on OrderCompletedDate, so completed orders carry one and span the six-month chart window; open orders (OS1) carry none and list only on My orders. Quotes sit in the base quoteStates, three of them in QuotePending, the state the Pending quotes widget asks for. Dates are absolute at the harvest day and the demo clock shifts them daily, so the relative ages hold; the current-month total depends on the day of the month the demo runs."
+      },
+      "assortment": {
+        "table": "EcomAssortments",
+        "assortmentId": "TCASRT-DEALER",
+        "languageId": "ENU",
+        "name": "Truvio Dealer Assortment",
+        "active": true,
+        "allowAnonymousUsers": false,
+        "groupRelation": "TCGRP-ASSORTMENTS",
+        "permissionAccessUserId": 100100,
+        "itemsTable": "EcomAssortmentItems",
+        "items": [
+          "TCPROD0021",
+          "TCPROD0022",
+          "TCPROD0023",
+          "TCPROD0024",
+          "TCPROD0025"
+        ],
+        "requires": {
+          "globalSetting": "/Globalsettings/Ecom/Assortments/UseAssortments = True",
+          "productIndex": "SkipAssortments False and the AssortmentIDs filter in the query (Swift 2.5.0 ProductsFrontend ships both; surface-swift TruvioCommerce does not yet)"
+        },
+        "note": "The Swift 2.5.0 assortment subject. The product index fills AssortmentIDs from EcomAssortmentItems through AssortmentService.GetAssortmentsByProductId, and a deserialize runs no rebuild, so the five item rows ship materialised in the rebuild's shape. A product in an active assortment lists only for a user whose id or group holds a permission on it; a product in no assortment stays visible to everyone. The account group 100100 holds the permission, so the buyer 100101, the CSR and the account admin see the five products and an anonymous visitor and the buyer's second profile 100105 do not. With UseAssortments on, DW's ecommerce group navigation also hides every group outside an assortment the visitor holds. Rendered, not probed."
       },
       "pimShop": {
         "table": "EcomShops",
