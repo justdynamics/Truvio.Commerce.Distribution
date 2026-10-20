@@ -1,5 +1,7 @@
 @inherits Dynamicweb.Rendering.ViewModelTemplate<Dynamicweb.Frontend.ParagraphViewModel>
 @using System.IO
+@using System.Text.RegularExpressions
+@using Dynamicweb.Core.Encoders
 @using Dynamicweb.Frontend
 
 @*
@@ -48,7 +50,20 @@
 
 			@if (video.IsExternalLink())
 			{
-				<iframe src="@video.ToEmbedUrl()" loading="lazy" title="@videoName" frameborder="0" allow="fullscreen; picture-in-picture; autoplay; clipboard-write; encrypted-media; web-share"></iframe>
+				// Embed without tracking cookies, as Swift 2.5 Components/VideoPlayer.cshtml does:
+				// YouTube from youtube-nocookie.com, Vimeo with dnt=1.
+				string embedUrl = video.ToEmbedUrl()?.ToString();
+				Match youtubeId = Regex.Match(video.Path, @"(?:youtube(?:-nocookie)?\.com/(?:.*[?&]v=|embed/|shorts/|live/)|youtu\.be/)([\w-]{11})", RegexOptions.IgnoreCase);
+				if (youtubeId.Success)
+				{
+					embedUrl = $"https://www.youtube-nocookie.com/embed/{youtubeId.Groups[1].Value}";
+				}
+				else if (embedUrl?.Contains("player.vimeo.com", StringComparison.OrdinalIgnoreCase) == true)
+				{
+					embedUrl += (embedUrl.Contains('?') ? "&" : "?") + "dnt=1";
+				}
+
+				<iframe src="@HtmlEncoder.HtmlEncode(embedUrl)" loading="lazy" title="@videoName" frameborder="0" allow="fullscreen; picture-in-picture; autoplay; clipboard-write; encrypted-media; web-share"></iframe>
 			}
 			else
 			{

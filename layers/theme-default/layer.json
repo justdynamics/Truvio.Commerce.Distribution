@@ -1,8 +1,8 @@
 ﻿{
   "name": "theme-default",
-  "version": "2.6.1",
+  "version": "2.7.0",
   "kind": "theme",
-  "swiftVersion": "2.4.0",
+  "swiftVersion": "2.5.0",
   "files": [
     "Images/Brand/edge-truvio.svg",
     "Images/Brand/edge.svg",
