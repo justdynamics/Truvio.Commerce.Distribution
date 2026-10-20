@@ -57,7 +57,7 @@ vocabulary, a material class, a rating, a compatibility note, a commercial term.
 | PIM shop id | `TCSHOP-PIM` (`Truvio PIM`) |
 | Order id | `TCO-0001` … `TCO-0027`, quotes `TCO-Q001` … `TCO-Q007`, carts `TCO-C001` … `TCO-C002` |
 | Persona | `buyer@truvio-demo.example`, `csr@…`, `admin@…` |
-| Assortment id | `TCASRT-DEALER` (`Truvio Dealer Assortment`) |
+| Assortment id | `TCASRT-DEALER` (`Truvio Dealer Assortment`), `TCASRT-PUBLIC` (`Truvio Public Assortment`) |
 
 The accent colour is industrial green (~`#2E7D5B`) wherever a colour is *data* — the product
 tiles under `files/Images/TruvioCommerce/`. This layer is **data, not theme**: presentation
@@ -83,9 +83,9 @@ the layer exactly as a local one does.
 | Favourite lists | `EcomCustomerFavoriteLists`, `EcomCustomerFavoriteProducts` | 11 |
 | Product field settings | `EcomProductField` | 6 |
 | PIM structure | `EcomShops`, `EcomShopLanguageRelation`, `EcomCompletionRules`, `DynamicStructures`, `DynamicStructureLevels` | 9 |
-| Assortment | `EcomAssortments`, `EcomAssortmentGroupRelations`, `EcomAssortmentPermissions`, `EcomAssortmentItems` | 8 |
+| Assortments | `EcomAssortments`, `EcomAssortmentGroupRelations`, `EcomAssortmentPermissions`, `EcomAssortmentItems` | 115 |
 
-2,119 rows in 43 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
+2,226 rows in 43 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
 counts an edition asserts are `EcomProducts` **97** and `EcomGroups` **21**.
 
 `EcomGroups` 21 is **16 browsable storefront groups + 5 PIM groups**, and the two trees sit in
@@ -220,7 +220,7 @@ and `100105`. `100104` is unused.
 `100106` is typed `SystemAccount` like `100100`, and the CSR group `1292` has the same
 impersonation grant over it (`AccessUserSecondaryRelation` `1292$$100106`). The North profile owns
 no orders: switching to it shows an empty order history, contract prices that do not apply
-(they resolve against `TC-100200`), and the catalogue without the dealer assortment below.
+(they resolve against `TC-100200`), and the catalogue without the dealer assortment's five products and its subgroup (see [Assortments](#assortments)).
 
 **What the layer cannot ship.** The button needs the `SignIn` navigation tag on the Sign in page,
 and the switch page needs the Sign in paragraph's **List user profiles** setting with the
@@ -305,7 +305,7 @@ These are the rows a shipped probe addresses. They are stated machine-readably i
 | subscription plan | `TCPROD0061` / `TC-SUB-0061` | feature-subscription-orders `checkout-recurring` |
 | delivered order | `TCO-0001` (`OS2`, buyer `100101`) | surface-swift `authenticated-body-contains` on `/en-us/customer-center/my-returns` |
 | BOM order | `TCO-0027`, parent line `TCO-0027-1`, item lines `TCO-0027-2` / `TCO-0027-3` | none (Swift 2.5.0 BOM product overview, rendered); `configRows` |
-| assortment | `TCASRT-DEALER` over `TCGRP-ASSORTMENTS`, permission `100100`, items `TCPROD0021`-`TCPROD0025` | none (Swift 2.5.0 assortment-based product lists, rendered); `configRows` |
+| assortment | `TCASRT-DEALER` over `TCGRP-ASSORTMENTS`, permission `100100`, items `TCPROD0021`-`TCPROD0025`; `TCASRT-PUBLIC` (anonymous, `100100`, `100106`, `1325`) over every other storefront product | none (Swift 2.5.0 assortment-based product lists, rendered); `configRows` |
 | RMA | `PACK-RMA-0001` + link `100301` | the same probe (the page lists it); `configRows` |
 | customer-center data | the buyer's orders, quotes, carts and favourite lists above (`customerCenter`) | surface-swift dashboard widgets (rendered, not probed) |
 
@@ -563,8 +563,8 @@ structure `EcomShops` `100130`, `EcomShopLanguageRelation` `100131`, `EcomGroups
 `100300`-`100327`, and for the customer-center data `EcomCustomerFavoriteLists` `100401`-`100402`
 and `EcomRmaOrderLines` `100301` (with `EcomRmas` `PACK-RMA-0001`), for Swift 2.5.0 `AccessUserSecondaryRelation` `100106`,
 `EcomOrders` `OrderAutoId` `100027` and `EcomOrderLines` `OrderLineAutoId` `100271`-`100273` (`TCO-0027`; both auto ids sit under a unique
-index), `EcomAssortments` `100500`, `EcomAssortmentGroupRelations` `100502`, `EcomAssortmentPermissions` `100503` and
-`EcomAssortmentItems` `100510`-`100514`. **The ranges are per TABLE**, so `EcomProductField` `100130`-`100135` and
+index), `EcomAssortments` `100500`-`100501`, `EcomAssortmentGroupRelations` `100502` and `100620`-`100630`, `EcomAssortmentPermissions`
+`100503`-`100506` and `EcomAssortmentItems` `100510`-`100514` and `100700`-`100791`. **The ranges are per TABLE**, so `EcomProductField` `100130`-`100135` and
 `EcomShops` `100130` are not a collision. The storefront binds the asset categories and the display
 group by system name, not by id. An addition writing its own rows into a base-owned table uses
 its `PACK-<NAME>-` prefix instead.
@@ -573,46 +573,74 @@ its `PACK-<NAME>-` prefix instead.
 
 The `Users` subgroup `Assortments` (`TCGRP-ASSORTMENTS`, `TCPROD0021`-`TCPROD0025`) is where the
 catalogue shows "which rows a signed-in persona sees". Until Swift 2.5.0 it was a plain subgroup;
-it is now the content of one assortment, so the demo shows it:
+it is now the content of a dealer assortment, and a public assortment carries the rest of the
+storefront so that navigation keeps working:
 
-| Table | Row | What it does |
+| Table | Rows | What they do |
 |---|---|---|
-| `EcomAssortments` | `TCASRT-DEALER$$ENU` "Truvio Dealer Assortment" | active, `AllowAnonymousUsers` false, `RebuildRequired` false |
-| `EcomAssortmentGroupRelations` | `TCASRT-DEALER$$TCGRP-ASSORTMENTS` | the authoring relation an admin rebuild reads |
-| `EcomAssortmentPermissions` | `100100$$TCASRT-DEALER` | the grant: the account group `100100` |
-| `EcomAssortmentItems` | five rows, `TCPROD0021`-`TCPROD0025`, `ENU` | the materialised assortment the index and the product filters read |
+| `EcomAssortments` | `TCASRT-DEALER$$ENU` "Truvio Dealer Assortment"; `TCASRT-PUBLIC$$ENU` "Truvio Public Assortment" | both active and `RebuildRequired` false; `AllowAnonymousUsers` false on the dealer, true on the public |
+| `EcomAssortmentGroupRelations` | dealer over `TCGRP-ASSORTMENTS`; public over the eleven other storefront subgroups | the authoring relations an admin rebuild reads, `IncludeSubgroups` false |
+| `EcomAssortmentPermissions` | dealer to `100100`; public to `100100`, `100106` and `1325` | the grants |
+| `EcomAssortmentItems` | dealer: `TCPROD0021`-`TCPROD0025`; public: the other 92 product rows (masters and variant rows), all `ENU` | the materialised assortments the index, the product filters and the navigation read |
 
-**The behaviour.** A product in an active assortment is shown only to a user with a permission
-on that assortment, directly or through one of the user's groups; **a product in no assortment
-stays visible to everyone.** Signed in as the buyer (`100101`, in `100100`), the CSR or the
-account admin, the Assortments subgroup lists its five products; an anonymous visitor's product
-lists and search omit them, and so does the buyer's second profile `100105` (account `100106`),
-which makes Switch account visibly change the catalogue. Every other product is unaffected.
+**The behaviour.** A product in an active assortment is shown only to a visitor who holds one of
+its assortments; **a product in no assortment stays visible to everyone.** The five dealer
+products are in the dealer assortment only, every other storefront product is in the public one:
+
+| Visitor | Holds | Products | Navigation groups |
+|---|---|---|---|
+| anonymous | public (allow-anonymous) | all except `TCPROD0021`-`TCPROD0025` | 15 of 16: no `Assortments` subgroup |
+| buyer `100101` (in `100100`, `1325`) | dealer and public | all | all 16 |
+| CSR `100102`, account admin `100103` (in `100100`) | dealer and public | all | all 16 |
+| buyer profile `100105` (in `100106`, `1325`) | public | all except the five | 15 of 16 |
+
+Switch account therefore visibly changes the catalogue: the North profile loses the Assortments
+subgroup and its five products.
+
+**Why a public assortment.** With `UseAssortments` on and any active assortment, DW's ecommerce
+group navigation (`GroupNavigationTreeNodeProvider.FilterGroups`, `AssortmentService.HasAccessToGroup`)
+lists a group only when an assortment the visitor holds has the group in its `GroupHierarchy`, and
+that hierarchy is the groups of the assortment's active item products plus their parents through
+`EcomGroupRelations`. A dealer-only assortment would empty the menu for anonymous visitors and the
+North profile and cut the buyer's menu to the Users groups. The public assortment's 92 items put the
+other eleven subgroups and all four top groups (`Users` through the direct top-group relation every
+master carries) into its hierarchy.
+
+**Why the public grants.** `AssortmentService.GetAssortmentIdsByUser` returns only the assortments
+granted to the user or one of its groups; the allow-anonymous assortments go only to a visitor who
+is not signed in. A signed-in user without a public grant would lose every group and every product
+in the public assortment. `100100` and `100106` cover the four personas; `1325` covers any other
+signed-in customer.
 
 **Why the items ship.** The product index fills `AssortmentIDs` from
-`AssortmentService.GetAssortmentsByProductId`, which reads `EcomAssortmentItems`, never the
-relation tables. Those rows are what an admin **Rebuild assortments** writes from the relations,
-and no deserialize runs a rebuild, so the layer ships them in the rebuild's own shape
-(`RelationAutoID` -1, `RelationType` empty). A later rebuild rewrites the same five rows.
+`AssortmentService.GetAssortmentsByProductId`, and DW computes `GroupHierarchy`, both from
+`EcomAssortmentItems`, never from the relation tables. Those rows are what an admin **Rebuild
+assortments** writes from the relations, and no deserialize runs a rebuild, so the layer ships them
+in the rebuild's own shape (`RelationAutoID` -1, `RelationType` empty).
+
+**The rebuild trade-off.** A rebuild takes, per group relation, every product directly related to
+the group (descendants only with `IncludeSubgroups`). Every master also carries a direct relation to
+its top group, so a public relation to the `Users` top group would pull the five dealer products into
+the public assortment and void the restriction. The public assortment therefore relates the eleven
+subgroups and no top group, and a rebuild regenerates exactly the shipped 92 and 5 items (checked
+against the delivered relations on the proving database). The cost: a product later added to a top
+group only, or to a new subgroup, stays outside both assortments until a relation is added, which
+leaves it visible to everyone and leaves a new subgroup out of the menu.
 
 **Why no shop relation.** The rebuild adds every product of a related shop
-(`EcomAssortmentShopRelations` joins the shop's groups), so a `SHOP1` relation would put the whole
-catalogue behind the assortment. The group relation alone fences the five products.
+(`EcomAssortmentShopRelations` joins the shop's groups), so a `SHOP1` relation would put the dealer
+products into the public assortment.
 
-**What the layer cannot ship, and the trap it carries.**
+**What the layer cannot ship.**
 
 - GlobalSettings `/Globalsettings/Ecom/Assortments/UseAssortments` must be `True`. While it is
   `False`, DW strips every `AssortmentIDs` expression from a product query before it runs, and
   everyone sees everything.
 - The product index must build with `SkipAssortments` `False` and the query must carry the
   `AssortmentIDs` filter (`IsEmpty` OR `MatchAny` the `Dynamicweb.UserManagement.Context:AssortmentIDs`
-  macro). Swift 2.5.0's `ProductsFrontend` repository ships both, so the header search honours the
-  assortment; the Shop PLP reads surface-swift's `TruvioCommerce` repository, which until it is
-  aligned builds with `SkipAssortments` `True` and filters nothing. Rebuild the index after delivery.
-- **With `UseAssortments` on and an active assortment, DW's ecommerce group navigation lists only
-  the groups inside an assortment the visitor holds** (`GroupNavigationTreeNodeProvider.FilterGroups`).
-  A menu built on ecommerce groups therefore shrinks for every visitor; the product-list rule
-  above is the index query's, not the navigation's.
+  macro). Swift 2.5.0's `ProductsFrontend` repository and surface-swift 1.19.0's `TruvioCommerce`
+  repository both do. **Rebuild the product index after delivery**, or the documents carry no
+  `AssortmentIDs` and every product shows to everyone.
 
 ## Variant combinations
 

@@ -120,7 +120,7 @@
       "providerType": "SqlTable",
       "table": "EcomAssortments",
       "where": "AssortmentID LIKE 'TCASRT-%'",
-      "_why": "Merge: the one assortment TCASRT-DEALER 'Truvio Dealer Assortment' (ENU, AssortmentAutoID 100500), active, not for anonymous users, RebuildRequired false because its EcomAssortmentItems rows ship materialised. Swift 2.5.0 product lists and search hide a product in an active assortment from every user without a permission on it; a product in no assortment stays visible to everyone."
+      "_why": "Merge: the two assortments. TCASRT-DEALER 'Truvio Dealer Assortment' (AutoID 100500) is active, not for anonymous users, and holds the five TCGRP-ASSORTMENTS products. TCASRT-PUBLIC 'Truvio Public Assortment' (AutoID 100501) is active, allows anonymous users and holds every other storefront product, so ecommerce group navigation, which lists only groups inside an assortment the visitor holds, keeps every ordinary group. RebuildRequired false on both because their EcomAssortmentItems rows ship materialised."
     },
     {
       "name": "sample-data EcomAssortmentGroupRelations",
@@ -128,7 +128,7 @@
       "providerType": "SqlTable",
       "table": "EcomAssortmentGroupRelations",
       "where": "AssortmentGroupRelationAssortmentID LIKE 'TCASRT-%'",
-      "_why": "Merge: the authoring relation, TCASRT-DEALER over the storefront subgroup TCGRP-ASSORTMENTS (AutoID 100502), so an admin Rebuild assortments reproduces the five shipped item rows."
+      "_why": "Merge: the authoring relations an admin Rebuild assortments reads, IncludeSubgroups false. TCASRT-DEALER over TCGRP-ASSORTMENTS (100502); TCASRT-PUBLIC over the eleven other storefront subgroups (100620-100630) and NOT over the Users top group, because every master also carries a direct relation to its top group and a TCGRP-USERS relation would pull the five dealer products into the public assortment."
     },
     {
       "name": "sample-data EcomAssortmentPermissions",
@@ -136,7 +136,7 @@
       "providerType": "SqlTable",
       "table": "EcomAssortmentPermissions",
       "where": "AssortmentPermissionAssortmentID LIKE 'TCASRT-%'",
-      "_why": "Merge: the one grant, TCASRT-DEALER to the account group 100100 Truvio Demo Account (AutoID 100503). AssortmentService.GetAssortmentIdsByUser matches the user id or any of the user's groups, so the buyer 100101, the CSR and the account admin see the assortment and the buyer's second profile 100105 on account 100106 does not."
+      "_why": "Merge: TCASRT-DEALER to the account group 100100 (100503); TCASRT-PUBLIC to 100100, 100106 and 1325 (100504-100506). AssortmentService.GetAssortmentIdsByUser returns only assortments granted to the user or one of its groups, never the allow-anonymous ones, so a signed-in user without a public grant would lose every group and every assortment product."
     },
     {
       "name": "sample-data EcomAssortmentItems",
@@ -144,7 +144,7 @@
       "providerType": "SqlTable",
       "table": "EcomAssortmentItems",
       "where": "AssortmentItemAssortmentID LIKE 'TCASRT-%'",
-      "_why": "Merge: the materialised assortment, the five TCGRP-ASSORTMENTS products TCPROD0021..TCPROD0025 in ENU (AutoID 100510-100514), in the shape the rebuild writes (RelationAutoID -1, RelationType empty). The product index fills AssortmentIDs from AssortmentService.GetAssortmentsByProductId, which reads these rows, and nothing rebuilds an assortment on deserialize, so the rows ship instead of a rebuild."
+      "_why": "Merge: the materialised assortments in the rebuild's shape (RelationAutoID -1, RelationType empty, ENU): TCASRT-DEALER TCPROD0021..TCPROD0025 (100510-100514) and TCASRT-PUBLIC the other 92 product rows, masters and variant rows (100700-100791), exactly what a rebuild regenerates from the group relations. The index fills AssortmentIDs and DW computes GroupHierarchy from these rows, and nothing rebuilds an assortment on deserialize."
     },
     {
       "name": "sample-data EcomVariantGroupProductRelation",

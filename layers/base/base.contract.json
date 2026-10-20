@@ -607,9 +607,41 @@
         ],
         "requires": {
           "globalSetting": "/Globalsettings/Ecom/Assortments/UseAssortments = True",
-          "productIndex": "SkipAssortments False and the AssortmentIDs filter in the query (Swift 2.5.0 ProductsFrontend ships both; surface-swift TruvioCommerce does not yet)"
+          "productIndex": "SkipAssortments False and the AssortmentIDs filter in the query: Swift 2.5.0 ProductsFrontend and surface-swift 1.19.0 TruvioCommerce both ship them. Rebuild the product index after delivery, or no document carries AssortmentIDs."
         },
-        "note": "The Swift 2.5.0 assortment subject. The product index fills AssortmentIDs from EcomAssortmentItems through AssortmentService.GetAssortmentsByProductId, and a deserialize runs no rebuild, so the five item rows ship materialised in the rebuild's shape. A product in an active assortment lists only for a user whose id or group holds a permission on it; a product in no assortment stays visible to everyone. The account group 100100 holds the permission, so the buyer 100101, the CSR and the account admin see the five products and an anonymous visitor and the buyer's second profile 100105 do not. With UseAssortments on, DW's ecommerce group navigation also hides every group outside an assortment the visitor holds. Rendered, not probed."
+        "note": "The Swift 2.5.0 assortment subject. The product index fills AssortmentIDs from EcomAssortmentItems through AssortmentService.GetAssortmentsByProductId, and a deserialize runs no rebuild, so the five item rows ship materialised in the rebuild's shape. A product in an active assortment lists only for a user whose id or group holds a permission on it; a product in no assortment stays visible to everyone. The account group 100100 holds the permission, so the buyer 100101, the CSR and the account admin see the five products and an anonymous visitor and the buyer's second profile 100105 do not. With UseAssortments on, DW's ecommerce group navigation hides every group outside an assortment the visitor holds, which is what publicAssortment covers. Rendered, not probed.",
+        "publicAssortment": {
+          "assortmentId": "TCASRT-PUBLIC",
+          "name": "Truvio Public Assortment",
+          "allowAnonymousUsers": true,
+          "groupRelations": [
+            "TCGRP-VARIANTS",
+            "TCGRP-UNITS",
+            "TCGRP-BUNDLES",
+            "TCGRP-PRICE-STRUCTURES",
+            "TCGRP-DISCOUNTS",
+            "TCGRP-STOCK-DELIVERY",
+            "TCGRP-DOCUMENTS",
+            "TCGRP-MEDIA",
+            "TCGRP-RELATIONS",
+            "TCGRP-CONTRACT-PRICING",
+            "TCGRP-CURRENCIES"
+          ],
+          "permissionAccessUserIds": [
+            100100,
+            100106,
+            1325
+          ],
+          "items": 92,
+          "note": "Every storefront product row except the five dealer products. DW's ecommerce group navigation lists a group only when an assortment the visitor holds has it in its GroupHierarchy (the groups of the assortment's active item products and their parents), so without this assortment the dealer-only assortment would empty the menu for anonymous visitors and the profile 100105 and cut the buyer's. Signed-in users get only granted assortments, never the allow-anonymous ones, hence the grants. No relation to a top group: every master carries a direct top-group relation, and a rebuild would pull the dealer products in."
+        },
+        "navigation": {
+          "anonymous": "15 of 16 storefront groups (no TCGRP-ASSORTMENTS)",
+          "100101": 16,
+          "100102": 16,
+          "100103": 16,
+          "100105": "15 of 16"
+        }
       },
       "pimShop": {
         "table": "EcomShops",
