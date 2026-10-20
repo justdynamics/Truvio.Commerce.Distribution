@@ -1,8 +1,8 @@
 {
   "name": "feature-gallery-zoom",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "kind": "feature",
-  "swiftVersion": "2.4.0",
+  "swiftVersion": "2.5.0",
   "files": [
     "Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/addon.css",
     "Templates/Designs/Swift-v2/Custom/Addons/gallery-zoom/addon.js",

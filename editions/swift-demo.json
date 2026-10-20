@@ -1,16 +1,16 @@
 ﻿{
   "name": "swift-demo",
-  "from": "base@4.3.0",
+  "from": "base@4.4.0",
   "add": [
-    "feature-reordering@1.0.4",
-    "feature-pricing@1.1.4",
-    "feature-subscription-orders@1.2.2",
-    "feature-bom-configurator@1.2.3",
-    "feature-b2b-comms@1.1.0",
-    "feature-gallery-zoom@1.0.0"
+    "feature-reordering@1.0.5",
+    "feature-pricing@1.1.5",
+    "feature-subscription-orders@1.2.3",
+    "feature-bom-configurator@1.2.4",
+    "feature-b2b-comms@1.1.1",
+    "feature-gallery-zoom@1.0.1"
   ],
   "surfaces": [
-    "surface-swift@1.18.2"
+    "surface-swift@1.19.0"
   ],
   "compatAxes": [
     "ring"

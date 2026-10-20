@@ -1,5 +1,9 @@
 # Changelog — feature-b2b-comms
 
+## 1.1.1 (2026-10-20)
+
+Swift 2.5.0: `swiftVersion` 2.5.0, no file change (Foundry #1535, the estate rolls forward from 2.4.0; rolling latest-only). The layer's templates and rows were checked against the 2.5.0 release: nothing it overlays or derives from changed.
+
 ## 1.1.0
 
 **MINOR. The layer ships the Email Marketing Flow Scheduler task (Foundry #1352).**

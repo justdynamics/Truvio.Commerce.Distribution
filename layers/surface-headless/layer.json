@@ -1,8 +1,8 @@
 {
   "name": "surface-headless",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "kind": "surface",
-  "swiftVersion": "2.4.0",
+  "swiftVersion": "2.5.0",
   "repositoryName": "Headless",
   "fragmentModes": [
     "replace",
