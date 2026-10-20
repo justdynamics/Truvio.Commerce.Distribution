@@ -1,5 +1,33 @@
 # Changelog — sample-data
 
+## 6.6.0 (2026-10-20)
+
+**MINOR. The Swift 2.5.0 features show in the demo data (Foundry #1535).**
+
+- **Switch account:** TruvioBuyer (100101) is the Login of its user name (`AccessUserIsLogin` true) and
+  keeps all its data, password and id. A second profile 100105 with the same user name sits on the
+  new account group 100106 "Truvio Demo Account North" (SystemAccount, TC-100300) and in group 1325;
+  CSR group 1292 can impersonate on it. DW10 links a Login to its profiles by the shared user name
+  only; the Swift button shows when more than one row carries the name and the Sign in page carries
+  the `SignIn` navigation tag (surface-swift 1.19.0).
+- **BOM product overview:** the completed order TCO-0027 for the kit TCPROD0042 carries the parent
+  line at 105 and two parts (TCPROD0002 at 60, TCPROD0051 at 45) with `OrderLineBOM` and
+  `OrderLineParentLineId` set, which the Swift 2.5.0 order list and detail render below the product.
+- **Assortments:** TCASRT-DEALER "Truvio Dealer Assortment" covers the TCGRP-ASSORTMENTS products
+  TCPROD0021..0025 and is granted to account group 100100. The `EcomAssortmentItems` rows ship
+  ready-built because a deserialize runs no assortment rebuild. Products in no assortment stay
+  visible to everyone. The host needs `/Globalsettings/Ecom/Assortments/UseAssortments` True (the
+  Foundry sets it on delivery); surface-swift 1.19.0 builds its index with `SkipAssortments` false
+  and filters the query on the visitor's assortments.
+- **Column background height:** three surface-swift grid-row documents ship as declared overrides with
+  the `Swift-v2_Row` field `ColumnBackgroundHeight`: `Home/grid-row-4` and `Home/grid-row-6` are
+  `fit`, `About/grid-row-2` is `stretch`. Every other key stays surface-swift's. The value lands only
+  where the delivered item type carries the column (Swift 2.5.0).
+- Four new tables, 2,119 rows in 43 tables; `swiftVersion` 2.5.0. A host delivered before this
+  version keeps `AccessUserIsLogin` false on 100101, because a merge never overwrites a set value.
+- hreflang (multi-language SEO) is not covered: a language version of the Swift 2 area cannot be
+  delivered until the master area id is remapped (Foundry #1561).
+
 ## 6.5.0
 
 **MINOR. Product images are filed under the wizard's Images group (owner ruling
