@@ -1,0 +1,44 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomAssortmentGroupRelations"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "AssortmentGroupRelationAssortmentID"
+- "AssortmentGroupRelationGroupID"
+"identityColumns":
+- "AssortmentGroupRelationAutoID"
+"allColumns":
+- "AssortmentGroupRelationAssortmentID"
+- "AssortmentGroupRelationGroupID"
+- "AssortmentGroupRelationAutoID"
+- "AssortmentGroupRelationExcluded"
+"columnDefinitions":
+- "name": "AssortmentGroupRelationAssortmentID"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentGroupRelationGroupID"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentGroupRelationAutoID"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "AssortmentGroupRelationExcluded"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
