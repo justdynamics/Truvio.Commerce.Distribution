@@ -15,6 +15,9 @@ The base ships no row change: the 2.5.0 features the editions show (Switch Accou
 overviews, assortment-aware product lists, Column background height, hreflang) live in surface-swift
 (templates, item types, the storefront query), theme-default and sample-data. The serializer config
 keeps its historical file name `config/swift-2.4.json` (the predicate set did not change).
+`deliveryTarget.hostFiles.globalSettings.required` is new: the host settings the layers need beyond the
+Swift release defaults, today `/Globalsettings/Ecom/Assortments/UseAssortments` True (sample-data 6.6.0
+assortment, surface-swift 1.19.0 query); the Foundry writes them on a blank build and a release roll.
 
 ## 4.3.0
 

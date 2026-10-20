@@ -68,6 +68,16 @@
         "sha256": "05312fdb0fdfe013ce0ff098da8cdb7fd5bef3bfb5b448a2293b017afc887129",
         "extractTo": "wwwroot (the zip root is Files/)"
       },
+      "globalSettings": {
+        "note": "Settings the delivered layers need in Files/GlobalSettings.config beyond the Swift release defaults. The Foundry writes them on every blank build (tools/vm/New-DemoSite.ps1) and on a Swift release roll (tools/vm/Update-SwiftFiles.ps1 merges the release file; these entries are applied after it); a standing host that lacks one is set by hand and recycled. A value is written only when the key is absent or differs; nothing else in the file is touched.",
+        "required": [
+          {
+            "path": "/Globalsettings/Ecom/Assortments/UseAssortments",
+            "value": "True",
+            "why": "sample-data 6.6.0 ships the assortment TCASRT-DEALER and surface-swift 1.19.0 filters the product query on the visitor's assortments (Swift 2.5.0); while the setting is False, Dynamicweb strips the assortment filter from every product query and every visitor sees every product."
+          }
+        ]
+      },
       "note": "The host's Files tree is the Swift release asset, unmodified: templates, item type definitions, the ProductsFrontend and ProductsBackend repositories (repositories.provisionedByGate false) and GlobalSettings.config with the Swift defaults (Settings/Designs/DoNotIncludeBaseHref True; the variant selector resolves through the friendly product URLs without a base href, measured on the blank host). The layers' files/ trees are delivered on top. tag must equal compat.swift.tag (validator check 16); rolling the Swift version rolls this asset and its sha256 with it."
     },
     "wizardSeed": {
