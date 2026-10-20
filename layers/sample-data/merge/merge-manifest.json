@@ -21,6 +21,8 @@
         "_sql/AccessUser/100101.yml",
         "_sql/AccessUser/100102.yml",
         "_sql/AccessUser/100103.yml",
+        "_sql/AccessUser/100105.yml",
+        "_sql/AccessUser/100106.yml",
         "_sql/AccessUser/_meta.yml"
       ]
     },
@@ -38,9 +40,11 @@
         "_sql/AccessUserGroupRelation/100100$$100101.yml",
         "_sql/AccessUserGroupRelation/100100$$100102.yml",
         "_sql/AccessUserGroupRelation/100100$$100103.yml",
+        "_sql/AccessUserGroupRelation/100106$$100105.yml",
         "_sql/AccessUserGroupRelation/1270$$100103.yml",
         "_sql/AccessUserGroupRelation/1292$$100102.yml",
         "_sql/AccessUserGroupRelation/1325$$100101.yml",
+        "_sql/AccessUserGroupRelation/1325$$100105.yml",
         "_sql/AccessUserGroupRelation/_meta.yml"
       ]
     },
@@ -56,6 +60,7 @@
       "entryId": "sql/AccessUserSecondaryRelation",
       "files": [
         "_sql/AccessUserSecondaryRelation/1292$$100100.yml",
+        "_sql/AccessUserSecondaryRelation/1292$$100106.yml",
         "_sql/AccessUserSecondaryRelation/_meta.yml"
       ]
     },
