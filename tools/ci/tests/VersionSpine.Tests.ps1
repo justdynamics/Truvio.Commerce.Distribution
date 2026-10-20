@@ -133,7 +133,8 @@ Describe 'S4 current never runs ahead of gateProven' {
     }
     It 'PASSes a current that lags gateProven, and says so (a lag is not a defect)' {
         $s = Copy-Doc $script:spine
-        $s.components.dw.current.version = '10.28.11'
+        # A lag: above the layers floor (10.29.0 since the Swift 2.5.0 roll), below gateProven (10.29.8).
+        $s.components.dw.current.version = '10.29.7'
         $rows = Invoke-Spine -Spine $s
         (Get-Fails $rows).Count | Should -Be 0
         ($rows | Where-Object { $_.msg -match 'dw current' }).msg | Should -Match 'gateProven is ahead'
@@ -166,7 +167,8 @@ Describe 'S5 the base contract copies the layers floors' {
     It 'FAILs a dw floor the contract did not copy' {
         $c = Copy-Doc $script:contract
         $c.compat.dw.min = '10.28.12'
-        (Get-Fails (Invoke-Spine -Contract $c)).msg -join ' ' | Should -Match "compat\.dw\.min '10\.28\.12' equals the spine layers floor '10\.28\.1'"
+        $floor = [regex]::Escape("$((@($script:spine.components.dw.floors | Where-Object { $_.consumer -eq 'layers' }) | Select-Object -First 1).min)")
+        (Get-Fails (Invoke-Spine -Contract $c)).msg -join ' ' | Should -Match "compat\.dw\.min '10\.28\.12' equals the spine layers floor '$floor'"
     }
 }
 
