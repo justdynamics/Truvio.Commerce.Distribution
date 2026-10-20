@@ -13,17 +13,21 @@
 - **BOM product overview:** the completed order TCO-0027 for the kit TCPROD0042 carries the parent
   line at 105 and two parts (TCPROD0002 at 60, TCPROD0051 at 45) with `OrderLineBOM` and
   `OrderLineParentLineId` set, which the Swift 2.5.0 order list and detail render below the product.
-- **Assortments:** TCASRT-DEALER "Truvio Dealer Assortment" covers the TCGRP-ASSORTMENTS products
-  TCPROD0021..0025 and is granted to account group 100100. The `EcomAssortmentItems` rows ship
-  ready-built because a deserialize runs no assortment rebuild. Products in no assortment stay
-  visible to everyone. The host needs `/Globalsettings/Ecom/Assortments/UseAssortments` True (the
-  Foundry sets it on delivery); surface-swift 1.19.0 builds its index with `SkipAssortments` false
-  and filters the query on the visitor's assortments.
+- **Assortments:** TCASRT-DEALER "Truvio Dealer Assortment" (TCPROD0021..0025, granted to the account group
+  100100) and TCASRT-PUBLIC "Truvio Public Assortment". The public one allows anonymous users, holds the
+  other 92 product rows through the eleven other storefront subgroups, and is granted to 100100, 100106 and
+  1325. With `UseAssortments` on, DW lists a group only if the visitor holds an assortment containing it; the
+  public assortment keeps every ordinary group listed for every persona, and only the Assortments subgroup
+  and its five products stay with the dealer grant. The items of both assortments ship ready-built, in the
+  form an assortment rebuild writes (a deserialize runs no rebuild). The host needs
+  `/Globalsettings/Ecom/Assortments/UseAssortments` True (the Foundry sets it on delivery); surface-swift
+  1.19.0 builds its index with `SkipAssortments` false and filters the query on the visitor's assortments;
+  rebuild the product index after delivery.
 - **Column background height:** three surface-swift grid-row documents ship as declared overrides with
   the `Swift-v2_Row` field `ColumnBackgroundHeight`: `Home/grid-row-4` and `Home/grid-row-6` are
   `fit`, `About/grid-row-2` is `stretch`. Every other key stays surface-swift's. The value lands only
   where the delivered item type carries the column (Swift 2.5.0).
-- Four new tables, 2,119 rows in 43 tables; `swiftVersion` 2.5.0. A host delivered before this
+- Four new tables, 2,226 rows in 43 tables; `swiftVersion` 2.5.0. A host delivered before this
   version keeps `AccessUserIsLogin` false on 100101, because a merge never overwrites a set value.
 - hreflang (multi-language SEO) is not covered: a language version of the Swift 2 area cannot be
   delivered until the master area id is remapped (Foundry #1561).
