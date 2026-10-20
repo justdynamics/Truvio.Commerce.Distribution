@@ -14,8 +14,8 @@
     <RedirectToReferrer>0</RedirectToReferrer>
     <CreatePasswordPageId>Default.aspx?Id=64</CreatePasswordPageId>
     <CreateUserPageId>Default.aspx?Id=61</CreateUserPageId>
-    <ListUserProfiles>0</ListUserProfiles>
-    <UserProfilesTemplate></UserProfilesTemplate>
+    <ListUserProfiles>1</ListUserProfiles>
+    <UserProfilesTemplate>SelectableUsers.cshtml</UserProfilesTemplate>
     <OneTimeCodeTemplate></OneTimeCodeTemplate>
     <MagicLinkTemplate></MagicLinkTemplate>
   </Settings>
