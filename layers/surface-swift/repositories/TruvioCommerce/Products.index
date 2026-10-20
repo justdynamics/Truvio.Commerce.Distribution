@@ -37,6 +37,13 @@
   level still renders, and every node is empty - no error anywhere. The Foundry gate treats
   this flag as blocking rather than advisory on an edition that declares pimWorkspaces.
 
+  SkipAssortments is False since 1.19.0, as in the Swift 2.5 ProductsFrontend index. The
+  Swift 2.5 query filters on the AssortmentIDs field the ProductIndexSchemaExtender
+  declares, and the Full build fills it only with this flag False. With no assortment rows
+  the field is empty on every product and the query's IsEmpty branch matches them all.
+  LanguageID, the field the ParameterOrContextLanguageID macro compares with, is a default
+  field of the same extender.
+
   FOUR ATTRIBUTE FACETS, ONE PER CATEGORY, AND WHY IT IS FOUR. The catalogue this
   distribution ships PARTITIONS its products across its four field categories - each
   category carries values for a quarter of the catalogue and none for the rest - so no
@@ -74,7 +81,7 @@
       <Setting Name="DoNotFailOnMismatchingProductCount">True</Setting>
       <Setting Name="ShopsToIndex"></Setting>
       <Setting Name="SkipOrderhistory">True</Setting>
-      <Setting Name="SkipAssortments">True</Setting>
+      <Setting Name="SkipAssortments">False</Setting>
       <Setting Name="SkipDataModels">False</Setting>
       <Setting Name="SkipBomInfo">False</Setting>
       <Setting Name="SkipProductTranslations">True</Setting>

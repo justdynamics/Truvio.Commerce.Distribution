@@ -1,9 +1,9 @@
 {
   "name": "dap-portal",
-  "from": "base@4.3.0",
+  "from": "base@4.4.0",
   "add": [],
   "surfaces": [
-    "surface-dap-portal@1.1.0"
+    "surface-dap-portal@1.1.1"
   ],
   "sampleData": true,
   "themes": [

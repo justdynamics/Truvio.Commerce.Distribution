@@ -1,0 +1,36 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomAssortmentPermissions"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "AssortmentPermissionAccessUserID"
+- "AssortmentPermissionAssortmentID"
+"identityColumns":
+- "AssortmentPermissionAutoID"
+"allColumns":
+- "AssortmentPermissionAssortmentID"
+- "AssortmentPermissionAccessUserID"
+- "AssortmentPermissionAutoID"
+"columnDefinitions":
+- "name": "AssortmentPermissionAssortmentID"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentPermissionAccessUserID"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentPermissionAutoID"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true

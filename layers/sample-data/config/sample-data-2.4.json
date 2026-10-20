@@ -6,7 +6,7 @@
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "AccessUser",
-      "where": "AccessUserId >= 100100 AND AccessUserId <= 100103",
+      "where": "AccessUserId >= 100100 AND AccessUserId <= 100106",
       "excludeFields": [
         "AccessUserPassword",
         "AccessUserPasswordDate",
@@ -16,23 +16,23 @@
         "AccessUserLastLoginBackendOn",
         "AccessUserCartId"
       ],
-      "_why": "Merge: a re-deserialize must never reset a persona or the password UserSetPassword set. The identity key is written with IDENTITY_INSERT (SqlTableWriter.cs:45-64), so 100100..100103 survive. Password and runtime login columns are excluded; AccessUserPasswordSalt is deliberately absent because the column does not exist on DW 10.28.10 and a missing column fails config load."
+      "_why": "Merge: a re-deserialize must never reset a persona or the password UserSetPassword set. The identity key is written with IDENTITY_INSERT (SqlTableWriter.cs:45-64), so 100100..100103, 100105 and 100106 survive (100104 is unused). 100101 is the Login of the user name TruvioBuyer (AccessUserIsLogin true) and 100105 its second profile on the account group 100106 (Swift 2.5.0 Switch account). Password and runtime login columns are excluded; AccessUserPasswordSalt is deliberately absent because the column does not exist on DW 10.28.10 and a missing column fails config load."
     },
     {
       "name": "sample-data AccessUserGroupRelation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "AccessUserGroupRelation",
-      "where": "AccessUserGroupRelationUserId >= 100101 AND AccessUserGroupRelationUserId <= 100103",
-      "_why": "Merge: additive membership into the layer's account 100100 and the base-contract groups 1325/1292/1270."
+      "where": "AccessUserGroupRelationUserId >= 100101 AND AccessUserGroupRelationUserId <= 100105",
+      "_why": "Merge: additive membership into the layer's accounts 100100 and 100106 and the base-contract groups 1325/1292/1270."
     },
     {
       "name": "sample-data AccessUserSecondaryRelation",
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "AccessUserSecondaryRelation",
-      "where": "AccessUserSecondaryRelationUserId = 1292 AND AccessUserSecondaryRelationSecondaryUserId = 100100",
-      "_why": "Merge: the one impersonation grant the layer ships, the base-contract CSR group 1292 over the layer's account group 100100 (Foundry #1261). The column direction is DW's: UserId is the impersonator, SecondaryUserId the account being impersonated. Additive, so a consumer's own grants survive a re-deserialize."
+      "where": "AccessUserSecondaryRelationUserId = 1292 AND AccessUserSecondaryRelationSecondaryUserId IN (100100, 100106)",
+      "_why": "Merge: the impersonation grants the layer ships, the base-contract CSR group 1292 over the layer's account groups 100100 (Foundry #1261) and 100106 (the second account the buyer's profile 100105 belongs to). The column direction is DW's: UserId is the impersonator, SecondaryUserId the account being impersonated. Additive, so a consumer's own grants survive a re-deserialize."
     },
     {
       "name": "sample-data EcomShops",
@@ -113,6 +113,38 @@
       "table": "EcomGroupProductRelation",
       "where": "GroupProductRelationProductId LIKE 'TCPROD%'",
       "_why": "Merge: sample-data rows. The predicate is keyed on the PRODUCT id, so it already fences the 61 TCDM-* data-model relations 5.0.0 adds beside the 122 TCGRP-* catalogue rows - no widening was needed. A master's data-model relation is IsPrimary false: its primary home stays its catalogue subgroup."
+    },
+    {
+      "name": "sample-data EcomAssortments",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomAssortments",
+      "where": "AssortmentID LIKE 'TCASRT-%'",
+      "_why": "Merge: the two assortments. TCASRT-DEALER 'Truvio Dealer Assortment' (AutoID 100500) is active, not for anonymous users, and holds the five TCGRP-ASSORTMENTS products. TCASRT-PUBLIC 'Truvio Public Assortment' (AutoID 100501) is active, allows anonymous users and holds every other storefront product, so ecommerce group navigation, which lists only groups inside an assortment the visitor holds, keeps every ordinary group. RebuildRequired false on both because their EcomAssortmentItems rows ship materialised."
+    },
+    {
+      "name": "sample-data EcomAssortmentGroupRelations",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomAssortmentGroupRelations",
+      "where": "AssortmentGroupRelationAssortmentID LIKE 'TCASRT-%'",
+      "_why": "Merge: the authoring relations an admin Rebuild assortments reads, IncludeSubgroups false. TCASRT-DEALER over TCGRP-ASSORTMENTS (100502); TCASRT-PUBLIC over the eleven other storefront subgroups (100620-100630) and NOT over the Users top group, because every master also carries a direct relation to its top group and a TCGRP-USERS relation would pull the five dealer products into the public assortment."
+    },
+    {
+      "name": "sample-data EcomAssortmentPermissions",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomAssortmentPermissions",
+      "where": "AssortmentPermissionAssortmentID LIKE 'TCASRT-%'",
+      "_why": "Merge: TCASRT-DEALER to the account group 100100 (100503); TCASRT-PUBLIC to 100100, 100106 and 1325 (100504-100506). AssortmentService.GetAssortmentIdsByUser returns only assortments granted to the user or one of its groups, never the allow-anonymous ones, so a signed-in user without a public grant would lose every group and every assortment product."
+    },
+    {
+      "name": "sample-data EcomAssortmentItems",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomAssortmentItems",
+      "where": "AssortmentItemAssortmentID LIKE 'TCASRT-%'",
+      "_why": "Merge: the materialised assortments in the rebuild's shape (RelationAutoID -1, RelationType empty, ENU): TCASRT-DEALER TCPROD0021..TCPROD0025 (100510-100514) and TCASRT-PUBLIC the other 92 product rows, masters and variant rows (100700-100791), exactly what a rebuild regenerates from the group relations. The index fills AssortmentIDs and DW computes GroupHierarchy from these rows, and nothing rebuilds an assortment on deserialize."
     },
     {
       "name": "sample-data EcomVariantGroupProductRelation",

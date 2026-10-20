@@ -10,7 +10,7 @@
 	visitors, the component renders a LOCK AFFORDANCE instead of nothing. Stock Swift
 	renders an empty div in that state, so a shopper who is not signed in sees a blank
 	column with no explanation and no call to action, and a presence-only design assert
-	passes vacuously over it. Everything below the lock block is the stock 2.4 price
+	passes vacuously over it. Everything below the lock block is the stock 2.5 price
 	rendering, unchanged.
 
 	THE GATE IS ONE AREA FIELD, not a user group and not an assortment.
@@ -136,7 +136,7 @@
 	string priceMin = product?.VariantInfo?.PriceMin?.PriceFormatted;
 	string priceMax = product?.VariantInfo?.PriceMax?.PriceFormatted;
 	string price = !string.IsNullOrEmpty(unitId) ? product.GetPrice(unitId).Price.PriceFormatted : product?.Price.PriceFormatted;
-	price = !string.IsNullOrEmpty(priceMin) ? (priceMin != priceMax ? priceMin + " - " + priceMax : priceMin) : price;
+	price = string.IsNullOrEmpty(unitId) && !string.IsNullOrEmpty(priceMin) ? (priceMin != priceMax ? priceMin + " - " + priceMax : (product.HasDiscount() ? price : priceMin)) : price;
 
 	string beforePrice = !string.IsNullOrEmpty(unitId) ? product.GetPrice(unitId).PriceBeforeDiscount.PriceFormatted : product?.PriceBeforeDiscount.PriceFormatted;
 

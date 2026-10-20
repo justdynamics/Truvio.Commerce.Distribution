@@ -1,0 +1,92 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomAssortments"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "AssortmentID"
+- "AssortmentLanguageID"
+"identityColumns":
+- "AssortmentAutoID"
+"allColumns":
+- "AssortmentID"
+- "AssortmentLanguageID"
+- "AssortmentName"
+- "AssortmentNumber"
+- "AssortmentLastBuildDate"
+- "AssortmentRebuildRequired"
+- "AssortmentAutoID"
+- "AssortmentActive"
+- "AssortmentIncludeSubgroups"
+- "AssortmentAllowAnonymousUsers"
+"columnDefinitions":
+- "name": "AssortmentID"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentLanguageID"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AssortmentNumber"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AssortmentLastBuildDate"
+  "dataType": "datetime"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "AssortmentRebuildRequired"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentAutoID"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "AssortmentActive"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentIncludeSubgroups"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentAllowAnonymousUsers"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

@@ -33,9 +33,10 @@ Paths are relative to the layer root. Every row file is one row: the file name i
 | Images and documents per product | `merge/_sql/EcomDetails/TC-DETAIL-*`, `TC-DOC-*`, `TC-GAL-*`, `TC-HOVER-*` | `DetailValue` (a `/Files/...` path), `DetailsName`, `DetailsKeywords`, `DetailDescription` |
 | Related products | `merge/_sql/EcomProductsRelated/`, `EcomProductsRelatedGroups/` | related group names; the pairs themselves are keys |
 | Bundles and BOM slots | `merge/_sql/EcomProductItems/TC-BOM-*.yml` | `ProductItemName`; the slot keys stay |
-| Personas and the B2B account | `merge/_sql/AccessUser/100100.yml` to `100103.yml` | `AccessUserName`, `AccessUserEmail`, `AccessUserCompany`, `AccessUserAddress`, `AccessUserZip`, `AccessUserCity`, `AccessUserCountryCode`, `AccessUserPhone` |
+| Personas and the B2B accounts | `merge/_sql/AccessUser/100100.yml` to `100103.yml`, the buyer's second profile `100105.yml` and its account `100106.yml` | `AccessUserName`, `AccessUserEmail`, `AccessUserCompany`, `AccessUserAddress`, `AccessUserZip`, `AccessUserCity`, `AccessUserCountryCode`, `AccessUserPhone` |
 | Orders, quotes and carts | `merge/_sql/EcomOrders/TCO-*.yml`, `merge/_sql/EcomOrderLines/TCO-*.yml` | customer and delivery name / company / address columns, `OrderReference`, `OrderCustomerComment` (the quote request text on `TCO-Q*`), `OrderDisplayName`; lines: `OrderLineProductNumber`, `OrderLineProductName`, unit and line prices |
 | Favourite lists | `merge/_sql/EcomCustomerFavoriteLists/1004*.yml`, `merge/_sql/EcomCustomerFavoriteProducts/*.yml` | `Name`, `Description`; products are keys (list id, product id) |
+| Assortments | `merge/_sql/EcomAssortments/TCASRT-DEALER$$ENU.yml`, `TCASRT-PUBLIC$$ENU.yml` | `AssortmentName`, `AssortmentNumber`; the group relation, the permission and the five item rows are keys |
 | Return request (RMA) | `merge/_sql/EcomRmas/PACK-RMA-0001.yml` | customer and delivery name / company / email / country columns |
 | PIM tree | `merge/_sql/EcomShops/TCSHOP-PIM.yml`, `EcomCompletionRules/`, `DynamicStructures/`, `DynamicStructureLevels/`, `repositories/TruvioCommerce/PimWorkspace.query` | display names only (see the PIM trap below) |
 | Storefront copy | `merge/_content/Swift 2/` (`Home`, `About`, `Header _ Footer`, `Navigation`, `Posts`), `replace/_content/Swift 2/Navigation/` and `replace/_content/Swift 2/Shop/Product Details/` (the PDP Features and FAQ) | paragraph `fields` text: `Title`, `Subtitle`, `Text`, button labels, image paths, alt text |
@@ -54,6 +55,7 @@ the keys.
 | Key | Why it must stay |
 |---|---|
 | `AccessUser` `100100` (account), `100101` buyer, `100102` CSR, `100103` account admin, and the user names `TruvioBuyer`, `TruvioCsr`, `TruvioAdmin` | The gate persona legs sign in as these user names, and the Foundry credential tool sets the password by id. Rename the display name, company and e-mail freely. |
+| `AccessUser` `100105` (the buyer's second profile) and `100106` (its account `Truvio Demo Account North`), `AccessUserIsLogin` true on `100101` only, and the shared user name `TruvioBuyer` on `100101` and `100105` | Swift 2.5.0 Switch account: DW links a Login to its profiles by user name alone and signs in on the `AccessUserIsLogin` row, so `100101` stays the Login that holds the buyer's data. A rename of `TruvioBuyer` renames it on both rows. The two profiles need two different customer numbers (`TC-100200`, `TC-100300`). |
 | Customer number `TC-100200` on the account, the three personas, the contract price and every order | Contract prices, account-wide favourites and the CSR account listing compare the string exactly. Change it only everywhere at once. |
 | Group memberships `1325` / `1292` / `1270` | Base-owned permission groups; the customer-center pages and the dashboard rows grant by these ids. |
 | `TCPROD0001` with product number `TC-VAR-0001` | `feature-reordering` `sku-validation` types that number into the Quick Order pad. |
@@ -61,13 +63,15 @@ the keys.
 | `TCPROD0046` and `TC-PRICE-CTR-0046` (36.90 at `TC-100200`) | `feature-pricing` contract `cart-price` expects 36.90. |
 | `TCPROD0042`, slots `TC-BOM-0042-1` / `TC-BOM-0042-2`, children `TCPROD0002`, `TCPROD0003`, `TCPROD0051`, `TCPROD0052` | `feature-bom-configurator` `bom-cart-lines` posts these slot ids with a non-default child. |
 | `TCPROD0061` / `TC-SUB-0061` | `feature-subscription-orders` `checkout-recurring` buys it on `PAY2` / `SHIP9`. |
+| `TCO-0027` and its lines `TCO-0027-1` (parent) to `TCO-0027-3` (BOM items with `OrderLineParentLineId` `TCO-0027-1` and the slot ids in `OrderLineBOMItemId`) | The Swift 2.5.0 BOM product overview renders the item lines below the kit; a re-keyed parent line orphans them. Keep the parent line price the sum of the item lines. |
+| `TCASRT-DEALER` (relation `TCGRP-ASSORTMENTS`, permission `100100`, five items) and `TCASRT-PUBLIC` (allow-anonymous, relations to the eleven other subgroups, permissions `100100`, `100106`, `1325`, 92 items) | The Swift 2.5.0 assortment demo: the index and the group navigation read the item rows, and the permissions name groups by id. Every storefront product must sit in one of the two, or the navigation loses its group; a product added to the catalogue needs its item row (or a Rebuild assortments after delivery). Never relate the public assortment to a top group: every master carries a direct top-group relation, so a rebuild would pull the dealer products in. |
 | `TCO-0001`, line `TCO-0001-1`, `PACK-RMA-0001`, `EcomRmaOrderLines` `100301` | The My returns probe (surface-swift) needs the buyer's delivered order and the return request against its first line. |
 | Persona `100101` as the owner of the orders, quotes, carts and favourite lists | The surface-swift dashboard widgets read the signed-in buyer's own rows. Re-owning them to another persona empties the buyer's dashboard. |
 | Quote `OrderStateId` values `QuotePending`, `QuoteSent`, `QuoteAccepted`, `QuoteRejected` | Base 4.0.0 states; the Pending quotes widget asks for `QuotePending` by id. |
 | `EcomDetailsGroup` system names `Images` and `Manuals`, display group `tc_specs` | Swift binds the PDP gallery, the documents table and the spec table by system name. |
 | `TCFIELD-*` rows in `EcomProductField` | The variant-editing settings for the six master-only fields; without them a master save overwrites every variant row. |
 | `TCSHOP-PIM` and its name `Truvio PIM` | The index field `DATAMODEL_Truvio_PIM` is derived from the shop name and the workspace level `100171` reads it. Renaming the shop means renaming that level's field too. |
-| The `TC*` key families (`TCGRP-*`, `TCDM-*`, `TCPROD*`, `TCVG-*`, `TCVGR-*`, `TCVO-*`, `TC-PRICE-*`, `TC-BOM-*`, `TC-DETAIL-*`, `TC-DOC-*`, `TC-GAL-*`, `TC-HOVER-*`, `TCREL-*`, `TCO-*`, `TCFIELD-*`, `tc_*`) | Every predicate in `config/sample-data-2.4.json` fences its rows with a `where` on these prefixes. A key outside the fence is neither harvested nor recognised as this layer's. |
+| The `TC*` key families (`TCGRP-*`, `TCDM-*`, `TCPROD*`, `TCVG-*`, `TCVGR-*`, `TCVO-*`, `TC-PRICE-*`, `TC-BOM-*`, `TC-DETAIL-*`, `TC-DOC-*`, `TC-GAL-*`, `TC-HOVER-*`, `TCREL-*`, `TCO-*`, `TCFIELD-*`, `TCASRT-*`, `tc_*`) | Every predicate in `config/sample-data-2.4.json` fences its rows with a `where` on these prefixes. A key outside the fence is neither harvested nor recognised as this layer's. |
 | The reserved int ids (`layer.json` `costHints.reservedKeyNote`) | Written verbatim with `IDENTITY_INSERT`; other rows point at them. |
 
 ## Re-keying safely
@@ -121,5 +125,8 @@ validator fails:
 ## After delivery
 
 Set the persona passwords (the Foundry `tools/secrets/Set-DemoCredential.ps1`, Management API
-`UserSetPassword`), restart the host, rebuild the product index, and check the storefront, the
-customer-center dashboard as the buyer, and the gate legs the demo claims.
+`UserSetPassword`; the buyer's second profile `100105` takes none), restart the host, rebuild the
+product index, and check the storefront, the customer-center dashboard as the buyer, and the gate
+legs the demo claims. The assortment hides its products only with GlobalSettings
+`/Globalsettings/Ecom/Assortments/UseAssortments` `True` and an index built with `SkipAssortments`
+`False`; the Switch account page needs the Sign in paragraph's List user profiles setting.

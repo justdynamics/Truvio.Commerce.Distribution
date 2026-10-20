@@ -1,0 +1,72 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomAssortmentItems"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "AssortmentItemAssortmentID"
+- "AssortmentItemLanguageID"
+- "AssortmentItemProductID"
+- "AssortmentItemProductVariantID"
+- "AssortmentItemRelationAutoID"
+- "AssortmentItemRelationType"
+"identityColumns":
+- "AssortmentItemAutoID"
+"allColumns":
+- "AssortmentItemAssortmentID"
+- "AssortmentItemRelationAutoID"
+- "AssortmentItemRelationType"
+- "AssortmentItemLanguageID"
+- "AssortmentItemProductID"
+- "AssortmentItemProductVariantID"
+- "AssortmentItemAutoID"
+"columnDefinitions":
+- "name": "AssortmentItemAssortmentID"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentItemRelationAutoID"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentItemRelationType"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentItemLanguageID"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentItemProductID"
+  "dataType": "nvarchar"
+  "maxLength": 30
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentItemProductVariantID"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "AssortmentItemAutoID"
+  "dataType": "bigint"
+  "maxLength": 0
+  "precision": 19
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true

@@ -1,5 +1,24 @@
 ﻿# theme-default changelog
 
+## 2.7.0 (2026-10-20)
+
+**MINOR. Rebased on Swift 2.5.0.** `swiftVersion` is 2.5.0 and `theme.json` `baselineTarget` is
+`swift/2.5`. The four layout variants were checked against the stock templates they derive from:
+
+- `Paragraph/Swift-v2_ProductPrice/PriceWithSignIn.cshtml` takes the 2.5.0 price line of
+  `Paragraph/Swift-v2_ProductPrice.cshtml` (29059): a product with a discount shows the discounted
+  price instead of the variant min/max, and the min/max range applies only without a `UnitId`.
+  The lock affordance is unchanged.
+- `Paragraph/Swift-v2_VideoPlayer/PosterLazy.cshtml` embeds an external video without tracking
+  cookies, as the 2.5.0 `Components/VideoPlayer.cshtml` does (29605): YouTube from
+  `youtube-nocookie.com`, Vimeo with `dnt=1`, the embed URL HTML-encoded. The local-video branch
+  (`preload="none"`, poster, native controls) is unchanged.
+- `Paragraph/Swift-v2_Image/Responsive.cshtml` and `Paragraph/Swift-v2_Poster/TextMiddleLeftLcp.cshtml`
+  are unchanged: their origins, `Swift-v2_Image/Plain.cshtml` and `Swift-v2_Poster/TextMiddleLeft.cshtml`,
+  did not change in 2.5.0.
+
+`Custom/` is unchanged.
+
 ## 2.6.1
 
 ### A card that holds a dropdown or a modal does not lift on hover (Foundry #1396)
