@@ -136,7 +136,7 @@ SQL run, or host-born values (GUIDs, timestamps, the `TC-PRICE-GRPV-*` ids) chur
 
 surface-swift ships its demo-facing strings in the `Placeholder` marker form on purpose, so a
 composition with no brand data fails the design gate instead of shipping template copy. This
-layer carries the copy that replaces the marker: 47 content documents, each surface-swift's own
+layer carries the copy that replaces the marker: 47 content documents (and the three row settings below), each surface-swift's own
 document at the same path under `merge/_content/Swift 2/`, `replace/_content/Swift 2/Navigation/` or
 `replace/_content/Swift 2/Shop/Product Details/`, with only the copy fields rewritten and an `ownership`
 header set to `replace`.
@@ -164,6 +164,8 @@ Rules for editing it:
   `placeholderRegex`. Figures quote this layer's own counts; change them with the rows.
 - **Links.** Page links stay `Default.aspx?ID=N` so the serializer's page-id remap resolves
   them; a `GroupID` query tail survives the remap.
+
+**Column background height (Swift 2.5.0).** Three of the documents are surface-swift's grid-row documents, not copy: they set the 2.5.0 row field `ColumnBackgroundHeight` so the setting shows in the admin and on the page. `Home/grid-row-4` (image beside the `lightgrey2` text column) and `Home/grid-row-6` (the three features) are `fit`; `About/grid-row-2` (three `lightgrey1` feature columns) is `stretch`. Every other key of those rows stays surface-swift's. The value lands only on a host whose `Swift-v2_Row` item type carries the column (Swift 2.5.0 or later); an older item type drops it.
 
 An edition that composes no Swift content area carries these documents inertly.
 
