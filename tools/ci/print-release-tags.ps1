@@ -172,6 +172,8 @@ foreach ($ef in (Get-ChildItem (Join-Path $RepoRoot 'editions') -File -Filter '*
         if ($release -notmatch "^editions/$([regex]::Escape($name))/(?<v>[0-9]+\.[0-9]+\.[0-9]+\S*)$") { throw "gateProven.releases.$name.tag '$release' is not editions/$name/<semver>." }
         $ver = $Matches['v']
         if ($editionVersion.ContainsKey($name) -and "$($editionVersion[$name])" -ne $ver) {
+            # Said on stdout before the throw: the error rendering differs between Windows and Linux hosts.
+            Write-Output "# REFUSED edition ${name}: gateProven.releases names $release, Get-EditionReleaseVersion says $($editionVersion[$name]); no tag is cut on a mismatch."
             throw "edition ${name}: gateProven.releases names $release but tools/ci/Bacpac.ps1 Get-EditionReleaseVersion says $($editionVersion[$name]). Prove that release (the record's proven line) or set the version it proved; no tag is cut on a mismatch."
         }
     } else {
