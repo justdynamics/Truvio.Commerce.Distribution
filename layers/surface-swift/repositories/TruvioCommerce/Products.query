@@ -22,10 +22,13 @@
                            the four category-field facets added in 1.10.0, one per field
                            category, each pruned when empty like every parameter above
 
-  STRUCTURE. A top-level And of three groups: the prunable filter group, an Or group for
-  search, and the sku group. A parameter expression the engine PRUNES when its parameter
-  is empty is what keeps an empty call meaning "all active products in this shop" instead
-  of matching nothing; the ecommerce-context macros (LanguageID, ShopID) resolve on a
+  STRUCTURE. A top-level And of four groups: the prunable filter group, an Or group for
+  search, the sku group, and the Swift 2.5 assortment group (a product in no assortment
+  matches every user; a product in an assortment matches only a user whose
+  UserManagement context AssortmentIDs names it), plus the ProductIds expression. A
+  parameter expression the engine PRUNES when its parameter is empty is what keeps an
+  empty call meaning "all active products in this shop" instead of matching nothing; the
+  ecommerce-context macros (ParameterOrContextLanguageID, ShopID) resolve on a
   server-rendered storefront request, which is why they are safe here and are NOT safe in
   the headless surface's own query.
 
@@ -64,7 +67,7 @@
             <FieldExpression Field="LanguageID" />
           </Left>
           <Right>
-            <MacroExpression Lookup="Dynamicweb.Ecommerce.Context:LanguageID" />
+            <MacroExpression Lookup="Dynamicweb.Ecommerce.Context:ParameterOrContextLanguageID" />
           </Right>
         </BinaryExpression>
         <BinaryExpression Operator="MatchAny" Disabled="false">
@@ -232,6 +235,24 @@
           <ParameterExpression Name="ProductIds" />
         </Right>
       </BinaryExpression>
+      <GroupExpression Operator="Or">
+        <BinaryExpression Operator="IsEmpty" Disabled="false">
+          <Left>
+            <FieldExpression Field="AssortmentIDs" Source="AssortmentIDs" />
+          </Left>
+          <Right>
+            <ConstantExpression Value="" Type="System.String" />
+          </Right>
+        </BinaryExpression>
+        <BinaryExpression Operator="MatchAny" Disabled="false">
+          <Left>
+            <FieldExpression Field="AssortmentIDs" Source="AssortmentIDs" />
+          </Left>
+          <Right>
+            <MacroExpression Lookup="Dynamicweb.UserManagement.Context:AssortmentIDs" />
+          </Right>
+        </BinaryExpression>
+      </GroupExpression>
     </GroupExpression>
   </Expressions>
   <ViewFields />

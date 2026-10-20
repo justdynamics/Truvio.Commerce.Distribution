@@ -5,7 +5,7 @@
 @using System.Globalization
 
 @*
-	RelatedProductsList - a byte-minimal OVERRIDE of the stock Swift 2.4 file of the same
+	RelatedProductsList - a byte-minimal OVERRIDE of the stock Swift 2.5 file of the same
 	path. Unlike a layout variant, this file is named by the render path itself, so it
 	takes effect the moment the layer is on disk. It is therefore kept as close to stock
 	as a fix allows: the whole delta is three tab-indented insertions plus these lines.
@@ -364,15 +364,13 @@
 						items: [
 							@foreach (var product in productList)
 							{
-								string itemVariant = string.Empty;
-								if (!string.IsNullOrEmpty(product.VariantName))
-								{
-									itemVariant = $"item_variant:'{product.VariantName}',";
-								}
 								<text>{
 									item_id: '@product.Number',
 									item_name: '@Dynamicweb.Core.Encoders.HtmlEncoder.JavaScriptStringEncode(product.Name)',
-									@itemVariant
+									@if (!string.IsNullOrEmpty(product.VariantName))
+									{
+										<text>item_variant: '@Dynamicweb.Core.Encoders.HtmlEncoder.JavaScriptStringEncode(product.VariantName)',</text>
+									}
 									currency: '@product.Price.CurrencyCode',
 									price: @product.Price.ToStringInvariant(),
 									discount: @product.Discount.ToStringInvariant()

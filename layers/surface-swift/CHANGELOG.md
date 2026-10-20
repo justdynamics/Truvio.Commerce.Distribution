@@ -1,5 +1,65 @@
 ﻿# Changelog — surface-swift
 
+## 1.19.0 (2026-10-20)
+
+**MINOR. Rebased on Swift 2.5.0.** Every `files/` overlay on a stock path, every shipped item type
+and the storefront repository follow the Swift 2.5.0 release (`Swift_v2.5.0_Files.zip`). Swift
+2.5.0 needs DW 10.29 or newer on .NET 10.
+
+### Overlays replaced with the 2.5.0 stock file
+
+These files were byte-equal to the Swift 2.4.0 stock file and now carry the 2.5.0 stock file:
+`FavoriteLists_Grid.cshtml` and `FavoriteLists_List.cshtml` (a "View" context-menu entry, 29142),
+`QueryPublisher/Post/PostPagination.cshtml` (paragraph-only reload, and the .NET 10 compile fix
+28675), `Users/UserAuthentication/Login/SelectableUsers.cshtml` (the separator bullet only with an
+email, 29702) and `Users/UserCreate/Create/UserGroupUser_Invite.cshtml` (the user group's company
+name saved on the invited user, 29638).
+
+### Overlays merged with the 2.5.0 stock file
+
+- `Paragraph/Swift-v2_Logo/Plain.cshtml` (Foundry #1185). Swift 2.5.0 adopts the area-name
+  fallback for the title and drops the file path from the raster `alt` (29549), but writes
+  `alt=""`. The override takes the 2.5.0 title expression (an empty or whitespace `LogoName` falls
+  back too), keeps it null-safe on `Pageview?.Area?.Name`, and keeps `alt="@title"`, so a raster
+  wordmark is announced by the site name.
+- `eCom/ProductCatalog/RelatedProductsList.cshtml` (the anonymous price gate). The 2.5.0
+  `item_variant` encoding (29386) merged cleanly; the `hidePrice` and `hideAddToCart` suppressions
+  are unchanged, because 2.5.0 still reads no `AnonymousUsers` gate in this list.
+- `eCom/ProductCatalog/VariantSelector.cshtml` (Foundry #1317). Swift 2.5.0 fixes the inverted
+  never-out-of-stock branch itself (29539: a never-out-of-stock product can always be added, a
+  discontinued product never). The override is now the 2.5.0 stock file, byte for byte, and
+  inert.
+- `eCom/CustomerExperienceCenter/Orders/List/Orders_List.cshtml` (Foundry #1263). The shipped
+  copy was an older design-package layout, not the 2.4.0 release file, and the product-number fix
+  it carried has been stock since 2.4.0. The override is now the 2.5.0 stock file, byte for byte,
+  which adds the BOM parts below a BOM order line (28066).
+
+### Item types
+
+`ItemType_Swift-v2_Row.xml` and `ItemType_Swift-v2_RowFlex.xml` (the Column background height
+setting, 24381), `ItemType_Swift-v2_ProductStaticVariants.xml` and
+`ItemType_Swift-v2_VariantGroups.xml` (variant groups read from ENU, 29264) are the 2.5.0 stock
+files. Each shipped copy was byte-equal to 2.4.0 stock. The customised copies and the `TC_*` item
+types are unchanged.
+
+### Repository
+
+`Products.query` takes the two 2.5.0 changes of the stock `ProductsFrontend/Products.query`: the
+language macro is `Dynamicweb.Ecommerce.Context:ParameterOrContextLanguageID` (29497), and a new
+Or group matches a product with an empty `AssortmentIDs` or one whose `AssortmentIDs` match the
+user's `Dynamicweb.UserManagement.Context:AssortmentIDs` (28751). `Products.index` sets
+`SkipAssortments` False, as the 2.5.0 stock index does, so the Full build fills `AssortmentIDs`;
+`LanguageID` and `AssortmentIDs` are fields of the `ProductIndexSchemaExtender` the index already
+declares. No layer ships assortment rows, so every product keeps matching. Rebuild the index after
+delivery.
+
+### Switch account
+
+The `Sign in/Sign in` page carries the navigation tag `SignIn`, which the 2.5.0 Switch account
+button resolves.
+
+`files/System/Truvio/swift.stamp.json` reads `v2.5.0`.
+
 ## 1.18.2
 
 **PATCH. Two stock Swift 2.4 checkout and cart defects, fixed by overriding the render path by name.**

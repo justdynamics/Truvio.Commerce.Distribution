@@ -1,8 +1,8 @@
 ﻿{
   "name": "surface-swift",
-  "version": "1.18.2",
+  "version": "1.19.0",
   "kind": "surface",
-  "swiftVersion": "2.4.0",
+  "swiftVersion": "2.5.0",
   "repositoryName": "TruvioCommerce",
   "fragmentModes": [
     "replace",
@@ -224,22 +224,22 @@
     {
       "path": "Templates/Designs/Swift-v2/Paragraph/Swift-v2_ProductMedia.cshtml",
       "kind": "template",
-      "why": "The PDP hero gallery. A two-edit override of the stock Swift 2.4 render path: \".svg\" added to the supportedImageFormats allowlist, and a null guard so a product with no image asset and no default image renders an empty media slot instead of a NullReferenceException (Foundry #1407). Stock ProductMedia resolves images by asset-category system name (which matched all along) and then discards every asset whose path does not contain one of seven hardcoded raster extensions, so an SVG catalogue renders a carousel with no slides in it while the PLP card, which applies no format filter, renders the same rows. Inert on a raster catalogue whose products carry images: identical output to stock."
+      "why": "The PDP hero gallery. A two-edit override of the stock Swift 2.5 render path: \".svg\" added to the supportedImageFormats allowlist, and a null guard so a product with no image asset and no default image renders an empty media slot instead of a NullReferenceException (Foundry #1407). Stock ProductMedia resolves images by asset-category system name (which matched all along) and then discards every asset whose path does not contain one of seven hardcoded raster extensions, so an SVG catalogue renders a carousel with no slides in it while the PLP card, which applies no format filter, renders the same rows. Inert on a raster catalogue whose products carry images: identical output to stock."
     },
     {
       "path": "Templates/Designs/Swift-v2/eCom/ProductCatalog/RelatedProductsList.cshtml",
       "kind": "template",
-      "why": "A data-leak fix, and the one file in this layer that overrides a stock render path by name rather than waiting to be named by a paragraph. Swift 2.4 ships this list with no read of the area's AnonymousUsers gate, so a PDP whose price column shows the sign-in lock still serves every related product's price in the same HTML - itemprop=price, itemprop=priceCurrency, and a third copy in the cart form's hidden ProductPrice input. The override adds the two booleans the stock file already has the ingredients for and suppresses the two cells' contents, keeping both <td> so the header row still lines up. Inert on any area that does not gate prices."
+      "why": "A data-leak fix, and the one file in this layer that overrides a stock render path by name rather than waiting to be named by a paragraph. Swift 2.5 ships this list with no read of the area's AnonymousUsers gate, so a PDP whose price column shows the sign-in lock still serves every related product's price in the same HTML - itemprop=price, itemprop=priceCurrency, and a third copy in the cart form's hidden ProductPrice input. The override adds the two booleans the stock file already has the ingredients for and suppresses the two cells' contents, keeping both <td> so the header row still lines up. Inert on any area that does not gate prices."
     },
     {
       "path": "Templates/Designs/Swift-v2/Paragraph/Swift-v2_ExpressBuyApp.cshtml",
       "kind": "template",
-      "why": "The Express Buy app, overriding the stock Swift 2.4 render path by name (Foundry #1499). Stock Express Buy adds through swift.PageUpdater and swaps only the cart summary beside the search, so the header mini-cart count stays at its old value until a reload; only swift.Cart, which the product add-to-cart forms use, writes it. The override reads the CartService page id and, in the form's updated.swift.pageupdater listener, fetches the count from that page with Swift-v2_MiniCart.cshtml and writes it into every .js-cart-qty, the request and target swift.Cart uses. Otherwise byte-identical to stock; inert on an area without a CartService page."
+      "why": "The Express Buy app, overriding the stock Swift 2.5 render path by name (Foundry #1499). Stock Express Buy adds through swift.PageUpdater and swaps only the cart summary beside the search, so the header mini-cart count stays at its old value until a reload; only swift.Cart, which the product add-to-cart forms use, writes it. The override reads the CartService page id and, in the form's updated.swift.pageupdater listener, fetches the count from that page with Swift-v2_MiniCart.cshtml and writes it into every .js-cart-qty, the request and target swift.Cart uses. Otherwise byte-identical to stock; inert on an area without a CartService page."
     },
     {
       "path": "Templates/Designs/Swift-v2/eCom7/CartV2/Step/Helpers/AddressUser.cshtml",
       "kind": "template",
-      "why": "The checkout Information step's saved-address list, overriding the stock Swift 2.4 render path by name with a one-line change (Foundry #1495). Stock line 138 looks the region up with the outer template's GetString(UserManagement:User.UserAddress.State) instead of the loop item's, so a saved address whose State differs from the account's lists the wrong region or none (Denver, United States, United States). The override reads userAddress.GetString, so the line reads <city>, <region name>, <country>. Identical output when the two States agree."
+      "why": "The checkout Information step's saved-address list, overriding the stock Swift 2.5 render path by name with a one-line change (Foundry #1495). Stock line 138 looks the region up with the outer template's GetString(UserManagement:User.UserAddress.State) instead of the loop item's, so a saved address whose State differs from the account's lists the wrong region or none (Denver, United States, United States). The override reads userAddress.GetString, so the line reads <city>, <region name>, <country>. Identical output when the two States agree."
     }
   ],
   "asserts": {
