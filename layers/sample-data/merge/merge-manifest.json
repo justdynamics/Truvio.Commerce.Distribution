@@ -557,6 +557,70 @@
     },
     {
       "providerType": "SqlTable",
+      "table": "EcomAssortments",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomAssortments",
+      "files": [
+        "_sql/EcomAssortments/TCASRT-DEALER$$ENU.yml",
+        "_sql/EcomAssortments/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomAssortmentGroupRelations",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomAssortmentGroupRelations",
+      "files": [
+        "_sql/EcomAssortmentGroupRelations/TCASRT-DEALER$$TCGRP-ASSORTMENTS.yml",
+        "_sql/EcomAssortmentGroupRelations/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomAssortmentPermissions",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomAssortmentPermissions",
+      "files": [
+        "_sql/EcomAssortmentPermissions/100100$$TCASRT-DEALER.yml",
+        "_sql/EcomAssortmentPermissions/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
+      "table": "EcomAssortmentItems",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomAssortmentItems",
+      "files": [
+        "_sql/EcomAssortmentItems/TCASRT-DEALER$$ENU$$TCPROD0021$$$$-1$$.yml",
+        "_sql/EcomAssortmentItems/TCASRT-DEALER$$ENU$$TCPROD0022$$$$-1$$.yml",
+        "_sql/EcomAssortmentItems/TCASRT-DEALER$$ENU$$TCPROD0023$$$$-1$$.yml",
+        "_sql/EcomAssortmentItems/TCASRT-DEALER$$ENU$$TCPROD0024$$$$-1$$.yml",
+        "_sql/EcomAssortmentItems/TCASRT-DEALER$$ENU$$TCPROD0025$$$$-1$$.yml",
+        "_sql/EcomAssortmentItems/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
       "table": "EcomVariantGroupProductRelation",
       "nameColumn": null,
       "compareColumns": null,

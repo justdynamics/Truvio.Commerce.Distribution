@@ -115,6 +115,38 @@
       "_why": "Merge: sample-data rows. The predicate is keyed on the PRODUCT id, so it already fences the 61 TCDM-* data-model relations 5.0.0 adds beside the 122 TCGRP-* catalogue rows - no widening was needed. A master's data-model relation is IsPrimary false: its primary home stays its catalogue subgroup."
     },
     {
+      "name": "sample-data EcomAssortments",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomAssortments",
+      "where": "AssortmentID LIKE 'TCASRT-%'",
+      "_why": "Merge: the one assortment TCASRT-DEALER 'Truvio Dealer Assortment' (ENU, AssortmentAutoID 100500), active, not for anonymous users, RebuildRequired false because its EcomAssortmentItems rows ship materialised. Swift 2.5.0 product lists and search hide a product in an active assortment from every user without a permission on it; a product in no assortment stays visible to everyone."
+    },
+    {
+      "name": "sample-data EcomAssortmentGroupRelations",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomAssortmentGroupRelations",
+      "where": "AssortmentGroupRelationAssortmentID LIKE 'TCASRT-%'",
+      "_why": "Merge: the authoring relation, TCASRT-DEALER over the storefront subgroup TCGRP-ASSORTMENTS (AutoID 100502), so an admin Rebuild assortments reproduces the five shipped item rows."
+    },
+    {
+      "name": "sample-data EcomAssortmentPermissions",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomAssortmentPermissions",
+      "where": "AssortmentPermissionAssortmentID LIKE 'TCASRT-%'",
+      "_why": "Merge: the one grant, TCASRT-DEALER to the account group 100100 Truvio Demo Account (AutoID 100503). AssortmentService.GetAssortmentIdsByUser matches the user id or any of the user's groups, so the buyer 100101, the CSR and the account admin see the assortment and the buyer's second profile 100105 on account 100106 does not."
+    },
+    {
+      "name": "sample-data EcomAssortmentItems",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomAssortmentItems",
+      "where": "AssortmentItemAssortmentID LIKE 'TCASRT-%'",
+      "_why": "Merge: the materialised assortment, the five TCGRP-ASSORTMENTS products TCPROD0021..TCPROD0025 in ENU (AutoID 100510-100514), in the shape the rebuild writes (RelationAutoID -1, RelationType empty). The product index fills AssortmentIDs from AssortmentService.GetAssortmentsByProductId, which reads these rows, and nothing rebuilds an assortment on deserialize, so the rows ship instead of a rebuild."
+    },
+    {
       "name": "sample-data EcomVariantGroupProductRelation",
       "mode": "Merge",
       "providerType": "SqlTable",
