@@ -374,6 +374,67 @@
         "secretNamedColumns": 83
       }
     },
-    "editions": {}
+    "editions": {
+      "swift-demo": {
+        "editionVersion": "5.5.0",
+        "tag": "editions/swift-demo/5.5.0",
+        "asset": "swift-demo-5.5.0.bacpac",
+        "sha256": "92406c431e367e62a6fd1747155c0851f37cc5a2db622c4d55f51b6da4de5a65",
+        "sizeBytes": 315634,
+        "gateRunId": "20261021-220532",
+        "deliveryRunId": "20261021-220225",
+        "provenRunId": "20261021-211942",
+        "distributionCommit": "3043857dd48ec3e6e010146387644ac3eecac0e3",
+        "dwVersion": "10.29.8",
+        "startsFrom": "blank-dw-10.29.8.bacpac (sha256 95ebee30a2fa82658ff95ed05f8cbe169753bd289becad563e9167a06bac8d8a)",
+        "scrubCheck": {
+          "verdict": "CLEAN",
+          "tool": "Foundry tools/bacpac/Test-BacpacScrub.ps1 (Foundry #1431)",
+          "knownSecrets": 12,
+          "secretNamedTables": 24,
+          "secretNamedColumns": 119
+        }
+      },
+      "dap-portal": {
+        "editionVersion": "2.5.0",
+        "tag": "editions/dap-portal/2.5.0",
+        "asset": "dap-portal-2.5.0.bacpac",
+        "sha256": "902c4c188c244eeba3a8551d10bd725526e3fc0d77eec5725f2384a53d33c53b",
+        "sizeBytes": 243413,
+        "gateRunId": "20261021-221310",
+        "deliveryRunId": "20261021-221047",
+        "provenRunId": "20261021-212522",
+        "distributionCommit": "3043857dd48ec3e6e010146387644ac3eecac0e3",
+        "dwVersion": "10.29.8",
+        "startsFrom": "blank-dw-10.29.8.bacpac (sha256 95ebee30a2fa82658ff95ed05f8cbe169753bd289becad563e9167a06bac8d8a)",
+        "scrubCheck": {
+          "verdict": "CLEAN",
+          "tool": "Foundry tools/bacpac/Test-BacpacScrub.ps1 (Foundry #1431)",
+          "knownSecrets": 12,
+          "secretNamedTables": 24,
+          "secretNamedColumns": 119
+        }
+      },
+      "headless-demo": {
+        "editionVersion": "3.4.0",
+        "tag": "editions/headless-demo/3.4.0",
+        "asset": "headless-demo-3.4.0.bacpac",
+        "sha256": "812116b30a2b94f06684a2561c2f2445f1bd93610b21bb4e04b8ff3943b9aebf",
+        "sizeBytes": 211330,
+        "gateRunId": "20261021-222025",
+        "deliveryRunId": "20261021-221755",
+        "provenRunId": "20261021-213018",
+        "distributionCommit": "3043857dd48ec3e6e010146387644ac3eecac0e3",
+        "dwVersion": "10.29.8",
+        "startsFrom": "blank-dw-10.29.8.bacpac (sha256 95ebee30a2fa82658ff95ed05f8cbe169753bd289becad563e9167a06bac8d8a)",
+        "scrubCheck": {
+          "verdict": "CLEAN",
+          "tool": "Foundry tools/bacpac/Test-BacpacScrub.ps1 (Foundry #1431)",
+          "knownSecrets": 12,
+          "secretNamedTables": 15,
+          "secretNamedColumns": 85
+        }
+      }
+    }
   }
 }
