@@ -129,7 +129,7 @@
     },
     "mcp": {
       "ids": { "package": "Truvio.Commerce.MCP", "aliases": [], "predecessors": ["Dynamicweb.MCP"] },
-      "current": { "version": "0.6.0-beta", "source": "gateProven" },
+      "current": { "version": "0.6.3-beta", "source": "gateProven" },
       "floors": [
         {
           "consumer": "layers",
@@ -153,7 +153,7 @@
     },
     "skills": {
       "ids": { "package": "dynamicweb/skills", "aliases": [] },
-      "current": { "version": "5.2.0", "tag": "v5.2.0", "source": "gateProven" },
+      "current": { "version": "5.8.12", "tag": "v5.8.12", "source": "gateProven" },
       "floors": []
     },
     "storefront": {

@@ -25,8 +25,8 @@
     "swift": {
       "tag": "v2.5.0"
     },
-    "skills": "v5.2.0",
-    "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
+    "skills": "v5.8.12",
+    "skillsCommit": "860c3372f68daae332aaecb88b400c47d63dea0d",
     "swiftVersion": "2.5.0",
     "dwPlatformVersion": "10.29.8",
     "source": {
