@@ -1,7 +1,7 @@
 {
   "_comment": "Machine-readable layer index for Truvio.Commerce.Distribution (P3, RUN-VERSION-CURRENCY T3-01..T3-04). SOURCE OF TRUTH for what layers exist, their kind/version/status, and what a retired name was superseded by. Two consumers read it: (1) tools/ci/Validate-Distribution.ps1 regenerates the `layers` array from the live tree and diffs it clean (drift both directions FAILs), asserts `gateProven` is present, and rejects any edition ref or living-doc mention of a name absent from `layers` (a retired hit names its successor); (2) the DemoAgent currency preflight (Invoke-DemoGate.ps1 `currency` leg) asserts this file parses + carries `gateProven`, and that every layer the demo consumed is live here (a retired hit -> 'retired -> use <supersededBy>'). UPDATE MECHANICS: the `layers` array is regenerated from the tree by Validate-Distribution.ps1 -RegenerateIndex (deterministic); `retired` tombstones are authored on layer retirement (release checklist, FOLLOWUP.md T4-02); `gateProven` is a PROJECTION of the editions record (solution truvio-editions, ruling std-q31-gateproven-from-record), written by the Foundry (tools/harness/Write-IndexGateProven.ps1) with the record extract beside it in layers/editions-record.json and checked by Validate-Distribution.ps1 check 14 -- never hand-authored as trusted. Consumers 'pin origin/main + assert INDEX.gateProven present' (D-CONSUME a). EDITIONS APPEAR IN gateProven.editions ONLY WHEN PROVEN: the map is projected from the proven (or legacy-proof) release lines of the record, so a newly specified edition (base-swift, added in the v5 phase-2 baseline release) is absent from it until its first PASS. An absent edition means unproven, never missing; hand-writing a run id there would fabricate an attestation, which is the one thing this file exists to prevent.",
   "gateProven": {
-    "date": "2026-10-20",
+    "date": "2026-10-21",
     "dw": {
       "ring": "R1-NET10",
       "ringNumber": 1,
@@ -11,7 +11,11 @@
     "apps": [
       {
         "id": "Truvio.Commerce.MCP",
-        "version": "0.6.0-BETA"
+        "version": "0.6.3-BETA"
+      },
+      {
+        "id": "Truvio.Commerce.MCP.Host",
+        "version": "0.6.3-BETA"
       },
       {
         "id": "Truvio.Commerce.Serializer",
@@ -21,8 +25,8 @@
     "swift": {
       "tag": "v2.5.0"
     },
-    "skills": "v5.2.0",
-    "skillsCommit": "3b3a4ebd6c670938fb1ded9d0739e4d585593314",
+    "skills": "v5.8.12",
+    "skillsCommit": "860c3372f68daae332aaecb88b400c47d63dea0d",
     "swiftVersion": "2.5.0",
     "dwPlatformVersion": "10.29.8",
     "source": {
@@ -31,41 +35,41 @@
       "ruling": "std-q31-gateproven-from-record"
     },
     "editions": {
-      "dap-portal": "20261020-091906",
-      "headless-demo": "20261020-092424",
-      "swift-demo": "20261020-091319"
+      "dap-portal": "20261021-212522",
+      "headless-demo": "20261021-213018",
+      "swift-demo": "20261021-211942"
     },
     "releases": {
       "dap-portal": {
         "tag": "editions/dap-portal/2.5.0",
-        "runId": "20261020-091906",
+        "runId": "20261021-212522",
         "host": "foundry-dap.mydwsite4.com",
-        "ts": "2026-10-20T09:23:26Z",
-        "resultsDigest": "sha256:3a1e5f358c59330e05fed7ba7dc700ebdef5381785c76c0687fc72da05a61a42",
+        "ts": "2026-10-21T21:29:16Z",
+        "resultsDigest": "sha256:8172f5719c339d1e26f1365aae6e4933180eff89b02d9e83086a17e398bda81c",
         "legacy": false
       },
       "headless-demo": {
         "tag": "editions/headless-demo/3.4.0",
-        "runId": "20261020-092424",
+        "runId": "20261021-213018",
         "host": "foundry-blank-dw10-iteration",
-        "ts": "2026-10-20T09:27:59Z",
-        "resultsDigest": "sha256:253a1583f282ea68c54952a2f3cafaad088e06cd673945897647852357dfb2e4",
+        "ts": "2026-10-21T21:33:42Z",
+        "resultsDigest": "sha256:d40873028f80a9a1ff66d5ad76083addccd439aeb5de5c91191a0c3f2c8bea68",
         "legacy": false
       },
       "swift-demo": {
         "tag": "editions/swift-demo/5.5.0",
-        "runId": "20261020-091319",
+        "runId": "20261021-211942",
         "host": "foundry.mydwsite4.com",
-        "ts": "2026-10-20T09:18:09Z",
-        "resultsDigest": "sha256:d9b204f7c1a5d300913a7fb0b729dc236a5eff83a35ca7d66b36c63208559916",
+        "ts": "2026-10-21T21:24:23Z",
+        "resultsDigest": "sha256:810bb291b7e58937c9c0b5ad3a454fa0ff05b0763974754fa94423f76d6bec6a",
         "legacy": false
       }
     },
     "proofs": {
       "dap-portal": {
-        "runId": "20261020-091906",
+        "runId": "20261021-212522",
         "release": "editions/dap-portal/2.5.0",
-        "distributionCommit": "9443076e271a251053f44750773575068fa8fc64",
+        "distributionCommit": "4082a91df3addc9ea7fd235ba637a651b90e0de6",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -87,9 +91,9 @@
         }
       },
       "headless-demo": {
-        "runId": "20261020-092424",
+        "runId": "20261021-213018",
         "release": "editions/headless-demo/3.4.0",
-        "distributionCommit": "9443076e271a251053f44750773575068fa8fc64",
+        "distributionCommit": "4082a91df3addc9ea7fd235ba637a651b90e0de6",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -107,9 +111,9 @@
         }
       },
       "swift-demo": {
-        "runId": "20261020-091319",
+        "runId": "20261021-211942",
         "release": "editions/swift-demo/5.5.0",
-        "distributionCommit": "9443076e271a251053f44750773575068fa8fc64",
+        "distributionCommit": "4082a91df3addc9ea7fd235ba637a651b90e0de6",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
