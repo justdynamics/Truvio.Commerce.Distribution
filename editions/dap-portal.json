@@ -14,7 +14,7 @@
     "/dap",
     "/help"
   ],
-  "description": "Digital Asset Portal edition: framework-only base + sample data + the Digital Assets Portal content surface (area 26 on Swift-v2 item types - the item-type definitions come from the host's Swift design-package overlay, not from base content) on the default theme. The header is the Swift mega-menu: Help and About are public sections with child pages, and Product Assets and Digital Assets join them for a signed-in partner. Not in layers/INDEX.json gateProven.editions until the Foundry publish flow stamps a gate run for it. INDEX gateProven is the record.",
+  "description": "Digital Asset Portal edition: framework-only base + sample data + the Digital Assets Portal content surface (area 26 on Swift-v2 item types - the item-type definitions come from the host's Swift design-package overlay, not from base content) on the default theme. The header is the Swift mega-menu: Help and About are public sections with child pages, and Product Assets and Digital Assets join them for a signed-in partner. In layers/INDEX.json gateProven.editions since run 20260925-105239 (foundry-dap.mydwsite4.com); last proven as dap-portal 2.5.0 by run 20261020-091906 on DW 10.29.8 (Distribution #120). INDEX gateProven is the record.",
   "expectedCounts": {
     "EcomProducts": 97,
     "EcomGroups": 21,
