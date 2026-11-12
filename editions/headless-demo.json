@@ -1,6 +1,6 @@
 {
   "name": "headless-demo",
-  "from": "base@4.4.1",
+  "from": "base@4.5.0",
   "add": [],
   "surfaces": [
     "surface-headless@2.4.2"

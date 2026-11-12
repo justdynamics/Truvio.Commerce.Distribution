@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "3.4.0",
+  "baseContractVersion": "3.5.0",
   "swiftVersion": "2.5.0",
   "compat": {
     "dw": {
@@ -29,7 +29,7 @@
   "minSerializerVersion": "1.0.8-beta",
   "minSerializerVersionDeprecated": "DEPRECATED ALIAS, not a second floor. The one serializer floor is compat.apps[id=Truvio.Commerce.Serializer].min: the Foundry compat leg (Test-CompatFloors) and the dw-demo-base install step read that key and nothing else. This field repeats the same value for prose readers that still name it (dynamicweb/skills dw-users-permissions page-gating.md); tools/ci/Validate-Distribution.ps1 fails when it disagrees with compat.apps, so it can never state a different number. Raise compat.apps and this field together; remove this field once no reader names it.",
   "serializerTaughtSurfaceNote": "WHY THE FLOOR IS 1.0.8-beta (raised 2026-10-07 with base 4.3.0, Distribution #103; it was 1.0.6-beta from sample-data 5.0.1, Distribution #78, and 1.0.2-beta from base 3.4.2). The base ships its EcomNumbers counters as a Merge SqlTable entry with raiseOnlyColumns [NumberCounter] (Foundry #1322, Serializer #41): 1.0.7-beta writes each shipped counter as the larger of host and shipped value, in the engine and again in SQL at write time. An older engine ignores the field, so the base's counters would never be raised on a blank database (Merge does not fill a counter that is already set) and the next admin create of an order state, payment or shipping method would mint an id the base already ships and overwrite that row; under Replace an older engine would lower a live counter. 1.0.7-beta also takes the SqlTable row identity from the key and never from nameColumn (Serializer #38), which the base's key-named EcomOrderStates files rely on. 1.0.8-beta rather than 1.0.7-beta: 1.0.7-beta also fixed Serializer #35, which removed the second Replace that had masked Serializer #42 on a blank database, so with 1.0.7-beta the first Replace onto the wizard's area 1 reverts the area properties it writes (AreaCulture stays da-DK, no shop or language binding) and the delivered storefront answers 404 (Foundry run 20261007-104454 on a scratch host restored from the blank bacpac); 1.0.8-beta fixes it (Serializer #45). Layers ship serialized SqlTable rows: sample-data ships its whole demo dataset as merge-mode SqlTable YAML with a per-document ownership header, and feature-rma ships its RMA rows the same way. Four engine facts set the floor. (0) SqlTable tables with NO primary key: 1.0.2-beta and earlier wrote a heap table (DynamicStructures, Languages on DW 10.28) as DELETE FROM plus insert in EVERY mode, so the one Dynamic Workspace row sample-data 5.0.0 merges deleted every workspace the host already had (Foundry #1305, Serializer #21). 1.0.3-beta resolves a match key instead (primary key, then the predicate's declared keyColumns, then a unique index, then all columns), a Merge never deletes, a whole-table truncate happens only under an explicit replaceStrategy truncate, and the run log reports a Deleted count; sample-data declares keyColumns on its DynamicStructures predicate, which an older engine ignores. 1.0.5-beta is the floor rather than 1.0.3-beta because 1.0.3-beta and 1.0.4-beta log a WARNING for every heap entry, declared keyColumns included, and strict mode (the Management API default) fails the whole deserialize on it (Serializer #30, measured by Foundry gate run 20260922-223534); from 1.0.5-beta a declared key is an info line and only inferred keys warn. 1.0.6-beta rather than 1.0.5-beta because 1.0.3-beta to 1.0.5-beta stopped remapping page ids held in option-list fields (Swift's ProductListComponentSelector / ProductComponentSelector ComponentSource and ProductBom ListComponentSource, RadioButtonListEditor with valueField PageId), so a delivered storefront listed zero products (Serializer #32, gate run 20260922-231413); 1.0.6-beta resolves ItemType/Sql option sources with valueField PageId or ParagraphId through the page and paragraph maps whatever the editor. (1) SqlTable NULL round trip: Truvio.Commerce.Serializer 1.0.1-beta and earlier wrote a NULL column as 1900-01-01 / '' / 0 in Merge mode on a row where an empty-string column came before the NULL (Serializer issue #18); 1.0.2-beta is the first release that writes it back as NULL, so an older engine silently corrupts shipped rows. (2) PackageUnzip, the transport an online build uses to move a layer's files, is available from 1.0.1-beta. (3) The ownership header needs 1.0.0-beta or later: a 0.9.x engine fails strict on the unknown ownership column. The engine's taught surface (the skills corpus and the Foundry harness) may run ahead of this floor; the floor rises only when a layer ships something an older engine drops, rejects or corrupts. Raise compat.apps[id=Truvio.Commerce.Serializer].min and minSerializerVersion together, not this note.",
-  "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution, base 3.0.0 FRAMEWORK-ONLY). The Swift 2.4 base split moved ALL content (both mode trees) and UrlPath to the surface-swift layer; the base now ships only the framework SQL sets + this contract + SQL-predicate config. Additions (feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Content-scoped contract bits (content areas, langPrefix, navDepth, page anchors, title rules, per-environment Area exclusions, protected Swift item types) moved to layers/surface-swift/surface.contract-notes.json. The gate reads this file for the base-contract collision check.",
+  "description": "Machine-readable guarantees the base layer makes to every addition (v3.0 Distribution, base 3.0.0 FRAMEWORK-ONLY). The Swift 2.4 base split moved ALL content (both mode trees) and UrlPath to the surface-swift layer; the base now ships only the framework SQL sets + this contract + SQL-predicate config, and since 4.5.0 one repository task file (repositories.productsBackend). Additions (feature/sample-data/surface/theme layers) bind ONLY to this contract - never to each other. Content-scoped contract bits (content areas, langPrefix, navDepth, page anchors, title rules, per-environment Area exclusions, protected Swift item types) moved to layers/surface-swift/surface.contract-notes.json. The gate reads this file for the base-contract collision check.",
   "deliveryTarget": {
     "rule": "Every edition delivers onto a BLANK DW10 database: the schema and seed rows the STOCK DW10 setup wizard creates at the pinned platform (compat.dw ring and tfm; proven at layers/INDEX.json gateProven.dw.version), and nothing else. No Swift-derived starting database is assumed or supported. The host carries the Swift release Files named in hostFiles, the apps compat.apps names, and a licence; the FIRST setup step after that is the edition deserialize, and everything the storefront needs beyond the wizard's database comes from the Distribution. A Replace never deletes, so a host that started from a Swift-derived database keeps its extra rows and columns; they are inert and no layer reads them.",
     "rulings": [
@@ -78,7 +78,7 @@
           }
         ]
       },
-      "note": "The host's Files tree is the Swift release asset, unmodified: templates, item type definitions, the ProductsFrontend and ProductsBackend repositories (repositories.provisionedByGate false) and GlobalSettings.config with the Swift defaults (Settings/Designs/DoNotIncludeBaseHref True; the variant selector resolves through the friendly product URLs without a base href, measured on the blank host). The layers' files/ trees are delivered on top. tag must equal compat.swift.tag (validator check 16); rolling the Swift version rolls this asset and its sha256 with it."
+      "note": "The host's Files tree is the Swift release asset, unmodified: templates, item type definitions, the ProductsFrontend and ProductsBackend repositories (repositories.provisionedByGate false) and GlobalSettings.config with the Swift defaults (Settings/Designs/DoNotIncludeBaseHref True; the variant selector resolves through the friendly product URLs without a base href, measured on the blank host). The layers' files/ and repositories/ trees are delivered on top; the asset's ProductsBackend folder carries Products.index and no task, and the base adds the task (repositories.productsBackend). tag must equal compat.swift.tag (validator check 16); rolling the Swift version rolls this asset and its sha256 with it."
     },
     "wizardSeed": {
       "note": "Rows the stock wizard creates that the layers build on or upsert over. Nothing here is deleted by a delivery.",
@@ -87,7 +87,7 @@
         "EcomLanguages LANG1 en-US (default); the base adds its 20 languages beside it",
         "EcomShops SHOP1; the base Replace sets its name and ShopDefault",
         "EcomOrderFlow 1 and EcomOrderStates OS1-OS4; the base Replace upserts its 4 flows and 18 states",
-        "EcomDetailsGroup 1 \"Images\" (IsSystemGroup) with its LANG1 translation: sample-data files every product image under it (EcomDetails DetailsGroupId 1)",
+        "EcomDetailsGroup 1 \"Images\" (IsSystemGroup) with its LANG1 translation: sample-data files every product image under it (EcomDetails DetailsGroupId 1); the base adds its ENU name (declaredByDistribution)",
         "EcomFieldType 1-16 (the SQL types the group and product field schema sync reads)",
         "EcomNumbers counters (59 rows, most at 0): the base raises eight of them (PAY, SHIP, OS, GROUPFIELD, COUNTRYREL, VATGRP, SHOP, LANG) to the highest id it ships, never lowering one (declaredByDistribution)",
         "AccessUser 1 Angel, 2 Administrator, 3 Admin",
@@ -122,6 +122,13 @@
           "EcomNumbers"
         ],
         "why": "The counters that mint the ids the base ships, raised to the highest shipped id: PAY 3, SHIP 13, OS 14, GROUPFIELD 10, COUNTRYREL 3002 (CREL), VATGRP 2, SHOP 1, LANG 1. The wizard creates them at 0 (SHOP, LANG and OS at 1, 1 and 4), so without the raise the next admin create of an order state, payment or shipping method mints an id the base ships and overwrites that row. One Merge SqlTable entry (merge/_sql/EcomNumbers, keyed by the wizard's NumberId) with raiseOnlyColumns [NumberCounter]: a counter is only raised, never lowered, so a live host whose counter is ahead keeps it, and the other columns of the host's row are not overwritten (Distribution #103, Foundry #1322)."
+      },
+      {
+        "layer": "base",
+        "tables": [
+          "EcomDetailsGroupTranslation"
+        ],
+        "why": "The ENU name 'Images' of the wizard's asset category (EcomDetailsGroup 1). The wizard names it in LANG1 only and the base makes ENU the default language, so without this row the stock category has no name in the default language (Foundry #1629). One filtered Replace row; the names of other asset categories ship with the layer that ships the category."
       },
       {
         "layer": "surface-swift",
@@ -799,7 +806,29 @@
         "note": "The storefront product repository surface-swift ships in its repositories/ tree (Build+Index.task, Products.index, Products.query, Products.facets) and stages before host start. The Shop PLP and three service pages bind it by the literal path /Files/System/Repositories/TruvioCommerce/Products.query, so it is deployed under exactly this folder name: a copy renamed to ProductsFrontend leaves the Shop PLP empty (Foundry #1409). A layer's layer.json repositoryName is descriptive only and never the authority for a folder name; this block is.",
         "consumingApp": "eCom_ProductCatalog"
       }
-    ]
+    ],
+    "productsBackend": {
+      "name": "ProductsBackend",
+      "installPath": "wwwroot/Files/System/Repositories/ProductsBackend/",
+      "hostSupplied": [
+        "Products.index"
+      ],
+      "baseShipped": [
+        "Build+Index.task"
+      ],
+      "shippedSince": "4.5.0",
+      "task": {
+        "provider": "Dynamicweb.Indexing.Tasks.IndexBuilderTaskProvider, Dynamicweb.Core",
+        "index": "Products.index",
+        "build": "Full",
+        "repeatMinutes": 1440
+      },
+      "notShipped": [
+        "Products.index build setting SkipCompletionRules",
+        "/Globalsettings/Features/Productsfeatures/Completenessfeature"
+      ],
+      "note": "ProductsBackend is the back-office (PIM) product index. The Swift release asset carries its Products.index and no task, so on a blank build the index was never built on a schedule and a PIM build had to copy the ProductsFrontend task (Foundry #1629). The base ships repositories/ProductsBackend/Build+Index.task, byte-identical to the Swift release's ProductsFrontend task (stock IndexBuilderTaskProvider, the Full build of Products.index, daily): configuration, no code, and it adds a file to the folder without replacing one. The base ships no .index, so no delivery path builds an index because of it. Completeness scoring is NOT delivered by this task: it needs the Completeness feature flag and SkipCompletionRules False on each <Build> of Products.index (absent means skipped). The setting is an element inside the Swift release's own Products.index, not a GlobalSettings path, so deliveryTarget.hostFiles.globalSettings cannot carry it, and shipping it would mean a base-owned copy of a Swift release file; the feature flag is a product feature switch no delivered layer requires on every edition. Neither is shipped."
+    }
   },
   "currencyRates": {
     "defaultCurrency": "USD",
@@ -989,6 +1018,11 @@
         "table": "EcomProductCategoryTranslation",
         "where": "CategoryTranslationCategoryId = 'reference_category'",
         "note": "FILTER-03: the ENU display name 'Reference category' that belongs to the FILTER-02 row, on the same filtered reasoning. The tc_*$$ENU translations stay sample-data-owned (Foundry #1304)."
+      },
+      {
+        "table": "EcomDetailsGroupTranslation",
+        "where": "DetailsGroupTranslationGroupId = 1 AND DetailsGroupTranslationLanguageId = 'ENU'",
+        "note": "FILTER-04 (4.5.0): the ENU name 'Images' of the wizard's asset category 1, the one row the base owns on this table (Foundry #1629). The wizard's LANG1 row is not harvested. Every other row is addition-owned: an addition names the asset categories it ships (sample-data: Manuals 100111 in ENU and LANG1) and never ships a name for group 1 in ENU."
       }
     ],
     "note": "Additions touching a base-owned table follow idRules (prefix / floor) and must pass the static intersection checks below. Base ships zero catalog (see idRules.baseCatalog) and zero content areas (base split 3.0.0). UrlPath is surface-swift-owned (its single row is a friendly-URL redirect bound to area 3 + a Swift page id - no route targets exist in a framework-only base)."

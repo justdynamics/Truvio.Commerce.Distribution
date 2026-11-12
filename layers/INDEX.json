@@ -164,7 +164,7 @@
     {
       "name": "base",
       "kind": "base",
-      "version": "4.4.1",
+      "version": "4.5.0",
       "status": "active"
     },
     {
@@ -212,7 +212,7 @@
     {
       "name": "sample-data",
       "kind": "sample-data",
-      "version": "6.6.2",
+      "version": "6.6.3",
       "status": "active"
     },
     {
