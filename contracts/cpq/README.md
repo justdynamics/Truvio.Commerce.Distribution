@@ -1,7 +1,7 @@
 # CPQ contracts, version 1
 
-These are the proposed inputs and evidence boundary for a CPQ feature layer. They do not ship a
-layer, install an app, compile a model or implement a runtime probe. Existing editions are
+These are the proposed inputs and evidence boundary for a CPQ feature layer. The offline [candidate compiler](compiler.md) emits rows and a blocked plan. These contracts do not ship a
+layer, install an app or implement a runtime producer. Existing editions are
 unchanged. The consumer must implement `cpq-contract-v1` before an edition can use it; an unknown
 probe kind must fail. Schema validation is not a CPQ readiness verdict.
 
@@ -76,8 +76,8 @@ queries or fragments; authentication belongs to the resolver, not the declaratio
 
 The resolver must verify the package bytes, declared dependencies and extracted assemblies
 against the lock before installation. A lock author can lie about a hash; syntax validation cannot
-establish that a package exists, is licensed or contains those assemblies. No live package lock
-is shipped here because the proving package set has not been resolved. Unit tests use synthetic
+establish that a package exists, is licensed or contains those assemblies. A separate `packages.candidate.lock.json` records actual observed byte identities and gaps;
+it is not an installable package lock because the proving package set has not been resolved. Unit tests use synthetic
 hashes and `.invalid` URLs and must never become deployment inputs.
 
 Store downloaded DLL/NuGet bytes in a local artifact cache outside synced review folders; retain
@@ -162,7 +162,7 @@ contract directory. Tests cover unknown fields/operators, missing/duplicate iden
 scope, package loader names, dependency closure, wrong hashes/locks/hosts, partial pages, stale
 or future receipts, mutation of observations, skipped fixtures and preserved failure outcomes.
 
-Later consumer work must add installation, compiler/apply, authorized read adapters and a bounded
+Later consumer work must add installation, apply, complete authorized read adapters and a bounded
 behavior producer. MCP comes first for equivalent complete reads; discover authenticated Admin
 queries next and use local-only SQL where needed. Studio's reviewed read/analyze tool pack
 enforces its `/admin/dynamo` context, so the external consumer cannot assume those tools are

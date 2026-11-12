@@ -1,0 +1,17 @@
+{
+  "inputRule": {
+    "InputRuleType": "CPQOptions",
+    "InputRuleConditions": [{"group_operator":"AND","and":[["formInput[Build_Size]","eq","large"]]}],
+    "InputRuleActions": [
+      {"action":"enableoptions","target":"formInput[Build_Base]","options":["fixed"]},
+      {"action":"disableoptions","target":"formInput[Build_Base]","options":["mobile"]}
+    ],
+    "InputRuleActionsElse": [{"action":"enableoptions","target":"formInput[Build_Base]","options":["fixed","mobile"]}]
+  },
+  "drawerBom": [{"no":"WB-DRAWER","qty":"formInput[Build_Drawers]","type":"Item"}],
+  "discountCondition": [{"group_operator":"AND","and":[["formInput[Build_Size]","eq","large"],["formInput[Build_Drawers]","eq",2]]}],
+  "discount": "10.00",
+  "beforeDiscount": "190.00",
+  "sell": "171.00",
+  "rowsByTable": {"CPQModel":1,"CPQModelVersion":1,"CPQGroup":3,"CPQInput":4,"CPQInputRule":1,"CPQBOMRule":4,"CPQPriceRule":1}
+}

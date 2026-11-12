@@ -142,6 +142,7 @@ function Compare-DistVersion {
 . (Join-Path $PSScriptRoot 'Bacpac.ps1')
 . (Join-Path $PSScriptRoot 'Ledger.ps1')
 . (Join-Path $PSScriptRoot 'Cpq.Contracts.ps1')
+. (Join-Path $PSScriptRoot 'Cpq.Compiler.ps1')
 
 $layersRoot   = Join-Path $RepoRoot 'layers'
 $editionsRoot = Join-Path $RepoRoot 'editions'
@@ -871,7 +872,11 @@ $cpqRoot = Join-Path $RepoRoot 'contracts/cpq'
 try {
     $cpqExample = Read-CpqJson (Join-Path $cpqRoot 'examples/neutral-workbench.json')
     Assert-CpqSpec $cpqExample $cpqRoot
+    $cpqCandidate = ConvertTo-CpqCandidate $cpqExample $cpqRoot
+    $cpqRepeat = ConvertTo-CpqCandidate $cpqExample $cpqRoot $cpqCandidate.identityMap
+    if ((Get-CpqDigest $cpqCandidate) -cne (Get-CpqDigest $cpqRepeat) -or $cpqCandidate.applyAllowed -ne $false) { throw 'CPQ candidate compilation is not deterministic or is improperly apply-ready.' }
     & $log $true 'CPQ contract example: typed spec and references'
+    & $log $true 'CPQ candidate compiler: deterministic rows and unresolved delivery requirements'
 } catch { & $log $false "CPQ contract example: $($_.Exception.Message)" }
 foreach ($directory in $layerDirs) {
     try {
