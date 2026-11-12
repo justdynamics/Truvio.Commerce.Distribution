@@ -1,0 +1,88 @@
+{
+  "name": "feature-cpq",
+  "version": "1.0.0-candidate",
+  "kind": "feature",
+  "swiftVersion": "2.5.0",
+  "csLedger": [],
+  "fragmentModes": [],
+  "cpq": {
+    "schemaVersion": 1,
+    "status": "candidate",
+    "spec": "cpq/neutral-workbench.json",
+    "packages": "cpq/packages.lock.json",
+    "behavior": "cpq/behavior.json",
+    "blockers": [
+      {
+        "id": "openxml-closure",
+        "reason": "Original OpenXml 3.1.0, OpenXml.Framework packages and the full transitive dependency closure remain unresolved."
+      },
+      {
+        "id": "runtime-identity",
+        "reason": "The original DW_CPQ_API 10.24.2 vendor package source still needs delivery resolution. Use vendor nupkg bytes only; the differing installed replacement and local hotfix are excluded."
+      },
+      {
+        "id": "runtime-verification",
+        "reason": "No loaded assembly inventory or proving receipt on blank DW 10.29.8 is available."
+      },
+      {
+        "id": "content-bindings",
+        "reason": "Catalogue/prices, configurator and card pages, owner fixtures and document template need verified target bindings and scoped content import."
+      },
+      {
+        "id": "engine-adapter",
+        "reason": "Compiler requirements need a characterized runtime adapter; app defects #9-#12 and behavior readbacks remain unproven."
+      }
+    ],
+    "candidateArtifacts": {
+      "compiled": "cpq/generated/candidate.json",
+      "identityMap": "cpq/generated/identity-map.json",
+      "content": "cpq/content-plan.json",
+      "cases": "cpq/cases.json"
+    }
+  },
+  "asserts": {
+    "behaviorProbes": [
+      {
+        "kind": "cpq-contract-v1",
+        "contract": "cpq/behavior.json",
+        "renderProof": true,
+        "path": "/en-us/cpq-workbench"
+      }
+    ]
+  },
+  "ledger": {
+    "provides": [
+      "cpq.installation",
+      "cpq.model-versions",
+      "cpq.inputs",
+      "cpq.lookups",
+      "cpq.conditions",
+      "cpq.input-rules",
+      "cpq.constraints",
+      "cpq.bom",
+      "cpq.pricing",
+      "cpq.persistence",
+      "cpq.revisions",
+      "cpq.cart",
+      "cpq.quotes",
+      "cpq.documents",
+      "cpq.page",
+      "cpq.studio-models",
+      "cpq.diagrams",
+      "cpq.spec-build"
+    ],
+    "requires": [
+      "content.pages",
+      "content.item-types",
+      "content.item-pages",
+      "commerce.default-price",
+      "orders.shopping-cart-app",
+      "orders.quotes",
+      "serializer.engine",
+      "serializer.deserialize",
+      "serializer.identity-resolution",
+      "serializer.strict-mode"
+    ],
+    "comment": "Candidate carriage. These are required checks, not claims of implemented bindings or gate proof."
+  }
+}

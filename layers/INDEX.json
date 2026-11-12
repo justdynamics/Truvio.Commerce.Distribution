@@ -180,6 +180,12 @@
       "status": "active"
     },
     {
+      "name": "feature-cpq",
+      "kind": "feature",
+      "version": "1.0.0-candidate",
+      "status": "candidate"
+    },
+    {
       "name": "feature-gallery-zoom",
       "kind": "feature",
       "version": "1.0.2",

@@ -1,0 +1,129 @@
+{
+  "name": "cpq-demo",
+  "from": "base@4.4.1",
+  "add": [
+    "feature-cpq@1.0.0-candidate"
+  ],
+  "surfaces": [
+    "surface-swift@1.19.1"
+  ],
+  "sampleData": false,
+  "themes": [
+    "default"
+  ],
+  "compatAxes": [
+    "dw",
+    "apps",
+    "swift"
+  ],
+  "criticalPaths": [
+    "/",
+    "/en-us/home",
+    "/en-us/sign-in/sign-in"
+  ],
+  "comment": "sampleData false. The four neutral component products belong to feature-cpq; no unrelated sample data or BOM configurator. Counts are the proposed target, not observed evidence.",
+  "expectedCounts": {
+    "EcomProducts": 4,
+    "EcomGroups": 0,
+    "EcomCountries": 96,
+    "EcomShops": 1,
+    "Area": 1
+  },
+  "description": "Disposable neutral CPQ proving edition candidate on DW 10.29.8. Delivery is refused until packages, bindings and runtime prerequisites are resolved.",
+  "ledger": {
+    "repo": "dynamicweb/skills",
+    "commit": "bc55885f71cbb34c71a451078ff1b6477a5d816b",
+    "manifest": "skills/dw-demo-ledger/assets/releases/10.29.8/manifest.json",
+    "digest": "sha256:94278eec4ca005013ffe90863f0a71339a5228fe9ff555f1e316d23bcb7f771e",
+    "checkIds": [
+      "commerce.currencies.one-default",
+      "commerce.currencies.several",
+      "commerce.default-price.priced-products",
+      "content.item-pages.in-use",
+      "content.item-pages.item-instances",
+      "content.item-pages.types-resolve",
+      "content.item-types.defined",
+      "content.item-types.field-health",
+      "content.item-types.table-health",
+      "content.item-types.table-health-metadata",
+      "content.pages.exist",
+      "content.paragraphs.item-instances",
+      "content.paragraphs.visible",
+      "content.websites.active",
+      "cpq.bom.references",
+      "cpq.bom.results",
+      "cpq.cart.handoff",
+      "cpq.conditions.dialect",
+      "cpq.conditions.truth-table",
+      "cpq.constraints.transitions",
+      "cpq.diagrams.dependencies",
+      "cpq.documents.output",
+      "cpq.input-rules.effects",
+      "cpq.input-rules.loader",
+      "cpq.inputs.declaration",
+      "cpq.inputs.types",
+      "cpq.installation.loaded",
+      "cpq.installation.restart",
+      "cpq.installation.schema",
+      "cpq.lookups.results",
+      "cpq.lookups.scope",
+      "cpq.model-versions.integrity",
+      "cpq.model-versions.isolation",
+      "cpq.page.binding",
+      "cpq.page.render",
+      "cpq.persistence.roundtrip",
+      "cpq.pricing.results",
+      "cpq.pricing.scope",
+      "cpq.quotes.handoff",
+      "cpq.revisions.isolated-copy",
+      "cpq.spec-build.reproducible",
+      "cpq.studio-models.roundtrip",
+      "distribution.base-layer.countries",
+      "distribution.base-layer.permission-groups",
+      "distribution.theme-layer.brand-slot",
+      "orders.customer-experience-center.paragraph",
+      "orders.quotes.convertible",
+      "orders.quotes.states",
+      "orders.quotes.submitted",
+      "orders.shopping-cart-app.paragraph",
+      "serializer.deserialize.dry-run-merge",
+      "serializer.deserialize.dry-run-replace",
+      "serializer.engine.config-staged",
+      "serializer.engine.engine-floor",
+      "serializer.engine.settings-valid",
+      "serializer.identity-resolution.page-guid-present",
+      "serializer.identity-resolution.page-guid-unique",
+      "serializer.identity-resolution.paragraph-guid-unique",
+      "serializer.strict-mode.last-run-clean",
+      "swift.header-footer.footer-page",
+      "swift.header-footer.header-page",
+      "swift.header-footer.selected-on-website",
+      "swift.sign-in.sign-in-entry"
+    ]
+  },
+  "delivery": {
+    "status": "candidate",
+    "blockers": [
+      {
+        "id": "openxml-closure",
+        "reason": "Original OpenXml 3.1.0, OpenXml.Framework packages and the full transitive dependency closure remain unresolved."
+      },
+      {
+        "id": "runtime-identity",
+        "reason": "The original DW_CPQ_API 10.24.2 vendor package source still needs delivery resolution. Use vendor nupkg bytes only; the differing installed replacement and local hotfix are excluded."
+      },
+      {
+        "id": "runtime-verification",
+        "reason": "No loaded assembly inventory or proving receipt on blank DW 10.29.8 is available."
+      },
+      {
+        "id": "content-bindings",
+        "reason": "Catalogue/prices, configurator and card pages, owner fixtures and document template need verified target bindings and scoped content import."
+      },
+      {
+        "id": "engine-adapter",
+        "reason": "Compiler requirements need a characterized runtime adapter; app defects #9-#12 and behavior readbacks remain unproven."
+      }
+    ]
+  }
+}

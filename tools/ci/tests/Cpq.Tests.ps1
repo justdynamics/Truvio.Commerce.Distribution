@@ -99,13 +99,46 @@ Describe 'CPQ package and behavior binding' {
     }
     It 'rejects absent MCP and DOCX dependencies and an MCP release below the Studio floor' {
         $f.packages.packages=@($f.packages.packages | Where-Object role -NE 'mcp-host')
-        { Assert-CpqPackages $f.packages $script:contractRoot } | Should -Throw '*mcp-host package*'
-        $f=New-TestFixture;$f.packages.packages[3].version='0.6.5-beta'
+        { Assert-CpqPackages $f.packages $script:contractRoot } | Should -Throw '*MCP.Host assembly carrier*'
+        $f=New-TestFixture;$f.packages.packages[3].version='0.6.5-alpha'
         { Assert-CpqPackages $f.packages $script:contractRoot } | Should -Throw '*floor*'
         $f=New-TestFixture;$f.packages.packages[2].dependsOn=@('CPQ_Admin')
         { Assert-CpqPackages $f.packages $script:contractRoot } | Should -Throw '*incomplete*'
         $f=New-TestFixture;$f.packages.packages[5].assemblies[0].name='DocumentFormat.OpenXml.Other'
         { Assert-CpqPackages $f.packages $script:contractRoot } | Should -Throw '*DOCX*'
+    }
+    It 'accepts MCP <version> at or above the beta floor' -ForEach @(
+        @{version='0.6.5-beta'},@{version='0.6.5-BETA'},@{version='0.6.5-beta.1'},
+        @{version='0.6.5-rc.1'},@{version='0.6.5'},@{version='0.6.6-alpha'}
+    ) {
+        $f.packages.packages[3].version=$version
+        Assert-CpqPackages $f.packages $script:contractRoot
+    }
+    It 'rejects MCP <version> below the beta floor' -ForEach @(
+        @{version='0.6.4'},@{version='0.6.5-alpha.99'},@{version='0.6.5-123'}
+    ) {
+        $f.packages.packages[3].version=$version
+        {Assert-CpqPackages $f.packages $script:contractRoot}|Should -Throw '*floor*'
+    }
+    It 'accepts a bundled Host and empty NuGet dependencies while preserving site prerequisites' {
+        Set-TestBundledMcp $f.packages
+        Assert-CpqPackages $f.packages $script:contractRoot
+        $f.packages.packages[2].dependsOn=@('CPQ_Admin','Truvio.Commerce.MCP')
+        {Assert-CpqPackages $f.packages $script:contractRoot}|Should -Throw '*incomplete*'
+    }
+    It 'rejects an older separate Host and an unlocked declared NuGet dependency' {
+        $f.packages.packages[4].version='0.6.4-beta'
+        {Assert-CpqPackages $f.packages $script:contractRoot}|Should -Throw '*floor*'
+        $f=New-TestFixture;$f.packages.packages[2].nugetDependencies=@('Missing')
+        {Assert-CpqPackages $f.packages $script:contractRoot}|Should -Throw '*installation graph*'
+    }
+    It 'rejects a mismatched bundled entry path and duplicate Host carriers' {
+        Set-TestBundledMcp $f.packages
+        $mcp=$f.packages.packages[3];$a=$mcp.assemblies[1];$entry=$a.entry
+        $a.entry=$entry.Replace('/net10.0/','/net8.0/')
+        {Assert-CpqPackages $f.packages $script:contractRoot}|Should -Throw '*assembly entry*'
+        $a.entry=$entry;$f.packages.packages[2].assemblies+=,(Copy-TestData $a)
+        {Assert-CpqPackages $f.packages $script:contractRoot}|Should -Throw '*MCP.Host assembly carrier*'
     }
     It 'rejects secret-shaped source locators and an unpinned source build' {
         $f.packages.packages[0].source.uri='https://packages.example.invalid/app?credential=fixture'

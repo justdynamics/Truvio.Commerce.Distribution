@@ -63,12 +63,24 @@ Input/price rule ordering, margin grammar and engine coercion still need actual 
 
 The lock requires the exact reviewed identities for admin/runtime/Studio, source locator,
 version, package digest, loaded assembly name/version/TFM/digest and a closed dependency graph.
-It also requires explicit `Truvio.Commerce.MCP` and `Truvio.Commerce.MCP.Host` identities and
-the `DocumentFormat.OpenXml` assembly for the declared DOCX output. Studio must declare its
-admin and MCP host dependencies. The reviewed Studio README requires MCP 0.6.5 or later;
-this is a CPQ profile requirement and does not raise another edition's floor. The resolver
-still has to choose compatible exact releases, inspect all transitive dependencies and bind
-their actual bytes. No exact MCP, MCP host or OpenXml release is invented by this contract.
+It also requires explicit `Truvio.Commerce.MCP` and `Truvio.Commerce.MCP.Host` assembly identities
+and the `DocumentFormat.OpenXml` assembly for DOCX output. The MCP floor is `>=0.6.5-beta`;
+there is no published stable 0.6.5. NuGet prerelease labels compare without case. The published
+0.6.5-BETA MCP package carries Host under `Files/System/AddIns/Installed/Truvio.Commerce.MCP.Host/lib/net10.0/`;
+it does not require a separately invented Host package. A separate Host carrier, if resolved,
+must also meet the floor. This CPQ profile does not raise another edition's floor.
+
+`dependsOn` is the closed installation prerequisite graph. Studio requires admin, runtime,
+MCP and the Host carrier on the site. Its published 0.7.0 package declares no NuGet dependencies,
+so it uses `nugetDependencies:[]` while retaining those installation prerequisites. This optional
+field names the exact non-platform NuGet dependencies; when absent it defaults to `dependsOn`
+for existing locks. Every declared NuGet dependency must also be in `dependsOn` and its version
+requirement must be met by the locked package. An empty declaration cannot hide a real dependency.
+
+An assembly's optional `entry` pins its archive path. The default is `lib/<tfm>/<name>.dll`;
+the other supported form is `Files/System/AddIns/Installed/<name>/lib/<tfm>/<name>.dll`.
+The loader identity and receipt still bind to the package that actually carries the bytes.
+The resolver must inspect all transitive dependencies and bind their actual bytes.
 There are no floating versions. A build source also names its full commit. The entry assembly
 must start with the package ID, and duplicate loaded identities, all-zero digests, unlocked
 dependencies and dependency cycles fail validation. Source locators are HTTPS without credentials,
@@ -79,6 +91,12 @@ against the lock before installation. A lock author can lie about a hash; syntax
 establish that a package exists, is licensed or contains those assemblies. A separate `packages.candidate.lock.json` records actual observed byte identities and gaps;
 it is not an installable package lock because the proving package set has not been resolved. Unit tests use synthetic
 hashes and `.invalid` URLs and must never become deployment inputs.
+
+The candidate now pins the published [Studio v0.7.0 release](https://github.com/truvio-commerce/Truvio.Commerce.CpqStudio/releases/tag/v0.7.0)
+at commit `577c2be7ffd4117c88d9bc83cfbbbaa1f4375ed4` and MCP 0.6.5-beta, including both MCP DLLs.
+Pin the published Studio nupkg hash: archive timestamps can change a repacked archive even when
+the DLL is reproducible. Vendor runtime source resolution and OpenXml 3.1.0 plus its closure
+still prevent an installable lock. An installed runtime replacement never substitutes for vendor package bytes.
 
 Store downloaded DLL/NuGet bytes in a local artifact cache outside synced review folders; retain
 hashes and source metadata in the evidence. Vendor code held locally is not a distributable fix.
@@ -162,9 +180,28 @@ contract directory. Tests cover unknown fields/operators, missing/duplicate iden
 scope, package loader names, dependency closure, wrong hashes/locks/hosts, partial pages, stale
 or future receipts, mutation of observations, skipped fixtures and preserved failure outcomes.
 
-Later consumer work must add installation, apply, complete authorized read adapters and a bounded
-behavior producer. MCP comes first for equivalent complete reads; discover authenticated Admin
+The companion Foundry CPQ proving consumer supplies package installation, transactional owned-row staging and a bounded separate behavior producer. A characterized runtime/content adapter and complete skills handlers are still required for live proof. MCP comes first for equivalent complete reads; discover authenticated Admin
 queries next and use local-only SQL where needed. Studio's reviewed read/analyze tool pack
 enforces its `/admin/dynamo` context, so the external consumer cannot assume those tools are
 exposed on `/admin/mcp`. None of these schemas weakens that access policy. No host is needed to
 review this contract; the blank proving host is needed for engine experiments and delivery proof.
+
+
+## Candidate carriage
+
+A CPQ layer may use an explicit `status:candidate`, a `-candidate` version and named `blockers`.
+Its `packages` path then points to `packages-candidate.schema.json` evidence, whose kind, status
+and `deployable:false` prevent it being mistaken for `packages.schema.json`. The candidate also
+names generated compiler output, identity map, case fixtures and content intent under
+`candidateArtifacts`; validation regenerates and checks those artifacts against the spec.
+A ready declaration cannot carry candidate blockers or artifacts.
+
+`Test-CpqLayerContract -ForDelivery` refuses candidates with the named reasons. A candidate
+edition must repeat every layer blocker and cannot claim gate proof. Nothing sets or changes
+an existing edition's proof. CPQ editions lock the checks of their provided functions **and**
+the CPQ prerequisites; non-CPQ editions retain their existing selection semantics.
+
+The validator accepts `-SkillsRootsByCommit` for mixed exact revisions; CI checks out both the
+older edition lock and the CPQ lock. `TRUVIO_CPQ_SKILLS_PATH` or `.ledger-skills-cpq` is an optional
+additional checkout, selected only when its HEAD equals the requested full commit. Validation
+never fetches or moves a skills checkout. All selected snapshot bytes remain digest-checked.

@@ -73,10 +73,12 @@ installable `cpq-packages` lock and is rejected by that validator. It records or
 package bytes separately from the differing installed runtime DLL. The local replacement and
 Truvio.CpqHotfix are excluded from delivery. No proprietary binaries are committed.
 
-The retained Studio 0.7.0 artifact comes from a local test build at the embedded source commit,
-which is older than the reviewed app source. Its complete build inputs and an installable
-package are unresolved. Installed MCP beta versions and OpenXml files also need a compatible,
-closed package resolution. No loaded-assembly or exact-baseline claim follows from this file.
+The Studio entry now pins the published v0.7.0 nupkg and DLL from source commit
+`577c2be7ffd4117c88d9bc83cfbbbaa1f4375ed4`, with its producer's build manifest.
+Its empty NuGet dependency list is separate from the admin/runtime/MCP site prerequisites.
+MCP 0.6.5-beta meets the corrected floor; its archive carries both MCP and MCP.Host DLLs.
+Original vendor runtime source resolution and OpenXml 3.1.0 plus the full dependency closure
+remain unresolved. No loaded-assembly or exact-baseline claim follows from archive inspection.
 
 Run `Invoke-Pester -Path tools/ci/tests/Cpq.Compiler.Tests.ps1 -CI` and the repository validator.
 Receipt integration tests accept `CPQ_SKILLS_ROOT` to explicitly select the skills checkout.

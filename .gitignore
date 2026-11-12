@@ -19,3 +19,4 @@ Thumbs.db
 
 # Pinned producer checkout used by ledger validation in CI.
 /.ledger-skills/
+/.ledger-skills-cpq/

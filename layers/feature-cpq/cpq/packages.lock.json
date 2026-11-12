@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 1,
+  "kind": "cpq-packages-candidate",
+  "status": "candidate",
+  "deployable": false,
+  "engineProfile": "carrot-10.24.2-studio-0.7.0",
+  "packages": [
+    {
+      "id": "CPQ_Admin",
+      "version": "10.24.2",
+      "origin": "vendor-local-nupkg",
+      "packageSha256": "sha256:2726581ece32bf6492db839b0a04d5180f7900e2d506299c60e6f702b36b5cfa",
+      "repository": "https://github.com/carrot-solutions/dw-cpq-admin.git",
+      "sourceCommit": "d14e7640b5a02b0381b6ef84dc6a8cfa2c92c496",
+      "assemblies": [
+        {
+          "name": "CPQ_Admin",
+          "entry": "lib/net8.0/CPQ_Admin.dll",
+          "assemblyVersion": "1.0.0.0",
+          "packageEntrySha256": "sha256:421fa2e6f2e23d7d4891de230677cc99ecc5d0989b7f8e88cd80dd5b0efc4f78",
+          "installedSha256": "sha256:421fa2e6f2e23d7d4891de230677cc99ecc5d0989b7f8e88cd80dd5b0efc4f78",
+          "installedMatchesPackage": true,
+          "loadedIdentityVerified": false
+        }
+      ],
+      "declaredDependencies": [
+        {
+          "id": "Dynamicweb",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Application.UI",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Apps.UI",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Content.UI",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Core",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.CoreUI",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Ecommerce",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Insights.UI",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Integration.UI",
+          "version": "10.22.10",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Newtonsoft.Json",
+          "version": "13.0.3",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    },
+    {
+      "id": "DW_CPQ_API",
+      "version": "10.24.2",
+      "origin": "vendor-local-nupkg",
+      "packageSha256": "sha256:8af00ad054a3192fe0010505980d1e058a7fec8176b0225321de2e12acdd8684",
+      "repository": "https://github.com/carrot-solutions/dw-cpq-api-windowdemo.git",
+      "sourceCommit": "414b70ee80fb748e07e9416ef6a572e3bc519a49",
+      "assemblies": [
+        {
+          "name": "DW_CPQ_API",
+          "entry": "lib/net8.0/DW_CPQ_API.dll",
+          "assemblyVersion": "1.0.0.0",
+          "packageEntrySha256": "sha256:e604e0e67ef86937a7ecbafffa02382c79441e5997d129479232595c925d90b2",
+          "installedSha256": "sha256:e813167b06af3b83c66ec6f4c32f6f7384dc5b30e5c6161c042b3243a0d87540",
+          "installedMatchesPackage": false,
+          "loadedIdentityVerified": false
+        }
+      ],
+      "declaredDependencies": [
+        {
+          "id": "DocumentFormat.OpenXml",
+          "version": "3.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Core",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.DataIntegration",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Ecommerce",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Host.Core",
+          "version": "10.24.11",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Newtonsoft.Json",
+          "version": "13.0.3",
+          "exclude": "Build,Analyzers"
+        }
+      ]
+    },
+    {
+      "id": "Truvio.Commerce.CpqStudio",
+      "version": "0.7.0",
+      "origin": "github-release",
+      "packageSha256": "sha256:8febe181c7ec2d45e9e3dd3c2b3024ab5b8553dc48715f4db3a68ac7b14d27b9",
+      "repository": "https://github.com/truvio-commerce/Truvio.Commerce.CpqStudio",
+      "release": "https://github.com/truvio-commerce/Truvio.Commerce.CpqStudio/releases/tag/v0.7.0",
+      "sourceCommit": "577c2be7ffd4117c88d9bc83cfbbbaa1f4375ed4",
+      "assemblies": [
+        {
+          "name": "Truvio.Commerce.CpqStudio",
+          "entry": "lib/net10.0/Truvio.Commerce.CpqStudio.dll",
+          "assemblyVersion": "0.7.0.0",
+          "productVersion": "0.7.0+577c2be7ffd4117c88d9bc83cfbbbaa1f4375ed4",
+          "packageEntrySha256": "sha256:daf059b239e830185d5922a5b83de5c55392a0dde93555c3b2b91af6dc092b8c",
+          "loadedIdentityVerified": false
+        }
+      ],
+      "declaredDependencies": [],
+      "nugetDependencies": [],
+      "dependsOn": [
+        "CPQ_Admin",
+        "DW_CPQ_API",
+        "Truvio.Commerce.MCP"
+      ],
+      "buildManifest": {
+        "schema": 1,
+        "package": {
+          "id": "Truvio.Commerce.CpqStudio",
+          "version": "0.7.0"
+        },
+        "source": {
+          "repo": "truvio-commerce/Truvio.Commerce.CpqStudio",
+          "commit": "577c2be7ffd4117c88d9bc83cfbbbaa1f4375ed4"
+        },
+        "sdk": "10.0.403",
+        "assembly": {
+          "path": "lib/net10.0/Truvio.Commerce.CpqStudio.dll",
+          "sha256": "daf059b239e830185d5922a5b83de5c55392a0dde93555c3b2b91af6dc092b8c",
+          "mvid": "9dfa5e39-e5ec-4261-8ee7-bdda5dbf4f6e",
+          "productVersion": "0.7.0+577c2be7ffd4117c88d9bc83cfbbbaa1f4375ed4"
+        },
+        "builtAgainst": {
+          "dynamicweb": {
+            "productVersion": "10.29.8+61654764303a7811e60068f7c2d4eab9269c7832",
+            "sha256": "985cb90a0a8eb461811763d45c45b92283da3192086b180ae42ebedd49a06345"
+          },
+          "cpqAdmin": {
+            "package": "CPQ_Admin 10.24.2",
+            "nupkgSha256": "2726581ece32bf6492db839b0a04d5180f7900e2d506299c60e6f702b36b5cfa",
+            "entry": "lib/net8.0/CPQ_Admin.dll",
+            "sha256": "421fa2e6f2e23d7d4891de230677cc99ecc5d0989b7f8e88cd80dd5b0efc4f78"
+          },
+          "mcpHost": {
+            "package": "Truvio.Commerce.MCP 0.6.5-BETA",
+            "nupkgSha256": "3386e1bc636c7f473cb64e33c9b5a7934e7a60f80b8ee9b2941e36d4f4672f2e",
+            "entry": "Files/System/AddIns/Installed/Truvio.Commerce.MCP.Host/lib/net10.0/Truvio.Commerce.MCP.Host.dll",
+            "sha256": "3e1b468d136f36c9aae10f569b2ed5f18dd7e83b48c041dc45385763bd7fc6c5"
+          }
+        },
+        "requiresOnSite": [
+          "Dynamicweb 10.29.8+61654764303a7811e60068f7c2d4eab9269c7832 ring (net10.0)",
+          "CPQ_Admin and DW_CPQ_API 10.24.2 (Carrot Solutions), installed from the vendor's packages",
+          "Truvio.Commerce.MCP 0.6.5-BETA or later, installed on its own (Studio is a Dynamo tool pack compiled against its Host)"
+        ],
+        "install": "Install the nupkg through the Dynamicweb add-in installer, or unpack lib/net10.0 into Files/System/AddIns/Installed/Truvio.Commerce.CpqStudio.<version>/lib/net10.0 (the layout deploy.ps1 writes). Never two versions side by side."
+      },
+      "provenanceNote": "Published archive and DLL hashes verified offline. Build reproducibility and 113 packed-DLL tests are reported by the release producer; this consumer does not rerun them."
+    },
+    {
+      "id": "Truvio.Commerce.MCP",
+      "version": "0.6.5-beta",
+      "origin": "nuget",
+      "packageSha256": "sha256:3386e1bc636c7f473cb64e33c9b5a7934e7a60f80b8ee9b2941e36d4f4672f2e",
+      "source": "https://api.nuget.org/v3-flatcontainer/truvio.commerce.mcp/0.6.5-beta/truvio.commerce.mcp.0.6.5-beta.nupkg",
+      "repository": "https://github.com/dynamicweb/MCP",
+      "sourceCommit": "759d0cb31900ba2c18583dff4b59ef0f2795ed4c",
+      "minimumVersion": "0.6.5-beta",
+      "nuspecVersion": "0.6.5-BETA",
+      "assemblies": [
+        {
+          "name": "Truvio.Commerce.MCP",
+          "entry": "lib/net10.0/Truvio.Commerce.MCP.dll",
+          "assemblyVersion": "1.0.0.0",
+          "packageEntrySha256": "sha256:b9fc260ea6b48cabb4e021f6ba4732d2ff1ac9789172ada03da757c64e364e58",
+          "loadedIdentityVerified": false
+        },
+        {
+          "name": "Truvio.Commerce.MCP.Host",
+          "entry": "Files/System/AddIns/Installed/Truvio.Commerce.MCP.Host/lib/net10.0/Truvio.Commerce.MCP.Host.dll",
+          "assemblyVersion": "1.0.0.0",
+          "packageEntrySha256": "sha256:3e1b468d136f36c9aae10f569b2ed5f18dd7e83b48c041dc45385763bd7fc6c5",
+          "loadedIdentityVerified": false
+        }
+      ],
+      "declaredDependencies": [
+        {
+          "id": "Dynamicweb",
+          "version": "10.25.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Core",
+          "version": "10.25.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.DataIntegration",
+          "version": "10.25.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.DataIntegration.Providers.ExcelProvider",
+          "version": "10.25.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Ecommerce",
+          "version": "10.25.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Ecommerce.UI",
+          "version": "10.25.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.EmailMarketing",
+          "version": "10.25.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Host.Core",
+          "version": "10.25.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Marketplace",
+          "version": "10.25.5",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Dynamicweb.Products.UI",
+          "version": "10.25.5",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "nugetDependencies": [],
+      "dependsOn": [],
+      "provenanceNote": "The published MCP nupkg carries both assemblies; MCP.Host is not a separate package requirement. Prerelease labels compare case-insensitively."
+    }
+  ],
+  "supportingInstalledFiles": [
+    {
+      "name": "DocumentFormat.OpenXml",
+      "packageFolder": "DW_CPQ_API.10.24.2",
+      "assemblyVersion": "3.1.0.0",
+      "informationalVersion": "3.1.0+Branch.main.Sha.522f9f3db3268ef5722c0721e065d63ced48e77c.522f9f3db3268ef5722c0721e065d63ced48e77c",
+      "sha256": "sha256:1ab32e6e0537ba9a2493f91243a34d25374292ee5c15f7bd3a2841916f4fa9d9",
+      "loadedIdentityVerified": false
+    },
+    {
+      "name": "DocumentFormat.OpenXml.Framework",
+      "packageFolder": "DW_CPQ_API.10.24.2",
+      "assemblyVersion": "3.1.0.0",
+      "informationalVersion": "3.1.0+Branch.main.Sha.522f9f3db3268ef5722c0721e065d63ced48e77c.522f9f3db3268ef5722c0721e065d63ced48e77c",
+      "sha256": "sha256:52412d3dd3425e7b8fa2b031d140eaf6d4fbb1f746c6491ff7046e06f37c5283",
+      "loadedIdentityVerified": false
+    },
+    {
+      "name": "Truvio.Commerce.CpqStudio",
+      "packageFolder": "Truvio.Commerce.CpqStudio.0.6.2",
+      "assemblyVersion": "0.6.2.0",
+      "informationalVersion": "0.6.2+4caf5f0012c6e1f572fbc79417d7ed1b4d0ef361",
+      "sha256": "sha256:b02f4a63467a25edd0c2c37b67b00e80268d1d62be369c41bbed47b4334ad18a",
+      "loadedIdentityVerified": false
+    },
+    {
+      "name": "Truvio.Commerce.MCP",
+      "packageFolder": "Truvio.Commerce.MCP.0.6.5-BETA",
+      "assemblyVersion": "1.0.0.0",
+      "informationalVersion": "0.6.5-BETA+759d0cb31900ba2c18583dff4b59ef0f2795ed4c",
+      "sha256": "sha256:b9fc260ea6b48cabb4e021f6ba4732d2ff1ac9789172ada03da757c64e364e58",
+      "loadedIdentityVerified": false
+    },
+    {
+      "name": "Truvio.Commerce.MCP.Host",
+      "packageFolder": "Truvio.Commerce.MCP.Host",
+      "assemblyVersion": "1.0.0.0",
+      "informationalVersion": "0.6.5-BETA+759d0cb31900ba2c18583dff4b59ef0f2795ed4c",
+      "sha256": "sha256:3e1b468d136f36c9aae10f569b2ed5f18dd7e83b48c041dc45385763bd7fc6c5",
+      "loadedIdentityVerified": false
+    }
+  ],
+  "gaps": [
+    "Authorize and resolve the original DW_CPQ_API 10.24.2 vendor package source for delivery. The installed replacement differs from its package entry and is never a substitute; use only the vendor nupkg bytes.",
+    "OpenXml 3.1.0 files observed beside runtime are not inside the vendor nupkg. Resolve original OpenXml 3.1.0, OpenXml.Framework and the complete transitive dependency closure, including other vendor package requirements.",
+    "No runtime-loaded hash inventory or exact DW 10.29.8 proving run is available. Release archive verification is not runtime verification; the full installable package set remains unresolved."
+  ],
+  "excludedFiles": [
+    "Truvio.CpqHotfix.dll"
+  ]
+}

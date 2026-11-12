@@ -1,0 +1,374 @@
+{
+  "schemaVersion": 1,
+  "kind": "cpq-contract-v1",
+  "engineProfile": "carrot-10.24.2-studio-0.7.0",
+  "specDigest": "sha256:d70b5a9ed74386639be06ec51d9b218f9c5aa144e3aebfe5e5be8e8a7b463ab6",
+  "packageLockDigest": "sha256:72dc3db002f12742079461243234cbf4d113b3f415df3e532bfea85a363fe2a2",
+  "maxAgeSeconds": 900,
+  "checks": [
+    {
+      "id": "cpq.bom.references",
+      "functionId": "cpq.bom",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.bom.results",
+      "functionId": "cpq.bom",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.cart.handoff",
+      "functionId": "cpq.cart",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "cart",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.conditions.dialect",
+      "functionId": "cpq.conditions",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.conditions.truth-table",
+      "functionId": "cpq.conditions",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.constraints.transitions",
+      "functionId": "cpq.constraints",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.diagrams.dependencies",
+      "functionId": "cpq.diagrams",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "studio",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.documents.output",
+      "functionId": "cpq.documents",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "document",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.input-rules.effects",
+      "functionId": "cpq.input-rules",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.input-rules.loader",
+      "functionId": "cpq.input-rules",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.inputs.declaration",
+      "functionId": "cpq.inputs",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.inputs.types",
+      "functionId": "cpq.inputs",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.installation.loaded",
+      "functionId": "cpq.installation",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "installation",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.installation.restart",
+      "functionId": "cpq.installation",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "installation",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.installation.schema",
+      "functionId": "cpq.installation",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "installation",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.lookups.results",
+      "functionId": "cpq.lookups",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.lookups.scope",
+      "functionId": "cpq.lookups",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.model-versions.integrity",
+      "functionId": "cpq.model-versions",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.model-versions.isolation",
+      "functionId": "cpq.model-versions",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.page.binding",
+      "functionId": "cpq.page",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "page",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.page.render",
+      "functionId": "cpq.page",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "page",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.persistence.roundtrip",
+      "functionId": "cpq.persistence",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "stored",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.pricing.results",
+      "functionId": "cpq.pricing",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.pricing.scope",
+      "functionId": "cpq.pricing",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "model",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.quotes.handoff",
+      "functionId": "cpq.quotes",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "quote",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.revisions.isolated-copy",
+      "functionId": "cpq.revisions",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "stored",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.spec-build.reproducible",
+      "functionId": "cpq.spec-build",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "spec",
+      "minimumSubjects": 1
+    },
+    {
+      "id": "cpq.studio-models.roundtrip",
+      "functionId": "cpq.studio-models",
+      "caseIds": [
+        "small-fixed",
+        "small-mobile",
+        "large-discount",
+        "invalid-mobile",
+        "invalid-drawer-count"
+      ],
+      "observation": "studio",
+      "minimumSubjects": 1
+    }
+  ]
+}

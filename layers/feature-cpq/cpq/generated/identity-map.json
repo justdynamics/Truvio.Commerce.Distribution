@@ -1,0 +1,21 @@
+{
+  "entries": {
+    "CPQBOMRule/v1/wheels": 257035749,
+    "CPQInput/v1/Build_Size": 228282929,
+    "CPQGroup/v1/bom": 727624772,
+    "CPQPriceRule/v1/large-two-drawers": 984238648,
+    "CPQInputRule/v1/large-base-options": 962171880,
+    "CPQInput/v1/Build_Label": 403897189,
+    "CPQBOMRule/v1/small-frame": 749840820,
+    "CPQGroup/v1/rules": 465951527,
+    "CPQModel/model/neutral-workbench": 262932398,
+    "CPQBOMRule/v1/drawers": 809753691,
+    "CPQInput/v1/Build_Drawers": 303943303,
+    "CPQInput/v1/Build_Base": 556935122,
+    "CPQBOMRule/v1/large-frame": 808009363,
+    "CPQModelVersion/v1/version": 692067885,
+    "CPQGroup/v1/input/Build": 614747714
+  },
+  "modelKey": "neutral-workbench",
+  "schemaVersion": 1
+}
