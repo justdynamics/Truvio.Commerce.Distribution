@@ -433,7 +433,7 @@
             "type": "object",
             "minProperties": 1,
             "additionalProperties": true,
-            "description": "Sanitized observation payload, not executable instructions. Domain interpretation belongs to the registered check handler."
+            "description": "Sanitized observation payload, not executable instructions. Its one shape is observation.schema.json; Assert-CpqReceipt validates every row against that file."
           }
         },
         "required": [

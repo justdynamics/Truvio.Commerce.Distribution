@@ -24,10 +24,11 @@ probe kind must fail. Schema validation is not a CPQ readiness verdict.
 | `behavior.schema.json` | Check author: exact check/function IDs, cases, observation kind, nonempty scope and freshness limit. |
 | `context.schema.json` | Trusted measurement coordinator: actual delivery/host/model/app/ledger facts. Never copied from a receipt to make it match. |
 | `receipt.schema.json` | Registered behavior producer: observed outcomes bound to those facts, with explicit read completeness. |
+| `observation.schema.json` | Producer and reader together: the one payload of a receipt row (`observed`), the case's step journal. |
 
 All are self-contained draft-7 schemas. Unknown contract fields are errors, including nested
-rules and actions. `observed` is intentionally the sanitized domain payload of the named check;
-its interpretation is the future handler's responsibility, not arbitrary instructions to execute.
+rules and actions. `observed` is the sanitized payload of the named check, in the one shape
+[`observation.schema.json`](observation.schema.json) fixes. It is data, never instructions to execute.
 
 ## Portable model
 
@@ -160,6 +161,42 @@ JSON serialize values with the PowerShell helper, UTF-8 without BOM, then SHA-25
 compare these digests with the same helper; this is not a claim of RFC 8785 interoperability.
 The ledger digest keeps its own existing algorithm. Raw package/assembly hashes are byte hashes.
 
+### Row payload
+
+Every row's `observed` is validated against `observation.schema.json` by the producer before it
+writes the receipt and by `Assert-CpqReceipt` on every read, so producer and reader cannot drift
+apart. The payload is `{operation, steps, reason}`:
+
+- `operation` is the experiment step the check is judged on. `Get-CpqCheckOperation` maps the
+  check's function to it (`cpq.page` render, `cpq.persistence` reopen, `cpq.revisions` revision,
+  `cpq.cart` cart, `cpq.quotes` quote, `cpq.documents` document, every other function
+  recalculate). A row naming another operation is refused.
+- `steps` is the case's journal in execution order: an unbroken prefix of render, recalculate,
+  save, reopen, revision, cart, quote, document. Only the last recorded step may be other than
+  `PASS`. Each step carries `result`, a complete `read` and its `observed` facts, bound to the
+  trusted host, the row's case and the trusted model version, with `erpCalls` 0.
+- Step facts are typed and closed: `rendered`, `dwErrors`, `theme`; `valid`, a `bom` map of SKU
+  to quantity, decimal-string `sell` and `beforeDiscount`; `destinationId`, `readBack`,
+  `ownerVerified`. A fact the adapter did not measure is left out, never sent as null. A new
+  fact needs a reviewed change to the schema.
+
+`Get-CpqObservationVerdict` compares the judged step with the independent case expectation and
+ignores the row's label. `Assert-CpqReceipt` then refuses a row whose label claims more than its
+journal shows: `PASS` over a step that did not pass or that contradicts the expectation, or
+anything but `FAIL`/`ERROR` over a step that failed or errored. A wrong price can therefore not
+travel under a `PASS` or `UNVERIFIED` label.
+
+### Binding status gates a PASS
+
+A receipt check is bound through the `cpq-behavior-receipt` binding of its check file in the
+edition's locked skills snapshot. `Get-CpqReceiptBinding` reads that status and
+`Resolve-CpqReaderVerdict` applies it to a reader's result: a `PASS` stands only when the reader
+reports complete evidence **and** the snapshot holds exactly one such binding with status
+`implemented`. A `planned` binding, a missing check, a missing or duplicated binding, or another
+surface gives `UNVERIFIED` and `complete:false`. `FAIL` and `ERROR` are kept whatever the binding
+says. Every consumer that turns reader output into a verdict must go through this function;
+promoting a binding in the snapshot is then the only thing that lets a `PASS` through.
+
 The validator returns no PASS verdict. A valid receipt may contain `FAIL`, `ERROR` or `UNVERIFIED`.
 The registered check handler must still inspect the actual outcome and compare it with the
 independent case assertion. In particular it must prove prices survive handoff, wrong-owner
@@ -179,6 +216,10 @@ The structural CI validates the neutral spec and every layer that opts in, and C
 contract directory. Tests cover unknown fields/operators, missing/duplicate identities, reference
 scope, package loader names, dependency closure, wrong hashes/locks/hosts, partial pages, stale
 or future receipts, mutation of observations, skipped fixtures and preserved failure outcomes.
+They also cover the row payload (free-form and unknown shapes, a wrong operation, a broken
+journal, a label that contradicts its journal) and the binding gate. `Cpq.Reader.Tests.ps1` runs
+the pinned skills reader over the same payloads and reads the pinned snapshot's real binding
+files; set `CPQ_SKILLS_ROOT` to the CPQ ledger checkout, as CI does.
 
 The companion Foundry CPQ proving consumer supplies package installation, transactional owned-row staging and a bounded separate behavior producer. A characterized runtime/content adapter and complete skills handlers are still required for live proof. MCP comes first for equivalent complete reads; discover authenticated Admin
 queries next and use local-only SQL where needed. Studio's reviewed read/analyze tool pack

@@ -10,6 +10,26 @@ function Set-TestBundledMcp($Packages) {
     $studio=@($Packages.packages|Where-Object role -EQ 'studio')[0]
     $studio.dependsOn=@('CPQ_Admin','DW_CPQ_API','Truvio.Commerce.MCP')
 }
+# One row payload in the shape contracts/cpq/observation.schema.json fixes: the producer's step
+# journal for a case, up to and including -Through, every step agreeing with the independent expectation.
+function New-TestObservation($Spec,$Case,$Context,[string]$Operation,[string]$Through='document') {
+    $steps=@{}
+    foreach($op in @('render','recalculate','save','reopen','revision','cart','quote','document')){
+        $seen=@{hostId=$Context.hostId;caseId=$Case.id;modelVersionId=$Context.modelVersionId;erpCalls=0}
+        if($op -eq 'render'){$seen.rendered=$true;$seen.dwErrors=0;$seen.theme=$Spec.page.theme}
+        else{
+            $seen.valid=$Case.expect.valid
+            if($Case.expect.valid){
+                $seen.bom=Copy-TestData $Case.expect.bom;$seen.sell=$Case.expect.sell
+                if($op -eq 'recalculate' -and $Case.expect.Contains('beforeDiscount')){$seen.beforeDiscount=$Case.expect.beforeDiscount}
+                if($op -ne 'recalculate'){$seen.destinationId=$Case.id+'.'+$op;$seen.readBack=$true;$seen.ownerVerified=$true}
+            }
+        }
+        $steps[$op]=@{result='PASS';read=@{complete=$true;nextCursor=$null;expectedSubjects=1;observedSubjects=1};observed=$seen}
+        if($op -eq $Through){break}
+    }
+    return @{operation=$Operation;steps=$steps;reason='Synthetic fixture journal; not a measured configuration.'}
+}
 function New-TestFixture {
     $spec = Read-CpqJson (Join-Path $script:contractRoot 'examples/neutral-workbench.json')
     # Synthetic identities and hashes. These are never installable package or live proof fixtures.
@@ -58,8 +78,8 @@ function New-TestFixture {
             $case=@($spec.cases | Where-Object id -EQ $id)[0]
             @{checkId='cpq.pricing.results';caseId=$id;inputDigest=(Get-CpqDigest $case.answers)
               expectationDigest=(Get-CpqDigest $case.expect);result='PASS'
-              read=@{surface='runtime';operation='/cpqapi/model';complete=$true;nextCursor=$null;expectedSubjects=1;observedSubjects=1}
-              observed=@{fixtureOnly=$true;sell=$case.expect.sell}}
+              read=@{surface='file';operation='bounded-experiment-journal';complete=$true;nextCursor=$null;expectedSubjects=1;observedSubjects=1}
+              observed=(New-TestObservation $spec $case $context 'recalculate')}
         })
     }
     return @{spec=$spec;packages=$packages;behavior=$behavior;context=$context;receipt=$receipt;digest=(Get-CpqDigest $receipt)}
