@@ -66,17 +66,13 @@
  *   --td-logo-w-phone: 132px;
  *   --td-logo-w-laptop: 170px;
  *   --td-hero-max-h:   60vh;
- *   --td-edge-mask:    url("data:image/svg+xml,...");
- *   --td-edge-fill-hero:   #RRGGBB;
- *   --td-edge-fill-alt:    #RRGGBB;
- *   --td-edge-fill-footer: #RRGGBB;
  *   --td-button-primary-ink-primary: #RRGGBB;
  * }
  *
  * The first thirteen are the theme's own token block (the first six also have the
  * inline head copy). The logo and hero tokens size blocks #13, #23 and the
- * image-height caps. The edge and button-ink tokens are the hooks of blocks #22 and
- * #30; set them only when the brand needs them (README, "Opt-in hooks").
+ * image-height caps. The button-ink token is the hook of block #30; set it only
+ * when the brand needs it (README, "Opt-in hooks").
  *
  * The accent on dark grounds: a brand whose accent is dark on light schemes sets a
  * lighter one per dark scheme, for example

@@ -36,7 +36,7 @@ appending to `default_custom.css`:
 
 | File | The demo writes | Theme ships |
 |------|-----------------|-------------|
-| `Custom/brand.tokens.json` | The brand's values: `schemes[]` (the seven fixed scheme ids with background, foreground, primary and secondary button, optional accent), `typography` (the Typography model keys plus the font import URL), `buttons` (the Buttons model keys plus the radius), `brand.logo` / `favicon` / `appleTouchIcon` / `edgeMask`, and `css` (the `--td-*` token values) | The neutral values of this layer, so the file is a true description of the unbranded site |
+| `Custom/brand.tokens.json` | The brand's values: `schemes[]` (the seven fixed scheme ids with background, foreground, primary and secondary button, optional accent), `typography` (the Typography model keys plus the font import URL), `buttons` (the Buttons model keys plus the radius), `brand.logo` / `favicon` / `appleTouchIcon`, and `css` (the `--td-*` token values) | The neutral values of this layer, so the file is a true description of the unbranded site |
 | `Custom/brand.css` | The `css` token values in a `:root:root` block, then brand-only component rules | A sentinel rule, the commented token block and the authoring guards. No paint |
 
 The delivery sequence, in a demo-local copy of the layer (the `cil-brand` pattern):
@@ -127,18 +127,6 @@ Block #21 also applies without any opt-in: in stock Swift, ContainerWidth 4 sets
 width-4 Text or product-list row in `main` renders at x=0. The block restores `calc(2rem)` in
 `main`, excluding nested containers and anything marked `data-td-full-bleed`. It restores the
 gutter, never the width.
-
-The edge motif (block #22) paints one fill per instance: `--td-edge-fill-hero` (the home hero
-row's bottom edge), `--td-edge-fill-alt` (the first colour-scheme boundary after it) and
-`--td-edge-fill-footer` (the crest over the site footer). Unset, each one follows a scheme that
-contrasts with the ground the band sits on: block 26 of `default_custom.js` copies onto the
-owner the first `--dw-color-background` that differs from the owner's own, reading the
-adjoining row, then the first scheme-bearing element inside the owner, then the first inside
-the adjoining row; the footer crest reads the footer's first scheme-bearing row, because the
-`<footer>` element itself is unpainted. `--td-edge-fill` is the last resort. **A brand sets the
-three tokens in its own sheet** when the derived colour is not the brand's edge colour, and must
-set one where no candidate differs from the ground, since then the edge is invisible while its
-mask is present.
 
 ## Not fixable from a theme — upstream asks
 
