@@ -1,6 +1,6 @@
 {
   "name": "sample-data",
-  "version": "6.6.1",
+  "version": "6.6.2",
   "kind": "sample-data",
   "swiftVersion": "2.5.0",
   "fragmentModes": [
@@ -39,6 +39,7 @@
     "EcomFieldDisplayGroupTranslation",
     "EcomFieldDisplayGroupFields",
     "EcomDetailsGroup",
+    "EcomDetailsGroupTranslation",
     "EcomDetails",
     "EcomProductsRelatedGroups",
     "EcomProductsRelated",
@@ -547,6 +548,7 @@
       "EcomCustomerFavoriteProducts": 9,
       "EcomDetails": 378,
       "EcomDetailsGroup": 1,
+      "EcomDetailsGroupTranslation": 3,
       "EcomFieldDisplayGroupFields": 28,
       "EcomFieldDisplayGroupTranslation": 1,
       "EcomFieldDisplayGroups": 1,

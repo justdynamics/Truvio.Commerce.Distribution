@@ -1,0 +1,35 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomDetailsGroupTranslation"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "DetailsGroupTranslationGroupId"
+- "DetailsGroupTranslationLanguageId"
+"identityColumns": []
+"allColumns":
+- "DetailsGroupTranslationGroupId"
+- "DetailsGroupTranslationLanguageId"
+- "DetailsGroupTranslationText"
+"columnDefinitions":
+- "name": "DetailsGroupTranslationGroupId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DetailsGroupTranslationLanguageId"
+  "dataType": "nvarchar"
+  "maxLength": 50
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "DetailsGroupTranslationText"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false

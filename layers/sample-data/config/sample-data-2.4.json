@@ -259,6 +259,14 @@
       "_why": "Merge by identity id. Harvest only AFTER the rekey to 100111 (Manuals). Images is not harvested: product images are filed under the Images group the DW10 setup wizard creates (id 1, owner ruling vnext-images-detail-group), and the retired id 100110 must not come back (base.contract.json deliveryTarget.retiredIds). Merge rather than Replace so a solution that already tuned a category at that id is filled, never re-shaped."
     },
     {
+      "name": "sample-data EcomDetailsGroupTranslation",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomDetailsGroupTranslation",
+      "where": "DetailsGroupTranslationGroupId = 100111 OR (DetailsGroupTranslationGroupId = 1 AND DetailsGroupTranslationLanguageId = 'ENU')",
+      "_why": "Merge: the names of the two asset categories the catalogue files under (Distribution #134). Manuals (100111) in ENU, the catalogue and default language, and in LANG1, the wizard's language; Images (1) in ENU only, because the wizard's own LANG1 row is not harvested. Keyed by group id and language id (the table's primary key); no identity column. A set name is never overwritten."
+    },
+    {
       "name": "sample-data EcomDetails",
       "mode": "Merge",
       "providerType": "SqlTable",
