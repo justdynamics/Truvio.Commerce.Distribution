@@ -1,6 +1,6 @@
-﻿{
+{
   "name": "theme-default",
-  "version": "2.7.0",
+  "version": "2.7.1",
   "kind": "theme",
   "swiftVersion": "2.5.0",
   "files": [
@@ -84,5 +84,14 @@
       "kind": "asset",
       "why": "The worked example of a brand-time motif swap: the Truvio edge, a softened zigzag with gently rounded peaks. Nothing paints it - the theme's --td-edge-mask token points at the neutral edge.svg - until a branded site sets that one token to this path as a data URI, which is the whole of the brand-time edit."
     }
-  ]
+  ],
+  "ledger": {
+    "provides": [
+      "distribution.theme-layer"
+    ],
+    "requires": [
+      "swift.design-installed"
+    ],
+    "comment": "Carries the disk overlay, brand.css and style assets. Applying area style IDs belongs to the composition; no behavioral storefront claim is made here."
+  }
 }

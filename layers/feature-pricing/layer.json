@@ -1,6 +1,6 @@
 {
   "name": "feature-pricing",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "kind": "feature",
   "swiftVersion": "2.5.0",
   "files": [
@@ -38,7 +38,9 @@
         "productId": "TCPROD0046",
         "quantity": 1,
         "expectedAmount": 36.9,
-        "requiresFixtures": [ "TCPROD0046" ]
+        "requiresFixtures": [
+          "TCPROD0046"
+        ]
       },
       {
         "kind": "cart-price",
@@ -47,8 +49,19 @@
         "productId": "TCPROD0020",
         "quantity": 10,
         "expectedAmount": 96,
-        "requiresFixtures": [ "TCPROD0020" ]
+        "requiresFixtures": [
+          "TCPROD0020"
+        ]
       }
     ]
+  },
+  "ledger": {
+    "provides": [],
+    "requires": [
+      "commerce.quantity-prices",
+      "commerce.customer-prices",
+      "commerce.discounts-v2"
+    ],
+    "comment": "Carries optional tier provider code and a settings fragment. Price rows and behavior subjects are supplied by the base sample-data contract, so these functions are requirements."
   }
 }

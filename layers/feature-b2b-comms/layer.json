@@ -1,6 +1,6 @@
 {
   "name": "feature-b2b-comms",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "kind": "feature",
   "swiftVersion": "2.5.0",
   "configRows": [
@@ -39,5 +39,16 @@
     "note": "Depends on surface-swift (composes under its area-3 '/Newsletter Emails' subtree and reuses its Swift-v2_Email* item types + the shipped Unsubscribe confirmation page). The layer.schema.json has no formal 'depends' field; the dependency is documented here (advisory) and enforced by edition composition order (surface before feature). Data-only: no customCode/src.",
     "minSerializerVersion": "1.0.6-beta",
     "minSerializerVersionNote": "Advisory, not a second floor: the enforced floor is base.contract.json compat.apps[id=Truvio.Commerce.Serializer].min, which is 1.0.6-beta, and this value may never sit below it. What this layer itself needs: the three EmailMarketingEmail rows (1.0.5) carry integer page ids in EmailPageId / EmailUnsubscribePageId, which only Serializer 1.0.4-beta and later resolve through the page map and bind by the pageRefs PageUniqueId (Serializer #27); an older engine writes the source page ids verbatim and every email points at the wrong page or none. Harvested and proven on 1.0.6-beta."
+  },
+  "ledger": {
+    "provides": [
+      "marketing.emails",
+      "swift.emails"
+    ],
+    "requires": [
+      "marketing.delivery-providers",
+      "users.user-groups"
+    ],
+    "comment": "Carries dealer email pages and campaign rows. SMTP, recipient binding and actual sends are not demonstrated by this layer."
   }
 }

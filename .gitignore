@@ -16,3 +16,6 @@ Thumbs.db
 .vs/
 .idea/
 *.user
+
+# Pinned producer checkout used by ledger validation in CI.
+/.ledger-skills/

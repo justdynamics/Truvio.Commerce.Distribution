@@ -408,7 +408,10 @@
                 "type": "array",
                 "minItems": 1,
                 "uniqueItems": true,
-                "items": { "type": "string", "pattern": "^[A-Za-z0-9 ._-]+$" },
+                "items": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9 ._-]+$"
+                },
                 "description": "OPTIONAL, edition-level opt-in. The sample-data ids this probe's subject resolves through - rows the sample-data layer ships, each one a subject named in base.contract.json sampleData.guaranteedRows, which is what the probe actually binds to. behaviorProbes are LAYER asserts, so they run for every edition composing the layer; a probe that declares requiresFixtures runs ONLY where the composition sets sampleData true, and is recorded as a loud SKIP row naming those ids and a proving edition everywhere else. A probe is NEVER silently dropped: the SKIP row lands in pack-assert.json alongside the PASS rows. Declare it whenever the probe names an id the sample-data layer owns; omit it for probes that only assert page markup the feature layer itself ships."
               }
             }
@@ -528,6 +531,36 @@
         }
       },
       "description": "OPTIONAL declaration that a feature layer ships compile-optional custom code (decision D3). Documents what works as data-only (withoutCompile) vs after the opt-in compile (withCompile). Only feature layers carrying src/ populate it; layers with no custom code omit it. Advisory: never gates activation — the gate still compiles + proves the full behavior; this block tells downstream distribution consumers what is optional."
+    },
+    "ledger": {
+      "type": "object",
+      "required": [
+        "provides",
+        "requires"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "provides": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9.-]*$"
+          }
+        },
+        "requires": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9.-]*$"
+          }
+        },
+        "comment": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
     }
   }
 }

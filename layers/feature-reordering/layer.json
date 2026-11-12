@@ -1,6 +1,6 @@
 {
   "name": "feature-reordering",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "kind": "feature",
   "swiftVersion": "2.5.0",
   "repositoryName": "ProductsFrontend",
@@ -33,7 +33,9 @@
         "kind": "sku-validation",
         "path": "/en-us/quick-order",
         "sku": "TC-VAR-0001",
-        "requiresFixtures": [ "TC-VAR-0001" ]
+        "requiresFixtures": [
+          "TC-VAR-0001"
+        ]
       }
     ],
     "criticalPaths": [
@@ -54,5 +56,14 @@
       "phase": "behavior-cycle",
       "reason": "Quick Order deactivate->reactivate known limitation: same 2-page fragment re-bind gap as the http-body-contains entry — the sku-validation cycle assert (feed GET against the 404'd page) fails in the Step 12c cycle leg. Scope: toggle-cycle only. Inherited verbatim from feature-reordering-pricing 1.1.0."
     }
-  ]
+  ],
+  "ledger": {
+    "provides": [
+      "swift.express-buy"
+    ],
+    "requires": [
+      "commerce.product-catalog-app"
+    ],
+    "comment": "Carries Quick order and Express buy pages and their assertions. SKU subjects come from the base sample-data contract."
+  }
 }

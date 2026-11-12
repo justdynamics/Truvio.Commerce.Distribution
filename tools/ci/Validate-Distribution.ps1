@@ -118,6 +118,7 @@ Usage: pwsh tools/ci/Validate-Distribution.ps1  (run from repo root; exits 0 pas
 param(
     [string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path,
     [switch]$RegenerateIndex,
+    [string]$SkillsRoot,
     [string]$SpineBaseRef = 'origin/main'
 )
 $ErrorActionPreference = 'Stop'
@@ -139,6 +140,7 @@ function Compare-DistVersion {
 . (Join-Path $PSScriptRoot 'GateProvenProjection.ps1')
 . (Join-Path $PSScriptRoot 'Test-ManifestFiles.ps1')
 . (Join-Path $PSScriptRoot 'Bacpac.ps1')
+. (Join-Path $PSScriptRoot 'Ledger.ps1')
 
 $layersRoot   = Join-Path $RepoRoot 'layers'
 $editionsRoot = Join-Path $RepoRoot 'editions'
@@ -848,6 +850,18 @@ if ($index) {
         $edNames = @($editionFiles | ForEach-Object { $_.BaseName })
         foreach ($r in @(Test-BacpacRegister -Index $index -EditionNames $edNames -EditionVersion (Get-EditionReleaseVersion))) { & $log $r.ok $r.message }
     }
+}
+
+# 18. A ledger lock is opt-in, but a declared lock fails closed. Unknown carriage,
+# wrong snapshot bytes and a missing/expanded check set cannot inherit an old proof.
+foreach ($file in $editionFiles) {
+    try {
+        $edition=Get-Content -LiteralPath $file.FullName -Raw|ConvertFrom-Json -AsHashtable
+        if ($edition.ContainsKey('ledger')) {
+            $plan=Get-EditionLedgerPlan -DistributionRoot $RepoRoot -Edition $edition -SkillsRoot $SkillsRoot
+            & $log $true "ledger $($edition.name): $($plan.functions.Count) functions, $($plan.checkIds.Count) locked checks"
+        } else { Write-Host "  [NOTE] ledger $($edition.name): no lock declared" }
+    } catch { & $log $false "ledger $($file.BaseName): $($_.Exception.Message)" }
 }
 
 Write-Host ""

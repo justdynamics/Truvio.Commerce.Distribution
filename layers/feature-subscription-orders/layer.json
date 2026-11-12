@@ -1,6 +1,6 @@
 {
   "name": "feature-subscription-orders",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "kind": "feature",
   "swiftVersion": "2.5.0",
   "csLedger": [],
@@ -49,11 +49,21 @@
         "paymentMethodId": "PAY2",
         "shippingMethodId": "SHIP9",
         "checkoutStepIndex": 1,
-        "requiresFixtures": [ "TCPROD0061" ]
+        "requiresFixtures": [
+          "TCPROD0061"
+        ]
       }
     ],
     "criticalPaths": [
       "/en-us/account/subscriptions"
     ]
+  },
+  "ledger": {
+    "provides": [],
+    "requires": [
+      "orders.subscriptions",
+      "orders.payment-methods"
+    ],
+    "comment": "Carries recurring checkout configuration and an assertion needing a subscription product and recurring order fixtures. Those subjects are not provided by this layer."
   }
 }

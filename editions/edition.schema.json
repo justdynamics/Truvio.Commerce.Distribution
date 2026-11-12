@@ -105,6 +105,43 @@
         "minimum": 0
       },
       "description": "OPTIONAL row-count contract override/extension: table -> expected row count, merged over the sampleData-derived defaults (EcomProducts/EcomGroups/EcomCountries) by Set-ConfigFromEdition. Lets a page-free edition (base-only since the Swift 2.4 base split) carry DB-level framework asserts (e.g. EcomShops=1) in place of page smoke."
+    },
+    "ledger": {
+      "type": "object",
+      "required": [
+        "repo",
+        "commit",
+        "manifest",
+        "digest",
+        "checkIds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "repo": {
+          "const": "dynamicweb/skills"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "manifest": {
+          "type": "string",
+          "pattern": "^skills/dw-demo-ledger/assets/releases/[^/]+/manifest\\.json$"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "checkIds": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9.-]*$"
+          },
+          "minItems": 1
+        }
+      }
     }
   }
 }
