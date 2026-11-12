@@ -344,14 +344,19 @@ Describe 'Test-ReleaseNotesRecord: a recorded bacpac release has its release-not
         $b.PSObject.Properties.Remove('releaseNotes')
         (Get-RecordRed (New-RegisterIndex $b $null))[0].message | Should -Match 'bacpacs\.blank \(databases/blank/10\.30\.1\) carries no releaseNotes record'
     }
-    It 'passes the releases published before the rule without a record, and only those' {
-        foreach ($t in @(Get-ReleaseNotesExemptTag)) {
+    It 'exempts no release: the four published before the rule were backfilled (owner decision 2026-11-12)' {
+        @(Get-ReleaseNotesExemptTag).Count | Should -Be 0
+        foreach ($t in 'databases/blank/10.29.8', 'editions/swift-demo/5.5.0', 'editions/dap-portal/2.5.0', 'editions/headless-demo/3.4.0') {
             $kind = if ($t -like 'databases/*') { 'blank' } else { 'edition' }
             $ix = if ($kind -eq 'blank') { New-RegisterIndex ([ordered]@{ tag = $t }) $null } else { New-RegisterIndex $null ([ordered]@{ ($t -split '/')[1] = [ordered]@{ tag = $t } }) }
-            Get-RecordRed $ix | Should -BeNullOrEmpty
+            @(Get-RecordRed $ix).Count | Should -Be 1 -Because "$t carries no releaseNotes record"
         }
-        # The next version of an exempt line is not exempt.
-        (Get-RecordRed (New-RegisterIndex ([ordered]@{ tag = 'databases/blank/10.29.9' }) $null)).Count | Should -Be 1
+    }
+    It 'the register in layers/INDEX.json carries a record on every entry' {
+        $real = Get-Content -Raw -Encoding utf8 (Join-Path $PSScriptRoot '..\..\..\layers\INDEX.json') | ConvertFrom-Json
+        $rows = @(Test-ReleaseNotesRecord -Index $real)
+        $rows.Count | Should -BeGreaterThan 0
+        @($rows | Where-Object { -not $_.ok }) | Should -BeNullOrEmpty
     }
     It 'FAILs a record with another schema name' {
         $e = Copy-Entry $script:index.bacpacs.blank
@@ -513,14 +518,17 @@ Describe 'Publish-BacpacRelease attaches the notes when it publishes (gh and the
         $out[0].result | Should -Be 'present'
         $global:RnCalls.Count | Should -Be 0
     }
-    It 'leaves a release published before the rule exactly as it is' {
+    It 'backfills a release published before the rule: one asset added and the body written, nothing else' {
         $row = Get-Plan 'databases/blank/10.30.1'
         $row.Tag = 'databases/blank/10.29.8'; $row.Asset = 'blank-dw-10.29.8.bacpac'
         $global:RnReleases = @(New-Release 'databases/blank/10.29.8' $false @('blank-dw-10.29.8.bacpac'))
         $out = @(Publish-BacpacRelease -Plan @($row) -Repo 'o/r' -RepoRoot $script:repo)
         $out[0].result | Should -Be 'present'
-        $out[0].detail | Should -Match 'published before the release-notes rule, left as it is'
-        $global:RnCalls.Count | Should -Be 0
+        $out[0].detail | Should -Match 'attached \(body and release-notes\.json\)'
+        @($global:RnCalls | ForEach-Object { $_.kind }) | Should -Be @('upload', 'gh')
+        $global:RnCalls[0].line | Should -Match '/assets\?name=release-notes\.json$'
+        $patch = $global:RnCalls[1].body | ConvertFrom-Json
+        @($patch.PSObject.Properties.Name) | Should -Be @('body')
     }
 }
 

@@ -378,6 +378,10 @@
         "knownSecrets": 12,
         "secretNamedTables": 15,
         "secretNamedColumns": 83
+      },
+      "releaseNotes": {
+        "schema": "release-notes/v1",
+        "previousTag": "databases/blank/10.29.7"
       }
     },
     "editions": {
@@ -399,6 +403,10 @@
           "knownSecrets": 12,
           "secretNamedTables": 24,
           "secretNamedColumns": 119
+        },
+        "releaseNotes": {
+          "schema": "release-notes/v1",
+          "previousTag": "editions/swift-demo/5.3.0"
         }
       },
       "dap-portal": {
@@ -419,6 +427,10 @@
           "knownSecrets": 12,
           "secretNamedTables": 24,
           "secretNamedColumns": 119
+        },
+        "releaseNotes": {
+          "schema": "release-notes/v1",
+          "previousTag": null
         }
       },
       "headless-demo": {
@@ -439,6 +451,10 @@
           "knownSecrets": 12,
           "secretNamedTables": 15,
           "secretNamedColumns": 85
+        },
+        "releaseNotes": {
+          "schema": "release-notes/v1",
+          "previousTag": null
         }
       }
     }

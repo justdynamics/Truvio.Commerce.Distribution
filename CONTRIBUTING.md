@@ -220,9 +220,11 @@ The offline trace is the entry's `releaseNotes` record, `{ schema: "release-note
 `New-ReleaseNotesRecord` when it registers the file. Check 17 **FAILs** an entry without it, and
 the generator refuses a record that names another previous release than the history does. The four
 releases published before the rule (`databases/blank/10.29.8`, `editions/swift-demo/5.5.0`,
-`editions/dap-portal/2.5.0`, `editions/headless-demo/3.4.0`; `Get-ReleaseNotesExemptTag`) need no
-record: their entries are proof records and are not edited, and `-Execute` leaves those releases as
-they are. `print-release-tags.ps1 -IncludePublishedNotes` prints what their notes would say.
+`editions/dap-portal/2.5.0`, `editions/headless-demo/3.4.0`) were backfilled (owner decision
+2026-11-12): their entries carry the record the generator derives from history, nothing else in them
+changed, and `Get-ReleaseNotesExemptTag` is empty. A published release that lacks `release-notes.json`
+gains the asset and its body is rewritten to the generated notes on the next `-Execute`; its bacpac
+asset, tag, title and draft state are not touched.
 
 **Restoring one.** Verify the sha256 against INDEX.json, then import onto a NEW database (SqlPackage:
 `sqlpackage /Action:Import /SourceFile:<file> /TargetServerName:<server> /TargetDatabaseName:<db>`;
