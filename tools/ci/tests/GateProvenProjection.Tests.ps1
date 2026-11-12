@@ -119,6 +119,34 @@ Describe 'Validate-Distribution check 14: the record is required' {
     }
 }
 
+Describe 'Validate-Distribution check 18: a candidate edition cannot be gateProven (Distribution #131)' {
+    BeforeAll {
+        function Invoke-Validator([string]$Root) { (& pwsh -NoProfile -File $script:validator -RepoRoot $Root 2>&1 | ForEach-Object { "$_" }) -join "`n" }
+        # A minimal tree: one candidate edition, and a gateProven that names it under the given key only.
+        function New-CandidateTree([string]$Key) {
+            $d = Join-Path $TestDrive ([guid]::NewGuid().ToString('N'))
+            Write-Text (Join-Path $d 'editions/cand-demo.json') ([ordered]@{ name = 'cand-demo'; from = 'base@1.0.0'; delivery = [ordered]@{ status = 'candidate' } } | ConvertTo-Json -Depth 5)
+            $gp = [ordered]@{ date = '2026-10-16'; editions = [ordered]@{ 'swift-demo' = '20261016-073012' }; releases = [ordered]@{}; proofs = [ordered]@{} }
+            if ($Key) { $gp[$Key]['cand-demo'] = $(if ($Key -eq 'editions') { '20261016-073012' } else { [ordered]@{ runId = '20261016-073012' } }) }
+            Write-Text (Join-Path $d 'layers/INDEX.json') ([ordered]@{ gateProven = $gp; layers = @() } | ConvertTo-Json -Depth 10)
+            return $d
+        }
+    }
+    It 'RED CONTROL: FAILs a candidate edition named under gateProven.<Key>' -ForEach @(@{ Key = 'editions' }, @{ Key = 'releases' }, @{ Key = 'proofs' }) {
+        Invoke-Validator (New-CandidateTree $Key) | Should -Match 'FAIL[^\r\n]*ledger cand-demo: Candidate edition cannot be gateProven'
+    }
+    It 'does not raise the guard for a candidate edition gateProven does not name' {
+        Invoke-Validator (New-CandidateTree '') | Should -Not -Match 'Candidate edition cannot be gateProven'
+    }
+    It 'reads the edition names of all three maps, from either JSON reader' {
+        $json = '{"editions":{"a":"1"},"releases":{"a":{},"b":{}},"proofs":{"c":{}}}'
+        (Get-GateProvenEditionName ($json | ConvertFrom-Json)) | Should -Be @('a', 'b', 'c')
+        (Get-GateProvenEditionName ($json | ConvertFrom-Json -AsHashtable)) | Should -Be @('a', 'b', 'c')
+        @(Get-GateProvenEditionName $null).Count | Should -Be 0
+        @(Get-GateProvenEditionName ('{"date":"2026-10-16"}' | ConvertFrom-Json)).Count | Should -Be 0
+    }
+}
+
 Describe 'print-release-tags: edition tags come from gateProven.releases' {
     It 'tags the release the record proved' {
         $d = New-TagTree -ReleaseTag 'editions/swift-demo/5.4.1' -MapVersion '5.4.1'

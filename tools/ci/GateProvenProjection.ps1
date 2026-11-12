@@ -100,6 +100,20 @@ function Test-GateProvenProjection {
     return $problems
 }
 
+# Every edition name gateProven carries, under any of its three edition-keyed maps (editions, releases,
+# proofs). The maps are objects keyed by edition name (a PSCustomObject from ConvertFrom-Json, a dictionary
+# from -AsHashtable), never a list of names, so a membership test reads the keys (Distribution #131).
+function Get-GateProvenEditionName {
+    param($GateProven)
+    if ($null -eq $GateProven) { return @() }
+    $names = foreach ($key in 'editions', 'releases', 'proofs') {
+        $map = if ($GateProven -is [System.Collections.IDictionary]) { $GateProven[$key] } else { $GateProven.$key }
+        if ($map -is [System.Collections.IDictionary]) { $map.Keys | ForEach-Object { "$_" } }
+        elseif ($map -is [pscustomobject]) { $map.PSObject.Properties.Name }
+    }
+    return @($names | Where-Object { $_ } | Select-Object -Unique)
+}
+
 # A record or index timestamp as a DateTimeOffset. ConvertFrom-Json turns ISO strings into DateTime, so
 # both shapes arrive here; a string without an offset is read as UTC.
 function ConvertTo-GateProvenInstant {

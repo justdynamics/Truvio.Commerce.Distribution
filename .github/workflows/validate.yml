@@ -54,3 +54,7 @@ jobs:
       - name: Validator unit tests (tools/ci/tests, Pester)
         shell: pwsh
         run: Invoke-Pester -Path tools/ci/tests -CI
+        env:
+          # Cpq.Reader.Tests.ps1 reads the skills-side receipt reader from the CPQ ledger revision checked
+          # out above; without this variable its five tests skip (Distribution #133).
+          CPQ_SKILLS_ROOT: ${{ github.workspace }}/.ledger-skills-cpq
