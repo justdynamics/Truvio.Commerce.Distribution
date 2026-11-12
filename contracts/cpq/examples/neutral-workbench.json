@@ -1,0 +1,319 @@
+{
+  "$schema": "../spec.schema.json",
+  "schemaVersion": 1,
+  "id": "neutral-workbench",
+  "version": 1,
+  "engineProfile": "carrot-10.24.2-studio-0.7.0",
+  "context": {
+    "shopRef": "cpq-demo-shop",
+    "languageRef": "cpq-demo-language",
+    "currency": "EUR",
+    "priceBasis": "ex-vat",
+    "decimalPlaces": 2,
+    "rounding": "half-up",
+    "quantity": 1,
+    "erp": "none"
+  },
+  "catalogue": [
+    {
+      "key": "WB-S",
+      "price": "100.00",
+      "cost": "60.00"
+    },
+    {
+      "key": "WB-L",
+      "price": "150.00",
+      "cost": "90.00"
+    },
+    {
+      "key": "WB-WHEELS",
+      "price": "30.00",
+      "cost": "15.00"
+    },
+    {
+      "key": "WB-DRAWER",
+      "price": "20.00",
+      "cost": "10.00"
+    }
+  ],
+  "groups": [
+    {
+      "key": "Build",
+      "label": "Your workbench",
+      "order": 10
+    }
+  ],
+  "inputs": [
+    {
+      "key": "Build_Size",
+      "group": "Build",
+      "type": "radiobox",
+      "required": true,
+      "default": "small",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ]
+    },
+    {
+      "key": "Build_Base",
+      "group": "Build",
+      "type": "select",
+      "required": true,
+      "default": "fixed",
+      "options": [
+        {
+          "value": "fixed",
+          "label": "Fixed feet"
+        },
+        {
+          "value": "mobile",
+          "label": "Wheels"
+        }
+      ]
+    },
+    {
+      "key": "Build_Drawers",
+      "group": "Build",
+      "type": "number",
+      "required": true,
+      "default": 0,
+      "min": 0,
+      "max": 2,
+      "step": 1
+    },
+    {
+      "key": "Build_Label",
+      "group": "Build",
+      "type": "text",
+      "default": "",
+      "use": "display-only",
+      "maxLength": 40
+    }
+  ],
+  "constraints": [
+    {
+      "id": "mobile-needs-small",
+      "when": {
+        "eq": [
+          "$input.Build_Base",
+          "mobile"
+        ]
+      },
+      "require": {
+        "eq": [
+          "$input.Build_Size",
+          "small"
+        ]
+      },
+      "onConflict": "clear-dependent-and-invalidate"
+    }
+  ],
+  "inputRules": [
+    {
+      "id": "large-base-options",
+      "order": 10,
+      "when": {
+        "eq": [
+          "$input.Build_Size",
+          "large"
+        ]
+      },
+      "then": [
+        {
+          "allowOptions": {
+            "input": "Build_Base",
+            "values": [
+              "fixed"
+            ]
+          }
+        }
+      ],
+      "else": [
+        {
+          "allowOptions": {
+            "input": "Build_Base",
+            "values": [
+              "fixed",
+              "mobile"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "bom": [
+    {
+      "id": "small-frame",
+      "when": {
+        "eq": [
+          "$input.Build_Size",
+          "small"
+        ]
+      },
+      "sku": "WB-S",
+      "quantity": 1
+    },
+    {
+      "id": "large-frame",
+      "when": {
+        "eq": [
+          "$input.Build_Size",
+          "large"
+        ]
+      },
+      "sku": "WB-L",
+      "quantity": 1
+    },
+    {
+      "id": "wheels",
+      "when": {
+        "eq": [
+          "$input.Build_Base",
+          "mobile"
+        ]
+      },
+      "sku": "WB-WHEELS",
+      "quantity": 1
+    },
+    {
+      "id": "drawers",
+      "when": {
+        "gt": [
+          "$input.Build_Drawers",
+          0
+        ]
+      },
+      "sku": "WB-DRAWER",
+      "quantity": "$input.Build_Drawers"
+    }
+  ],
+  "pricing": {
+    "method": "catalogue-sell",
+    "additionalMarkupPercent": "0",
+    "rules": [
+      {
+        "id": "large-two-drawers",
+        "order": 10,
+        "when": {
+          "and": [
+            {
+              "eq": [
+                "$input.Build_Size",
+                "large"
+              ]
+            },
+            {
+              "eq": [
+                "$input.Build_Drawers",
+                2
+              ]
+            }
+          ]
+        },
+        "discountPercent": "10.00"
+      }
+    ]
+  },
+  "page": {
+    "navigationTag": "CpqWorkbench",
+    "theme": "cpq-neutral",
+    "tabs": [
+      "Build"
+    ],
+    "optionColumns": 2
+  },
+  "output": {
+    "persistence": "card",
+    "handoff": [
+      "cart",
+      "local-quote"
+    ],
+    "document": "local-docx",
+    "routing": false,
+    "visual3d": false
+  },
+  "cases": [
+    {
+      "id": "small-fixed",
+      "answers": {
+        "Build_Size": "small",
+        "Build_Base": "fixed",
+        "Build_Drawers": 0
+      },
+      "expect": {
+        "valid": true,
+        "bom": {
+          "WB-S": 1
+        },
+        "sell": "100.00"
+      }
+    },
+    {
+      "id": "small-mobile",
+      "answers": {
+        "Build_Size": "small",
+        "Build_Base": "mobile",
+        "Build_Drawers": 1
+      },
+      "expect": {
+        "valid": true,
+        "bom": {
+          "WB-S": 1,
+          "WB-WHEELS": 1,
+          "WB-DRAWER": 1
+        },
+        "sell": "150.00"
+      }
+    },
+    {
+      "id": "large-discount",
+      "answers": {
+        "Build_Size": "large",
+        "Build_Base": "fixed",
+        "Build_Drawers": 2
+      },
+      "expect": {
+        "valid": true,
+        "bom": {
+          "WB-L": 1,
+          "WB-DRAWER": 2
+        },
+        "beforeDiscount": "190.00",
+        "sell": "171.00"
+      }
+    },
+    {
+      "id": "invalid-mobile",
+      "answers": {
+        "Build_Size": "large",
+        "Build_Base": "mobile",
+        "Build_Drawers": 0
+      },
+      "expect": {
+        "valid": false,
+        "canPersist": false,
+        "canHandoff": false
+      }
+    },
+    {
+      "id": "invalid-drawer-count",
+      "answers": {
+        "Build_Size": "small",
+        "Build_Base": "fixed",
+        "Build_Drawers": 3
+      },
+      "expect": {
+        "valid": false,
+        "canPersist": false,
+        "canHandoff": false
+      }
+    }
+  ]
+}

@@ -70,6 +70,11 @@ carries a `layer.json` (correct `kind`), its `replace/`+`merge/` mode trees and/
 composition whose refs resolve. Run `tools/ci/Validate-Distribution.ps1` locally before
 opening the PR.
 
+CPQ declarations use the proposed [CPQ contracts](contracts/cpq/README.md). The structural
+gate validates their spec, package lock, behavior binding and layer ownership. It does not
+execute CPQ rules or certify cart/quote behavior. A live producer and matching, complete,
+fresh observations are still required before a CPQ layer or edition can be released.
+
 ## Version floors
 
 [`versions/spine.json`](versions/spine.json) is the one record of every outward component's

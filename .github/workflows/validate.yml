@@ -9,6 +9,7 @@ on:
       - 'layers/**'
       - 'editions/**'
       - 'versions/**'
+      - 'contracts/cpq/**'
       - 'tools/ci/**'
       - '.github/workflows/validate.yml'
   push:

@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CPQ exact package lock v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "cpq-packages"
+    },
+    "engineProfile": {
+      "const": "carrot-10.24.2-studio-0.7.0"
+    },
+    "dwVersion": {
+      "const": "10.29.8"
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[A-Za-z0-9.-]+)?$"
+          },
+          "role": {
+            "enum": [
+              "admin",
+              "runtime",
+              "studio",
+              "mcp",
+              "mcp-host",
+              "dependency"
+            ]
+          },
+          "source": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "enum": [
+                  "appstore",
+                  "vendor",
+                  "build"
+                ]
+              },
+              "uri": {
+                "type": "string",
+                "pattern": "^https://[^\\s]+$"
+              },
+              "commit": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{40}$"
+              }
+            },
+            "required": [
+              "kind",
+              "uri"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "build"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "commit"
+                  ]
+                }
+              }
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "assemblies": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+                },
+                "version": {
+                  "type": "string",
+                  "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[A-Za-z0-9.-]+)?$"
+                },
+                "tfm": {
+                  "type": "string",
+                  "pattern": "^net(?:standard|coreapp)?[0-9]+\\.[0-9]+$"
+                },
+                "sha256": {
+                  "type": "string",
+                  "pattern": "^sha256:[a-f0-9]{64}$"
+                }
+              },
+              "required": [
+                "name",
+                "version",
+                "tfm",
+                "sha256"
+              ]
+            },
+            "minItems": 1
+          },
+          "dependsOn": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+            },
+            "minItems": 0,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "id",
+          "version",
+          "role",
+          "source",
+          "sha256",
+          "assemblies",
+          "dependsOn"
+        ]
+      },
+      "minItems": 3
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "kind",
+    "engineProfile",
+    "dwVersion",
+    "packages"
+  ]
+}
