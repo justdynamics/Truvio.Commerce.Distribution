@@ -166,7 +166,7 @@ Describe 'CPQ receipts are bound evidence, not a readiness verdict' {
         $f.receipt.observations[0].result | Should -BeExactly 'FAIL'
     }
     It 'rejects an altered observation against the trusted receipt digest' {
-        $f.receipt.observations[0].observed.sell='0.00'
+        $f.receipt.observations[0].observed.steps.recalculate.observed.sell='0.00'
         { Assert-TestReceipt $f } | Should -Throw '*trusted record*'
     }
     It 'rejects foreign hosts and runtime drift even with a rehashed envelope' {
@@ -212,6 +212,134 @@ Describe 'CPQ receipts are bound evidence, not a readiness verdict' {
         { Assert-TestReceipt $f -Rehash } | Should -Throw '*expectation*'
         $f=New-TestFixture;$f.receipt.observations[0].read.surface='sql'
         { Assert-TestReceipt $f -Rehash } | Should -Throw '*schema*'
+    }
+}
+
+Describe 'CPQ row payload contract (observation.schema.json)' {
+    BeforeEach { $f=New-TestFixture;$row=$f.receipt.observations[0];$case=$f.spec.cases[0] }
+    It 'accepts the producer step journal for every operation a check can be judged on' {
+        foreach($function in @('cpq.page','cpq.pricing','cpq.bom','cpq.persistence','cpq.revisions','cpq.cart','cpq.quotes','cpq.documents')){
+            $operation=Get-CpqCheckOperation $function
+            foreach($case in $f.spec.cases){
+                $r=@{caseId=$case.id;result='PASS';observed=(New-TestObservation $f.spec $case $f.context $operation)}
+                { Assert-CpqObservationPayload -Row $r -Check @{functionId=$function} -Case $case -Context $f.context -Spec $f.spec -ContractRoot $script:contractRoot } | Should -Not -Throw
+                Get-CpqObservationVerdict $r $case $f.spec | Should -BeExactly PASS
+            }
+        }
+    }
+    It 'RED CONTROL: refuses the free-form payloads the envelope alone used to accept' {
+        foreach($payload in @(@{fixtureOnly=$true;sell='100.00'},@{lines=@(@{sku='WB-S';quantity=1})},@{operation='recalculate';steps=@{};reason='x'},@{operation='recalculate';steps=$row.observed.steps})){
+            $row.observed=$payload
+            { Assert-TestReceipt $f -Rehash } | Should -Throw '*observation.schema.json*'
+        }
+    }
+    It 'refuses unknown fields, an unknown step, a null price and ERP calls' {
+        $row.observed.extra=1
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*observation.schema.json*'
+        $f=New-TestFixture;$f.receipt.observations[0].observed.steps.cleanup=$f.receipt.observations[0].observed.steps.render
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*observation.schema.json*'
+        $f=New-TestFixture;$f.receipt.observations[0].observed.steps.recalculate.observed.vendorNote='x'
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*observation.schema.json*'
+        $f=New-TestFixture;$f.receipt.observations[0].observed.steps.recalculate.observed.beforeDiscount=$null
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*observation.schema.json*'
+        $f=New-TestFixture;$f.receipt.observations[0].observed.steps.cart.observed.erpCalls=1
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*observation.schema.json*'
+    }
+    It 'refuses a payload judged on another operation than its check' {
+        $row.observed.operation='cart'
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*another operation*'
+    }
+    It 'refuses a broken journal and a journal that continues after a failed step' {
+        $row.observed.steps.Remove('save')
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*unbroken prefix*'
+        $f=New-TestFixture;$f.receipt.observations[0].observed.steps.render.result='UNVERIFIED'
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*continues after*'
+    }
+    It 'refuses a step from another host, case or model version, and a partial step read' {
+        foreach($change in @(@{hostId='another-host'},@{caseId='large-discount'},@{modelVersionId=7})){
+            $f=New-TestFixture;$seen=$f.receipt.observations[0].observed.steps.save.observed
+            foreach($key in $change.Keys){$seen[$key]=$change[$key]}
+            { Assert-TestReceipt $f -Rehash } | Should -Throw '*escaped its host, case or model version*'
+        }
+        $f=New-TestFixture;$f.receipt.observations[0].observed.steps.quote.read.expectedSubjects=2
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*step read is incomplete*'
+    }
+    It 'RED CONTROL: a PASS label over a wrong price, discount basis or BOM is refused' {
+        foreach($change in @(@{sell='99.00'},@{bom=@{'WB-S'=2}},@{valid=$false})){
+            $f=New-TestFixture;$seen=$f.receipt.observations[0].observed.steps.recalculate.observed
+            foreach($key in $change.Keys){$seen[$key]=$change[$key]}
+            Get-CpqObservationVerdict $f.receipt.observations[0] $f.spec.cases[0] $f.spec | Should -BeExactly FAIL
+            { Assert-TestReceipt $f -Rehash } | Should -Throw '*contradicts its own observation*'
+        }
+        $f=New-TestFixture;$f.receipt.observations[1].observed.steps.recalculate.observed.beforeDiscount='180.00'
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*contradicts its own observation*'
+    }
+    It 'RED CONTROL: a failed or errored step cannot hide under UNVERIFIED' {
+        foreach($result in @('FAIL','ERROR')){
+            $f=New-TestFixture;$row=$f.receipt.observations[0]
+            $row.observed.steps=@{render=$row.observed.steps.render;recalculate=$row.observed.steps.recalculate}
+            $row.observed.steps.recalculate.result=$result;$row.result='UNVERIFIED'
+            { Assert-TestReceipt $f -Rehash } | Should -Throw '*contradicts its own observation*'
+            $row.result=$result
+            { Assert-TestReceipt $f -Rehash } | Should -Not -Throw
+        }
+    }
+    It 'reads a journal that stopped before the judged step, and a missing readback, as UNVERIFIED' {
+        $row.observed=New-TestObservation $f.spec $case $f.context 'recalculate' -Through 'render'
+        Get-CpqObservationVerdict $row $case $f.spec | Should -BeExactly UNVERIFIED
+        $row.result='PASS'
+        { Assert-TestReceipt $f -Rehash } | Should -Throw '*contradicts its own observation*'
+        $row.result='UNVERIFIED'
+        { Assert-TestReceipt $f -Rehash } | Should -Not -Throw
+        $cart=@{caseId=$case.id;result='UNVERIFIED';observed=(New-TestObservation $f.spec $case $f.context 'cart')}
+        $cart.observed.steps.cart.observed.ownerVerified=$false
+        Get-CpqObservationVerdict $cart $case $f.spec | Should -BeExactly UNVERIFIED
+    }
+    It 'fails an invalid configuration that left a destination behind' {
+        $invalid=@($f.spec.cases | Where-Object id -EQ 'invalid-mobile')[0]
+        $r=@{caseId=$invalid.id;result='FAIL';observed=(New-TestObservation $f.spec $invalid $f.context 'cart')}
+        Get-CpqObservationVerdict $r $invalid $f.spec | Should -BeExactly PASS
+        $r.observed.steps.cart.observed.destinationId='cart-1'
+        Get-CpqObservationVerdict $r $invalid $f.spec | Should -BeExactly FAIL
+    }
+}
+
+Describe 'A PASS needs an implemented receipt binding in the locked snapshot' {
+    BeforeAll {
+        function New-TestSnapshot([string]$Status,[string]$Handler='cpq-behavior-receipt',[string]$Surface='file') {
+            $binding=@{id='file-cpq-receipt';surface=$Surface;status=$Status;handler=$Handler}
+            if($Status -eq 'planned'){$binding.reason='No complete domain producer/assertion exists for this intent.'}
+            @{checks=@{'cpq.pricing.results'=@{id='cpq.pricing.results';functionId='cpq.pricing';bindings=@($binding)}}}
+        }
+        $script:passed=@{result='PASS';complete=$true}
+    }
+    It 'RED CONTROL: a complete reader PASS on a planned binding is UNVERIFIED' {
+        $verdict=Resolve-CpqReaderVerdict cpq.pricing.results $script:passed (New-TestSnapshot planned)
+        $verdict.result | Should -BeExactly UNVERIFIED;$verdict.complete | Should -BeFalse;$verdict.binding | Should -BeExactly planned
+    }
+    It 'RED CONTROL: a complete reader PASS without a receipt binding is UNVERIFIED' {
+        foreach($snapshot in @($null,@{checks=@{}},(New-TestSnapshot implemented 'cpq-structured-read'),(New-TestSnapshot implemented 'cpq-behavior-receipt' 'sql'),(New-TestSnapshot retired))){
+            $verdict=Resolve-CpqReaderVerdict cpq.pricing.results $script:passed $snapshot
+            $verdict.result | Should -BeExactly UNVERIFIED;$verdict.complete | Should -BeFalse;$verdict.binding | Should -BeExactly unbound
+        }
+        $twice=New-TestSnapshot implemented;$twice.checks['cpq.pricing.results'].bindings+=$twice.checks['cpq.pricing.results'].bindings[0]
+        (Resolve-CpqReaderVerdict cpq.pricing.results $script:passed $twice).binding | Should -BeExactly unbound
+        (Resolve-CpqReaderVerdict cpq.bom.results $script:passed (New-TestSnapshot implemented)).result | Should -BeExactly UNVERIFIED
+    }
+    It 'lets a complete reader PASS stand once the snapshot promotes the binding' {
+        $verdict=Resolve-CpqReaderVerdict cpq.pricing.results $script:passed (New-TestSnapshot implemented)
+        $verdict.result | Should -BeExactly PASS;$verdict.complete | Should -BeTrue;$verdict.binding | Should -BeExactly implemented
+    }
+    It 'does not let an implemented binding complete an incomplete reader result' {
+        $verdict=Resolve-CpqReaderVerdict cpq.pricing.results @{result='PASS';complete=$false} (New-TestSnapshot implemented)
+        $verdict.result | Should -BeExactly UNVERIFIED;$verdict.complete | Should -BeFalse
+    }
+    It 'keeps FAIL and ERROR under any binding and reads an unknown result as ERROR' {
+        foreach($status in @('planned','implemented')){foreach($result in @('FAIL','ERROR')){
+            (Resolve-CpqReaderVerdict cpq.pricing.results @{result=$result;complete=$false} (New-TestSnapshot $status)).result | Should -BeExactly $result
+        }}
+        (Resolve-CpqReaderVerdict cpq.pricing.results @{result='OK';complete=$true} (New-TestSnapshot implemented)).result | Should -BeExactly ERROR
+        (Resolve-CpqReaderVerdict cpq.pricing.results $null (New-TestSnapshot implemented)).result | Should -BeExactly ERROR
     }
 }
 
