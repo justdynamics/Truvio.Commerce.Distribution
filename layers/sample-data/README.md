@@ -67,7 +67,7 @@ stays in `theme-default` (SPEC-06).
 
 Every row is **serialized SqlTable YAML** under [`merge/_sql/<Table>/`](merge/_sql/), one file
 per row key, listed in [`merge/merge-manifest.json`](merge/merge-manifest.json) and fenced by
-the 43 merge predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json), which
+the 44 merge predicates in [`config/sample-data-2.4.json`](config/sample-data-2.4.json), which
 Compose-Edition unions into the composed `Serializer.config.json`. The rows land through the
 ordinary merge deserialize, so an online build (URL + Admin API key, no SQL channel) delivers
 the layer exactly as a local one does.
@@ -78,14 +78,14 @@ the layer exactly as a local one does.
 | Variants | `EcomVariantGroups`, `EcomVariantsOptions`, `EcomVariantGroupProductRelation`, `EcomVariantOptionsProductRelation` | 55 |
 | Prices, BOM, stock | `EcomPrices`, `EcomProductItems`, `EcomStockUnit` | 292 |
 | Category fields and specs | `EcomProductCategory`, `EcomProductCategoryTranslation`, `EcomProductCategoryField`, `EcomProductCategoryFieldTranslation`, `EcomProductCategoryFieldValue`, `EcomFieldDisplayGroups`, `EcomFieldDisplayGroupTranslation`, `EcomFieldDisplayGroupFields` | 577 |
-| Imagery, documents, relations | `EcomDetailsGroup`, `EcomDetails`, `EcomProductsRelatedGroups`, `EcomProductsRelated` | 708 |
+| Imagery, documents, relations | `EcomDetailsGroup`, `EcomDetailsGroupTranslation`, `EcomDetails`, `EcomProductsRelatedGroups`, `EcomProductsRelated` | 711 |
 | Identities, orders, quotes, carts, returns | `AccessUser`, `AccessUserGroupRelation`, `AccessUserSecondaryRelation`, `EcomOrders`, `EcomOrderLines`, `EcomRmas`, `EcomRmaOrderLines` | 115 |
 | Favourite lists | `EcomCustomerFavoriteLists`, `EcomCustomerFavoriteProducts` | 11 |
 | Product field settings | `EcomProductField` | 6 |
 | PIM structure | `EcomShops`, `EcomShopLanguageRelation`, `EcomCompletionRules`, `DynamicStructures`, `DynamicStructureLevels` | 9 |
 | Assortments | `EcomAssortments`, `EcomAssortmentGroupRelations`, `EcomAssortmentPermissions`, `EcomAssortmentItems` | 115 |
 
-2,226 rows in 43 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
+2,229 rows in 44 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
 counts an edition asserts are `EcomProducts` **97** and `EcomGroups` **21**.
 
 `EcomGroups` 21 is **16 browsable storefront groups + 5 PIM groups**, and the two trees sit in

@@ -1787,6 +1787,23 @@
     },
     {
       "providerType": "SqlTable",
+      "table": "EcomDetailsGroupTranslation",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomDetailsGroupTranslation",
+      "files": [
+        "_sql/EcomDetailsGroupTranslation/1$$ENU.yml",
+        "_sql/EcomDetailsGroupTranslation/100111$$ENU.yml",
+        "_sql/EcomDetailsGroupTranslation/100111$$LANG1.yml",
+        "_sql/EcomDetailsGroupTranslation/_meta.yml"
+      ]
+    },
+    {
+      "providerType": "SqlTable",
       "table": "EcomDetails",
       "nameColumn": null,
       "compareColumns": null,

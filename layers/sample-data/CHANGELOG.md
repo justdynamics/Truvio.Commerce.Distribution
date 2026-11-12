@@ -1,5 +1,24 @@
 # Changelog — sample-data
 
+## 6.6.2 (2026-11-12)
+
+**PATCH. The asset categories carry their names (Distribution #134).**
+
+The layer shipped the `Manuals` asset category (`EcomDetailsGroup` 100111, 120 documents) with no
+`EcomDetailsGroupTranslation` row, and the wizard's `Images` group 1 is named in `LANG1` only, so the
+ledger check `pim.documents.category-names` failed on a delivered `swift-demo`.
+
+- New merge table `EcomDetailsGroupTranslation`, three rows: `Manuals` (100111) in `ENU` and `LANG1`,
+  `Images` (1) in `ENU`. `ENU` is the catalogue and default language; `LANG1` is the language the
+  wizard names its own `Images` group in. The wizard's `Images`/`LANG1` row is not harvested.
+- Predicate `sample-data EcomDetailsGroupTranslation` in `config/sample-data-2.4.json` (44
+  predicates); keyed by group id and language id, the table's primary key. Column shape read from a
+  blank DW 10.29.8 database.
+- 2,229 rows in 44 tables. No id change, no other row change.
+- Not gate-proven yet: an edition with sample data needs a re-prove on this version.
+
+6.6.1 changed layer metadata only (the `ledger` carriage block); no row or file change.
+
 ## 6.6.0 (2026-10-20)
 
 **MINOR. The Swift 2.5.0 features show in the demo data (Foundry #1535).**
