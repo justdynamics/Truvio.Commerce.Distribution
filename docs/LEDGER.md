@@ -22,7 +22,48 @@ Run `pwsh tools/ci/Validate-Distribution.ps1 -SkillsRoot <path>` and Pester on
 `tools/ci/tests` with `TRUVIO_SKILLS_PATH` pointing to that checkout. CI explicitly
 checks out the lock's revision. A future lock update also updates that CI ref;
 validation rejects a checkout at the wrong revision. Unknown function/check ids,
-digest differences, empty sets and extra or missing checks fail.
+digest differences, empty sets and extra or missing checks fail. A pinned checkout
+whose snapshot files hold CRLF line endings is refused by name before the digest is
+compared, so a digest taken from an `autocrlf=true` checkout cannot validate locally.
+
+## Checks that can never pass
+
+A lock may not contain a check that cannot end PASS at the locked commit. The
+validator decides this from the locked snapshot and the pinned runner, without a host
+(`Get-LedgerUnexecutableCheck` in `tools/ci/Ledger.ps1`):
+
+| Rule | The check fails it when |
+|---|---|
+| `no-implemented-binding` | every binding is `status: planned` |
+| `handler-not-allowlisted` | no implemented binding names a handler that the runner's `assets/handlers.json` allows on its surface |
+| `requirement-not-establishable` | its function requires a fact the pinned runner has no source for: any `app`, `licence` or `capability` requirement, a `flag` when the runner does not discover feature flags, or a `flag` whose id is a settings path |
+
+A candidate edition (`delivery.status: candidate`) is refused for delivery and cannot
+claim proof, so the validator reports its count as a NOTE. Every other edition FAILs
+per finding unless `contracts/ledger/exceptions.json` `unexecutable` names exactly that
+edition, check and rule, with a `ref` (`owner/repo#issue`) and a reason. An entry that
+matches no finding FAILs too, so the register shrinks when a lock moves to a snapshot
+where the check runs. Whether a required fact holds on a given host, and whether a
+short flag name matches the host's feature name, is not decidable here.
+
+## Removing a lock, a check or carriage
+
+Against the base branch (`-SpineBaseRef`, the merge base when history allows, as the
+floor rule reads it) the validator FAILs when:
+
+- an edition that carried a lock has none, or its file is gone (`lock`);
+- a check id an edition locked is no longer locked (`check`);
+- a layer that carried a `ledger` block has none (`carriage`);
+- a function a layer provided is no longer in its `provides` (`provides`).
+
+A removal passes only when the same change adds an entry to
+`contracts/ledger/exceptions.json` `removals` with that `kind`, the `subject` (edition
+or layer name), the `id` (check or function id, for `check` and `provides`), the
+`ruling` id that allows it and a `reason`. An entry already present on the base is
+spent, and a new entry that matches nothing removed FAILs. A removed layer directory
+is not a row of its own; the checks it carried surface as `check` removals. An
+unreadable base FAILs; `-SpineBaseRef ''` skips the comparison for local runs only.
+Independently of any base, an edition named in `gateProven` must declare a lock.
 
 The first locks cover all five compositions. Layer patch versions change because
 layer.json is part of the proven tree hash; payloads are unchanged. Existing release

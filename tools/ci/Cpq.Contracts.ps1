@@ -288,6 +288,41 @@ function Assert-CpqPackages {
     if (-not $assemblies.Contains('DocumentFormat.OpenXml')) { throw 'DOCX dependency identity is missing.' }
 }
 
+# Candidate evidence is not installable and has no roles, so Assert-CpqPackages does not apply. What is decidable
+# offline still holds: the engine profile's identities and versions, the MCP floor, one assembly per name, an entry
+# path that follows from the assembly name, well-formed digests, and installedMatchesPackage agreeing with them.
+# The digest values themselves cannot be checked here: the repository holds no package bytes.
+function Assert-CpqCandidatePackages {
+    param([Parameter(Mandatory)]$Packages)
+    $map = Get-CpqIdentityMap @($Packages.packages) 'id'
+    foreach ($pin in @(@('CPQ_Admin','10.24.2'), @('DW_CPQ_API','10.24.2'), @('Truvio.Commerce.CpqStudio','0.7.0'))) {
+        if (-not $map.ContainsKey($pin[0]) -or $map[$pin[0]].id -cne $pin[0] -or $map[$pin[0]].version -cne $pin[1]) { throw 'Candidate package identity/version differs from the declared engine profile.' }
+    }
+    if (-not $map.ContainsKey('Truvio.Commerce.MCP')) { throw 'Candidate MCP dependency identity is missing.' }
+    $mcp = $map['Truvio.Commerce.MCP']
+    foreach ($version in @($mcp.version) + @(if ($mcp.ContainsKey('minimumVersion')) { $mcp.minimumVersion })) {
+        if ((Compare-CpqNuGetVersion $version '0.6.5-beta') -lt 0) { throw 'Candidate MCP dependency is below the Studio floor (0.6.5-beta).' }
+    }
+    if ($mcp.ContainsKey('minimumVersion') -and (Compare-CpqNuGetVersion $mcp.version $mcp.minimumVersion) -lt 0) { throw 'Candidate MCP dependency is below its own minimum version.' }
+    $digest = '^sha256:(?!0{64}$)[a-f0-9]{64}$'
+    $assemblies = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
+    foreach ($package in $Packages.packages) {
+        if ("$($package.packageSha256)" -cnotmatch $digest) { throw 'Candidate package digest is missing or malformed.' }
+        if (-not @($package.assemblies | Where-Object { "$($_.name)".StartsWith($package.id, [StringComparison]::OrdinalIgnoreCase) }).Count) { throw 'Candidate package and entry assembly identities do not match.' }
+        foreach ($assembly in $package.assemblies) {
+            if (-not $assembly.name -or -not $assemblies.Add($assembly.name)) { throw 'Missing or duplicate candidate assembly identity.' }
+            $name = [regex]::Escape($assembly.name)
+            if ("$($assembly.entry)" -cnotmatch "^(?:Files/System/AddIns/Installed/$name/)?lib/net(?:standard|coreapp)?[0-9]+\.[0-9]+/$name\.dll$") { throw 'Candidate assembly entry differs from its name, TFM or supported add-in layout.' }
+            if ("$($assembly.packageEntrySha256)" -cnotmatch $digest) { throw 'Candidate assembly digest is missing or malformed.' }
+            if ($assembly.ContainsKey('installedSha256') -ne $assembly.ContainsKey('installedMatchesPackage')) { throw 'Candidate installed digest and installedMatchesPackage must appear together.' }
+            if ($assembly.ContainsKey('installedSha256')) {
+                if ("$($assembly.installedSha256)" -cnotmatch $digest) { throw 'Candidate assembly digest is missing or malformed.' }
+                if ($assembly.installedMatchesPackage -isnot [bool] -or $assembly.installedMatchesPackage -ne ($assembly.installedSha256 -ceq $assembly.packageEntrySha256)) { throw 'Candidate installedMatchesPackage contradicts its digests.' }
+            }
+        }
+    }
+}
+
 function Assert-CpqBehavior {
     param([Parameter(Mandatory)]$Behavior, [Parameter(Mandatory)]$Spec, [Parameter(Mandatory)]$Packages, [Parameter(Mandatory)][string]$ContractRoot)
     Assert-CpqSchema $Behavior (Join-Path $ContractRoot 'behavior.schema.json')
@@ -317,6 +352,12 @@ function Test-CpqLayerContract {
     if($Layer.cpq.status -ceq 'candidate'){
         if($Layer.version -notmatch '-candidate$'){throw 'Candidate layer requires a candidate version.'}
         Assert-CpqSchema $packages (Join-Path $ContractRoot 'packages-candidate.schema.json')
+        Assert-CpqCandidatePackages $packages
+        # The layer carries a copy of the shared candidate evidence; the two may not drift apart.
+        $shared = Join-Path $ContractRoot 'packages.candidate.lock.json'
+        if (-not (Test-Path -LiteralPath $shared -PathType Leaf) -or (Get-CpqDigest $packages) -cne (Get-CpqDigest (Read-CpqJson $shared))) {
+            throw 'Candidate package lock differs from contracts/cpq/packages.candidate.lock.json.'
+        }
         $null=Get-CpqIdentityMap @($Layer.cpq.blockers) 'id'
         $paths=$Layer.cpq.candidateArtifacts
         $compiled=Read-CpqJson (Resolve-CpqContractPath $LayerRoot $paths.compiled)
