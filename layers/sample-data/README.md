@@ -739,6 +739,16 @@ from these layers the table is empty and the six rows are the only ones.
   password `UserSetPassword` set. Merge cannot rename or delete, so a host seeded by an older
   script keeps its stale values; editions deserialize to fresh hosts.
 
+- **Replacement product stays empty.** All 97 product rows ship `ProductReplacementProductId`
+  and `ProductReplacementVariantId` empty and `ProductDiscontinued` false. Swift's
+  `ExpressBuySearchResponse.cshtml` builds the Replace modal's feed URL from the service page
+  with navigation tag `ReorderReplacement`, and no layer ships that page: a discontinued product
+  with a replacement shows a Replace button in Express Buy, the modal opens empty and Accept
+  leaves the row reading "null" (Foundry [#1597]). A demo's own catalogue keeps both columns
+  empty too.
+
+[#1597]: https://github.com/justdynamics/Truvio.Commerce.Foundry/issues/1597
+
 ## Activation
 
 Every edition that sets `sampleData: true` composes it: `swift-demo`, `headless-demo`,
