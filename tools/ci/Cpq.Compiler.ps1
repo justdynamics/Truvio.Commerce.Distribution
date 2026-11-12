@@ -57,6 +57,16 @@ function ConvertTo-CpqActions {
     }
     return ,$out.ToArray()
 }
+# Rows order by `order`, then by identity compared ORDINALLY. Sort-Object compares strings with the
+# machine culture (da-DK sorts 'aa' after 'ab'), so equal orders gave a different row order and digest
+# per locale (Distribution #133). Identities are unique, so the ordinal pass leaves no ties.
+function Get-CpqOrdered {
+    param($Items,[string]$Key)
+    $list=[Collections.Generic.List[object]]::new()
+    foreach($item in @($Items)){if($null -ne $item){$list.Add($item)}}
+    $list.Sort([Comparison[object]]{param($a,$b)[string]::CompareOrdinal([string]$a[$Key],[string]$b[$Key])})
+    return @($list | Sort-Object -Stable -Property {$_['order']})
+}
 function ConvertTo-CpqCandidate {
     param($Spec,[string]$ContractRoot,$IdentityMap)
     Assert-CpqSpec $Spec $ContractRoot
@@ -95,7 +105,7 @@ function ConvertTo-CpqCandidate {
     $modelId=Add-CompiledRow CPQModel $Spec.id ModelId @{ModelName=$Spec.id;ModelDefault=$false;ModelDescription='';ModelSeq=0} -Model
     $versionId=Add-CompiledRow CPQModelVersion version ModelVersionId @{ModelVersionModelId=$modelId;ModelVersionNumber=[string]$Spec.version;ModelVersionDescription='';ModelVersionActive=$false;ModelVersionSetting=''}
     $groupIds=@{}
-    foreach($group in $Spec.groups | Sort-Object order,key){
+    foreach($group in Get-CpqOrdered $Spec.groups 'key'){
         $groupIds[$group.key]=Add-CompiledRow CPQGroup ('input/'+$group.key) GroupId @{GroupModelVersionId=$versionId;GroupMode='input';GroupParentId='0';GroupName=$group.key;GroupLabel=$group.label;GroupSeq=$group.order;GroupEnabled=$true;GroupArray=$false;GroupTable=$false;GroupCondition=''}
     }
     $inputs=Get-CpqIdentityMap @($Spec.inputs)
@@ -125,7 +135,7 @@ function ConvertTo-CpqCandidate {
     }
     if($Spec.inputRules.Count -gt 0){
         $gid=Add-CompiledRow CPQGroup rules GroupId @{GroupModelVersionId=$versionId;GroupMode='input_rule';GroupParentId='0';GroupName='Compiler_InputRules';GroupLabel='Input rules';GroupSeq=10000;GroupEnabled=$true;GroupArray=$false;GroupTable=$false;GroupCondition=''}
-        foreach($rule in $Spec.inputRules | Sort-Object order,id){
+        foreach($rule in Get-CpqOrdered $Spec.inputRules 'id'){
             $null=Add-CompiledRow CPQInputRule $rule.id InputRuleId @{InputRuleGroupId=$gid;InputRuleType='CPQOptions';InputRuleDescription=$rule.id;InputRuleEnabled=$true;InputRuleStop=$false;InputRuleSeq=$rule.order;InputRuleConditions=(ConvertTo-CpqConditionText $rule.when);InputRuleActions=(ConvertTo-CpqCanonicalJson (ConvertTo-CpqActions @($rule.then) $inputs));InputRuleActionsElse=(ConvertTo-CpqCanonicalJson (ConvertTo-CpqActions @($rule.else) $inputs))}
         }
     }
@@ -136,7 +146,7 @@ function ConvertTo-CpqCandidate {
         $line=@{no=$rule.sku;qty=[string]$qty;type='Item'}
         $null=Add-CompiledRow CPQBOMRule $rule.id BOMRuleId @{BOMRuleGroupId=$gid;BOMRuleDescription=$rule.id;BOMRuleEnabled=$true;BOMRuleSeq=$sequence;BOMRuleConditions=(ConvertTo-CpqConditionText $rule.when);BOMRuleBomItems=(ConvertTo-CpqCanonicalJson @(,$line))}
     }
-    foreach($rule in $Spec.pricing.rules | Sort-Object order,id){
+    foreach($rule in Get-CpqOrdered $Spec.pricing.rules 'id'){
         $null=Add-CompiledRow CPQPriceRule $rule.id CPQPriceRuleId @{CPQPriceRuleModelVersionId=$versionId;Description=$rule.id;Enabled=$true;CPQPriceRuleSort=$rule.order;Conditions=(ConvertTo-CpqConditionText $rule.when);Margin='';Discount=$rule.discountPercent;DiscountType='Percent'}
     }
     $requirements=@(

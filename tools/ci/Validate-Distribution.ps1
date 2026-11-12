@@ -860,7 +860,7 @@ if ($index) {
 foreach ($file in $editionFiles) {
     try {
         $edition=Get-Content -LiteralPath $file.FullName -Raw|ConvertFrom-Json -AsHashtable
-        if($edition.delivery.status -ceq 'candidate' -and $edition.name -in @($index.gateProven.editions)){throw 'Candidate edition cannot be gateProven.'}
+        if($edition.delivery.status -ceq 'candidate' -and $edition.name -in @(Get-GateProvenEditionName $(if($index){$index.gateProven}))){throw 'Candidate edition cannot be gateProven.'}
         if ($edition.ContainsKey('ledger')) {
             $plan=Get-EditionLedgerPlan -DistributionRoot $RepoRoot -Edition $edition -SkillsRoot $SkillsRoot -SkillsRootsByCommit $SkillsRootsByCommit
             & $log $true "ledger $($edition.name): $($plan.functions.Count) functions, $($plan.checkIds.Count) locked checks"

@@ -48,6 +48,25 @@ function Read-DistributionLedgerSnapshot {
     }
     return @{root=$root;manifest=$manifest;digest=$digest;functions=$functions;checks=$checks;dwVersion=$meta.dwVersion}
 }
+# ConvertFrom-Json keeps the LAST of two same-named properties, the CPQ contract reader refuses them. Composition
+# refuses them too, so one layer.json cannot read differently in the two places (Distribution #133).
+function Assert-LedgerUniqueJsonKey {
+    param([string]$Raw,[string]$Label)
+    $document=[System.Text.Json.JsonDocument]::Parse($Raw)
+    try{
+        $pending=[Collections.Generic.Stack[System.Text.Json.JsonElement]]::new();$pending.Push($document.RootElement)
+        while($pending.Count){
+            $node=$pending.Pop()
+            if($node.ValueKind -eq 'Object'){
+                $names=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+                foreach($property in $node.EnumerateObject()){
+                    if(-not $names.Add($property.Name)){throw "Duplicate JSON property '$($property.Name)' in $Label."}
+                    $pending.Push($property.Value)
+                }
+            }elseif($node.ValueKind -eq 'Array'){foreach($item in $node.EnumerateArray()){$pending.Push($item)}}
+        }
+    }finally{$document.Dispose()}
+}
 function Get-EditionLedgerLayer {
     param([string]$DistributionRoot,$Edition)
     $names=@(foreach($ref in @($Edition.from)+@($Edition.add)+@($Edition.surfaces)){
@@ -57,7 +76,9 @@ function Get-EditionLedgerLayer {
     if($Edition.sampleData){$names+='sample-data'}
     foreach($theme in $Edition.themes){if($theme -notmatch '^[a-z0-9-]+$'){throw 'Invalid theme reference.'};$names+='theme-'+$theme}
     foreach($name in @($names|Select-Object -Unique)){
-        Get-Content -LiteralPath (Join-Path $DistributionRoot "layers/$name/layer.json") -Raw -ErrorAction Stop|ConvertFrom-Json -AsHashtable
+        $raw=Get-Content -LiteralPath (Join-Path $DistributionRoot "layers/$name/layer.json") -Raw -ErrorAction Stop
+        Assert-LedgerUniqueJsonKey $raw "layers/$name/layer.json"
+        $raw|ConvertFrom-Json -AsHashtable
     }
 }
 function Get-EditionLedgerPlan {

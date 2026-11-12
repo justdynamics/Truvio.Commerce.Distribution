@@ -29,10 +29,11 @@ Describe 'Non-deliverable CPQ candidate carriage' {
         $read.nulls.Count|Should -Be 1
         (Get-CpqDigest $read)|Should -BeExactly (Get-CpqDigest $value)
     }
-    It 'refuses delivery with all four named package blockers' {
+    It 'refuses delivery and names all five blockers' {
         $layer.cpq.blockers.id|Should -Not -Contain 'studio-package'
         $layer.cpq.blockers.id|Should -Not -Contain 'stable-mcp'
-        {Test-Candidate $root $layer -Delivery}|Should -Throw '*openxml-closure*runtime-identity*'
+        $layer.cpq.blockers.Count|Should -Be 5
+        {Test-Candidate $root $layer -Delivery}|Should -Throw '*openxml-closure*runtime-identity*runtime-verification*content-bindings*engine-adapter*'
     }
     It 'cannot promote partial evidence by changing only status or version' {
         $layer.cpq.status='ready';$layer.cpq.Remove('blockers');$layer.cpq.Remove('candidateArtifacts');$layer.version='1.0.0'
@@ -68,5 +69,14 @@ Describe 'Non-deliverable CPQ candidate carriage' {
         {Get-EditionLedgerPlan $script:dist $e $skills}|Should -Throw '*omits*'
         $e=Read-CpqJson (Join-Path $script:dist 'editions/cpq-demo.json');$e.ledger.checkIds=@($e.ledger.checkIds|Select-Object -Skip 1)
         {Get-EditionLedgerPlan $script:dist $e $skills}|Should -Throw '*checkIds must equal*'
+    }
+    It 'RED CONTROL: composition refuses a layer.json with a duplicate key, as the contract reader does' {
+        $d=Join-Path $TestDrive ([guid]::NewGuid().ToString('N'));$dir=New-Item -ItemType Directory -Force -Path (Join-Path $d 'layers/dup')
+        $path=Join-Path $dir 'layer.json'
+        [IO.File]::WriteAllText($path,'{"name":"dup","version":"1.0.0","cpq":{"status":"candidate"},"cpq":null}')
+        {Read-CpqJson $path}|Should -Throw '*Duplicate JSON property*'
+        {Get-EditionLedgerLayer $d @{from='dup@1.0.0';add=@();surfaces=@();themes=@()}}|Should -Throw "*Duplicate JSON property 'cpq'*"
+        [IO.File]::WriteAllText($path,'{"name":"dup","version":"1.0.0","cpq":null}')
+        @(Get-EditionLedgerLayer $d @{from='dup@1.0.0';add=@();surfaces=@();themes=@()})[0].name|Should -BeExactly 'dup'
     }
 }

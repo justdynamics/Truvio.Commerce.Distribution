@@ -39,6 +39,23 @@ Describe 'Offline CPQ compiler and refusal boundary' {
         (ConvertTo-CpqCanonicalJson (ConvertTo-CpqCandidate $s $contracts $first.identityMap)) | Should -BeExactly (ConvertTo-CpqCanonicalJson $first)
         (Get-CpqDigest (ConvertTo-CpqCandidate $s $contracts)) | Should -BeExactly (Get-CpqDigest $first)
     }
+    It 'compiles to the same rows and digest under en-US and da-DK (ordinal order at equal `order`)' {
+        # da-DK sorts 'aa' after 'ab' and both after 'Build'; en-US sorts aa, ab, Build; ordinal is Build, aa, ab.
+        $s=New-Spec;$order=$s.groups[0].order
+        $s.groups=@($s.groups)+@(@{key='ab';label='Second';order=$order},@{key='aa';label='First';order=$order})
+        $saved=[Globalization.CultureInfo]::CurrentCulture
+        try{
+            $byCulture=@{}
+            foreach($name in @('en-US','da-DK')){
+                [Globalization.CultureInfo]::CurrentCulture=[Globalization.CultureInfo]::GetCultureInfo($name)
+                $c=ConvertTo-CpqCandidate $s $contracts
+                $byCulture[$name]=@{digest=(Get-CpqDigest $c);groups=(@($c.rows | Where-Object {$_.table -ceq 'CPQGroup' -and $_.values.GroupMode -ceq 'input'} | ForEach-Object {$_.values.GroupName}) -join ',')}
+            }
+        }finally{[Globalization.CultureInfo]::CurrentCulture=$saved}
+        $byCulture['en-US'].groups | Should -BeExactly 'Build,aa,ab'
+        $byCulture['da-DK'].groups | Should -BeExactly 'Build,aa,ab'
+        $byCulture['da-DK'].digest | Should -BeExactly $byCulture['en-US'].digest
+    }
     It 'keeps unimplemented semantics explicit and cannot produce an apply-ready plan' {
         $c=New-Candidate;$read=New-EmptyRead;$p=New-CpqApplyPlan $c $read (Get-CpqDigest $read)
         $p.applyAllowed | Should -BeFalse;$p.operations.Count | Should -Be 15
