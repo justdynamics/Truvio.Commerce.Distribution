@@ -1,0 +1,56 @@
+{
+  "schemaVersion": 1,
+  "comment": "The only place a ledger finding may be accepted (docs/LEDGER.md). unexecutable: a locked check that can never pass at the edition's locked skills commit; each entry must match a live finding exactly (edition, check, rule) and FAILs once it no longer does. removals: a removed lock, locked check, layer carriage or provided function, with the owner ruling that allows it; an entry counts only in the change that adds it.",
+  "unexecutable": [
+    {
+      "edition": "base-swift",
+      "check": "swift.header-footer.selected-on-website",
+      "rule": "no-implemented-binding",
+      "ref": "justdynamics/Truvio.Commerce.Distribution#132",
+      "reason": "Only binding is planned at skills 1072ba8 (website header/footer field names not verified); stays UNVERIFIED on every host until a snapshot implements it."
+    },
+    {
+      "edition": "base-swift",
+      "check": "swift.sign-in.sign-in-entry",
+      "rule": "requirement-not-establishable",
+      "ref": "dynamicweb/skills#222",
+      "reason": "swift.sign-in requires capability users.frontend-sign-in; the runner at 1072ba8 fills no capability facts, so the implemented SQL binding never runs."
+    },
+    {
+      "edition": "headless-demo",
+      "check": "search.facets.not-analyzed",
+      "rule": "no-implemented-binding",
+      "ref": "justdynamics/Truvio.Commerce.Distribution#132",
+      "reason": "Only binding is planned at skills 1072ba8 (needs a join of facet field to index field Analyzed); stays UNVERIFIED on every host."
+    },
+    {
+      "edition": "headless-demo",
+      "check": "search.index-queries.no-constant-macros",
+      "rule": "no-implemented-binding",
+      "ref": "justdynamics/Truvio.Commerce.Distribution#132",
+      "reason": "Only binding is planned at skills 1072ba8 (needs per-query enumeration and an expression-tree projection); stays UNVERIFIED on every host."
+    },
+    {
+      "edition": "swift-demo",
+      "check": "swift.express-buy.express-buy-page",
+      "rule": "requirement-not-establishable",
+      "ref": "dynamicweb/skills#222",
+      "reason": "swift.express-buy requires capability swift.cart-checkout; the runner at 1072ba8 fills no capability facts, so the implemented binding never runs."
+    },
+    {
+      "edition": "swift-demo",
+      "check": "swift.header-footer.selected-on-website",
+      "rule": "no-implemented-binding",
+      "ref": "justdynamics/Truvio.Commerce.Distribution#132",
+      "reason": "Only binding is planned at skills 1072ba8 (website header/footer field names not verified); stays UNVERIFIED on every host until a snapshot implements it."
+    },
+    {
+      "edition": "swift-demo",
+      "check": "swift.sign-in.sign-in-entry",
+      "rule": "requirement-not-establishable",
+      "ref": "dynamicweb/skills#222",
+      "reason": "swift.sign-in requires capability users.frontend-sign-in; the runner at 1072ba8 fills no capability facts, so the implemented SQL binding never runs."
+    }
+  ],
+  "removals": []
+}

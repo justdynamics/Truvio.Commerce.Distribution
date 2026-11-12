@@ -10,6 +10,7 @@ on:
       - 'editions/**'
       - 'versions/**'
       - 'contracts/cpq/**'
+      - 'contracts/ledger/**'
       - 'tools/ci/**'
       - '.github/workflows/validate.yml'
   push:
@@ -39,6 +40,8 @@ jobs:
       # The floor rule (versions/spine.json, owner ruling redesign-floors) compares this PR's floors
       # with the base branch, so the base must be readable: a shallow checkout carries only the
       # merge commit. On a push to main the base is main itself and nothing can be raised.
+      # The ledger removal rule (docs/LEDGER.md) reads editions, layer.json and the exceptions register
+      # at the same base.
       - name: Fetch the base branch for the floor rule
         shell: bash
         run: git fetch --no-tags --depth=50 origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
