@@ -29,6 +29,16 @@
         "secretNamedColumns": { "type": "integer", "minimum": 0 }
       }
     },
+    "releaseNotes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema", "previousTag"],
+      "description": "The release-notes record (Foundry #1604, owner ruling distribution-release-notes-1604): the release of this entry ships generated release notes (body and the release-notes.json asset, layers/release-notes.schema.json) as a delta against previousTag. Written by the Foundry from tools/ci/ReleaseNotes.ps1 New-ReleaseNotesRecord when it registers the file. Required on every entry registered after the rule (tools/ci/ReleaseNotes.ps1 Get-ReleaseNotesExemptTag lists the releases published before it).",
+      "properties": {
+        "schema": { "const": "release-notes/v1" },
+        "previousTag": { "type": ["string", "null"], "pattern": "^(databases/blank/[0-9A-Za-z.+-]+|editions/[a-z0-9-]+/[0-9]+\\.[0-9]+\\.[0-9]+)$", "description": "The previous release of the same line (the tag this entry replaced in the register); null for the first release of a line." }
+      }
+    },
     "blank": {
       "type": "object",
       "additionalProperties": false,
@@ -43,7 +53,8 @@
         "gateRunId": { "$ref": "#/$defs/runId", "description": "The gate run that proved the restored database: an edition delivered onto it and measured PASS." },
         "deliveryRunId": { "$ref": "#/$defs/runId" },
         "provedWith": { "type": "string", "description": "Which edition the proof delivered onto the restored database." },
-        "scrubCheck": { "$ref": "#/$defs/scrubCheck" }
+        "scrubCheck": { "$ref": "#/$defs/scrubCheck" },
+        "releaseNotes": { "$ref": "#/$defs/releaseNotes" }
       }
     },
     "edition": {
@@ -62,7 +73,8 @@
         "distributionCommit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
         "dwVersion": { "type": "string" },
         "startsFrom": { "type": "string", "description": "The blank bacpac the delivery started from (asset and sha256)." },
-        "scrubCheck": { "$ref": "#/$defs/scrubCheck" }
+        "scrubCheck": { "$ref": "#/$defs/scrubCheck" },
+        "releaseNotes": { "$ref": "#/$defs/releaseNotes" }
       }
     }
   }

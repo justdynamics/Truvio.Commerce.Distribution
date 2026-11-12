@@ -39,9 +39,21 @@ the draft (tools/ci/Bacpac.ps1 Publish-BacpacRelease). A missing draft or a sha2
 run after the tags are pushed, and leaves the release unpublished; re-run the workflow once fixed.
 The print mode lists each release asset under its tag.
 
+Release notes (Foundry #1604, owner ruling distribution-release-notes-1604; tools/ci/ReleaseNotes.ps1):
+every bacpac release published from here carries a generated "What changed" section (DW version,
+layer pins with their CHANGELOG entries, component versions, merged pull requests and what a consumer
+must do, all against the previous release of the same line), a "Provenance" section, and the same
+content as the release-notes.json asset (layers/release-notes.schema.json). The print mode prints the
+notes -Execute would attach; -Execute writes the body and uploads the asset in the step that publishes
+the draft, and leaves the draft unpublished when the notes cannot be generated. The four releases
+published before the rule are left as they are (-IncludePublishedNotes prints what theirs would say).
+
 Usage:
-  pwsh tools/ci/print-release-tags.ps1              # print the manifest (executes nothing)
-  pwsh tools/ci/print-release-tags.ps1 -CheckReleases  # dry run + verify each bacpac draft's sha256 (gh auth)
+  pwsh tools/ci/print-release-tags.ps1              # print the manifest and the release notes (executes nothing)
+  pwsh tools/ci/print-release-tags.ps1 -ShowReleaseNotesJson   # ... and each release-notes.json
+  pwsh tools/ci/print-release-tags.ps1 -IncludePublishedNotes  # ... also for the releases published before the rule
+  pwsh tools/ci/print-release-tags.ps1 -CheckReleases  # dry run + verify each bacpac draft's sha256 (gh auth);
+                                                       # prints the notes of the releases not published yet
   pwsh tools/ci/print-release-tags.ps1 -Execute     # CI actuator: cut + push missing tags
 #>
 [CmdletBinding()]
@@ -50,6 +62,11 @@ param(
     [switch]$Execute,
     # Dry run only: also download each draft asset and compare its sha256 (needs gh auth); publishes nothing.
     [switch]$CheckReleases,
+    # Dry run only: also print the release-notes.json each release would carry.
+    [switch]$ShowReleaseNotesJson,
+    # Dry run only: also print the notes of releases that -Execute leaves as they are (published before the
+    # release-notes rule, or already published when -CheckReleases can see that).
+    [switch]$IncludePublishedNotes,
     [string]$Repo = $(if ($env:GITHUB_REPOSITORY) { $env:GITHUB_REPOSITORY } else { 'justdynamics/Truvio.Commerce.Distribution' })
 )
 $ErrorActionPreference = 'Stop'
@@ -219,11 +236,41 @@ if (-not $Execute) {
     Write-Host ""
     Write-Host "git push origin --tags"
     Write-Host ""
+    $checked = @{}
     if ($releasePlan.Count -gt 0) {
         Write-Host "# Release assets (-Execute: download the Foundry's draft asset, verify sha256 against layers/INDEX.json, publish):" -ForegroundColor Cyan
         foreach ($r in $releasePlan) { Write-Host "gh release: '$($r.Tag)' <- $($r.Asset) sha256 $($r.Sha256) ($($r.SizeBytes) bytes) '$($r.Title)'" }
         if ($CheckReleases) {
-            foreach ($r in @(Publish-BacpacRelease -Plan $releasePlan -Repo $Repo -VerifyOnly)) { Write-Host "#   [$($r.result)] $($r.tag): $($r.detail)" }
+            foreach ($r in @(Publish-BacpacRelease -Plan $releasePlan -Repo $Repo -VerifyOnly -RepoRoot $RepoRoot)) { $checked[$r.tag] = $r.result; Write-Host "#   [$($r.result)] $($r.tag): $($r.detail)" }
+        }
+        Write-Host ""
+    }
+    # The release notes -Execute attaches (body and release-notes.json), printed as they would be published.
+    # -IncludePublishedNotes also covers the registered releases this manifest holds.
+    $notesRows = if ($IncludePublishedNotes) { @(Get-BacpacReleasePlan -Index $index) } else { $releasePlan }
+    if ($notesRows.Count -gt 0) {
+        $exemptTags = @(Get-ReleaseNotesExemptTag)
+        foreach ($r in $notesRows) {
+            $isExempt = $exemptTags -contains $r.Tag
+            $isPublished = ($checked -and $checked[$r.Tag] -eq 'present')
+            if (($isExempt -or $isPublished) -and -not $IncludePublishedNotes) {
+                Write-Host "# Release notes '$($r.Tag)': not printed, $(if ($isExempt) { 'published before the release-notes rule and left as it is' } else { 'already published' }) (-IncludePublishedNotes prints them)."
+                continue
+            }
+            try {
+                $n = New-BacpacReleaseNotes -RepoRoot $RepoRoot -Kind $r.Kind -Edition $r.Edition -Entry $r.Entry -Repo $Repo -Lead $r.Notes
+                Write-Host "# Release notes '$($r.Tag)' ($(if ($n.PreviousTag) { "against $($n.PreviousTag)" } else { 'first release of its line' })$(if ($isExempt) { '; for reference only, -Execute leaves this release as it is' })): release body" -ForegroundColor Cyan
+                Write-Host $n.Markdown
+                if ($ShowReleaseNotesJson) {
+                    Write-Host "# Release notes '$($r.Tag)': $(Get-ReleaseNotesAssetName) asset" -ForegroundColor Cyan
+                    Write-Host $n.Json
+                } else {
+                    Write-Host "# Release notes '$($r.Tag)': $(Get-ReleaseNotesAssetName) asset, $([System.Text.Encoding]::UTF8.GetByteCount($n.Json)) bytes, validates against layers/release-notes.schema.json (-ShowReleaseNotesJson prints it)."
+                }
+            } catch {
+                Write-Host "# Release notes '$($r.Tag)': [error] $($_.Exception.Message) -Execute would leave this release unpublished." -ForegroundColor Red
+            }
+            Write-Host ""
         }
         Write-Host ""
     }
@@ -267,7 +314,7 @@ if ($created.Count -eq 0) {
 # Bacpac release assets (Foundry #1422): after the tags exist, publish each registered bacpac.
 if ($releasePlan.Count -gt 0) {
     Write-Host "== Bacpac release assets ($($releasePlan.Count)) ==" -ForegroundColor Cyan
-    $rel = @(Publish-BacpacRelease -Plan $releasePlan -Repo $Repo)
+    $rel = @(Publish-BacpacRelease -Plan $releasePlan -Repo $Repo -RepoRoot $RepoRoot)
     foreach ($r in $rel) {
         if ($r.result -eq 'error') { Write-Host "::error title=bacpac release $($r.tag)::$($r.detail)" }
         Write-Host "  [$($r.result)] $($r.tag): $($r.detail)" -ForegroundColor $(if ($r.result -eq 'error') { 'Red' } else { 'Green' })

@@ -102,6 +102,10 @@ Checks (all fail-closed; any failure -> exit 1):
                         every entry's dwVersion equals gateProven.dw.version, and tag and asset name
                         follow from the entry. An edition that changes version or proving run while
                         its bacpac entry does not FAILs: rebuild the bacpac or remove the entry.
+                        Release notes (Foundry #1604, tools/ci/ReleaseNotes.ps1): every entry carries
+                        its `releaseNotes` record { schema, previousTag }, the offline trace that its
+                        release ships generated notes; the releases published before the rule
+                        (Get-ReleaseNotesExemptTag) need none. An entry without one FAILs.
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -852,6 +856,9 @@ if ($index) {
         & $log $bpOk "INDEX.bacpacs validates vs layers/bacpacs.schema.json$(if (-not $bpOk) { ": $bpErr" })"
         $edNames = @($editionFiles | ForEach-Object { $_.BaseName })
         foreach ($r in @(Test-BacpacRegister -Index $index -EditionNames $edNames -EditionVersion (Get-EditionReleaseVersion))) { & $log $r.ok $r.message }
+        # Release notes (Foundry #1604): every entry registered after the rule carries its releaseNotes
+        # record; the releases published before it need none (tools/ci/ReleaseNotes.ps1).
+        foreach ($r in @(Test-ReleaseNotesRecord -Index $index)) { & $log $r.ok $r.message }
     }
 }
 

@@ -63,7 +63,10 @@ A shortcut for a new host: the blank DW10 database and gate-proven edition datab
 bacpac assets on GitHub Releases (tag `databases/blank/<DW version>` and the edition tags), each
 registered with its sha256 and gate run in `layers/INDEX.json` `bacpacs`. They ship scrubbed, with no
 password and no API key; see CONTRIBUTING.md, "Bacpac release assets". Without an entry, the
-deserialize is the path.
+deserialize is the path. Each bacpac release states what changed against the previous release of
+its line (DW version, layer pins, component versions, what a consumer must do) and carries the same
+content as a `release-notes.json` asset ([`layers/release-notes.schema.json`](layers/release-notes.schema.json))
+for pipelines that read the GitHub Releases API.
 
 ## Policy
 
