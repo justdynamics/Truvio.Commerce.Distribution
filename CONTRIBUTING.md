@@ -166,7 +166,8 @@ only that path.
 sha256, sizeBytes, gateRunId, scrubCheck } and `editions.<edition>` { editionVersion, tag, asset,
 sha256, sizeBytes, gateRunId (the gate run on the database restored from this file),
 deliveryRunId, provenRunId (`gateProven.editions.<edition>` when the file was built),
-distributionCommit, dwVersion, scrubCheck }. The Foundry writes it from the proving runs; because
+distributionCommit, dwVersion, scrubCheck }, each with its `releaseNotes` record (see "Release
+notes" below). The Foundry writes it from the proving runs; because
 every entry is bound to `gateProven` (check 17), it is a projection of the editions record like
 `gateProven` itself, and it is never hand-authored as trusted.
 
@@ -190,6 +191,38 @@ publishes the release. A missing draft or a mismatch fails the run after the tag
 leaves the release unpublished; fix the draft and re-run the workflow. A published asset is never
 replaced. The dry run lists each release asset under its tag; `print-release-tags.ps1 -CheckReleases`
 also downloads each draft and compares its sha256, publishing nothing.
+
+**Release notes.** Every bacpac release carries generated release notes (owner ruling
+`distribution-release-notes-1604`, Foundry #1604); they are never hand-written. The body has two
+sections in a fixed order. **What changed** is a delta against the previous release of the same
+line (the previous blank database for `databases/blank/<DW version>`, the previous release of the
+same edition for `editions/<edition>/<version>`): the DW version and the Swift release before and
+after, every layer pin of the edition with the entries of the layer's `CHANGELOG.md` between the two
+versions, the proven component versions (`versions/spine.json` `current`), the pull requests merged
+between the two commits, and what a consumer must do. **Provenance** restates the register entry
+(asset, sha256, size, gate run, delivery run, proof run, Distribution commit, scrub verdict). The
+first release of a line has nothing to compare with and says so. The same content is attached as
+the asset `release-notes.json` (shape: [`layers/release-notes.schema.json`](layers/release-notes.schema.json),
+`release-notes/v1`), so a pipeline (Azure DevOps, Power BI) reads
+`GET /repos/justdynamics/Truvio.Commerce.Distribution/releases` and that asset without parsing
+Markdown; the releases are public, no token is needed.
+
+[`tools/ci/ReleaseNotes.ps1`](tools/ci/ReleaseNotes.ps1) generates both from this repository's own
+records at two commits: an edition's `distributionCommit`, a blank's tag commit. The previous
+release is the tag the line's `bacpacs` entry carried before the current one replaced it, read from
+the history of `layers/INDEX.json`. `print-release-tags.ps1` prints the notes in its dry run
+(`-ShowReleaseNotesJson` prints the asset too) and `-Execute` attaches them in the step that
+publishes the draft: `release-notes.json` is uploaded to the draft, then the body is written and
+the draft published. A draft whose notes cannot be generated or attached stays a draft.
+
+The offline trace is the entry's `releaseNotes` record, `{ schema: "release-notes/v1", previousTag }`
+(`previousTag` null for the first release of a line), which the Foundry writes from
+`New-ReleaseNotesRecord` when it registers the file. Check 17 **FAILs** an entry without it, and
+the generator refuses a record that names another previous release than the history does. The four
+releases published before the rule (`databases/blank/10.29.8`, `editions/swift-demo/5.5.0`,
+`editions/dap-portal/2.5.0`, `editions/headless-demo/3.4.0`; `Get-ReleaseNotesExemptTag`) need no
+record: their entries are proof records and are not edited, and `-Execute` leaves those releases as
+they are. `print-release-tags.ps1 -IncludePublishedNotes` prints what their notes would say.
 
 **Restoring one.** Verify the sha256 against INDEX.json, then import onto a NEW database (SqlPackage:
 `sqlpackage /Action:Import /SourceFile:<file> /TargetServerName:<server> /TargetDatabaseName:<db>`;

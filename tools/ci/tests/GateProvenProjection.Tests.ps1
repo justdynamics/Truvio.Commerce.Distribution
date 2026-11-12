@@ -23,7 +23,7 @@ BeforeAll {
     function New-TagTree([string]$ReleaseTag, [string]$MapVersion) {
         $d = Join-Path $TestDrive ([guid]::NewGuid().ToString('N'))
         $ci = (New-Item -ItemType Directory -Force -Path (Join-Path $d 'tools/ci')).FullName
-        foreach ($f in 'print-release-tags.ps1', 'Bacpac.ps1', 'ProvenTree.ps1', 'Get-LayerTreeHash.ps1') { Copy-Item -LiteralPath (Join-Path $PSScriptRoot "..\$f") -Destination $ci }
+        foreach ($f in 'print-release-tags.ps1', 'Bacpac.ps1', 'ReleaseNotes.ps1', 'Test-VersionSpine.ps1', 'ProvenTree.ps1', 'Get-LayerTreeHash.ps1') { Copy-Item -LiteralPath (Join-Path $PSScriptRoot "..\$f") -Destination $ci }
         $src = Get-Content -Raw (Join-Path $ci 'Bacpac.ps1')
         Write-Text (Join-Path $ci 'Bacpac.ps1') ($src -replace "'swift-demo'(\s*)=\s*'[^']+'", "'swift-demo'`$1= '$MapVersion'")
         Write-Text (Join-Path $d 'editions/swift-demo.json') (@{ name = 'swift-demo'; from = 'base@1.0.0' } | ConvertTo-Json)

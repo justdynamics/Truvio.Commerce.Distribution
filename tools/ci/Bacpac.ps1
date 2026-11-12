@@ -20,8 +20,15 @@ are the ones a schema cannot state:
 The asset bytes never pass through this repository. The Foundry uploads the proven file to a DRAFT
 release on the tag (tools/bacpac/Publish-BacpacDraft.ps1); release-tags.yml
 (print-release-tags.ps1 -Execute) downloads that draft's asset, compares its sha256 with the entry,
-and only then publishes the release. Functions only.
+and only then publishes the release.
+
+Release notes (Foundry #1604, tools/ci/ReleaseNotes.ps1): a release published after the rule gets
+its generated notes as the body and as the release-notes.json asset in the same step, and a draft
+whose notes cannot be generated stays unpublished. The releases published before the rule
+(Get-ReleaseNotesExemptTag) are left as they are. Functions only.
 #>
+
+. (Join-Path $PSScriptRoot 'ReleaseNotes.ps1')
 
 # Per-edition RELEASE version: the edition artifact's own semver, bumped when the edition FILE
 # changes. Nothing in INDEX.json records it, so it is declared here, once, for the release tags and
@@ -106,6 +113,7 @@ function Get-BacpacReleasePlan {
         $b = $bp.blank
         $plan += [pscustomobject]@{
             Tag = "$($b.tag)"; Asset = "$($b.asset)"; Sha256 = "$($b.sha256)"; SizeBytes = $b.sizeBytes
+            Kind = 'blank'; Edition = ''; Entry = $b
             Title = "Blank DW10 database, DW $($b.dwVersion)"
             Notes = ("The database the stock Dynamicweb 10 setup wizard creates at DW $($b.dwVersion), as a bacpac. Every Truvio Commerce " +
                      "edition delivers onto it (layers/base/base.contract.json, blankTarget). sha256 $($b.sha256). Proven by restoring it onto a " +
@@ -118,6 +126,7 @@ function Get-BacpacReleasePlan {
         $e = $p.Value
         $plan += [pscustomobject]@{
             Tag = "$($e.tag)"; Asset = "$($e.asset)"; Sha256 = "$($e.sha256)"; SizeBytes = $e.sizeBytes
+            Kind = 'edition'; Edition = "$($p.Name)"; Entry = $e
             Title = "$($p.Name) $($e.editionVersion) database"
             Notes = ("The $($p.Name) $($e.editionVersion) edition delivered onto the blank DW $($e.dwVersion) database (Distribution " +
                      "$($e.distributionCommit), delivery run $($e.deliveryRunId)) and exported before any measurement, as a bacpac. sha256 " +
@@ -137,12 +146,43 @@ function Get-BacpacReleasePlan {
 #   anything else (no draft, wrong asset, sha256 mismatch, published without the asset) -> an error
 #   row, and the release stays as it was.
 # -VerifyOnly (the dry run's -CheckReleases) downloads and compares but publishes nothing.
+# Release notes (tools/ci/ReleaseNotes.ps1), for every tag outside Get-ReleaseNotesExemptTag:
+#   a draft is published only with its notes: the generated Markdown is the body and
+#   release-notes.json is uploaded to the draft first; notes that cannot be generated, or an upload
+#   that fails, is an error row and the draft stays a draft;
+#   a published release that lacks release-notes.json (a run that died between the two calls) gets
+#   the asset and the body. A bacpac asset is never touched.
+# -RepoRoot is the checkout the notes are generated from (full history: the previous release is
+# read from the history of layers/INDEX.json).
 # Returns rows { tag; result = present|verified|published|error; detail }.
 # ---------------------------------------------------------------------------
+function Get-BacpacPlanReleaseNotes {
+    param([Parameter(Mandatory)]$Row, [string]$RepoRoot, [Parameter(Mandatory)][string]$Repo)
+    if (-not $RepoRoot) { throw 'no -RepoRoot: the notes are generated from the checkout' }
+    return (New-BacpacReleaseNotes -RepoRoot $RepoRoot -Kind $Row.Kind -Edition $Row.Edition -Entry $Row.Entry -Repo $Repo -Lead $Row.Notes)
+}
+
+# Upload release-notes.json to a release by id (a draft answers by id, not by tag). An asset of that
+# name left on a DRAFT by an earlier run is replaced; a published release only ever gains it.
+function Send-ReleaseNotesAsset {
+    param([Parameter(Mandatory)][string]$Repo, [Parameter(Mandatory)]$Release, [Parameter(Mandatory)][string]$Json, [Parameter(Mandatory)][string]$Token)
+    $name = Get-ReleaseNotesAssetName
+    foreach ($a in @($Release.assets | Where-Object { $_.name -eq $name })) {
+        if (-not $Release.draft) { throw "the published release already carries $name" }
+        gh api -X DELETE "repos/$Repo/releases/assets/$($a.id)" > $null
+        if ($LASTEXITCODE -ne 0) { throw "could not remove the draft's earlier $name" }
+    }
+    $bytes = [System.Text.UTF8Encoding]::new($false).GetBytes($Json)
+    Invoke-WebRequest -Method Post -Uri "https://uploads.github.com/repos/$Repo/releases/$($Release.id)/assets?name=$name" -Body $bytes -ContentType 'application/json' -Headers @{
+        Authorization = "Bearer $Token"; Accept = 'application/vnd.github+json'; 'X-GitHub-Api-Version' = '2022-11-28' } | Out-Null
+}
+
 function Publish-BacpacRelease {
     [CmdletBinding()]
-    param([Parameter(Mandatory)][object[]]$Plan, [Parameter(Mandatory)][string]$Repo, [switch]$VerifyOnly)
+    param([Parameter(Mandatory)][object[]]$Plan, [Parameter(Mandatory)][string]$Repo, [switch]$VerifyOnly, [string]$RepoRoot)
     $out = @()
+    $exempt = @(Get-ReleaseNotesExemptTag)
+    $notesAsset = Get-ReleaseNotesAssetName
     $token = if ($env:GH_TOKEN) { $env:GH_TOKEN } else { "$(gh auth token)".Trim() }
     $releases = @((gh api "repos/$Repo/releases?per_page=100" --paginate --slurp | ConvertFrom-Json) | ForEach-Object { $_ } | ForEach-Object { $_ })
     foreach ($row in $Plan) {
@@ -168,12 +208,33 @@ function Publish-BacpacRelease {
         if ($sha -ne $row.Sha256) {
             $out += [pscustomobject]@{ tag = $row.Tag; result = 'error'; detail = "asset $($row.Asset) sha256 $sha does not match layers/INDEX.json $($row.Sha256); left $(if ($rel.draft) { 'unpublished' } else { 'as it is' })" }; continue
         }
-        if (-not $rel.draft) { $out += [pscustomobject]@{ tag = $row.Tag; result = 'present'; detail = "published, $($row.Asset) sha256 verified" }; continue }
-        if ($VerifyOnly) { $out += [pscustomobject]@{ tag = $row.Tag; result = 'verified'; detail = "draft carries $($row.Asset) with the recorded sha256; -Execute publishes it" }; continue }
-        $body = @{ draft = $false; tag_name = $row.Tag; name = $row.Title; body = $row.Notes; make_latest = 'false' } | ConvertTo-Json -Compress
+        # Release notes: owed by every release outside the exempt list, generated only when they are about to be used.
+        $owed = ($exempt -notcontains $row.Tag)
+        $hasNotes = [bool]@($rel.assets | Where-Object { $_.name -eq $notesAsset }).Count
+        $notes = $null
+        if ($owed -and ($rel.draft -or -not $hasNotes)) {
+            try { $notes = Get-BacpacPlanReleaseNotes -Row $row -RepoRoot $RepoRoot -Repo $Repo }
+            catch { $out += [pscustomobject]@{ tag = $row.Tag; result = 'error'; detail = "release notes could not be generated ($($_.Exception.Message)); left $(if ($rel.draft) { 'unpublished' } else { 'as it is' })" }; continue }
+        }
+        $said = if ($notes) { "release notes against $(if ($notes.PreviousTag) { $notes.PreviousTag } else { 'no previous release (first of its line)' })" } else { '' }
+        if (-not $rel.draft) {
+            if (-not $notes) { $out += [pscustomobject]@{ tag = $row.Tag; result = 'present'; detail = "published, $($row.Asset) sha256 verified$(if (-not $owed) { '; published before the release-notes rule, left as it is' })" }; continue }
+            if ($VerifyOnly) { $out += [pscustomobject]@{ tag = $row.Tag; result = 'present'; detail = "published, $($row.Asset) sha256 verified; $notesAsset is missing, -Execute attaches the $said" }; continue }
+            try { Send-ReleaseNotesAsset -Repo $Repo -Release $rel -Json $notes.Json -Token $token }
+            catch { $out += [pscustomobject]@{ tag = $row.Tag; result = 'error'; detail = "published, but $notesAsset could not be attached: $($_.Exception.Message)" }; continue }
+            (@{ body = $notes.Markdown } | ConvertTo-Json -Compress) | gh api -X PATCH "repos/$Repo/releases/$($rel.id)" --input - > $null
+            if ($LASTEXITCODE -ne 0) { $out += [pscustomobject]@{ tag = $row.Tag; result = 'error'; detail = "$notesAsset attached, but the release body could not be written" }; continue }
+            $out += [pscustomobject]@{ tag = $row.Tag; result = 'present'; detail = "published, $($row.Asset) sha256 verified; $said attached (body and $notesAsset)" }; continue
+        }
+        if ($VerifyOnly) { $out += [pscustomobject]@{ tag = $row.Tag; result = 'verified'; detail = "draft carries $($row.Asset) with the recorded sha256; -Execute publishes it$(if ($notes) { " with the $said" })" }; continue }
+        if ($notes) {
+            try { Send-ReleaseNotesAsset -Repo $Repo -Release $rel -Json $notes.Json -Token $token }
+            catch { $out += [pscustomobject]@{ tag = $row.Tag; result = 'error'; detail = "$notesAsset could not be attached to the draft ($($_.Exception.Message)); left unpublished" }; continue }
+        }
+        $body = @{ draft = $false; tag_name = $row.Tag; name = $row.Title; body = $(if ($notes) { $notes.Markdown } else { $row.Notes }); make_latest = 'false' } | ConvertTo-Json -Compress
         $body | gh api -X PATCH "repos/$Repo/releases/$($rel.id)" --input - > $null
         if ($LASTEXITCODE -ne 0) { $out += [pscustomobject]@{ tag = $row.Tag; result = 'error'; detail = 'publishing the draft failed' }; continue }
-        $out += [pscustomobject]@{ tag = $row.Tag; result = 'published'; detail = "$($row.Asset) sha256 verified, draft published" }
+        $out += [pscustomobject]@{ tag = $row.Tag; result = 'published'; detail = "$($row.Asset) sha256 verified, draft published$(if ($notes) { " with the $said (body and $notesAsset)" })" }
     }
     return $out
 }
