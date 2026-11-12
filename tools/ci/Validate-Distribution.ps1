@@ -141,6 +141,7 @@ function Compare-DistVersion {
 . (Join-Path $PSScriptRoot 'Test-ManifestFiles.ps1')
 . (Join-Path $PSScriptRoot 'Bacpac.ps1')
 . (Join-Path $PSScriptRoot 'Ledger.ps1')
+. (Join-Path $PSScriptRoot 'Cpq.Contracts.ps1')
 
 $layersRoot   = Join-Path $RepoRoot 'layers'
 $editionsRoot = Join-Path $RepoRoot 'editions'
@@ -862,6 +863,22 @@ foreach ($file in $editionFiles) {
             & $log $true "ledger $($edition.name): $($plan.functions.Count) functions, $($plan.checkIds.Count) locked checks"
         } else { Write-Host "  [NOTE] ledger $($edition.name): no lock declared" }
     } catch { & $log $false "ledger $($file.BaseName): $($_.Exception.Message)" }
+}
+
+# 19. Optional CPQ carriage is typed and bound to its spec/package/behavior artifacts.
+# This validates declarations only. No package install, runtime probe or readiness verdict.
+$cpqRoot = Join-Path $RepoRoot 'contracts/cpq'
+try {
+    $cpqExample = Read-CpqJson (Join-Path $cpqRoot 'examples/neutral-workbench.json')
+    Assert-CpqSpec $cpqExample $cpqRoot
+    & $log $true 'CPQ contract example: typed spec and references'
+} catch { & $log $false "CPQ contract example: $($_.Exception.Message)" }
+foreach ($directory in $layerDirs) {
+    try {
+        $layer = Read-CpqJson (Join-Path $directory.FullName 'layer.json')
+        Test-CpqLayerContract $directory.FullName $layer $cpqRoot
+        if ($layer.ContainsKey('cpq')) { & $log $true "CPQ declaration $($directory.Name): artifacts and behavior binding" }
+    } catch { & $log $false "CPQ declaration $($directory.Name): $($_.Exception.Message)" }
 }
 
 Write-Host ""

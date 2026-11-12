@@ -1,0 +1,461 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CPQ behavior evidence envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "cpq-behavior-receipt"
+    },
+    "startedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$"
+    },
+    "completedAt": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(?:\\.\\d+)?Z$"
+    },
+    "before": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "hostId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "release": {
+          "type": "string",
+          "pattern": "^editions/[a-z0-9-]+/[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "distributionCommit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9.-]*$"
+        },
+        "deliveryRunId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9.-]*$"
+        },
+        "dwVersion": {
+          "const": "10.29.8"
+        },
+        "modelKey": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9.-]*$"
+        },
+        "modelId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "modelVersionId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "modelDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "specDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "catalogueDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "packageLockDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "behaviorDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "ledger": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "repo": {
+              "const": "dynamicweb/skills"
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            },
+            "manifest": {
+              "type": "string",
+              "pattern": "^skills/dw-demo-ledger/assets/releases/10\\.29\\.8/manifest\\.json$"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            },
+            "checkIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9.-]*$"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "repo",
+            "commit",
+            "manifest",
+            "digest",
+            "checkIds"
+          ]
+        },
+        "loadedAssemblies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "packageId": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+              },
+              "packageVersion": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[A-Za-z0-9.-]+)?$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+              },
+              "version": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[A-Za-z0-9.-]+)?$"
+              },
+              "tfm": {
+                "type": "string",
+                "pattern": "^net(?:standard|coreapp)?[0-9]+\\.[0-9]+$"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "packageId",
+              "packageVersion",
+              "name",
+              "version",
+              "tfm",
+              "sha256"
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "hostId",
+        "release",
+        "distributionCommit",
+        "runId",
+        "deliveryRunId",
+        "dwVersion",
+        "modelKey",
+        "modelId",
+        "modelVersionId",
+        "modelDigest",
+        "specDigest",
+        "catalogueDigest",
+        "packageLockDigest",
+        "behaviorDigest",
+        "ledger",
+        "loadedAssemblies"
+      ]
+    },
+    "after": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "hostId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "release": {
+          "type": "string",
+          "pattern": "^editions/[a-z0-9-]+/[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "distributionCommit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "runId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9.-]*$"
+        },
+        "deliveryRunId": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9.-]*$"
+        },
+        "dwVersion": {
+          "const": "10.29.8"
+        },
+        "modelKey": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9.-]*$"
+        },
+        "modelId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "modelVersionId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "modelDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "specDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "catalogueDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "packageLockDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "behaviorDigest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "ledger": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "repo": {
+              "const": "dynamicweb/skills"
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{40}$"
+            },
+            "manifest": {
+              "type": "string",
+              "pattern": "^skills/dw-demo-ledger/assets/releases/10\\.29\\.8/manifest\\.json$"
+            },
+            "digest": {
+              "type": "string",
+              "pattern": "^sha256:[a-f0-9]{64}$"
+            },
+            "checkIds": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9.-]*$"
+              },
+              "minItems": 1,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "repo",
+            "commit",
+            "manifest",
+            "digest",
+            "checkIds"
+          ]
+        },
+        "loadedAssemblies": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "packageId": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+              },
+              "packageVersion": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[A-Za-z0-9.-]+)?$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+              },
+              "version": {
+                "type": "string",
+                "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[A-Za-z0-9.-]+)?$"
+              },
+              "tfm": {
+                "type": "string",
+                "pattern": "^net(?:standard|coreapp)?[0-9]+\\.[0-9]+$"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^sha256:[a-f0-9]{64}$"
+              }
+            },
+            "required": [
+              "packageId",
+              "packageVersion",
+              "name",
+              "version",
+              "tfm",
+              "sha256"
+            ]
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "hostId",
+        "release",
+        "distributionCommit",
+        "runId",
+        "deliveryRunId",
+        "dwVersion",
+        "modelKey",
+        "modelId",
+        "modelVersionId",
+        "modelDigest",
+        "specDigest",
+        "catalogueDigest",
+        "packageLockDigest",
+        "behaviorDigest",
+        "ledger",
+        "loadedAssemblies"
+      ]
+    },
+    "observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "checkId": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9.-]*$"
+          },
+          "caseId": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9.-]*$"
+          },
+          "inputDigest": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "expectationDigest": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          },
+          "result": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "ERROR",
+              "UNVERIFIED"
+            ]
+          },
+          "read": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "surface": {
+                "enum": [
+                  "mcp",
+                  "admin-api",
+                  "runtime",
+                  "file",
+                  "sql"
+                ]
+              },
+              "operation": {
+                "type": "string",
+                "minLength": 1
+              },
+              "complete": {
+                "const": true
+              },
+              "nextCursor": {
+                "const": null
+              },
+              "expectedSubjects": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "observedSubjects": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "localOnly": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "surface",
+              "operation",
+              "complete",
+              "nextCursor",
+              "expectedSubjects",
+              "observedSubjects"
+            ],
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "surface": {
+                      "const": "sql"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "localOnly"
+                  ],
+                  "properties": {
+                    "localOnly": {
+                      "const": true
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "observed": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": true,
+            "description": "Sanitized observation payload, not executable instructions. Domain interpretation belongs to the registered check handler."
+          }
+        },
+        "required": [
+          "checkId",
+          "caseId",
+          "inputDigest",
+          "expectationDigest",
+          "result",
+          "read",
+          "observed"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "kind",
+    "startedAt",
+    "completedAt",
+    "before",
+    "after",
+    "observations"
+  ]
+}

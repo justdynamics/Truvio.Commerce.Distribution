@@ -1,0 +1,160 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CPQ trusted measurement context v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "hostId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "release": {
+      "type": "string",
+      "pattern": "^editions/[a-z0-9-]+/[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "distributionCommit": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{40}$"
+    },
+    "runId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9.-]*$"
+    },
+    "deliveryRunId": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9.-]*$"
+    },
+    "dwVersion": {
+      "const": "10.29.8"
+    },
+    "modelKey": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9.-]*$"
+    },
+    "modelId": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "modelVersionId": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "modelDigest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "specDigest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "catalogueDigest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "packageLockDigest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "behaviorDigest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "ledger": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "repo": {
+          "const": "dynamicweb/skills"
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{40}$"
+        },
+        "manifest": {
+          "type": "string",
+          "pattern": "^skills/dw-demo-ledger/assets/releases/10\\.29\\.8/manifest\\.json$"
+        },
+        "digest": {
+          "type": "string",
+          "pattern": "^sha256:[a-f0-9]{64}$"
+        },
+        "checkIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9.-]*$"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "repo",
+        "commit",
+        "manifest",
+        "digest",
+        "checkIds"
+      ]
+    },
+    "loadedAssemblies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "packageId": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+          },
+          "packageVersion": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[A-Za-z0-9.-]+)?$"
+          },
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+          },
+          "version": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:\\.[0-9]+)?(?:-[A-Za-z0-9.-]+)?$"
+          },
+          "tfm": {
+            "type": "string",
+            "pattern": "^net(?:standard|coreapp)?[0-9]+\\.[0-9]+$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^sha256:[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "packageId",
+          "packageVersion",
+          "name",
+          "version",
+          "tfm",
+          "sha256"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "hostId",
+    "release",
+    "distributionCommit",
+    "runId",
+    "deliveryRunId",
+    "dwVersion",
+    "modelKey",
+    "modelId",
+    "modelVersionId",
+    "modelDigest",
+    "specDigest",
+    "catalogueDigest",
+    "packageLockDigest",
+    "behaviorDigest",
+    "ledger",
+    "loadedAssemblies"
+  ]
+}

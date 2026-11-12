@@ -413,8 +413,52 @@
                   "pattern": "^[A-Za-z0-9 ._-]+$"
                 },
                 "description": "OPTIONAL, edition-level opt-in. The sample-data ids this probe's subject resolves through - rows the sample-data layer ships, each one a subject named in base.contract.json sampleData.guaranteedRows, which is what the probe actually binds to. behaviorProbes are LAYER asserts, so they run for every edition composing the layer; a probe that declares requiresFixtures runs ONLY where the composition sets sampleData true, and is recorded as a loud SKIP row naming those ids and a proving edition everywhere else. A probe is NEVER silently dropped: the SKIP row lands in pack-assert.json alongside the PASS rows. Declare it whenever the probe names an id the sample-data layer owns; omit it for probes that only assert page markup the feature layer itself ships."
+              },
+              "contract": {
+                "type": "string",
+                "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(?!/)[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)*\\.json$"
               }
-            }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "cpq-contract-v1"
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "contract"
+                  ],
+                  "properties": {
+                    "renderProof": {
+                      "const": true
+                    }
+                  },
+                  "not": {
+                    "required": [
+                      "requiresFixtures"
+                    ]
+                  }
+                }
+              },
+              {
+                "if": {
+                  "required": [
+                    "contract"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "kind": {
+                      "const": "cpq-contract-v1"
+                    }
+                  }
+                }
+              }
+            ]
           },
           "description": "Behavior probes Invoke-LayerAssert runs after activation. Authenticated kinds (authenticated-body-contains, cart-price, checkout-recurring) ride the canonical seeded buyer session (gate config packs.buyerUsername + the buyerPassword secret from git-ignored config/gate-secrets.local.json, falling back to the documented demo default) and FAIL closed when credentials are absent - never a silent skip."
         },
@@ -561,6 +605,52 @@
           "minLength": 1
         }
       }
+    },
+    "cpq": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "schemaVersion": {
+          "const": 1
+        },
+        "spec": {
+          "type": "string",
+          "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(?!/)[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)*\\.json$"
+        },
+        "packages": {
+          "type": "string",
+          "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(?!/)[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)*\\.json$"
+        },
+        "behavior": {
+          "type": "string",
+          "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(?!/)[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)*\\.json$"
+        }
+      },
+      "required": [
+        "schemaVersion",
+        "spec",
+        "packages",
+        "behavior"
+      ]
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "cpq"
+        ]
+      },
+      "then": {
+        "properties": {
+          "kind": {
+            "const": "feature"
+          }
+        },
+        "required": [
+          "asserts"
+        ]
+      }
+    }
+  ]
 }

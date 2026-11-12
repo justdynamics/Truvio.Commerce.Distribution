@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CPQ behavior-kind contract v1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "cpq-contract-v1"
+    },
+    "engineProfile": {
+      "const": "carrot-10.24.2-studio-0.7.0"
+    },
+    "specDigest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "packageLockDigest": {
+      "type": "string",
+      "pattern": "^sha256:[a-f0-9]{64}$"
+    },
+    "maxAgeSeconds": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 3600
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^cpq\\.[a-z][a-z0-9.-]+$"
+          },
+          "functionId": {
+            "type": "string",
+            "pattern": "^cpq\\.[a-z][a-z0-9-]+$"
+          },
+          "caseIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9.-]*$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "observation": {
+            "enum": [
+              "model",
+              "stored",
+              "cart",
+              "quote",
+              "page",
+              "studio",
+              "document",
+              "installation",
+              "spec"
+            ]
+          },
+          "minimumSubjects": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "id",
+          "functionId",
+          "caseIds",
+          "observation",
+          "minimumSubjects"
+        ]
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "kind",
+    "engineProfile",
+    "specDigest",
+    "packageLockDigest",
+    "maxAgeSeconds",
+    "checks"
+  ]
+}
