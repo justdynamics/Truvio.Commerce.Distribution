@@ -1,6 +1,6 @@
 {
   "name": "surface-headless",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "kind": "surface",
   "swiftVersion": "2.5.0",
   "repositoryName": "Headless",
@@ -25,5 +25,22 @@
     "System/Items/ItemType_Headless_Page.xml",
     "System/Items/ItemType_Headless_PageProperties.xml",
     "System/Items/ItemType_Headless_SpecSheet.xml"
-  ]
+  ],
+  "ledger": {
+    "provides": [
+      "content.websites",
+      "content.pages",
+      "content.paragraphs",
+      "content.item-types",
+      "search.repositories",
+      "search.index-queries",
+      "search.facets"
+    ],
+    "requires": [
+      "delivery.content-api",
+      "delivery.commerce-products-api",
+      "delivery.query-api"
+    ],
+    "comment": "Carries headless content, item types and repository definitions. It does not carry the API engine, authentication or an external storefront."
+  }
 }

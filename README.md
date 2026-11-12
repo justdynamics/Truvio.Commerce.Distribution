@@ -67,6 +67,10 @@ deserialize is the path.
 
 ## Policy
 
+Edition function coverage is pinned in each edition's `ledger` lock. See
+[Edition ledger locks](docs/LEDGER.md) for carriage declarations, validation and the
+matching skills runner checkout. A declaration does not advance gateProven.
+
 **Rolling latest-only Swift support.** This distribution targets the current latest Swift
 release and validates on that one version. When the next Swift ships, maintenance rolls
 forward and the prior version is dropped — no back-support, no multi-version matrix.

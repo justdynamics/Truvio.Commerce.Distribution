@@ -1,9 +1,20 @@
 {
   "name": "surface-dap-portal",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "kind": "surface",
   "swiftVersion": "2.5.0",
   "fragmentModes": [
     "replace"
-  ]
+  ],
+  "ledger": {
+    "provides": [
+      "content.websites",
+      "content.pages",
+      "content.paragraphs"
+    ],
+    "requires": [
+      "swift.design-installed"
+    ],
+    "comment": "Carries portal content. Product assets, permissions and API behavior are not inferred from a page shell."
+  }
 }

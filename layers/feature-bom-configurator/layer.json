@@ -1,6 +1,6 @@
 {
   "name": "feature-bom-configurator",
-  "version": "1.2.4",
+  "version": "1.2.5",
   "kind": "feature",
   "swiftVersion": "2.5.0",
   "csLedger": [],
@@ -38,11 +38,23 @@
         ],
         "expectedChildLines": 2,
         "renderProof": false,
-        "requiresFixtures": [ "TCPROD0042", "TCPROD0003", "TCPROD0052" ]
+        "requiresFixtures": [
+          "TCPROD0042",
+          "TCPROD0003",
+          "TCPROD0052"
+        ]
       }
     ],
     "criticalPaths": [
       "/en-us/kit-configurator"
     ]
+  },
+  "ledger": {
+    "provides": [],
+    "requires": [
+      "pim.bom",
+      "swift.cart-checkout"
+    ],
+    "comment": "Carries a configurator surface and fixture-bound cart assertion; BOM product rows belong to the base sample-data contract, not this layer."
   }
 }

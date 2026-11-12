@@ -21,6 +21,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Checkout the edition ledger revision (canonical LF)
+        uses: actions/checkout@v4
+        with:
+          repository: dynamicweb/skills
+          ref: 1072ba88149903f619cc13546922f7aed560b85e
+          path: .ledger-skills
 
       # The floor rule (versions/spine.json, owner ruling redesign-floors) compares this PR's floors
       # with the base branch, so the base must be readable: a shallow checkout carries only the
@@ -33,7 +39,7 @@ jobs:
 
       - name: Validate distribution contract (schema, edition refs, base contract, version spine + floor rule, protected strings, SPEC-06, INDEX.json + gateProven + provenTree proof key + retired tombstones)
         shell: pwsh
-        run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF"
+        run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF" -SkillsRoot .ledger-skills
         env:
           BASE_REF: ${{ github.base_ref || 'main' }}
 

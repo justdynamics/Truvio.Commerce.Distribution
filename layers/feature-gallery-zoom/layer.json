@@ -1,6 +1,6 @@
 {
   "name": "feature-gallery-zoom",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "kind": "feature",
   "swiftVersion": "2.5.0",
   "files": [
@@ -44,5 +44,12 @@
     ],
     "note": "Opt-in: compose it only for image-heavy demos. Needs theme-default 2.6.0 or later, whose DefaultHeadInclude.cshtml registers Custom/Addons/<name>/addon.css and addon.js for every add-on folder on disk; on an older theme the files are delivered and never loaded, which the first behaviorProbe catches. The layer.schema.json has no formal 'depends' field; the dependency is advisory. Files only: no fragmentModes, no customCode (front-end assets, no C#). Browser proof of the zoom is the Foundry GALLERY-ZOOM design probe on the PDP, which reports N/A on editions that do not compose this layer.",
     "vendored": "PhotoSwipe 5.4.4 (MIT, photoswipe/LICENSE.txt), dist/*.esm.min.js and photoswipe.css unmodified from the npm package. About 4 KB gzip loads with every page (addon.js 3 KB, addon.css 1 KB); the lightbox (4.5 KB), the core (16.4 KB) and the sheet (2.4 KB) load on the first open."
+  },
+  "ledger": {
+    "provides": [],
+    "requires": [
+      "swift.product-detail"
+    ],
+    "comment": "The shipped gallery addon and HTTP assertions have no exact function in the pinned ledger. Do not label all product-detail behavior as provided by this addon."
   }
 }
