@@ -1,5 +1,39 @@
 ﻿# Changelog — base
 
+## 4.5.0
+
+### A blank base for a PIM build (Foundry #1629)
+
+Three PIM builds on the base-only edition each repaired the same things before PIM features worked.
+What is a base row or file now ships with the base; what is not is recorded.
+
+- **The `Images` asset category is named in the default language.** New filtered Replace
+  `EcomDetailsGroupTranslation` (FILTER-04, one row): group `1`, language `ENU`, `Images`. The stock
+  wizard names its `Images` group in `LANG1` only and the base makes `ENU` the default language, so
+  the ledger check `pim.documents.category-names` failed on a blank build with no build mistake.
+  The row was a sample-data merge row in sample-data 6.6.2 (Distribution #137) and moves here;
+  sample-data 6.6.3 drops it, so one layer owns the key. Column shape and key as sample-data 6.6.2
+  read them from a blank DW 10.29.8 database. 23 `replace` SqlTable sets, 747 rows.
+- **`ProductsBackend` builds from its own task.** New `repositories/ProductsBackend/Build+Index.task`,
+  declared in `layer.json` `repositories`: byte-identical to the Swift 2.5.0 release's
+  `ProductsFrontend` task (stock `IndexBuilderTaskProvider`, `Full` build of `Products.index`,
+  daily). The Swift release ships `ProductsBackend/Products.index` with no task. The base's first
+  disk file since 3.5.3; it replaces no Swift file and the base ships no `.index`.
+- **Not shipped: `SkipCompletionRules` and the Completeness feature flag.** The setting is an element
+  of the Swift release's own `ProductsBackend/Products.index`, not a GlobalSettings path, so the
+  `deliveryTarget.hostFiles.globalSettings.required` mechanism cannot carry it; shipping it would
+  mean a base-owned copy of a Swift release file. Recorded in `repositories.productsBackend`
+  `notShipped` and in BASE.md. The contract line under `sampleData.guaranteedRows.completenessRules` is unchanged.
+
+`base.contract.json` 3.5.0 (additive): `baseOwnedTables.replaceFiltered` FILTER-04;
+`deliveryTarget.declaredByDistribution` entry for `EcomDetailsGroupTranslation`; the `wizardSeed`
+`Images` line and `hostFiles.note` name the two additions; new `repositories.productsBackend`; the
+`description` names the task file. No floor, id rule or existing guarantee changes.
+
+Every edition pins `base@4.5.0`. Not gate-proven: every edition needs a re-prove on this version.
+
+4.4.1 changed layer metadata only (the `ledger` carriage block); no row or file change.
+
 ## 4.4.0
 
 ### Swift 2.5.0 (Foundry #1535, owner answer 2026-10-20)

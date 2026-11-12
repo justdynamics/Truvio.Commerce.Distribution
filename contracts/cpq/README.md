@@ -197,7 +197,12 @@ names generated compiler output, identity map, case fixtures and content intent 
 A ready declaration cannot carry candidate blockers or artifacts.
 
 `Test-CpqLayerContract -ForDelivery` refuses candidates with the named reasons. A candidate
-edition must repeat every layer blocker and cannot claim gate proof. Nothing sets or changes
+edition must carry exactly the blockers its candidate layers declare (same id and reason, both
+directions) and cannot claim gate proof. The layer's candidate package evidence must equal
+`packages.candidate.lock.json` here, and it keeps the offline rules that apply to it
+(`Assert-CpqCandidatePackages`): engine profile identities and versions, the MCP floor, one
+assembly per name, an entry path that follows from the assembly name, well-formed digests and
+`installedMatchesPackage` agreeing with them. The digest values are not verifiable offline. Nothing sets or changes
 an existing edition's proof. CPQ editions lock the checks of their provided functions **and**
 the CPQ prerequisites; non-CPQ editions retain their existing selection semantics.
 

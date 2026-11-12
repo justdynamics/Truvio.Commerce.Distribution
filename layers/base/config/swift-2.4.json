@@ -123,6 +123,14 @@
       "_why": "Replace, filtered to the reference_category rows only, for the same reason as the parent predicate: the ENU display name 'Reference category' ships with the row it belongs to, while the tc_* translations stay sample-data-owned merge rows. The Foundry gate's own seed is IF NOT EXISTS-guarded on the category id, so a gated host that already carries a LANG1 row is unaffected (Foundry #1304)."
     },
     {
+      "name": "Images asset category name",
+      "mode": "Replace",
+      "providerType": "SqlTable",
+      "table": "EcomDetailsGroupTranslation",
+      "where": "DetailsGroupTranslationGroupId = 1 AND DetailsGroupTranslationLanguageId = 'ENU'",
+      "_why": "Replace, filtered to ONE row: the ENU name 'Images' of the asset category the stock DW10 setup wizard creates (EcomDetailsGroup 1). The wizard names its group in LANG1 only, and the base makes ENU the default language (EcomLanguages), so on every delivered database the stock category had no name in the default language (Foundry #1629: the ledger check pim.documents.category-names failed on a base-only build with no build mistake). Filtered to group 1 and ENU: the wizard's own LANG1 row is not harvested, and the names of every other asset category belong to the layer that ships the category (sample-data ships Manuals 100111 as merge rows). Keyed by group id and language id, the table's primary key; no identity column. The row was a sample-data merge row in 6.6.2 and moved here, so a composition without sample data carries it too."
+    },
+    {
       "name": "EcomPayments",
       "mode": "Replace",
       "providerType": "SqlTable",

@@ -106,6 +106,14 @@ Checks (all fail-closed; any failure -> exit 1):
                         its `releaseNotes` record { schema, previousTag }, the offline trace that its
                         release ships generated notes; the releases published before the rule
                         (Get-ReleaseNotesExemptTag) need none. An entry without one FAILs.
+ 18. Ledger locks     - (docs/LEDGER.md, Distribution #132) a declared edition lock equals the check
+                        union of its carriage at the exact pinned skills commit and LF snapshot
+                        digest (tools/ci/Ledger.ps1). A locked check that can never pass at that
+                        commit FAILs unless contracts/ledger/exceptions.json names it (candidate
+                        editions only report). Against the merge base (-SpineBaseRef) a removed lock,
+                        locked check, layer ledger block or provided function FAILs unless the same
+                        change adds a removal entry with a named ruling. A gateProven edition must
+                        declare a lock.
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -862,8 +870,19 @@ if ($index) {
     }
 }
 
-# 18. A ledger lock is opt-in, but a declared lock fails closed. Unknown carriage,
-# wrong snapshot bytes and a missing/expanded check set cannot inherit an old proof.
+# 18. A ledger lock is opt-in until an edition has one or is gateProven; a declared lock fails closed. Unknown
+# carriage, wrong snapshot bytes and a missing/expanded check set cannot inherit an old proof.
+# (Distribution #132) A locked check that can never pass at the locked commit FAILs (rule list:
+# Get-LedgerUnexecutableCheck) unless contracts/ledger/exceptions.json names it; a candidate edition only reports.
+$ledgerExceptions = $null
+try {
+    $ledgerRegister = Join-Path $RepoRoot 'contracts/ledger/exceptions.json'
+    $ledgerExceptions = ConvertFrom-LedgerExceptions $(if (Test-Path -LiteralPath $ledgerRegister -PathType Leaf) { Get-Content -LiteralPath $ledgerRegister -Raw } else { '' })
+    $ledgerEditionNames = @($editionFiles | ForEach-Object { $_.BaseName })
+    foreach ($entry in $ledgerExceptions.unexecutable) {
+        if ($entry.edition -cnotin $ledgerEditionNames) { & $log $false "ledger exceptions: unexecutable entry names unknown edition '$($entry.edition)'" }
+    }
+} catch { & $log $false "ledger exceptions: $($_.Exception.Message)" }
 foreach ($file in $editionFiles) {
     try {
         $edition=Get-Content -LiteralPath $file.FullName -Raw|ConvertFrom-Json -AsHashtable
@@ -871,9 +890,22 @@ foreach ($file in $editionFiles) {
         if ($edition.ContainsKey('ledger')) {
             $plan=Get-EditionLedgerPlan -DistributionRoot $RepoRoot -Edition $edition -SkillsRoot $SkillsRoot -SkillsRootsByCommit $SkillsRootsByCommit
             & $log $true "ledger $($edition.name): $($plan.functions.Count) functions, $($plan.checkIds.Count) locked checks"
+            if ($ledgerExceptions) {
+                foreach ($r in @(Test-EditionLedgerExecutable -Edition $edition -Plan $plan -Exceptions $ledgerExceptions)) {
+                    if ($r.note) { Write-Host "  [NOTE] $($r.msg)" } else { & $log $r.ok $r.msg }
+                }
+            }
         } else { Write-Host "  [NOTE] ledger $($edition.name): no lock declared" }
     } catch { & $log $false "ledger $($file.BaseName): $($_.Exception.Message)" }
 }
+# 18b. (Distribution #132) Removing a lock, a locked check or a layer's ledger carriage FAILs against the same
+# base the floor rule reads (-SpineBaseRef, merge base when history allows), unless the change itself adds a
+# removal entry with a named ruling to contracts/ledger/exceptions.json. A gateProven edition must carry a lock.
+try {
+    $ledgerBase = if ([string]::IsNullOrWhiteSpace($SpineBaseRef)) { @{ state = 'skipped'; label = '(none)'; record = $null } } else { Get-BaseLedgerRecord -RepoRoot $RepoRoot -BaseRef $SpineBaseRef }
+    foreach ($r in @(Test-LedgerRemoval -Head (Get-LedgerRecord -RepoRoot $RepoRoot) -Base $ledgerBase.record -BaseState $ledgerBase.state -BaseLabel $ledgerBase.label `
+            -GateProven @(Get-GateProvenEditionName $(if ($index) { $index.gateProven })))) { & $log $r.ok $r.msg }
+} catch { & $log $false "ledger removal: $($_.Exception.Message)" }
 
 # 19. Optional CPQ carriage is typed and bound to its spec/package/behavior artifacts.
 # This validates declarations only. No package install, runtime probe or readiness verdict.
