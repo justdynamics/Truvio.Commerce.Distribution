@@ -1,0 +1,80 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "CPQ non-installable package evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "kind",
+    "status",
+    "deployable",
+    "engineProfile",
+    "packages",
+    "gaps"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "kind": {
+      "const": "cpq-packages-candidate"
+    },
+    "status": {
+      "const": "candidate"
+    },
+    "deployable": {
+      "const": false
+    },
+    "engineProfile": {
+      "const": "carrot-10.24.2-studio-0.7.0"
+    },
+    "packages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "version",
+          "origin",
+          "assemblies"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "origin": {
+            "type": "string",
+            "minLength": 1
+          },
+          "assemblies": {
+            "type": "array",
+            "minItems": 1
+          }
+        }
+      }
+    },
+    "supportingInstalledFiles": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "excludedFiles": {
+      "type": "array"
+    },
+    "gaps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 10
+      }
+    }
+  }
+}

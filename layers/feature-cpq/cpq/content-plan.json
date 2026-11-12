@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "status": "candidate",
+  "applyAllowed": false,
+  "modelKey": "neutral-workbench",
+  "catalogue": [
+    {
+      "key": "WB-S",
+      "price": "100.00",
+      "cost": "60.00"
+    },
+    {
+      "key": "WB-L",
+      "price": "150.00",
+      "cost": "90.00"
+    },
+    {
+      "key": "WB-WHEELS",
+      "price": "30.00",
+      "cost": "15.00"
+    },
+    {
+      "key": "WB-DRAWER",
+      "price": "20.00",
+      "cost": "10.00"
+    }
+  ],
+  "context": {
+    "shopRef": "cpq-demo-shop",
+    "languageRef": "cpq-demo-language",
+    "currency": "EUR",
+    "priceBasis": "ex-vat",
+    "decimalPlaces": 2,
+    "rounding": "half-up",
+    "quantity": 1,
+    "erp": "none"
+  },
+  "page": {
+    "navigationTag": "CpqWorkbench",
+    "theme": "cpq-neutral",
+    "tabs": [
+      "Build"
+    ],
+    "optionColumns": 2
+  },
+  "output": {
+    "persistence": "card",
+    "handoff": [
+      "cart",
+      "local-quote"
+    ],
+    "document": "local-docx",
+    "routing": false,
+    "visual3d": false
+  },
+  "ownership": {
+    "sql": "Compiler identity-map.json only; retain old version rows. No broad CPQ table import.",
+    "content": "Dedicated neutral configurator, card/quote and document bindings. No page or owner IDs borrowed from demos.",
+    "files": "Future neutral stylesheet through the vendor custom hook; no vendor templates or engine binaries."
+  },
+  "requiresBindings": [
+    "shop",
+    "language",
+    "catalogue-and-prices",
+    "configurator-page",
+    "card-page",
+    "local-cart",
+    "local-quote",
+    "owner-a",
+    "owner-b",
+    "document-template"
+  ],
+  "excludes": [
+    "ERP requests",
+    "routing",
+    "3D",
+    "local hotfix",
+    "feature-bom-configurator",
+    "customer data"
+  ]
+}

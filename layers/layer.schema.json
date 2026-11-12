@@ -19,7 +19,7 @@
     },
     "version": {
       "type": "string",
-      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+(?:-candidate)?$",
       "description": "Semver release version; component of the layers/<name>/<version> annotated tag."
     },
     "kind": {
@@ -31,7 +31,7 @@
         "sample-data",
         "surface"
       ],
-      "description": "Layer classification (prefix = kind; the layer dir name carries the kind as its prefix — catalog-*, feature-*, surface-*, theme-*; base and sample-data are singletons). base = the one privileged layer every edition builds on (ships the base contract). catalog = shop catalog content (groups/products/prices). feature = a customization tier bundle (may carry src/ .cs). theme = disk-overlay-only presentation (files/ mirroring System/Styles per SPEC-06; no DB data), applied via themes[] — the distribution ships ONE default theme (theme-default: the neutral starting point every customer re-skin overwrites). sample-data = optional demo content (orders/users/contract prices). surface = what a frontend leg needs (e.g. headless content + itemtypes + repositories)."
+      "description": "Layer classification (prefix = kind; the layer dir name carries the kind as its prefix \u2014 catalog-*, feature-*, surface-*, theme-*; base and sample-data are singletons). base = the one privileged layer every edition builds on (ships the base contract). catalog = shop catalog content (groups/products/prices). feature = a customization tier bundle (may carry src/ .cs). theme = disk-overlay-only presentation (files/ mirroring System/Styles per SPEC-06; no DB data), applied via themes[] \u2014 the distribution ships ONE default theme (theme-default: the neutral starting point every customer re-skin overwrites). sample-data = optional demo content (orders/users/contract prices). surface = what a frontend leg needs (e.g. headless content + itemtypes + repositories)."
     },
     "swiftVersion": {
       "type": "string",
@@ -563,7 +563,7 @@
         },
         "withoutCompile": {
           "type": "string",
-          "description": "The behavior the layer GUARANTEES with the sources NOT compiled (pure data on the native platform) — the zero-code headline. e.g. contract pricing enforced by the stock DefaultPriceProvider."
+          "description": "The behavior the layer GUARANTEES with the sources NOT compiled (pure data on the native platform) \u2014 the zero-code headline. e.g. contract pricing enforced by the stock DefaultPriceProvider."
         },
         "withCompile": {
           "type": "string",
@@ -574,7 +574,7 @@
           "description": "OPTIONAL human/skill-readable pointer to the opt-in compile recipe (the dynamicweb-skills feature-layer compile step)."
         }
       },
-      "description": "OPTIONAL declaration that a feature layer ships compile-optional custom code (decision D3). Documents what works as data-only (withoutCompile) vs after the opt-in compile (withCompile). Only feature layers carrying src/ populate it; layers with no custom code omit it. Advisory: never gates activation — the gate still compiles + proves the full behavior; this block tells downstream distribution consumers what is optional."
+      "description": "OPTIONAL declaration that a feature layer ships compile-optional custom code (decision D3). Documents what works as data-only (withoutCompile) vs after the opt-in compile (withCompile). Only feature layers carrying src/ populate it; layers with no custom code omit it. Advisory: never gates activation \u2014 the gate still compiles + proves the full behavior; this block tells downstream distribution consumers what is optional."
     },
     "ledger": {
       "type": "object",
@@ -624,6 +624,62 @@
         "behavior": {
           "type": "string",
           "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(?!/)[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)*\\.json$"
+        },
+        "status": {
+          "enum": [
+            "candidate",
+            "ready"
+          ]
+        },
+        "blockers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "reason"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]+$"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 10
+              }
+            }
+          }
+        },
+        "candidateArtifacts": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "compiled",
+            "identityMap",
+            "content",
+            "cases"
+          ],
+          "properties": {
+            "compiled": {
+              "type": "string",
+              "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(?!/)[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)*\\.json$"
+            },
+            "identityMap": {
+              "type": "string",
+              "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(?!/)[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)*\\.json$"
+            },
+            "content": {
+              "type": "string",
+              "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(?!/)[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)*\\.json$"
+            },
+            "cases": {
+              "type": "string",
+              "pattern": "^(?!.*(?:^|/)\\.\\.(?:/|$))(?!/)[A-Za-z0-9_-]+(?:/[A-Za-z0-9_.-]+)*\\.json$"
+            }
+          }
         }
       },
       "required": [
@@ -631,6 +687,42 @@
         "spec",
         "packages",
         "behavior"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "candidate"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "blockers",
+              "candidateArtifacts"
+            ]
+          },
+          "else": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "blockers"
+                  ]
+                },
+                {
+                  "required": [
+                    "candidateArtifacts"
+                  ]
+                }
+              ]
+            }
+          }
+        }
       ]
     }
   },
@@ -650,6 +742,58 @@
         "required": [
           "asserts"
         ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "version": {
+            "pattern": "-candidate$"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "cpq"
+        ],
+        "properties": {
+          "cpq": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "candidate"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "cpq"
+        ],
+        "properties": {
+          "cpq": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "candidate"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "version": {
+            "pattern": "-candidate$"
+          }
+        }
       }
     }
   ]

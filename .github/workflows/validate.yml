@@ -29,6 +29,13 @@ jobs:
           ref: 1072ba88149903f619cc13546922f7aed560b85e
           path: .ledger-skills
 
+      - name: Checkout the CPQ candidate ledger revision (canonical LF)
+        uses: actions/checkout@v4
+        with:
+          repository: dynamicweb/skills
+          ref: bc55885f71cbb34c71a451078ff1b6477a5d816b
+          path: .ledger-skills-cpq
+
       # The floor rule (versions/spine.json, owner ruling redesign-floors) compares this PR's floors
       # with the base branch, so the base must be readable: a shallow checkout carries only the
       # merge commit. On a push to main the base is main itself and nothing can be raised.
@@ -40,7 +47,7 @@ jobs:
 
       - name: Validate distribution contract (schema, edition refs, base contract, version spine + floor rule, protected strings, SPEC-06, INDEX.json + gateProven + provenTree proof key + retired tombstones)
         shell: pwsh
-        run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF" -SkillsRoot .ledger-skills
+        run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF" -SkillsRoot .ledger-skills -SkillsRootsByCommit @{bc55885f71cbb34c71a451078ff1b6477a5d816b=".ledger-skills-cpq"}
         env:
           BASE_REF: ${{ github.base_ref || 'main' }}
 

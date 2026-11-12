@@ -25,8 +25,31 @@ function Read-CpqJson {
             foreach ($item in $Node.EnumerateArray()) { Assert-UniqueJsonKeys $item }
         }
     }
-    try { Assert-UniqueJsonKeys $document.RootElement } finally { $document.Dispose() }
-    return ConvertFrom-Json -InputObject $raw -AsHashtable -Depth 100 -ErrorAction Stop
+    # ConvertFrom-Json can materialize ISO strings as DateTime and normalize their
+    # fractional seconds on a later write. That changes a trusted receipt digest.
+    # Preserve JSON strings and array shape independently of PowerShell's DateKind default.
+    function ConvertFrom-CpqJsonNode([System.Text.Json.JsonElement]$Node) {
+        switch($Node.ValueKind.ToString()){
+            'Object' {
+                $map=[hashtable]::new([StringComparer]::Ordinal)
+                foreach($p in $Node.EnumerateObject()){$map[$p.Name]=ConvertFrom-CpqJsonNode $p.Value}
+                return $map
+            }
+            'Array' {return ,@(foreach($item in $Node.EnumerateArray()){ConvertFrom-CpqJsonNode $item})}
+            'String' {return $Node.GetString()}
+            'Number' {
+                $integer=0L;if($Node.TryGetInt64([ref]$integer)){return $integer}
+                $number=[decimal]0;if($Node.TryGetDecimal([ref]$number)){return $number}
+                return $Node.GetDouble()
+            }
+            'True' {return $true}
+            'False' {return $false}
+            'Null' {return ,$null}
+            default {throw 'Unsupported CPQ JSON value.'}
+        }
+    }
+    try { Assert-UniqueJsonKeys $document.RootElement; return ConvertFrom-CpqJsonNode $document.RootElement }
+    finally { $document.Dispose() }
 }
 
 function Assert-CpqSchema {
@@ -240,7 +263,7 @@ function Assert-CpqBehavior {
 }
 
 function Test-CpqLayerContract {
-    param([Parameter(Mandatory)][string]$LayerRoot, [Parameter(Mandatory)]$Layer, [Parameter(Mandatory)][string]$ContractRoot)
+    param([Parameter(Mandatory)][string]$LayerRoot, [Parameter(Mandatory)]$Layer, [Parameter(Mandatory)][string]$ContractRoot, [switch]$ForDelivery)
     $probes = @($Layer.asserts.behaviorProbes | Where-Object { $_.kind -like 'cpq-*' })
     if (-not $Layer.ContainsKey('cpq')) {
         if ($probes.Count) { throw 'CPQ probe requires a layer CPQ declaration.' }
@@ -252,7 +275,26 @@ function Test-CpqLayerContract {
     $packages = Read-CpqJson (Resolve-CpqContractPath $LayerRoot $Layer.cpq.packages)
     $behavior = Read-CpqJson (Resolve-CpqContractPath $LayerRoot $Layer.cpq.behavior)
     Assert-CpqSpec $spec $ContractRoot
-    Assert-CpqPackages $packages $ContractRoot
+    if($Layer.cpq.status -ceq 'candidate'){
+        if($Layer.version -notmatch '-candidate$'){throw 'Candidate layer requires a candidate version.'}
+        Assert-CpqSchema $packages (Join-Path $ContractRoot 'packages-candidate.schema.json')
+        $null=Get-CpqIdentityMap @($Layer.cpq.blockers) 'id'
+        $paths=$Layer.cpq.candidateArtifacts
+        $compiled=Read-CpqJson (Resolve-CpqContractPath $LayerRoot $paths.compiled)
+        $identity=Read-CpqJson (Resolve-CpqContractPath $LayerRoot $paths.identityMap)
+        $cases=Read-CpqJson (Resolve-CpqContractPath $LayerRoot $paths.cases)
+        $content=Read-CpqJson (Resolve-CpqContractPath $LayerRoot $paths.content)
+        $fresh=ConvertTo-CpqCandidate $spec $ContractRoot $identity
+        if((Get-CpqDigest $compiled) -cne (Get-CpqDigest $fresh) -or (Get-CpqDigest $identity) -cne (Get-CpqDigest $fresh.identityMap)){throw 'Candidate compiler artifacts are stale or altered.'}
+        if($cases.modelKey -cne $spec.id -or (Get-CpqDigest $cases.cases) -cne (Get-CpqDigest $spec.cases)){throw 'Candidate case fixtures differ from the spec.'}
+        if($content.status -cne 'candidate' -or $content.applyAllowed -ne $false -or $content.modelKey -cne $spec.id){throw 'Candidate content plan must be non-executable and model-bound.'}
+        foreach($key in @('catalogue','context','page','output')){if((Get-CpqDigest $content[$key]) -cne (Get-CpqDigest $spec[$key])){throw 'Candidate content intent differs from the spec.'}}
+
+        if($ForDelivery){throw ('CPQ candidate refused for delivery: '+(($Layer.cpq.blockers | ForEach-Object { $_.id+': '+$_.reason }) -join '; '))}
+    } else {
+        if($Layer.version -match '-candidate$'){throw 'Candidate version requires candidate status.'}
+        Assert-CpqPackages $packages $ContractRoot
+    }
     Assert-CpqBehavior $behavior $spec $packages $ContractRoot
     if ($probes.Count -ne 1 -or $probes[0].kind -cne 'cpq-contract-v1' -or $probes[0].contract -cne $Layer.cpq.behavior) { throw 'Layer requires one matching CPQ behavior probe.' }
     if ($probes[0].ContainsKey('renderProof') -and -not $probes[0].renderProof) { throw 'CPQ render proof cannot be disabled.' }

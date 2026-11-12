@@ -1,0 +1,81 @@
+{
+  "schemaVersion": 1,
+  "modelKey": "neutral-workbench",
+  "cases": [
+    {
+      "id": "small-fixed",
+      "answers": {
+        "Build_Size": "small",
+        "Build_Base": "fixed",
+        "Build_Drawers": 0
+      },
+      "expect": {
+        "valid": true,
+        "bom": {
+          "WB-S": 1
+        },
+        "sell": "100.00"
+      }
+    },
+    {
+      "id": "small-mobile",
+      "answers": {
+        "Build_Size": "small",
+        "Build_Base": "mobile",
+        "Build_Drawers": 1
+      },
+      "expect": {
+        "valid": true,
+        "bom": {
+          "WB-S": 1,
+          "WB-WHEELS": 1,
+          "WB-DRAWER": 1
+        },
+        "sell": "150.00"
+      }
+    },
+    {
+      "id": "large-discount",
+      "answers": {
+        "Build_Size": "large",
+        "Build_Base": "fixed",
+        "Build_Drawers": 2
+      },
+      "expect": {
+        "valid": true,
+        "bom": {
+          "WB-L": 1,
+          "WB-DRAWER": 2
+        },
+        "beforeDiscount": "190.00",
+        "sell": "171.00"
+      }
+    },
+    {
+      "id": "invalid-mobile",
+      "answers": {
+        "Build_Size": "large",
+        "Build_Base": "mobile",
+        "Build_Drawers": 0
+      },
+      "expect": {
+        "valid": false,
+        "canPersist": false,
+        "canHandoff": false
+      }
+    },
+    {
+      "id": "invalid-drawer-count",
+      "answers": {
+        "Build_Size": "small",
+        "Build_Base": "fixed",
+        "Build_Drawers": 3
+      },
+      "expect": {
+        "valid": false,
+        "canPersist": false,
+        "canHandoff": false
+      }
+    }
+  ]
+}

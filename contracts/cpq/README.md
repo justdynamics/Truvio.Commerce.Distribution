@@ -162,9 +162,28 @@ contract directory. Tests cover unknown fields/operators, missing/duplicate iden
 scope, package loader names, dependency closure, wrong hashes/locks/hosts, partial pages, stale
 or future receipts, mutation of observations, skipped fixtures and preserved failure outcomes.
 
-Later consumer work must add installation, apply, complete authorized read adapters and a bounded
-behavior producer. MCP comes first for equivalent complete reads; discover authenticated Admin
+The companion Foundry CPQ proving consumer supplies package installation, transactional owned-row staging and a bounded separate behavior producer. A characterized runtime/content adapter and complete skills handlers are still required for live proof. MCP comes first for equivalent complete reads; discover authenticated Admin
 queries next and use local-only SQL where needed. Studio's reviewed read/analyze tool pack
 enforces its `/admin/dynamo` context, so the external consumer cannot assume those tools are
 exposed on `/admin/mcp`. None of these schemas weakens that access policy. No host is needed to
 review this contract; the blank proving host is needed for engine experiments and delivery proof.
+
+
+## Candidate carriage
+
+A CPQ layer may use an explicit `status:candidate`, a `-candidate` version and named `blockers`.
+Its `packages` path then points to `packages-candidate.schema.json` evidence, whose kind, status
+and `deployable:false` prevent it being mistaken for `packages.schema.json`. The candidate also
+names generated compiler output, identity map, case fixtures and content intent under
+`candidateArtifacts`; validation regenerates and checks those artifacts against the spec.
+A ready declaration cannot carry candidate blockers or artifacts.
+
+`Test-CpqLayerContract -ForDelivery` refuses candidates with the named reasons. A candidate
+edition must repeat every layer blocker and cannot claim gate proof. Nothing sets or changes
+an existing edition's proof. CPQ editions lock the checks of their provided functions **and**
+the CPQ prerequisites; non-CPQ editions retain their existing selection semantics.
+
+The validator accepts `-SkillsRootsByCommit` for mixed exact revisions; CI checks out both the
+older edition lock and the CPQ lock. `TRUVIO_CPQ_SKILLS_PATH` or `.ledger-skills-cpq` is an optional
+additional checkout, selected only when its HEAD equals the requested full commit. Validation
+never fetches or moves a skills checkout. All selected snapshot bytes remain digest-checked.

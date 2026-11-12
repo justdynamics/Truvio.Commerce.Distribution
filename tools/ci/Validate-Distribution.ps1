@@ -119,6 +119,7 @@ param(
     [string]$RepoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path,
     [switch]$RegenerateIndex,
     [string]$SkillsRoot,
+    [hashtable]$SkillsRootsByCommit = @{},
     [string]$SpineBaseRef = 'origin/main'
 )
 $ErrorActionPreference = 'Stop'
@@ -188,7 +189,7 @@ foreach ($ln in @($manifests.Keys | Sort-Object)) {
 # Edition schema + reference resolution.
 $editionFiles = @(Get-ChildItem -LiteralPath $editionsRoot -File -Filter '*.json' -ErrorAction SilentlyContinue |
     Where-Object { $_.Name -ne 'edition.schema.json' })
-$refRx = '^(?<n>[a-z0-9-]+)@(?<v>[0-9]+\.[0-9]+\.[0-9]+)$'
+$refRx = '^(?<n>[a-z0-9-]+)@(?<v>[0-9]+\.[0-9]+\.[0-9]+(?:-candidate)?)$'
 foreach ($ef in $editionFiles) {
     $raw = Get-Content -LiteralPath $ef.FullName -Raw -Encoding utf8
     $ok = $false
@@ -649,7 +650,7 @@ function Get-ExpectedLiveEntries {
     foreach ($n in ($Manifests.Keys | Sort-Object)) {
         $m = $Manifests[$n]
         $dep = ($m.costHints -and $m.costHints.deprecated)
-        $e = [ordered]@{ name = "$($m.name)"; kind = "$($m.kind)"; version = "$($m.version)"; status = $(if ($dep) { 'deprecated' } else { 'active' }) }
+        $e = [ordered]@{ name = "$($m.name)"; kind = "$($m.kind)"; version = "$($m.version)"; status = $(if ($dep) { 'deprecated' } elseif ($m.cpq.status -eq 'candidate') { 'candidate' } else { 'active' }) }
         if ($dep -and $m.costHints.supersededBy) { $e.supersededBy = @($m.costHints.supersededBy | ForEach-Object { "$_" }) }
         $out += [pscustomobject]$e
     }
@@ -859,8 +860,9 @@ if ($index) {
 foreach ($file in $editionFiles) {
     try {
         $edition=Get-Content -LiteralPath $file.FullName -Raw|ConvertFrom-Json -AsHashtable
+        if($edition.delivery.status -ceq 'candidate' -and $edition.name -in @($index.gateProven.editions)){throw 'Candidate edition cannot be gateProven.'}
         if ($edition.ContainsKey('ledger')) {
-            $plan=Get-EditionLedgerPlan -DistributionRoot $RepoRoot -Edition $edition -SkillsRoot $SkillsRoot
+            $plan=Get-EditionLedgerPlan -DistributionRoot $RepoRoot -Edition $edition -SkillsRoot $SkillsRoot -SkillsRootsByCommit $SkillsRootsByCommit
             & $log $true "ledger $($edition.name): $($plan.functions.Count) functions, $($plan.checkIds.Count) locked checks"
         } else { Write-Host "  [NOTE] ledger $($edition.name): no lock declared" }
     } catch { & $log $false "ledger $($file.BaseName): $($_.Exception.Message)" }

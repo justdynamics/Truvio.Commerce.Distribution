@@ -1,0 +1,493 @@
+{
+  "modelId": 262932398,
+  "compiler": "cpq-native/v1",
+  "specVersion": 1,
+  "modelVersionId": 692067885,
+  "schemaVersion": 1,
+  "applyAllowed": false,
+  "specDigest": "sha256:d70b5a9ed74386639be06ec51d9b218f9c5aa144e3aebfe5e5be8e8a7b463ab6",
+  "rows": [
+    {
+      "values": {
+        "ModelId": 262932398,
+        "ModelDefault": false,
+        "ModelName": "neutral-workbench",
+        "ModelDescription": "",
+        "ModelSeq": 0
+      },
+      "id": 262932398,
+      "table": "CPQModel"
+    },
+    {
+      "values": {
+        "ModelVersionSetting": "",
+        "ModelVersionDescription": "",
+        "ModelVersionActive": false,
+        "ModelVersionModelId": 262932398,
+        "ModelVersionNumber": "1",
+        "ModelVersionId": 692067885
+      },
+      "id": 692067885,
+      "table": "CPQModelVersion"
+    },
+    {
+      "values": {
+        "GroupCondition": "",
+        "GroupId": 614747714,
+        "GroupParentId": "0",
+        "GroupName": "Build",
+        "GroupModelVersionId": 692067885,
+        "GroupMode": "input",
+        "GroupLabel": "Your workbench",
+        "GroupEnabled": true,
+        "GroupTable": false,
+        "GroupArray": false,
+        "GroupSeq": 10
+      },
+      "id": 614747714,
+      "table": "CPQGroup"
+    },
+    {
+      "values": {
+        "InputName": "Build_Size",
+        "InputReadOnly": false,
+        "InputLabel": "Build_Size",
+        "InputSeq": 1,
+        "InputDataSource": "",
+        "InputRequired": true,
+        "InputDataParameters": "",
+        "InputSettings": "[{\"name\":\"option-columns\",\"type\":\"string\",\"value\":\"2\"}]",
+        "InputGroupId": 614747714,
+        "InputType": "radiobox",
+        "InputEnabled": true,
+        "InputOptions": "[{\"disabled\":false,\"label\":\"Small\",\"seq\":1,\"value\":\"small\",\"visible\":true},{\"disabled\":false,\"label\":\"Large\",\"seq\":2,\"value\":\"large\",\"visible\":true}]",
+        "InputDefaultValue": "small",
+        "InputId": 228282929,
+        "InputVisible": true
+      },
+      "id": 228282929,
+      "table": "CPQInput"
+    },
+    {
+      "values": {
+        "InputName": "Build_Base",
+        "InputReadOnly": false,
+        "InputLabel": "Build_Base",
+        "InputSeq": 2,
+        "InputDataSource": "",
+        "InputRequired": true,
+        "InputDataParameters": "",
+        "InputSettings": "[{\"name\":\"option-columns\",\"type\":\"string\",\"value\":\"2\"}]",
+        "InputGroupId": 614747714,
+        "InputType": "select",
+        "InputEnabled": true,
+        "InputOptions": "[{\"disabled\":false,\"label\":\"Fixed feet\",\"seq\":1,\"value\":\"fixed\",\"visible\":true},{\"disabled\":false,\"label\":\"Wheels\",\"seq\":2,\"value\":\"mobile\",\"visible\":true}]",
+        "InputDefaultValue": "fixed",
+        "InputId": 556935122,
+        "InputVisible": true
+      },
+      "id": 556935122,
+      "table": "CPQInput"
+    },
+    {
+      "values": {
+        "InputName": "Build_Drawers",
+        "InputReadOnly": false,
+        "InputLabel": "Build_Drawers",
+        "InputSeq": 3,
+        "InputDataSource": "",
+        "InputRequired": true,
+        "InputDataParameters": "",
+        "InputSettings": "[{\"name\":\"min\",\"type\":\"string\",\"value\":\"0\"},{\"name\":\"max\",\"type\":\"string\",\"value\":\"2\"},{\"name\":\"step\",\"type\":\"string\",\"value\":\"1\"}]",
+        "InputGroupId": 614747714,
+        "InputType": "number",
+        "InputEnabled": true,
+        "InputOptions": "[]",
+        "InputDefaultValue": "0",
+        "InputId": 303943303,
+        "InputVisible": true
+      },
+      "id": 303943303,
+      "table": "CPQInput"
+    },
+    {
+      "values": {
+        "InputName": "Build_Label",
+        "InputReadOnly": false,
+        "InputLabel": "Build_Label",
+        "InputSeq": 4,
+        "InputDataSource": "",
+        "InputRequired": false,
+        "InputDataParameters": "",
+        "InputSettings": "[]",
+        "InputGroupId": 614747714,
+        "InputType": "text",
+        "InputEnabled": true,
+        "InputOptions": "[]",
+        "InputDefaultValue": "",
+        "InputId": 403897189,
+        "InputVisible": true
+      },
+      "id": 403897189,
+      "table": "CPQInput"
+    },
+    {
+      "values": {
+        "GroupCondition": "",
+        "GroupId": 465951527,
+        "GroupParentId": "0",
+        "GroupName": "Compiler_InputRules",
+        "GroupModelVersionId": 692067885,
+        "GroupMode": "input_rule",
+        "GroupLabel": "Input rules",
+        "GroupEnabled": true,
+        "GroupTable": false,
+        "GroupArray": false,
+        "GroupSeq": 10000
+      },
+      "id": 465951527,
+      "table": "CPQGroup"
+    },
+    {
+      "values": {
+        "InputRuleConditions": "[{\"and\":[[\"formInput[Build_Size]\",\"eq\",\"large\"]],\"group_operator\":\"AND\"}]",
+        "InputRuleDescription": "large-base-options",
+        "InputRuleEnabled": true,
+        "InputRuleType": "CPQOptions",
+        "InputRuleActions": "[{\"action\":\"enableoptions\",\"options\":[\"fixed\"],\"target\":\"formInput[Build_Base]\"},{\"action\":\"disableoptions\",\"options\":[\"mobile\"],\"target\":\"formInput[Build_Base]\"}]",
+        "InputRuleGroupId": 465951527,
+        "InputRuleActionsElse": "[{\"action\":\"enableoptions\",\"options\":[\"fixed\",\"mobile\"],\"target\":\"formInput[Build_Base]\"}]",
+        "InputRuleStop": false,
+        "InputRuleSeq": 10,
+        "InputRuleId": 962171880
+      },
+      "id": 962171880,
+      "table": "CPQInputRule"
+    },
+    {
+      "values": {
+        "GroupCondition": "",
+        "GroupId": 727624772,
+        "GroupParentId": "0",
+        "GroupName": "Compiler_BOM",
+        "GroupModelVersionId": 692067885,
+        "GroupMode": "bom_rule",
+        "GroupLabel": "BOM",
+        "GroupEnabled": true,
+        "GroupTable": false,
+        "GroupArray": false,
+        "GroupSeq": 10001
+      },
+      "id": 727624772,
+      "table": "CPQGroup"
+    },
+    {
+      "values": {
+        "BOMRuleId": 749840820,
+        "BOMRuleBomItems": "[{\"no\":\"WB-S\",\"qty\":\"1\",\"type\":\"Item\"}]",
+        "BOMRuleGroupId": 727624772,
+        "BOMRuleConditions": "[{\"and\":[[\"formInput[Build_Size]\",\"eq\",\"small\"]],\"group_operator\":\"AND\"}]",
+        "BOMRuleEnabled": true,
+        "BOMRuleSeq": 1,
+        "BOMRuleDescription": "small-frame"
+      },
+      "id": 749840820,
+      "table": "CPQBOMRule"
+    },
+    {
+      "values": {
+        "BOMRuleId": 808009363,
+        "BOMRuleBomItems": "[{\"no\":\"WB-L\",\"qty\":\"1\",\"type\":\"Item\"}]",
+        "BOMRuleGroupId": 727624772,
+        "BOMRuleConditions": "[{\"and\":[[\"formInput[Build_Size]\",\"eq\",\"large\"]],\"group_operator\":\"AND\"}]",
+        "BOMRuleEnabled": true,
+        "BOMRuleSeq": 2,
+        "BOMRuleDescription": "large-frame"
+      },
+      "id": 808009363,
+      "table": "CPQBOMRule"
+    },
+    {
+      "values": {
+        "BOMRuleId": 257035749,
+        "BOMRuleBomItems": "[{\"no\":\"WB-WHEELS\",\"qty\":\"1\",\"type\":\"Item\"}]",
+        "BOMRuleGroupId": 727624772,
+        "BOMRuleConditions": "[{\"and\":[[\"formInput[Build_Base]\",\"eq\",\"mobile\"]],\"group_operator\":\"AND\"}]",
+        "BOMRuleEnabled": true,
+        "BOMRuleSeq": 3,
+        "BOMRuleDescription": "wheels"
+      },
+      "id": 257035749,
+      "table": "CPQBOMRule"
+    },
+    {
+      "values": {
+        "BOMRuleId": 809753691,
+        "BOMRuleBomItems": "[{\"no\":\"WB-DRAWER\",\"qty\":\"formInput[Build_Drawers]\",\"type\":\"Item\"}]",
+        "BOMRuleGroupId": 727624772,
+        "BOMRuleConditions": "[{\"and\":[[\"formInput[Build_Drawers]\",\"gt\",0]],\"group_operator\":\"AND\"}]",
+        "BOMRuleEnabled": true,
+        "BOMRuleSeq": 4,
+        "BOMRuleDescription": "drawers"
+      },
+      "id": 809753691,
+      "table": "CPQBOMRule"
+    },
+    {
+      "values": {
+        "Description": "large-two-drawers",
+        "CPQPriceRuleSort": 10,
+        "Conditions": "[{\"and\":[[\"formInput[Build_Size]\",\"eq\",\"large\"],[\"formInput[Build_Drawers]\",\"eq\",2]],\"group_operator\":\"AND\"}]",
+        "DiscountType": "Percent",
+        "Enabled": true,
+        "CPQPriceRuleId": 984238648,
+        "CPQPriceRuleModelVersionId": 692067885,
+        "Margin": "",
+        "Discount": "10.00"
+      },
+      "id": 984238648,
+      "table": "CPQPriceRule"
+    }
+  ],
+  "kind": "cpq-compiler-candidate",
+  "deliveryRequirements": [
+    {
+      "status": "unresolved",
+      "inputs": [
+        {
+          "required": true,
+          "input": "Build_Size"
+        },
+        {
+          "required": true,
+          "input": "Build_Base"
+        },
+        {
+          "max": 2,
+          "required": true,
+          "min": 0,
+          "input": "Build_Drawers",
+          "step": 1
+        },
+        {
+          "required": false,
+          "input": "Build_Label",
+          "maxLength": 40,
+          "use": "display-only"
+        }
+      ],
+      "constraints": [
+        {
+          "id": "mobile-needs-small",
+          "when": {
+            "eq": [
+              "$input.Build_Base",
+              "mobile"
+            ]
+          },
+          "require": {
+            "eq": [
+              "$input.Build_Size",
+              "small"
+            ]
+          },
+          "onConflict": "clear-dependent-and-invalidate"
+        }
+      ],
+      "kind": "server-validation"
+    },
+    {
+      "status": "unresolved",
+      "context": {
+        "shopRef": "cpq-demo-shop",
+        "languageRef": "cpq-demo-language",
+        "currency": "EUR",
+        "priceBasis": "ex-vat",
+        "decimalPlaces": 2,
+        "rounding": "half-up",
+        "quantity": 1,
+        "erp": "none"
+      },
+      "catalogue": [
+        {
+          "key": "WB-S",
+          "price": "100.00",
+          "cost": "60.00"
+        },
+        {
+          "key": "WB-L",
+          "price": "150.00",
+          "cost": "90.00"
+        },
+        {
+          "key": "WB-WHEELS",
+          "price": "30.00",
+          "cost": "15.00"
+        },
+        {
+          "key": "WB-DRAWER",
+          "price": "20.00",
+          "cost": "10.00"
+        }
+      ],
+      "pricing": {
+        "method": "catalogue-sell",
+        "additionalMarkupPercent": "0",
+        "rules": [
+          {
+            "id": "large-two-drawers",
+            "order": 10,
+            "when": {
+              "and": [
+                {
+                  "eq": [
+                    "$input.Build_Size",
+                    "large"
+                  ]
+                },
+                {
+                  "eq": [
+                    "$input.Build_Drawers",
+                    2
+                  ]
+                }
+              ]
+            },
+            "discountPercent": "10.00"
+          }
+        ]
+      },
+      "kind": "price-context-and-engine"
+    },
+    {
+      "status": "unresolved",
+      "modelVersionId": 692067885,
+      "page": {
+        "navigationTag": "CpqWorkbench",
+        "theme": "cpq-neutral",
+        "tabs": [
+          "Build"
+        ],
+        "optionColumns": 2
+      },
+      "kind": "page-and-theme"
+    },
+    {
+      "status": "unresolved",
+      "output": {
+        "persistence": "card",
+        "handoff": [
+          "cart",
+          "local-quote"
+        ],
+        "document": "local-docx",
+        "routing": false,
+        "visual3d": false
+      },
+      "kind": "persistence-and-output"
+    },
+    {
+      "status": "unresolved",
+      "cases": [
+        {
+          "id": "small-fixed",
+          "answers": {
+            "Build_Size": "small",
+            "Build_Base": "fixed",
+            "Build_Drawers": 0
+          },
+          "expect": {
+            "valid": true,
+            "bom": {
+              "WB-S": 1
+            },
+            "sell": "100.00"
+          }
+        },
+        {
+          "id": "small-mobile",
+          "answers": {
+            "Build_Size": "small",
+            "Build_Base": "mobile",
+            "Build_Drawers": 1
+          },
+          "expect": {
+            "valid": true,
+            "bom": {
+              "WB-S": 1,
+              "WB-WHEELS": 1,
+              "WB-DRAWER": 1
+            },
+            "sell": "150.00"
+          }
+        },
+        {
+          "id": "large-discount",
+          "answers": {
+            "Build_Size": "large",
+            "Build_Base": "fixed",
+            "Build_Drawers": 2
+          },
+          "expect": {
+            "valid": true,
+            "bom": {
+              "WB-L": 1,
+              "WB-DRAWER": 2
+            },
+            "beforeDiscount": "190.00",
+            "sell": "171.00"
+          }
+        },
+        {
+          "id": "invalid-mobile",
+          "answers": {
+            "Build_Size": "large",
+            "Build_Base": "mobile",
+            "Build_Drawers": 0
+          },
+          "expect": {
+            "valid": false,
+            "canPersist": false,
+            "canHandoff": false
+          }
+        },
+        {
+          "id": "invalid-drawer-count",
+          "answers": {
+            "Build_Size": "small",
+            "Build_Base": "fixed",
+            "Build_Drawers": 3
+          },
+          "expect": {
+            "valid": false,
+            "canPersist": false,
+            "canHandoff": false
+          }
+        }
+      ],
+      "kind": "engine-golden-cases"
+    }
+  ],
+  "identityMap": {
+    "entries": {
+      "CPQBOMRule/v1/wheels": 257035749,
+      "CPQInput/v1/Build_Size": 228282929,
+      "CPQGroup/v1/bom": 727624772,
+      "CPQPriceRule/v1/large-two-drawers": 984238648,
+      "CPQInputRule/v1/large-base-options": 962171880,
+      "CPQInput/v1/Build_Label": 403897189,
+      "CPQBOMRule/v1/small-frame": 749840820,
+      "CPQGroup/v1/rules": 465951527,
+      "CPQModel/model/neutral-workbench": 262932398,
+      "CPQBOMRule/v1/drawers": 809753691,
+      "CPQInput/v1/Build_Drawers": 303943303,
+      "CPQInput/v1/Build_Base": 556935122,
+      "CPQBOMRule/v1/large-frame": 808009363,
+      "CPQModelVersion/v1/version": 692067885,
+      "CPQGroup/v1/input/Build": 614747714
+    },
+    "modelKey": "neutral-workbench",
+    "schemaVersion": 1
+  },
+  "modelKey": "neutral-workbench"
+}

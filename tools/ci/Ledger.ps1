@@ -52,7 +52,7 @@ function Get-EditionLedgerLayer {
     param([string]$DistributionRoot,$Edition)
     $names=@(foreach($ref in @($Edition.from)+@($Edition.add)+@($Edition.surfaces)){
         if(-not $ref){continue}
-        if($ref -notmatch '^([a-z0-9-]+)@[0-9]+\.[0-9]+\.[0-9]+$'){throw 'Invalid layer reference.'};$Matches[1]
+        if($ref -notmatch '^([a-z0-9-]+)@[0-9]+\.[0-9]+\.[0-9]+(?:-candidate)?$'){throw 'Invalid layer reference.'};$Matches[1]
     })
     if($Edition.sampleData){$names+='sample-data'}
     foreach($theme in $Edition.themes){if($theme -notmatch '^[a-z0-9-]+$'){throw 'Invalid theme reference.'};$names+='theme-'+$theme}
@@ -61,24 +61,44 @@ function Get-EditionLedgerLayer {
     }
 }
 function Get-EditionLedgerPlan {
-    param([string]$DistributionRoot,$Edition,[string]$SkillsRoot)
+    param([string]$DistributionRoot,$Edition,[string]$SkillsRoot,[hashtable]$SkillsRootsByCommit = @{})
+    if($SkillsRootsByCommit.ContainsKey([string]$Edition.ledger.commit)){$SkillsRoot=$SkillsRootsByCommit[[string]$Edition.ledger.commit]}
     $SkillsRoot=Resolve-LedgerSkillsRoot $SkillsRoot $DistributionRoot
+    $head=& git -C $SkillsRoot rev-parse HEAD 2>$null
+    if($Edition.ledger.commit -and $head -cne $Edition.ledger.commit){
+        $alternate=if($env:TRUVIO_CPQ_SKILLS_PATH){$env:TRUVIO_CPQ_SKILLS_PATH}else{Join-Path $DistributionRoot '.ledger-skills-cpq'}
+        if(Test-Path -LiteralPath $alternate -PathType Container){
+            $other=& git -C $alternate rev-parse HEAD 2>$null
+            if($LASTEXITCODE -eq 0 -and $other -ceq $Edition.ledger.commit){$SkillsRoot=$alternate}
+        }
+    }
     $snapshot=Read-DistributionLedgerSnapshot $Edition.ledger $SkillsRoot
-    $provided=@();$required=@()
+    $provided=@();$required=@();$cpqRequired=@()
+    $candidateLayers=@()
     foreach($layer in @(Get-EditionLedgerLayer $DistributionRoot $Edition)){
         if(-not $layer.ledger){throw "Layer '$($layer.name)' has no ledger carriage declaration."}
         foreach($id in @($layer.ledger.provides)+@($layer.ledger.requires)){
             if(-not $snapshot.functions.ContainsKey($id)){throw "Layer '$($layer.name)' names unknown ledger function '$id'."}
         }
         if(@($layer.ledger.provides|Where-Object {$_ -in $layer.ledger.requires}).Count){throw "Layer '$($layer.name)' both provides and requires the same function."}
+        if($layer.cpq){$cpqRequired+=@($layer.ledger.requires)}
+        if($layer.cpq.status -ceq 'candidate'){$candidateLayers+=,$layer}
         $provided+=@($layer.ledger.provides);$required+=@($layer.ledger.requires)
     }
     $provided=@($provided|Sort-Object -Unique)
-    $expected=@($snapshot.checks.Values|Where-Object {$_.functionId -in $provided}|ForEach-Object id|Sort-Object)
+    if($candidateLayers.Count){
+        if($Edition.delivery.status -cne 'candidate'){throw 'Candidate layer requires an explicitly non-deliverable candidate edition.'}
+        foreach($layer in $candidateLayers){foreach($block in $layer.cpq.blockers){
+            if(-not @($Edition.delivery.blockers | Where-Object {$_.id -ceq $block.id -and $_.reason -ceq $block.reason}).Count){throw 'Candidate edition omits a layer delivery blocker.'}
+        }}
+        if($Edition.provenOn){throw 'Candidate edition cannot claim proof.'}
+    } elseif($Edition.delivery){throw 'Candidate edition has no candidate layer.'}
+    $measured=@($provided)+@($cpqRequired)
+    $expected=@($snapshot.checks.Values|Where-Object {$_.functionId -in $measured}|ForEach-Object id|Sort-Object)
     $locked=@($Edition.ledger.checkIds)
     if(-not $expected.Count -or -not $locked.Count){throw 'Edition ledger check set must not be empty.'}
     if(@($locked|Sort-Object -Unique).Count -ne $locked.Count){throw 'Duplicate locked ledger check id.'}
     foreach($id in $locked){if(-not $snapshot.checks.ContainsKey($id)){throw "Unknown locked check '$id'."}}
-    if(@(Compare-Object $expected @($locked|Sort-Object)).Count){throw 'Edition checkIds must equal the provided functions check union at the locked snapshot.'}
-    return @{functions=$provided;requires=@($required|Sort-Object -Unique);checkIds=$locked;snapshot=$snapshot;skillsRoot=$SkillsRoot}
+    if(@(Compare-Object $expected @($locked|Sort-Object)).Count){throw 'Edition checkIds must equal the provided functions plus CPQ prerequisites check union at the locked snapshot.'}
+    return @{functions=@($measured|Sort-Object -Unique);provides=$provided;requires=@($required|Sort-Object -Unique);checkIds=$locked;snapshot=$snapshot;skillsRoot=$SkillsRoot}
 }
