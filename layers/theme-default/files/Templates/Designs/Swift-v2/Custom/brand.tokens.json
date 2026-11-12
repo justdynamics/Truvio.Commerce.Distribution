@@ -11,8 +11,7 @@
       "width": 210
     },
     "favicon": null,
-    "appleTouchIcon": null,
-    "edgeMask": "/Files/Images/Brand/edge.svg"
+    "appleTouchIcon": null
   },
   "css": {
     "--td-ink": "#1F2933",

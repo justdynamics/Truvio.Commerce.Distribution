@@ -1,5 +1,34 @@
 ﻿# theme-default changelog
 
+## 2.8.0 (2026-11-12)
+
+**MINOR. The edge motif is gone.** Justin asked for it to be removed from the layer after it painted a
+thick black curved line above the second home row on the NOX demo (nox.mydwsite4.com, swift-demo
+5.5.0). That line was the hero row's bottom edge. The motif also drew one at the first colour-scheme
+boundary and a crest over the footer, so every demo built from this layer showed a curved band its
+brand never asked for.
+
+Removed:
+
+- `default_custom.css` block 22: the `--td-edge-h`, `--td-edge-fill` and `--td-edge-mask` tokens, the
+  `.td-edge-bottom::after` / `.td-edge-top::before` paint, the per-instance fills
+  (`--td-edge-fill-hero`, `-alt`, `-footer`, `--td-edge-adjoin`), and the clearance padding
+  (`.td-edge-bottom`, `main > *:has(+ .td-edge-top)`, `main:has(+ footer.td-edge-top)`). Without the
+  paint, that padding only added about 86 px of empty space under the hero, under the boundary row
+  and at the end of `main`.
+- `default_custom.js` block 26: `edgeMotif()`, `adjoin()`, `ground()` and `firstScheme()`. The page
+  no longer gets the `td-edge-*` classes. `run()` keeps the anchor strip.
+- `Images/Brand/edge.svg` and `Images/Brand/edge-truvio.svg`, the `edgeMask` key of
+  `brand.tokens.json`, the edge tokens in the `brand.css` example, and the README paragraph on the
+  edge fills.
+
+A brand sheet that still sets `--td-edge-*` sets unused variables, which is harmless. A demo that
+hid the motif in its own sheet (NOX: `--td-edge-h: 0px` and `content: none`) can drop that rule.
+The Foundry design gate no longer arms the three `paintClearance` entries that named these
+instances (the companion Foundry PR).
+
+2.7.1 was a metadata-only release (the layer.json `ledger` block); its files equal 2.7.0.
+
 ## 2.7.0 (2026-10-20)
 
 **MINOR. Rebased on Swift 2.5.0.** `swiftVersion` is 2.5.0 and `theme.json` `baselineTarget` is
