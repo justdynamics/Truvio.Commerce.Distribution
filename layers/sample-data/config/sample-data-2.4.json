@@ -263,8 +263,8 @@
       "mode": "Merge",
       "providerType": "SqlTable",
       "table": "EcomDetailsGroupTranslation",
-      "where": "DetailsGroupTranslationGroupId = 100111 OR (DetailsGroupTranslationGroupId = 1 AND DetailsGroupTranslationLanguageId = 'ENU')",
-      "_why": "Merge: the names of the two asset categories the catalogue files under (Distribution #134). Manuals (100111) in ENU, the catalogue and default language, and in LANG1, the wizard's language; Images (1) in ENU only, because the wizard's own LANG1 row is not harvested. Keyed by group id and language id (the table's primary key); no identity column. A set name is never overwritten."
+      "where": "DetailsGroupTranslationGroupId = 100111",
+      "_why": "Merge: the names of the asset category this layer ships (Distribution #134). Manuals (100111) in ENU, the catalogue and default language, and in LANG1, the wizard's language. The ENU name of the wizard's Images group (1) is a base row since base 4.5.0 (base.contract.json baseOwnedTables FILTER-04) and is never harvested here; the wizard's own LANG1 row is not harvested either. Keyed by group id and language id (the table's primary key); no identity column. A set name is never overwritten."
     },
     {
       "name": "sample-data EcomDetails",

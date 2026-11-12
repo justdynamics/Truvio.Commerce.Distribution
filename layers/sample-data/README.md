@@ -78,14 +78,14 @@ the layer exactly as a local one does.
 | Variants | `EcomVariantGroups`, `EcomVariantsOptions`, `EcomVariantGroupProductRelation`, `EcomVariantOptionsProductRelation` | 55 |
 | Prices, BOM, stock | `EcomPrices`, `EcomProductItems`, `EcomStockUnit` | 292 |
 | Category fields and specs | `EcomProductCategory`, `EcomProductCategoryTranslation`, `EcomProductCategoryField`, `EcomProductCategoryFieldTranslation`, `EcomProductCategoryFieldValue`, `EcomFieldDisplayGroups`, `EcomFieldDisplayGroupTranslation`, `EcomFieldDisplayGroupFields` | 577 |
-| Imagery, documents, relations | `EcomDetailsGroup`, `EcomDetailsGroupTranslation`, `EcomDetails`, `EcomProductsRelatedGroups`, `EcomProductsRelated` | 711 |
+| Imagery, documents, relations | `EcomDetailsGroup`, `EcomDetailsGroupTranslation`, `EcomDetails`, `EcomProductsRelatedGroups`, `EcomProductsRelated` | 710 |
 | Identities, orders, quotes, carts, returns | `AccessUser`, `AccessUserGroupRelation`, `AccessUserSecondaryRelation`, `EcomOrders`, `EcomOrderLines`, `EcomRmas`, `EcomRmaOrderLines` | 115 |
 | Favourite lists | `EcomCustomerFavoriteLists`, `EcomCustomerFavoriteProducts` | 11 |
 | Product field settings | `EcomProductField` | 6 |
 | PIM structure | `EcomShops`, `EcomShopLanguageRelation`, `EcomCompletionRules`, `DynamicStructures`, `DynamicStructureLevels` | 9 |
 | Assortments | `EcomAssortments`, `EcomAssortmentGroupRelations`, `EcomAssortmentPermissions`, `EcomAssortmentItems` | 115 |
 
-2,229 rows in 44 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
+2,228 rows in 44 tables. The per-table figures are `layer.json` `costHints.expectedRows`; the
 counts an edition asserts are `EcomProducts` **97** and `EcomGroups` **21**.
 
 `EcomGroups` 21 is **16 browsable storefront groups + 5 PIM groups**, and the two trees sit in

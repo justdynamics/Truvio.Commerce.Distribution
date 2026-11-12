@@ -1,5 +1,19 @@
 # Changelog — sample-data
 
+## 6.6.3 (2026-11-12)
+
+**PATCH. The `Images` name moves to the base (Foundry #1629).**
+
+- `EcomDetailsGroupTranslation` `1$$ENU` (`Images` in `ENU`) is removed from this layer: base 4.5.0
+  ships the same row as a filtered Replace (`base.contract.json` `baseOwnedTables` FILTER-04), so an
+  edition without sample data names the wizard's `Images` category in the default language too. One
+  layer owns the row; an addition never ships a base row key.
+- The predicate `sample-data EcomDetailsGroupTranslation` is filtered to group 100111. The table
+  keeps two rows: `Manuals` (100111) in `ENU` and `LANG1`.
+- 2,228 rows in 44 tables. The delivered database is the same on every edition with sample data
+  (they all compose the base); no id change, no other row change.
+- Requires base 4.5.0. Not gate-proven yet: an edition with sample data needs a re-prove.
+
 ## 6.6.2 (2026-11-12)
 
 **PATCH. The asset categories carry their names (Distribution #134).**
