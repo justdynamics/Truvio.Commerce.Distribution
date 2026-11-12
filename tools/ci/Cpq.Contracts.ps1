@@ -196,11 +196,45 @@ function Assert-CpqSpec {
     }
 }
 
+function Compare-CpqNuGetVersion {
+    param([string]$Left, [string]$Right)
+    # NuGet compares release labels without case; numeric labels sort before text.
+    $parsed = @()
+    foreach ($value in @($Left, $Right)) {
+        if ($value -cnotmatch '^([0-9]+\.[0-9]+\.[0-9]+(?:\.[0-9]+)?)(?:-([A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)*))?$') { throw 'Invalid NuGet version.' }
+        $core = [version]$Matches[1]; $label = $Matches[2]
+        $parsed += @{core=[version]::new($core.Major,$core.Minor,$core.Build,[Math]::Max(0,$core.Revision));labels=@(if($label){$label.Split('.')})}
+    }
+    $comparison = $parsed[0].core.CompareTo($parsed[1].core)
+    if ($comparison) { return $comparison }
+    $a = $parsed[0].labels; $b = $parsed[1].labels
+    if (-not $a.Count) { if (-not $b.Count) { return 0 }; return 1 }
+    if (-not $b.Count) { return -1 }
+    for ($i=0; $i -lt [Math]::Min($a.Count,$b.Count); $i++) {
+        $an = $a[$i] -match '^[0-9]+$'; $bn = $b[$i] -match '^[0-9]+$'
+        if ($an -and $bn) { $comparison = ([Numerics.BigInteger]::Parse($a[$i])).CompareTo([Numerics.BigInteger]::Parse($b[$i])) }
+        elseif ($an) { $comparison = -1 }
+        elseif ($bn) { $comparison = 1 }
+        else { $comparison = [StringComparer]::OrdinalIgnoreCase.Compare($a[$i],$b[$i]) }
+        if ($comparison) { return $comparison }
+    }
+    return $a.Count.CompareTo($b.Count)
+}
+
+function Get-CpqAssemblyEntry {
+    param($Assembly)
+    $ordinary = "lib/$($Assembly.tfm)/$($Assembly.name).dll"
+    if (-not $Assembly.ContainsKey('entry')) { return $ordinary }
+    $bundled = "Files/System/AddIns/Installed/$($Assembly.name)/$ordinary"
+    if ($Assembly.entry -cnotin @($ordinary,$bundled)) { throw 'Package assembly entry differs from its name, TFM or supported add-in layout.' }
+    return $Assembly.entry
+}
+
 function Assert-CpqPackages {
     param([Parameter(Mandatory)]$Packages, [Parameter(Mandatory)][string]$ContractRoot)
     Assert-CpqSchema $Packages (Join-Path $ContractRoot 'packages.schema.json')
     $map = Get-CpqIdentityMap @($Packages.packages) 'id'
-    foreach ($role in @('admin','runtime','studio','mcp','mcp-host')) {
+    foreach ($role in @('admin','runtime','studio','mcp')) {
         if (@($Packages.packages | Where-Object role -EQ $role).Count -ne 1) { throw "Exactly one $role package is required." }
     }
     $profile = @{
@@ -211,17 +245,16 @@ function Assert-CpqPackages {
         $pinned = @($Packages.packages | Where-Object role -EQ $role)[0]
         if ($pinned.id -cne $profile[$role][0] -or $pinned.version -cne $profile[$role][1]) { throw 'Package identity/version differs from the declared engine profile.' }
     }
-    foreach ($binding in @(@('mcp','Truvio.Commerce.MCP'), @('mcp-host','Truvio.Commerce.MCP.Host'))) {
-        $package = @($Packages.packages | Where-Object role -EQ $binding[0])[0]
-        if ($package.id -cne $binding[1]) { throw 'MCP dependency identity differs from the reviewed profile.' }
+    $mcp = @($Packages.packages | Where-Object role -EQ 'mcp')[0]
+    if ($mcp.id -cne 'Truvio.Commerce.MCP' -or 'Truvio.Commerce.MCP' -cnotin $mcp.assemblies.name) { throw 'MCP dependency identity differs from the reviewed profile.' }
+    $mcpHost = @($Packages.packages | Where-Object { 'Truvio.Commerce.MCP.Host' -cin $_.assemblies.name })
+    if ($mcpHost.Count -ne 1 -or $mcpHost[0].role -cnotin @('mcp','mcp-host')) { throw 'Exactly one MCP.Host assembly carrier is required.' }
+    $separateHost = @($Packages.packages | Where-Object role -EQ 'mcp-host')
+    if ($separateHost.Count -gt 1 -or ($separateHost.Count -and ($separateHost[0].id -cne 'Truvio.Commerce.MCP.Host' -or $mcpHost[0].id -cne $separateHost[0].id))) { throw 'MCP.Host package identity differs from the reviewed profile.' }
+    foreach ($package in @($mcp,$mcpHost[0])) {
+        if ((Compare-CpqNuGetVersion $package.version '0.6.5-beta') -lt 0) { throw 'MCP dependency is below the Studio floor (0.6.5-beta).' }
     }
-    $mcpVersion = $map['Truvio.Commerce.MCP'].version
-    $numeric = [version]$mcpVersion.Split('-')[0]
-    $release = [version]::new($numeric.Major, $numeric.Minor, $numeric.Build, [Math]::Max(0, $numeric.Revision))
-    if ($release -lt [version]'0.6.5.0' -or ($release -eq [version]'0.6.5.0' -and $mcpVersion.Contains('-'))) {
-        throw 'MCP dependency is below the Studio floor.'
-    }
-    foreach ($id in @('CPQ_Admin','Truvio.Commerce.MCP.Host')) {
+    foreach ($id in @('CPQ_Admin','DW_CPQ_API','Truvio.Commerce.MCP',$mcpHost[0].id)) {
         if ($id -cnotin $map['Truvio.Commerce.CpqStudio'].dependsOn) { throw 'Studio dependency declaration is incomplete.' }
     }
     $assemblies = [Collections.Generic.HashSet[string]]::new([StringComparer]::OrdinalIgnoreCase)
@@ -232,10 +265,16 @@ function Assert-CpqPackages {
         if ($package.source.kind -eq 'build' -and $package.source.commit -eq ('0' * 40)) { throw 'Missing source build identity.' }
         if (-not @($package.assemblies | Where-Object { $_.name.StartsWith($package.id, [StringComparison]::OrdinalIgnoreCase) }).Count) { throw 'Package and entry assembly identities do not match.' }
         foreach ($assembly in $package.assemblies) {
+            $null = Get-CpqAssemblyEntry $assembly
             if (-not $assemblies.Add($assembly.name)) { throw 'Duplicate loaded assembly identity.' }
             if ($assembly.sha256 -eq ('sha256:' + ('0' * 64))) { throw 'Missing assembly digest.' }
         }
         foreach ($dependency in $package.dependsOn) { if (-not $map.ContainsKey($dependency)) { throw 'Package dependency is not locked.' } }
+        if ($package.ContainsKey('nugetDependencies')) {
+            foreach ($dependency in $package.nugetDependencies) {
+                if ($dependency -cnotin $package.dependsOn) { throw 'NuGet dependency is missing from the installation graph.' }
+            }
+        }
     }
     $done = @{}; $visiting = @{}
     function Visit-CpqPackage([string]$Id) {

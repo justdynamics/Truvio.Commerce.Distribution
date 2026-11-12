@@ -6,13 +6,16 @@ This is the neutral workbench CPQ candidate for a blank DW 10.29.8 proving host.
 
 The package file is intentionally `kind:cpq-packages-candidate`, not an installable lock. The retained hashes are evidence from package inspection. They do not authorize redistributing the modified runtime DLL or hotfix. Blockers are named in the layer and repeated in the edition:
 
-- `studio-package`: an installable, reproducible Studio 0.7.0 artifact is missing.
-- `stable-mcp`: measured MCP and MCP.Host 0.6.5-BETA do not meet the stable floor.
-- `openxml-closure`: original OpenXml packages and dependency closure remain unresolved.
-- `runtime-identity`: the observed runtime differs from the original vendor package.
+- `openxml-closure`: original OpenXml 3.1.0, OpenXml.Framework packages and dependency closure remain unresolved.
+- `runtime-identity`: the original vendor runtime package source needs delivery resolution; only vendor nupkg bytes qualify, never the differing installed replacement.
 - `runtime-verification`: loaded identities and a blank 10.29.8 proving run are missing.
 - `content-bindings`: scoped catalogue, price, page, owner and document bindings need a verified importer.
 - `engine-adapter`: runtime payloads, behavior readbacks and app defects need characterization.
+
+Studio availability and the MCP prerelease are resolved package questions. The evidence pins
+the published Studio v0.7.0 nupkg at `577c2be7ffd4117c88d9bc83cfbbbaa1f4375ed4` and MCP
+0.6.5-beta, whose package bundles MCP.Host. Studio's NuGet dependency list is empty; its
+admin/runtime/MCP site prerequisites remain explicit. Neither verified archive claims a host run.
 
 Changing a status or filename cannot promote this evidence. Structural validation checks the candidate schema, content digests, deterministic compiler output, identity map and case fixtures. `Test-CpqLayerContract -ForDelivery` refuses it with the named reasons. Foundry's dedicated proving delivery is the eventual consumer; generic composition refuses CPQ instead of ignoring its declaration.
 

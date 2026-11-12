@@ -103,6 +103,10 @@
                   "type": "string",
                   "pattern": "^net(?:standard|coreapp)?[0-9]+\\.[0-9]+$"
                 },
+                "entry": {
+                  "type": "string",
+                  "pattern": "^(?:Files/System/AddIns/Installed/[A-Za-z][A-Za-z0-9_.-]*/)?lib/net(?:standard|coreapp)?[0-9]+\\.[0-9]+/[A-Za-z][A-Za-z0-9_.-]*\\.dll$"
+                },
                 "sha256": {
                   "type": "string",
                   "pattern": "^sha256:[a-f0-9]{64}$"
@@ -117,7 +121,17 @@
             },
             "minItems": 1
           },
+          "nugetDependencies": {
+            "description": "Exact non-platform NuGet dependency IDs, a subset of dependsOn. Omitted means dependsOn for legacy locks; an empty array explicitly means none.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"
+            },
+            "uniqueItems": true
+          },
           "dependsOn": {
+            "description": "Closed installation prerequisite graph, including runtime requirements not declared by NuGet.",
             "type": "array",
             "items": {
               "type": "string",

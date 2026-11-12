@@ -13,20 +13,12 @@
     "behavior": "cpq/behavior.json",
     "blockers": [
       {
-        "id": "studio-package",
-        "reason": "No installable, reproducible Studio 0.7.0 package with its complete build inputs has been resolved."
-      },
-      {
-        "id": "stable-mcp",
-        "reason": "Observed MCP and MCP.Host 0.6.5-BETA do not meet the stable 0.6.5 floor."
-      },
-      {
         "id": "openxml-closure",
-        "reason": "OpenXml and OpenXml.Framework original packages and full dependency closure remain unresolved."
+        "reason": "Original OpenXml 3.1.0, OpenXml.Framework packages and the full transitive dependency closure remain unresolved."
       },
       {
         "id": "runtime-identity",
-        "reason": "The observed DW_CPQ_API DLL differs from the original 10.24.2 package; the replacement and local hotfix are excluded."
+        "reason": "The original DW_CPQ_API 10.24.2 vendor package source still needs delivery resolution. Use vendor nupkg bytes only; the differing installed replacement and local hotfix are excluded."
       },
       {
         "id": "runtime-verification",

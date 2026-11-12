@@ -3,7 +3,7 @@
   "kind": "cpq-contract-v1",
   "engineProfile": "carrot-10.24.2-studio-0.7.0",
   "specDigest": "sha256:d70b5a9ed74386639be06ec51d9b218f9c5aa144e3aebfe5e5be8e8a7b463ab6",
-  "packageLockDigest": "sha256:003204aae3b52aaf45beda431f9006f78593dd5d430126b260da7669504dbaa6",
+  "packageLockDigest": "sha256:72dc3db002f12742079461243234cbf4d113b3f415df3e532bfea85a363fe2a2",
   "maxAgeSeconds": 900,
   "checks": [
     {

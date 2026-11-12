@@ -63,12 +63,24 @@ Input/price rule ordering, margin grammar and engine coercion still need actual 
 
 The lock requires the exact reviewed identities for admin/runtime/Studio, source locator,
 version, package digest, loaded assembly name/version/TFM/digest and a closed dependency graph.
-It also requires explicit `Truvio.Commerce.MCP` and `Truvio.Commerce.MCP.Host` identities and
-the `DocumentFormat.OpenXml` assembly for the declared DOCX output. Studio must declare its
-admin and MCP host dependencies. The reviewed Studio README requires MCP 0.6.5 or later;
-this is a CPQ profile requirement and does not raise another edition's floor. The resolver
-still has to choose compatible exact releases, inspect all transitive dependencies and bind
-their actual bytes. No exact MCP, MCP host or OpenXml release is invented by this contract.
+It also requires explicit `Truvio.Commerce.MCP` and `Truvio.Commerce.MCP.Host` assembly identities
+and the `DocumentFormat.OpenXml` assembly for DOCX output. The MCP floor is `>=0.6.5-beta`;
+there is no published stable 0.6.5. NuGet prerelease labels compare without case. The published
+0.6.5-BETA MCP package carries Host under `Files/System/AddIns/Installed/Truvio.Commerce.MCP.Host/lib/net10.0/`;
+it does not require a separately invented Host package. A separate Host carrier, if resolved,
+must also meet the floor. This CPQ profile does not raise another edition's floor.
+
+`dependsOn` is the closed installation prerequisite graph. Studio requires admin, runtime,
+MCP and the Host carrier on the site. Its published 0.7.0 package declares no NuGet dependencies,
+so it uses `nugetDependencies:[]` while retaining those installation prerequisites. This optional
+field names the exact non-platform NuGet dependencies; when absent it defaults to `dependsOn`
+for existing locks. Every declared NuGet dependency must also be in `dependsOn` and its version
+requirement must be met by the locked package. An empty declaration cannot hide a real dependency.
+
+An assembly's optional `entry` pins its archive path. The default is `lib/<tfm>/<name>.dll`;
+the other supported form is `Files/System/AddIns/Installed/<name>/lib/<tfm>/<name>.dll`.
+The loader identity and receipt still bind to the package that actually carries the bytes.
+The resolver must inspect all transitive dependencies and bind their actual bytes.
 There are no floating versions. A build source also names its full commit. The entry assembly
 must start with the package ID, and duplicate loaded identities, all-zero digests, unlocked
 dependencies and dependency cycles fail validation. Source locators are HTTPS without credentials,
@@ -79,6 +91,12 @@ against the lock before installation. A lock author can lie about a hash; syntax
 establish that a package exists, is licensed or contains those assemblies. A separate `packages.candidate.lock.json` records actual observed byte identities and gaps;
 it is not an installable package lock because the proving package set has not been resolved. Unit tests use synthetic
 hashes and `.invalid` URLs and must never become deployment inputs.
+
+The candidate now pins the published [Studio v0.7.0 release](https://github.com/truvio-commerce/Truvio.Commerce.CpqStudio/releases/tag/v0.7.0)
+at commit `577c2be7ffd4117c88d9bc83cfbbbaa1f4375ed4` and MCP 0.6.5-beta, including both MCP DLLs.
+Pin the published Studio nupkg hash: archive timestamps can change a repacked archive even when
+the DLL is reproducible. Vendor runtime source resolution and OpenXml 3.1.0 plus its closure
+still prevent an installable lock. An installed runtime replacement never substitutes for vendor package bytes.
 
 Store downloaded DLL/NuGet bytes in a local artifact cache outside synced review folders; retain
 hashes and source metadata in the evidence. Vendor code held locally is not a distributable fix.

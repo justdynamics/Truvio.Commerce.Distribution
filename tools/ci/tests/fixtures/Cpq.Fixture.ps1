@@ -1,5 +1,15 @@
 # Synthetic CPQ receipt identities only. Never use as a package or delivery lock.
 function Copy-TestData($Data) { ConvertFrom-Json -InputObject (ConvertTo-Json -InputObject $Data -Depth 100) -AsHashtable }
+function Set-TestBundledMcp($Packages) {
+    $mcp=@($Packages.packages|Where-Object role -EQ 'mcp')[0]
+    $mcpHost=@($Packages.packages|Where-Object role -EQ 'mcp-host')[0]
+    $assembly=$mcpHost.assemblies[0]
+    $assembly.entry="Files/System/AddIns/Installed/$($assembly.name)/lib/$($assembly.tfm)/$($assembly.name).dll"
+    $mcp.assemblies+=,$assembly;$mcp.version='0.6.5-beta';$mcp.dependsOn=@();$mcp.nugetDependencies=@()
+    $Packages.packages=@($Packages.packages|Where-Object role -NE 'mcp-host')
+    $studio=@($Packages.packages|Where-Object role -EQ 'studio')[0]
+    $studio.dependsOn=@('CPQ_Admin','DW_CPQ_API','Truvio.Commerce.MCP')
+}
 function New-TestFixture {
     $spec = Read-CpqJson (Join-Path $script:contractRoot 'examples/neutral-workbench.json')
     # Synthetic identities and hashes. These are never installable package or live proof fixtures.
@@ -20,7 +30,8 @@ function New-TestFixture {
         $package.assemblies=@(@{name=$package.id;version=$package.version+'.0';tfm='net10.0';sha256='sha256:'+('b'*64)})
         $package.dependsOn=@()
     }
-    $packages.packages[2].dependsOn=@('CPQ_Admin','Truvio.Commerce.MCP.Host')
+    $packages.packages[2].dependsOn=@('CPQ_Admin','DW_CPQ_API','Truvio.Commerce.MCP','Truvio.Commerce.MCP.Host')
+    $packages.packages[2].nugetDependencies=@()
     $packages.packages[1].dependsOn=@('DocumentFormat.OpenXml')
     $packages.packages[3].dependsOn=@('Truvio.Commerce.MCP.Host')
     $packages.packages[5].assemblies[0].tfm='netstandard2.0'

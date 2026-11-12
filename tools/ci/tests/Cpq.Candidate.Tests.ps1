@@ -30,7 +30,9 @@ Describe 'Non-deliverable CPQ candidate carriage' {
         (Get-CpqDigest $read)|Should -BeExactly (Get-CpqDigest $value)
     }
     It 'refuses delivery with all four named package blockers' {
-        {Test-Candidate $root $layer -Delivery}|Should -Throw '*studio-package*stable-mcp*openxml-closure*runtime-identity*'
+        $layer.cpq.blockers.id|Should -Not -Contain 'studio-package'
+        $layer.cpq.blockers.id|Should -Not -Contain 'stable-mcp'
+        {Test-Candidate $root $layer -Delivery}|Should -Throw '*openxml-closure*runtime-identity*'
     }
     It 'cannot promote partial evidence by changing only status or version' {
         $layer.cpq.status='ready';$layer.cpq.Remove('blockers');$layer.cpq.Remove('candidateArtifacts');$layer.version='1.0.0'
