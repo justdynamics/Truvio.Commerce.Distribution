@@ -33,6 +33,16 @@ UrlPath row would dangle (route with no target) and force base re-proves on ever
 page churn. Friendly URLs → pages ⇒ the row travels with the content it routes.
 The same decision is recorded in `layers/base/BASE.md`.
 
+## Known limits
+
+- **No `ReorderReplacement` service page.** Swift's `ExpressBuySearchResponse.cshtml` builds the
+  Express Buy Replace modal's feed URL from `GetPageIdByNavigationTag("ReorderReplacement")`.
+  The page tree ships no page with that navigation tag, and none was found in the Swift
+  v2.5.0 source to copy. A discontinued product with a `ProductReplacementProductId` therefore
+  shows a Replace button whose modal opens empty and whose row reads "null" after Accept
+  (Foundry #1597). Keep `ProductReplacementProductId` empty in sample data and in a demo's own
+  catalogue.
+
 ## Composition
 
 Editions compose this surface via `surfaces: ["surface-swift@<version>"]`, where `<version>`

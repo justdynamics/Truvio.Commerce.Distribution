@@ -104,6 +104,13 @@ stay beside the new ones.
   them all by whole days. Keep new dates on or before that day, or move the anchor in
   `demo-clock.sql` with them.
 
+## Replacement products
+
+Leave `ProductReplacementProductId` and `ProductReplacementVariantId` empty on every product row,
+as the layer ships them. The Express Buy Replace modal reads a service page with navigation tag
+`ReorderReplacement`, which no layer ships; a discontinued product that names a replacement shows
+a Replace button whose modal is empty and whose row reads "null" after Accept (Foundry #1597).
+
 ## Currency
 
 Every `EcomPrices` and `EcomOrders` row is USD, the base default, and the surface-swift area
