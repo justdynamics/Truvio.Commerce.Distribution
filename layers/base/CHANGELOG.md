@@ -1,5 +1,23 @@
 ﻿# Changelog — base
 
+## 4.6.0
+
+### Truvio.Commerce.MCP floor 0.6.3-beta (Foundry #1666, owner ruling 2026-11-13)
+
+`base.contract.json` 3.6.0: `compat.apps` `Truvio.Commerce.MCP` `min` rises from `0.6.0-beta` to
+`0.6.3-beta`, the spine `current`. `versions/spine.json` records the `layers` floor with the new
+reason ref `justdynamics/Truvio.Commerce.Foundry#1666`. The consumer is the Foundry demo build: it
+mints a new blank site's MCP bearer by writing the key hash to the token row and recycling
+(`New-DemoMcpKey`, Foundry #1620), and 0.6.3-beta is the first release measured to accept a key minted
+that way. `New-DemoSite` installs this floor exactly, so the blank bacpac restore proof for DW 10.30.6
+failed with 401 on 0.6.0-beta. Floor rule `redesign-floors`: the floor rises because a consumer depends
+on the fix. Owner ruling on Foundry #1666, 2026-11-13: raise the floor to the current release.
+The `skills` consumer floor stays `0.6.0-beta`. `required` stays `false`: a host without the add-in
+still qualifies.
+
+No row or file change. Every edition pins `base@4.6.0`. Not gate-proven: every edition needs a re-prove
+on this version.
+
 ## 4.5.0
 
 ### A blank base for a PIM build (Foundry #1629)

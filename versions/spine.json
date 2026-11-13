@@ -133,11 +133,11 @@
       "floors": [
         {
           "consumer": "layers",
-          "min": "0.6.0-beta",
+          "min": "0.6.3-beta",
           "required": false,
           "reason": {
-            "ref": "dynamicweb/skills#137",
-            "why": "0.6.0 adds skills inside MCP and Dynamo, which the estate builds on (owner ruling, Justin Sjouw, 2026-09-23). The owner expects this floor to rise again soon on the same basis."
+            "ref": "justdynamics/Truvio.Commerce.Foundry#1666",
+            "why": "The Foundry demo build mints a new blank site's MCP bearer by writing the key hash to the token row and recycling (New-DemoMcpKey, justdynamics/Truvio.Commerce.Foundry#1620); 0.6.3-beta is the first release measured to accept a key minted that way (tools/list answered on DW 10.30.6, foundry-dap and the blank iteration host, 2026-11-13). New-DemoSite installs this floor exactly, and the blank bacpac restore proof for DW 10.30.6 failed with 401 on the 0.6.0-beta floor (Foundry #1666, run 10.30.6-20261113-071509). Owner ruling on Foundry #1666, 2026-11-13: raise the floor to the current release. Before that: 0.6.0-beta, because 0.6.0 adds skills inside MCP and Dynamo, which the estate builds on (owner ruling 2026-09-23, dynamicweb/skills#137)."
           }
         },
         {
