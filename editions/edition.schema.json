@@ -154,6 +154,20 @@
               "type": "string",
               "pattern": "^[A-Za-z0-9_-]+$",
               "description": "The EcomShops ShopId of the PIM shop the producer substitutes for the {pimShop} token of a locked check (e.g. TCSHOP-PIM). A plain id (letters, digits, '_' or '-'). The validator requires it when a locked check uses {pimShop} and requires the id to be an EcomShops row a composed layer ships."
+            },
+            "families": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "category"],
+                "properties": {
+                  "name": { "type": "string", "minLength": 1 },
+                  "category": { "type": "string", "pattern": "^[A-Za-z0-9_-]+$" }
+                }
+              },
+              "description": "The PIM families the edition's layers carry, for the producer's build 'families' (a locked check with a 'families' assertion, e.g. pim.data-models.families-have-models: every declared family has a data model on its category, with products). name is the family's label, category the EcomProductCategory CategoryId its data model is on. The validator requires it when a locked check reads families and requires each category to be an EcomProductCategory row a composed layer ships."
             }
           },
           "description": "OPTIONAL build inputs the edition declares for the producer's tokens (docs/LEDGER.md). The edition owns them because its own layers carry the rows they name, so the value is the same on every host that receives the edition. The Foundry ledger leg passes them to the runner's build declaration and refuses a host value that differs."

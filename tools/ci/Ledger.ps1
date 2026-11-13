@@ -180,8 +180,9 @@ function Test-EditionLedgerInput {
     $inputs=if($Edition.ledger -is [Collections.IDictionary] -and $Edition.ledger.Contains('inputs')){$Edition.ledger.inputs}else{$null}
     if($null -ne $inputs -and $inputs -isnot [Collections.IDictionary]){@{ok=$false;msg="ledger ${name}: ledger.inputs must be an object"};return}
     if($null -eq $inputs){$inputs=@{}}
-    $fields=@($script:LedgerEditionInputToken.Values|ForEach-Object {$_.field})
-    foreach($field in @($inputs.Keys|Where-Object {$_ -cnotin $fields})){@{ok=$false;msg="ledger ${name}: unsupported ledger.inputs field '$field'; an edition declares only $($fields -join ' and ')"}}
+    $fields=@($script:LedgerEditionInputToken.Values|ForEach-Object {$_.field})+'families'
+    foreach($field in @($inputs.Keys|Where-Object {$_ -cnotin $fields})){@{ok=$false;msg="ledger ${name}: unsupported ledger.inputs field '$field'; an edition declares only $($fields -join ', ')"}}
+    Test-EditionLedgerFamilyInput -DistributionRoot $DistributionRoot -Name $name -Inputs $inputs -Plan $Plan
     foreach($token in $script:LedgerEditionInputToken.Keys){
         $spec=$script:LedgerEditionInputToken[$token]
         $users=@(foreach($id in $Plan.checkIds){
@@ -205,6 +206,41 @@ function Test-EditionLedgerInput {
         if(-not $carriers.Count){@{ok=$false;msg="ledger ${name}: ledger.inputs.$($spec.field) '$value' names no $($spec.table) row that a layer of the edition ships ($(@($Plan.layers) -join ', '))"};continue}
         @{ok=$true;msg="ledger ${name}: ledger.inputs.$($spec.field) '$value' for $($users.Count) locked check(s) using {$token}, a $($spec.table) row of $($carriers -join ', ')"}
     }
+}
+
+# The PIM families a locked check with a 'families' assertion reads from the build (skills pim-families handler:
+# every declared family has a data model on its category, with products, and at least one family is declared).
+# The edition declares them because its own layers carry those categories and data models: ledger.inputs.families,
+# @(@{name;category}). Rows @{ok;msg}: a locked families check and no declaration (FAIL, the check FAILs on every host
+# with "the build file declares 0 family(ies)"); a declaration no locked check reads (FAIL); a malformed entry or a
+# category no layer of the edition ships as layers/<layer>/<mode>/_sql/EcomProductCategory/<id>.yml (FAIL); else PASS.
+function Test-EditionLedgerFamilyInput {
+    param([string]$DistributionRoot,[string]$Name,$Inputs,$Plan)
+    $users=@(foreach($id in $Plan.checkIds){$check=$Plan.snapshot.checks[$id];if($check -and $check.assertion -and $check.assertion.kind -ceq 'families'){$id}})
+    if(-not $Inputs.Contains('families')){
+        if($users.Count){@{ok=$false;msg="ledger ${Name}: $($users.Count) locked check(s) read the build's families (e.g. $($users[0])) and editions/$Name.json declares no ledger.inputs.families; the check FAILs with 'the build file declares 0 family(ies)'"}}
+        return
+    }
+    if(-not $users.Count){@{ok=$false;msg="ledger ${Name}: ledger.inputs.families is declared but no locked check reads families; remove it"};return}
+    $families=@($Inputs.families)
+    if($Inputs.families -isnot [Collections.IList] -or -not $families.Count){@{ok=$false;msg="ledger ${Name}: ledger.inputs.families must be a non-empty array of {name, category}"};return}
+    $bad=@($families|Where-Object {$_ -isnot [Collections.IDictionary] -or @($_.Keys|Where-Object {$_ -cnotin @('name','category')}).Count -or
+        $_.name -isnot [string] -or [string]::IsNullOrWhiteSpace($_.name) -or $_.category -isnot [string] -or $_.category -cnotmatch '^[A-Za-z0-9_-]+$'})
+    if($bad.Count){@{ok=$false;msg="ledger ${Name}: each ledger.inputs.families entry is {name, category}: a non-blank name and a plain-id category (letters, digits, '_' or '-')"};return}
+    $dup=@($families.category|Group-Object|Where-Object Count -gt 1|ForEach-Object Name)
+    if($dup.Count){@{ok=$false;msg="ledger ${Name}: ledger.inputs.families names category '$($dup[0])' twice"};return}
+    $shipped=@()
+    foreach($family in $families){
+        $carriers=@(foreach($layer in @($Plan.layers)){
+            foreach($mode in 'replace','merge'){
+                $row=Join-Path $DistributionRoot "layers/$layer/$mode/_sql/EcomProductCategory/$($family.category).yml"
+                if((Test-Path -LiteralPath $row -PathType Leaf) -and (Get-Content -LiteralPath $row -Raw) -cmatch ('(?m)^"?CategoryId"?:\s*"?'+[regex]::Escape($family.category)+'"?\s*$')){"$layer/$mode"}
+            }
+        })
+        if(-not $carriers.Count){@{ok=$false;msg="ledger ${Name}: ledger.inputs.families category '$($family.category)' ($($family.name)) names no EcomProductCategory row that a layer of the edition ships ($(@($Plan.layers) -join ', '))"};continue}
+        $shipped+="$($family.category) ($($carriers -join ', '))"
+    }
+    if($shipped.Count -eq $families.Count){@{ok=$true;msg="ledger ${Name}: ledger.inputs.families declares $($families.Count) famil$(if($families.Count -eq 1){'y'}else{'ies'}) for $($users.Count) locked check(s) reading families, EcomProductCategory rows of $($shipped -join '; ')"}}
 }
 
 # ---- Locked checks that can never pass (Distribution #132 item 1) ----

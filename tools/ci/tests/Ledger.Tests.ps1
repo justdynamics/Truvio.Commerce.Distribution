@@ -299,9 +299,10 @@ Describe 'Foundry #1641: edition build inputs for the {lang} and {pimShop} token
         $s = $script:inputEditions[$Name]
         $rows = Get-InputRow $s.edition $s.plan
         @($rows | Where-Object { -not $_.ok }).Count | Should -Be 0
-        $rows.Count | Should -Be 2
-        $rows[0].msg | Should -BeLike "*defaultLanguage 'ENU' for 10 locked check(s) using {lang}, a EcomLanguages row of base/replace*"
-        $rows[1].msg | Should -BeLike "*pimShop 'TCSHOP-PIM' for 1 locked check(s) using {pimShop}, a EcomShops row of sample-data/merge*"
+        $rows.Count | Should -Be 3
+        $rows[0].msg | Should -BeLike "*families declares 4 families for 1 locked check(s) reading families, EcomProductCategory rows of tc_commerce (sample-data/merge)*"
+        $rows[1].msg | Should -BeLike "*defaultLanguage 'ENU' for 10 locked check(s) using {lang}, a EcomLanguages row of base/replace*"
+        $rows[2].msg | Should -BeLike "*pimShop 'TCSHOP-PIM' for 1 locked check(s) using {pimShop}, a EcomShops row of sample-data/merge*"
     }
     It 'an edition whose locked checks use neither token needs no inputs' {
         $s = $script:inputEditions['base-only']
@@ -310,9 +311,29 @@ Describe 'Foundry #1641: edition build inputs for the {lang} and {pimShop} token
     It 'RED CONTROL: an edition whose locked checks use the tokens fails without inputs' {
         $s = $script:inputEditions['swift-demo']; $e = Copy-Edition $s.edition; $e.ledger.Remove('inputs')
         $fails = @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok } | ForEach-Object msg)
-        $fails.Count | Should -Be 2
-        $fails[0] | Should -BeLike '*10 locked check(s) use {lang}*declares no ledger.inputs.defaultLanguage*'
-        $fails[1] | Should -BeLike '*1 locked check(s) use {pimShop}*declares no ledger.inputs.pimShop*'
+        $fails.Count | Should -Be 3
+        $fails[0] | Should -BeLike "*1 locked check(s) read the build's families (e.g. pim.data-models.families-have-models)*declares no ledger.inputs.families*"
+        $fails[1] | Should -BeLike '*10 locked check(s) use {lang}*declares no ledger.inputs.defaultLanguage*'
+        $fails[2] | Should -BeLike '*1 locked check(s) use {pimShop}*declares no ledger.inputs.pimShop*'
+    }
+    It 'RED CONTROL: families that are malformed, duplicated, unused or not shipped by the edition fail' {
+        $s = $script:inputEditions['dap-portal']
+        $e = Copy-Edition $s.edition; $e.ledger.inputs.families = @(@{ name = 'Commerce'; category = 'tc_absent' })
+        @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok -and $_.msg -like "*category 'tc_absent' (Commerce) names no EcomProductCategory row*" }).Count | Should -Be 1
+        $e = Copy-Edition $s.edition; $e.ledger.inputs.families = @(@{ name = 'Commerce'; category = "tc_commerce' --" })
+        @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok -and $_.msg -like '*plain-id category*' }).Count | Should -Be 1
+        $e = Copy-Edition $s.edition; $e.ledger.inputs.families = @(@{ category = 'tc_commerce' })
+        @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok -and $_.msg -like '*non-blank name*' }).Count | Should -Be 1
+        $e = Copy-Edition $s.edition; $e.ledger.inputs.families = @(@{ name = 'A'; category = 'tc_commerce' }, @{ name = 'B'; category = 'tc_commerce' })
+        @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok -and $_.msg -like "*names category 'tc_commerce' twice*" }).Count | Should -Be 1
+        $e = Copy-Edition $s.edition; $e.ledger.inputs.families = @()
+        @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok -and $_.msg -like '*non-empty array*' }).Count | Should -Be 1
+        # The categories are sample-data rows: an edition that does not compose sample-data does not carry them.
+        $plan = $s.plan.Clone(); $plan.layers = @($s.plan.layers | Where-Object { $_ -ne 'sample-data' })
+        @((Get-InputRow $s.edition $plan) | Where-Object { -not $_.ok -and $_.msg -like '*families category*names no EcomProductCategory row*' }).Count | Should -Be 4
+        $b = $script:inputEditions['base-only']; $e = Copy-Edition $b.edition; $e.ledger.inputs = @{ families = @(@{ name = 'Commerce'; category = 'tc_commerce' }) }
+        $rows = Get-InputRow $e $b.plan
+        $rows.Count | Should -Be 1; $rows[0].ok | Should -BeFalse; $rows[0].msg | Should -BeLike '*no locked check reads families*'
     }
     It 'RED CONTROL: a declared input that no locked check uses fails' {
         $s = $script:inputEditions['base-only']; $e = Copy-Edition $s.edition; $e.ledger.inputs = @{ defaultLanguage = 'ENU' }
@@ -325,7 +346,7 @@ Describe 'Foundry #1641: edition build inputs for the {lang} and {pimShop} token
         $fails.Count | Should -Be 1; $fails[0].msg | Should -BeLike "*pimShop 'SHOP-ABSENT' names no EcomShops row*"
         # TCSHOP-PIM is a sample-data row: an edition that does not compose sample-data does not carry it.
         $plan = $s.plan.Clone(); $plan.layers = @($s.plan.layers | Where-Object { $_ -ne 'sample-data' })
-        $fails = @((Get-InputRow $s.edition $plan) | Where-Object { -not $_.ok })
+        $fails = @((Get-InputRow $s.edition $plan) | Where-Object { -not $_.ok -and $_.msg -like '*pimShop*' })
         $fails.Count | Should -Be 1; $fails[0].msg | Should -BeLike "*pimShop 'TCSHOP-PIM' names no EcomShops row*"
     }
     It 'RED CONTROL: a non-plain id, an unsupported field and a non-object fail' {
@@ -341,7 +362,8 @@ Describe 'Foundry #1641: edition build inputs for the {lang} and {pimShop} token
         $schema = Join-Path $script:distribution 'editions/edition.schema.json'
         $raw = Get-Content (Join-Path $script:distribution 'editions/swift-demo.json') -Raw
         $raw | Test-Json -SchemaFile $schema -ErrorAction Stop | Should -BeTrue
-        foreach ($bad in @($raw.Replace('"pimShop": "TCSHOP-PIM"', '"pimShop": "TCSHOP PIM"'), $raw.Replace('"pimShop": "TCSHOP-PIM"', '"pimShop": "TCSHOP-PIM", "areaId": "1"'))) {
+        foreach ($bad in @($raw.Replace('"pimShop": "TCSHOP-PIM"', '"pimShop": "TCSHOP PIM"'), $raw.Replace('"pimShop": "TCSHOP-PIM"', '"pimShop": "TCSHOP-PIM", "areaId": "1"'),
+                          $raw.Replace('"category": "tc_commerce"', '"category": "tc commerce"'), $raw.Replace('{ "name": "Commerce", "category": "tc_commerce" }', '{ "name": "Commerce", "category": "tc_commerce", "groupId": "TCDM-COMMERCE" }'))) {
             $bad | Should -Not -BeExactly $raw
             # As the validator reads it: a refusal is $false or a throw, never a pass.
             $ok = try { $bad | Test-Json -SchemaFile $schema -ErrorAction Stop } catch { $false }
