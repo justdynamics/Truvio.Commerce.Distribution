@@ -1,11 +1,11 @@
 {
   "name": "cpq-demo",
-  "from": "base@4.6.0",
+  "from": "base@4.6.1",
   "add": [
     "feature-cpq@1.0.0-candidate"
   ],
   "surfaces": [
-    "surface-swift@1.19.1"
+    "surface-swift@1.19.2"
   ],
   "sampleData": false,
   "themes": [
@@ -32,13 +32,14 @@
   "description": "Disposable neutral CPQ proving edition candidate on DW 10.29.8. Delivery is refused until packages, bindings and runtime prerequisites are resolved.",
   "ledger": {
     "repo": "dynamicweb/skills",
-    "commit": "bb68e6c4a4b8c968f5e24b0f35a8a8f6a031e02d",
+    "commit": "51fdaca488750a205d29c7e9986c9d9d6cbf14b2",
     "manifest": "skills/dw-demo-ledger/assets/releases/10.30.6/manifest.json",
-    "digest": "sha256:60121d175c81b23d796b1a5ad2dab8481986b205e931e292c4f5b56156b16e8f",
+    "digest": "sha256:ccc3b04ae2cfa429bb7df93fa88bb82d2f4cff7898e781831dc157603c58e773",
     "checkIds": [
       "commerce.currencies.one-default",
       "commerce.currencies.several",
       "commerce.default-price.priced-products",
+      "commerce.product-catalog-app.paragraph",
       "content.item-pages.in-use",
       "content.item-pages.item-instances",
       "content.item-pages.types-resolve",
@@ -49,6 +50,7 @@
       "content.pages.exist",
       "content.paragraphs.item-instances",
       "content.paragraphs.visible",
+      "content.website-ecommerce-context.defaults-set",
       "content.websites.active",
       "cpq.bom.references",
       "cpq.bom.results",
@@ -82,9 +84,11 @@
       "distribution.base-layer.permission-groups",
       "distribution.theme-layer.brand-slot",
       "orders.customer-experience-center.paragraph",
+      "orders.payment-methods.active",
       "orders.quotes.convertible",
       "orders.quotes.states",
       "orders.quotes.submitted",
+      "orders.shipping-methods.active",
       "orders.shopping-cart-app.paragraph",
       "serializer.deserialize.dry-run-merge",
       "serializer.deserialize.dry-run-replace",
@@ -95,10 +99,17 @@
       "serializer.identity-resolution.page-guid-unique",
       "serializer.identity-resolution.paragraph-guid-unique",
       "serializer.strict-mode.last-run-clean",
+      "swift.cart-checkout.cart-page",
+      "swift.cart-checkout.checkout-page",
+      "swift.cart-checkout.mini-cart",
       "swift.header-footer.footer-page",
       "swift.header-footer.header-page",
       "swift.header-footer.selected-on-website",
-      "swift.sign-in.sign-in-entry"
+      "swift.shop-catalog.shop-navigation-tag",
+      "swift.shop-catalog.shop-page",
+      "swift.sign-in.sign-in-entry",
+      "users.frontend-sign-in.app-placed",
+      "users.frontend-sign-in.persona-signs-in"
     ]
   },
   "delivery": {

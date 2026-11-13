@@ -251,9 +251,28 @@ function Test-EditionLedgerFamilyInput {
 #   requirement-not-establishable  the owning function requires a fact the pinned runner has no source for: any
 #                                  app, licence or capability requirement; a flag requirement when the runner does
 #                                  not discover feature flags, or whose id is a settings path (UNVERIFIED before any
-#                                  ruling is read; dynamicweb/skills#222).
+#                                  ruling is read; dynamicweb/skills#222). A capability requirement that names a
+#                                  function the build measures (-Functions) is established by the runner from the
+#                                  run itself, when every locked check of that function passes (skills snapshot
+#                                  revision 7, #223); it stays not establishable when that function is not built,
+#                                  has no locked check, or has a locked check that can itself never pass.
+function Get-LedgerFunctionBlock {
+    # Why the named function cannot establish a capability in this build, or $null when it can.
+    param($Snapshot,[string[]]$CheckIds,[string[]]$Functions,[string]$FunctionId,[hashtable]$Seen=@{})
+    if($FunctionId -cnotin @($Functions)){return "function $FunctionId is not built"}
+    if($Seen.ContainsKey($FunctionId)){return "circular requirement through $FunctionId"}
+    $path=@{}+$Seen;$path[$FunctionId]=$true
+    $own=@($CheckIds|Where-Object {$Snapshot.checks[$_].functionId -ceq $FunctionId})
+    if(-not $own.Count){return "function $FunctionId has no locked check"}
+    foreach($id in $own){
+        $finding=@(Get-LedgerUnexecutableCheck $Snapshot @($id) -AllCheckIds $CheckIds -Functions $Functions -Seen $path)|Select-Object -First 1
+        if($finding){return "its check $id can never pass ($($finding.rule))"}
+    }
+    return $null
+}
 function Get-LedgerUnexecutableCheck {
-    param($Snapshot,[string[]]$CheckIds)
+    param($Snapshot,[string[]]$CheckIds,[string[]]$AllCheckIds,[string[]]$Functions=@(),[hashtable]$Seen=@{})
+    if($null -eq $AllCheckIds){$AllCheckIds=$CheckIds}
     foreach($id in $CheckIds){
         $check=$Snapshot.checks[$id];$function=$Snapshot.functions[$check.functionId]
         $implemented=@($check.bindings|Where-Object {$_.status -ceq 'implemented'})
@@ -262,8 +281,13 @@ function Get-LedgerUnexecutableCheck {
         }elseif(-not @($implemented|Where-Object {$Snapshot.handlers.ContainsKey([string]$_.handler) -and $_.surface -in $Snapshot.handlers[[string]$_.handler]}).Count){
             @{check=$id;rule='handler-not-allowlisted';detail='handler '+((@($implemented.handler)|Sort-Object -Unique) -join ', ')}
         }
-        $blocked=@($function.requires|Where-Object {$_.kind -cnotin $Snapshot.factKinds -or "$($_.id)".StartsWith('/')})
-        if($blocked.Count){@{check=$id;rule='requirement-not-establishable';detail='requires '+(($blocked|ForEach-Object {"$($_.kind):$($_.id)"}) -join ', ')}}
+        $blocked=@(foreach($requirement in @($function.requires)){
+            if($requirement.kind -ceq 'capability' -and $Snapshot.functions.ContainsKey([string]$requirement.id) -and @($Functions).Count){
+                $why=Get-LedgerFunctionBlock $Snapshot $AllCheckIds $Functions ([string]$requirement.id) $Seen
+                if($why){"capability:$($requirement.id) ($why)"}
+            }elseif($requirement.kind -cnotin $Snapshot.factKinds -or "$($requirement.id)".StartsWith('/')){"$($requirement.kind):$($requirement.id)"}
+        })
+        if($blocked.Count){@{check=$id;rule='requirement-not-establishable';detail='requires '+($blocked -join ', ')}}
     }
 }
 # contracts/ledger/exceptions.json: the only place a finding above, or a removal below, may be accepted.
@@ -297,7 +321,7 @@ function ConvertFrom-LedgerExceptions {
 function Test-EditionLedgerExecutable {
     param($Edition,$Plan,$Exceptions)
     $name=[string]$Edition.name;$at=([string]$Edition.ledger.commit).Substring(0,8)
-    $findings=@(Get-LedgerUnexecutableCheck $Plan.snapshot $Plan.checkIds)
+    $findings=@(Get-LedgerUnexecutableCheck $Plan.snapshot $Plan.checkIds -Functions @($Plan.functions))
     $entries=@($Exceptions.unexecutable|Where-Object {$_.edition -ceq $name})
     if($Edition.delivery.status -ceq 'candidate'){
         if($entries.Count){@{ok=$false;msg="ledger ${name}: a candidate edition takes no unexecutable exception; remove its entries from contracts/ledger/exceptions.json"}}

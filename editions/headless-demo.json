@@ -1,6 +1,6 @@
 {
   "name": "headless-demo",
-  "from": "base@4.6.0",
+  "from": "base@4.6.1",
   "add": [],
   "surfaces": [
     "surface-headless@2.4.2"
@@ -15,9 +15,9 @@
   },
   "ledger": {
     "repo": "dynamicweb/skills",
-    "commit": "bb68e6c4a4b8c968f5e24b0f35a8a8f6a031e02d",
+    "commit": "51fdaca488750a205d29c7e9986c9d9d6cbf14b2",
     "manifest": "skills/dw-demo-ledger/assets/releases/10.30.6/manifest.json",
-    "digest": "sha256:60121d175c81b23d796b1a5ad2dab8481986b205e931e292c4f5b56156b16e8f",
+    "digest": "sha256:ccc3b04ae2cfa429bb7df93fa88bb82d2f4cff7898e781831dc157603c58e773",
     "checkIds": [
       "commerce.currencies.one-default",
       "commerce.currencies.several",
@@ -40,9 +40,11 @@
       "orders.favorite-lists.lists",
       "orders.favorite-lists.paragraph",
       "orders.named-carts.named",
+      "orders.payment-methods.active",
       "orders.quotes.convertible",
       "orders.quotes.states",
       "orders.quotes.submitted",
+      "orders.shipping-methods.active",
       "pim.assortments.active",
       "pim.assortments.anonymous-range",
       "pim.assortments.built",

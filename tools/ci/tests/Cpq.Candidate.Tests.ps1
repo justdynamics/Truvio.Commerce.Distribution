@@ -58,7 +58,7 @@ Describe 'Non-deliverable CPQ candidate carriage' {
         $e=Read-CpqJson (Join-Path $script:dist 'editions/cpq-demo.json')
         $skills=if($env:TRUVIO_CPQ_SKILLS_PATH){$env:TRUVIO_CPQ_SKILLS_PATH}else{Join-Path $script:dist '.ledger-skills-cpq'}
         $p=Get-EditionLedgerPlan $script:dist $e $skills
-        $p.checkIds.Count|Should -Be 63
+        $p.checkIds.Count|Should -Be 74
         @($p.checkIds|Where-Object {$_ -like 'cpq.*'}).Count|Should -Be 28
         $p.checkIds|Should -Contain 'serializer.engine.engine-floor'
     }

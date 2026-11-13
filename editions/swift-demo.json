@@ -1,6 +1,6 @@
 {
   "name": "swift-demo",
-  "from": "base@4.6.0",
+  "from": "base@4.6.1",
   "add": [
     "feature-reordering@1.0.6",
     "feature-pricing@1.1.6",
@@ -10,7 +10,7 @@
     "feature-gallery-zoom@1.0.2"
   ],
   "surfaces": [
-    "surface-swift@1.19.1"
+    "surface-swift@1.19.2"
   ],
   "compatAxes": [
     "ring"
@@ -35,13 +35,14 @@
   "description": "Full Swift storefront demo on the split composition (Swift 2.5): framework-only base + the surface-swift content surface (en-US area + UrlPath + own item types) + five feature layers (feature-reordering, feature-pricing, feature-subscription-orders, feature-bom-configurator and feature-b2b-comms) + the sample-data layer on the default theme. The sample-data layer carries the whole browsable catalogue a prospect sees - 12 frontend-demonstrable subgroups under 4 top groups, 60 masters + 36 variant rows bound to their axes, one subscription plan, 90 customer-group prices, the Images and Manuals asset categories, 324 relations, the buyer's 26 orders, 7 quotes, 2 open carts and 2 favourite lists in USD for the customer-center dashboard, the demo return request, three personas - and the storefront copy on Home, About, Contact, the header, the footer and the mega-menu. The composer stages it after surfaces[], so that copy wins the paths it shares with surface-swift.",
   "ledger": {
     "repo": "dynamicweb/skills",
-    "commit": "bb68e6c4a4b8c968f5e24b0f35a8a8f6a031e02d",
+    "commit": "51fdaca488750a205d29c7e9986c9d9d6cbf14b2",
     "manifest": "skills/dw-demo-ledger/assets/releases/10.30.6/manifest.json",
-    "digest": "sha256:60121d175c81b23d796b1a5ad2dab8481986b205e931e292c4f5b56156b16e8f",
+    "digest": "sha256:ccc3b04ae2cfa429bb7df93fa88bb82d2f4cff7898e781831dc157603c58e773",
     "checkIds": [
       "commerce.currencies.one-default",
       "commerce.currencies.several",
       "commerce.customer-prices.scoped",
+      "commerce.product-catalog-app.paragraph",
       "commerce.quantity-prices.tiers",
       "content.item-types.defined",
       "content.item-types.field-health",
@@ -50,6 +51,7 @@
       "content.pages.exist",
       "content.paragraphs.item-instances",
       "content.paragraphs.visible",
+      "content.website-ecommerce-context.defaults-set",
       "content.websites.active",
       "distribution.base-layer.countries",
       "distribution.base-layer.permission-groups",
@@ -64,9 +66,11 @@
       "orders.favorite-lists.lists",
       "orders.favorite-lists.paragraph",
       "orders.named-carts.named",
+      "orders.payment-methods.active",
       "orders.quotes.convertible",
       "orders.quotes.states",
       "orders.quotes.submitted",
+      "orders.shipping-methods.active",
       "orders.shopping-cart-app.paragraph",
       "pim.assortments.active",
       "pim.assortments.anonymous-range",
@@ -94,12 +98,19 @@
       "pim.workspaces.completeness-level",
       "pim.workspaces.empty-workspaces",
       "pim.workspaces.workspaces",
+      "swift.cart-checkout.cart-page",
+      "swift.cart-checkout.checkout-page",
+      "swift.cart-checkout.mini-cart",
       "swift.emails.email-page",
       "swift.express-buy.express-buy-page",
       "swift.header-footer.footer-page",
       "swift.header-footer.header-page",
       "swift.header-footer.selected-on-website",
+      "swift.shop-catalog.shop-navigation-tag",
+      "swift.shop-catalog.shop-page",
       "swift.sign-in.sign-in-entry",
+      "users.frontend-sign-in.app-placed",
+      "users.frontend-sign-in.persona-signs-in",
       "users.user-accounts.active-frontend-users",
       "users.user-groups.exists",
       "users.user-groups.membership"
