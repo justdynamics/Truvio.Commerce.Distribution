@@ -356,7 +356,7 @@ Describe 'Test-ReleaseNotesRecord: a recorded bacpac release has its release-not
         $real = Get-Content -Raw -Encoding utf8 (Join-Path $PSScriptRoot '..\..\..\layers\INDEX.json') | ConvertFrom-Json
         $bp = if ($real.PSObject.Properties['bacpacs']) { $real.bacpacs } else { $null }
         $entries = @(if ($bp -and $bp.PSObject.Properties['blank'] -and $bp.blank) { 'blank' }) +
-                   @(if ($bp -and $bp.PSObject.Properties['editions'] -and $bp.editions) { @($bp.editions.PSObject.Properties.Name) })
+                   @(if ($bp -and $bp.PSObject.Properties['editions'] -and $bp.editions) { @($bp.editions.PSObject.Properties | ForEach-Object { $_.Name }) })
         $rows = @(Test-ReleaseNotesRecord -Index $real)
         # Every entry is bound to gateProven (check 17), so a restamp onto a new DW version empties the register
         # until files are cut at that version: an empty register has nothing to record. Each entry yields a row.
