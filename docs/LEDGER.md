@@ -26,6 +26,43 @@ digest differences, empty sets and extra or missing checks fail. A pinned checko
 whose snapshot files hold CRLF line endings is refused by name before the digest is
 compared, so a digest taken from an `autocrlf=true` checkout cannot validate locally.
 
+## Build inputs (`ledger.inputs`)
+
+Some locked checks name a build field as a token in their probe: `{lang}` for the
+language their rows are stored in and `{pimShop}` for the PIM shop whose folders they
+count. The edition declares those values in its lock, because its own layers carry the
+rows they name, so the value is the same on every host that receives the edition:
+
+```json
+"ledger": { "repo": "dynamicweb/skills", "commit": "...", "manifest": "...", "digest": "...", "checkIds": [ ... ],
+            "inputs": { "defaultLanguage": "ENU", "pimShop": "TCSHOP-PIM" } }
+```
+
+| Field | Token | Names |
+|---|---|---|
+| `defaultLanguage` | `{lang}` | an `EcomLanguages` `LanguageId` |
+| `pimShop` | `{pimShop}` | an `EcomShops` `ShopId` |
+
+Each value is a plain id (letters, digits, `_` or `-`), the producer's SQL token rule;
+no other field is accepted. The Foundry ledger leg passes them to the runner's build
+declaration, refuses a host value that differs, and fails the gate with `Ledger input not
+declared` when a locked check uses a token that nothing supplied (Foundry #1641).
+`{areaId}` is not an edition input: it comes from the host profile.
+
+The validator (`Test-EditionLedgerInput` in `tools/ci/Ledger.ps1`) FAILs, so a missing
+declaration fails the pull request rather than the gate, when:
+
+- a locked check uses `{lang}` or `{pimShop}` and the edition declares no value for it;
+- the edition declares a value that no locked check uses;
+- the value is not a plain id, or no layer the edition composes ships that row as
+  `layers/<layer>/<replace|merge>/_sql/<EcomLanguages|EcomShops>/<id>.yml`.
+
+swift-demo, headless-demo and dap-portal declare `ENU` (a base row, the default language
+the sample-data catalogue is stored in) and `TCSHOP-PIM` (the sample-data PIM shop);
+each has 10 locked checks using `{lang}` and 1 using `{pimShop}`. base-only, base-swift
+and cpq-demo use neither token and declare no inputs. An edition file is not part of a
+layer's proven tree hash, so declaring inputs bumps no layer version.
+
 ## Checks that can never pass
 
 A lock may not contain a check that cannot end PASS at the locked commit. The

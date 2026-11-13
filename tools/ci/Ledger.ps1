@@ -111,8 +111,9 @@ function Get-EditionLedgerPlan {
     }
     $snapshot=Read-DistributionLedgerSnapshot $Edition.ledger $SkillsRoot
     $provided=@();$required=@();$cpqRequired=@()
-    $candidateLayers=@()
+    $candidateLayers=@();$layerNames=@()
     foreach($layer in @(Get-EditionLedgerLayer $DistributionRoot $Edition)){
+        $layerNames+=[string]$layer.name
         if(-not $layer.ledger){throw "Layer '$($layer.name)' has no ledger carriage declaration."}
         foreach($id in @($layer.ledger.provides)+@($layer.ledger.requires)){
             if(-not $snapshot.functions.ContainsKey($id)){throw "Layer '$($layer.name)' names unknown ledger function '$id'."}
@@ -141,7 +142,51 @@ function Get-EditionLedgerPlan {
     if(@($locked|Sort-Object -Unique).Count -ne $locked.Count){throw 'Duplicate locked ledger check id.'}
     foreach($id in $locked){if(-not $snapshot.checks.ContainsKey($id)){throw "Unknown locked check '$id'."}}
     if(@(Compare-Object $expected @($locked|Sort-Object)).Count){throw 'Edition checkIds must equal the provided functions plus CPQ prerequisites check union at the locked snapshot.'}
-    return @{functions=@($measured|Sort-Object -Unique);provides=$provided;requires=@($required|Sort-Object -Unique);checkIds=$locked;snapshot=$snapshot;skillsRoot=$SkillsRoot}
+    return @{functions=@($measured|Sort-Object -Unique);provides=$provided;requires=@($required|Sort-Object -Unique);checkIds=$locked;snapshot=$snapshot;skillsRoot=$SkillsRoot;layers=$layerNames}
+}
+
+# ---- Edition build inputs for the producer's tokens (Foundry #1641) ----
+# A locked check names a build field as a token in its probe; the Foundry ledger leg fills {lang} and {pimShop} from
+# the edition's ledger.inputs and fails the gate when they are missing. Checked here so a missing declaration fails
+# the PR, not the gate. Token -> the input field, the table whose row it names and that table's key column.
+$script:LedgerEditionInputToken=[ordered]@{
+    lang=@{field='defaultLanguage';table='EcomLanguages';key='LanguageId'}
+    pimShop=@{field='pimShop';table='EcomShops';key='ShopId'}
+}
+# Rows @{ok;msg}. Per token: a locked check uses it and the edition declares no value (FAIL); the edition declares a
+# value no locked check uses (FAIL, a declaration nothing reads); the declared id is not a plain id, or no layer the
+# edition composes ships that row as layers/<layer>/<mode>/_sql/<table>/<id>.yml (FAIL); otherwise one PASS row.
+function Test-EditionLedgerInput {
+    param([string]$DistributionRoot,$Edition,$Plan)
+    $name=[string]$Edition.name
+    $inputs=if($Edition.ledger -is [Collections.IDictionary] -and $Edition.ledger.Contains('inputs')){$Edition.ledger.inputs}else{$null}
+    if($null -ne $inputs -and $inputs -isnot [Collections.IDictionary]){@{ok=$false;msg="ledger ${name}: ledger.inputs must be an object"};return}
+    if($null -eq $inputs){$inputs=@{}}
+    $fields=@($script:LedgerEditionInputToken.Values|ForEach-Object {$_.field})
+    foreach($field in @($inputs.Keys|Where-Object {$_ -cnotin $fields})){@{ok=$false;msg="ledger ${name}: unsupported ledger.inputs field '$field'; an edition declares only $($fields -join ' and ')"}}
+    foreach($token in $script:LedgerEditionInputToken.Keys){
+        $spec=$script:LedgerEditionInputToken[$token]
+        $users=@(foreach($id in $Plan.checkIds){
+            $check=$Plan.snapshot.checks[$id]
+            if($check -and ($check|ConvertTo-Json -Depth 60 -Compress).Contains("{$token}")){$id}
+        })
+        $declared=$inputs.Contains($spec.field)
+        if(-not $declared){
+            if($users.Count){@{ok=$false;msg="ledger ${name}: $($users.Count) locked check(s) use {$token} (e.g. $($users[0])) and editions/$name.json declares no ledger.inputs.$($spec.field); the Foundry ledger leg fails with 'Ledger input not declared'"}}
+            continue
+        }
+        $value=$inputs[$spec.field]
+        if(-not $users.Count){@{ok=$false;msg="ledger ${name}: ledger.inputs.$($spec.field) is declared but no locked check uses {$token}; remove it"};continue}
+        if($value -isnot [string] -or $value -cnotmatch '^[A-Za-z0-9_-]+$'){@{ok=$false;msg="ledger ${name}: ledger.inputs.$($spec.field) must be a plain id (letters, digits, '_' or '-')"};continue}
+        $carriers=@(foreach($layer in @($Plan.layers)){
+            foreach($mode in 'replace','merge'){
+                $row=Join-Path $DistributionRoot "layers/$layer/$mode/_sql/$($spec.table)/$value.yml"
+                if((Test-Path -LiteralPath $row -PathType Leaf) -and (Get-Content -LiteralPath $row -Raw) -cmatch ('(?m)^"?'+$spec.key+'"?:\s*"?'+[regex]::Escape($value)+'"?\s*$')){"$layer/$mode"}
+            }
+        })
+        if(-not $carriers.Count){@{ok=$false;msg="ledger ${name}: ledger.inputs.$($spec.field) '$value' names no $($spec.table) row that a layer of the edition ships ($(@($Plan.layers) -join ', '))"};continue}
+        @{ok=$true;msg="ledger ${name}: ledger.inputs.$($spec.field) '$value' for $($users.Count) locked check(s) using {$token}, a $($spec.table) row of $($carriers -join ', ')"}
+    }
 }
 
 # ---- Locked checks that can never pass (Distribution #132 item 1) ----

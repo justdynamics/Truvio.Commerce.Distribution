@@ -140,6 +140,23 @@
             "pattern": "^[a-z][a-z0-9.-]*$"
           },
           "minItems": 1
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "defaultLanguage": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "description": "The EcomLanguages LanguageId the producer substitutes for the {lang} token of a locked check (e.g. ENU). A plain id (letters, digits, '_' or '-'), the producer's SQL token rule. The validator requires it when a locked check uses {lang} and requires the id to be an EcomLanguages row a composed layer ships."
+            },
+            "pimShop": {
+              "type": "string",
+              "pattern": "^[A-Za-z0-9_-]+$",
+              "description": "The EcomShops ShopId of the PIM shop the producer substitutes for the {pimShop} token of a locked check (e.g. TCSHOP-PIM). A plain id (letters, digits, '_' or '-'). The validator requires it when a locked check uses {pimShop} and requires the id to be an EcomShops row a composed layer ships."
+            }
+          },
+          "description": "OPTIONAL build inputs the edition declares for the producer's tokens (docs/LEDGER.md). The edition owns them because its own layers carry the rows they name, so the value is the same on every host that receives the edition. The Foundry ledger leg passes them to the runner's build declaration and refuses a host value that differs."
         }
       }
     },

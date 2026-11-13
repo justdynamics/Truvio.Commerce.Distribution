@@ -77,6 +77,10 @@
       "users.user-accounts.active-frontend-users",
       "users.user-groups.exists",
       "users.user-groups.membership"
-    ]
+    ],
+    "inputs": {
+      "defaultLanguage": "ENU",
+      "pimShop": "TCSHOP-PIM"
+    }
   }
 }
