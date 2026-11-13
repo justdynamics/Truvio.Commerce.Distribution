@@ -24,8 +24,9 @@ and only then publishes the release.
 
 Release notes (Foundry #1604, tools/ci/ReleaseNotes.ps1): a release published after the rule gets
 its generated notes as the body and as the release-notes.json asset in the same step, and a draft
-whose notes cannot be generated stays unpublished. The releases published before the rule
-(Get-ReleaseNotesExemptTag) are left as they are. Functions only.
+whose notes cannot be generated stays unpublished. A published release that lacks the asset (the
+four published before the rule, backfilled 2026-11-12) gains the asset and the body; a tag in
+Get-ReleaseNotesExemptTag (empty now) is left as it is. Functions only.
 #>
 
 . (Join-Path $PSScriptRoot 'ReleaseNotes.ps1')

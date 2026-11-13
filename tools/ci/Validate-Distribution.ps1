@@ -104,8 +104,8 @@ Checks (all fail-closed; any failure -> exit 1):
                         its bacpac entry does not FAILs: rebuild the bacpac or remove the entry.
                         Release notes (Foundry #1604, tools/ci/ReleaseNotes.ps1): every entry carries
                         its `releaseNotes` record { schema, previousTag }, the offline trace that its
-                        release ships generated notes; the releases published before the rule
-                        (Get-ReleaseNotesExemptTag) need none. An entry without one FAILs.
+                        release ships generated notes; a tag in Get-ReleaseNotesExemptTag (empty
+                        since the 2026-11-12 backfill) needs none. An entry without one FAILs.
  18. Ledger locks     - (docs/LEDGER.md, Distribution #132) a declared edition lock equals the check
                         union of its carriage at the exact pinned skills commit and LF snapshot
                         digest (tools/ci/Ledger.ps1). A locked check that can never pass at that

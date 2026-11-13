@@ -28,9 +28,9 @@ repository's own records at two commits, never re-typed:
 
 The record (the validator's offline check, tools/ci/Bacpac.ps1 check 17): a bacpac entry carries
 `releaseNotes` { schema, previousTag }, written by the Foundry from New-ReleaseNotesRecord when it
-registers the file. The four releases published before the rule (Get-ReleaseNotesExemptTag) need
-none and are never rewritten. At publication the generator recomputes the previous release and
-refuses a record that names another one.
+registers the file. The four releases published before the rule carry it too, backfilled from the
+same history (owner decision 2026-11-12); Get-ReleaseNotesExemptTag is empty. At publication the
+generator recomputes the previous release and refuses a record that names another one.
 
 Functions only: dot-sourcing defines functions and nothing else. Needs git; no network.
 #>
@@ -41,15 +41,14 @@ if (-not (Get-Command Compare-SpineVersion -ErrorAction SilentlyContinue)) { . (
 function Get-ReleaseNotesSchemaName { return 'release-notes/v1' }
 function Get-ReleaseNotesAssetName { return 'release-notes.json' }
 
-# The releases published before the rule (2026-11-12). Their register entries are proof records and
-# are not edited to add a `releaseNotes` record; -Execute leaves those releases as they are.
+# Releases that owe no release notes. Empty: the four releases published before the rule
+# (databases/blank/10.29.8, editions/swift-demo/5.5.0, editions/dap-portal/2.5.0,
+# editions/headless-demo/3.4.0) were backfilled (owner decision 2026-11-12). Their register entries
+# carry the `releaseNotes` record the generator derives from history, and the next -Execute gives
+# each published release its body and release-notes.json asset. A tag listed here passes check 17
+# without a record and is left as it is by -Execute.
 function Get-ReleaseNotesExemptTag {
-    return @(
-        'databases/blank/10.29.8'
-        'editions/swift-demo/5.5.0'
-        'editions/dap-portal/2.5.0'
-        'editions/headless-demo/3.4.0'
-    )
+    return @()
 }
 
 function Get-ReleaseNotesLinePattern {

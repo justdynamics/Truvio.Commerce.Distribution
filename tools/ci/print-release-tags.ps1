@@ -45,8 +45,9 @@ layer pins with their CHANGELOG entries, component versions, merged pull request
 must do, all against the previous release of the same line), a "Provenance" section, and the same
 content as the release-notes.json asset (layers/release-notes.schema.json). The print mode prints the
 notes -Execute would attach; -Execute writes the body and uploads the asset in the step that publishes
-the draft, and leaves the draft unpublished when the notes cannot be generated. The four releases
-published before the rule are left as they are (-IncludePublishedNotes prints what theirs would say).
+the draft, and leaves the draft unpublished when the notes cannot be generated. A published release
+without release-notes.json (the four published before the rule, backfilled 2026-11-12) gains the
+asset and the body; its bacpac asset, tag, title and draft state are not touched.
 
 Usage:
   pwsh tools/ci/print-release-tags.ps1              # print the manifest and the release notes (executes nothing)
