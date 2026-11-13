@@ -22,9 +22,9 @@
   },
   "ledger": {
     "repo": "dynamicweb/skills",
-    "commit": "1072ba88149903f619cc13546922f7aed560b85e",
-    "manifest": "skills/dw-demo-ledger/assets/releases/10.29.8/manifest.json",
-    "digest": "sha256:058a510b1ef24780823944266f787330d1a48b4fc3442290e9dcb53dd95ce9f4",
+    "commit": "bb68e6c4a4b8c968f5e24b0f35a8a8f6a031e02d",
+    "manifest": "skills/dw-demo-ledger/assets/releases/10.30.6/manifest.json",
+    "digest": "sha256:60121d175c81b23d796b1a5ad2dab8481986b205e931e292c4f5b56156b16e8f",
     "checkIds": [
       "commerce.currencies.one-default",
       "commerce.currencies.several",

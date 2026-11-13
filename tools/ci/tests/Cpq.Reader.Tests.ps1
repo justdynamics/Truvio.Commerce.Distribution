@@ -27,9 +27,18 @@ Describe 'Skills reader against actual Distribution receipt contracts' -Skip:(-n
         # The 21 behavioural checks whose only binding is the receipt handler.
         $script:receiptCheckIds=@('installation.restart','model-versions.isolation','inputs.types','lookups.results','conditions.truth-table','input-rules.effects','constraints.transitions','bom.results','routing.results','pricing.results','persistence.roundtrip','revisions.isolated-copy','cart.handoff','quotes.handoff','documents.output','page.render','studio-models.roundtrip','diagrams.dependencies','visualization.selection','erp.boundary','spec-build.reproducible')
     }
-    It 'reads all 21 behavioral envelopes in the producer payload shape without inventing a domain PASS' {
+    It 'reads all 21 behavioral envelopes in the producer payload shape; a proven row is PASS only until the binding status gates it' {
+        # Skills #240 (reader contract): every row judged by Get-CpqObservationVerdict and proven reads PASS with
+        # complete=$true. The binding status, not the reader, keeps it from a domain PASS (Resolve-CpqReaderVerdict).
+        $snapshot=@{checks=@{}}
         foreach($id in $script:receiptCheckIds){$f=New-TestFixture;Set-Check $f ('cpq.'+$id)
-            (Read-CpqBehaviorObservation ('cpq.'+$id) $f.receipt (Get-Trust $f)).result | Should -BeExactly UNVERIFIED
+            $read=Read-CpqBehaviorObservation ('cpq.'+$id) $f.receipt (Get-Trust $f)
+            $read.result | Should -BeExactly PASS;$read.complete | Should -BeTrue;@($read.offenders).Count | Should -Be 0
+            $snapshot.checks['cpq.'+$id]=@{id='cpq.'+$id;bindings=@(@{id='file-cpq-receipt';surface='file';status='planned';handler='cpq-behavior-receipt'})}
+            (Resolve-CpqReaderVerdict ('cpq.'+$id) $read $snapshot).result | Should -BeExactly UNVERIFIED
+            # Only promoting the binding lets the same proven row through.
+            $snapshot.checks['cpq.'+$id].bindings[0].status='implemented'
+            (Resolve-CpqReaderVerdict ('cpq.'+$id) $read $snapshot).result | Should -BeExactly PASS
         }
     }
     It 'RED CONTROL: a wrong price in the producer shape under a PASS label is refused, never read as UNVERIFIED' {
@@ -52,7 +61,7 @@ Describe 'Skills reader against actual Distribution receipt contracts' -Skip:(-n
     }
     It 'refuses a wrong BOM quantity under a PASS label and keeps the producer failure for it' {
         $f=New-TestFixture;Set-Check $f cpq.bom.results
-        (Read-CpqBehaviorObservation cpq.bom.results $f.receipt (Get-Trust $f)).result | Should -BeExactly UNVERIFIED
+        (Read-CpqBehaviorObservation cpq.bom.results $f.receipt (Get-Trust $f)).result | Should -BeExactly PASS
         $f.receipt.observations[0].observed.steps.recalculate.observed.bom['WB-S']=99
         {Read-CpqBehaviorObservation cpq.bom.results $f.receipt (Get-Trust $f)} | Should -Throw '*contradicts its own observation*'
         Set-FailedRecalculation $f.receipt.observations[0]
@@ -74,7 +83,7 @@ Describe 'Skills reader against actual Distribution receipt contracts' -Skip:(-n
     }
     It 'binds every receipt check of the pinned snapshot as planned, so none of them can yield PASS' {
         # The binding files of the pinned checkout, not a copy: when one is promoted this test names it.
-        $probes=Join-Path $env:CPQ_SKILLS_ROOT 'skills/dw-demo-ledger/assets/releases/10.29.8/probes/cpq'
+        $probes=Join-Path $env:CPQ_SKILLS_ROOT 'skills/dw-demo-ledger/assets/releases/10.30.6/probes/cpq'
         $snapshot=@{checks=@{}}
         foreach($file in Get-ChildItem -LiteralPath $probes -Filter '*.json' -File){$check=Read-CpqJson $file.FullName;$snapshot.checks[$check.id]=$check}
         $bound=@($snapshot.checks.Keys | Where-Object {(Get-CpqReceiptBinding $_ $snapshot) -cne 'unbound'} | Sort-Object)

@@ -19,6 +19,24 @@ function Resolve-LedgerSkillsRoot {
     if(-not $SkillsRoot -or -not(Test-Path -LiteralPath $SkillsRoot -PathType Container)){throw 'No skills checkout: pass -SkillsRoot or set TRUVIO_SKILLS_PATH.'}
     return (Resolve-Path -LiteralPath $SkillsRoot).Path
 }
+# The runner's handler allowlist as {handler: [surfaces]}. Up to skills 6.8.5 assets/handlers.json IS that map;
+# from 6.8.6 (dynamicweb/skills #240) it is {handlers: {<handler>: {surfaces, assertions}}, mcpReadTools,
+# adminReadQueries, dwapiReadRoutes}. Both shapes give the same map; anything else gives an empty one, which the
+# unexecutable-check rule then reports per check rather than passing it.
+function ConvertTo-LedgerHandlerSurfaceMap {
+    param($Registry)
+    $map=@{}
+    if($Registry -isnot [Collections.IDictionary]){return $map}
+    if($Registry.Contains('handlers') -and $Registry['handlers'] -is [Collections.IDictionary]){
+        foreach($name in @($Registry['handlers'].Keys)){
+            $entry=$Registry['handlers'][$name]
+            if($entry -is [Collections.IDictionary] -and $entry.Contains('surfaces')){$map[[string]$name]=@($entry['surfaces']|ForEach-Object {[string]$_})}
+        }
+        return $map
+    }
+    foreach($name in @($Registry.Keys)){$map[[string]$name]=@($Registry[$name]|ForEach-Object {[string]$_})}
+    return $map
+}
 function Read-DistributionLedgerSnapshot {
     param($Lock,[string]$SkillsRoot)
     if(-not $Lock -or $Lock.repo -ne 'dynamicweb/skills' -or $Lock.commit -notmatch '^[a-f0-9]{40}$' -or $Lock.digest -notmatch '^sha256:[a-f0-9]{64}$') {throw 'Missing or invalid ledger lock.'}
@@ -52,7 +70,7 @@ function Read-DistributionLedgerSnapshot {
     # What the pinned runner can execute, read from the same checkout: its handler allowlist, and the requirement
     # kinds it has a fact source for (only feature flags, and only when the runner discovers them at all).
     $handlers=@{};$registry=Join-Path $SkillsRoot 'skills/dw-demo-ledger/assets/handlers.json'
-    if(Test-Path -LiteralPath $registry -PathType Leaf){$handlers=Read-LedgerJson $registry}
+    if(Test-Path -LiteralPath $registry -PathType Leaf){$handlers=ConvertTo-LedgerHandlerSurfaceMap (Read-LedgerJson $registry)}
     $factKinds=@();$transport=Join-Path $SkillsRoot 'skills/dw-demo-ledger/scripts/Ledger.Transport.ps1'
     if((Test-Path -LiteralPath $transport -PathType Leaf) -and (Get-Content -LiteralPath $transport -Raw) -match 'function\s+Get-LedgerFeatureFacts\b'){$factKinds=@('flag')}
     return @{root=$root;manifest=$manifest;digest=$digest;functions=$functions;checks=$checks;dwVersion=$meta.dwVersion;handlers=$handlers;factKinds=$factKinds}
