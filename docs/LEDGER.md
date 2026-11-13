@@ -44,7 +44,7 @@ rows they name, so the value is the same on every host that receives the edition
 | `pimShop` | `{pimShop}` | an `EcomShops` `ShopId` |
 
 Each value is a plain id (letters, digits, `_` or `-`), the producer's SQL token rule;
-no other field is accepted. The Foundry ledger leg passes them to the runner's build
+no other field is accepted except `families` (below). The Foundry ledger leg passes them to the runner's build
 declaration, refuses a host value that differs, and fails the gate with `Ledger input not
 declared` when a locked check uses a token that nothing supplied (Foundry #1641).
 `{areaId}` is not an edition input: it comes from the host profile.
@@ -56,6 +56,19 @@ declaration fails the pull request rather than the gate, when:
 - the edition declares a value that no locked check uses;
 - the value is not a plain id, or no layer the edition composes ships that row as
   `layers/<layer>/<replace|merge>/_sql/<EcomLanguages|EcomShops>/<id>.yml`.
+
+`families` is not a token: the skills `pim-families` handler reads it from the build. A
+locked check whose assertion kind is `families` (`pim.data-models.families-have-models`)
+needs every declared family to have a data model on its category, with products, and at
+least one family declared; without a declaration it FAILs on every host with "the build file
+declares 0 family(ies)". The edition declares them as `ledger.inputs.families`, an array of
+`{ "name": "<label>", "category": "<EcomProductCategory CategoryId>" }`. The validator FAILs
+when a locked check reads families and none are declared, when they are declared and no
+locked check reads them, on an entry that is not a non-blank name and a plain-id category,
+on a category named twice, and on a category no composed layer ships as
+`layers/<layer>/<replace|merge>/_sql/EcomProductCategory/<id>.yml`. swift-demo,
+headless-demo and dap-portal declare the four data-model categories the sample-data layer
+carries (`tc_commerce`, `tc_content`, `tc_product_structure`, `tc_users`).
 
 swift-demo, headless-demo and dap-portal declare `ENU` (a base row, the default language
 the sample-data catalogue is stored in) and `TCSHOP-PIM` (the sample-data PIM shop);

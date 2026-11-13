@@ -106,7 +106,13 @@
     ],
     "inputs": {
       "defaultLanguage": "ENU",
-      "pimShop": "TCSHOP-PIM"
+      "pimShop": "TCSHOP-PIM",
+      "families": [
+        { "name": "Commerce", "category": "tc_commerce" },
+        { "name": "Content", "category": "tc_content" },
+        { "name": "Product Structure", "category": "tc_product_structure" },
+        { "name": "Users", "category": "tc_users" }
+      ]
     }
   }
 }
