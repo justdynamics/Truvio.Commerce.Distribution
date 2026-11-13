@@ -354,9 +354,18 @@ Describe 'Test-ReleaseNotesRecord: a recorded bacpac release has its release-not
     }
     It 'the register in layers/INDEX.json carries a record on every entry' {
         $real = Get-Content -Raw -Encoding utf8 (Join-Path $PSScriptRoot '..\..\..\layers\INDEX.json') | ConvertFrom-Json
+        $bp = if ($real.PSObject.Properties['bacpacs']) { $real.bacpacs } else { $null }
+        $entries = @(if ($bp -and $bp.PSObject.Properties['blank'] -and $bp.blank) { 'blank' }) +
+                   @(if ($bp -and $bp.PSObject.Properties['editions'] -and $bp.editions) { @($bp.editions.PSObject.Properties.Name) })
         $rows = @(Test-ReleaseNotesRecord -Index $real)
-        $rows.Count | Should -BeGreaterThan 0
+        # Every entry is bound to gateProven (check 17), so a restamp onto a new DW version empties the register
+        # until files are cut at that version: an empty register has nothing to record. Each entry yields a row.
+        if ($entries.Count) { $rows.Count | Should -BeGreaterOrEqual $entries.Count } else { $rows.Count | Should -Be 0 }
         @($rows | Where-Object { -not $_.ok }) | Should -BeNullOrEmpty
+    }
+    It 'an empty register (a restamp onto a new DW version) yields no row and no finding' {
+        @(Test-ReleaseNotesRecord -Index ([pscustomobject]@{ bacpacs = [pscustomobject]@{} })).Count | Should -Be 0
+        @(Test-ReleaseNotesRecord -Index ([pscustomobject]@{ bacpacs = [pscustomobject]@{ editions = [pscustomobject]@{} } })).Count | Should -Be 0
     }
     It 'FAILs a record with another schema name' {
         $e = Copy-Entry $script:index.bacpacs.blank
