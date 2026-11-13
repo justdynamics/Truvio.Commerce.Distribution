@@ -1,6 +1,6 @@
 {
   "name": "base",
-  "version": "4.6.0",
+  "version": "4.6.1",
   "kind": "base",
   "swiftVersion": "2.5.0",
   "fragmentModes": [
@@ -39,11 +39,13 @@
   "ledger": {
     "provides": [
       "distribution.base-layer",
-      "commerce.currencies"
+      "commerce.currencies",
+      "orders.payment-methods",
+      "orders.shipping-methods"
     ],
     "requires": [
       "serializer.engine"
     ],
-    "comment": "Framework records and the base contract are carried. Payment/shipping defaults enable later compositions; no completed transaction or storefront behavior is claimed."
+    "comment": "Framework records and the base contract are carried, including the active payment method (PAY2 On account) and the active shipping methods a checkout offers. No completed transaction or storefront behavior is claimed."
   }
 }

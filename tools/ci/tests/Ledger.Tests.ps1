@@ -143,6 +143,30 @@ Describe 'Distribution #132 item 1: a locked check that can never pass' {
         Get-Rule $s 'f.flag.ok' | Should -BeExactly ''
         foreach ($check in 'f.cap.ok', 'f.app.ok', 'f.path.ok') { Get-Rule $s $check | Should -BeExactly 'requirement-not-establishable' }
     }
+    It 'a capability on a function the build measures, whose locked checks can all pass, is established by the run' {
+        $f = @(Get-LedgerUnexecutableCheck (New-Snapshot) @('f.cap.ok', 'f.plain.ok') -Functions @('f.cap', 'f.plain'))
+        $f.Count | Should -Be 0
+    }
+    It 'RED CONTROL: the capability stays not establishable when its function <Case>' -ForEach @(
+        @{ Case = 'is not built'; Checks = @('f.cap.ok'); Functions = @('f.cap'); Detail = 'function f.plain is not built' }
+        @{ Case = 'has no locked check'; Checks = @('f.cap.ok'); Functions = @('f.cap', 'f.plain'); Detail = 'function f.plain has no locked check' }
+        @{ Case = 'has a locked check that can never pass'; Checks = @('f.cap.ok', 'f.plain.ok', 'f.plain.planned'); Functions = @('f.cap', 'f.plain'); Detail = 'its check f.plain.planned can never pass (no-implemented-binding)' }
+    ) {
+        $f = @(Get-LedgerUnexecutableCheck (New-Snapshot) $Checks -Functions $Functions | Where-Object { $_.check -eq 'f.cap.ok' })
+        $f.Count | Should -Be 1
+        $f[0].rule | Should -BeExactly 'requirement-not-establishable'
+        $f[0].detail | Should -BeLike "*capability:f.plain ($Detail)*"
+    }
+    It 'RED CONTROL: a circular capability requirement is never establishable' {
+        $s = New-Snapshot
+        $s.functions['f.a'] = @{ id = 'f.a'; requires = @(@{ kind = 'capability'; id = 'f.b'; expected = $true }) }
+        $s.functions['f.b'] = @{ id = 'f.b'; requires = @(@{ kind = 'capability'; id = 'f.a'; expected = $true }) }
+        $s.checks['f.a.ok'] = @{ id = 'f.a.ok'; functionId = 'f.a'; bindings = @(@{ status = 'implemented'; surface = 'sql'; handler = 'sql-scalar' }) }
+        $s.checks['f.b.ok'] = @{ id = 'f.b.ok'; functionId = 'f.b'; bindings = @(@{ status = 'implemented'; surface = 'sql'; handler = 'sql-scalar' }) }
+        $f = @(Get-LedgerUnexecutableCheck $s @('f.a.ok', 'f.b.ok') -Functions @('f.a', 'f.b'))
+        @($f.rule | Sort-Object -Unique) | Should -Be @('requirement-not-establishable')
+        $f.Count | Should -Be 2
+    }
     It 'an exact register entry turns the finding into a note' {
         $rows = Test-Lock 'f.plain.planned' @{ edition = 'ed'; check = 'f.plain.planned'; rule = 'no-implemented-binding'; ref = 'o/r#1'; reason = 'recorded finding' }
         $rows.Count | Should -Be 1; $rows[0].ok | Should -BeTrue; $rows[0].note | Should -BeTrue
@@ -171,11 +195,11 @@ Describe 'Distribution #132 item 1: a locked check that can never pass' {
             @(Test-EditionLedgerExecutable -Edition $lock.edition -Plan $lock.plan -Exceptions $register | Where-Object { -not $_.ok }).Count | Should -Be 0
         }
     }
-    It 'RED CONTROL: without the register the three known locks fail on their seven checks' {
+    It 'RED CONTROL: without the register the three known locks fail on their six checks' {
         $failed = foreach ($lock in $script:shipped) {
             Test-EditionLedgerExecutable -Edition $lock.edition -Plan $lock.plan -Exceptions @{ unexecutable = @(); removals = @() } | Where-Object { -not $_.ok } | ForEach-Object { $lock.edition.name }
         }
-        ($failed | Group-Object | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Count)" }) -join ' ' | Should -BeExactly 'base-swift=2 headless-demo=2 swift-demo=3'
+        ($failed | Group-Object | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Count)" }) -join ' ' | Should -BeExactly 'base-swift=2 headless-demo=2 swift-demo=2'
     }
     It 'RED CONTROL: the register refuses an unknown rule, a missing reference and an unknown key' {
         $entry = '{"edition":"ed","check":"c.x","rule":"no-implemented-binding","ref":"o/r#1","reason":"recorded finding"}'

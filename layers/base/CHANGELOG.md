@@ -1,5 +1,16 @@
 ﻿# Changelog — base
 
+## 4.6.1
+
+### Ledger carriage: payment and shipping methods
+
+`layer.json` `ledger.provides` adds `orders.payment-methods` and `orders.shipping-methods`. The base
+already ships the rows these functions check (`EcomPayments`: `PAY2` On account active;
+`EcomShippings`: Standard ground, Express, Freight, LTL and Customer pickup active), and the
+storefront cart and checkout that `surface-swift` now declares require them as capabilities
+(skills ledger `swift.cart-checkout`). Every edition now locks `orders.payment-methods.active` and
+`orders.shipping-methods.active`. A metadata change only: no row or file changes.
+
 ## 4.6.0
 
 ### Truvio.Commerce.MCP floor 0.6.3-beta (Foundry #1666, owner ruling 2026-11-13)

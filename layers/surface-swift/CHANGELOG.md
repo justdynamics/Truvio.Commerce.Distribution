@@ -1,5 +1,20 @@
 ﻿# Changelog — surface-swift
 
+## 1.19.2 (2026-11-13)
+
+**PATCH. Ledger carriage only, no row or file change.** `layer.json` `ledger.provides` names the
+storefront functions this layer already ships, which other declared functions require as
+capabilities (`swift.express-buy` requires `swift.cart-checkout`; `swift.sign-in` requires
+`users.frontend-sign-in`):
+
+- `swift.shop-catalog`: the Shop page (`Swift-v2_Shop`, navigation tag `Shop`).
+- `swift.cart-checkout`: the cart (`Swift-v2_Cart`) and checkout (`Swift-v2_Checkout`) pages and
+  the mini cart paragraph (`Swift-v2_MiniCart`).
+- `commerce.product-catalog-app`: the `eCom_ProductCatalog` app paragraphs.
+- `content.website-ecommerce-context`: the area's default shop, language and currency.
+- `users.frontend-sign-in`: the sign-in page with the Users - Authentication app
+  (`UserAuthentication`). The persona that signs in is carried by `sample-data`.
+
 ## 1.19.0 (2026-10-20)
 
 **MINOR. Rebased on Swift 2.5.0.** Every `files/` overlay on a stock path, every shipped item type

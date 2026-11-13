@@ -164,7 +164,7 @@
     {
       "name": "base",
       "kind": "base",
-      "version": "4.6.0",
+      "version": "4.6.1",
       "status": "active"
     },
     {
@@ -230,7 +230,7 @@
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.19.1",
+      "version": "1.19.2",
       "status": "active"
     },
     {

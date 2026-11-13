@@ -1,9 +1,9 @@
 {
   "name": "base-swift",
-  "from": "base@4.6.0",
+  "from": "base@4.6.1",
   "add": [],
   "surfaces": [
-    "surface-swift@1.19.1"
+    "surface-swift@1.19.2"
   ],
   "sampleData": false,
   "themes": [
@@ -30,12 +30,13 @@
   "description": "The foundational baseline: the one thing to clone that boots a Swift site. base + surface-swift + theme default, NO sample data and NO feature layers - an empty shop with a complete, themed storefront around it, and the declared placeholder footprint of both layers present, parsed and inert. An EDITION and never a merged layer (V5-PLAN D-C): collapsing base and surface-swift into one would force every headless and DAP consumer to carry the Swift design surface, break base.contract.json as the content-free contract additions bind to, and make base-only unprovable. criticalPaths are expressed under the CULTURE segment, not AreaUrlName: on a single-area host Dynamicweb serves /en-us/ and the decorative AreaUrlName 404s (Foundry 965, 1005). compatAxes names all three axes, so an unmet floor fails this edition instead of warning.",
   "ledger": {
     "repo": "dynamicweb/skills",
-    "commit": "bb68e6c4a4b8c968f5e24b0f35a8a8f6a031e02d",
+    "commit": "51fdaca488750a205d29c7e9986c9d9d6cbf14b2",
     "manifest": "skills/dw-demo-ledger/assets/releases/10.30.6/manifest.json",
-    "digest": "sha256:60121d175c81b23d796b1a5ad2dab8481986b205e931e292c4f5b56156b16e8f",
+    "digest": "sha256:ccc3b04ae2cfa429bb7df93fa88bb82d2f4cff7898e781831dc157603c58e773",
     "checkIds": [
       "commerce.currencies.one-default",
       "commerce.currencies.several",
+      "commerce.product-catalog-app.paragraph",
       "content.item-types.defined",
       "content.item-types.field-health",
       "content.item-types.table-health",
@@ -43,16 +44,26 @@
       "content.pages.exist",
       "content.paragraphs.item-instances",
       "content.paragraphs.visible",
+      "content.website-ecommerce-context.defaults-set",
       "content.websites.active",
       "distribution.base-layer.countries",
       "distribution.base-layer.permission-groups",
       "distribution.theme-layer.brand-slot",
       "orders.customer-experience-center.paragraph",
+      "orders.payment-methods.active",
+      "orders.shipping-methods.active",
       "orders.shopping-cart-app.paragraph",
+      "swift.cart-checkout.cart-page",
+      "swift.cart-checkout.checkout-page",
+      "swift.cart-checkout.mini-cart",
       "swift.header-footer.footer-page",
       "swift.header-footer.header-page",
       "swift.header-footer.selected-on-website",
-      "swift.sign-in.sign-in-entry"
+      "swift.shop-catalog.shop-navigation-tag",
+      "swift.shop-catalog.shop-page",
+      "swift.sign-in.sign-in-entry",
+      "users.frontend-sign-in.app-placed",
+      "users.frontend-sign-in.persona-signs-in"
     ]
   }
 }

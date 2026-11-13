@@ -86,7 +86,7 @@ validator decides this from the locked snapshot and the pinned runner, without a
 |---|---|
 | `no-implemented-binding` | every binding is `status: planned` |
 | `handler-not-allowlisted` | no implemented binding names a handler that the runner's `assets/handlers.json` allows on its surface |
-| `requirement-not-establishable` | its function requires a fact the pinned runner has no source for: any `app`, `licence` or `capability` requirement, a `flag` when the runner does not discover feature flags, or a `flag` whose id is a settings path |
+| `requirement-not-establishable` | its function requires a fact the pinned runner has no source for: any `app` or `licence` requirement, a `flag` when the runner does not discover feature flags, or a `flag` whose id is a settings path. A `capability` that names a function is established by the run when the edition measures that function and every locked check of it can pass; it is not establishable when that function is not built, has no locked check, or has a locked check that can never pass (a circle never establishes) |
 
 A candidate edition (`delivery.status: candidate`) is refused for delivery and cannot
 claim proof, so the validator reports its count as a NOTE. Every other edition FAILs
