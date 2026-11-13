@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "baseContractVersion": "3.5.0",
+  "baseContractVersion": "3.6.0",
   "swiftVersion": "2.5.0",
   "compat": {
     "dw": {
@@ -20,7 +20,7 @@
       },
       {
         "id": "Truvio.Commerce.MCP",
-        "min": "0.6.0-beta",
+        "min": "0.6.3-beta",
         "required": false
       }
     ]

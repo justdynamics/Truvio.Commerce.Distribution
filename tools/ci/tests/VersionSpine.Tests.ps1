@@ -74,13 +74,17 @@ Describe 'the shipped spine' {
         @($script:spine.components.mcp.ids.predecessors) | Should -Be @('Dynamicweb.MCP')
         (Get-SpineIds -Component $script:spine.components.mcp -IncludePredecessors) | Should -Be @('Truvio.Commerce.MCP', 'Dynamicweb.MCP')
     }
-    It 'states the MCP floor 0.6.0-beta for both consumers, with the owner reason' {
-        foreach ($cons in 'layers', 'skills') {
-            $f = Get-Floor $script:spine 'mcp' $cons
-            $f.min | Should -Be '0.6.0-beta'
-            $f.reason.ref | Should -Be 'dynamicweb/skills#137'
-            $f.PSObject.Properties.Name | Should -Not -Contain 'flag'
-        }
+    It 'states the MCP layers floor 0.6.3-beta, with the Foundry #1666 consumer reason' {
+        $f = Get-Floor $script:spine 'mcp' 'layers'
+        $f.min | Should -Be '0.6.3-beta'
+        $f.reason.ref | Should -Be 'justdynamics/Truvio.Commerce.Foundry#1666'
+        $f.PSObject.Properties.Name | Should -Not -Contain 'flag'
+    }
+    It 'states the MCP skills floor 0.6.0-beta, with the owner reason' {
+        $f = Get-Floor $script:spine 'mcp' 'skills'
+        $f.min | Should -Be '0.6.0-beta'
+        $f.reason.ref | Should -Be 'dynamicweb/skills#137'
+        $f.PSObject.Properties.Name | Should -Not -Contain 'flag'
     }
     It 'gives every floor a reason ref' {
         foreach ($c in $script:spine.components.PSObject.Properties) {
@@ -190,6 +194,23 @@ Describe 'S6 the floor rule: a floor rises only when a consumer depends on the f
         (Get-Fails $rows).Count | Should -Be 0
         ($rows | Where-Object { $_.msg -match 'floor rule' }).msg | Should -Match "with a new consumer reason 'justdynamics/Truvio\.Commerce\.Serializer#42'"
     }
+    It 'PASSes the MCP layers floor raise 0.6.0-beta -> 0.6.3-beta, which cites its consumer (Foundry #1666)' {
+        $b = Copy-Doc $script:spine
+        (Get-Floor $b 'mcp' 'layers').min = '0.6.0-beta'
+        (Get-Floor $b 'mcp' 'layers').reason.ref = 'dynamicweb/skills#137'
+        $rows = Invoke-Spine -BaseSpine $b -BaseState 'present'
+        (Get-Fails $rows).Count | Should -Be 0
+        ($rows | Where-Object { $_.msg -match 'floor rule' }).msg | Should -Match "Foundry#1666"
+    }
+    It 'FAILs the same MCP raise when it keeps the 0.6.0-beta reason ref' {
+        $b = Copy-Doc $script:spine
+        (Get-Floor $b 'mcp' 'layers').min = '0.6.0-beta'
+        (Get-Floor $b 'mcp' 'layers').reason.ref = 'dynamicweb/skills#137'
+        $head = Copy-Doc $script:spine
+        (Get-Floor $head 'mcp' 'layers').reason.ref = 'dynamicweb/skills#137'
+        $fails = Get-Fails (Invoke-Spine -Spine $head -BaseSpine $b -BaseState 'present')
+        $fails.msg -join ' ' | Should -Match 'floor raised without a consumer reason: mcp floor for .layers. \(min 0\.6\.0-beta -> 0\.6\.3-beta\)'
+    }
     It 'PASSes a floor that is lowered or unchanged with the same ref' {
         $head = Copy-Doc $script:base
         (Get-Floor $head 'serializer' 'layers').min = '1.0.2-beta'
@@ -205,9 +226,9 @@ Describe 'S6 the floor rule: a floor rises only when a consumer depends on the f
         $fails = Get-Fails (Invoke-Spine -BaseSpine $b -BaseState 'present')
         $fails.msg -join ' ' | Should -Match 'floor raised without a consumer reason: dw floor for .layers. \(ring R2 -> R1\)'
     }
-    It 'does not count a prerelease case change as a raise (0.6.0-BETA == 0.6.0-beta)' {
+    It 'does not count a prerelease case change as a raise (0.6.3-BETA == 0.6.3-beta)' {
         $b = Copy-Doc $script:spine
-        (Get-Floor $b 'mcp' 'layers').min = '0.6.0-BETA'
+        (Get-Floor $b 'mcp' 'layers').min = '0.6.3-BETA'
         (Get-Fails (Invoke-Spine -BaseSpine $b -BaseState 'present')).Count | Should -Be 0
     }
     It 'FAILs closed when the merge base could not be read' {
