@@ -27,14 +27,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: dynamicweb/skills
-          ref: 1072ba88149903f619cc13546922f7aed560b85e
+          ref: bb1f5daa5901216b4966382e64240f9499fcf0c0
           path: .ledger-skills
 
       - name: Checkout the CPQ candidate ledger revision (canonical LF)
         uses: actions/checkout@v4
         with:
           repository: dynamicweb/skills
-          ref: bc55885f71cbb34c71a451078ff1b6477a5d816b
+          ref: bb1f5daa5901216b4966382e64240f9499fcf0c0
           path: .ledger-skills-cpq
 
       # The floor rule (versions/spine.json, owner ruling redesign-floors) compares this PR's floors
@@ -50,7 +50,7 @@ jobs:
 
       - name: Validate distribution contract (schema, edition refs, base contract, version spine + floor rule, protected strings, SPEC-06, INDEX.json + gateProven + provenTree proof key + retired tombstones)
         shell: pwsh
-        run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF" -SkillsRoot .ledger-skills -SkillsRootsByCommit @{bc55885f71cbb34c71a451078ff1b6477a5d816b=".ledger-skills-cpq"}
+        run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF" -SkillsRoot .ledger-skills -SkillsRootsByCommit @{bb1f5daa5901216b4966382e64240f9499fcf0c0=".ledger-skills"}
         env:
           BASE_REF: ${{ github.base_ref || 'main' }}
 

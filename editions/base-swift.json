@@ -30,15 +30,16 @@
   "description": "The foundational baseline: the one thing to clone that boots a Swift site. base + surface-swift + theme default, NO sample data and NO feature layers - an empty shop with a complete, themed storefront around it, and the declared placeholder footprint of both layers present, parsed and inert. An EDITION and never a merged layer (V5-PLAN D-C): collapsing base and surface-swift into one would force every headless and DAP consumer to carry the Swift design surface, break base.contract.json as the content-free contract additions bind to, and make base-only unprovable. criticalPaths are expressed under the CULTURE segment, not AreaUrlName: on a single-area host Dynamicweb serves /en-us/ and the decorative AreaUrlName 404s (Foundry 965, 1005). compatAxes names all three axes, so an unmet floor fails this edition instead of warning.",
   "ledger": {
     "repo": "dynamicweb/skills",
-    "commit": "1072ba88149903f619cc13546922f7aed560b85e",
+    "commit": "bb1f5daa5901216b4966382e64240f9499fcf0c0",
     "manifest": "skills/dw-demo-ledger/assets/releases/10.29.8/manifest.json",
-    "digest": "sha256:058a510b1ef24780823944266f787330d1a48b4fc3442290e9dcb53dd95ce9f4",
+    "digest": "sha256:6b49dcad0e064d98db1eeacdad675ca84166c7f2afbedd54405fd7f74373dacb",
     "checkIds": [
       "commerce.currencies.one-default",
       "commerce.currencies.several",
       "content.item-types.defined",
       "content.item-types.field-health",
       "content.item-types.table-health",
+      "content.item-types.table-health-metadata",
       "content.pages.exist",
       "content.paragraphs.item-instances",
       "content.paragraphs.visible",
