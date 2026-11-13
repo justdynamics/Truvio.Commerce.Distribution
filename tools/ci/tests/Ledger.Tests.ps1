@@ -281,3 +281,71 @@ Describe 'Distribution #132 item 2: removing a lock, a locked check or carriage'
         (Get-BaseLedgerRecord -RepoRoot $repo -BaseRef 'origin/absent').state | Should -BeExactly 'unresolved'
     }
 }
+
+Describe 'Foundry #1641: edition build inputs for the {lang} and {pimShop} tokens' {
+    BeforeAll {
+        function Get-ShippedPlan([string]$Name) {
+            $e = Get-Content (Join-Path $script:distribution "editions/$Name.json") -Raw | ConvertFrom-Json -AsHashtable
+            @{ edition = $e; plan = (Get-EditionLedgerPlan $script:distribution $e $script:skills) }
+        }
+        function Get-InputRow($Edition, $Plan) { , @(Test-EditionLedgerInput -DistributionRoot $script:distribution -Edition $Edition -Plan $Plan) }
+        function Copy-Edition($Edition) { $Edition | ConvertTo-Json -Depth 20 | ConvertFrom-Json -AsHashtable }
+        $script:inputEditions = @{}
+        foreach ($name in 'swift-demo', 'headless-demo', 'dap-portal', 'base-only') { $script:inputEditions[$name] = Get-ShippedPlan $name }
+    }
+    It '<Name> declares ENU and TCSHOP-PIM, shipped by its own layers, for 10 {lang} and 1 {pimShop} checks' -ForEach @(
+        @{ Name = 'swift-demo' }, @{ Name = 'headless-demo' }, @{ Name = 'dap-portal' }
+    ) {
+        $s = $script:inputEditions[$Name]
+        $rows = Get-InputRow $s.edition $s.plan
+        @($rows | Where-Object { -not $_.ok }).Count | Should -Be 0
+        $rows.Count | Should -Be 2
+        $rows[0].msg | Should -BeLike "*defaultLanguage 'ENU' for 10 locked check(s) using {lang}, a EcomLanguages row of base/replace*"
+        $rows[1].msg | Should -BeLike "*pimShop 'TCSHOP-PIM' for 1 locked check(s) using {pimShop}, a EcomShops row of sample-data/merge*"
+    }
+    It 'an edition whose locked checks use neither token needs no inputs' {
+        $s = $script:inputEditions['base-only']
+        (Get-InputRow $s.edition $s.plan).Count | Should -Be 0
+    }
+    It 'RED CONTROL: an edition whose locked checks use the tokens fails without inputs' {
+        $s = $script:inputEditions['swift-demo']; $e = Copy-Edition $s.edition; $e.ledger.Remove('inputs')
+        $fails = @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok } | ForEach-Object msg)
+        $fails.Count | Should -Be 2
+        $fails[0] | Should -BeLike '*10 locked check(s) use {lang}*declares no ledger.inputs.defaultLanguage*'
+        $fails[1] | Should -BeLike '*1 locked check(s) use {pimShop}*declares no ledger.inputs.pimShop*'
+    }
+    It 'RED CONTROL: a declared input that no locked check uses fails' {
+        $s = $script:inputEditions['base-only']; $e = Copy-Edition $s.edition; $e.ledger.inputs = @{ defaultLanguage = 'ENU' }
+        $rows = Get-InputRow $e $s.plan
+        $rows.Count | Should -Be 1; $rows[0].ok | Should -BeFalse; $rows[0].msg | Should -BeLike '*no locked check uses {lang}*'
+    }
+    It 'RED CONTROL: an id that no composed layer ships fails' {
+        $s = $script:inputEditions['headless-demo']; $e = Copy-Edition $s.edition; $e.ledger.inputs.pimShop = 'SHOP-ABSENT'
+        $fails = @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok })
+        $fails.Count | Should -Be 1; $fails[0].msg | Should -BeLike "*pimShop 'SHOP-ABSENT' names no EcomShops row*"
+        # TCSHOP-PIM is a sample-data row: an edition that does not compose sample-data does not carry it.
+        $plan = $s.plan.Clone(); $plan.layers = @($s.plan.layers | Where-Object { $_ -ne 'sample-data' })
+        $fails = @((Get-InputRow $s.edition $plan) | Where-Object { -not $_.ok })
+        $fails.Count | Should -Be 1; $fails[0].msg | Should -BeLike "*pimShop 'TCSHOP-PIM' names no EcomShops row*"
+    }
+    It 'RED CONTROL: a non-plain id, an unsupported field and a non-object fail' {
+        $s = $script:inputEditions['dap-portal']
+        $e = Copy-Edition $s.edition; $e.ledger.inputs.defaultLanguage = "ENU' OR 1=1"
+        @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok -and $_.msg -like '*must be a plain id*' }).Count | Should -Be 1
+        $e = Copy-Edition $s.edition; $e.ledger.inputs.areaId = '1'
+        @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok -and $_.msg -like "*unsupported ledger.inputs field 'areaId'*" }).Count | Should -Be 1
+        $e = Copy-Edition $s.edition; $e.ledger.inputs = 'ENU'
+        @((Get-InputRow $e $s.plan) | Where-Object { -not $_.ok -and $_.msg -like '*must be an object*' }).Count | Should -Be 1
+    }
+    It 'RED CONTROL: the edition schema refuses an unknown input field and a non-plain id' {
+        $schema = Join-Path $script:distribution 'editions/edition.schema.json'
+        $raw = Get-Content (Join-Path $script:distribution 'editions/swift-demo.json') -Raw
+        $raw | Test-Json -SchemaFile $schema -ErrorAction Stop | Should -BeTrue
+        foreach ($bad in @($raw.Replace('"pimShop": "TCSHOP-PIM"', '"pimShop": "TCSHOP PIM"'), $raw.Replace('"pimShop": "TCSHOP-PIM"', '"pimShop": "TCSHOP-PIM", "areaId": "1"'))) {
+            $bad | Should -Not -BeExactly $raw
+            # As the validator reads it: a refusal is $false or a throw, never a pass.
+            $ok = try { $bad | Test-Json -SchemaFile $schema -ErrorAction Stop } catch { $false }
+            $ok | Should -BeFalse
+        }
+    }
+}

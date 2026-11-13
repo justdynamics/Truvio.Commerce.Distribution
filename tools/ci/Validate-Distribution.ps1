@@ -113,7 +113,10 @@ Checks (all fail-closed; any failure -> exit 1):
                         editions only report). Against the merge base (-SpineBaseRef) a removed lock,
                         locked check, layer ledger block or provided function FAILs unless the same
                         change adds a removal entry with a named ruling. A gateProven edition must
-                        declare a lock.
+                        declare a lock. (Foundry #1641) An edition whose locked checks use {lang}
+                        or {pimShop} declares ledger.inputs.defaultLanguage / pimShop as an
+                        EcomLanguages / EcomShops row a composed layer ships; a declared input no
+                        locked check uses FAILs too.
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -890,6 +893,7 @@ foreach ($file in $editionFiles) {
         if ($edition.ContainsKey('ledger')) {
             $plan=Get-EditionLedgerPlan -DistributionRoot $RepoRoot -Edition $edition -SkillsRoot $SkillsRoot -SkillsRootsByCommit $SkillsRootsByCommit
             & $log $true "ledger $($edition.name): $($plan.functions.Count) functions, $($plan.checkIds.Count) locked checks"
+            foreach ($r in @(Test-EditionLedgerInput -DistributionRoot $RepoRoot -Edition $edition -Plan $plan)) { & $log $r.ok $r.msg }
             if ($ledgerExceptions) {
                 foreach ($r in @(Test-EditionLedgerExecutable -Edition $edition -Plan $plan -Exceptions $ledgerExceptions)) {
                     if ($r.note) { Write-Host "  [NOTE] $($r.msg)" } else { & $log $r.ok $r.msg }
