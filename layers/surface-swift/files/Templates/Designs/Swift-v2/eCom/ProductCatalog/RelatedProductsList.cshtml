@@ -36,6 +36,12 @@
 	INERT WHERE PRICES ARE PUBLIC. An area whose AnonymousUsers value does not contain
 	"price" never reaches the suppressed branch, so on a public catalogue this file renders
 	byte-identical output to the stock one.
+
+	TWO ROW FIXES (2026-11-13). The stock column says "Out of stock" for a stock-type
+	product at zero even when it is marked never out of stock, which the add-to-cart cell
+	of the same row already honours; the condition now reads NeverOutOfstock too. And an
+	SVG default image is linked as the file itself, sized by attributes, because
+	GetImage.ashx answers 500 when asked to resize an SVG to webp.
 *@
 
 @functions{
@@ -414,7 +420,8 @@
 					@foreach (var product in productList)
 					{
 						string? image = product.DefaultImage?.Value;
-						image = !string.IsNullOrEmpty(image) ? $"/Admin/Public/GetImage.ashx?image={image}&width=30&format=webp" : null;
+						bool imageIsSvg = !string.IsNullOrEmpty(image) && image.EndsWith(".svg", StringComparison.OrdinalIgnoreCase);
+						image = !string.IsNullOrEmpty(image) ? (imageIsSvg ? image : $"/Admin/Public/GetImage.ashx?image={image}&width=30&format=webp") : null;
 						List<CategoryFieldViewModel> categories = new List<CategoryFieldViewModel>();
 						foreach (var selection in selectedDisplayGroupsList)
 						{
@@ -431,7 +438,7 @@
 							@if (!hideImage && image != null)
 							{
 								<td width="30">
-									<img src="@image">
+									@if (imageIsSvg) { <img src="@image" width="30" height="30" style="max-width:none" alt=""> } else { <img src="@image"> }
 								</td>
 							}
 							@if (!hideProductNumber)
@@ -573,7 +580,7 @@
 							@if (!hideStock)
 							{
 								<td>
-									@if (product.ProductType == Dynamicweb.Ecommerce.Products.ProductType.Stock && product.StockLevel <= 0)
+									@if (product.ProductType == Dynamicweb.Ecommerce.Products.ProductType.Stock && product.StockLevel <= 0 && !product.NeverOutOfstock)
 									{
 										<span class="text-danger">@Translate("Out of stock")</span>
 									}
