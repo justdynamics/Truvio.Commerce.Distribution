@@ -1,5 +1,23 @@
 ﻿# Changelog — surface-swift
 
+## 1.19.2 (2026-11-13)
+
+**PATCH. Two row fixes in the related-products list** (`eCom/ProductCatalog/RelatedProductsList.cshtml`),
+found on the Stahls' demo, where every warranty and platen related to a heat press read "Out of stock"
+and showed a broken thumbnail.
+
+- The Stock cell said "Out of stock" for a stock-type product at zero even when the product is marked
+  never out of stock. The add-to-cart cell of the same row already honoured `NeverOutOfstock`; the
+  stock cell now does too. Stock Swift 2.5.0 has the same condition.
+- An SVG default image went through `GetImage.ashx?...&width=30&format=webp`, which answers HTTP 500
+  for an SVG. An `.svg` default image is now linked as the file itself with `width`/`height` 30 and
+  `max-width:none` (without it the image collapses to a sliver in the phone-width scrolling table).
+  Raster images keep the stock GetImage URL.
+
+The anonymous price gate and everything else in the file are unchanged. Checked on stahls-inc on
+desktop (1440) and phone (390): no broken images, no 4xx/5xx image responses, thumbnails 30 px, no
+page-level horizontal scroll.
+
 ## 1.19.0 (2026-10-20)
 
 **MINOR. Rebased on Swift 2.5.0.** Every `files/` overlay on a stock path, every shipped item type
