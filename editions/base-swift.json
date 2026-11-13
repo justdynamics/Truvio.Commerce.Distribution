@@ -30,9 +30,9 @@
   "description": "The foundational baseline: the one thing to clone that boots a Swift site. base + surface-swift + theme default, NO sample data and NO feature layers - an empty shop with a complete, themed storefront around it, and the declared placeholder footprint of both layers present, parsed and inert. An EDITION and never a merged layer (V5-PLAN D-C): collapsing base and surface-swift into one would force every headless and DAP consumer to carry the Swift design surface, break base.contract.json as the content-free contract additions bind to, and make base-only unprovable. criticalPaths are expressed under the CULTURE segment, not AreaUrlName: on a single-area host Dynamicweb serves /en-us/ and the decorative AreaUrlName 404s (Foundry 965, 1005). compatAxes names all three axes, so an unmet floor fails this edition instead of warning.",
   "ledger": {
     "repo": "dynamicweb/skills",
-    "commit": "bb1f5daa5901216b4966382e64240f9499fcf0c0",
-    "manifest": "skills/dw-demo-ledger/assets/releases/10.29.8/manifest.json",
-    "digest": "sha256:6b49dcad0e064d98db1eeacdad675ca84166c7f2afbedd54405fd7f74373dacb",
+    "commit": "bb68e6c4a4b8c968f5e24b0f35a8a8f6a031e02d",
+    "manifest": "skills/dw-demo-ledger/assets/releases/10.30.6/manifest.json",
+    "digest": "sha256:60121d175c81b23d796b1a5ad2dab8481986b205e931e292c4f5b56156b16e8f",
     "checkIds": [
       "commerce.currencies.one-default",
       "commerce.currencies.several",
