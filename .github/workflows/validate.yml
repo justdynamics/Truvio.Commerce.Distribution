@@ -50,7 +50,7 @@ jobs:
 
       - name: Validate distribution contract (schema, edition refs, base contract, version spine + floor rule, protected strings, SPEC-06, INDEX.json + gateProven + provenTree proof key + retired tombstones)
         shell: pwsh
-        run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF" -SkillsRoot .ledger-skills -SkillsRootsByCommit @{51fdaca488750a205d29c7e9986c9d9d6cbf14b2=".ledger-skills"}
+        run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF" -SkillsRoot .ledger-skills -SkillsRootsByCommit @{'51fdaca488750a205d29c7e9986c9d9d6cbf14b2'='.ledger-skills'}
         env:
           BASE_REF: ${{ github.base_ref || 'main' }}
 
