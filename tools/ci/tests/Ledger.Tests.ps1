@@ -195,11 +195,11 @@ Describe 'Distribution #132 item 1: a locked check that can never pass' {
             @(Test-EditionLedgerExecutable -Edition $lock.edition -Plan $lock.plan -Exceptions $register | Where-Object { -not $_.ok }).Count | Should -Be 0
         }
     }
-    It 'RED CONTROL: without the register the three known locks fail on their six checks' {
+    It 'without the register every shipped lock is executable: skills 1ce57fa3 binds the six checks the register used to accept' {
         $failed = foreach ($lock in $script:shipped) {
             Test-EditionLedgerExecutable -Edition $lock.edition -Plan $lock.plan -Exceptions @{ unexecutable = @(); removals = @() } | Where-Object { -not $_.ok } | ForEach-Object { $lock.edition.name }
         }
-        ($failed | Group-Object | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Count)" }) -join ' ' | Should -BeExactly 'base-swift=2 headless-demo=2 swift-demo=2'
+        ($failed | Group-Object | Sort-Object Name | ForEach-Object { "$($_.Name)=$($_.Count)" }) -join ' ' | Should -BeExactly ''
     }
     It 'RED CONTROL: the register refuses an unknown rule, a missing reference and an unknown key' {
         $entry = '{"edition":"ed","check":"c.x","rule":"no-implemented-binding","ref":"o/r#1","reason":"recorded finding"}'
