@@ -1,5 +1,26 @@
 ﻿# Changelog — surface-swift
 
+## 1.19.3 (2026-11-14)
+
+**PATCH. The desktop header carries a sign-in entry.** `ledger.provides` names `swift.sign-in`
+("Sign in element in the Swift header"), but the layer shipped the `Swift-v2_SignIn` item type and
+no paragraph of it, so the ledger check `swift.sign-in.sign-in-entry` (at least one live
+`Swift-v2_SignIn` paragraph) failed on swift-demo (Foundry #1670, owner ruling "Add the paragraph").
+
+- `Header _ Footer/Desktop Header`, grid row 3, column 3 (the empty column left of My account): one
+  `Swift-v2_SignIn` paragraph (merge mode, new `paragraphUniqueId`), stock `Clean.cshtml` render
+  path (template empty, as the stock Swift 2.5.0 placement in the Digital Assets Portal mobile
+  header), Title "Sign in", Icon the item type's default `arrow-right-to-bracket.svg`, and
+  `SignInPage` the `Sign in` page this layer ships (source page 60). The stock template renders a
+  dropdown of that page's children (Sign in, Forgot password, Create user profile) for an
+  anonymous visitor and nothing for a signed-in one. The row's `columns` names column 3.
+- The stock Swift 2.5.0 `Swift 2` area has no `Swift-v2_SignIn` paragraph in either header (its
+  anonymous route is the My account paragraph); stock places it only in the Digital Assets Portal
+  mobile header. The mobile header is unchanged: its four-column action row is full and keeps one
+  painted row (1.13.6, Foundry #1260); there the My account paragraph remains the anonymous
+  visitor's route to the sign-in page.
+- Standard Swift building blocks only: no template, item type or file is added.
+
 ## 1.19.2 (2026-11-13)
 
 **PATCH. Ledger carriage only, no row or file change.** `layer.json` `ledger.provides` names the
