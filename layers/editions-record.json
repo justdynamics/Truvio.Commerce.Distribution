@@ -26,10 +26,10 @@
         {
           "tag": "editions/dap-portal/2.5.0",
           "proven": {
-            "ts": "2026-11-13T22:26:50+00:00",
-            "runId": "20261113-221936",
+            "ts": "2026-11-14T11:46:01+00:00",
+            "runId": "20261114-113632",
             "host": "foundry-dap.mydwsite4.com",
-            "resultsDigest": "sha256:82898b1cf1d6b43dcb488716e2c2921abcdb9abb69f1c252426e69e33c972662"
+            "resultsDigest": "sha256:583d06541961b6027d031a4b3c69e6ef731ac213ee2adf112fe1ba140be64444"
           },
           "legacy": null,
           "confirmed": null
