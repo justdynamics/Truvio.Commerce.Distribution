@@ -36,8 +36,8 @@
     },
     "editions": {
       "dap-portal": "20261114-113632",
-      "headless-demo": "20261021-213018",
-      "swift-demo": "20261021-211942"
+      "headless-demo": "20261114-133859",
+      "swift-demo": "20261114-132345"
     },
     "releases": {
       "dap-portal": {
@@ -50,18 +50,18 @@
       },
       "headless-demo": {
         "tag": "editions/headless-demo/3.4.0",
-        "runId": "20261021-213018",
+        "runId": "20261114-133859",
         "host": "foundry-blank-dw10-iteration",
-        "ts": "2026-10-21T21:33:42Z",
-        "resultsDigest": "sha256:d40873028f80a9a1ff66d5ad76083addccd439aeb5de5c91191a0c3f2c8bea68",
+        "ts": "2026-11-14T13:48:17Z",
+        "resultsDigest": "sha256:019a1ba09445c3607a6d3da606164cda72159d0fbc63d27f2935d3287098ac1c",
         "legacy": false
       },
       "swift-demo": {
         "tag": "editions/swift-demo/5.5.0",
-        "runId": "20261021-211942",
+        "runId": "20261114-132345",
         "host": "foundry.mydwsite4.com",
-        "ts": "2026-10-21T21:24:23Z",
-        "resultsDigest": "sha256:810bb291b7e58937c9c0b5ad3a454fa0ff05b0763974754fa94423f76d6bec6a",
+        "ts": "2026-11-14T13:34:07Z",
+        "resultsDigest": "sha256:10ba941758dc0337d27788d24d0e2d6a043b6e24368709af9917a9d722f52701",
         "legacy": false
       }
     },
@@ -91,70 +91,70 @@
         }
       },
       "headless-demo": {
-        "runId": "20261021-213018",
+        "runId": "20261114-133859",
         "release": "editions/headless-demo/3.4.0",
-        "distributionCommit": "4082a91df3addc9ea7fd235ba637a651b90e0de6",
+        "distributionCommit": "e01455680501c44ef63f802f8fc452bbe4784db6",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
-            "version": "4.4.0",
-            "hash": "sha256:2e1874a2df60a0e2faf5241f58d885d58c79e6139b11b0c7de8df756e7073064"
+            "version": "4.6.1",
+            "hash": "sha256:c37d37f2e3e0d353e36b5440cbcfe0cf1a54bdfa5bf3cb768ec9879eea9fcd18"
           },
           "sample-data": {
-            "version": "6.6.0",
-            "hash": "sha256:b38560fab59954e15d8aa7a02dc1f8d8e474d937161eb853ed0631f6a5566780"
+            "version": "6.6.3",
+            "hash": "sha256:a270e270d41820ef42f0e7873b511a6433334c31c30530e94f0792f2efe9185f"
           },
           "surface-headless": {
-            "version": "2.4.1",
-            "hash": "sha256:090815a00051da396969a53e736f283f6184e4bdd9fa5d7ed9fa38858a85f8b1"
+            "version": "2.4.2",
+            "hash": "sha256:bab1615851b65db202636d1975920768526655b9a27ba2ad38769ac4474510b5"
           }
         }
       },
       "swift-demo": {
-        "runId": "20261021-211942",
+        "runId": "20261114-132345",
         "release": "editions/swift-demo/5.5.0",
-        "distributionCommit": "4082a91df3addc9ea7fd235ba637a651b90e0de6",
+        "distributionCommit": "e01455680501c44ef63f802f8fc452bbe4784db6",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
-            "version": "4.4.0",
-            "hash": "sha256:2e1874a2df60a0e2faf5241f58d885d58c79e6139b11b0c7de8df756e7073064"
+            "version": "4.6.1",
+            "hash": "sha256:c37d37f2e3e0d353e36b5440cbcfe0cf1a54bdfa5bf3cb768ec9879eea9fcd18"
           },
           "feature-b2b-comms": {
-            "version": "1.1.1",
-            "hash": "sha256:22eb688c89fd13294203e98399a7e8de69fd3b6207ee37a451c5e54c55873dfa"
+            "version": "1.1.2",
+            "hash": "sha256:0147c7fbcb6163370708fd300d421bf6e835e56b3e8cc7785ecf6052b6de3e4d"
           },
           "feature-bom-configurator": {
-            "version": "1.2.4",
-            "hash": "sha256:44d9d41511df59c74102ee6ecec4c89a7b4e0244db643b3be2123cb1862747ba"
+            "version": "1.2.5",
+            "hash": "sha256:f2d879fd049e511e718508a93f4005e7cb898608e60429fd395079a51584e10a"
           },
           "feature-gallery-zoom": {
-            "version": "1.0.1",
-            "hash": "sha256:282cecb980df7124557f2e04158ce4050b7ff723f5a0b77e1a6d619bb5a5a82e"
+            "version": "1.0.2",
+            "hash": "sha256:265cd4ae56b0a73a3c252fc47f146a2e08294cc942d35d108cb0c219a4d1eb48"
           },
           "feature-pricing": {
-            "version": "1.1.5",
-            "hash": "sha256:5fced5a2e894899999ab239e3b5b8ef9e5e1e434ce8797915788e96510900766"
+            "version": "1.1.6",
+            "hash": "sha256:8444af22bacec40cb860bc7210db0c8bfd8c08bb8cb393241756216b475bd94e"
           },
           "feature-reordering": {
-            "version": "1.0.5",
-            "hash": "sha256:4a19a48777126c6581810620c4a505a4cfebdc19de173690ee31a343f40a4ce3"
+            "version": "1.0.6",
+            "hash": "sha256:1cbddf1ec5ea2eee666875543a1e70113070454e66655ba7180a77e2179e12a9"
           },
           "feature-subscription-orders": {
-            "version": "1.2.3",
-            "hash": "sha256:4c6ff70a4aebe224e3d8d15adfd3bd554af63bfac409de6dcce75f04d55cb509"
+            "version": "1.2.4",
+            "hash": "sha256:2610876e8994f5da87a2f368f3a73fc5685c95c80831ce234f0e9f1e6f5ad853"
           },
           "sample-data": {
-            "version": "6.6.0",
-            "hash": "sha256:b38560fab59954e15d8aa7a02dc1f8d8e474d937161eb853ed0631f6a5566780"
+            "version": "6.6.3",
+            "hash": "sha256:a270e270d41820ef42f0e7873b511a6433334c31c30530e94f0792f2efe9185f"
           },
           "surface-swift": {
-            "version": "1.19.0",
-            "hash": "sha256:741f56772dbe712c1d0f4ab22f1f3ba87bc5503169a88831b6886c503a9776cf"
+            "version": "1.19.3",
+            "hash": "sha256:136df6f3d064bf8d714e93ecdc44819a59ced481a906d51ce3505ec99740edcb"
           },
           "theme-default": {
-            "version": "2.7.0",
-            "hash": "sha256:3e2c5fb89b2cde559bc45a1f75b37cd9526af92e0ca7024a155a3ac2bc424446"
+            "version": "2.8.0",
+            "hash": "sha256:c79bdebd22b1e6c4f34223a9bd1f76a135c2d916ac82383915a29ea7d18c5245"
           }
         }
       }
