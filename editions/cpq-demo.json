@@ -5,7 +5,7 @@
     "feature-cpq@1.0.0-candidate"
   ],
   "surfaces": [
-    "surface-swift@1.19.2"
+    "surface-swift@1.19.3"
   ],
   "sampleData": false,
   "themes": [
