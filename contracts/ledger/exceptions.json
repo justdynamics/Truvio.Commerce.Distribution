@@ -1,49 +1,6 @@
 {
   "schemaVersion": 1,
   "comment": "The only place a ledger finding may be accepted (docs/LEDGER.md). unexecutable: a locked check that can never pass at the edition's locked skills commit; each entry must match a live finding exactly (edition, check, rule) and FAILs once it no longer does. removals: a removed lock, locked check, layer carriage or provided function, with the owner ruling that allows it; an entry counts only in the change that adds it.",
-  "unexecutable": [
-    {
-      "edition": "base-swift",
-      "check": "swift.sign-in.sign-in-entry",
-      "rule": "requirement-not-establishable",
-      "ref": "dynamicweb/skills#222",
-      "reason": "swift.sign-in requires capability users.frontend-sign-in. surface-swift 1.19.2 provides that function, so the runner at 51fdaca establishes the capability only when every locked check of it passes; users.frontend-sign-in.persona-signs-in has no implemented binding (entry above), so the capability is never established and this check stays UNVERIFIED."
-    },
-    {
-      "edition": "base-swift",
-      "check": "users.frontend-sign-in.persona-signs-in",
-      "rule": "no-implemented-binding",
-      "ref": "dynamicweb/skills#244",
-      "reason": "Only binding is planned at skills 51fdaca (snapshot 10.30.6 revision 2, dynamicweb/skills#245): a storefront sign-in is a POST of the persona's user name and password to /dwapi/users/authenticate and needs a sign-in handler and a persona credential supplied to the runner, which no handler has. surface-swift 1.19.2 provides users.frontend-sign-in (the sign-in page with the Users - Authentication app; its app-placed check is implemented). Stays UNVERIFIED on every host until a snapshot implements it."
-    },
-    {
-      "edition": "headless-demo",
-      "check": "search.facets.not-analyzed",
-      "rule": "no-implemented-binding",
-      "ref": "justdynamics/Truvio.Commerce.Distribution#132",
-      "reason": "Only binding is planned at skills 51fdaca (snapshot 10.30.6 revision 2): no allowlisted read returns whether an index field is analysed, so the facet-to-field join needs a new handler; stays UNVERIFIED on every host."
-    },
-    {
-      "edition": "headless-demo",
-      "check": "search.index-queries.no-constant-macros",
-      "rule": "no-implemented-binding",
-      "ref": "justdynamics/Truvio.Commerce.Distribution#132",
-      "reason": "Only binding is planned at skills 51fdaca (snapshot 10.30.6 revision 2): get_index_query_expressions is not on the read allowlist and the check needs per-query enumeration with offenders; stays UNVERIFIED on every host."
-    },
-    {
-      "edition": "swift-demo",
-      "check": "swift.sign-in.sign-in-entry",
-      "rule": "requirement-not-establishable",
-      "ref": "dynamicweb/skills#222",
-      "reason": "swift.sign-in requires capability users.frontend-sign-in. surface-swift 1.19.2 provides that function, so the runner at 51fdaca establishes the capability only when every locked check of it passes; users.frontend-sign-in.persona-signs-in has no implemented binding (entry above), so the capability is never established and this check stays UNVERIFIED."
-    },
-    {
-      "edition": "swift-demo",
-      "check": "users.frontend-sign-in.persona-signs-in",
-      "rule": "no-implemented-binding",
-      "ref": "dynamicweb/skills#244",
-      "reason": "Only binding is planned at skills 51fdaca (snapshot 10.30.6 revision 2, dynamicweb/skills#245): a storefront sign-in is a POST of the persona's user name and password to /dwapi/users/authenticate and needs a sign-in handler and a persona credential supplied to the runner, which no handler has. surface-swift 1.19.2 provides users.frontend-sign-in (the sign-in page with the Users - Authentication app; its app-placed check is implemented). Stays UNVERIFIED on every host until a snapshot implements it."
-    }
-  ],
+  "unexecutable": [],
   "removals": []
 }
