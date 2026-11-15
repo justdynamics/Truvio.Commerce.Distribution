@@ -103,10 +103,10 @@
         {
           "tag": "editions/swift-demo/5.5.0",
           "proven": {
-            "ts": "2026-11-14T13:34:07+00:00",
-            "runId": "20261114-132345",
+            "ts": "2026-11-15T20:26:06+00:00",
+            "runId": "20261115-201430",
             "host": "foundry.mydwsite4.com",
-            "resultsDigest": "sha256:10ba941758dc0337d27788d24d0e2d6a043b6e24368709af9917a9d722f52701"
+            "resultsDigest": "sha256:b5c3475cf5d6c3113591dab8de26c24185f04cbc04d407344a32f7995612731d"
           },
           "legacy": null,
           "confirmed": null
