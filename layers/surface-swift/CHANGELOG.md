@@ -1,5 +1,30 @@
 ﻿# Changelog — surface-swift
 
+## 1.19.5 (2026-11-15)
+
+**PATCH. Two row fixes in the related-products list** (`eCom/ProductCatalog/RelatedProductsList.cshtml`,
+which this layer already overrides for the anonymous price gate). Both were found on a customer demo
+whose related rows showed broken thumbnails and a false "Out of stock"; that demo carries the same edits by hand, and redeploying 1.19.4 onto it would bring both
+defects back. Stock Swift 2.5.0 and Swift `main` have both.
+
+- **SVG thumbnails.** Every default image went through
+  `/Admin/Public/GetImage.ashx?image=...&width=30&format=webp`, which answers HTTP 500 for an SVG. An
+  `.svg` default image is now linked as the file itself with `width`/`height` 30 and `max-width:none`
+  (without it the image collapses to a sliver in the phone-width scrolling table). Raster images keep
+  the stock GetImage URL.
+- **Never out of stock.** The Stock cell said "Out of stock" for a stock-type product at zero even when
+  the product is marked never out of stock. The add-to-cart cell of the same row already honoured
+  `NeverOutOfstock`; the Stock cell now does too.
+
+The anonymous price gate and the rest of the file are unchanged. `tools/ci/tests/SurfaceSwiftRelatedProducts.Tests.ps1`
+keeps the override registered and fails when the thumbnail URL sends an SVG through GetImage or when an
+"Out of stock" condition on `StockLevel` does not read `NeverOutOfstock`, so a re-base on a later Swift
+release cannot drop either fix silently. Checked live on the demo at desktop (1440) and phone (390)
+width: no broken images, no 4xx/5xx image responses, thumbnails 30 px, no page-level horizontal scroll.
+
+Editions base-swift, cpq-demo and swift-demo re-pinned; INDEX.json, LAYERS.md and the feature-cpq
+README follow. Edition release versions are unchanged.
+
 ## 1.19.4 (2026-11-15)
 
 **PATCH. The search and favourite templates survive a product without an image, and the header
