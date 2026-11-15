@@ -1,6 +1,6 @@
 {
   "name": "surface-swift",
-  "version": "1.19.3",
+  "version": "1.19.4",
   "kind": "surface",
   "swiftVersion": "2.5.0",
   "repositoryName": "TruvioCommerce",
@@ -48,6 +48,9 @@
     "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RenameFavoriteListEdit.cshtml",
     "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Favorites/Modals/RenameFavoriteListModal.cshtml",
     "Templates/Designs/Swift-v2/eCom/CustomerExperienceCenter/Orders/List/Orders_List.cshtml",
+    "Templates/Designs/Swift-v2/eCom/ProductCatalog/ExpressBuySearchResponse.cshtml",
+    "Templates/Designs/Swift-v2/eCom/ProductCatalog/Favorites.cshtml",
+    "Templates/Designs/Swift-v2/eCom/ProductCatalog/ProductSearchDropdownResponse.cshtml",
     "Templates/Designs/Swift-v2/eCom/ProductCatalog/RelatedProductsList.cshtml",
     "Templates/Designs/Swift-v2/eCom/ProductCatalog/VariantSelector.cshtml",
     "Templates/Designs/Swift-v2/eCom7/CartV2/Step/Helpers/AddressUser.cshtml"
@@ -240,6 +243,21 @@
       "path": "Templates/Designs/Swift-v2/eCom7/CartV2/Step/Helpers/AddressUser.cshtml",
       "kind": "template",
       "why": "The checkout Information step's saved-address list, overriding the stock Swift 2.5 render path by name with a one-line change (Foundry #1495). Stock line 138 looks the region up with the outer template's GetString(UserManagement:User.UserAddress.State) instead of the loop item's, so a saved address whose State differs from the account's lists the wrong region or none (Denver, United States, United States). The override reads userAddress.GetString, so the line reads <city>, <region name>, <country>. Identical output when the two States agree."
+    },
+    {
+      "path": "Templates/Designs/Swift-v2/eCom/ProductCatalog/ExpressBuySearchResponse.cshtml",
+      "kind": "template",
+      "why": "Quick add (Express Buy) results, overriding the stock Swift 2.5 render path by name with one null guard. Stock line 94 reads product.DefaultImage.Value unguarded in the out-of-stock and discontinued rows, so a result set holding a product without an image (valid in a migrated catalogue) throws and Quick add answers nothing. The override reads DefaultImage?.Value ?? string.Empty, the form the same file already uses at line 218. Identical output for a product with an image."
+    },
+    {
+      "path": "Templates/Designs/Swift-v2/eCom/ProductCatalog/ProductSearchDropdownResponse.cshtml",
+      "kind": "template",
+      "why": "The header search type-ahead dropdown, overriding the stock Swift 2.5 render path by name with two null guards. Stock lines 167 and 178 read suggestion.PrimaryOrDefaultGroup.Id and suggestion.DefaultImage.Value unguarded, so one suggestion without an image or primary group throws and the dropdown suggests nothing while Enter still works. The override reads both null-conditionally. Its render is proven by the swift-demo edition's typeahead check (Foundry remote gate, critical-paths leg). Identical output for a product with an image and a group."
+    },
+    {
+      "path": "Templates/Designs/Swift-v2/eCom/ProductCatalog/Favorites.cshtml",
+      "kind": "template",
+      "why": "The favourite toggle and list picker, overriding the stock Swift 2.5 render path by name. Stock lines 10, 11, 48 and 103 read Model.DefaultImage.Value unguarded, so the heart on a product without an image throws. The override reads the image once into defaultImage (DefaultImage?.Value ?? string.Empty) and uses it in all four places; the Thumbnail field is still sent only when there is an image. Identical output for a product with an image."
     }
   ],
   "asserts": {

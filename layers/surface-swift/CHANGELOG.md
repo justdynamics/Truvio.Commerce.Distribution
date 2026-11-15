@@ -1,5 +1,47 @@
 ﻿# Changelog — surface-swift
 
+## 1.19.4 (2026-11-15)
+
+**PATCH. The search and favourite templates survive a product without an image, and the header
+type-ahead is checked on its own.**
+
+### Three null-safe stock templates
+
+A migrated catalogue can carry valid products without an image. Stock Swift 2.5.0 dereferences
+`ProductViewModel.DefaultImage.Value` unguarded in three templates, so any result set holding one such
+product throws a NullReferenceException: Quick add answered nothing for a term that matched one, the
+header type-ahead suggested nothing, and the favourite heart failed. A customer demo carried the same
+three-template patch by hand. The overrides are the Swift 2.5.0 stock files (release tag `v2.5.0`)
+with only these edits:
+
+- `eCom/ProductCatalog/ExpressBuySearchResponse.cshtml` line 94: `DefaultImage?.Value ?? string.Empty`,
+  the form the same file already uses at line 218.
+- `eCom/ProductCatalog/ProductSearchDropdownResponse.cshtml` lines 167 and 178:
+  `PrimaryOrDefaultGroup?.Id ?? string.Empty` and `DefaultImage?.Value ?? string.Empty`.
+- `eCom/ProductCatalog/Favorites.cshtml` lines 10, 11, 48 and 103: the image is read once into
+  `defaultImage` (`DefaultImage?.Value ?? string.Empty`) and used in all four places; the Thumbnail
+  field is still sent only when there is an image.
+
+Identical output for a product with an image. Registered in `files[]` and `placeholders[]` (kind
+`template`); `tools/ci/tests/SurfaceSwiftNullImage.Tests.ps1` keeps them registered and fails on any
+unguarded `DefaultImage` or `PrimaryOrDefaultGroup` member access in them, so a re-base on a later
+Swift release cannot drop the guards silently.
+
+### The header type-ahead has its own check
+
+The stock service pages carry their page-level paragraphs since 1.15.1 (Foundry #1315), but nothing
+measured the type-ahead apart from the submitted search: the defect answered HTTP 200 with 0 bytes, so
+every critical path stayed green. `swift-demo` now declares `typeahead` (edition schema): the Foundry
+remote gate's critical-paths leg reads the results page the home header names
+(`data-search-results-page`), asks it as `swift.Typeahead` does, and fails on an empty body, the
+stock no-product-results row, a compile dump or a missing expected product. That request renders
+`ProductSearchDropdownResponse.cshtml`, which is the body-content proof its `template` placeholder owes.
+Measured on foundry.mydwsite4.com (swift-demo 5.5.0, DW 10.30.6), 2026-11-15: results page 48 lists 5
+product suggestions for `variant`, including `Truvio Variant Master`; an unknown term fails.
+
+Editions base-swift, cpq-demo and swift-demo re-pinned; INDEX.json, LAYERS.md and the feature-cpq
+README follow. Edition release versions are unchanged.
+
 ## 1.19.3 (2026-11-14)
 
 **PATCH. The desktop header carries a sign-in entry.** `ledger.provides` names `swift.sign-in`
