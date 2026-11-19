@@ -1,0 +1,277 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/justdynamics/Truvio.Commerce.Distribution/tools/sample-data/customer-data.schema.json",
+  "title": "Customer data: the sections rewrite-sample-data.py reads",
+  "description": "The same file the dynamicweb/skills recipe runner reads (skills/dw-demo-ledger/assets/recipe-input.schema.json): one object, `schema: 1`, one key per section. This schema states the sections the sample-data generator reads: catalogue, prices, users.accounts (the skills shape, extended with role, address and phone), history and brandCopy. Other sections (build, content.pages) are allowed and ignored. No credential belongs in this file: passwordRef names a key of DW_RECIPE_SECRETS. Paths of images and documents are relative to this file. Dates are relative: daysAgo counts back from the layer's harvest day, which the demo clock moves to today.",
+  "type": "object",
+  "required": ["schema"],
+  "properties": {
+    "schema": {"const": 1},
+    "catalogue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["groups", "products"],
+      "properties": {
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "description": "The storefront tree, two levels. A top group is one data model and one product category in the PIM (at most 4); its specFields are the spec table and the completeness fields of every product under it (at most 7).",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["key", "name"],
+            "properties": {
+              "key": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*$", "maxLength": 40, "description": "Becomes the group id TCGRP-<KEY> and the GroupID in storefront links."},
+              "name": {"type": "string", "minLength": 1},
+              "parent": {"type": "string", "minLength": 1, "description": "key of a top group; absent for a top group"},
+              "description": {"type": "string"},
+              "specFields": {
+                "type": "array",
+                "description": "Top groups only.",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["key", "label"],
+                  "properties": {
+                    "key": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]*$"},
+                    "label": {"type": "string", "minLength": 1},
+                    "facet": {"type": "boolean", "description": "The field the storefront index offers as the facet of this product category (one per top group)."}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "products": {
+          "type": "array",
+          "minItems": 1,
+          "description": "Simple products. Variants and bundles are not generated.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["number", "name", "group", "listPrice", "images"],
+            "properties": {
+              "number": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$", "maxLength": 60},
+              "name": {"type": "string", "minLength": 1, "maxLength": 255},
+              "group": {"type": "string", "minLength": 1, "description": "key of the group the product sits in (its primary group)"},
+              "short": {"type": "string"},
+              "long": {"type": "string"},
+              "metaTitle": {"type": "string", "maxLength": 255},
+              "metaDescription": {"type": "string"},
+              "listPrice": {"type": "number", "minimum": 0},
+              "stock": {"type": "number", "minimum": 0},
+              "ean": {"type": "string", "maxLength": 255},
+              "weight": {"type": "number", "minimum": 0},
+              "images": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "description": "PNG, JPEG, WebP or GIF; the first is the default image, the second the hover image, the rest the gallery."},
+              "documents": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["path", "name"],
+                  "properties": {"path": {"type": "string", "minLength": 1}, "name": {"type": "string", "minLength": 1}}
+                }
+              },
+              "specs": {"type": "object", "additionalProperties": {"type": "string"}, "description": "specFields key of the product's top group -> value"},
+              "related": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "accessories": {"type": "array", "items": {"type": "string"}},
+                  "related": {"type": "array", "items": {"type": "string"}},
+                  "spares": {"type": "array", "items": {"type": "string"}}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "prices": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Every price row is generated from here and the products' listPrice; no sample price survives.",
+      "properties": {
+        "currency": {"type": "string", "pattern": "^[A-Z]{3}$", "description": "One currency for every price and order row; default USD, the currency the Swift area serves."},
+        "tiers": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["product", "quantity", "amount"],
+            "properties": {"product": {"type": "string"}, "quantity": {"type": "integer", "minimum": 2}, "amount": {"type": "number", "exclusiveMinimum": 0}}
+          }
+        },
+        "groupPrices": {
+          "type": "array",
+          "description": "Prices for every signed-in customer (base permission group 1325).",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["product", "amount"],
+            "properties": {"product": {"type": "string"}, "quantity": {"type": "integer", "minimum": 1}, "amount": {"type": "number", "exclusiveMinimum": 0}}
+          }
+        },
+        "contracts": {
+          "type": "array",
+          "description": "Prices for one account, matched on its customer number.",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["account", "product", "amount"],
+            "properties": {"account": {"type": "string", "description": "customerNumber of an account"}, "product": {"type": "string"}, "quantity": {"type": "integer", "minimum": 1}, "amount": {"type": "number", "exclusiveMinimum": 0}}
+          }
+        }
+      }
+    },
+    "users.accounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["groups"],
+      "description": "The dynamicweb/skills section, with three additions: user.role, user.phone, and group.address / group.phone.",
+      "properties": {
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "kind", "users"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "kind": {"enum": ["account", "staff"]},
+              "customerNumber": {"type": "string", "minLength": 1},
+              "phone": {"type": "string"},
+              "address": {
+                "type": "object", "additionalProperties": false,
+                "properties": {"street": {"type": "string"}, "zip": {"type": "string"}, "city": {"type": "string"}, "countryCode": {"type": "string", "pattern": "^[A-Z]{2}$"}}
+              },
+              "users": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["userName"],
+                  "properties": {
+                    "userName": {"type": "string", "minLength": 1},
+                    "name": {"type": "string"},
+                    "email": {"type": "string"},
+                    "phone": {"type": "string"},
+                    "passwordRef": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"},
+                    "role": {"enum": ["buyer", "accountAdmin", "user", "csr"], "description": "buyer: the one persona every authenticated gate leg signs in as (AccessUser 100101); accountAdmin: account admin (base group 1270); user: a customer contact (1325); csr: a representative (1292). Default user in an account, csr in a staff group."}
+                  }
+                }
+              }
+            }
+          }
+        },
+        "impersonation": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["impersonator", "customer"],
+            "properties": {"impersonator": {"type": "string", "minLength": 1}, "customer": {"type": "string", "minLength": 1}}
+          }
+        },
+        "assortmentIds": {"type": "array", "items": {"type": "string", "minLength": 1}}
+      }
+    },
+    "history": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Orders, quotes, carts and favourite lists. The owner (user) defaults to the buyer and must be a customer user. Line prices default to the price the owner's account gets at that quantity.",
+      "properties": {
+        "orders": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["daysAgo", "state", "lines"],
+            "properties": {
+              "user": {"type": "string"},
+              "daysAgo": {"type": "integer", "minimum": 0},
+              "state": {"enum": ["completed", "open", "rejected"]},
+              "reference": {"type": "string"},
+              "lines": {"$ref": "#/definitions/lines"}
+            }
+          }
+        },
+        "quotes": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["daysAgo", "state", "lines"],
+            "properties": {
+              "user": {"type": "string"},
+              "daysAgo": {"type": "integer", "minimum": 0},
+              "state": {"enum": ["QuotePending", "QuoteSent", "QuoteAccepted", "QuoteRejected"]},
+              "reference": {"type": "string"},
+              "comment": {"type": "string"},
+              "lines": {"$ref": "#/definitions/lines"}
+            }
+          }
+        },
+        "carts": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["daysAgo", "name", "lines"],
+            "properties": {
+              "user": {"type": "string"},
+              "daysAgo": {"type": "integer", "minimum": 0},
+              "name": {"type": "string", "minLength": 1},
+              "lines": {"$ref": "#/definitions/lines"}
+            }
+          }
+        },
+        "favourites": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["name", "products"],
+            "properties": {
+              "user": {"type": "string"},
+              "name": {"type": "string", "minLength": 1},
+              "description": {"type": "string"},
+              "default": {"type": "boolean"},
+              "products": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+            }
+          }
+        }
+      }
+    },
+    "brandCopy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["companyName", "emailDomain", "logo", "images"],
+      "description": "The storefront copy the layer carries (Home, About, header, footer, PDP, the asset portal header and footer). Named slots overwrite their field; everywhere else the brand name, the e-mail domain, the phone number and the image paths are substituted.",
+      "properties": {
+        "companyName": {"type": "string", "minLength": 1},
+        "shortName": {"type": "string", "pattern": "^[A-Za-z0-9 ]+$", "description": "Default: the first word of companyName. Names the PIM shop '<shortName> PIM'."},
+        "emailDomain": {"type": "string", "pattern": "^[a-z0-9.-]+\\.[a-z]+$"},
+        "assetFolder": {"type": "string", "pattern": "^[A-Za-z0-9]+$", "description": "Folder under Files/Images and Files/Documents; default companyName in PascalCase."},
+        "logo": {"type": "string", "minLength": 1},
+        "logoFooter": {"type": "string", "minLength": 1},
+        "images": {
+          "type": "object", "additionalProperties": false, "required": ["hero", "catalogueBand", "people"],
+          "properties": {"hero": {"type": "string"}, "catalogueBand": {"type": "string"}, "people": {"type": "string"}, "portal": {"type": "string"}}
+        },
+        "contact": {
+          "type": "object", "additionalProperties": false,
+          "properties": {"email": {"type": "string"}, "phone": {"type": "string"}}
+        },
+        "copyright": {"type": "string"},
+        "copyrightYear": {"type": "integer"},
+        "home": {
+          "type": "object", "additionalProperties": false,
+          "properties": {
+            "metaTitle": {"type": "string"}, "metaDescription": {"type": "string"},
+            "heroEyebrow": {"type": "string"}, "heroTitle": {"type": "string"}, "heroText": {"type": "string"}, "heroAltText": {"type": "string"}
+          }
+        },
+        "about": {
+          "type": "object", "additionalProperties": false,
+          "properties": {"metaDescription": {"type": "string"}, "title": {"type": "string"}, "text": {"type": "string"}}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "lines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["product", "quantity"],
+        "properties": {"product": {"type": "string"}, "quantity": {"type": "integer", "minimum": 1}, "unitPrice": {"type": "number", "minimum": 0}}
+      }
+    }
+  }
+}

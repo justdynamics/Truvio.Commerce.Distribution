@@ -1,0 +1,161 @@
+{
+  "schema": 1,
+  "catalogue": {
+    "groups": [
+      {"key": "fasteners", "name": "Fasteners", "description": "Bolts, nuts and screws for timber, steel and marine work.",
+       "specFields": [
+         {"key": "material", "label": "Material", "facet": true},
+         {"key": "drive", "label": "Drive"},
+         {"key": "size", "label": "Size"},
+         {"key": "packSize", "label": "Pack size"}
+       ]},
+      {"key": "bolts", "name": "Bolts & Nuts", "parent": "fasteners"},
+      {"key": "screws", "name": "Wood & Deck Screws", "parent": "fasteners"},
+      {"key": "anchors", "name": "Anchors & Plugs", "description": "Mechanical and chemical anchors for concrete and masonry.",
+       "specFields": [
+         {"key": "baseMaterial", "label": "Base material", "facet": true},
+         {"key": "loadRating", "label": "Load rating"},
+         {"key": "drillDiameter", "label": "Drill diameter"}
+       ]},
+      {"key": "tools", "name": "Setting Tools", "description": "Drivers, bits and setting tools for the fixings we sell.",
+       "specFields": [
+         {"key": "power", "label": "Power source", "facet": true},
+         {"key": "toolWeight", "label": "Weight"},
+         {"key": "warranty", "label": "Warranty"}
+       ]}
+    ],
+    "products": [
+      {"number": "VF-HB-M10-60", "name": "Hex Bolt M10 x 60, A4 Stainless, box of 50", "group": "bolts", "listPrice": 38.5, "stock": 140,
+       "short": "Fully threaded A4 stainless hex bolt for marine and coastal work.",
+       "long": "A4 (316) stainless hex bolt, fully threaded, ISO 4017. Pairs with the M10 hex nut for through-fixing timber and steel on decks, pontoons and coastal facades.",
+       "images": ["images/vf-hb-m10-60-1.png", "images/vf-hb-m10-60-2.png", "images/vf-hb-m10-60-3.png"],
+       "documents": [{"path": "documents/vf-stainless-bolts-datasheet.pdf", "name": "Stainless bolts datasheet"}],
+       "specs": {"material": "A4 stainless", "drive": "Hex", "size": "M10 x 60", "packSize": "50"},
+       "related": {"accessories": ["VF-HN-M10"]}},
+      {"number": "VF-HN-M10", "name": "Hex Nut M10, A4 Stainless, box of 100", "group": "bolts", "listPrice": 21.0, "stock": 310,
+       "short": "A4 stainless hex nut to ISO 4032.",
+       "images": ["images/vf-hn-m10-1.png"],
+       "specs": {"material": "A4 stainless", "drive": "Hex", "size": "M10", "packSize": "100"}},
+      {"number": "VF-CB-M8-40", "name": "Carriage Bolt M8 x 40, Hot-Dip Galvanised, box of 50", "group": "bolts", "listPrice": 17.25, "stock": 95,
+       "short": "Cup-head carriage bolt for timber framing.",
+       "images": ["images/vf-cb-m8-40-1.png", "images/vf-cb-m8-40-2.png"],
+       "specs": {"material": "Galvanised steel", "drive": "Cup head", "size": "M8 x 40", "packSize": "50"}},
+      {"number": "VF-DS-5-50", "name": "Deck Screw 5 x 50, C4 Coated, box of 200", "group": "screws", "listPrice": 24.9, "stock": 420,
+       "short": "Coated deck screw with a cutting tip, rated for C4 exposure.",
+       "images": ["images/vf-ds-5-50-1.png", "images/vf-ds-5-50-2.png"],
+       "specs": {"material": "Coated carbon steel", "drive": "TX25", "size": "5 x 50", "packSize": "200"}},
+      {"number": "VF-WS-4-40", "name": "Wood Screw 4 x 40, Zinc Yellow, box of 200", "group": "screws", "listPrice": 9.8, "stock": 600,
+       "short": "General purpose chipboard and wood screw.",
+       "images": ["images/vf-ws-4-40-1.png"],
+       "specs": {"material": "Zinc yellow steel", "drive": "PZ2", "size": "4 x 40", "packSize": "200"}},
+      {"number": "VF-SD-63-25", "name": "Self-Drilling Screw 6.3 x 25, Zinc, box of 100", "group": "screws", "listPrice": 14.6, "stock": 0,
+       "short": "Hex-head self-drilling screw for light-gauge steel.",
+       "images": ["images/vf-sd-63-25-1.png"],
+       "specs": {"material": "Zinc plated steel", "drive": "Hex 8 mm", "size": "6.3 x 25", "packSize": "100"}},
+      {"number": "VF-WA-M10", "name": "Wedge Anchor M10 x 95", "group": "anchors", "listPrice": 2.4, "stock": 1500,
+       "short": "Through-bolt anchor for cracked and uncracked concrete.",
+       "images": ["images/vf-wa-m10-1.png", "images/vf-wa-m10-2.png"],
+       "documents": [{"path": "documents/vf-wedge-anchor-install.pdf", "name": "Wedge anchor installation guide"}],
+       "specs": {"baseMaterial": "Concrete", "loadRating": "8.5 kN", "drillDiameter": "10 mm"},
+       "related": {"accessories": ["VF-AT-SET"]}},
+      {"number": "VF-CA-M8", "name": "Chemical Anchor Rod Kit M8", "group": "anchors", "listPrice": 6.9, "stock": 260,
+       "short": "Threaded rod, nut and washer for injection resin anchoring.",
+       "images": ["images/vf-ca-m8-1.png"],
+       "specs": {"baseMaterial": "Concrete and solid masonry", "loadRating": "6.0 kN", "drillDiameter": "10 mm"}},
+      {"number": "VF-NP-8", "name": "Nylon Plug 8 mm, box of 100", "group": "anchors", "listPrice": 5.5, "stock": 900,
+       "short": "Universal nylon plug for brick, block and plasterboard.",
+       "images": ["images/vf-np-8-1.png"],
+       "specs": {"baseMaterial": "Brick and block", "loadRating": "0.8 kN", "drillDiameter": "8 mm"}},
+      {"number": "VF-IT-18V", "name": "Impact Driver 18 V, body only", "group": "tools", "listPrice": 129.0, "stock": 18,
+       "short": "Brushless impact driver for long deck and structural screws.",
+       "images": ["images/vf-it-18v-1.png", "images/vf-it-18v-2.png"],
+       "specs": {"power": "18 V battery", "toolWeight": "1.3 kg", "warranty": "3 years"},
+       "related": {"related": ["VF-DB-SDS-10"]}},
+      {"number": "VF-AT-SET", "name": "Anchor Setting Tool M8 to M12", "group": "tools", "listPrice": 32.0, "stock": 40,
+       "short": "Hand setting tool for drop-in and wedge anchors.",
+       "images": ["images/vf-at-set-1.png"],
+       "specs": {"power": "Manual", "toolWeight": "0.6 kg", "warranty": "1 year"}},
+      {"number": "VF-DB-SDS-10", "name": "SDS Plus Drill Bit 10 x 160", "group": "tools", "listPrice": 7.75, "stock": 220,
+       "short": "Four-cutter SDS Plus bit for anchor holes in concrete.",
+       "images": ["images/vf-db-sds-10-1.png"],
+       "specs": {"power": "Rotary hammer", "toolWeight": "0.1 kg", "warranty": "1 year"}}
+    ]
+  },
+  "prices": {
+    "currency": "USD",
+    "tiers": [
+      {"product": "VF-DS-5-50", "quantity": 10, "amount": 22.4},
+      {"product": "VF-DS-5-50", "quantity": 25, "amount": 21.2},
+      {"product": "VF-WA-M10", "quantity": 100, "amount": 2.1}
+    ],
+    "groupPrices": [
+      {"product": "VF-IT-18V", "amount": 119.0}
+    ],
+    "contracts": [
+      {"account": "C-10410", "product": "VF-HB-M10-60", "amount": 33.0},
+      {"account": "C-10410", "product": "VF-WA-M10", "amount": 1.95},
+      {"account": "C-10520", "product": "VF-DS-5-50", "amount": 20.5}
+    ]
+  },
+  "users.accounts": {
+    "groups": [
+      {"name": "Brannoch Shipwrights", "kind": "account", "customerNumber": "C-10410", "phone": "+1 555 0170",
+       "address": {"street": "12 Slipway Road", "zip": "04101", "city": "Portland", "countryCode": "US"},
+       "users": [
+         {"userName": "edda.marlowe@brannoch.example", "name": "Edda Marlowe", "email": "edda.marlowe@brannoch.example", "role": "buyer", "passwordRef": "buyer"},
+         {"userName": "corin.haskett@brannoch.example", "name": "Corin Haskett", "email": "corin.haskett@brannoch.example", "role": "accountAdmin", "passwordRef": "admin"}
+       ]},
+      {"name": "Tamsin and Orr Fit-Out", "kind": "account", "customerNumber": "C-10520", "phone": "+1 555 0181",
+       "address": {"street": "48 Mill Lane", "zip": "03301", "city": "Concord", "countryCode": "US"},
+       "users": [
+         {"userName": "rufus.pell@tamsinorr.example", "name": "Rufus Pell", "email": "rufus.pell@tamsinorr.example", "role": "user", "passwordRef": "user"}
+       ]},
+      {"name": "Vellmark customer service", "kind": "staff",
+       "users": [
+         {"userName": "ines.okafor@vellmark.example", "name": "Ines Okafor", "email": "ines.okafor@vellmark.example", "role": "csr", "passwordRef": "csr"}
+       ]}
+    ],
+    "impersonation": [
+      {"impersonator": "ines.okafor@vellmark.example", "customer": "edda.marlowe@brannoch.example"},
+      {"impersonator": "ines.okafor@vellmark.example", "customer": "rufus.pell@tamsinorr.example"}
+    ]
+  },
+  "history": {
+    "orders": [
+      {"daysAgo": 62, "state": "completed", "reference": "PO-BS-2207", "lines": [{"product": "VF-HB-M10-60", "quantity": 4}, {"product": "VF-HN-M10", "quantity": 2}]},
+      {"daysAgo": 40, "state": "completed", "reference": "PO-BS-2231", "lines": [{"product": "VF-DS-5-50", "quantity": 12}, {"product": "VF-IT-18V", "quantity": 1}]},
+      {"daysAgo": 30, "state": "rejected", "reference": "PO-BS-2240", "lines": [{"product": "VF-SD-63-25", "quantity": 6}]},
+      {"daysAgo": 21, "state": "completed", "reference": "PO-BS-2252", "lines": [{"product": "VF-WA-M10", "quantity": 200}, {"product": "VF-AT-SET", "quantity": 1}, {"product": "VF-DB-SDS-10", "quantity": 3}]},
+      {"daysAgo": 3, "state": "open", "reference": "PO-BS-2266", "lines": [{"product": "VF-CB-M8-40", "quantity": 5}]},
+      {"user": "rufus.pell@tamsinorr.example", "daysAgo": 15, "state": "completed", "reference": "TO-5521", "lines": [{"product": "VF-DS-5-50", "quantity": 30}, {"product": "VF-WS-4-40", "quantity": 10}]}
+    ],
+    "quotes": [
+      {"daysAgo": 2, "state": "QuotePending", "reference": "RFQ-BS-031", "comment": "Pricing for the spring pontoon refit: stainless bolts and wedge anchors.",
+       "lines": [{"product": "VF-HB-M10-60", "quantity": 20}, {"product": "VF-WA-M10", "quantity": 500}]}
+    ],
+    "favourites": [
+      {"name": "Yard restock", "description": "What the yard reorders every month.", "default": true,
+       "products": ["VF-HB-M10-60", "VF-HN-M10", "VF-DS-5-50", "VF-WA-M10"]}
+    ]
+  },
+  "brandCopy": {
+    "companyName": "Vellmark Fastening Supply",
+    "shortName": "Vellmark",
+    "emailDomain": "vellmark.example",
+    "logo": "brand/vellmark-logo.svg",
+    "images": {"hero": "brand/hero-yard.png", "catalogueBand": "brand/band-fixings.png", "people": "brand/counter-team.png"},
+    "contact": {"email": "orders@vellmark.example", "phone": "+1 555 0142"},
+    "home": {
+      "metaTitle": "Vellmark Fastening Supply",
+      "metaDescription": "Fasteners, anchors and setting tools for boatyards, fit-out and construction trade accounts.",
+      "heroEyebrow": "Fasteners, anchors and setting tools",
+      "heroTitle": "The fixings your crews ask for, on the account you already have",
+      "heroAltText": "Pallets of boxed fasteners in a supply yard"
+    },
+    "about": {
+      "metaDescription": "About Vellmark Fastening Supply: a trade counter and warehouse for fixings.",
+      "title": "About Vellmark",
+      "text": "Vellmark supplies fasteners, anchors and the tools to set them to boatyards, fit-out firms and builders, from one warehouse and one trade counter."
+    }
+  }
+}

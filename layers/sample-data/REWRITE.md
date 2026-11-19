@@ -5,6 +5,33 @@ strategy is fixed (owner ruling 2026-09-24): **copy the layer, rewrite the YAML,
 copy.** A demo never delivers this layer and cleans it up afterwards, and it never edits the
 Distribution's own copy.
 
+## The generator
+
+[`tools/sample-data/rewrite-sample-data.py`](../../tools/sample-data/rewrite-sample-data.py) (repository
+level, outside this layer so the layer's proven tree hash is untouched) performs this rewrite from a
+customer data file, the same file the dynamicweb/skills recipe runner reads (`schema: 1`, one key per
+section). It reads the sections `catalogue`, `prices`, `users.accounts`, `history` and `brandCopy`,
+whose shape is [`tools/sample-data/customer-data.schema.json`](../../tools/sample-data/customer-data.schema.json):
+
+```
+python tools/sample-data/rewrite-sample-data.py --input <customer data file> \
+    --out <demo>/layers/<customer>-data [--name <customer>-data] [--dry-run] [--report report.json]
+```
+
+It writes a complete layer of kind `sample-data` into `--out` (never under the Distribution's
+`layers/`), keeps every key in [What must stay stable](#what-must-stay-stable) that the copy can keep,
+leaves out every sample row the customer does not use, rewrites the four inventories, and prints the
+edition counts, the configRows it dropped and the layer probes whose fixtures the copy no longer
+carries. It refuses, with what to fix, an input that would break a guaranteed row. `--dry-run`
+reports and writes nothing; `--logins input` writes the customer's user names on the personas
+instead of the `TruvioBuyer` / `TruvioCsr` / `TruvioAdmin` names the gate signs in as. The key ranges
+it uses for rows beyond the sample's count are in the script's header.
+[`tools/sample-data/testdata/vellmark/`](../../tools/sample-data/testdata/vellmark/) is a fictional
+customer that the tests in [`tools/sample-data/tests/`](../../tools/sample-data/tests/) rewrite and
+validate.
+
+The tables below remain the reference for what it writes. By hand, the steps are:
+
 1. Copy `layers/sample-data/` into the demo's own layer folder, for example
    `<demo>/layers/<customer>-data/`, the same pattern a demo-local brand layer uses. Set
    `layer.json` `name` to the folder name and keep `kind` `sample-data`.
