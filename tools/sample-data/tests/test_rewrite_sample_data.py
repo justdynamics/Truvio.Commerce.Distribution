@@ -13,7 +13,11 @@ synthetic Distribution trees: one where the generated copy stands in place of sa
 control where an unmodified sample-data stands there under the same name. The copy passes when
 every FAIL it gets the control gets too (the edition-level checks that expect a layer named
 sample-data) and none names the copy. It needs pwsh; set SAMPLE_DATA_REWRITE_SKIP_VALIDATOR=1 to
-skip it. TRUVIO_SKILLS_PATH, when set, lets the ledger checks run in both trees.
+skip it. TRUVIO_SKILLS_PATH, when set, lets the ledger checks run in both trees, and, when that checkout
+carries skills/dw-demo-ledger/assets/recipe-input.schema.json, runs RecipeSchemaParity: the fixture passes
+the recipe input schema, and the generator schema accepts every member it defines with the same
+constraints. The fixture carries the members the recipes require and no actsFor, so the tests name the
+buyer's second account with acts_for, as a recipe-valid file does with --acts-for.
 """
 import copy
 import importlib.util
@@ -36,6 +40,7 @@ spec.loader.exec_module(gen)
 SOURCE = gen.find_source(None)
 DIST = SOURCE.parent.parent
 NAME = 'vellmark-data'
+ACTS_FOR = 'C-10520'   # the fixture buyer may act for the second account (its Switch account profile)
 
 
 def read_rows(layer, table):
@@ -69,25 +74,123 @@ def absolutise(data):
     return data
 
 
-class GeneratedCopy(unittest.TestCase):
+class TreeChecks:
+    """Checks every generated copy must pass: set out, data and report in setUpClass."""
+
+    def rows(self, table):
+        return read_rows(self.out, table)
+
+    # --------------------------------------------------------------- referential consistency
+    def test_every_reference_resolves(self):
+        products = {r.get('ProductId'): r for r in self.rows('EcomProducts').values()}
+        groups = {r.get('GroupId') for r in self.rows('EcomGroups').values()}
+        for table, col in (('EcomPrices', 'PriceProductId'), ('EcomDetails', 'DetailProductId'), ('EcomOrderLines', 'OrderLineProductId'),
+                           ('EcomCustomerFavoriteProducts', 'ProductId'), ('EcomStockUnit', 'StockUnitProductId'),
+                           ('EcomProductCategoryFieldValue', 'FieldValueProductId'), ('EcomGroupProductRelation', 'GroupProductRelationProductId'),
+                           ('EcomProductsRelated', 'ProductRelatedProductId'), ('EcomProductsRelated', 'ProductRelatedProductRelId')):
+            for n, r in self.rows(table).items():
+                self.assertIn(r.get(col), products, '%s/%s %s' % (table, n, col))
+        for r in self.rows('EcomOrderLines').values():
+            self.assertEqual(r.get('OrderLineProductNumber'), products[r.get('OrderLineProductId')].get('ProductNumber'))
+        for r in self.rows('EcomStockUnit').values():
+            self.assertEqual(r.get('StockUnitProductNumber'), products[r.get('StockUnitProductId')].get('ProductNumber'))
+        for table, col in (('EcomGroupProductRelation', 'GroupProductRelationGroupId'), ('EcomGroupRelations', 'GroupRelationsGroupId'),
+                           ('EcomGroupRelations', 'GroupRelationsParentId'), ('EcomShopGroupRelation', 'ShopGroupGroupId')):
+            for n, r in self.rows(table).items():
+                self.assertIn(r.get(col), groups, '%s/%s %s' % (table, n, col))
+        tops = {'TCGRP-' + g['key'].upper() for g in self.data['catalogue']['groups'] if not g.get('parent')}
+        self.assertEqual([n for n, r in self.rows('EcomGroupRelations').items() if r.get('GroupRelationsGroupId') in tops], [],
+                         'a top group carries a group-relation row')
+        orders = {r.get('OrderId'): r for r in self.rows('EcomOrders').values()}
+        users = {r.get('AccessUserId') for r in self.rows('AccessUser').values()}
+        lines_by_order = {}
+        for r in self.rows('EcomOrderLines').values():
+            self.assertIn(r.get('OrderLineOrderId'), orders)
+            lines_by_order.setdefault(r.get('OrderLineOrderId'), []).append(r)
+        for oid, o in orders.items():
+            self.assertIn(o.get('OrderCustomerAccessUserId'), users)
+            total = round(sum(l.get('OrderLinePriceWithVAT') for l in lines_by_order[oid]), 2)
+            self.assertAlmostEqual(o.get('OrderPriceWithVAT'), total, places=2)
+            self.assertEqual(o.get('OrderCurrencyCode'), 'USD')
+        for r in self.rows('EcomCustomerFavoriteLists').values():
+            self.assertIn(r.get('AccessUserId'), users)
+        lists = {r.get('Id') for r in self.rows('EcomCustomerFavoriteLists').values()}
+        for r in self.rows('EcomCustomerFavoriteProducts').values():
+            self.assertIn(r.get('FavoriteListId'), lists)
+        for table in ('AccessUserGroupRelation',):
+            for r in self.rows(table).values():
+                gid = r.get('AccessUserGroupRelationGroupId')
+                self.assertTrue(gid in users or gid in (1325, 1292, 1270), gid)
+                self.assertIn(r.get('AccessUserGroupRelationUserId'), users)
+        cats = {r.get('CategoryId') for r in self.rows('EcomProductCategory').values()}
+        fields = {(r.get('FieldCategoryId'), r.get('FieldId')) for r in self.rows('EcomProductCategoryField').values()}
+        for r in self.rows('EcomProductCategoryFieldValue').values():
+            self.assertIn((r.get('FieldValueFieldCategoryId'), r.get('FieldValueFieldId')), fields)
+        for r in self.rows('EcomFieldDisplayGroupFields').values():
+            _, cat, fid = r.get('FieldDisplayGroupFieldSystemName').split('|')
+            self.assertIn((cat, fid), fields)
+        for r in self.rows('EcomCompletionRules').values():
+            for f in filter(None, (r.get('EcomCompletionRuleProductFields') or '').split(',')):
+                _, cat, fid = f.split('|')
+                self.assertIn((cat, fid), fields)
+        for (cat, fid) in fields:
+            if cat == 'reference_category':
+                self.assertTrue(any(f == fid and c != cat for c, f in fields), 'mirror without its field: ' + fid)
+        for r in self.rows('EcomGroups').values():
+            if r.get('ProductCategoryId'):
+                self.assertIn(r.get('ProductCategoryId'), cats)
+        # every /Files/ path a row or a copy field points at is shipped by the copy (the logo and the icons come from Swift and the theme)
+        shipped = {'/Files/' + p.relative_to(self.out / 'files').as_posix() for p in (self.out / 'files').rglob('*') if p.is_file()}
+        for r in self.rows('EcomDetails').values():
+            self.assertIn(r.get('DetailValue'), shipped)
+        for r in products.values():
+            for c in ('ProductImageSmall', 'ProductImageMedium', 'ProductImageLarge'):
+                if r.get(c) is not None:
+                    self.assertIn(r.get(c), shipped)
+        for mode in ('merge', 'replace'):
+            for p in (self.out / mode / '_content').rglob('*.yml'):
+                for path in re.findall(r'/Files/Images/VellmarkFasteningSupply/[^"\\]+', p.read_text(encoding='utf-8-sig')):
+                    self.assertIn(path, shipped, str(p))
+
+    def test_inventories_agree_with_the_tree(self):
+        man = json.loads((self.out / 'merge' / 'merge-manifest.json').read_text(encoding='utf-8'))
+        lj = json.loads((self.out / 'layer.json').read_text(encoding='utf-8'))
+        self.assertEqual(lj['name'], NAME)
+        self.assertEqual(lj['kind'], 'sample-data')
+        on_disk = {d.name for d in (self.out / 'merge' / '_sql').iterdir() if d.is_dir()}
+        self.assertEqual({e['table'] for e in man['entries'] if e['providerType'] == 'SqlTable'}, on_disk)
+        self.assertEqual(set(lj['fragmentTables']), on_disk)
+        for e in man['entries']:
+            listed = {f.split('/')[-1] for f in e['files']}
+            disk = {p.name for p in (self.out / 'merge' / '_sql' / e['table']).iterdir()}
+            self.assertEqual(listed, disk, e['table'])
+            self.assertEqual(lj['costHints']['expectedRows'][e['table']], len(disk - {'_meta.yml'}))
+        self.assertEqual(sorted(lj['files']), sorted(p.relative_to(self.out / 'files').as_posix() for p in (self.out / 'files').rglob('*') if p.is_file()))
+        cfg = json.loads((self.out / 'config' / 'sample-data-2.4.json').read_text(encoding='utf-8'))
+        self.assertEqual({p['table'] for p in cfg['predicates']}, on_disk)
+        for cr in lj['configRows']:
+            self.assertRegex(cr['where'], r"^ *[A-Za-z0-9_]+ *= *'[a-zA-Z0-9 ._-]*'( +AND +[A-Za-z0-9_]+ *= *'[a-zA-Z0-9 ._-]*')* *$")
+        self.assertNotIn('pim.variants', lj['ledger']['provides'])
+        self.assertIn('orders.quotes', lj['ledger']['provides'])
+
+
+
+class GeneratedCopy(TreeChecks, unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.tmp = Path(tempfile.mkdtemp(prefix='sdrw-'))
         cls.out = cls.tmp / 'a' / NAME
-        cls.report, _ = gen.generate(FIXTURE, cls.out)
+        cls.report, _ = gen.generate(FIXTURE, cls.out, acts_for=ACTS_FOR)
         cls.data = fixture()
 
     @classmethod
     def tearDownClass(cls):
         shutil.rmtree(cls.tmp, ignore_errors=True)
 
-    def rows(self, table):
-        return read_rows(self.out, table)
-
     # --------------------------------------------------------------- determinism
     def test_two_runs_write_identical_trees(self):
         other = self.tmp / 'b' / NAME
-        gen.generate(FIXTURE, other)
+        gen.generate(FIXTURE, other, acts_for=ACTS_FOR)
 
         def tree(root):
             return {p.relative_to(root).as_posix(): p.read_bytes() for p in sorted(root.rglob('*')) if p.is_file()}
@@ -97,7 +200,7 @@ class GeneratedCopy(unittest.TestCase):
 
     def test_dry_run_writes_nothing(self):
         target = self.tmp / 'dry' / NAME
-        report, files = gen.generate(FIXTURE, target, dry_run=True)
+        report, files = gen.generate(FIXTURE, target, dry_run=True, acts_for=ACTS_FOR)
         self.assertFalse(target.exists())
         self.assertEqual(sorted(files), sorted(p.relative_to(self.out).as_posix() for p in self.out.rglob('*') if p.is_file()))
 
@@ -233,97 +336,24 @@ class GeneratedCopy(unittest.TestCase):
             self.assertTrue(rows)
             self.assertEqual([n for n, r in rows.items() if not test(r)], [], pr['where'])
 
-    # --------------------------------------------------------------- referential consistency
-    def test_every_reference_resolves(self):
-        products = {r.get('ProductId'): r for r in self.rows('EcomProducts').values()}
-        groups = {r.get('GroupId') for r in self.rows('EcomGroups').values()}
-        for table, col in (('EcomPrices', 'PriceProductId'), ('EcomDetails', 'DetailProductId'), ('EcomOrderLines', 'OrderLineProductId'),
-                           ('EcomCustomerFavoriteProducts', 'ProductId'), ('EcomStockUnit', 'StockUnitProductId'),
-                           ('EcomProductCategoryFieldValue', 'FieldValueProductId'), ('EcomGroupProductRelation', 'GroupProductRelationProductId'),
-                           ('EcomProductsRelated', 'ProductRelatedProductId'), ('EcomProductsRelated', 'ProductRelatedProductRelId')):
-            for n, r in self.rows(table).items():
-                self.assertIn(r.get(col), products, '%s/%s %s' % (table, n, col))
-        for r in self.rows('EcomOrderLines').values():
-            self.assertEqual(r.get('OrderLineProductNumber'), products[r.get('OrderLineProductId')].get('ProductNumber'))
-        for r in self.rows('EcomStockUnit').values():
-            self.assertEqual(r.get('StockUnitProductNumber'), products[r.get('StockUnitProductId')].get('ProductNumber'))
-        for table, col in (('EcomGroupProductRelation', 'GroupProductRelationGroupId'), ('EcomGroupRelations', 'GroupRelationsGroupId'),
-                           ('EcomGroupRelations', 'GroupRelationsParentId'), ('EcomShopGroupRelation', 'ShopGroupGroupId')):
-            for n, r in self.rows(table).items():
-                self.assertIn(r.get(col), groups, '%s/%s %s' % (table, n, col))
-        tops = {'TCGRP-' + g['key'].upper() for g in self.data['catalogue']['groups'] if not g.get('parent')}
-        self.assertEqual([n for n, r in self.rows('EcomGroupRelations').items() if r.get('GroupRelationsGroupId') in tops], [],
-                         'a top group carries a group-relation row')
-        orders = {r.get('OrderId'): r for r in self.rows('EcomOrders').values()}
-        users = {r.get('AccessUserId') for r in self.rows('AccessUser').values()}
-        lines_by_order = {}
-        for r in self.rows('EcomOrderLines').values():
-            self.assertIn(r.get('OrderLineOrderId'), orders)
-            lines_by_order.setdefault(r.get('OrderLineOrderId'), []).append(r)
-        for oid, o in orders.items():
-            self.assertIn(o.get('OrderCustomerAccessUserId'), users)
-            total = round(sum(l.get('OrderLinePriceWithVAT') for l in lines_by_order[oid]), 2)
-            self.assertAlmostEqual(o.get('OrderPriceWithVAT'), total, places=2)
-            self.assertEqual(o.get('OrderCurrencyCode'), 'USD')
-        for r in self.rows('EcomCustomerFavoriteLists').values():
-            self.assertIn(r.get('AccessUserId'), users)
-        lists = {r.get('Id') for r in self.rows('EcomCustomerFavoriteLists').values()}
-        for r in self.rows('EcomCustomerFavoriteProducts').values():
-            self.assertIn(r.get('FavoriteListId'), lists)
-        for table in ('AccessUserGroupRelation',):
-            for r in self.rows(table).values():
-                gid = r.get('AccessUserGroupRelationGroupId')
-                self.assertTrue(gid in users or gid in (1325, 1292, 1270), gid)
-                self.assertIn(r.get('AccessUserGroupRelationUserId'), users)
-        cats = {r.get('CategoryId') for r in self.rows('EcomProductCategory').values()}
-        fields = {(r.get('FieldCategoryId'), r.get('FieldId')) for r in self.rows('EcomProductCategoryField').values()}
-        for r in self.rows('EcomProductCategoryFieldValue').values():
-            self.assertIn((r.get('FieldValueFieldCategoryId'), r.get('FieldValueFieldId')), fields)
-        for r in self.rows('EcomFieldDisplayGroupFields').values():
-            _, cat, fid = r.get('FieldDisplayGroupFieldSystemName').split('|')
-            self.assertIn((cat, fid), fields)
-        for r in self.rows('EcomCompletionRules').values():
-            for f in filter(None, (r.get('EcomCompletionRuleProductFields') or '').split(',')):
-                _, cat, fid = f.split('|')
-                self.assertIn((cat, fid), fields)
-        for (cat, fid) in fields:
-            if cat == 'reference_category':
-                self.assertTrue(any(f == fid and c != cat for c, f in fields), 'mirror without its field: ' + fid)
-        for r in self.rows('EcomGroups').values():
-            if r.get('ProductCategoryId'):
-                self.assertIn(r.get('ProductCategoryId'), cats)
-        # every /Files/ path a row or a copy field points at is shipped by the copy (the logo and the icons come from Swift and the theme)
-        shipped = {'/Files/' + p.relative_to(self.out / 'files').as_posix() for p in (self.out / 'files').rglob('*') if p.is_file()}
-        for r in self.rows('EcomDetails').values():
-            self.assertIn(r.get('DetailValue'), shipped)
-        for r in products.values():
-            for c in ('ProductImageSmall', 'ProductImageMedium', 'ProductImageLarge'):
-                self.assertIn(r.get(c), shipped)
-        for mode in ('merge', 'replace'):
-            for p in (self.out / mode / '_content').rglob('*.yml'):
-                for path in re.findall(r'/Files/Images/VellmarkFasteningSupply/[^"\\]+', p.read_text(encoding='utf-8-sig')):
-                    self.assertIn(path, shipped, str(p))
-
-    def test_inventories_agree_with_the_tree(self):
-        man = json.loads((self.out / 'merge' / 'merge-manifest.json').read_text(encoding='utf-8'))
-        lj = json.loads((self.out / 'layer.json').read_text(encoding='utf-8'))
-        self.assertEqual(lj['name'], NAME)
-        self.assertEqual(lj['kind'], 'sample-data')
-        on_disk = {d.name for d in (self.out / 'merge' / '_sql').iterdir() if d.is_dir()}
-        self.assertEqual({e['table'] for e in man['entries'] if e['providerType'] == 'SqlTable'}, on_disk)
-        self.assertEqual(set(lj['fragmentTables']), on_disk)
-        for e in man['entries']:
-            listed = {f.split('/')[-1] for f in e['files']}
-            disk = {p.name for p in (self.out / 'merge' / '_sql' / e['table']).iterdir()}
-            self.assertEqual(listed, disk, e['table'])
-            self.assertEqual(lj['costHints']['expectedRows'][e['table']], len(disk - {'_meta.yml'}))
-        self.assertEqual(sorted(lj['files']), sorted(p.relative_to(self.out / 'files').as_posix() for p in (self.out / 'files').rglob('*') if p.is_file()))
-        cfg = json.loads((self.out / 'config' / 'sample-data-2.4.json').read_text(encoding='utf-8'))
-        self.assertEqual({p['table'] for p in cfg['predicates']}, on_disk)
-        for cr in lj['configRows']:
-            self.assertRegex(cr['where'], r"^ *[A-Za-z0-9_]+ *= *'[a-zA-Z0-9 ._-]*'( +AND +[A-Za-z0-9_]+ *= *'[a-zA-Z0-9 ._-]*')* *$")
-        self.assertNotIn('pim.variants', lj['ledger']['provides'])
-        self.assertIn('orders.quotes', lj['ledger']['provides'])
+    # --------------------------------------------------------------- the recipe members the generator uses
+    def test_recipe_members_are_used_or_reported(self):
+        prices = self.rows('EcomPrices')
+        grp = [r for r in prices.values() if r.get('PriceId').startswith('TC-PRICE-GRP-')]
+        self.assertTrue(grp)
+        # prices.customerGroup names the buyer's account: the group price reaches its users only
+        self.assertTrue(all(str(r.get('PriceUserGroupId')) == '100100' for r in grp), [r.get('PriceUserGroupId') for r in grp])
+        states = {r.get('OrderReference'): r.get('OrderStateId') for r in self.rows('EcomOrders').values() if not r.get('OrderIsQuote')}
+        self.assertEqual((states['PO-BS-2207'], states['PO-BS-2266'], states['PO-BS-2240']), ('OS2', 'OS1', 'OS3'))
+        folder = [r for r in self.rows('EcomGroups').values() if r.get('GroupType') == 1]
+        self.assertEqual([r.get('GroupName') for r in folder], ['Vellmark catalogue'])
+        self.assertFalse(self.report['numbering']['written'])
+        self.assertIn('EcomNumbers', self.report['numbering']['why'])
+        self.assertFalse((self.out / 'merge' / '_sql' / 'EcomNumbers').exists())
+        ignored = {m['member'] for m in self.report['ignored']}
+        self.assertIn('history.numbering', ignored)
+        self.assertIn('prices.buyer.passwordRef', ignored)
+        self.assertEqual(self.report['ids']['buyerSecondProfile'], {'id': 100105, 'account': 'Tamsin and Orr Fit-Out'})
 
     # --------------------------------------------------------------- the CI validator
     @unittest.skipIf(os.environ.get('SAMPLE_DATA_REWRITE_SKIP_VALIDATOR') == '1', 'SAMPLE_DATA_REWRITE_SKIP_VALIDATOR=1')
@@ -382,6 +412,7 @@ class Refusals(unittest.TestCase):
         case.mkdir()
         inp = case / 'customer-data.json'
         inp.write_text(json.dumps(data), encoding='utf-8')
+        kw.setdefault('acts_for', ACTS_FOR)
         return gen.generate(inp, case / 'out' / NAME, **kw)
 
     def assertRefused(self, mutate, text, **kw):
@@ -399,7 +430,16 @@ class Refusals(unittest.TestCase):
             gen.generate(FIXTURE, self.tmp / 'x' / NAME, name='other-name', dry_run=True)
 
     def test_no_buyer(self):
-        self.assertRefused(lambda d: d['users.accounts']['groups'][0]['users'][0].update(role='user'), 'exactly one user needs role buyer')
+        def m(d):
+            d['users.accounts']['groups'][0]['users'][0].update(role='user')
+            del d['prices']['buyer'], d['history']['buyer']
+        self.assertRefused(m, 'exactly one user needs role buyer')
+
+    def test_recipe_buyer_names_the_buyer_when_no_role_does(self):
+        def m(d):
+            d['users.accounts']['groups'][0]['users'][0].update(role='user')
+        report, files = self.run_with(m, dry_run=True)
+        self.assertEqual(report['ids']['users']['edda.marlowe@brannoch.example'], 100101)
 
     def test_one_account_breaks_the_second_profile(self):
         def m(d):
@@ -407,7 +447,7 @@ class Refusals(unittest.TestCase):
             del g[1]
             d['history']['orders'] = [o for o in d['history']['orders'] if 'user' not in o]
             d['prices']['contracts'] = [c for c in d['prices']['contracts'] if c['account'] != 'C-10520']
-        self.assertRefused(m, 'second profile')
+        self.assertRefused(m, 'guarantees the buyer a second profile', acts_for=None)
 
     def test_shared_customer_number(self):
         self.assertRefused(lambda d: d['users.accounts']['groups'][1].update(customerNumber='C-10410'), 'share a customer number')
@@ -430,12 +470,6 @@ class Refusals(unittest.TestCase):
             d['catalogue']['products'][0]['images'][0] = d['brandCopy']['logo']
         self.assertRefused(m, 'no SVG decoder')
 
-    def test_too_many_top_groups(self):
-        def m(d):
-            for i in range(2):
-                d['catalogue']['groups'].append({'key': 'extra%d' % i, 'name': 'Extra %d' % i})
-                d['catalogue']['products'].append(dict(d['catalogue']['products'][0], number='VF-X-%d' % i, group='extra%d' % i, specs={}, related={}))
-        self.assertRefused(m, 'product categories')
 
     def test_order_owned_by_the_csr(self):
         self.assertRefused(lambda d: d['history']['orders'][1].update(user='ines.okafor@vellmark.example'), 'invisible to every persona')
@@ -454,6 +488,114 @@ class Refusals(unittest.TestCase):
 
     def test_schema_violation(self):
         self.assertRefused(lambda d: d['catalogue']['products'][0].pop('listPrice'), 'missing listPrice')
+
+    def test_account_without_customer_number_fails_the_schema(self):
+        self.assertRefused(lambda d: d['users.accounts']['groups'][1].pop('customerNumber'), 'missing customerNumber')
+
+    # --------------------------------------------------------------- one key per row
+    def test_contract_and_group_prices_with_a_quantity(self):
+        def m(d):
+            d['prices']['contracts'].append({'account': 'C-10410', 'product': 'VF-HB-M10-60', 'quantity': 10, 'amount': 31.0})
+            d['prices']['groupPrices'].append({'product': 'VF-IT-18V', 'quantity': 3, 'amount': 115.0})
+        report, files = self.run_with(m, dry_run=True)
+        n = report['ids']['products']['VF-HB-M10-60'][len('TCPROD'):]
+        g = report['ids']['products']['VF-IT-18V'][len('TCPROD'):]
+        names = {k.split('/')[-1] for k in files if k.startswith('merge/_sql/EcomPrices/')}
+        for key in ('TC-PRICE-CTR-%s-A1' % n, 'TC-PRICE-CTR-%s-A1-Q10' % n, 'TC-PRICE-GRP-%s' % g, 'TC-PRICE-GRP-%s-Q3' % g):
+            self.assertIn(key + '.yml', names)
+
+    def test_two_contract_rows_for_one_rung(self):
+        def m(d):
+            d['prices']['contracts'].append({'account': 'C-10410', 'product': 'VF-HB-M10-60', 'quantity': 1, 'amount': 30.0})
+        self.assertRefused(m, 'prices.contracts[0] and prices.contracts[3]')
+
+    def test_a_repeated_relation_names_both_rows(self):
+        def m(d):
+            d['catalogue']['products'][0]['related']['accessories'].append('VF-HN-M10')
+        self.assertRefused(m, 'related.accessories[0] and catalogue.products VF-HB-M10-60 related.accessories[1]')
+
+    def test_a_repeated_favourite_names_both_rows(self):
+        self.assertRefused(lambda d: d['history']['favourites'][0]['products'].append('VF-HN-M10'),
+                           'history.favourites[0].products[1] and history.favourites[0].products[4]')
+
+    def test_two_groups_with_one_name(self):
+        self.assertRefused(lambda d: d['users.accounts']['groups'][1].update(name='Brannoch Shipwrights'), 'two groups are named')
+
+    # --------------------------------------------------------------- recipe members that contradict the copy
+    def test_list_price_contradiction(self):
+        self.assertRefused(lambda d: d['prices']['listPrices'][0].update(amount=40), 'make them equal')
+
+    def test_list_price_of_an_unknown_product(self):
+        self.assertRefused(lambda d: d['prices']['listPrices'].append({'product': 'VF-NOPE', 'amount': 1}), 'not a catalogue product number')
+
+    def test_customer_group_that_is_not_an_account(self):
+        self.assertRefused(lambda d: d['prices'].update(customerGroup='Trade customers'), 'is not an account in users.accounts')
+
+    def test_customer_group_without_the_buyer(self):
+        self.assertRefused(lambda d: d['prices'].update(customerGroup='Tamsin and Orr Fit-Out'), 'not a direct member of prices.customerGroup')
+
+    def test_recipe_buyer_is_another_user(self):
+        self.assertRefused(lambda d: d['history']['buyer'].update(userName='rufus.pell@tamsinorr.example'), 'One file, one buyer')
+
+    def test_price_buyer_on_another_account(self):
+        self.assertRefused(lambda d: d['prices']['buyer'].update(account='C-10520'), 'prices.buyer.account')
+
+    def test_another_storefront_shop(self):
+        self.assertRefused(lambda d: d['history'].update(shop='SHOP7'), 'history.shop: SHOP7')
+
+    def test_another_pim_shop(self):
+        self.assertRefused(lambda d: d.update(build={'pimShop': 'SHOP19'}), 'build.pimShop: SHOP19')
+
+    def test_unknown_order_state(self):
+        self.assertRefused(lambda d: d['history']['orderStates'][0].update(name='Shipped'), 'is not an order state')
+
+    def test_completed_must_stay_the_delivered_state(self):
+        def m(d):
+            d['history']['orderStates'] = [{'state': 'completed', 'name': 'New'}, {'state': 'open', 'name': 'Completed'}]
+        self.assertRefused(m, 'deliveredOrder')
+
+    # --------------------------------------------------------------- the buyer's second profile
+    def test_acts_for_in_the_file_equals_the_flag(self):
+        def m(d):
+            d['users.accounts']['groups'][0]['users'][0]['actsFor'] = ['C-10520']
+        _, files = self.run_with(m, dry_run=True, acts_for=None)
+        _, flagged = self.run_with(lambda d: None, dry_run=True)
+        self.assertEqual(sorted(files), sorted(flagged))
+        # layer.json differs only in the input digest it records
+        self.assertEqual([k for k in files if k != 'layer.json' and files[k] != flagged[k]], [])
+
+    def test_acts_for_on_a_user_who_is_not_the_buyer(self):
+        self.assertRefused(lambda d: d['users.accounts']['groups'][1]['users'][0].update(actsFor=['C-10410']), 'only the buyer gets a second profile')
+
+    def test_acts_for_the_buyers_own_account(self):
+        self.assertRefused(lambda d: None, 'own account', acts_for='C-10410')
+
+    def test_acts_for_an_unknown_account(self):
+        self.assertRefused(lambda d: None, 'is not the customerNumber of an account', acts_for='C-99999')
+
+    def test_acts_for_flag_and_file_disagree(self):
+        def m(d):
+            d['users.accounts']['groups'].insert(2, {'name': 'Halden Marine Works', 'kind': 'account', 'customerNumber': 'C-10630', 'users': []})
+            d['users.accounts']['groups'][0]['users'][0]['actsFor'] = ['C-10630']
+        self.assertRefused(m, 'disagree')
+
+    def test_no_account_named_for_the_second_profile(self):
+        self.assertRefused(lambda d: None, 'names no other account to act for', acts_for=None)
+
+    def test_every_recipe_section_is_accepted_and_reported_ignored(self):
+        def m(d):
+            d['build'] = {'areaId': 1, 'defaultLanguage': 'en-US', 'pimShop': 'TCSHOP-PIM'}
+            d['brand'] = {'id': 'vellmark'}
+            d['debrand'] = {'forbidden': [{'text': 'Old name', 'replacement': 'Vellmark'}]}
+            d['content.pages'] = {'pages': [{'menuText': 'About us', 'urlName': 'about-us', 'itemType': 'Swift-v2_Page'}]}
+            d['pim.workflow'] = {'name': 'Review', 'states': [{'name': 'Draft'}]}
+            d['catalogue']['assortmentIds'] = ['A1']
+            d['history']['reset'] = True
+        report, _ = self.run_with(m, dry_run=True)
+        ignored = {x['member'] for x in report['ignored']}
+        for member in ('build.areaId', 'build.defaultLanguage', 'brand', 'debrand', 'content.pages', 'pim.workflow',
+                       'catalogue.assortmentIds', 'history.reset', 'history.numbering'):
+            self.assertIn(member, ignored)
 
 
 class MoreRowsThanTheSample(unittest.TestCase):
@@ -481,7 +623,7 @@ class MoreRowsThanTheSample(unittest.TestCase):
         inp = cls.tmp / 'customer-data.json'
         inp.write_text(json.dumps(data), encoding='utf-8')
         cls.out = cls.tmp / 'out' / NAME
-        cls.report, _ = gen.generate(inp, cls.out, logins='input')
+        cls.report, _ = gen.generate(inp, cls.out, logins='input', acts_for=ACTS_FOR)
 
     @classmethod
     def tearDownClass(cls):
@@ -511,6 +653,191 @@ class MoreRowsThanTheSample(unittest.TestCase):
         self.assertEqual(users['100101.yml'].get('AccessUserUserName'), 'edda.marlowe@brannoch.example')
         self.assertEqual(users['100105.yml'].get('AccessUserUserName'), 'edda.marlowe@brannoch.example')
         self.assertEqual(self.report['residualSampleTokens'], [])
+
+    def test_logins_input_satisfies_what_the_gate_legs_read(self):
+        """The Foundry reads the personas the way Get-SampleDataPersona (tools/harness/Set-PersonaCredential.ps1) does:
+        each base contract role with an AccessUser id counts when the shipped row exists, and its user name is the
+        row's AccessUserUserName line, matched with the same two expressions. gate.ps1 Step 3c2 then requires
+        config layers.buyerUsername to equal the buyer's, and the Switch account profile shares it."""
+        contract = json.loads((DIST / 'layers' / 'base' / 'base.contract.json').read_text(encoding='utf-8-sig'))
+        guaranteed = contract['sampleData']['guaranteedRows']
+        expected = {'buyer': 'edda.marlowe@brannoch.example', 'csr': 'ines.okafor@vellmark.example', 'accountAdmin': 'corin.haskett@brannoch.example'}
+        for role, name in expected.items():
+            row = self.out / 'merge' / '_sql' / 'AccessUser' / ('%d.yml' % guaranteed[role]['id'])
+            self.assertTrue(row.is_file(), role)
+            lines = [l for l in row.read_text(encoding='utf-8').splitlines() if re.match(r'^\s*"?AccessUserUserName"?\s*:', l)]
+            self.assertEqual(len(lines), 1, role)
+            m = re.search(r':\s*"?([^"]+)"?\s*$', lines[0])
+            self.assertEqual(m.group(1).strip(), name, role)
+        users = read_rows(self.out, 'AccessUser')
+        buyer, profile = users['%d.yml' % guaranteed['buyer']['id']], users['100105.yml']
+        self.assertTrue(buyer.get('AccessUserIsLogin'))
+        self.assertFalse(profile.get('AccessUserIsLogin'))
+        self.assertEqual(profile.get('AccessUserUserName'), buyer.get('AccessUserUserName'))
+        self.assertNotEqual(profile.get('AccessUserCustomerNumber'), buyer.get('AccessUserCustomerNumber'))
+        stable = {'TruvioBuyer', 'TruvioCsr', 'TruvioAdmin'}
+        self.assertEqual([n for n, r in users.items() if r.get('AccessUserUserName') in stable], [])
+        # a configRow that pins a stable user name is rewritten or dropped, never left naming a user the copy lacks
+        lj = json.loads((self.out / 'layer.json').read_text(encoding='utf-8'))
+        self.assertEqual([c['where'] for c in lj['configRows'] if any(x in c['where'] for x in stable)], [])
+
+
+class LiftedLimits(TreeChecks, unittest.TestCase):
+    """Six top groups (the sample carries four product categories), nine spec fields on one top group (its category
+    carries seven field slots) and a product without images."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = Path(tempfile.mkdtemp(prefix='sdrw-l-'))
+        data = absolutise(fixture())
+        groups, products = data['catalogue']['groups'], data['catalogue']['products']
+        fasteners = groups[0]
+        for k in ('finish', 'thread', 'headStyle', 'grade'):
+            fasteners['specFields'].append({'key': k, 'label': k.capitalize()})
+        products[0]['specs'].update(finish='Plain', thread='Coarse', headStyle='Hex', grade='A4-70')
+        for i, (key, name) in enumerate((('sealants', 'Sealants'), ('safety', 'Safety Wear'), ('storage', 'Storage'))):
+            groups.append({'key': key, 'name': name, 'specFields': [{'key': 'volume', 'label': 'Volume', 'facet': True}, {'key': 'colour', 'label': 'Colour'}]})
+            p = copy.deepcopy(products[1])
+            p.update(number='VF-%s-1' % key.upper(), name='%s item' % name, group=key, specs={'volume': '%d ml' % (100 * (i + 1)), 'colour': 'Grey'})
+            p.pop('related', None)
+            if key == 'storage':
+                p.pop('images')
+            products.append(p)
+        cls.data = data
+        inp = cls.tmp / 'customer-data.json'
+        inp.write_text(json.dumps(data), encoding='utf-8')
+        cls.out = cls.tmp / 'out' / NAME
+        cls.report, _ = gen.generate(inp, cls.out, acts_for=ACTS_FOR)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def test_every_top_group_has_a_data_model_and_a_category(self):
+        groups = {r.get('GroupId'): r for r in self.rows('EcomGroups').values()}
+        models = [r for r in groups.values() if r.get('GroupType') == 2]
+        self.assertEqual(len(models), 6)
+        cats = {r.get('CategoryId') for r in self.rows('EcomProductCategory').values()}
+        rules = {str(r.get('EcomCompletionRuleId')) for r in self.rows('EcomCompletionRules').values()}
+        for m in models:
+            self.assertIn(m.get('ProductCategoryId'), cats)
+            self.assertIn(m.get('GroupCompletionRules'), rules)
+        self.assertEqual(len(cats), 6)
+        self.assertIn('TCDM-SAFETY', groups)
+        self.assertIn('tc_safety', cats)
+        folder = next(r.get('GroupId') for r in groups.values() if r.get('GroupType') == 1)
+        parents = {r.get('GroupRelationsGroupId'): r.get('GroupRelationsParentId') for r in self.rows('EcomGroupRelations').values()}
+        self.assertTrue(all(parents.get(m.get('GroupId')) == folder for m in models))
+        shops = {r.get('ShopGroupGroupId'): r.get('ShopGroupShopId') for r in self.rows('EcomShopGroupRelation').values()}
+        self.assertTrue(all(shops.get(m.get('GroupId')) == 'TCSHOP-PIM' for m in models))
+        cfg = json.loads((self.out / 'config' / 'sample-data-2.4.json').read_text(encoding='utf-8'))
+        where = {p['table']: p['where'] for p in cfg['predicates']}
+        self.assertEqual(where['EcomCompletionRules'], 'EcomCompletionRuleId >= 100160 AND EcomCompletionRuleId <= 100165')
+        self.assertEqual(self.report['outsidePredicateFence'], [])
+
+    def test_spec_fields_beyond_the_slots_are_new_fields(self):
+        fields = {(r.get('FieldCategoryId'), r.get('FieldId')) for r in self.rows('EcomProductCategoryField').values()}
+        for fid in ('tcFastenersHeadStyle', 'tcFastenersGrade'):
+            self.assertTrue(any(f == fid and c != 'reference_category' for c, f in fields), fid)
+            self.assertIn(('reference_category', fid), fields)
+        rule = next(r for r in self.rows('EcomCompletionRules').values() if r.get('EcomCompletionRuleName') == 'Fasteners data complete')
+        self.assertEqual(len(rule.get('EcomCompletionRuleProductFields').split(',')), 9)
+        display = [r.get('FieldDisplayGroupFieldSystemName') for r in self.rows('EcomFieldDisplayGroupFields').values()]
+        self.assertEqual(len(display), 9 + 3 + 3 + 3 * 2)
+
+    def test_a_product_without_images(self):
+        pid = self.report['ids']['products']['VF-STORAGE-1']
+        product = next(r for r in self.rows('EcomProducts').values() if r.get('ProductId') == pid)
+        self.assertIsNone(product.get('ProductImageSmall'))
+        self.assertEqual([r for r in self.rows('EcomDetails').values() if r.get('DetailProductId') == pid], [])
+
+
+class NoGuaranteedProfile(unittest.TestCase):
+    """A source layer with no base contract beside it guarantees no Switch account profile: the generator writes none
+    unless the input names the account, and never picks one."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = Path(tempfile.mkdtemp(prefix='sdrw-p-'))
+        cls.src = cls.tmp / 'src' / 'sample-data'
+        shutil.copytree(SOURCE, cls.src, ignore=shutil.ignore_patterns('files', 'tools'))
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def test_no_second_profile_without_acts_for(self):
+        report, files = gen.generate(FIXTURE, self.tmp / 'out' / NAME, source=str(self.src), dry_run=True)
+        self.assertIsNone(report['ids']['buyerSecondProfile'])
+        self.assertNotIn('merge/_sql/AccessUser/100105.yml', files)
+        self.assertNotIn('merge/_sql/AccessUserGroupRelation/1325$$100105.yml', files)
+        self.assertTrue(any('No second profile' in w for w in report['warnings']))
+        lj = json.loads(files['layer.json'].decode('utf-8'))
+        self.assertEqual([c for c in lj['configRows'] if '100105' in c['where']], [])
+
+    def test_acts_for_still_writes_it(self):
+        report, files = gen.generate(FIXTURE, self.tmp / 'out2' / NAME, source=str(self.src), dry_run=True, acts_for=ACTS_FOR)
+        self.assertEqual(report['ids']['buyerSecondProfile']['id'], 100105)
+        self.assertIn('merge/_sql/AccessUser/100105.yml', files)
+
+
+def _recipe_schema_path():
+    root = os.environ.get('TRUVIO_SKILLS_PATH')
+    if not root:
+        return None
+    p = Path(root) / 'skills' / 'dw-demo-ledger' / 'assets' / 'recipe-input.schema.json'
+    return p if p.is_file() else None
+
+
+@unittest.skipIf(_recipe_schema_path() is None, 'TRUVIO_SKILLS_PATH has no skills/dw-demo-ledger/assets/recipe-input.schema.json')
+class RecipeSchemaParity(unittest.TestCase):
+    """The generator schema accepts every member the recipe input schema defines, with the same constraints, except the
+    two documented generator-only additions; and the fixture is one file both read."""
+
+    # a member only the generator reads (actsFor) is not a difference here: the generator may read more
+    EXTENSIONS = {'$.catalogue.products[].required', '$.catalogue.products[].images.minItems'}
+    RECIPE_OWNED = {'$.brand', '$.debrand', '$.content.pages', '$.pim.workflow'}
+
+    @classmethod
+    def setUpClass(cls):
+        cls.recipe = json.loads(_recipe_schema_path().read_text(encoding='utf-8-sig'))
+        cls.ours = json.loads((TOOLS / 'customer-data.schema.json').read_text(encoding='utf-8-sig'))
+
+    def test_the_fixture_passes_the_recipe_input_schema(self):
+        self.assertEqual(gen.schema_errors(fixture(), self.recipe, self.recipe), [])
+
+    def test_every_recipe_member_is_accepted_with_its_constraints(self):
+        def resolve(node, root):
+            while isinstance(node, dict) and '$ref' in node:
+                target = root
+                for part in node['$ref'].lstrip('#/').split('/'):
+                    target = target[part]
+                node = target
+            return node
+        diffs = []
+
+        def walk(r, g, path):
+            r, g = resolve(r, self.recipe), resolve(g, self.ours) if g is not None else None
+            if path in self.RECIPE_OWNED:
+                if g is None or g.get('type') != 'object':
+                    diffs.append(path + ': not accepted')
+                return
+            if g is None:
+                diffs.append(path + ': not declared')
+                return
+            for k in ('type', 'const', 'enum', 'minLength', 'maxLength', 'pattern', 'minimum', 'exclusiveMinimum', 'minItems', 'maxItems'):
+                if r.get(k) != g.get(k):
+                    diffs.append('%s.%s' % (path, k))
+            if sorted(r.get('required', [])) != sorted(g.get('required', [])):
+                diffs.append(path + '.required')
+            if r.get('then') != g.get('then'):
+                diffs.append(path + '.then')
+            for k, v in r.get('properties', {}).items():
+                walk(v, g.get('properties', {}).get(k), path + '.' + k)
+            if 'items' in r:
+                walk(r['items'], g.get('items'), path + '[]')
+        walk(self.recipe, self.ours, '$')
+        self.assertEqual(sorted(set(diffs) - self.EXTENSIONS), [])
 
 
 if __name__ == '__main__':

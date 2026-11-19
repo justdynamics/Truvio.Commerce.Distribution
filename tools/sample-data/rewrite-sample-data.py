@@ -13,9 +13,28 @@ of kind sample-data into --out:
         [--dry-run] [--report <file.json>] [--logins stable|input] [--source <sample-data dir>]
 
 The customer data file is the same file the dynamicweb/skills recipe runner reads (`schema: 1`,
-one key per section). This script reads the sections catalogue, prices, users.accounts, history
-and brandCopy; customer-data.schema.json beside this script is their shape. REWRITE.md beside the
-layer is the by-hand reference for every table this script writes.
+one key per section); its canonical shape is that repository's recipe input schema
+(skills/dw-demo-ledger/assets/recipe-input.schema.json). customer-data.schema.json beside this script
+accepts every member that schema defines and adds two the generator alone reads (the buyer's actsFor
+and a product without images). This script reads catalogue, prices, users.accounts, history,
+brandCopy and build.pimShop; every other member is accepted, ignored and listed in the report as
+owned by a recipe. REWRITE.md beside the layer is the by-hand reference for every table it writes.
+
+    prices.listPrices    the product's own price, restated for the recipes. catalogue.products[]
+                         listPrice is what the copy writes; a product named in both carries one
+                         amount, or the input is refused.
+    prices.customerGroup scopes groupPrices to that account's user group (its users are direct
+                         members); absent, groupPrices reach every signed-in customer (1325).
+    prices.buyer, history.buyer
+                         must name the users.accounts buyer (and its account); with no role buyer
+                         they name it.
+    history.orderStates  the base order state each history state is written with, by name in the
+                         base's default order flow; completed must stay the delivered-order state.
+    history.numbering    reported, not written: the layer carries no EcomNumbers table (the base
+                         owns it) and a merge row could not change the prefix a blank site holds.
+    catalogue.pimFolder  the name of the PIM data-model folder (default: the company name).
+    catalogue.shop, history.shop, build.pimShop
+                         must be the shops the copy carries (SHOP1, TCSHOP-PIM).
 
 HOW. Every catalogue, price, order and favourite row is rebuilt from the data file, cloned from a
 sample row of the same table so each column the platform needs keeps the shape the serializer
@@ -35,13 +54,20 @@ KEYS AND IDS FOR ROWS BEYOND THE SAMPLE'S COUNT.
   products       TCPROD0002..TCPROD0061 in input order, skipping the ids a layer probe names in
                  requiresFixtures (TCPROD0001 by its number TC-VAR-0001, 0003, 0020, 0042, 0046,
                  0052, 0061), then TCPROD1001 upward. Inside the TCPROD% fence.
-  groups         TCGRP-<KEY>, the upper-cased input key. Inside the TCGRP-% fence. At most as many
-                 top groups as the layer has product categories (4), at most as many spec fields
-                 per top group as its category has field slots (7).
-  accounts       the buyer's account 100100, the next account 100106, then 100110 upward.
+  groups         TCGRP-<KEY>, the upper-cased input key. Inside the TCGRP-% fence. The first four top
+                 groups take the layer's four product categories and data models; a fifth and
+                 later top group gets a new category tc_<key>, data model TCDM-<KEY> and completion
+                 rule 100164 upward, cloned from the first. A spec field beyond its category's seven
+                 field slots gets a new field tc<TopKey><FieldKey> (with its reference_category
+                 mirror). New categories and fields carry no storefront facet.
+  accounts       the buyer's account 100100; the account the buyer acts for (actsFor or --acts-for),
+                 else the next account, 100106; then 100110 upward.
   users          buyer 100101, CSR 100102, account admin 100103, the buyer's second profile 100105
-                 (same user name, on 100106), every other user 100110 upward after the accounts.
-                 The AccessUser and AccessUserGroupRelation fences widen to the highest id.
+                 (same user name, on the actsFor account; written only when the input names one),
+                 every other user 100110 upward after the accounts. The AccessUser and
+                 AccessUserGroupRelation fences widen to the highest id.
+  prices         TC-PRICE-LIST-<n>, TC-PRICE-Q<qty>-<n>, TC-PRICE-GRP-<n>[-Q<qty>],
+                 TC-PRICE-CTR-<n>-A<account>[-Q<qty>]: one key per (account,) product and quantity.
   orders         TCO-0001 is the buyer's first completed order, then TCO-0002 upward; quotes
                  TCO-Q001 upward, carts TCO-C001 upward, lines <order>-<n>.
   favourite list 100401 upward (fence widened); stock unit 100200 + the product number part.
@@ -51,12 +77,15 @@ KEYS AND IDS FOR ROWS BEYOND THE SAMPLE'S COUNT.
                  the same input write identical trees.
 
 WHAT IT REFUSES, with what to fix: an input that would break a guaranteed row (no buyer, no CSR,
-no account admin on the buyer's account, fewer than two accounts for the Switch account profile,
-two accounts sharing a customer number, no completed order of the buyer for TCO-0001 and the
-return request), an order or favourite list owned by a user the customer-centre page cannot show
-it to, a referenced image or document that does not exist, an SVG product image (GetImage.ashx
-cannot decode SVG), a currency or country the base does not ship, more top groups or spec fields
-than the layer has slots, an empty group, and an --out inside the Distribution's layers/ folder.
+no account admin on the buyer's account, no account named for the buyer's second profile while
+the base contract guarantees one, two accounts sharing a customer number, no completed order of
+the buyer for TCO-0001 and the return request), an order or favourite list owned by a user the
+customer-centre page cannot show it to, a referenced image or document that does not exist, an
+SVG product image (GetImage.ashx cannot decode SVG), a currency, country or order state the base
+does not ship, two price rows for one rung, a listPrices amount that contradicts the product's
+listPrice, a recipe member that contradicts the copy (another buyer, another shop), any input that
+would write two rows with one key (the refusal names both input rows), an empty group, and an
+--out inside the Distribution's layers/ folder.
 
 Standard library only, like the tools in layers/sample-data/tools/. It lives outside layers/ because every
 file under a layer directory is part of the layer tree hash the gate proved.
@@ -335,6 +364,8 @@ def schema_errors(value, schema, root, path='$'):
     if isinstance(value, list):
         if len(value) < schema.get('minItems', 0):
             errs.append('%s: needs at least %d item(s)' % (path, schema['minItems']))
+        if 'maxItems' in schema and len(value) > schema['maxItems']:
+            errs.append('%s: at most %d item(s)' % (path, schema['maxItems']))
         if 'items' in schema:
             for i, v in enumerate(value):
                 errs += schema_errors(v, schema['items'], root, '%s[%d]' % (path, i))
@@ -351,6 +382,8 @@ def schema_errors(value, schema, root, path='$'):
                 errs.append('%s: unknown property %s' % (path, k))
             elif isinstance(extra, dict):
                 errs += schema_errors(v, extra, root, '%s.%s' % (path, k))
+    if 'if' in schema and not schema_errors(value, schema['if'], root, path):
+        errs += schema_errors(value, schema.get('then', {}), root, path)
     return errs
 
 
@@ -412,17 +445,21 @@ def rel_posix(p):
 # --------------------------------------------------------------------------- the generator
 
 class Generator:
-    def __init__(self, source, inp, input_dir, name, logins):
+    def __init__(self, source, inp, input_dir, name, logins, acts_for=None):
         self.src = source
         self.inp = inp
         self.input_dir = input_dir
         self.name = name
         self.logins = logins
+        self.acts_for_cli = acts_for
         self.dist = source.parent.parent if (source.parent / 'layer.schema.json').is_file() else None
         self.reasons = []
         self.warnings = []
-        self.report = {'layer': name, 'source': {}, 'tables': {}, 'ids': {}, 'removed': [], 'warnings': self.warnings}
+        self.ignored = []        # [{'member': path, 'owner': who reads it}]
+        self.report = {'layer': name, 'source': {}, 'tables': {}, 'ids': {}, 'removed': [], 'warnings': self.warnings,
+                       'ignored': self.ignored}
         self.tables = load_tables(source)
+        self.origins = {}        # (table, file name) -> the input row that produced it
         self.out = {}            # table -> {file name: Row}
         self.files = {}          # relative output path -> bytes (everything except row files)
         self.content = {}        # relative path -> text (content documents)
@@ -438,16 +475,30 @@ class Generator:
         self.facets = {}
         self.probe_fixtures = {}     # fixture token -> [layer names]
         self.other_layer_products = {}
+        self.guaranteed = {}         # base.contract.json sampleData.guaranteedRows
+        self.order_states = None     # order state name -> id, in the base's default order flow
         if not self.dist:
-            self.warnings.append('The source layer is not inside a Distribution clone: currency, country, facet and probe checks are skipped.')
+            self.warnings.append('The source layer is not inside a Distribution clone: currency, country, facet, order state and probe checks are skipped.')
             return
         contract_path = self.dist / 'layers' / 'base' / 'base.contract.json'
         if contract_path.is_file():
             c = load_json(contract_path)
-            hd = (((c.get('sampleData') or {}).get('guaranteedRows') or {}).get('customerCenter') or {}).get('harvestDay')
+            self.guaranteed = (c.get('sampleData') or {}).get('guaranteedRows') or {}
+            hd = (self.guaranteed.get('customerCenter') or {}).get('harvestDay')
             if hd:
                 self.harvest = date.fromisoformat(hd)
         base_sql = self.dist / 'layers' / 'base' / 'replace' / '_sql'
+        if (base_sql / 'EcomOrderStates').is_dir() and (base_sql / 'EcomOrderFlow').is_dir():
+            def rows(d):
+                # the base's replace rows carry no ownership header: every line is a column
+                for p in sorted(d.glob('*.yml')):
+                    if p.name != '_meta.yml':
+                        yield {m.group(1): parse_raw(m.group(2)) for m in re.finditer(r'^"([^"]+)": ?(.*?)\r?$', p.read_text(encoding='utf-8-sig'), re.M)}
+            order_flows = {r.get('OrderFlowId') for r in rows(base_sql / 'EcomOrderFlow') if r.get('OrderFlowOrderType') == 0 and r.get('OrderFlowIsDefault')}
+            self.order_states = {}
+            for r in sorted(rows(base_sql / 'EcomOrderStates'), key=lambda r: str(r.get('OrderStateId'))):
+                if r.get('OrderFlowId') in order_flows and not r.get('OrderStateIsDeleted'):
+                    self.order_states.setdefault(r.get('OrderStateName'), r.get('OrderStateId'))
         if (base_sql / 'EcomCurrencies').is_dir():
             self.currencies = sorted({p.name.split('$$')[0] for p in (base_sql / 'EcomCurrencies').glob('*.yml') if p.name != '_meta.yml'})
         if (base_sql / 'EcomCountries').is_dir():
@@ -497,6 +548,8 @@ class Generator:
                 self.refuse('input has no "%s" section; this generator needs catalogue, prices, users.accounts, history and brandCopy' % section)
         if self.reasons:
             raise Refused(self.reasons)
+        self._note_ignored()
+        self._validate_shops()
         self._validate_catalogue()
         self._validate_accounts()
         if self.reasons:
@@ -506,6 +559,58 @@ class Generator:
         self._validate_brand()
         if self.reasons:
             raise Refused(self.reasons)
+
+    # Members of the recipe input the generator accepts and does not use, and who owns each.
+    RECIPE_OWNED = (
+        ('build.areaId', 'the recipe runner ({build.*} tokens)'),
+        ('build.defaultLanguage', 'the recipe runner ({build.*} tokens)'),
+        ('brand', 'the content.design-styles recipe'),
+        ('debrand', 'the content.page-seo recipe'),
+        ('content.pages', 'the content.pages recipe'),
+        ('pim.workflow', 'the pim.workflow recipe'),
+        ('catalogue.assortmentIds', 'the pim.identifiers recipe (assortments debt); the copy ships no assortment'),
+        ('users.accounts.assortmentIds', 'a recipe; the copy ships no assortment'),
+        ('users.accounts.groups[].users[].passwordRef', 'the users.accounts recipe (DW_RECIPE_SECRETS); the copy ships no password, the Foundry credential tool sets it'),
+        ('prices.buyer.passwordRef', 'the commerce.customer-prices recipe (DW_RECIPE_SECRETS)'),
+        ('history.buyer.passwordRef', 'the orders.completed-orders recipe (DW_RECIPE_SECRETS)'),
+        ('history.reset', 'the orders.completed-orders recipe; a copy is delivered to a fresh host'),
+        ('history.numbering', 'the orders.completed-orders recipe (numbering step); see numbering in this report'),
+    )
+
+    def _note_ignored(self):
+        sections = sorted((k for k in self.inp if '.' in k), key=len, reverse=True)
+
+        def present(path):
+            section = next((s for s in sections if path == s or path.startswith(s + '.')), None)
+            if section:
+                nodes, rest = [self.inp[section]], path[len(section) + 1:]
+            else:
+                nodes, rest = [self.inp], path
+            for part in filter(None, rest.split('.')):
+                nxt = []
+                for n in nodes:
+                    if isinstance(n, dict) and part.endswith('[]'):
+                        nxt += [x for x in n.get(part[:-2]) or []]
+                    elif isinstance(n, dict) and part in n:
+                        nxt.append(n[part])
+                nodes = nxt
+            return bool(nodes)
+        for path, owner in self.RECIPE_OWNED:
+            if present(path):
+                self.ignored.append({'member': path, 'owner': owner})
+
+    def _validate_shops(self):
+        """The shop ids a recipe names must be the ones the copy carries, or a recipe run against the delivered copy
+        would look in another shop."""
+        for path, value in (('catalogue.shop', (self.inp['catalogue'] or {}).get('shop')),
+                            ('history.shop', (self.inp['history'] or {}).get('shop'))):
+            if value is not None and value != STOREFRONT_SHOP:
+                self.refuse('%s: %s, but the copy places its groups and orders in the storefront shop %s. Name %s, or the recipes and the copy describe two shops.'
+                            % (path, value, STOREFRONT_SHOP, STOREFRONT_SHOP))
+        pim = (self.inp.get('build') or {}).get('pimShop')
+        pim_id = self.tables['EcomShops'].by_file('TCSHOP-PIM').get('ShopId')
+        if pim is not None and pim != pim_id:
+            self.refuse('build.pimShop: %s, but the PIM shop the copy carries is %s (a stable key). Name %s.' % (pim, pim_id, pim_id))
 
     def _asset(self, rel, what, allowed):
         p = (self.input_dir / rel).resolve()
@@ -540,19 +645,15 @@ class Generator:
         if len(set(ids)) != len(ids):
             self.refuse('catalogue.groups: two keys give the same group id after upper-casing (TCGRP-<KEY>)')
         self.categories = self._category_slots()
-        if len(self.tops) > len(self.categories):
-            self.refuse('catalogue.groups: %d top groups, the layer has %d product categories (one data model each). Merge top groups or make some of them subgroups.'
-                        % (len(self.tops), len(self.categories)))
-        self.field_map = {}
-        for i, g in enumerate(self.tops[:len(self.categories)]):
-            slot = self.categories[i]
+        self.slots = self._plan_slots()
+        self.field_map = {}        # (top key, spec key) -> (category, field id, label)
+        self.new_fields = {}       # (category, field id) -> (template category, template field id): a field the sample does not carry
+        taken_fids = {r.get('FieldId') for r in self.tables['EcomProductCategoryField'].rows.values()}
+        for g, slot in zip(self.tops, self.slots):
             fields = g.get('specFields', [])
             keys = [f['key'] for f in fields]
             if len(set(keys)) != len(keys):
                 self.refuse('catalogue.groups %s: a spec field key appears twice' % g['key'])
-            if len(fields) > len(slot['fields']):
-                self.refuse('catalogue.groups %s: %d spec fields, its product category %s has %d field slots. Drop or merge spec fields.'
-                            % (g['key'], len(fields), slot['category'], len(slot['fields'])))
                 continue
             facets = [f for f in fields if f.get('facet')]
             if len(facets) > 1:
@@ -560,19 +661,31 @@ class Generator:
                             % (g['key'], len(facets), slot['facet'] or 'none'))
                 continue
             free = [fid for fid in slot['fields'] if fid != slot['facet']]
+            facet_free = slot['facet']
             for f in fields:
-                if f.get('facet'):
-                    if not slot['facet']:
-                        self.refuse('catalogue.groups %s: spec field %s is marked facet, but no storefront index names a facet on category %s' % (g['key'], f['key'], slot['category']))
-                        continue
-                    fid = slot['facet']
-                else:
-                    if not free:
-                        free = [slot['facet']]
+                if f.get('facet') and facet_free:
+                    fid, facet_free = facet_free, None
+                elif free:
                     fid = free.pop(0)
+                elif facet_free and not facets:
+                    fid, facet_free = facet_free, None
+                else:
+                    # beyond the sample's field slots: a new field in the same category, cloned from its first field
+                    fid = 'tc' + pascal(g['key']) + pascal(f['key'])
+                    if fid in taken_fids:
+                        self.refuse('catalogue.groups %s: spec field %s gives the field id %s, which the layer already uses; rename the key' % (g['key'], f['key'], fid))
+                        continue
+                    self.new_fields[(slot['category'], fid)] = slot['fieldTemplate']
+                taken_fids.add(fid)
                 self.field_map[(g['key'], f['key'])] = (slot['category'], fid, f['label'])
+            if facets and not slot['facet']:
+                self.warnings.append('Top group %s marks spec field %s as facet, but no storefront index names a facet on its product category %s: the field shows in the spec table and offers no facet.'
+                                     % (g['key'], facets[0]['key'], slot['category']))
             if fields and not facets and slot['facet']:
                 self.warnings.append('Top group %s marks no spec field as facet: the storefront facet on %s|%s stays empty.' % (g['key'], slot['category'], slot['facet']))
+        extra_fields = sorted(fid for (_, fid) in self.new_fields)
+        if extra_fields:
+            self.warnings.append('Spec fields beyond the sample\'s field slots get new fields (%s): they show in the spec table and count for completeness; no storefront index names them.' % ', '.join(extra_fields))
         self.products = cat['products']
         self.product_by_number = {}
         for p in self.products:
@@ -601,8 +714,12 @@ class Generator:
             if not direct and not below:
                 self.refuse('catalogue.groups %s: no product sits in it. An empty group still serves a live PLP reading "0 products"; remove it or give it products.' % g['key'])
         self.assets = {}   # (kind, basename) -> source path
+        bare = [p['number'] for p in self.products if not p.get('images')]
+        if bare:
+            self.warnings.append('Products without images (%s): no default image and no gallery; the storefront shows its placeholder. '
+                                 'The recipe input schema requires at least one image per product.' % ', '.join(bare))
         for p in self.products:
-            for i, img in enumerate(p['images']):
+            for i, img in enumerate(p.get('images') or []):
                 src = self._asset(img, 'catalogue.products %s images[%d]' % (p['number'], i), IMAGE_EXT)
                 if src:
                     self._register_asset('products', src, img)
@@ -640,6 +757,41 @@ class Generator:
                           'rule': str(row.get('GroupCompletionRules') or ''), 'fields': fids,
                           'facet': self.facets.get(catid) if self.facets.get(catid) in fids else None})
         slots.sort(key=lambda s: (s['order'], s['category']))
+        for s in slots:
+            s['fieldTemplate'] = (s['category'], s['fields'][0])
+            s['new'] = False
+        return slots
+
+    def _plan_slots(self):
+        """One product category and data model per top group: the sample's, in order, then new ones cloned from the
+        first. A new category carries no storefront facet (no index in the copy names it)."""
+        slots = []
+        G = self.tables['EcomGroups']
+        taken_groups = {r.get('GroupId') for r in G.rows.values()}
+        taken_cats = {r.get('CategoryId') for r in self.tables['EcomProductCategory'].rows.values()}
+        rules = [int(r.get('EcomCompletionRuleId')) for r in self.tables['EcomCompletionRules'].rows.values()]
+        next_rule = max(rules) + 1
+        for i, g in enumerate(self.tops):
+            if i < len(self.categories):
+                slots.append(self.categories[i])
+                continue
+            tpl = self.categories[0]
+            dm = 'TCDM-' + slug_key(g['key'])
+            cat = 'tc_' + re.sub(r'[^a-z0-9]+', '_', g['key'].lower()).strip('_')
+            while dm in taken_groups:
+                dm += '-MODEL'
+            while cat in taken_cats:
+                cat += '_x'
+            taken_groups.add(dm)
+            taken_cats.add(cat)
+            slots.append({'order': 99 + i, 'sampleTop': None, 'dataModel': dm, 'category': cat, 'rule': str(next_rule), 'fields': [],
+                          'facet': None, 'fieldTemplate': tpl['fieldTemplate'], 'new': True, 'template': tpl})
+            next_rule += 1
+        if len(self.tops) > len(self.categories):
+            self.warnings.append('%d top groups, the sample carries %d product categories: %s get new data models and product categories (%s), '
+                                 'cloned from %s. No storefront index names a facet on them.'
+                                 % (len(self.tops), len(self.categories), ', '.join(g['key'] for g in self.tops[len(self.categories):]),
+                                    ', '.join(s['category'] for s in slots[len(self.categories):]), self.categories[0]['category']))
         return slots
 
     def _validate_accounts(self):
@@ -659,6 +811,9 @@ class Generator:
                     self.refuse('users.accounts: user name %s appears twice' % u['userName'])
                 seen.add(u['userName'])
                 self.users.append({'group': g, 'user': u, 'role': role})
+        names = [g['name'] for g in ua['groups']]
+        for n in sorted({n for n in names if names.count(n) > 1}):
+            self.refuse('users.accounts: two groups are named %s; a group is found by its name, so names must be unique' % n)
         for g in self.accounts:
             if not g.get('customerNumber'):
                 self.refuse('users.accounts %s: an account needs a customerNumber (contract prices, account favourites and the CSR account list compare it)' % g['name'])
@@ -667,17 +822,31 @@ class Generator:
         numbers = [g['customerNumber'] for g in self.accounts]
         if len(set(numbers)) != len(numbers):
             self.refuse('users.accounts: two accounts share a customer number. DW tells a login\'s profiles apart by customer number, and contract prices compare it exactly.')
+        by_name = {x['user']['userName']: x for x in self.users}
+        named = {}   # the buyer as prices.buyer / history.buyer name it
+        for path in ('prices', 'history'):
+            nb = (self.inp.get(path) or {}).get('buyer')
+            if nb:
+                named[path + '.buyer'] = nb['userName']
         buyers = [u for u in self.users if u['role'] == 'buyer']
+        if not buyers and named:
+            first = sorted(named.items())[0]
+            x = by_name.get(first[1])
+            if x and x['group']['kind'] == 'account' and x['role'] == 'user':
+                x['role'] = 'buyer'
+                buyers = [x]
         if len(buyers) != 1:
-            self.refuse('users.accounts: exactly one user needs role buyer (found %d). The buyer becomes AccessUser 100101, the persona every authenticated gate leg signs in as (base.contract.json sampleData.guaranteedRows.buyer).' % len(buyers))
+            self.refuse('users.accounts: exactly one user needs role buyer (found %d), or prices.buyer / history.buyer must name a customer user. The buyer becomes AccessUser 100101, the persona every authenticated gate leg signs in as (base.contract.json sampleData.guaranteedRows.buyer).' % len(buyers))
             return
         self.buyer = buyers[0]
         self.account1 = self.buyer['group']
-        others = [g for g in self.accounts if g is not self.account1]
-        if not others:
-            self.refuse('users.accounts: one account of kind account. The base contract guarantees the buyer a second profile on a second account (guaranteedRows.buyerProfiles, AccessUser 100105 on 100106, Swift Switch account); add a second account.')
-        else:
-            self.account2 = others[0]
+        for path, name in sorted(named.items()):
+            if name != self.buyer['user']['userName']:
+                self.refuse('%s.userName: %s, but the users.accounts buyer is %s. One file, one buyer: name the same user.' % (path, name, self.buyer['user']['userName']))
+        pb = (self.inp.get('prices') or {}).get('buyer')
+        if pb and pb['account'] != self.account1['customerNumber']:
+            self.refuse('prices.buyer.account: %s, but the buyer %s is a user of %s (%s).' % (pb['account'], self.buyer['user']['userName'], self.account1['name'], self.account1['customerNumber']))
+        self._plan_second_profile(by_name)
         admins = [u for u in self.users if u['role'] == 'accountAdmin']
         if not admins:
             self.refuse('users.accounts: no user has role accountAdmin. AccessUser 100103 (guaranteedRows.accountAdmin) is an admin on the buyer\'s account; give one user of %s that role.' % self.account1['name'])
@@ -694,13 +863,47 @@ class Generator:
                 self.refuse('users.accounts.impersonation: %s -> %s names a user that is not in groups' % (imp['impersonator'], imp['customer']))
             elif a['role'] != 'csr':
                 self.refuse('users.accounts.impersonation: %s is not a staff user; impersonation is granted to the CSR group 1292' % imp['impersonator'])
-        if ua.get('assortmentIds'):
-            self.warnings.append('users.accounts.assortmentIds is not applied: the copy ships no assortment (both sample assortments are removed).')
         if self.countries:
             for g in ua['groups']:
                 cc = (g.get('address') or {}).get('countryCode')
                 if cc and cc not in self.countries:
                     self.refuse('users.accounts %s: country code %s is not an EcomCountries row the base ships' % (g['name'], cc))
+
+    def _plan_second_profile(self, by_name):
+        """The buyer's second profile (Switch account) goes on the account the input says the buyer may act for, never
+        on an account the generator picks. Written when named; when not named, refused only if the base contract
+        guarantees the row (sampleData.guaranteedRows.buyerProfiles)."""
+        self.profile_account = None
+        named = []
+        for x in self.users:
+            af = x['user'].get('actsFor')
+            if af and x is not self.buyer:
+                self.refuse('users.accounts %s: user %s carries actsFor; only the buyer gets a second profile (the layer carries one Switch account profile, the buyer\'s)'
+                            % (x['group']['name'], x['user']['userName']))
+            elif af:
+                named.append(('users.accounts buyer actsFor', af[0]))
+        if self.acts_for_cli:
+            named.append(('--acts-for', self.acts_for_cli))
+        if len({v for _, v in named}) > 1:
+            self.refuse('%s disagree (%s); name one account the buyer may act for' % (' and '.join(k for k, _ in named), ', '.join(v for _, v in named)))
+            return
+        guaranteed = self.guaranteed.get('buyerProfiles')
+        if not named:
+            if guaranteed:
+                others = ', '.join('%s (%s)' % (g['name'], g['customerNumber']) for g in self.accounts if g is not self.account1) or 'none: add a second account'
+                self.refuse('the buyer %s names no other account to act for. The base contract guarantees the buyer a second profile on a second account '
+                            '(base.contract.json sampleData.guaranteedRows.buyerProfiles: Swift Switch account), and the generator no longer picks that '
+                            'account itself. Add actsFor: ["<customerNumber>"] to the buyer, or pass --acts-for <customerNumber> when the file must also '
+                            'pass the recipe input schema. Accounts: %s.' % (self.buyer['user']['userName'], others))
+            return
+        cn = named[0][1]
+        acct = next((g for g in self.accounts if g['customerNumber'] == cn), None)
+        if acct is None:
+            self.refuse('%s: %s is not the customerNumber of an account in users.accounts' % (named[0][0], cn))
+        elif acct is self.account1:
+            self.refuse('%s: %s is the buyer\'s own account; name another account the buyer may act for' % (named[0][0], cn))
+        else:
+            self.profile_account = acct
 
     def logins_input(self):
         return self.logins == 'input'
@@ -715,11 +918,48 @@ class Generator:
         self.currency = cur
         numbers = {g['customerNumber'] for g in self.accounts}
         for section in ('tiers', 'groupPrices', 'contracts'):
+            seen = {}
             for i, p in enumerate(pr.get(section) or []):
                 if p['product'] not in self.product_by_number:
                     self.refuse('prices.%s[%d]: product %s is not a catalogue product number' % (section, i, p['product']))
                 if section == 'contracts' and p['account'] not in numbers:
                     self.refuse('prices.contracts[%d]: account %s is not the customerNumber of an account' % (i, p['account']))
+                # one price row per (account,) product and quantity: a second row for the same rung is a contradiction
+                key = (p.get('account'), p['product'], p.get('quantity', 1))
+                if key in seen:
+                    self.refuse('prices.%s[%d] and prices.%s[%d]: both price %s%s at quantity %d; one row per rung'
+                                % (section, seen[key], section, i, p['product'], ' for account %s' % p['account'] if p.get('account') else '', key[2]))
+                seen.setdefault(key, i)
+        # listPrices restates the product's own price for the recipes. catalogue.products[].listPrice is what the copy
+        # writes (ProductPrice and the list price row); a product named in both carries one amount.
+        named = {}
+        for i, lp in enumerate(pr.get('listPrices') or []):
+            p = self.product_by_number.get(lp['product'])
+            if lp['product'] in named:
+                self.refuse('prices.listPrices[%d] and prices.listPrices[%d]: both name product %s' % (named[lp['product']], i, lp['product']))
+                continue
+            named[lp['product']] = i
+            if not p:
+                self.refuse('prices.listPrices[%d]: product %s is not a catalogue product number' % (i, lp['product']))
+            elif abs(float(lp['amount']) - float(p['listPrice'])) > 1e-9:
+                self.refuse('prices.listPrices[%d]: product %s at %s, but catalogue.products %s has listPrice %s. Both are the product\'s own price; make them equal.'
+                            % (i, lp['product'], fmt_number(lp['amount']), lp['product'], fmt_number(p['listPrice'])))
+        if pr.get('listPrices') is not None:
+            unnamed = sorted({p['product'] for s in ('tiers', 'groupPrices', 'contracts') for p in pr.get(s) or []} - set(named))
+            if unnamed:
+                self.warnings.append('prices.listPrices does not name %s, which other price rows name; the commerce.customer-prices recipe expects every priced product in it.' % ', '.join(unnamed))
+        # groupPrices reach one user group: customerGroup when named (an account of users.accounts), else every signed-in customer
+        self.price_group = None
+        cg = pr.get('customerGroup')
+        if cg is not None:
+            acct = next((g for g in self.accounts if g['name'] == cg), None)
+            if acct is None:
+                self.refuse('prices.customerGroup: %s is not an account in users.accounts. The copy scopes group prices to an account\'s user group (its users are direct members), '
+                            'or, without customerGroup, to every signed-in customer.' % cg)
+            else:
+                self.price_group = acct
+                if pr.get('buyer') and acct is not self.account1:
+                    self.refuse('prices.buyer: %s is not a direct member of prices.customerGroup %s (it is a user of %s)' % (pr['buyer']['userName'], cg, self.account1['name']))
 
     def _validate_history(self):
         h = self.inp['history']
@@ -754,6 +994,38 @@ class Generator:
                     self.refuse('history.favourites[%d]: product %s is not a catalogue product number' % (i, p))
         if not any(q['state'] == 'QuotePending' for q in h.get('quotes') or []) and h.get('quotes'):
             self.warnings.append('No quote is QuotePending: the dashboard Pending quotes widget stays empty.')
+        # history.orderStates names the order state each history state is set to; the copy writes the base's state id
+        self.state_ids = dict(ORDER_STATE)
+        seen = set()
+        for i, s in enumerate(h.get('orderStates') or []):
+            if s['state'] in seen:
+                self.refuse('history.orderStates[%d]: state %s is mapped twice' % (i, s['state']))
+                continue
+            seen.add(s['state'])
+            if self.order_states is None:
+                self.warnings.append('history.orderStates[%d] (%s: %s) is not checked: no base order flow beside the source layer; the copy keeps %s.'
+                                     % (i, s['state'], s['name'], ORDER_STATE[s['state']]))
+                continue
+            sid = self.order_states.get(s['name'])
+            if sid is None:
+                self.refuse('history.orderStates[%d]: %s is not an order state of the base\'s order flow (%s). The copy delivers no order state; name one the base ships.'
+                            % (i, s['name'], ', '.join(sorted(self.order_states))))
+                continue
+            self.state_ids[s['state']] = sid
+        delivered = (self.guaranteed.get('deliveredOrder') or {}).get('orderStateId')
+        if delivered and self.state_ids['completed'] != delivered:
+            self.refuse('history.orderStates: completed maps to %s, but the buyer\'s delivered order TCO-0001 is guaranteed in state %s (base.contract.json sampleData.guaranteedRows.deliveredOrder); map completed to that state.'
+                        % (self.state_ids['completed'], delivered))
+        if len(set(self.state_ids.values())) != len(self.state_ids):
+            self.refuse('history.orderStates: two history states map to one order state (%s)' % ', '.join('%s: %s' % kv for kv in sorted(self.state_ids.items())))
+        num = h.get('numbering')
+        if num is not None:
+            self.report['numbering'] = {
+                'input': num, 'written': False,
+                'why': ('The order number series is the EcomNumbers ORDER row. The sample-data layer carries no EcomNumbers table (the base owns that table '
+                        'and raises only its own counters), and a merge row fills only unset columns, so it could not change the prefix the blank '
+                        'site already holds (ORDER). The copy\'s own orders keep their stable TCO-* keys inside the layer\'s fence. Apply the series '
+                        'after delivery with the orders.completed-orders recipe numbering step; orders placed after that take the prefix.')}
 
     def _validate_brand(self):
         b = self.inp['brandCopy']
@@ -773,9 +1045,7 @@ class Generator:
     # ----------------------------------------------------------------- id plans
     def plan(self):
         self.gid = {g['key']: 'TCGRP-' + slug_key(g['key']) for g in self.groups}
-        self.top_slot = {}
-        for i, g in enumerate(self.tops):
-            self.top_slot[g['key']] = self.categories[i]
+        self.top_slot = {g['key']: s for g, s in zip(self.tops, self.slots)}
         # products
         probe_ids = set()
         products = self.tables['EcomProducts']
@@ -799,7 +1069,11 @@ class Generator:
         self.report['ids']['probeSlotsSkipped'] = sorted(probe_ids)
         # accounts and users
         self.uid = {}
-        self.account_id = {self.account1['name']: 100100, self.account2['name']: 100106}
+        # 100100 the buyer's account; 100106 the account of the buyer's second profile, else the next account
+        second = self.profile_account or next((g for g in self.accounts if g is not self.account1), None)
+        self.account_id = {self.account1['name']: 100100}
+        if second:
+            self.account_id[second['name']] = 100106
         nxt = EXTRA_ACCESSUSER_BASE
         for g in self.accounts:
             if g['name'] not in self.account_id:
@@ -820,7 +1094,8 @@ class Generator:
                 nxt += 1
         self.report['ids']['accounts'] = {k: v for k, v in sorted(self.account_id.items(), key=lambda kv: kv[1])}
         self.report['ids']['users'] = {k: v for k, v in sorted(self.uid.items(), key=lambda kv: kv[1])}
-        self.report['ids']['buyerSecondProfile'] = {'id': 100105, 'account': self.account2['name']}
+        self.report['ids']['buyerSecondProfile'] = ({'id': 100105, 'account': self.profile_account['name']} if self.profile_account
+                                                    else None)
         self.report['ids']['groups'] = dict(sorted(self.gid.items()))
         self.report['ids']['categories'] = {g['key']: self.top_slot[g['key']]['category'] for g in self.tops}
 
@@ -829,13 +1104,18 @@ class Generator:
         self.out.setdefault(table, {})
         return self.out[table]
 
-    def add(self, table, row):
+    def add(self, table, row, origin=None):
+        """Add a row. Two rows with one key are a clean refusal naming the input rows that produced them."""
         t = self.tables[table]
         name = t.file_of(row)
         rows = self.new_rows(table)
         if name in rows:
-            raise ValueError('%s: two generated rows share the key %s' % (table, name))
+            first = self.origins.get((table, name))
+            self.refuse('%s: %s and %s both produce the row %s; one of them repeats the other. Remove the repeat.'
+                        % (table, first or 'a row the layer keeps', origin or 'a generated row', name[:-len('.yml')]))
+            return
         rows[name] = row
+        self.origins[(table, name)] = origin
 
     def tmpl(self, table, key):
         return self.tables[table].by_file(key).clone()
@@ -912,8 +1192,8 @@ class Generator:
         sort_in = {}
         for p in self.products:
             pid = self.pid[p['number']]
-            imgs = [(self.input_dir / i).resolve() for i in p['images']]
-            first = self.image_path(imgs[0])
+            imgs = [(self.input_dir / i).resolve() for i in p.get('images') or []]
+            first = self.image_path(imgs[0]) if imgs else None
             r = tp.clone()
             for c, v in (('ProductId', pid), ('ProductNumber', p['number']), ('ProductName', p['name']),
                          ('ProductShortDescription', p.get('short')), ('ProductLongDescription', p.get('long')),
@@ -922,7 +1202,7 @@ class Generator:
                          ('ProductPrice', p['listPrice']), ('ProductStock', p.get('stock', 0)),
                          ('ProductEAN', p.get('ean')), ('ProductWeight', p.get('weight', 0))):
                 P.set(r, c, v)
-            self.add('EcomProducts', r)
+            self.add('EcomProducts', r, 'catalogue.products %s' % p['number'])
             # group relations: primary to its own group, a second to its top group, one to its data model
             own = p['group']
             top = self.top_of(own)['key']
@@ -974,7 +1254,7 @@ class Generator:
                     for c, v in (('ProductRelatedGroupId', rg), ('ProductRelatedProductId', pid), ('ProductRelatedProductRelId', self.pid[ref]),
                                  ('ProductRelatedSortOrder', k + 1)):
                         R.set(x, c, v)
-                    self.add('EcomProductsRelated', x)
+                    self.add('EcomProductsRelated', x, 'catalogue.products %s related.%s[%d]' % (p['number'], kind, k))
         if self.reasons:
             raise Refused(self.reasons)
         for g in self.tables['EcomProductsRelatedGroups'].rows.values():
@@ -1017,6 +1297,35 @@ class Generator:
                 top = next(g for g in self.tops if self.top_slot[g['key']]['category'] == cat)
                 CT.set(r, 'CategoryTranslationCategoryName', top['name'])
                 self.add('EcomProductCategoryTranslation', r)
+        # product categories and fields beyond the sample's slots, cloned from a sample category and field
+        for g in self.tops:
+            slot = self.top_slot[g['key']]
+            if not slot['new']:
+                continue
+            tcat = slot['template']['category']
+            r = self.tmpl('EcomProductCategory', tcat)
+            self.tables['EcomProductCategory'].set(r, 'CategoryId', slot['category'])
+            self.add('EcomProductCategory', r, 'catalogue.groups %s' % g['key'])
+            r = self.tmpl('EcomProductCategoryTranslation', '%s$$%s' % (tcat, LANG))
+            CT.set(r, 'CategoryTranslationCategoryId', slot['category'])
+            CT.set(r, 'CategoryTranslationCategoryName', g['name'])
+            self.add('EcomProductCategoryTranslation', r, 'catalogue.groups %s' % g['key'])
+        for g in self.tops:
+            for n, f in enumerate(g.get('specFields', [])):
+                cat, fid, label = self.field_map[(g['key'], f['key'])]
+                if (cat, fid) not in self.new_fields:
+                    continue
+                tcat, tfid = self.new_fields[(cat, fid)]
+                origin = 'catalogue.groups %s specFields %s' % (g['key'], f['key'])
+                for c_cat in (cat, 'reference_category'):
+                    r = self.tmpl('EcomProductCategoryField', '%s$$%s' % (tcat if c_cat == cat else 'reference_category', tfid))
+                    for c, v in (('FieldCategoryId', c_cat), ('FieldId', fid), ('FieldTemplateTag', fid), ('FieldType', 1), ('FieldSortOrder', n + 1)):
+                        CF.set(r, c, v)
+                    self.add('EcomProductCategoryField', r, origin)
+                    r = self.tmpl('EcomProductCategoryFieldTranslation', '%s$$%s$$%s' % (tcat if c_cat == cat else 'reference_category', tfid, LANG))
+                    for c, v in (('FieldTranslationFieldCategoryId', c_cat), ('FieldTranslationFieldId', fid), ('FieldTranslationFieldLabel', label)):
+                        CFT.set(r, c, v)
+                    self.add('EcomProductCategoryFieldTranslation', r, origin)
         # spec table: tc_specs display group fields in input order
         FD = self.tables['EcomFieldDisplayGroupFields']
         fd_t = next(iter(FD.rows.values())).clone()
@@ -1050,17 +1359,21 @@ class Generator:
         for g in self.tops:
             slot = self.top_slot[g['key']]
             fields = [self.field_map[(g['key'], f['key'])] for f in g.get('specFields', [])]
+            src = slot['template'] if slot['new'] else slot
             for row in CR.rows.values():
-                if str(row.get('EcomCompletionRuleId')) == slot['rule']:
+                if str(row.get('EcomCompletionRuleId')) == src['rule']:
                     r = row.clone()
+                    CR.set(r, 'EcomCompletionRuleId', int(slot['rule']))
                     CR.set(r, 'EcomCompletionRuleName', '%s data complete' % g['name'])
                     CR.set(r, 'EcomCompletionRuleDescription', 'The %s attributes a %s product carries before it is fit to sell: %s.'
                            % (len(fields), g['name'], ', '.join(l.lower() for _, _, l in fields)) if fields else 'No attribute is required yet.')
                     CR.set(r, 'EcomCompletionRuleProductFields', ','.join('ProductCategory|%s|%s' % (c, f) for c, f, _ in fields))
-                    self.add('EcomCompletionRules', r)
-            r = G.by_file('%s$$%s' % (slot['dataModel'], LANG)).clone()
-            G.set(r, 'GroupName', g['name'])
-            self.add('EcomGroups', r)
+                    self.add('EcomCompletionRules', r, 'catalogue.groups %s' % g['key'])
+            r = G.by_file('%s$$%s' % (src['dataModel'], LANG)).clone()
+            for c, v in (('GroupId', slot['dataModel']), ('GroupNumber', slot['dataModel']), ('ProductCategoryId', slot['category']),
+                         ('GroupCompletionRules', slot['rule']), ('GroupName', g['name'])):
+                G.set(r, c, v)
+            self.add('EcomGroups', r, 'catalogue.groups %s' % g['key'])
 
     # prices ---------------------------------------------------------------
     def build_prices(self):
@@ -1070,34 +1383,47 @@ class Generator:
         t_tier = self.tmpl('EcomPrices', 'TC-PRICE-Q10-0020')
         t_grp = self.tmpl('EcomPrices', 'TC-PRICE-GRP-0020')
         t_ctr = self.tmpl('EcomPrices', 'TC-PRICE-CTR-0046')
-        self.price_rows = []   # (product number, quantity, amount, customerNumber or None, user group or None)
+        self.price_rows = []   # (product number, quantity, amount, customerNumber or None, user group id or None)
 
-        def emit(tmpl, pid_num, priceid, qty, amount, cust='', ugroup=''):
+        def emit(tmpl, pid_num, priceid, qty, amount, origin, cust='', ugroup=''):
             r = tmpl.clone()
             for c, v in (('PriceId', priceid), ('PriceProductId', self.pid[pid_num]), ('PriceProductVariantId', ''),
                          ('PriceCurrency', self.currency), ('PriceQuantity', qty), ('PriceAmount', amount),
                          ('PriceUserCustomerNumber', cust), ('PriceUserGroupId', ugroup)):
                 PR.set(r, c, v)
-            self.add('EcomPrices', r)
-            self.price_rows.append((pid_num, qty, amount, cust or None, ugroup or None))
+            self.add('EcomPrices', r, origin)
+            self.price_rows.append((pid_num, qty, amount, cust or None, int(ugroup) if ugroup else None))
+
+        def qsuffix(qty):
+            # quantity 1 keeps the sample's key shape; another quantity makes the key unique per rung
+            return '' if qty == 1 else '-Q%d' % qty
 
         n4 = lambda num: self.pid[num][len('TCPROD'):]
         for p in self.products:
-            emit(t_list, p['number'], 'TC-PRICE-LIST-' + n4(p['number']), 1, p['listPrice'])
-        for t in pr.get('tiers') or []:
-            emit(t_tier, t['product'], 'TC-PRICE-Q%02d-%s' % (t['quantity'], n4(t['product'])), t['quantity'], t['amount'])
-        for t in pr.get('groupPrices') or []:
-            emit(t_grp, t['product'], 'TC-PRICE-GRP-' + n4(t['product']), t.get('quantity', 1), t['amount'], ugroup=str(PERMISSION['user']))
+            emit(t_list, p['number'], 'TC-PRICE-LIST-' + n4(p['number']), 1, p['listPrice'], 'catalogue.products %s listPrice' % p['number'])
+        for i, t in enumerate(pr.get('tiers') or []):
+            emit(t_tier, t['product'], 'TC-PRICE-Q%02d-%s' % (t['quantity'], n4(t['product'])), t['quantity'], t['amount'], 'prices.tiers[%d]' % i)
+        group = str(self.account_id[self.price_group['name']]) if self.price_group else str(PERMISSION['user'])
+        for i, t in enumerate(pr.get('groupPrices') or []):
+            q = t.get('quantity', 1)
+            emit(t_grp, t['product'], 'TC-PRICE-GRP-%s%s' % (n4(t['product']), qsuffix(q)), q, t['amount'], 'prices.groupPrices[%d]' % i, ugroup=group)
         acct_ord = {g['customerNumber']: i + 1 for i, g in enumerate(self.accounts)}
-        for t in pr.get('contracts') or []:
-            emit(t_ctr, t['product'], 'TC-PRICE-CTR-%s-A%d' % (n4(t['product']), acct_ord[t['account']]), t.get('quantity', 1), t['amount'], cust=t['account'])
+        for i, t in enumerate(pr.get('contracts') or []):
+            q = t.get('quantity', 1)
+            emit(t_ctr, t['product'], 'TC-PRICE-CTR-%s-A%d%s' % (n4(t['product']), acct_ord[t['account']], qsuffix(q)), q, t['amount'],
+                 'prices.contracts[%d]' % i, cust=t['account'])
 
-    def price_for(self, number, qty, customer_number):
+    def price_for(self, number, qty, account):
+        """The lowest price the account's users get at that quantity: list, tiers, a group price of every signed-in
+        customer or of their account, a contract on their customer number."""
         best = None
+        aid = self.account_id.get(account['name'])
         for (num, q, amount, cust, ugroup) in self.price_rows:
             if num != number or q > qty:
                 continue
-            if cust and cust != customer_number:
+            if cust and cust != account.get('customerNumber'):
+                continue
+            if ugroup and ugroup not in (PERMISSION['user'], aid):
                 continue
             best = amount if best is None else min(best, amount)
         return best
@@ -1156,19 +1482,24 @@ class Generator:
                 AG.set(x, 'AccessUserGroupRelationGroupId', gid)
                 AG.set(x, 'AccessUserGroupRelationUserId', uid)
                 self.add('AccessUserGroupRelation', x)
-        # the buyer's second profile: same login, the second account
+        # the buyer's second profile: same login, on the account the input says the buyer may act for
         b = self.buyer['user']
-        r = self.tmpl('AccessUser', '100105')
-        for c, v in (('AccessUserUserName', buyer_login), ('AccessUserName', b.get('name') or buyer_login), ('AccessUserEmail', b.get('email')),
-                     ('AccessUserCompany', self.account2['name']), ('AccessUserCustomerNumber', self.account2['customerNumber']),
-                     ('AccessUserPhone', b.get('phone') or self.account2.get('phone'))) + self.address_cols(self.account2):
-            AU.set(r, c, v)
-        self.add('AccessUser', r)
-        for gid in (100106, PERMISSION['buyer']):
-            x = t_rel.clone()
-            AG.set(x, 'AccessUserGroupRelationGroupId', gid)
-            AG.set(x, 'AccessUserGroupRelationUserId', 100105)
-            self.add('AccessUserGroupRelation', x)
+        a2 = self.profile_account
+        if a2:
+            r = self.tmpl('AccessUser', '100105')
+            for c, v in (('AccessUserUserName', buyer_login), ('AccessUserName', b.get('name') or buyer_login), ('AccessUserEmail', b.get('email')),
+                         ('AccessUserCompany', a2['name']), ('AccessUserCustomerNumber', a2['customerNumber']),
+                         ('AccessUserPhone', b.get('phone') or a2.get('phone'))) + self.address_cols(a2):
+                AU.set(r, c, v)
+            self.add('AccessUser', r, 'the buyer\'s second profile (actsFor %s)' % a2['customerNumber'])
+            for gid in (self.account_id[a2['name']], PERMISSION['buyer']):
+                x = t_rel.clone()
+                AG.set(x, 'AccessUserGroupRelationGroupId', gid)
+                AG.set(x, 'AccessUserGroupRelationUserId', 100105)
+                self.add('AccessUserGroupRelation', x)
+        else:
+            self.warnings.append('No second profile for the buyer: the input names no account the buyer may act for, and the base contract beside the source '
+                                 'guarantees none, so Switch account shows no button.')
         if not self.logins_input():
             renamed = [u['user']['userName'] for u in self.users if self.uid[u['user']['userName']] in stable_logins and u['user']['userName'] != stable_logins[self.uid[u['user']['userName']]]]
             if renamed:
@@ -1202,6 +1533,7 @@ class Generator:
             hour = 9 + n % 8
             if kind == 'order':
                 r = self.tmpl('EcomOrders', templates[o['state']])
+                O.set(r, 'OrderStateId', self.state_ids[o['state']])
             elif kind == 'quote':
                 r = quote_t[o['state']].clone() if o['state'] in quote_t else self.tmpl('EcomOrders', 'TCO-Q001')
                 O.set(r, 'OrderStateId', o['state'])
@@ -1212,7 +1544,7 @@ class Generator:
             for j, line in enumerate(o['lines']):
                 unit = line.get('unitPrice')
                 if unit is None:
-                    unit = self.price_for(line['product'], line['quantity'], acct['customerNumber'])
+                    unit = self.price_for(line['product'], line['quantity'], acct)
                 amount = round(unit * line['quantity'], 2)
                 total = round(total + amount, 2)
                 lr = t_line.clone()
@@ -1278,7 +1610,7 @@ class Generator:
                 x = t_fp.clone()
                 for c, v in (('FavoriteListId', lid), ('ProductId', self.pid[num]), ('SortOrder', k + 1)):
                     FP.set(x, c, v)
-                self.add('EcomCustomerFavoriteProducts', x)
+                self.add('EcomCustomerFavoriteProducts', x, 'history.favourites[%d].products[%d]' % (i, k))
 
     # PIM shop, workspace, folder ---------------------------------------------
     def build_pim(self):
@@ -1301,18 +1633,33 @@ class Generator:
         G = self.tables['EcomGroups']
         folder = next(r for r in G.rows.values() if r.get('GroupType') == 1)
         f = folder.clone()
-        G.set(f, 'GroupName', self.company)
+        G.set(f, 'GroupName', self.inp['catalogue'].get('pimFolder') or self.company)
         G.set(f, 'GroupNumber', 'TCDM-' + slug_key(self.short))
         self.add('EcomGroups', f)
         fid = folder.get('GroupId')
         used_models = {self.top_slot[g['key']]['dataModel'] for g in self.tops}
-        for row in self.tables['EcomShopGroupRelation'].rows.values():
+        SGR, GR = self.tables['EcomShopGroupRelation'], self.tables['EcomGroupRelations']
+        for row in SGR.rows.values():
             gid = row.get('ShopGroupGroupId')
             if gid == fid or gid in used_models:
                 self.keep('EcomShopGroupRelation', row)
-        for row in self.tables['EcomGroupRelations'].rows.values():
+        for row in GR.rows.values():
             if row.get('GroupRelationsParentId') == fid and row.get('GroupRelationsGroupId') in used_models:
                 self.keep('EcomGroupRelations', row)
+        # data models beyond the sample's: the shop and folder relations of the template data model, re-pointed
+        for n, g in enumerate(self.tops):
+            slot = self.top_slot[g['key']]
+            if not slot['new']:
+                continue
+            tdm = slot['template']['dataModel']
+            s = next(r for r in SGR.rows.values() if r.get('ShopGroupGroupId') == tdm).clone()
+            SGR.set(s, 'ShopGroupGroupId', slot['dataModel'])
+            SGR.set(s, 'ShopGroupRelationsSorting', n + 2)
+            self.add('EcomShopGroupRelation', s, 'catalogue.groups %s' % g['key'])
+            rel = next(r for r in GR.rows.values() if r.get('GroupRelationsGroupId') == tdm and r.get('GroupRelationsParentId') == fid).clone()
+            GR.set(rel, 'GroupRelationsGroupId', slot['dataModel'])
+            GR.set(rel, 'GroupRelationsSorting', n + 1)
+            self.add('EcomGroupRelations', rel, 'catalogue.groups %s' % g['key'])
         self.report['pimShop'] = {'name': name, 'indexField': 'DATAMODEL_' + name.replace(' ', '_')}
 
     # rows kept as the sample ships them ------------------------------------
@@ -1769,7 +2116,7 @@ def is_within(child, parent):
         return False
 
 
-def generate(input_path, out, name=None, source=None, dry_run=False, logins='stable'):
+def generate(input_path, out, name=None, source=None, dry_run=False, logins='stable', acts_for=None):
     """Returns (report, files). Writes nothing when dry_run. Raises Refused."""
     input_path = Path(input_path).resolve()
     out = Path(out).resolve()
@@ -1793,7 +2140,7 @@ def generate(input_path, out, name=None, source=None, dry_run=False, logins='sta
         raise Refused(reasons)
     raw = input_path.read_bytes()
     inp = json.loads(raw.decode('utf-8-sig'))
-    gen = Generator(src, inp, input_path.parent, name, logins)
+    gen = Generator(src, inp, input_path.parent, name, logins, acts_for)
     files = gen.run(hashlib.sha256(raw).hexdigest())
     if not dry_run:
         out.mkdir(parents=True, exist_ok=True)
@@ -1833,6 +2180,14 @@ def print_report(report, out=sys.stdout):
         w('\nSAMPLE TOKENS LEFT IN THE COPY:\n')
         for h in report['residualSampleTokens']:
             w('  %s\n' % h)
+    prof = report['ids'].get('buyerSecondProfile')
+    w('\nBuyer second profile (Switch account): %s\n' % ('AccessUser 100105 on %s' % prof['account'] if prof else 'none written'))
+    if report.get('numbering'):
+        w('\nhistory.numbering NOT written: %s\n' % report['numbering']['why'])
+    if report['ignored']:
+        w('\nIgnored, owned by a recipe:\n')
+        for m in report['ignored']:
+            w('  %-45s %s\n' % (m['member'], m['owner']))
     if report['warnings']:
         w('\nWarnings:\n')
         for m in report['warnings']:
@@ -1847,11 +2202,14 @@ def main(argv=None):
     ap.add_argument('--source', help='the sample-data layer to copy (default: the layer this script ships in)')
     ap.add_argument('--logins', default='stable', choices=('stable', 'input'),
                     help='stable keeps the persona user names the gate signs in as; input writes the input user names')
+    ap.add_argument('--acts-for', metavar='CUSTOMER_NUMBER',
+                    help='the account the buyer may act for (its second profile, Switch account): the same as actsFor on the buyer, '
+                         'for a file that must also pass the recipe input schema')
     ap.add_argument('--dry-run', action='store_true', help='report what would change and write nothing')
     ap.add_argument('--report', help='also write the report as JSON to this file')
     a = ap.parse_args(argv)
     try:
-        report, _ = generate(a.input, a.out, a.name, a.source, a.dry_run, a.logins)
+        report, _ = generate(a.input, a.out, a.name, a.source, a.dry_run, a.logins, a.acts_for)
     except Refused as e:
         sys.stderr.write('REFUSED. Nothing was written. Fix the input and run again:\n')
         for r in e.reasons:

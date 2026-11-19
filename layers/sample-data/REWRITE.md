@@ -10,13 +10,22 @@ Distribution's own copy.
 [`tools/sample-data/rewrite-sample-data.py`](../../tools/sample-data/rewrite-sample-data.py) (repository
 level, outside this layer so the layer's proven tree hash is untouched) performs this rewrite from a
 customer data file, the same file the dynamicweb/skills recipe runner reads (`schema: 1`, one key per
-section). It reads the sections `catalogue`, `prices`, `users.accounts`, `history` and `brandCopy`,
-whose shape is [`tools/sample-data/customer-data.schema.json`](../../tools/sample-data/customer-data.schema.json):
+section). The canonical shape of that file is the recipe input schema
+(`skills/dw-demo-ledger/assets/recipe-input.schema.json` in dynamicweb/skills).
+[`tools/sample-data/customer-data.schema.json`](../../tools/sample-data/customer-data.schema.json) is the
+generator's reading of it: it accepts every member the recipe input schema defines, reads `catalogue`,
+`prices`, `users.accounts`, `history`, `brandCopy` and `build.pimShop`, and lists the rest in its report as
+ignored, owned by a recipe:
 
 ```
 python tools/sample-data/rewrite-sample-data.py --input <customer data file> \
-    --out <demo>/layers/<customer>-data [--name <customer>-data] [--dry-run] [--report report.json]
+    --out <demo>/layers/<customer>-data [--name <customer>-data] [--acts-for <customerNumber>] \
+    [--logins stable|input] [--dry-run] [--report report.json]
 ```
+
+The buyer's second profile (`100105`, Switch account) goes on the account the input names, `actsFor`
+on the buyer or `--acts-for` (the recipe input schema does not define `actsFor`); the generator never
+picks one, and refuses an input that names none while the base contract guarantees the profile.
 
 It writes a complete layer of kind `sample-data` into `--out` (never under the Distribution's
 `layers/`), keeps every key in [What must stay stable](#what-must-stay-stable) that the copy can keep,

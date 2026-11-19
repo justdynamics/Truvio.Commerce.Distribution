@@ -1,41 +1,273 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://github.com/justdynamics/Truvio.Commerce.Distribution/tools/sample-data/customer-data.schema.json",
-  "title": "Customer data: the sections rewrite-sample-data.py reads",
-  "description": "The same file the dynamicweb/skills recipe runner reads (skills/dw-demo-ledger/assets/recipe-input.schema.json): one object, `schema: 1`, one key per section. This schema states the sections the sample-data generator reads: catalogue, prices, users.accounts (the skills shape, extended with role, address and phone), history and brandCopy. Other sections (build, content.pages) are allowed and ignored. No credential belongs in this file: passwordRef names a key of DW_RECIPE_SECRETS. Paths of images and documents are relative to this file. Dates are relative: daysAgo counts back from the layer's harvest day, which the demo clock moves to today.",
+  "title": "Customer data as the sample-data rewrite generator reads it",
+  "description": "The canonical shape of a customer data file is the recipe input schema of the dynamicweb/skills demo ledger (skills/dw-demo-ledger/assets/recipe-input.schema.json): one object, schema 1, one key per section, read by the recipes and by a sample-data producer. This schema is how tools/sample-data/rewrite-sample-data.py reads that file. It accepts every member the recipe input schema defines, with the same constraints, and adds two things only the generator reads: users.accounts.groups[].users[].actsFor, and a product without images. A file that uses either no longer passes the recipe input schema. Sections and members the generator does not use are accepted and listed in the generator report as ignored, owned by a recipe. No credential belongs in this file: a secret is named by a reference key whose value the runner reads from DW_RECIPE_SECRETS. Paths of images and documents are relative to this file. daysAgo counts back from the day the data is applied.",
   "type": "object",
-  "required": ["schema"],
+  "additionalProperties": false,
+  "required": [
+    "schema"
+  ],
   "properties": {
-    "schema": {"const": 1},
-    "catalogue": {
+    "schema": {
+      "const": 1
+    },
+    "build": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["groups", "products"],
+      "description": "Values the recipes' {build.*} tokens read when no ledger build file is supplied. The generator ignores areaId and defaultLanguage; pimShop, when set, must be the id of the PIM shop the copy carries.",
+      "properties": {
+        "areaId": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "defaultLanguage": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pimShop": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "users.accounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "groups"
+      ],
       "properties": {
         "groups": {
           "type": "array",
           "minItems": 1,
-          "description": "The storefront tree, two levels. A top group is one data model and one product category in the PIM (at most 4); its specFields are the spec table and the completeness fields of every product under it (at most 7).",
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["key", "name"],
+            "required": [
+              "name",
+              "kind",
+              "users"
+            ],
             "properties": {
-              "key": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*$", "maxLength": 40, "description": "Becomes the group id TCGRP-<KEY> and the GroupID in storefront links."},
-              "name": {"type": "string", "minLength": 1},
-              "parent": {"type": "string", "minLength": 1, "description": "key of a top group; absent for a top group"},
-              "description": {"type": "string"},
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "enum": [
+                  "account",
+                  "staff"
+                ],
+                "description": "account: a customer company (type SystemAccount, carries the customer number); staff: a group of representatives."
+              },
+              "customerNumber": {
+                "type": "string",
+                "minLength": 1,
+                "description": "The account's customer number, required on an account. Contract prices, account favourites and the representatives' account list compare it exactly."
+              },
+              "users": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "userName"
+                  ],
+                  "properties": {
+                    "userName": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "passwordRef": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+                      "description": "A key of DW_RECIPE_SECRETS, never the password."
+                    },
+                    "phone": {
+                      "type": "string"
+                    },
+                    "role": {
+                      "enum": [
+                        "buyer",
+                        "accountAdmin",
+                        "user",
+                        "csr"
+                      ],
+                      "description": "buyer: the persona a signed-in check signs in as; accountAdmin: the account's administrator; user: a customer contact; csr: a representative who impersonates customers. Default user in an account, csr in a staff group."
+                    },
+                    "actsFor": {
+                      "type": "array",
+                      "maxItems": 1,
+                      "items": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "description": "Generator only: the recipe input schema does not define it, so a file that must also pass that schema passes the same value as rewrite-sample-data.py --acts-for. The customer number of another account this buyer may act for: the buyer gets a second profile with the same user name on that account (Switch account). Only the buyer carries it, and names at most one account."
+                    }
+                  }
+                }
+              },
+              "phone": {
+                "type": "string"
+              },
+              "address": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "street": {
+                    "type": "string"
+                  },
+                  "zip": {
+                    "type": "string"
+                  },
+                  "city": {
+                    "type": "string"
+                  },
+                  "countryCode": {
+                    "type": "string",
+                    "pattern": "^[A-Z]{2}$"
+                  }
+                }
+              }
+            },
+            "if": {
+              "properties": {
+                "kind": {
+                  "const": "account"
+                }
+              }
+            },
+            "then": {
+              "required": [
+                "customerNumber"
+              ]
+            }
+          }
+        },
+        "impersonation": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "impersonator",
+              "customer"
+            ],
+            "properties": {
+              "impersonator": {
+                "type": "string",
+                "minLength": 1,
+                "description": "userName of the representative who impersonates."
+              },
+              "customer": {
+                "type": "string",
+                "minLength": 1,
+                "description": "userName of the customer being impersonated."
+              }
+            }
+          }
+        },
+        "assortmentIds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Assortments the accounts are given. Owned by a recipe; the generator ignores it."
+        }
+      },
+      "description": "Customer accounts, their users and the representatives who impersonate them."
+    },
+    "content.pages": {
+      "type": "object",
+      "description": "Owned by the content.pages recipe; the generator ignores it. Its shape is the recipe input schema's."
+    },
+    "catalogue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "groups",
+        "products"
+      ],
+      "properties": {
+        "pimFolder": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the data-model folder under the PIM shop that holds one data model per top group. Default: brandCopy.companyName."
+        },
+        "shop": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Id of the storefront shop the groups are created in. It must be the storefront shop the copy carries."
+        },
+        "assortmentIds": {
+          "type": "array",
+          "maxItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "The existing storefront assortment every catalogue group joins (one id). Owned by a recipe; the generator ignores it."
+        },
+        "groups": {
+          "type": "array",
+          "minItems": 1,
+          "description": "The storefront tree, two levels. A top group is one data model and one product category in the PIM; its specFields are the spec table and the completeness fields of every product under it.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "key",
+              "name"
+            ],
+            "properties": {
+              "key": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9-]*$",
+                "maxLength": 40,
+                "description": "The group's natural key; a producer derives the group id from it."
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "parent": {
+                "type": "string",
+                "minLength": 1,
+                "description": "key of a top group; absent for a top group"
+              },
+              "description": {
+                "type": "string"
+              },
               "specFields": {
                 "type": "array",
                 "description": "Top groups only.",
                 "items": {
                   "type": "object",
                   "additionalProperties": false,
-                  "required": ["key", "label"],
+                  "required": [
+                    "key",
+                    "label"
+                  ],
                   "properties": {
-                    "key": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9]*$"},
-                    "label": {"type": "string", "minLength": 1},
-                    "facet": {"type": "boolean", "description": "The field the storefront index offers as the facet of this product category (one per top group)."}
+                    "key": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z][A-Za-z0-9]*$"
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "facet": {
+                      "type": "boolean",
+                      "description": "The field the storefront index offers as the facet of this product category (one per top group)."
+                    }
                   }
                 }
               }
@@ -49,37 +281,115 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["number", "name", "group", "listPrice", "images"],
+            "required": [
+              "number",
+              "name",
+              "group",
+              "listPrice"
+            ],
             "properties": {
-              "number": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$", "maxLength": 60},
-              "name": {"type": "string", "minLength": 1, "maxLength": 255},
-              "group": {"type": "string", "minLength": 1, "description": "key of the group the product sits in (its primary group)"},
-              "short": {"type": "string"},
-              "long": {"type": "string"},
-              "metaTitle": {"type": "string", "maxLength": 255},
-              "metaDescription": {"type": "string"},
-              "listPrice": {"type": "number", "minimum": 0},
-              "stock": {"type": "number", "minimum": 0},
-              "ean": {"type": "string", "maxLength": 255},
-              "weight": {"type": "number", "minimum": 0},
-              "images": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}, "description": "PNG, JPEG, WebP or GIF; the first is the default image, the second the hover image, the rest the gallery."},
+              "number": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$",
+                "maxLength": 60
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 255
+              },
+              "group": {
+                "type": "string",
+                "minLength": 1,
+                "description": "key of the group the product sits in (its primary group)"
+              },
+              "short": {
+                "type": "string"
+              },
+              "long": {
+                "type": "string"
+              },
+              "metaTitle": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "metaDescription": {
+                "type": "string"
+              },
+              "listPrice": {
+                "type": "number",
+                "minimum": 0
+              },
+              "stock": {
+                "type": "number",
+                "minimum": 0
+              },
+              "ean": {
+                "type": "string",
+                "maxLength": 255
+              },
+              "weight": {
+                "type": "number",
+                "minimum": 0
+              },
+              "images": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "description": "PNG, JPEG, WebP or GIF; the first is the default image, the second the hover image, the rest the gallery. The recipe input schema requires at least one; the generator accepts a product without images."
+              },
               "documents": {
                 "type": "array",
                 "items": {
                   "type": "object",
                   "additionalProperties": false,
-                  "required": ["path", "name"],
-                  "properties": {"path": {"type": "string", "minLength": 1}, "name": {"type": "string", "minLength": 1}}
+                  "required": [
+                    "path",
+                    "name"
+                  ],
+                  "properties": {
+                    "path": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "name": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
                 }
               },
-              "specs": {"type": "object", "additionalProperties": {"type": "string"}, "description": "specFields key of the product's top group -> value"},
+              "specs": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "description": "specFields key of the product's top group -> value"
+              },
               "related": {
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
-                  "accessories": {"type": "array", "items": {"type": "string"}},
-                  "related": {"type": "array", "items": {"type": "string"}},
-                  "spares": {"type": "array", "items": {"type": "string"}}
+                  "accessories": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "related": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "spares": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
                 }
               }
             }
@@ -87,179 +397,494 @@
         }
       }
     },
+    "pim.workflow": {
+      "type": "object",
+      "description": "Owned by the pim.workflow recipe; the generator ignores it. Its shape is the recipe input schema's."
+    },
     "prices": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Every price row is generated from here and the products' listPrice; no sample price survives.",
+      "description": "Every price row comes from here and the products' listPrice.",
       "properties": {
-        "currency": {"type": "string", "pattern": "^[A-Z]{3}$", "description": "One currency for every price and order row; default USD, the currency the Swift area serves."},
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "description": "One currency for every price and order row; default USD, the currency the Swift area serves."
+        },
+        "listPrices": {
+          "type": "array",
+          "description": "The default price of each product this section prices: the product's own price, which a visitor without a better price pays. catalogue.products[].listPrice is the same price, so a product named in both carries one amount in both places.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "product",
+              "amount"
+            ],
+            "properties": {
+              "product": {
+                "type": "string",
+                "description": "product number"
+              },
+              "amount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            }
+          }
+        },
+        "customerGroup": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the user group the groupPrices are scoped to; a group price reaches the group's direct members only; the generator reads it as an account of users.accounts. Absent: every signed-in customer. A group price is one row per product and quantity, like a contract row; a percentage off a whole catalogue is a discount, which this file does not describe."
+        },
+        "buyer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "userName",
+            "passwordRef",
+            "account"
+          ],
+          "description": "The persona the signed-in price probes sign in as: a direct member of customerGroup and a user of the account whose contracts are probed. It names the users.accounts buyer.",
+          "properties": {
+            "userName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "passwordRef": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+              "description": "A key of DW_RECIPE_SECRETS, never the password."
+            },
+            "account": {
+              "type": "string",
+              "minLength": 1,
+              "description": "customerNumber of the buyer's account"
+            }
+          }
+        },
         "tiers": {
           "type": "array",
           "items": {
-            "type": "object", "additionalProperties": false, "required": ["product", "quantity", "amount"],
-            "properties": {"product": {"type": "string"}, "quantity": {"type": "integer", "minimum": 2}, "amount": {"type": "number", "exclusiveMinimum": 0}}
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "product",
+              "quantity",
+              "amount"
+            ],
+            "properties": {
+              "product": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 2
+              },
+              "amount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            }
           }
         },
         "groupPrices": {
           "type": "array",
-          "description": "Prices for every signed-in customer (base permission group 1325).",
+          "description": "Prices for one user group: customerGroup when set, otherwise every signed-in customer.",
           "items": {
-            "type": "object", "additionalProperties": false, "required": ["product", "amount"],
-            "properties": {"product": {"type": "string"}, "quantity": {"type": "integer", "minimum": 1}, "amount": {"type": "number", "exclusiveMinimum": 0}}
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "product",
+              "amount"
+            ],
+            "properties": {
+              "product": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "amount": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            }
           }
         },
         "contracts": {
           "type": "array",
           "description": "Prices for one account, matched on its customer number.",
           "items": {
-            "type": "object", "additionalProperties": false, "required": ["account", "product", "amount"],
-            "properties": {"account": {"type": "string", "description": "customerNumber of an account"}, "product": {"type": "string"}, "quantity": {"type": "integer", "minimum": 1}, "amount": {"type": "number", "exclusiveMinimum": 0}}
-          }
-        }
-      }
-    },
-    "users.accounts": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["groups"],
-      "description": "The dynamicweb/skills section, with three additions: user.role, user.phone, and group.address / group.phone.",
-      "properties": {
-        "groups": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["name", "kind", "users"],
+            "required": [
+              "account",
+              "product",
+              "amount"
+            ],
             "properties": {
-              "name": {"type": "string", "minLength": 1},
-              "kind": {"enum": ["account", "staff"]},
-              "customerNumber": {"type": "string", "minLength": 1},
-              "phone": {"type": "string"},
-              "address": {
-                "type": "object", "additionalProperties": false,
-                "properties": {"street": {"type": "string"}, "zip": {"type": "string"}, "city": {"type": "string"}, "countryCode": {"type": "string", "pattern": "^[A-Z]{2}$"}}
+              "account": {
+                "type": "string",
+                "description": "customerNumber of an account"
               },
-              "users": {
-                "type": "array",
-                "items": {
-                  "type": "object",
-                  "additionalProperties": false,
-                  "required": ["userName"],
-                  "properties": {
-                    "userName": {"type": "string", "minLength": 1},
-                    "name": {"type": "string"},
-                    "email": {"type": "string"},
-                    "phone": {"type": "string"},
-                    "passwordRef": {"type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$"},
-                    "role": {"enum": ["buyer", "accountAdmin", "user", "csr"], "description": "buyer: the one persona every authenticated gate leg signs in as (AccessUser 100101); accountAdmin: account admin (base group 1270); user: a customer contact (1325); csr: a representative (1292). Default user in an account, csr in a staff group."}
-                  }
-                }
+              "product": {
+                "type": "string"
+              },
+              "quantity": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "amount": {
+                "type": "number",
+                "exclusiveMinimum": 0
               }
             }
           }
-        },
-        "impersonation": {
-          "type": "array",
-          "items": {
-            "type": "object", "additionalProperties": false, "required": ["impersonator", "customer"],
-            "properties": {"impersonator": {"type": "string", "minLength": 1}, "customer": {"type": "string", "minLength": 1}}
-          }
-        },
-        "assortmentIds": {"type": "array", "items": {"type": "string", "minLength": 1}}
+        }
       }
     },
     "history": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Orders, quotes, carts and favourite lists. The owner (user) defaults to the buyer and must be a customer user. Line prices default to the price the owner's account gets at that quantity.",
+      "description": "Orders, quotes, carts and favourite lists. The owner (user) defaults to the buyer persona and must be a customer user. Line prices default to the price the owner's account gets at that quantity. daysAgo counts back from the day the data is applied.",
       "properties": {
+        "buyer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "userName",
+            "passwordRef"
+          ],
+          "description": "The buyer persona: the default owner of every order, quote and list, and the user the signed-in history probes sign in as. It names the users.accounts buyer.",
+          "properties": {
+            "userName": {
+              "type": "string",
+              "minLength": 1
+            },
+            "passwordRef": {
+              "type": "string",
+              "pattern": "^[A-Za-z][A-Za-z0-9_.-]*$",
+              "description": "A key of DW_RECIPE_SECRETS, never the password."
+            }
+          }
+        },
+        "shop": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Id of the shop the orders and quotes are placed in. It must be the storefront shop the copy carries."
+        },
+        "orderStates": {
+          "type": "array",
+          "description": "The order state each history state is set to, by state name in the order flow (completed: Completed, open: New, rejected: Rejected on a default flow). A name must be a state of that flow.",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "state",
+              "name"
+            ],
+            "properties": {
+              "state": {
+                "enum": [
+                  "completed",
+                  "open",
+                  "rejected"
+                ]
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          }
+        },
+        "numbering": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "prefix"
+          ],
+          "description": "The order number series (prefix + counter + postFix). A blank site numbers ORDER1, ORDER2. Owned by a recipe: the generator reports it and writes no number series.",
+          "properties": {
+            "prefix": {
+              "type": "string"
+            },
+            "postFix": {
+              "type": "string"
+            },
+            "counter": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "The last number used; the next order takes counter + 1."
+            }
+          }
+        },
+        "reset": {
+          "type": "boolean",
+          "description": "Return the history to the seeded state before a demo. Owned by a recipe; the generator ignores it."
+        },
         "orders": {
           "type": "array",
           "items": {
-            "type": "object", "additionalProperties": false, "required": ["daysAgo", "state", "lines"],
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "daysAgo",
+              "state",
+              "lines"
+            ],
             "properties": {
-              "user": {"type": "string"},
-              "daysAgo": {"type": "integer", "minimum": 0},
-              "state": {"enum": ["completed", "open", "rejected"]},
-              "reference": {"type": "string"},
-              "lines": {"$ref": "#/definitions/lines"}
+              "user": {
+                "type": "string"
+              },
+              "daysAgo": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "state": {
+                "enum": [
+                  "completed",
+                  "open",
+                  "rejected"
+                ]
+              },
+              "reference": {
+                "type": "string"
+              },
+              "lines": {
+                "$ref": "#/definitions/lines"
+              }
             }
           }
         },
         "quotes": {
           "type": "array",
           "items": {
-            "type": "object", "additionalProperties": false, "required": ["daysAgo", "state", "lines"],
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "daysAgo",
+              "state",
+              "lines"
+            ],
             "properties": {
-              "user": {"type": "string"},
-              "daysAgo": {"type": "integer", "minimum": 0},
-              "state": {"enum": ["QuotePending", "QuoteSent", "QuoteAccepted", "QuoteRejected"]},
-              "reference": {"type": "string"},
-              "comment": {"type": "string"},
-              "lines": {"$ref": "#/definitions/lines"}
+              "user": {
+                "type": "string"
+              },
+              "daysAgo": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "state": {
+                "enum": [
+                  "QuotePending",
+                  "QuoteSent",
+                  "QuoteAccepted",
+                  "QuoteRejected"
+                ]
+              },
+              "reference": {
+                "type": "string"
+              },
+              "comment": {
+                "type": "string"
+              },
+              "lines": {
+                "$ref": "#/definitions/lines"
+              }
             }
           }
         },
         "carts": {
           "type": "array",
           "items": {
-            "type": "object", "additionalProperties": false, "required": ["daysAgo", "name", "lines"],
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "daysAgo",
+              "name",
+              "lines"
+            ],
             "properties": {
-              "user": {"type": "string"},
-              "daysAgo": {"type": "integer", "minimum": 0},
-              "name": {"type": "string", "minLength": 1},
-              "lines": {"$ref": "#/definitions/lines"}
+              "user": {
+                "type": "string"
+              },
+              "daysAgo": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "lines": {
+                "$ref": "#/definitions/lines"
+              }
             }
           }
         },
         "favourites": {
           "type": "array",
           "items": {
-            "type": "object", "additionalProperties": false, "required": ["name", "products"],
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "products"
+            ],
             "properties": {
-              "user": {"type": "string"},
-              "name": {"type": "string", "minLength": 1},
-              "description": {"type": "string"},
-              "default": {"type": "boolean"},
-              "products": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+              "user": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "description": {
+                "type": "string"
+              },
+              "default": {
+                "type": "boolean"
+              },
+              "products": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
             }
           }
         }
       }
     },
+    "brand": {
+      "type": "object",
+      "description": "Owned by the content.design-styles recipe; the generator ignores it. Its shape is the recipe input schema's."
+    },
+    "debrand": {
+      "type": "object",
+      "description": "Owned by the content.page-seo recipe; the generator ignores it. Its shape is the recipe input schema's."
+    },
     "brandCopy": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["companyName", "emailDomain", "logo", "images"],
+      "required": [
+        "companyName",
+        "emailDomain",
+        "logo",
+        "images"
+      ],
       "description": "The storefront copy the layer carries (Home, About, header, footer, PDP, the asset portal header and footer). Named slots overwrite their field; everywhere else the brand name, the e-mail domain, the phone number and the image paths are substituted.",
       "properties": {
-        "companyName": {"type": "string", "minLength": 1},
-        "shortName": {"type": "string", "pattern": "^[A-Za-z0-9 ]+$", "description": "Default: the first word of companyName. Names the PIM shop '<shortName> PIM'."},
-        "emailDomain": {"type": "string", "pattern": "^[a-z0-9.-]+\\.[a-z]+$"},
-        "assetFolder": {"type": "string", "pattern": "^[A-Za-z0-9]+$", "description": "Folder under Files/Images and Files/Documents; default companyName in PascalCase."},
-        "logo": {"type": "string", "minLength": 1},
-        "logoFooter": {"type": "string", "minLength": 1},
+        "companyName": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shortName": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9 ]+$",
+          "description": "Default: the first word of companyName. The PIM shop name is derived from it."
+        },
+        "emailDomain": {
+          "type": "string",
+          "pattern": "^[a-z0-9.-]+\\.[a-z]+$"
+        },
+        "assetFolder": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9]+$",
+          "description": "Folder under Files/Images and Files/Documents; default companyName in PascalCase."
+        },
+        "logo": {
+          "type": "string",
+          "minLength": 1
+        },
+        "logoFooter": {
+          "type": "string",
+          "minLength": 1
+        },
         "images": {
-          "type": "object", "additionalProperties": false, "required": ["hero", "catalogueBand", "people"],
-          "properties": {"hero": {"type": "string"}, "catalogueBand": {"type": "string"}, "people": {"type": "string"}, "portal": {"type": "string"}}
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "hero",
+            "catalogueBand",
+            "people"
+          ],
+          "properties": {
+            "hero": {
+              "type": "string"
+            },
+            "catalogueBand": {
+              "type": "string"
+            },
+            "people": {
+              "type": "string"
+            },
+            "portal": {
+              "type": "string"
+            }
+          }
         },
         "contact": {
-          "type": "object", "additionalProperties": false,
-          "properties": {"email": {"type": "string"}, "phone": {"type": "string"}}
-        },
-        "copyright": {"type": "string"},
-        "copyrightYear": {"type": "integer"},
-        "home": {
-          "type": "object", "additionalProperties": false,
+          "type": "object",
+          "additionalProperties": false,
           "properties": {
-            "metaTitle": {"type": "string"}, "metaDescription": {"type": "string"},
-            "heroEyebrow": {"type": "string"}, "heroTitle": {"type": "string"}, "heroText": {"type": "string"}, "heroAltText": {"type": "string"}
+            "email": {
+              "type": "string"
+            },
+            "phone": {
+              "type": "string"
+            }
+          }
+        },
+        "copyright": {
+          "type": "string"
+        },
+        "copyrightYear": {
+          "type": "integer"
+        },
+        "home": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "metaTitle": {
+              "type": "string"
+            },
+            "metaDescription": {
+              "type": "string"
+            },
+            "heroEyebrow": {
+              "type": "string"
+            },
+            "heroTitle": {
+              "type": "string"
+            },
+            "heroText": {
+              "type": "string"
+            },
+            "heroAltText": {
+              "type": "string"
+            }
           }
         },
         "about": {
-          "type": "object", "additionalProperties": false,
-          "properties": {"metaDescription": {"type": "string"}, "title": {"type": "string"}, "text": {"type": "string"}}
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "metaDescription": {
+              "type": "string"
+            },
+            "title": {
+              "type": "string"
+            },
+            "text": {
+              "type": "string"
+            }
+          }
         }
       }
     }
@@ -269,8 +894,25 @@
       "type": "array",
       "minItems": 1,
       "items": {
-        "type": "object", "additionalProperties": false, "required": ["product", "quantity"],
-        "properties": {"product": {"type": "string"}, "quantity": {"type": "integer", "minimum": 1}, "unitPrice": {"type": "number", "minimum": 0}}
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "product",
+          "quantity"
+        ],
+        "properties": {
+          "product": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "unitPrice": {
+            "type": "number",
+            "minimum": 0
+          }
+        }
       }
     }
   }

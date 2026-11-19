@@ -1,6 +1,8 @@
 {
   "schema": 1,
   "catalogue": {
+    "pimFolder": "Vellmark catalogue",
+    "shop": "SHOP1",
     "groups": [
       {"key": "fasteners", "name": "Fasteners", "description": "Bolts, nuts and screws for timber, steel and marine work.",
        "specFields": [
@@ -83,6 +85,14 @@
   },
   "prices": {
     "currency": "USD",
+    "listPrices": [
+      {"product": "VF-HB-M10-60", "amount": 38.5},
+      {"product": "VF-DS-5-50", "amount": 24.9},
+      {"product": "VF-WA-M10", "amount": 2.4},
+      {"product": "VF-IT-18V", "amount": 129.0}
+    ],
+    "customerGroup": "Brannoch Shipwrights",
+    "buyer": {"userName": "edda.marlowe@brannoch.example", "passwordRef": "buyer", "account": "C-10410"},
     "tiers": [
       {"product": "VF-DS-5-50", "quantity": 10, "amount": 22.4},
       {"product": "VF-DS-5-50", "quantity": 25, "amount": 21.2},
@@ -121,6 +131,14 @@
     ]
   },
   "history": {
+    "buyer": {"userName": "edda.marlowe@brannoch.example", "passwordRef": "buyer"},
+    "shop": "SHOP1",
+    "orderStates": [
+      {"state": "completed", "name": "Completed"},
+      {"state": "open", "name": "New"},
+      {"state": "rejected", "name": "Rejected"}
+    ],
+    "numbering": {"prefix": "VF-"},
     "orders": [
       {"daysAgo": 62, "state": "completed", "reference": "PO-BS-2207", "lines": [{"product": "VF-HB-M10-60", "quantity": 4}, {"product": "VF-HN-M10", "quantity": 2}]},
       {"daysAgo": 40, "state": "completed", "reference": "PO-BS-2231", "lines": [{"product": "VF-DS-5-50", "quantity": 12}, {"product": "VF-IT-18V", "quantity": 1}]},

@@ -8,7 +8,8 @@ tools/sample-data/rewrite-sample-data.py rewrites a copy of the sample-data laye
 data file. Its tests are Python unittest (the generator is Python, like the sample-data layer's tools) and run
 it on the fictional Vellmark fixture: determinism, no sample row left outside the stable keys, the stable
 keys intact, every reference resolving, the inventories agreeing with the tree, the refusals, and
-Validate-Distribution.ps1 run on a Distribution where the copy stands in place of sample-data. This file
+Validate-Distribution.ps1 run on a Distribution where the copy stands in place of sample-data, and (when the
+skills checkout carries the recipe input schema) that the generator schema accepts every member of it. This file
 only runs them, so the CI step that runs tools/ci/tests runs them too. The ledger skills checkout CI makes
 for the CPQ tests is passed on as TRUVIO_SKILLS_PATH, so the ledger checks run in the validator trees.
 #>
