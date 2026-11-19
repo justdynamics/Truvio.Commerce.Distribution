@@ -12,6 +12,7 @@ on:
       - 'contracts/cpq/**'
       - 'contracts/ledger/**'
       - 'tools/ci/**'
+      - 'tools/sample-data/**'
       - '.github/workflows/validate.yml'
   push:
     branches: [ main ]

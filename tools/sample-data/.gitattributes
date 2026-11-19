@@ -1,0 +1,4 @@
+# The fixture documents are binary PDFs. Without this, a checkout with core.autocrlf=true rewrites
+# the LFs in their byte stream and the xref offsets no longer point at the objects (the same rule
+# layers/sample-data/.gitattributes carries for the layer's own documents).
+*.pdf -text -diff
