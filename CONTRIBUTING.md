@@ -58,9 +58,7 @@ Fail any one → fold it in. The naming follows the kind (`feature-*`, `surface-
 improvements fold into `theme-default` — the distribution ships one theme, and a
 customer re-skin starts from it.
 
-Gate cost is tracked as a **KPI trend only** (gate cost per edition, in the Foundry's
-`docs/KPI.md`) — there is no per-publish leg budget; the constraint ranking triggers action,
-not a fixed threshold.
+There is no per-publish leg budget for gate cost.
 
 ## Authoring
 
