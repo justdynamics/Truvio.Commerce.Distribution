@@ -441,7 +441,8 @@ Describe 'Publish-BacpacRelease attaches the notes when it publishes (gh and the
     }
     AfterAll {
         $env:GH_TOKEN = $script:oldToken
-        Remove-Item function:global:gh -ErrorAction SilentlyContinue
+        # function:gh, not function:global:gh: Remove-Item does nothing with the scope prefix and reports nothing.
+        Remove-Item function:gh -ErrorAction SilentlyContinue
         Remove-Variable -Scope Global -Name RnReleases, RnCalls, RnFailPatch -ErrorAction SilentlyContinue
     }
     BeforeEach {

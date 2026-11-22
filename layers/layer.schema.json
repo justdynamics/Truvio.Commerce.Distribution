@@ -101,7 +101,7 @@
           }
         }
       },
-      "description": "OPTIONAL rows Invoke-LayerAssert verifies exist after activation (SQL EXISTS probes). Layers touching no config rows (theme, most catalog/sample-data) omit the field."
+      "description": "OPTIONAL rows expected to exist after activation (SQL EXISTS probes). DECLARED ONLY: the Foundry runner that verified them belonged to its local clean-room gate (last run 2026-08-05), which was removed; the remote gate does not read this field. Layers touching no config rows (theme, most catalog/sample-data) omit the field."
     },
     "fragmentModes": {
       "type": "array",
@@ -460,17 +460,17 @@
               }
             ]
           },
-          "description": "Behavior probes Invoke-LayerAssert runs after activation. Authenticated kinds (authenticated-body-contains, cart-price, checkout-recurring) ride the canonical seeded buyer session (gate config packs.buyerUsername + the buyerPassword secret from git-ignored config/gate-secrets.local.json, falling back to the documented demo default) and FAIL closed when credentials are absent - never a silent skip."
+          "description": "Behavior probes declared for the layer. DECLARED ONLY: the Foundry runner that ran them after activation belonged to its local clean-room gate (last run 2026-08-05), which was removed; the remote gate does not run them. As designed, the authenticated kinds (authenticated-body-contains, cart-price, checkout-recurring) ride the seeded buyer session and fail closed when credentials are absent."
         },
         "criticalPaths": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "description": "Optional frontend paths that must respond 2xx after activation. Enforced by Invoke-LayerAssert (WR-07): one anonymous GET per path, PASS on 2xx, FAIL row otherwise - never silently skipped."
+          "description": "Optional frontend paths that must respond 2xx after activation. DECLARED ONLY: the Foundry runner that requested them belonged to its local clean-room gate (last run 2026-08-05), which was removed. The paths the remote gate requests are the edition's own criticalPaths (editions/<name>.json)."
         }
       },
-      "description": "OPTIONAL behavior assertion declarations consumed by Invoke-LayerAssert."
+      "description": "OPTIONAL behavior assertion declarations. DECLARED ONLY: no runner reads them today (see behaviorProbes and criticalPaths)."
     },
     "knownCycleLimitations": {
       "type": "array",
@@ -513,7 +513,7 @@
           }
         }
       },
-      "description": "OPTIONAL. Layer-declared known cycle-limitations: tracked-but-unfixed cycle edges the gate records as KNOWN-LIMITATION (WARN) instead of FAIL. Matched TIGHTLY by layer + probe + path + phase; a NON-declared cycle FAIL still hard-fails the gate. Surfaced loudly (never a silent skip). Layers with no known limitations omit the field."
+      "description": "OPTIONAL. Layer-declared known cycle-limitations: tracked-but-unfixed edges of the deactivate->reactivate cycle. DECLARED ONLY: the cycle proof belonged to the Foundry's local clean-room gate (last run 2026-08-05), which was removed, so nothing reads this field today. As designed, an entry was matched tightly by layer + probe + path + phase and recorded as KNOWN-LIMITATION (WARN) instead of FAIL. Layers with no known limitations omit the field."
     },
     "provenOn": {
       "type": "object",
