@@ -32,9 +32,9 @@
   "description": "Disposable neutral CPQ proving edition candidate on DW 10.29.8. Delivery is refused until packages, bindings and runtime prerequisites are resolved.",
   "ledger": {
     "repo": "dynamicweb/skills",
-    "commit": "d10a98ff21ddaa67d2cbd9e3ec4875401569dabc",
+    "commit": "ac3571b7ab00755b65e7e60c071b146ef014d146",
     "manifest": "skills/dw-demo-ledger/assets/releases/10.30.6/manifest.json",
-    "digest": "sha256:2e39048b9cb817d408962f6b92199e8b2987afdceb9fb79276c0324824c9c0c7",
+    "digest": "sha256:4cb789daa0f0690b528f7d623e0f6d3871dc03d0a109b135c71568c25a6d782b",
     "checkIds": [
       "commerce.currencies.one-default",
       "commerce.currencies.several",
