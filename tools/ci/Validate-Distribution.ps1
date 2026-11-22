@@ -2,8 +2,8 @@
 .SYNOPSIS
 Self-contained PR validator for the Truvio Commerce Distribution repo (v3.0). The
 machine-enforced merge gate (CONTRIBUTING.md): every PR must pass all checks below.
-The deep clean-room deserialize roundtrip stays a documented operator step (run in the
-harness / Foundry) — this validator is the fast structural gate.
+The deep proof (delivery to a standing host and the edition proof set, run in the
+Foundry) stays a documented operator step — this validator is the fast structural gate.
 
 Checks (all fail-closed; any failure -> exit 1):
   1. Layer schema      — every layers/<name>/layer.json validates vs layers/layer.schema.json.
