@@ -34,13 +34,19 @@ A change to `layers/` or `editions/` is mergeable only when both hold:
      as prose, while a template, layout, image or file value carrying `/replace/` still
      fails;
 
-2. **The clean-room roundtrip is attested (operator step).** The deep proof — a layer or
-   edition deserializes cleanly on the current latest Swift with row-count parity and zero
-   strict-mode escalations — runs in the **Foundry** harness
-   (`Truvio.Commerce.Serializer.BaselineUpdater`), not on a hosted runner (it needs a live
-   DW host + SQL Server). The maintainer runs `gate.ps1 -Edition <name>` and records the
-   run id in the PR. A layer that cannot pass ships **Beta**, flagged in its `BASELINE.md`
-   with the promote-out path (see `layers/dap-portal`).
+2. **The delivery to a standing host is attested (operator step).** The deep proof — an
+   edition delivers onto a blank proving host on the current latest Swift with zero
+   strict-mode escalations, and the proof set of the `edition` kind is measured on it — runs
+   in the **Foundry** harness, not on a hosted runner (it needs a live DW host + SQL
+   Server). The maintainer runs `gate.ps1 -HostProfile <host> -Edition <name> -Deliver`,
+   measures, and records the run id in the PR; see
+   [gateProven is a projection of the editions record](#gateproven-is-a-projection-of-the-editions-record).
+   The earlier clean-room roundtrip (database reset, row-count parity, the layer
+   activate/deactivate cycle) last ran on 2026-08-05 and is no longer part of the Foundry:
+   an edition's `expectedCounts` and a layer's `configRows`, `asserts` and
+   `knownCycleLimitations` are declarations nothing measures today. A layer that cannot
+   pass ships **Beta**, flagged in its `BASELINE.md` with the promote-out path (see
+   `layers/dap-portal`).
 
 ## Composition policy — when an improvement becomes a NEW layer
 
@@ -58,9 +64,7 @@ Fail any one → fold it in. The naming follows the kind (`feature-*`, `surface-
 improvements fold into `theme-default` — the distribution ships one theme, and a
 customer re-skin starts from it.
 
-Gate cost is tracked as a **KPI trend only** (gate cost per edition, in the Foundry's
-`docs/KPI.md`) — there is no per-publish leg budget; the constraint ranking triggers action,
-not a fixed threshold.
+There is no per-publish leg budget for gate cost.
 
 ## Authoring
 

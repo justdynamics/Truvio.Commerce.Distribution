@@ -115,7 +115,7 @@
         "type": "integer",
         "minimum": 0
       },
-      "description": "OPTIONAL row-count contract override/extension: table -> expected row count, merged over the sampleData-derived defaults (EcomProducts/EcomGroups/EcomCountries) by Set-ConfigFromEdition. Lets a page-free edition (base-only since the Swift 2.4 base split) carry DB-level framework asserts (e.g. EcomShops=1) in place of page smoke."
+      "description": "OPTIONAL row-count contract: table -> expected row count. DECLARED ONLY: the row-count assert belonged to the Foundry's local clean-room gate (last run 2026-08-05), which was removed; the remote gate does not count rows. As designed, it let a page-free edition (base-only since the Swift 2.4 base split) carry DB-level framework asserts (e.g. EcomShops=1) in place of page smoke."
     },
     "ledger": {
       "type": "object",

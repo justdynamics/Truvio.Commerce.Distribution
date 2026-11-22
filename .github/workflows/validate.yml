@@ -1,8 +1,9 @@
 name: validate-distribution
 
 # Machine-enforced merge gate (v3.0 Distribution, plan §4 Phase 3). Every PR to the
-# layers/ or editions/ contract must pass the structural validator. The deep clean-room
-# deserialize roundtrip stays a documented operator step (run in the Foundry harness).
+# layers/ or editions/ contract must pass the structural validator. The deep proof
+# (delivery to a standing host and the edition proof set) stays a documented operator
+# step (run in the Foundry harness).
 on:
   pull_request:
     paths:
