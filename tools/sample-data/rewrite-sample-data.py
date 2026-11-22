@@ -12,13 +12,12 @@ of kind sample-data into --out:
         --input <customer data file> --out <demo>/layers/<customer>-data [--name <layer name>]
         [--dry-run] [--report <file.json>] [--logins stable|input] [--source <sample-data dir>]
 
-The customer data file is the same file the dynamicweb/skills recipe runner reads (`schema: 1`,
-one key per section); its canonical shape is that repository's recipe input schema
-(skills/dw-demo-ledger/assets/recipe-input.schema.json). customer-data.schema.json beside this script
-accepts every member that schema defines and adds two the generator alone reads (the buyer's actsFor
-and a product without images). This script reads catalogue, prices, users.accounts, history,
-brandCopy and build.pimShop; every other member is accepted, ignored and listed in the report as
-owned by a recipe. REWRITE.md beside the layer is the by-hand reference for every table it writes.
+The customer data file is one object (`schema: 1`, one key per section); its shape is
+customer-data.schema.json beside this script. This script reads catalogue, prices, users.accounts,
+history, brandCopy and build.pimShop. The other sections and members belong to build recipes: scripts
+outside this repository that write other parts of a demo from the same file. They are accepted,
+ignored and listed in the report as owned by a recipe, so one file can feed both. Two members are read
+by the generator alone: the buyer's actsFor and a product without images. REWRITE.md beside the layer is the by-hand reference for every table it writes.
 
     prices.listPrices    the product's own price, restated for the recipes. catalogue.products[]
                          listPrice is what the copy writes; a product named in both carries one
@@ -568,6 +567,7 @@ class Generator:
         ('debrand', 'the content.page-seo recipe'),
         ('content.pages', 'the content.pages recipe'),
         ('pim.workflow', 'the pim.workflow recipe'),
+        ('checkout', 'a checkout recipe (payment and shipping methods)'),
         ('catalogue.assortmentIds', 'the pim.identifiers recipe (assortments debt); the copy ships no assortment'),
         ('users.accounts.assortmentIds', 'a recipe; the copy ships no assortment'),
         ('users.accounts.groups[].users[].passwordRef', 'the users.accounts recipe (DW_RECIPE_SECRETS); the copy ships no password, the Foundry credential tool sets it'),
@@ -717,7 +717,7 @@ class Generator:
         bare = [p['number'] for p in self.products if not p.get('images')]
         if bare:
             self.warnings.append('Products without images (%s): no default image and no gallery; the storefront shows its placeholder. '
-                                 'The recipe input schema requires at least one image per product.' % ', '.join(bare))
+                                 'A recipe that reads the same file requires at least one image per product.' % ', '.join(bare))
         for p in self.products:
             for i, img in enumerate(p.get('images') or []):
                 src = self._asset(img, 'catalogue.products %s images[%d]' % (p['number'], i), IMAGE_EXT)
@@ -893,8 +893,8 @@ class Generator:
                 others = ', '.join('%s (%s)' % (g['name'], g['customerNumber']) for g in self.accounts if g is not self.account1) or 'none: add a second account'
                 self.refuse('the buyer %s names no other account to act for. The base contract guarantees the buyer a second profile on a second account '
                             '(base.contract.json sampleData.guaranteedRows.buyerProfiles: Swift Switch account), and the generator no longer picks that '
-                            'account itself. Add actsFor: ["<customerNumber>"] to the buyer, or pass --acts-for <customerNumber> when the file must also '
-                            'pass the recipe input schema. Accounts: %s.' % (self.buyer['user']['userName'], others))
+                            'account itself. Add actsFor: ["<customerNumber>"] to the buyer, or pass --acts-for <customerNumber> when the file must '
+                            'stay free of generator-only members. Accounts: %s.' % (self.buyer['user']['userName'], others))
             return
         cn = named[0][1]
         acct = next((g for g in self.accounts if g['customerNumber'] == cn), None)
@@ -2204,7 +2204,7 @@ def main(argv=None):
                     help='stable keeps the persona user names the gate signs in as; input writes the input user names')
     ap.add_argument('--acts-for', metavar='CUSTOMER_NUMBER',
                     help='the account the buyer may act for (its second profile, Switch account): the same as actsFor on the buyer, '
-                         'for a file that must also pass the recipe input schema')
+                         'for a file that must stay free of generator-only members')
     ap.add_argument('--dry-run', action='store_true', help='report what would change and write nothing')
     ap.add_argument('--report', help='also write the report as JSON to this file')
     a = ap.parse_args(argv)

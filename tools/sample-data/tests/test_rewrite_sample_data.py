@@ -589,11 +589,12 @@ class Refusals(unittest.TestCase):
             d['debrand'] = {'forbidden': [{'text': 'Old name', 'replacement': 'Vellmark'}]}
             d['content.pages'] = {'pages': [{'menuText': 'About us', 'urlName': 'about-us', 'itemType': 'Swift-v2_Page'}]}
             d['pim.workflow'] = {'name': 'Review', 'states': [{'name': 'Draft'}]}
+            d['checkout'] = {'country': 'US', 'language': 'en-US', 'methods': []}
             d['catalogue']['assortmentIds'] = ['A1']
             d['history']['reset'] = True
         report, _ = self.run_with(m, dry_run=True)
         ignored = {x['member'] for x in report['ignored']}
-        for member in ('build.areaId', 'build.defaultLanguage', 'brand', 'debrand', 'content.pages', 'pim.workflow',
+        for member in ('build.areaId', 'build.defaultLanguage', 'brand', 'debrand', 'content.pages', 'pim.workflow', 'checkout',
                        'catalogue.assortmentIds', 'history.reset', 'history.numbering'):
             self.assertIn(member, ignored)
 
@@ -796,7 +797,7 @@ class RecipeSchemaParity(unittest.TestCase):
 
     # a member only the generator reads (actsFor) is not a difference here: the generator may read more
     EXTENSIONS = {'$.catalogue.products[].required', '$.catalogue.products[].images.minItems'}
-    RECIPE_OWNED = {'$.brand', '$.debrand', '$.content.pages', '$.pim.workflow'}
+    RECIPE_OWNED = {'$.brand', '$.debrand', '$.content.pages', '$.pim.workflow', '$.checkout'}
 
     @classmethod
     def setUpClass(cls):

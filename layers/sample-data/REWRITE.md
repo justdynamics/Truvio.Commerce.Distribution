@@ -9,13 +9,12 @@ Distribution's own copy.
 
 [`tools/sample-data/rewrite-sample-data.py`](../../tools/sample-data/rewrite-sample-data.py) (repository
 level, outside this layer so the layer's proven tree hash is untouched) performs this rewrite from a
-customer data file, the same file the dynamicweb/skills recipe runner reads (`schema: 1`, one key per
-section). The canonical shape of that file is the recipe input schema
-(`skills/dw-demo-ledger/assets/recipe-input.schema.json` in dynamicweb/skills).
-[`tools/sample-data/customer-data.schema.json`](../../tools/sample-data/customer-data.schema.json) is the
-generator's reading of it: it accepts every member the recipe input schema defines, reads `catalogue`,
-`prices`, `users.accounts`, `history`, `brandCopy` and `build.pimShop`, and lists the rest in its report as
-ignored, owned by a recipe:
+customer data file (`schema: 1`, one key per section). The shape of that file is
+[`tools/sample-data/customer-data.schema.json`](../../tools/sample-data/customer-data.schema.json). The
+generator reads `catalogue`, `prices`, `users.accounts`, `history`, `brandCopy` and `build.pimShop`. The
+other sections (`brand`, `debrand`, `content.pages`, `pim.workflow`, `checkout`) belong to build recipes:
+scripts outside this repository that write other parts of a demo from the same file. The generator accepts
+them, so one file can feed both, and lists them in its report as ignored, owned by a recipe:
 
 ```
 python tools/sample-data/rewrite-sample-data.py --input <customer data file> \
@@ -24,7 +23,7 @@ python tools/sample-data/rewrite-sample-data.py --input <customer data file> \
 ```
 
 The buyer's second profile (`100105`, Switch account) goes on the account the input names, `actsFor`
-on the buyer or `--acts-for` (the recipe input schema does not define `actsFor`); the generator never
+on the buyer or `--acts-for` (for a file that must stay free of generator-only members); the generator never
 picks one, and refuses an input that names none while the base contract guarantees the profile.
 
 It writes a complete layer of kind `sample-data` into `--out` (never under the Distribution's

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Customer data as the sample-data rewrite generator reads it",
-  "description": "The canonical shape of a customer data file is the recipe input schema of the dynamicweb/skills demo ledger (skills/dw-demo-ledger/assets/recipe-input.schema.json): one object, schema 1, one key per section, read by the recipes and by a sample-data producer. This schema is how tools/sample-data/rewrite-sample-data.py reads that file. It accepts every member the recipe input schema defines, with the same constraints, and adds two things only the generator reads: users.accounts.groups[].users[].actsFor, and a product without images. A file that uses either no longer passes the recipe input schema. Sections and members the generator does not use are accepted and listed in the generator report as ignored, owned by a recipe. No credential belongs in this file: a secret is named by a reference key whose value the runner reads from DW_RECIPE_SECRETS. Paths of images and documents are relative to this file. daysAgo counts back from the day the data is applied.",
+  "description": "The shape of a customer data file: one object, schema 1, one key per section. tools/sample-data/rewrite-sample-data.py reads catalogue, prices, users.accounts, history, brandCopy and build.pimShop. The other sections and members belong to build recipes: scripts outside this repository that write other parts of a demo from the same file. This schema keeps their shape, so one file can feed both. Two things are read by the generator alone: users.accounts.groups[].users[].actsFor, and a product without images. Sections and members the generator does not use are accepted and listed in the generator report as ignored, owned by a recipe. No credential belongs in this file: a secret is named by a reference key whose value the runner reads from DW_RECIPE_SECRETS. Paths of images and documents are relative to this file. daysAgo counts back from the day the data is applied.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -108,7 +108,7 @@
                         "type": "string",
                         "minLength": 1
                       },
-                      "description": "Generator only: the recipe input schema does not define it, so a file that must also pass that schema passes the same value as rewrite-sample-data.py --acts-for. The customer number of another account this buyer may act for: the buyer gets a second profile with the same user name on that account (Switch account). Only the buyer carries it, and names at most one account."
+                      "description": "Generator only: a recipe does not read it, so a file that must stay free of it passes the same value as rewrite-sample-data.py --acts-for. The customer number of another account this buyer may act for: the buyer gets a second profile with the same user name on that account (Switch account). Only the buyer carries it, and names at most one account."
                     }
                   }
                 }
@@ -186,7 +186,7 @@
     },
     "content.pages": {
       "type": "object",
-      "description": "Owned by the content.pages recipe; the generator ignores it. Its shape is the recipe input schema's."
+      "description": "Owned by the content.pages recipe; the generator ignores it. Its shape is the recipe's own."
     },
     "catalogue": {
       "type": "object",
@@ -338,7 +338,7 @@
                   "type": "string",
                   "minLength": 1
                 },
-                "description": "PNG, JPEG, WebP or GIF; the first is the default image, the second the hover image, the rest the gallery. The recipe input schema requires at least one; the generator accepts a product without images."
+                "description": "PNG, JPEG, WebP or GIF; the first is the default image, the second the hover image, the rest the gallery. A recipe requires at least one; the generator accepts a product without images."
               },
               "documents": {
                 "type": "array",
@@ -399,7 +399,7 @@
     },
     "pim.workflow": {
       "type": "object",
-      "description": "Owned by the pim.workflow recipe; the generator ignores it. Its shape is the recipe input schema's."
+      "description": "Owned by the pim.workflow recipe; the generator ignores it. Its shape is the recipe's own."
     },
     "prices": {
       "type": "object",
@@ -761,13 +761,17 @@
         }
       }
     },
+    "checkout": {
+      "type": "object",
+      "description": "The payment and shipping methods of a storefront checkout. Owned by a checkout recipe; the generator ignores it. Its shape is the recipe's own."
+    },
     "brand": {
       "type": "object",
-      "description": "Owned by the content.design-styles recipe; the generator ignores it. Its shape is the recipe input schema's."
+      "description": "Owned by the content.design-styles recipe; the generator ignores it. Its shape is the recipe's own."
     },
     "debrand": {
       "type": "object",
-      "description": "Owned by the content.page-seo recipe; the generator ignores it. Its shape is the recipe input schema's."
+      "description": "Owned by the content.page-seo recipe; the generator ignores it. Its shape is the recipe's own."
     },
     "brandCopy": {
       "type": "object",
