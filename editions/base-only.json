@@ -22,9 +22,9 @@
   "description": "Framework-only proof (base split, Swift 2.5): base alone - ZERO content areas, ZERO pages, ZERO catalog, no theme leg (nothing to skin). Smoke is API/DB-level: /Admin/ liveness + token auth + the framework row-count contract (shops/payments/shippings/order-states (18 since base 4.0.0: the 14 stock states plus the four quote states)/languages/currencies + 0/0/96 catalog-free counts + Page=0/Area=0). Not in layers/INDEX.json gateProven.editions: unproven until the Foundry publish flow stamps a gate run for it. INDEX gateProven is the record.",
   "ledger": {
     "repo": "dynamicweb/skills",
-    "commit": "d049f8fb6596a1ccd5a03ed6f8b22e70bc3a37b6",
+    "commit": "d10a98ff21ddaa67d2cbd9e3ec4875401569dabc",
     "manifest": "skills/dw-demo-ledger/assets/releases/10.30.6/manifest.json",
-    "digest": "sha256:3c14f78f3f74602f1c8c7208917c579c4ad0a1bdae82c41ecd256c67012e6e5d",
+    "digest": "sha256:2e39048b9cb817d408962f6b92199e8b2987afdceb9fb79276c0324824c9c0c7",
     "checkIds": [
       "commerce.currencies.one-default",
       "commerce.currencies.several",
