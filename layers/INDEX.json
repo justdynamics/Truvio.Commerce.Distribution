@@ -362,6 +362,28 @@
   ],
   "bacpacs": {
     "_comment": "Databases published as GitHub Release assets (Foundry #1422, owner ruling vnext-bacpac-artifacts). Written by the Foundry from the proving runs; shape layers/bacpacs.schema.json, rules tools/ci/Bacpac.ps1, how to restore and the first-login state: CONTRIBUTING.md, 'Bacpac release assets'. No entry means the deserialize is the path.",
+    "blank": {
+      "dwVersion": "10.30.8",
+      "tag": "databases/blank/10.30.8",
+      "asset": "blank-dw-10.30.8.bacpac",
+      "sha256": "2bebf6848590f56f4fa48c5cc5c54ec7e8c507641e9432c8990cd253166a51dc",
+      "sizeBytes": 120391,
+      "tables": 392,
+      "gateRunId": "20261122-172205",
+      "deliveryRunId": "20261122-171729",
+      "provedWith": "swift-demo 5.5.0 delivered onto the database restored from this file, on scratch-blank-proof-10-30-8.mydwsite4.com (R1-NET10), nothing blocking",
+      "scrubCheck": {
+        "verdict": "CLEAN",
+        "tool": "Foundry tools/bacpac/Test-BacpacScrub.ps1 (Foundry #1431)",
+        "knownSecrets": 18,
+        "secretNamedTables": 15,
+        "secretNamedColumns": 83
+      },
+      "releaseNotes": {
+        "schema": "release-notes/v1",
+        "previousTag": "databases/blank/10.29.8"
+      }
+    },
     "editions": {}
   }
 }
