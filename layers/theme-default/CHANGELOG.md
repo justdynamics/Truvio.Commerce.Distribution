@@ -1,5 +1,20 @@
 ﻿# theme-default changelog
 
+## 2.8.1 (2026-11-22)
+
+**PATCH. The stock column of the product list holds its start on a phone.** Below the `lg`
+breakpoint the stock cell was sized from its own text, so it started where that text ended:
+"40 In stock" and "260 In stock" put the column 9 px apart at 390 wide (Foundry #1720, #1739;
+PLP-ALIGN-01, mobile, signed out: x 300.28 / 301.17 / 292.11). The sample catalogue's stock figures
+are equally wide, so it only showed on a site built with a customer's own data.
+
+- `default_custom.css` block 14: the stock cell gets a basis of `6.5rem` below 992 px in place of
+  `auto`. Measured on a site built from a rewritten sample-data copy: x 270.00 on each of the first
+  six rows at 390, 310.00 at 430, 648.00 at 768; 992 px and wider is unchanged.
+
+Not in this release: the signed-in rows of #1720 (the two-row header on a phone, and the price and
+description columns when signed in).
+
 ## 2.8.0 (2026-11-12)
 
 **MINOR. The edge motif is gone.** Justin asked for it to be removed from the layer after it painted a

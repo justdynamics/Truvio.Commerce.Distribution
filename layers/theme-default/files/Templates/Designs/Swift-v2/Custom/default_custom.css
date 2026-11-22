@@ -906,7 +906,13 @@ main [data-dw-itemtype="swift-v2_productcomponentslider"] .card .card-title {
   .product-list article.product [data-dw-itemtype="swift-v2_productnumber"] { flex: 0 1 auto !important; font-size: .75rem; }
   .product-list article.product [data-dw-itemtype="swift-v2_productheader"] { flex: 1 1 100% !important; }
   .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] { flex: 1 1 40% !important; }
-  .product-list article.product [data-dw-itemtype="swift-v2_productstock"] { flex: 0 0 auto !important; }
+  /* The stock cell is a COLUMN below lg too. Sized from its content (`flex: 0 0 auto`) it started
+   * where its own text ended, so "40 In stock" and "260 In stock" put it 9px apart on a phone; the
+   * sample's figures happen to be equally wide, a real catalogue's are not (Foundry #1720, #1739:
+   * PLP-ALIGN-01 mobile, stock x 300.28 / 301.17 / 292.11 at 390). A real basis holds the column
+   * start for any figure: 6.5rem takes a four-digit count on one line. Measured after: x 270.00 on
+   * every row at 390, 310.00 at 430 and 648.00 at 768. */
+  .product-list article.product [data-dw-itemtype="swift-v2_productstock"] { flex: 0 0 6.5rem !important; min-width: 0; }
   .product-list article.product [data-dw-itemtype="swift-v2_productprice"] {
     flex: 0 0 auto !important;
     margin-left: auto !important;
