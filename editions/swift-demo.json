@@ -40,9 +40,9 @@
   "description": "Full Swift storefront demo on the split composition (Swift 2.5): framework-only base + the surface-swift content surface (en-US area + UrlPath + own item types) + five feature layers (feature-reordering, feature-pricing, feature-subscription-orders, feature-bom-configurator and feature-b2b-comms) + the sample-data layer on the default theme. The sample-data layer carries the whole browsable catalogue a prospect sees - 12 frontend-demonstrable subgroups under 4 top groups, 60 masters + 36 variant rows bound to their axes, one subscription plan, 90 customer-group prices, the Images and Manuals asset categories, 324 relations, the buyer's 26 orders, 7 quotes, 2 open carts and 2 favourite lists in USD for the customer-center dashboard, the demo return request, three personas - and the storefront copy on Home, About, Contact, the header, the footer and the mega-menu. The composer stages it after surfaces[], so that copy wins the paths it shares with surface-swift.",
   "ledger": {
     "repo": "dynamicweb/skills",
-    "commit": "d10a98ff21ddaa67d2cbd9e3ec4875401569dabc",
+    "commit": "ac3571b7ab00755b65e7e60c071b146ef014d146",
     "manifest": "skills/dw-demo-ledger/assets/releases/10.30.6/manifest.json",
-    "digest": "sha256:2e39048b9cb817d408962f6b92199e8b2987afdceb9fb79276c0324824c9c0c7",
+    "digest": "sha256:4cb789daa0f0690b528f7d623e0f6d3871dc03d0a109b135c71568c25a6d782b",
     "checkIds": [
       "commerce.currencies.one-default",
       "commerce.currencies.several",
