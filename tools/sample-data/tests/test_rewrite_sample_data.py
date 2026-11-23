@@ -19,8 +19,10 @@ the recipe input schema, and the generator schema accepts every member it define
 constraints. The fixture carries the members the recipes require and no actsFor, so the tests name the
 buyer's second account with acts_for, as a recipe-valid file does with --acts-for.
 """
+import contextlib
 import copy
 import importlib.util
+import io
 import json
 import os
 import re
@@ -72,6 +74,55 @@ def absolutise(data):
     b['logo'] = str(base / b['logo'])
     b['images'] = {k: str(base / v) for k, v in b['images'].items()}
     return data
+
+
+# The sample's storefront facts the first real build on this route served for a catalogue of 87 products without
+# variants (Foundry #1753): stat tiles, navigation promos, a Home band and the product page Features and FAQ.
+SAMPLE_CLAIMS = ['Product masters', 'Variant combinations', 'Variants on every master', 'Pick a tier and a mode',
+                 'Four groups, twelve capabilities', 'Commerce building blocks, named for what they do',
+                 'Every product in the', 'Every master carries', 'variant axes', 'variant selector', 'Options resolved on the page',
+                 'Do the options change the part number', 'install guide', 'revision', 'never out of stock', 'expected-delivery',
+                 'assortment', 'quantity breaks start at a single unit', 'Quantity prices from one unit']
+
+
+def field_values(layer):
+    """(file, field, value) of every storefront copy field; the paragraph header (an admin label) is not a field."""
+    for mode in ('merge', 'replace'):
+        for p in sorted((layer / mode / '_content').rglob('*.yml')):
+            for m in re.finditer(r'^\s+"([^"]+)": (".*")\r?$', p.read_text(encoding='utf-8-sig'), re.M):
+                yield p.relative_to(layer).as_posix(), m.group(1), json.loads(m.group(2))
+
+
+def content_hits(layer, phrases):
+    return ['%s %s: %s' % (f, k, ph) for f, k, v in field_values(layer) for ph in phrases if ph.lower() in v.lower()]
+
+
+def stat_tiles(layer):
+    """The Home and About figures as served: [(number, label)] per page."""
+    def runs(rel, field):
+        text = (layer / 'merge/_content/Swift 2' / rel).read_text(encoding='utf-8-sig')
+        return re.findall(r'>([^<]+)<', json.loads(re.search(r'^\s+"%s": (".*")\r?$' % field, text, re.M).group(1)))
+    home = [(int(runs('Home/grid-row-9/%s.yml' % p, 'Subtitle')[0]), runs('Home/grid-row-9/%s.yml' % p, 'Title')[0])
+            for p in ('paragraph-c1-11', 'paragraph-c2-12', 'paragraph-c3-13')]
+    about = [(int(runs('About/grid-row-4/%s.yml' % p, 'Text')[0]), runs('About/grid-row-4/%s.yml' % p, 'Text')[1])
+             for p in ('paragraph-c1-64', 'paragraph-c2-65', 'paragraph-c3-66')]
+    return {'home': home, 'about': about}
+
+
+def expected_counts(d):
+    """The figures, counted from the data file by hand (not by the generator's code)."""
+    cat, pr = d['catalogue'], d['prices']
+    products, groups = len(cat['products']), len(cat['groups'])
+    tops = sum(1 for g in cat['groups'] if not g.get('parent'))
+    grp, ctr = len(pr.get('groupPrices') or []), len(pr.get('contracts') or [])
+    rel = sum(len(v) for p in cat['products'] for v in (p.get('related') or {}).values())
+    docs = sum(len(p.get('documents') or []) for p in cat['products'])
+    third = (grp + ctr, 'Customer prices') if grp + ctr else (tops, 'Top-level groups')
+    second = (grp, 'Customer-group prices') if grp else (ctr, 'Contract prices') if ctr else (products, 'List prices')
+    last = (rel, 'Product relations') if rel else (docs, 'Product documents') if docs else (products, 'Products')
+    fix = lambda n, l: (n, l[:-1] if n == 1 and l.endswith('s') else l)
+    return {'home': [fix(products, 'Products'), fix(groups, 'Product groups'), fix(*third)],
+            'about': [fix(tops, 'Top-level groups'), fix(*second), fix(*last)]}
 
 
 class TreeChecks:
@@ -251,6 +302,34 @@ class GeneratedCopy(TreeChecks, unittest.TestCase):
         self.assertIn('GroupID=TCGRP-FASTENERS', hero)
         self.assertIn('Browse Fasteners', hero)
         self.assertNotIn('TCGRP-PRODUCT-STRUCTURE', hero)
+
+    def test_storefront_copy_states_no_sample_claim(self):
+        """Foundry #1753: the sample's figures and capability claims never reach a customer's copy."""
+        self.assertEqual(content_hits(self.out, SAMPLE_CLAIMS), [])
+        self.assertEqual(self.report['residualSampleClaims'], [])
+        self.assertEqual([w for w in self.report['warnings'] if 'copy slot' in w], [])
+
+    def test_figures_are_counted_from_the_input(self):
+        d = self.data
+        counts = expected_counts(d)
+        self.assertEqual(stat_tiles(self.out), counts)
+        self.assertEqual({k: [(t['figure'], t['label']) for t in v] for k, v in self.report['copyFigures'].items()}, counts)
+
+    def test_facet_names_follow_the_spec_field_labels(self):
+        """Foundry #1754: the copy carries the storefront facet file with the customer's facet labels, Field and
+        QueryParameter (and every other byte) as surface-swift ships them."""
+        rel = 'repositories/TruvioCommerce/Products.facets'
+        ours = (self.out / rel).read_text(encoding='utf-8-sig')
+        theirs = (DIST / 'layers' / 'surface-swift' / rel).read_text(encoding='utf-8-sig')
+        strip = lambda t: re.sub(r'<Facet Name="[^"]*"', '<Facet', t)
+        self.assertEqual(strip(ours), strip(theirs))
+        names = dict((f, n) for n, f in re.findall(r'<Facet Name="([^"]*)" Type="Field" Field="([^"]+)"', ours.split('-->')[-1]))
+        labels = [f['label'] for g in self.data['catalogue']['groups'] for f in g.get('specFields', []) if f.get('facet')]
+        self.assertEqual([names['MaterialClass_Facet'], names['LeadTime_Facet'], names['LanguageCoverage_Facet']], labels)
+        self.assertEqual(names['AccountTerms_Facet'], 'Account terms', 'a facet the copy does not fill keeps its name')
+        lj = json.loads((self.out / 'layer.json').read_text(encoding='utf-8'))
+        self.assertIn('System/Repositories/TruvioCommerce/Products.facets', lj['repositories'])
+        self.assertEqual({r['to'] for r in self.report['facetNames']}, set(labels))
 
     def test_unused_sample_rows_are_absent_not_inactive(self):
         for table in ('EcomVariantGroups', 'EcomVariantsOptions', 'EcomVariantGroupProductRelation', 'EcomVariantOptionsProductRelation',
@@ -780,6 +859,95 @@ class NoGuaranteedProfile(unittest.TestCase):
         report, files = gen.generate(FIXTURE, self.tmp / 'out2' / NAME, source=str(self.src), dry_run=True, acts_for=ACTS_FOR)
         self.assertEqual(report['ids']['buyerSecondProfile']['id'], 100105)
         self.assertIn('merge/_sql/AccessUser/100105.yml', files)
+
+
+class PlainCatalogue(unittest.TestCase):
+    """A catalogue with list prices only, no relations, documents, quotes or favourite lists (the shape of the first
+    real build on this route, minus what it did carry): the copy names none of those and counts its figures from
+    what is left."""
+
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = Path(tempfile.mkdtemp(prefix='sdrw-plain-'))
+        data = absolutise(fixture())
+        for p in data['catalogue']['products']:
+            p.pop('related', None)
+            p.pop('documents', None)
+        for k in ('tiers', 'groupPrices', 'contracts', 'customerGroup'):
+            data['prices'].pop(k, None)
+        for k in ('quotes', 'favourites', 'carts'):
+            data['history'].pop(k, None)
+        cls.data = data
+        inp = cls.tmp / 'customer-data.json'
+        inp.write_text(json.dumps(data), encoding='utf-8')
+        cls.out = cls.tmp / 'out' / NAME
+        cls.report, _ = gen.generate(inp, cls.out, acts_for=ACTS_FOR)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def test_no_claim_of_what_the_copy_does_not_carry(self):
+        self.assertEqual(self.report['residualSampleClaims'], [])
+        absent = ['quantity', 'contract', 'customer-group', 'quote', 'favourite', 'document', 'related product', 'relation']
+        self.assertEqual(content_hits(self.out, SAMPLE_CLAIMS + absent), [])
+        lj = json.loads((self.out / 'layer.json').read_text(encoding='utf-8'))
+        for fn in ('pim.documents', 'pim.product-relations', 'commerce.customer-prices', 'commerce.quantity-prices', 'orders.quotes', 'orders.favorite-lists'):
+            self.assertNotIn(fn, lj['ledger']['provides'])
+
+    def test_figures_fall_back_to_what_the_file_counts(self):
+        counts = expected_counts(self.data)
+        self.assertEqual(counts['home'][2], (3, 'Top-level groups'))
+        self.assertEqual(counts['about'][1:], [(12, 'List prices'), (12, 'Products')])
+        self.assertEqual(stat_tiles(self.out), counts)
+
+    def test_the_product_page_keeps_its_two_paragraphs(self):
+        """Features and FAQ are rewritten, never emptied: the PDP grid rows keep their paragraph."""
+        values = {(f, k): v for f, k, v in field_values(self.out)}
+        features = values[('replace/_content/Swift 2/Shop/Product Details/grid-row-10/paragraph-c1-20.yml', 'Text')]
+        faq = values[('replace/_content/Swift 2/Shop/Product Details/grid-row-11/paragraph-c1-21.yml', 'Text')]
+        self.assertGreaterEqual(features.count('<li>'), 3)
+        self.assertGreaterEqual(faq.count('<p><strong>'), 2)
+
+
+class CommandLine(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.tmp = Path(tempfile.mkdtemp(prefix='sdrw-cli-'))
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.tmp, ignore_errors=True)
+
+    def test_report_into_a_folder_that_does_not_exist(self):
+        report = self.tmp / 'reports' / 'new' / 'report.json'
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = gen.main(['--input', str(FIXTURE), '--out', str(self.tmp / 'copy' / NAME), '--acts-for', ACTS_FOR,
+                             '--dry-run', '--report', str(report)])
+        self.assertEqual(code, 0)
+        self.assertEqual(json.loads(report.read_text(encoding='utf-8'))['layer'], NAME)
+
+    def test_list_prices_naming_fewer_products_prices_the_copy_the_same(self):
+        """prices.listPrices restates listPrice for the recipes. A product it does not name is priced from its listPrice
+        all the same, so the generator does not report it (Foundry #1753)."""
+        def run(case, mutate):
+            data = absolutise(fixture())
+            mutate(data)
+            d = self.tmp / case
+            d.mkdir()
+            (d / 'customer-data.json').write_text(json.dumps(data), encoding='utf-8')
+            return gen.generate(d / 'customer-data.json', d / 'out' / NAME, dry_run=True, acts_for=ACTS_FOR)
+
+        def name_all(d):
+            d['prices']['listPrices'] = [{'product': p['number'], 'amount': p['listPrice']} for p in d['catalogue']['products']]
+        full_report, full = run('full', name_all)
+        few_report, few = run('few', lambda d: d['prices'].update(listPrices=d['prices']['listPrices'][:1]))
+        priced = [k for k in full if k.startswith(('merge/_sql/EcomPrices/', 'merge/_sql/EcomProducts/'))]
+        self.assertTrue(priced)
+        self.assertEqual(sorted(priced), sorted(k for k in few if k.startswith(('merge/_sql/EcomPrices/', 'merge/_sql/EcomProducts/'))))
+        self.assertEqual([k for k in priced if full[k] != few[k]], [])
+        self.assertEqual([w for w in few_report['warnings'] if 'listPrices' in w], [])
 
 
 def _recipe_schema_path():
