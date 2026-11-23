@@ -1,5 +1,36 @@
 ﻿# theme-default changelog
 
+## 2.10.0 (2026-11-23)
+
+**MINOR. The product page: a name above its sections, a picture that fills its frame, a buy box in
+one hand, tables that fit.** Steps 3 and 4 of Foundry #1765, with surface-swift 1.19.6 beside it
+(the name's size, six related rows and the related table's columns are that layer's).
+
+`default_custom.css` block #39:
+
+- **Section headings** under the buy box are the fourth step of the brand's type scale (23 px on
+  the sample scale, 25 px on a 1.25 scale), one under the product's name. They were 33 to 39 px
+  over a 19 to 20 px name. The formula is resolved at the heading, where the brand's scale is set;
+  `--td-pdp-heading` overrides it.
+- **The main picture fills its frame**, whole (`object-fit: contain`), with `--td-pdp-inset` of
+  air. Swift paints it at its own size, so a 360 px picture sat in the middle of a 696 by 522
+  frame, and on a phone it was 146 px wide in a 358 px frame.
+- **The buy box.** The item number is 14 px and muted. The price is `--td-pdp-price` (24 px),
+  semibold, tabular digits. A variant option has a visible edge before it is chosen (it was a
+  word with a transparent border). The documents are two-column link rows under a rule: the
+  heading row is kept for a screen reader and not painted, and the file type column is not shown.
+- **The specification table** is at most `--td-pdp-measure` wide (it ran 1408 px for a label and a
+  value), 14/20, with a 40% muted label column.
+- **Related products** read like the product list: no stripes, small uppercase headings, a muted
+  item number, the name as the link, tabular prices, a 40 px thumbnail, at most `--td-pdp-related`
+  wide. "Load more" is one quiet line under the table instead of a second filled button.
+- **On a phone a table fits its column.** The related table wraps and drops its item number column;
+  it was 458 to 555 px wide in 358.
+
+Not in this release: folding long sections on a phone (it needs a control with a translated label,
+so a template), and the documents appearing in the buy box as well as in their section, which
+surface-swift does on purpose since 1.11.0.
+
 ## 2.9.0 (2026-11-23)
 
 **MINOR. The product list row is one bordered unit on one grid, and the signed-out price is one

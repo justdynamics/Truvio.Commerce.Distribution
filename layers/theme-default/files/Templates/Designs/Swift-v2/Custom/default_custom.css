@@ -2571,3 +2571,205 @@ main [data-dw-itemtype="swift-v2_productcomponentselector"] section[data-swift-g
     display: none;
   }
 }
+
+/* =============================================================================
+ * #39 THE PRODUCT PAGE - a name above its sections, a picture that fills its
+ * frame, a buy box in one hand, tables that fit (Foundry #1765, steps 3 and 4)
+ *
+ * MEASURED BEFORE, on the sample catalogue and on a site built from a customer's
+ * data file:
+ *   - The product's name was 19 to 20px and the section headings under it 33 to
+ *     39px: the page's largest type was "Specifications".
+ *   - The main picture sat at its own size in the middle of a 696 by 522 frame: 360
+ *     or 435px wide at 1440, and 146 or 176px wide in a 358px frame on a phone.
+ *   - The variant options were plain words: a 1px transparent border until chosen.
+ *   - The specification table ran the page's width, 1408px for a label and a value.
+ *   - The related products table was striped, sat between two empty 96px bands, kept
+ *     empty Price and Qty columns for a visitor who sees no price, ended in a second
+ *     filled button, and on a phone was 458 to 555px wide in a 358px column.
+ *
+ * WHAT THIS BLOCK DOES, with surface-swift 1.19.6 beside it (the name's size, six
+ * related rows, the two bands and the table's columns are that layer's settings and
+ * template; a theme does not override a setting an editor can see):
+ *   1. Section headings at the fourth step of the brand's type scale, one under the
+ *      name.
+ *   2. The picture fills its frame, whole, with a little air.
+ *   3. The buy box: a small muted item number, the price as the largest figure in
+ *      tabular digits, options with a visible edge, and the documents as two-column
+ *      link rows under a rule.
+ *   4. The specification table at a readable width, 14/20, a 40% label column.
+ *   5. Related products in the product list's hand: no stripes, a muted number, the
+ *      name as the row's link, tabular prices, and "load more" as one quiet line.
+ *   6. On a phone a table fits its column.
+ *
+ * THE TOKENS a brand may set in brand.css: --td-pdp-heading, --td-pdp-price,
+ * --td-pdp-measure, --td-pdp-related, --td-pdp-inset. The border and the muted ink
+ * are the list's (--td-list-border, --td-list-muted), so the two pages read as one.
+ *
+ * NOT HERE. Folding long sections on a phone needs a control with a translated
+ * label, so it needs a template. The documents stay in the buy box as well as in
+ * their section: surface-swift put them there on purpose (1.11.0).
+ * ========================================================================== */
+[data-td-block="39"] { --td-block: 39; }
+
+:root {
+  --td-pdp-price:   1.5rem;     /* the price in the buy box */
+  --td-pdp-measure: 44rem;      /* the specification table's width */
+  --td-pdp-related: 64rem;      /* the related products table's width */
+  --td-pdp-inset:   4%;         /* the air between the picture and its frame */
+}
+
+/* 1. THE SECTION HEADINGS sit one step under the product's name: the fourth step of the
+ * brand's own type scale, where the name (surface-swift, FontSize h3) is the third. The
+ * formula is Swift's, and it is written here and not in a :root token because the scale is
+ * set below the root: a token on :root would freeze it at its fallback. A brand that wants
+ * another size sets --td-pdp-heading. */
+section[data-swift-gridrow]:has(> [data-swift-container] > [data-dw-itemtype="swift-v2_productcomponentselector"]) ~ section[data-swift-gridrow] > [data-swift-container] > [data-dw-itemtype="swift-v2_text"] h2 {
+  font-size: var(--td-pdp-heading, calc(var(--dw-base-font-size, 1rem) * pow(var(--dw-type-scale, 1.2), 2)));
+}
+
+/* 2. THE PICTURE FILLS ITS FRAME. Swift paints the image at its own size inside the frame
+ * (mw-100 mh-100), so a picture smaller than the frame floats in the middle of it. */
+main [data-dw-itemtype="swift-v2_productmedia"] .carousel-item .ratio img {
+  width: 100%;
+  height: 100%;
+  padding: var(--td-pdp-inset);
+  object-fit: contain !important;
+}
+
+/* 3. THE BUY BOX. The item number is small and muted, the price is the largest figure, an
+ * option reads as something to press, and the documents close the box under a rule. */
+main [data-dw-itemtype="swift-v2_productcomponentselector"] .item_swift-v2_productnumber {
+  font-size: .875rem;
+  color: var(--td-list-muted);
+  opacity: 1 !important;
+}
+main [data-dw-itemtype="swift-v2_productcomponentselector"] .item_swift-v2_productprice .text-price {
+  font-size: var(--td-pdp-price);
+  line-height: 1.25;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+main [data-dw-itemtype="swift-v2_productcomponentselector"] .js-variant-selector {
+  margin-top: .5rem;
+}
+main [data-dw-itemtype="swift-v2_productcomponentselector"] .variant-option:not(.active):not(.colorbox) {
+  border-color: var(--td-list-border);
+}
+main [data-dw-itemtype="swift-v2_productcomponentselector"] .variant-option:not(.active):not(.colorbox):hover {
+  border-color: currentColor;
+}
+main [data-dw-itemtype="swift-v2_productcomponentselector"] .item_swift-v2_productmediatable {
+  margin-top: .75rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--td-list-border);
+}
+main [data-dw-itemtype="swift-v2_productcomponentselector"] .item_swift-v2_productmediatable thead {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+main [data-dw-itemtype="swift-v2_productcomponentselector"] .item_swift-v2_productmediatable :is(td, th):last-child {
+  display: none;
+}
+main [data-dw-itemtype="swift-v2_productcomponentselector"] .item_swift-v2_productmediatable td {
+  padding: .375rem 0;
+  font-size: .875rem;
+}
+
+/* 4. THE SPECIFICATION TABLE: a readable width, a label column, small type. */
+main [data-dw-itemtype="swift-v2_productfielddisplaygroups"] .table-responsive {
+  max-width: var(--td-pdp-measure);
+}
+main [data-dw-itemtype="swift-v2_productfielddisplaygroups"] table {
+  margin-bottom: 0;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+main [data-dw-itemtype="swift-v2_productfielddisplaygroups"] table td {
+  padding: .5rem 1rem .5rem 0;
+  vertical-align: top;
+}
+main [data-dw-itemtype="swift-v2_productfielddisplaygroups"] table td:first-child {
+  width: 40% !important;
+  color: var(--td-list-muted);
+}
+
+/* 5. RELATED PRODUCTS: a short table in the list's hand, not a striped grid. */
+main [data-dw-itemtype="swift-v2_relatedproductslist"] .table-responsive {
+  max-width: var(--td-pdp-related);
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] table {
+  --bs-table-striped-bg: transparent;
+  margin-bottom: 0;
+  font-size: .875rem;
+  line-height: 1.25rem;
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] table :is(th, td) {
+  padding: .5rem .75rem .5rem 0;
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] table th {
+  font-size: .75rem;
+  font-weight: 600;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--td-list-muted);
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] table td img {
+  width: 2.5rem;
+  height: 2.5rem;
+  object-fit: contain;
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] .td-related__number {
+  font-size: .8125rem;
+  color: var(--td-list-muted);
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] .td-related__name {
+  font-weight: 600;
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] .td-related__name a {
+  color: inherit;
+  text-decoration: none;
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] .td-related__name a:hover,
+main [data-dw-itemtype="swift-v2_relatedproductslist"] .td-related__name a:focus-visible {
+  text-decoration: underline;
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] .td-related__price {
+  font-variant-numeric: tabular-nums;
+}
+/* More of them is one quiet line under the table, not a second filled button on the page. */
+main [data-dw-itemtype="swift-v2_relatedproductslist"] .table-responsive + .text-center {
+  display: flex;
+  align-items: baseline;
+  gap: .75rem;
+  max-width: var(--td-pdp-related);
+  font-size: .875rem;
+  text-align: left !important;
+  color: var(--td-list-muted);
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] .table-responsive + .text-center > div {
+  margin: 0 !important;
+}
+main [data-dw-itemtype="swift-v2_relatedproductslist"] .table-responsive + .text-center > .btn {
+  padding: 0;
+  border: 0;
+  background: none !important;
+  box-shadow: none !important;
+  color: var(--dw-color-foreground, currentColor) !important;
+  font-size: inherit;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+  text-decoration: underline;
+}
+
+/* 6. ON A PHONE A TABLE FITS ITS COLUMN. Swift's related table never wraps (text-nowrap), so
+ * it ran wider than the screen; here a cell wraps and the item number steps aside. */
+@media (max-width: 767.98px) {
+  main [data-dw-itemtype="swift-v2_relatedproductslist"] table { white-space: normal !important; }
+  main [data-dw-itemtype="swift-v2_relatedproductslist"] :is(.td-related__number, .td-related__number-head) { display: none; }
+}

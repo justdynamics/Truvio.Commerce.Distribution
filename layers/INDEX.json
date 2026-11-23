@@ -230,13 +230,13 @@
     {
       "name": "surface-swift",
       "kind": "surface",
-      "version": "1.19.5",
+      "version": "1.19.6",
       "status": "active"
     },
     {
       "name": "theme-default",
       "kind": "theme",
-      "version": "2.9.0",
+      "version": "2.10.0",
       "status": "active"
     }
   ],

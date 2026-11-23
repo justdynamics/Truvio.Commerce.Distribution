@@ -70,3 +70,33 @@ Describe 'surface-swift: the related-products row fixes stay in place' {
         $cond[0] | Should -Not -Match '!\s*product\.NeverOutOfstock'
     }
 }
+
+Describe 'surface-swift: the related row is a link, has no empty column and honours the price gate (1.19.6)' {
+
+    It 'the product name is a link to the product page' {
+        $script:text | Should -Match '<td class="td-related__name">\s*<a href="@product\.GetProductLink\(GetPageIdByNavigationTag\("Shop"\), false\)">'
+    }
+
+    It 'the Price and Qty headings and cells are emitted only when the gate lets them' {
+        $script:text | Should -Match '@if \(!hidePrice\)\s*\{\s*<th scope="col" class="text-end">@Translate\("Price"\)</th>'
+        $script:text | Should -Match '@if \(!hideAddToCart\)\s*\{\s*<th scope="col" style="width: @addToCartColWidth;">@Translate\("Qty"\)</th>'
+        $script:text | Should -Match '@if \(!hidePrice\)\s*\{\s*<td align="right" class="td-related__price">'
+        $script:text | Should -Match 'if \(!hideAddToCart\)\s*\{\s*<td align="right">\s*<form method="post"'
+        @([regex]::Matches($script:text, '<td align="right"')).Count | Should -Be 2 -Because 'one price cell and one cart cell, each inside its condition'
+    }
+
+    It 'a product without an image keeps its cell' {
+        $script:text | Should -Match 'else if \(!hideImage\)\s*\{\s*<td width="30"></td>'
+    }
+
+    It 'the data layer push leaves the price out when the gate hides it' {
+        $script:text | Should -Match "@if \(!hidePrice\)\s*\{\s*<text>currency: '@product\.Price\.CurrencyCode',\s*price: @product\.Price\.ToStringInvariant\(\),\s*discount: @product\.Discount\.ToStringInvariant\(\)</text>\s*\}"
+        @([regex]::Matches($script:text, 'price: @product\.Price\.ToStringInvariant\(\)')).Count | Should -Be 1
+    }
+
+    It 'RED CONTROL: the stock push and the stock name cell are flagged' {
+        $stock = "currency: '@product.Price.CurrencyCode',`r`nprice: @product.Price.ToStringInvariant(),`r`n<td>`r`n@product.Name`r`n</td>"
+        $stock | Should -Not -Match '@if \(!hidePrice\)\s*\{\s*<text>currency:'
+        $stock | Should -Not -Match 'td-related__name'
+    }
+}
