@@ -2258,6 +2258,9 @@ main [data-dw-itemtype="swift-v2_productcomponentselector"] section[data-swift-g
  *   6. BELOW lg THE ROW STACKS on the same grid: picture beside name and number, the
  *      description under them, stock and price on one line, the cart control across
  *      the foot.
+ *   7. ONE ROW HEIGHT. From lg up a row is as tall as a row with a two-line
+ *      description whatever its own description runs, and on a phone a description
+ *      holds its two lines.
  *
  * MEASURED AFTER, same site, same twelve rows:
  *   1440   every row 120px, signed in and out; every cell's start spread 0px
@@ -2265,6 +2268,8 @@ main [data-dw-itemtype="swift-v2_productcomponentselector"] section[data-swift-g
  *   576, 768, 992, 1024, 1200, 1366, 1920: no horizontal overflow, nothing outside
  *   its row, every start spread 0px. Below 1200 a long name takes its second line
  *   and that row is 144px.
+ * And on a second site, whose first twelve rows have one-line descriptions: 120px at
+ * 1440 and at 1366, the same as a row with two lines (7).
  *
  * THE TOKENS are the knobs a brand turns, in brand.css: --td-list-border,
  * --td-list-pad, --td-list-gap, --td-list-thumb, --td-list-stock, --td-list-price,
@@ -2445,6 +2450,16 @@ main [data-dw-itemtype="swift-v2_productcomponentselector"] section[data-swift-g
   white-space: nowrap;
 }
 
+/* From lg up every row is the height of a row with a two-line description (the name, the
+ * number and two lines are 5.375rem), whether its own description runs one line, two or
+ * none. Without the floor a one-line row was 114px beside a 120px neighbour, and 100px
+ * beside 120px in the laptop band, where the picture is smaller. */
+@media (min-width: 992px) {
+  .product-list article.product section > [data-swift-container] {
+    min-height: calc(5.375rem + 2 * var(--td-list-pad));
+  }
+}
+
 /* The laptop band. Between 992 and 1400 the page container keeps wide side margins, so the
  * row is narrower than on a phone held sideways would suggest. The columns give width back
  * to the text: a smaller picture and tighter stock and price columns up to 1400, and below
@@ -2498,6 +2513,9 @@ main [data-dw-itemtype="swift-v2_productcomponentselector"] section[data-swift-g
   .product-list article.product [data-dw-itemtype="swift-v2_productnumber"],
   .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] { align-self: start; }
   .product-list article.product [data-dw-itemtype="swift-v2_productdefaultimage"] img { width: 100%; height: 100%; object-fit: contain; }
+  /* A description holds its two lines, so the stock and price line starts at the same
+   * place on a card whose description is one line. */
+  .product-list article.product [data-dw-itemtype="swift-v2_productshortdescription"] .item_swift-v2_productshortdescription { min-height: 2.5rem; }
   .product-list article.product [data-dw-itemtype="swift-v2_productstock"],
   .product-list article.product [data-dw-itemtype="swift-v2_productprice"] { align-self: center; padding-top: .25rem; }
   .product-list article.product [data-dw-itemtype="swift-v2_productaddtocart"] { justify-self: end; padding-top: .5rem; }
