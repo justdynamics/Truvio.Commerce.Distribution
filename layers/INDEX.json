@@ -35,41 +35,41 @@
       "ruling": "std-q31-gateproven-from-record"
     },
     "editions": {
-      "dap-portal": "20261122-142556",
-      "headless-demo": "20261122-143949",
-      "swift-demo": "20261122-141129"
+      "dap-portal": "20261122-233429",
+      "headless-demo": "20261122-234830",
+      "swift-demo": "20261122-231645"
     },
     "releases": {
       "dap-portal": {
         "tag": "editions/dap-portal/2.5.0",
-        "runId": "20261122-142556",
+        "runId": "20261122-233429",
         "host": "foundry-dap.mydwsite4.com",
-        "ts": "2026-11-22T14:37:53Z",
-        "resultsDigest": "sha256:107a74c21b6c31dfd3731dfb85951ae9d81798c946258568ca2eeb63f46c35f7",
+        "ts": "2026-11-22T23:46:41Z",
+        "resultsDigest": "sha256:3998ce94f1bfccd4e613cef187496134e0c3cd2654a4f64a064126e1cd7d36f3",
         "legacy": false
       },
       "headless-demo": {
         "tag": "editions/headless-demo/3.4.0",
-        "runId": "20261122-143949",
+        "runId": "20261122-234830",
         "host": "foundry-blank-dw10-iteration",
-        "ts": "2026-11-22T14:51:14Z",
-        "resultsDigest": "sha256:42b83e3c6b15bfe26c69f23d5d897b1dbef18e1d07e6c3c016509f5f6d734624",
+        "ts": "2026-11-22T23:59:42Z",
+        "resultsDigest": "sha256:fbfd3e75c68fff68b092118d8a118c1d9d33fc06cce6d5ecc37cd31ec2a712f6",
         "legacy": false
       },
       "swift-demo": {
         "tag": "editions/swift-demo/5.5.0",
-        "runId": "20261122-141129",
+        "runId": "20261122-231645",
         "host": "foundry.mydwsite4.com",
-        "ts": "2026-11-22T14:23:51Z",
-        "resultsDigest": "sha256:7113a89c5a862aa4cee84d93b313ddc0ce44cac39c4e59bbbdc20ea1e15fc74e",
+        "ts": "2026-11-22T23:32:18Z",
+        "resultsDigest": "sha256:803e8c389f743b587b81040f3ce0c7c6720cf6fd41ba887cd9e83b61033405a5",
         "legacy": false
       }
     },
     "proofs": {
       "dap-portal": {
-        "runId": "20261122-142556",
+        "runId": "20261122-233429",
         "release": "editions/dap-portal/2.5.0",
-        "distributionCommit": "cac416cdce5679a18dc597c2b0c776616c6f5787",
+        "distributionCommit": "6af29e18e49a1fa920a56236b42b360df97fca5a",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -91,9 +91,9 @@
         }
       },
       "headless-demo": {
-        "runId": "20261122-143949",
+        "runId": "20261122-234830",
         "release": "editions/headless-demo/3.4.0",
-        "distributionCommit": "cac416cdce5679a18dc597c2b0c776616c6f5787",
+        "distributionCommit": "6af29e18e49a1fa920a56236b42b360df97fca5a",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -111,9 +111,9 @@
         }
       },
       "swift-demo": {
-        "runId": "20261122-141129",
+        "runId": "20261122-231645",
         "release": "editions/swift-demo/5.5.0",
-        "distributionCommit": "cac416cdce5679a18dc597c2b0c776616c6f5787",
+        "distributionCommit": "6af29e18e49a1fa920a56236b42b360df97fca5a",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
