@@ -24,14 +24,22 @@
 	set by the product-list render grid. BOTH contexts carry the anchor, because a
 	stated gate with no way past it is the worst of the three states: the listing is the
 	surface a buyer scans, and it was the one place on the site that named the
-	restriction and then offered nothing to do about it. The two contexts differ only in
-	SHAPE - td-price-lock--pdp is the detail modifier and stacks the anchor under the
-	label on its own line, while the list instance stays a chip and wraps - and the href
-	is the same resolver in both.
+	restriction and then offered nothing to do about it. The href is the same resolver
+	in both. The SHAPE differs:
+	  - the detail page (td-price-lock--pdp) keeps the padlock, the label and the anchor
+	    as a button. Signed out, signing in is that page's one action;
+	  - the list (td-price-lock--list) is a plain text link in the price cell and
+	    nothing else (owner ruling of 2026-11-23, Foundry #1765: one notice above the
+	    list and a quiet link per row). A tinted chip with a label and a pill on each of
+	    twelve rows read as twelve calls to action. The link carries the notice's words
+	    in three data attributes, and default_custom.js places ONE notice above the
+	    list from the first of them. The words are here, not in the script, so they go
+	    through the translation table like every other string. With the script off the
+	    row link still works and nothing is lost but the notice.
 
 	THE COPY IS GENERIC on purpose. "Account price" describes what any B2B area gates;
 	a distribution ships no customer's word for its own buyers. A re-skin changes the
-	two strings through the translation table, not by editing this file.
+	strings through the translation table, not by editing this file.
 
 	THE SIGN-IN HREF is resolved the way Swift resolves it everywhere else -
 	Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")
@@ -104,14 +112,30 @@
 	int signInPageId = Services.Pages.GetFirstModulePageForArea(Pageview.AreaID, "UserAuthentication")?.ID ?? 0;
 	string signInUrl = signInPageId != 0 ? Dynamicweb.Frontend.SearchEngineFriendlyURLs.GetFriendlyUrl(signInPageId) : string.Empty;
 
-	<div class="td-price-lock@(inProductList ? "" : " td-price-lock--pdp")" data-td-price-lock="1">
-		<svg class="td-price-lock__icon" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M17 9V7a5 5 0 0 0-10 0v2H5v13h14V9h-2Zm-8-2a3 3 0 0 1 6 0v2H9V7Z"/></svg>
-		<span class="td-price-lock__label">@Translate("Account price")</span>
-		@if (!string.IsNullOrEmpty(signInUrl))
-		{
-			<a href="@signInUrl" class="td-price-lock__action btn btn-sm btn-outline-primary" data-dw-button="outline">@Translate("Sign in for account pricing")</a>
-		}
-	</div>
+	if (inProductList)
+	{
+		<div class="td-price-lock td-price-lock--list" data-td-price-lock="1" data-td-price-notice="@Translate("Sign in to see your account prices.")" data-td-price-notice-action="@Translate("Sign in")" data-td-price-notice-href="@signInUrl">
+			@if (!string.IsNullOrEmpty(signInUrl))
+			{
+				<a href="@signInUrl" class="td-price-lock__link">@Translate("Sign in for price")</a>
+			}
+			else
+			{
+				<span class="td-price-lock__label">@Translate("Account price")</span>
+			}
+		</div>
+	}
+	else
+	{
+		<div class="td-price-lock td-price-lock--pdp" data-td-price-lock="1">
+			<svg class="td-price-lock__icon" width="12" height="12" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M17 9V7a5 5 0 0 0-10 0v2H5v13h14V9h-2Zm-8-2a3 3 0 0 1 6 0v2H9V7Z"/></svg>
+			<span class="td-price-lock__label">@Translate("Account price")</span>
+			@if (!string.IsNullOrEmpty(signInUrl))
+			{
+				<a href="@signInUrl" class="td-price-lock__action btn btn-sm btn-outline-primary" data-dw-button="outline">@Translate("Sign in for account pricing")</a>
+			}
+		</div>
+	}
 }
 
 @if (product is object && !hidePrice && !isDiscontinued && priceType != "fixedprice") {

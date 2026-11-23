@@ -122,8 +122,85 @@
         });
     }
 
+    /* ----------------------------------------------------------------------
+     * THE PRICE NOTICE. One line above a product list whose prices are hidden
+     * from this visitor, instead of a call to action on every row (owner ruling
+     * of 2026-11-23, Foundry #1765).
+     *
+     * The price template (Paragraph/Swift-v2_ProductPrice/PriceWithSignIn.cshtml)
+     * renders a plain link in each row's price cell and carries the notice's
+     * words, the action's label and the sign-in address in three data
+     * attributes. This reads them from the first row and places one
+     * <p class="td-price-notice"> in front of the list. Every word comes from
+     * the template, so it went through the translation table: nothing is
+     * written here that the server did not send.
+     *
+     * ONE per page: the first list that carries a lock gets it. "Load more"
+     * adds its rows as a further .product-list element, and a notice in front of
+     * each would be a second and a third notice down the page. A list whose
+     * rows carry no lock gets none, and a notice whose list lost its locks (the
+     * list re-rendered for a visitor who has signed in) is removed. The
+     * observer is there because Swift replaces the list's rows on a facet, a
+     * sort and a paging step; it watches for element changes under <main> only
+     * and does its work at most once per frame.
+     * -------------------------------------------------------------------- */
+    function priceNotice() {
+        var lists = document.querySelectorAll(".product-list");
+        var served = false;
+        Array.prototype.forEach.call(lists, function (list) {
+            var previous = list.previousElementSibling;
+            var placed = previous && previous.classList && previous.classList.contains("td-price-notice") ? previous : null;
+            var lock = list.querySelector("[data-td-price-notice]");
+            var words = lock ? lock.getAttribute("data-td-price-notice") : "";
+
+            if (!words || served) {
+                if (placed) { placed.parentNode.removeChild(placed); }
+                return;
+            }
+            served = true;
+            if (placed || !list.parentNode) { return; }
+
+            var note = document.createElement("p");
+            note.className = "td-price-notice";
+
+            var text = document.createElement("span");
+            text.className = "td-price-notice__text";
+            text.textContent = words;
+            note.appendChild(text);
+
+            var href = lock.getAttribute("data-td-price-notice-href");
+            var label = lock.getAttribute("data-td-price-notice-action");
+            if (href && label) {
+                var action = document.createElement("a");
+                action.className = "td-price-notice__action";
+                action.href = href;
+                action.textContent = label;
+                note.appendChild(action);
+            }
+
+            list.parentNode.insertBefore(note, list);
+        });
+    }
+
+    function watchLists() {
+        var main = document.querySelector("main");
+        if (!main || !window.MutationObserver || !document.querySelector(".product-list")) { return; }
+
+        var queued = false;
+        new MutationObserver(function () {
+            if (queued) { return; }
+            queued = true;
+            window.requestAnimationFrame(function () {
+                queued = false;
+                priceNotice();
+            });
+        }).observe(main, { childList: true, subtree: true });
+    }
+
     function run() {
         anchorStrip();
+        priceNotice();
+        watchLists();
     }
 
     if (document.readyState === "loading") {
