@@ -26,10 +26,10 @@
         {
           "tag": "editions/dap-portal/2.5.0",
           "proven": {
-            "ts": "2026-11-22T14:37:53+00:00",
-            "runId": "20261122-142556",
+            "ts": "2026-11-22T23:46:41+00:00",
+            "runId": "20261122-233429",
             "host": "foundry-dap.mydwsite4.com",
-            "resultsDigest": "sha256:107a74c21b6c31dfd3731dfb85951ae9d81798c946258568ca2eeb63f46c35f7"
+            "resultsDigest": "sha256:3998ce94f1bfccd4e613cef187496134e0c3cd2654a4f64a064126e1cd7d36f3"
           },
           "legacy": null,
           "confirmed": null
@@ -72,10 +72,10 @@
         {
           "tag": "editions/headless-demo/3.4.0",
           "proven": {
-            "ts": "2026-11-22T14:51:14+00:00",
-            "runId": "20261122-143949",
+            "ts": "2026-11-22T23:59:42+00:00",
+            "runId": "20261122-234830",
             "host": "foundry-blank-dw10-iteration",
-            "resultsDigest": "sha256:42b83e3c6b15bfe26c69f23d5d897b1dbef18e1d07e6c3c016509f5f6d734624"
+            "resultsDigest": "sha256:fbfd3e75c68fff68b092118d8a118c1d9d33fc06cce6d5ecc37cd31ec2a712f6"
           },
           "legacy": null,
           "confirmed": null
@@ -103,10 +103,10 @@
         {
           "tag": "editions/swift-demo/5.5.0",
           "proven": {
-            "ts": "2026-11-22T14:23:51+00:00",
-            "runId": "20261122-141129",
+            "ts": "2026-11-22T23:32:18+00:00",
+            "runId": "20261122-231645",
             "host": "foundry.mydwsite4.com",
-            "resultsDigest": "sha256:7113a89c5a862aa4cee84d93b313ddc0ce44cac39c4e59bbbdc20ea1e15fc74e"
+            "resultsDigest": "sha256:803e8c389f743b587b81040f3ce0c7c6720cf6fd41ba887cd9e83b61033405a5"
           },
           "legacy": null,
           "confirmed": null
