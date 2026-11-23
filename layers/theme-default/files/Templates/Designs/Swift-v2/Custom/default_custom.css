@@ -2305,6 +2305,12 @@ main [data-dw-itemtype="swift-v2_productcomponentselector"] section[data-swift-g
   outline: 2px solid var(--td-accent);
   outline-offset: 2px;
 }
+/* "Load more" adds its rows as a further .product-list element, and Swift's grid carries a
+ * 16px bottom padding (.pb-3). Between two lists that is a 16px seam among 8px gaps, which
+ * a border makes visible. The padding of a list that is followed by another is the row gap. */
+.product-list:has(+ .product-list) > .grid {
+  padding-bottom: .5rem !important;
+}
 
 /* One grid, the same in every row. The cells are placed by name, so a cell that is
  * empty or absent leaves its column where it is. */
