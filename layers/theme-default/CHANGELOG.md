@@ -7,8 +7,8 @@ notice with a plain link per row.** Justin, on a list built from a customer's da
 too dense, this is a layer issue and must be fixed there so every demo gets a really good looking
 PLP and PDP", and "we added light borders to the PLP at one point but they are gone again". The
 border had been ruled on 2026-10-08 (register `plp-row-border-1479`, option B) and never built. The
-plan is Foundry #1765; this release is its steps 1 and 2. It also closes the product list item of
-Foundry #1720.
+plan is Foundry #1765; this release is its steps 1 and 2. It also closes both theme items of
+Foundry #1720: the product list columns and the phone header when signed in.
 
 **The row** (`default_custom.css` block #37):
 
@@ -61,9 +61,16 @@ column start spread 0 px, signed in and out. Below 1200 a long name takes its se
 row is 144 px. The row link opens the sign-in page, a click anywhere else on the row opens the
 product, and one notice stands after "load more", a sort and a facet.
 
+**The phone header, signed in** (`default_custom.css` block #38, Foundry #1720): one row. Block #28
+capped the signed-in name in Swift's account dropdown; a phone is served the offcanvas variant,
+whose name nothing capped, so the account cell wrapped to a second header row. Below 768 that name
+takes the same cap, and below 480 it is not shown in either variant: the initials are the control
+and the full name reads in the panel. Measured at 390, signed in: 138 px on two rows, then 92 px on
+one.
+
 Not in this release: the product page beyond its signed-out price line (Foundry #1765 steps 3 and
-4), attributes in place of the description (step 5), a worded stock state for a product with no
-stock row, and the two-row header on a phone when signed in (Foundry #1720).
+4), attributes in place of the description (step 5), and a worded stock state for a product with no
+stock row.
 
 ## 2.8.1 (2026-11-22)
 

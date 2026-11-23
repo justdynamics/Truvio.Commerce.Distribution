@@ -2516,3 +2516,40 @@ main [data-dw-itemtype="swift-v2_productcomponentselector"] section[data-swift-g
   .product-list article.product [data-dw-itemtype="swift-v2_productaddtocart"] form > .d-flex { flex-wrap: nowrap !important; }
   .product-list article.product [data-dw-itemtype="swift-v2_productaddtocart"] .js-add-to-cart-button { flex: 1 1 auto; }
 }
+
+/* =============================================================================
+ * #38 THE SIGNED-IN PHONE HEADER IS ONE ROW (Foundry #1720)
+ *
+ * Block #28 capped the signed-in name inside Swift's account DROPDOWN
+ * ([id^="SignInDropdown_"]). The header a phone is served carries the OFFCANVAS
+ * variant instead: a button.nav-link.hstack whose [data-swift-avatar-mini-image]
+ * holds the initials and a span.text-nowrap with the full name. Nothing capped
+ * that one, so a name of ordinary length made the account cell 143px, the line no
+ * longer fitted in 358, and the account cell wrapped to a second header row,
+ * signed in only (HEADER-02, mobile, authenticated: "WRAPPED to 2 rows").
+ *
+ * Below 768 the name in that variant takes block #28's cap and its ellipsis. Below
+ * 480 the name is not shown in either variant: the initials are the account
+ * control, the button keeps its accessible name, and the full name reads in the
+ * panel it opens.
+ *
+ * MEASURED at 390, signed in: the header was 138px on two rows (menu, logo and cart,
+ * then the account cell on its own) and is 92px on one (menu 22, logo 140, cart 74,
+ * account 48). Signed out it was and is one row.
+ * ========================================================================== */
+[data-td-block="38"] { --td-block: 38; }
+
+@media (max-width: 767.98px) {
+  [data-swift-page-header] [data-swift-avatar-mini-image] .text-nowrap {
+    min-width: 0;
+    max-width: 6.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+@media (max-width: 479.98px) {
+  [data-swift-page-header] [data-swift-avatar-mini-image] .text-nowrap,
+  [data-swift-page-header] [id^="SignInDropdown_"] .text-nowrap {
+    display: none;
+  }
+}
