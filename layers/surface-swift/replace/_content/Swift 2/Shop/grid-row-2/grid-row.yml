@@ -3,6 +3,8 @@
 "definitionId": "1Column"
 "itemType": "Swift-v2_Row"
 "container": "Grid"
+"topSpacing": 0
+"bottomSpacing": 0
 "verticalAlignment": "None"
 "fields":
   "Id": "50"

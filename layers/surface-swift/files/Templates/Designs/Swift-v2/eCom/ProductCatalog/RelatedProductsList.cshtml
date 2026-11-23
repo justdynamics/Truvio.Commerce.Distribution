@@ -43,6 +43,25 @@
 	NeverOutOfstock too. And an SVG default image is linked as the file itself, sized by
 	attributes, because GetImage.ashx answers HTTP 500 when asked to resize an SVG to webp.
 	Raster images keep the stock GetImage URL.
+
+	THE ROW AS A LINK, AND NO EMPTY COLUMNS (surface-swift 1.19.6, Foundry #1765). Four more
+	edits, each a few tab-indented lines:
+	  - The product's name is a link to its page. Stock prints the name as text, so a visitor
+	    could not open a related product from the list at all.
+	  - The Price and Qty columns are emitted, heading and cell together, only for a visitor who
+	    may see a price or use the cart. The cells used to stay, empty, under their headings;
+	    with the heading row conditional too, no column shifts.
+	  - A product without an image keeps its cell. Stock drops the cell, and every later column
+	    of that row moves one to the left of its heading.
+	  - The number and name cells, the number's heading and the price cell carry a class
+	    (td-related__number, td-related__number-head, td-related__name, td-related__price), so
+	    the theme styles a column by what it holds and not by its position. The thumbnail is
+	    asked for at 80 px instead of 30, for a 40 px slot on a dense screen.
+
+	THE DATA LAYER HONOURS THE GATE TOO (Foundry #1773). The view_item_list push sent currency,
+	price and discount for every related product to every visitor, so the figures the lock
+	withholds were in the page's source and in window.dataLayer of a signed-out browser. With
+	the gate on they are left out; the item's id and name still go.
 *@
 
 @functions{
@@ -378,9 +397,12 @@
 									{
 										<text>item_variant: '@Dynamicweb.Core.Encoders.HtmlEncoder.JavaScriptStringEncode(product.VariantName)',</text>
 									}
-									currency: '@product.Price.CurrencyCode',
-									price: @product.Price.ToStringInvariant(),
-									discount: @product.Discount.ToStringInvariant()
+									@if (!hidePrice)
+									{
+										<text>currency: '@product.Price.CurrencyCode',
+										price: @product.Price.ToStringInvariant(),
+										discount: @product.Discount.ToStringInvariant()</text>
+									}
 								},</text>
 							}
 						]
@@ -397,7 +419,7 @@
 						}
 						@if (!hideProductNumber)
 						{
-							<th scope="col">#</th>
+							<th scope="col" class="td-related__number-head">#</th>
 						}
 						@if (!hideProductName)
 						{
@@ -413,8 +435,15 @@
 							<th scope="col">@Translate("Stock")</th>
 						}
 
-						<th scope="col" class="text-end">@Translate("Price")</th>
-						<th scope="col" style="width: @addToCartColWidth;">@Translate("Qty")</th>					</tr>
+						@if (!hidePrice)
+						{
+							<th scope="col" class="text-end">@Translate("Price")</th>
+						}
+						@if (!hideAddToCart)
+						{
+							<th scope="col" style="width: @addToCartColWidth;">@Translate("Qty")</th>
+						}
+					</tr>
 				</thead>
 
 				<tbody>
@@ -422,7 +451,7 @@
 					{
 						string? image = product.DefaultImage?.Value;
 						bool imageIsSvg = !string.IsNullOrEmpty(image) && image.EndsWith(".svg", StringComparison.OrdinalIgnoreCase);
-						image = !string.IsNullOrEmpty(image) ? (imageIsSvg ? image : $"/Admin/Public/GetImage.ashx?image={image}&width=30&format=webp") : null;
+						image = !string.IsNullOrEmpty(image) ? (imageIsSvg ? image : $"/Admin/Public/GetImage.ashx?image={image}&width=80&format=webp") : null;
 						List<CategoryFieldViewModel> categories = new List<CategoryFieldViewModel>();
 						foreach (var selection in selectedDisplayGroupsList)
 						{
@@ -439,24 +468,30 @@
 							@if (!hideImage && image != null)
 							{
 								<td width="30">
-									@if (imageIsSvg) { <img src="@image" width="30" height="30" style="max-width:none" alt=""> } else { <img src="@image"> }
+									@if (imageIsSvg) { <img src="@image" width="30" height="30" style="max-width:none" alt=""> } else { <img src="@image" width="40" alt=""> }
 								</td>
+							}
+							else if (!hideImage)
+							{
+								<td width="30"></td>
 							}
 							@if (!hideProductNumber)
 							{
-								<td>@product.Number</td>
+								<td class="td-related__number">@product.Number</td>
 							}
 							@if (!hideProductName)
 							{
-								<td>
+								<td class="td-related__name">
+									<a href="@product.GetProductLink(GetPageIdByNavigationTag("Shop"), false)">
 									@if (!string.IsNullOrEmpty(product.VariantName))
 									{
-										<div>@product.Name - @product.VariantName</div>
+										<span>@product.Name - @product.VariantName</span>
 									}
 									else
 									{
 										@product.Name
 									}
+									</a>
 								</td>
 							}
 							@foreach (string fieldCell in fieldsHeaders)
@@ -593,9 +628,9 @@
 								</td>
 							}
 
-							<td align="right">
-								@if (!hidePrice)
-								{
+							@if (!hidePrice)
+							{
+							<td align="right" class="td-related__price">
 								<div itemprop="offers" itemscope itemtype="https://schema.org/Offer">
 									<span itemprop="priceCurrency" content="@product.Price.CurrencyCode" class="d-none"></span>
 									<span itemprop="price" content="@product.Price.Price" class="d-none"></span>
@@ -612,8 +647,8 @@
 								@if (product.Price.TryGetVatLabel(out string vatLabel)) {
 									<small class="opacity-85 fst-normal order-3">@Translate(vatLabel)</small>
 								}
-								}
 							</td>
+							}
 
 							@{
 								bool isStockType = product.ProductType == Dynamicweb.Ecommerce.Products.ProductType.Stock;
@@ -630,9 +665,9 @@
 									maxQty = product.StockLevel;
 								}
 
+								if (!hideAddToCart)
+								{
 								<td align="right">
-									@if (!hideAddToCart)
-									{
 									<form method="post" action="@url">
 										@if (!string.IsNullOrEmpty(contextCart))
 										{
@@ -721,8 +756,8 @@
 											</template>
 										}
 									</form>
-									}
 								</td>
+								}
 							}
 						</tr>
 					}

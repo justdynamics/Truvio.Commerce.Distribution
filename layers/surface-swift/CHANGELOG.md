@@ -1,5 +1,49 @@
 ﻿# Changelog — surface-swift
 
+## 1.19.6 (2026-11-23)
+
+**PATCH. The product page's own settings, and the related products row as a link.** Steps 3 and 4 of
+the list and product page plan (Foundry #1765); theme-default 2.10.0 carries the styling beside it.
+What an editor can see as a setting is changed here as a setting, not overridden in the theme.
+
+Four content settings:
+
+- **The product's name is `FontSize: h3`** (`Product Components/Product Info (right side)`, the
+  `Swift-v2_ProductHeader` paragraph; it was `h5`). The name was 19 to 20 px under section headings
+  of 33 to 39 px. It is now the third step of the brand's type scale (27.6 px on the sample scale,
+  31.25 px on a 1.25 scale); the theme sets the section headings at the fourth.
+- **Related products: `PageSize: 6`** (was 10) on the product page's `Swift-v2_RelatedProductsList`.
+- **No band inside the related list.** The service page the list is fetched from
+  (`Service Pages/Related products list`) had a row with the default spacing, 96 px above and below
+  the table inside the product page's own row. `topSpacing` and `bottomSpacing` are 0.
+- **The empty row at the foot of the Shop page takes no room** (`Shop/grid-row-2`, `topSpacing` and
+  `bottomSpacing` 0). It painted 232 px of nothing above the footer of every list and product page;
+  it now paints 40.
+
+`eCom/ProductCatalog/RelatedProductsList.cshtml` (already an override), five small edits:
+
+- **The name is a link** to the product's page (`GetProductLink(GetPageIdByNavigationTag("Shop"))`,
+  the idiom of `ExpressBuySearchResponse.cshtml`). Stock prints the name as text, so a related
+  product could not be opened from the list.
+- **Price and Qty are columns only for a visitor who may see a price or use the cart.** Heading and
+  cell are emitted together. 1.19.x kept the two cells, empty, under their headings.
+- **A product without an image keeps its cell.** Stock drops it and every later column of that row
+  moves one to the left of its heading.
+- **Class hooks** on the number and name cells, the number's heading and the price cell
+  (`td-related__number`, `td-related__number-head`, `td-related__name`, `td-related__price`), so
+  the theme styles a column by what it holds. The thumbnail is asked for at 80 px for a 40 px slot.
+- **The data layer honours the price gate** (Foundry #1773). The `view_item_list` push sent
+  `currency`, `price` and `discount` for every related product to every visitor. With the gate on
+  they are left out. Measured signed out on a product page with ten related products: 10 of 10
+  items carried a price above zero before, 0 of 10 after; signed in it is unchanged. The list page
+  and the product's own `view_item` push are stock templates this layer does not override; #1773
+  tracks them.
+
+`tools/ci/tests/SurfaceSwiftRelatedProducts.Tests.ps1` keeps the link, the conditional columns, the
+image cell and the gated push in place across a re-base. Editions base-swift, cpq-demo and swift-demo
+re-pinned; INDEX.json, LAYERS.md and the feature-cpq README follow. Edition release versions are
+unchanged. A host on 1.19.5 needs a surface-swift Replace and the `files/` overlay restaged.
+
 ## 1.19.5 (2026-11-15)
 
 **PATCH. Two row fixes in the related-products list** (`eCom/ProductCatalog/RelatedProductsList.cshtml`,
