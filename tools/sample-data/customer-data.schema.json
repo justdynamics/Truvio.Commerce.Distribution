@@ -782,7 +782,7 @@
         "logo",
         "images"
       ],
-      "description": "The storefront copy the layer carries (Home, About, header, footer, PDP, the asset portal header and footer). Named slots overwrite their field; everywhere else the brand name, the e-mail domain, the phone number and the image paths are substituted.",
+      "description": "The storefront copy the layer carries (Home, About, header, footer, PDP, the asset portal header and footer). Named slots overwrite their field; a slot left out gets a plain default. The copy fields that state a figure or a capability (stat tiles, feature tiles, navigation promos, the PDP Features and FAQ) are written by the generator from the other sections, never kept from the sample. Everywhere else the brand name, the e-mail domain, the phone number and the image paths are substituted.",
       "properties": {
         "companyName": {
           "type": "string",

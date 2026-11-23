@@ -49,6 +49,22 @@ inventories are rewritten from the tree: merge-manifest.json files[], the predic
 layer.json fragmentTables, files[], configRows and costHints.expectedRows, and the edition counts
 are printed for the demo's edition.
 
+STOREFRONT COPY. brandCopy fills the Home hero, About, the header and the footer; what it leaves out gets a
+plain default (the company name, the product count and the top groups). Every other copy field that states a
+figure or a capability of the sample catalogue (Foundry #1753) is written from the file: the Home and About stat
+tiles count products, product groups, top groups, customer prices, relations or documents under a label that is
+true for the number; the Home feature tiles, the About tiles, the navigation promos and the product page Features
+and FAQ name a capability (quantity prices, customer prices, documents, relations, quotes, favourite lists) only
+when the copy carries it. No paragraph is dropped. The report lists the figures (copyFigures) and every copy field
+that still names a capability the copy does not carry or a sample-only fact (residualSampleClaims, empty when the
+source layer matches the slots). Paragraph headers, the admin labels of paragraphs, keep the sample's words.
+
+FACET NAMES (Foundry #1754). The storefront facet file another layer ships (surface-swift
+repositories/TruvioCommerce/Products.facets) names the four category facets the sample's way. The copy carries that
+file, declared in layer.json repositories[], with the Name of each facet a top group's spec field fills set to that
+field's label; Field, QueryParameter and every other byte stay as the Distribution ships them. A layer of kind
+sample-data composes after the surfaces, so its file is the one the host serves; the delivery reports the override.
+
 KEYS AND IDS FOR ROWS BEYOND THE SAMPLE'S COUNT.
   products       TCPROD0002..TCPROD0061 in input order, skipping the ids a layer probe names in
                  requiresFixtures (TCPROD0001 by its number TC-VAR-0001, 0003, 0020, 0042, 0046,
@@ -410,6 +426,48 @@ def replace_inner_html(old, text):
     if m:
         return m.group(1) + html_escape(text) + '</%s>' % m.group(2)
     return html_escape(text)
+
+
+def replace_texts(old, texts):
+    """Swap the text runs of a copy field in order, keeping every tag: '<h4>96</h4><p>Old</p>' with ['12', 'New']
+    -> '<h4>12</h4><p>New</p>'. None when the field carries another number of text runs (it changed upstream)."""
+    runs = list(re.finditer(r'>([^<]+)<', old))
+    if len(runs) != len(texts):
+        return None
+    out = old
+    for m, t in reversed(list(zip(runs, texts))):
+        out = out[:m.start(1)] + html_escape(str(t)) + out[m.end(1):]
+    return out
+
+
+def and_join(items):
+    items = list(items)
+    return items[0] if len(items) == 1 else ', '.join(items[:-1]) + ' and ' + items[-1]
+
+
+def plural(n, one, many):
+    return one if n == 1 else many
+
+
+def xml_attr(s):
+    return html_escape(s).replace('"', '&quot;')
+
+
+# Words in a storefront copy field that state a capability. Each one is checked when the copy no longer provides
+# the ledger function (layer.json ledger.provides) it names; ALWAYS_SAMPLE_CLAIMS are facts of the sample
+# catalogue no copy carries (revised documents, install guides, a never-out-of-stock row, its capability count).
+CLAIM_WORDS = {
+    'pim.variants': r'(?i)\bvariants?\b|product masters?|\bevery master\b',
+    'pim.bom': r'(?i)bill of materials|\bBOM\b',
+    'pim.assortments': r'(?i)\bassortments?\b',
+    'pim.documents': r'(?i)\bdocuments?\b|datasheet',
+    'pim.product-relations': r'(?i)related products|product relations?|\baccessories\b|spare parts',
+    'commerce.quantity-prices': r'(?i)quantity (?:prices?|breaks?)|price breaks?',
+    'commerce.customer-prices': r'(?i)contract pric|customer-group pric',
+    'orders.quotes': r'(?i)\bquotes?\b',
+    'orders.favorite-lists': r'(?i)\bfavou?rites?\b',
+}
+ALWAYS_SAMPLE_CLAIMS = r'(?i)\brevisions?\b|install guide|never out of stock|expected-delivery|twelve capabilities|building blocks'
 
 
 def sql_where(where):
@@ -931,7 +989,9 @@ class Generator:
                                 % (section, seen[key], section, i, p['product'], ' for account %s' % p['account'] if p.get('account') else '', key[2]))
                 seen.setdefault(key, i)
         # listPrices restates the product's own price for the recipes. catalogue.products[].listPrice is what the copy
-        # writes (ProductPrice and the list price row); a product named in both carries one amount.
+        # writes (ProductPrice and the list price row); a product named in both carries one amount. A product listPrices
+        # does not name is priced the same, from its listPrice, so it is not reported: a session completing listPrices
+        # for that warning changed nothing in the copy (Foundry #1753).
         named = {}
         for i, lp in enumerate(pr.get('listPrices') or []):
             p = self.product_by_number.get(lp['product'])
@@ -944,10 +1004,6 @@ class Generator:
             elif abs(float(lp['amount']) - float(p['listPrice'])) > 1e-9:
                 self.refuse('prices.listPrices[%d]: product %s at %s, but catalogue.products %s has listPrice %s. Both are the product\'s own price; make them equal.'
                             % (i, lp['product'], fmt_number(lp['amount']), lp['product'], fmt_number(p['listPrice'])))
-        if pr.get('listPrices') is not None:
-            unnamed = sorted({p['product'] for s in ('tiers', 'groupPrices', 'contracts') for p in pr.get(s) or []} - set(named))
-            if unnamed:
-                self.warnings.append('prices.listPrices does not name %s, which other price rows name; the commerce.customer-prices recipe expects every priced product in it.' % ', '.join(unnamed))
         # groupPrices reach one user group: customerGroup when named (an account of users.accounts), else every signed-in customer
         self.price_group = None
         cg = pr.get('customerGroup')
@@ -1699,6 +1755,133 @@ class Generator:
                         rows[n].set_raw(col, str(uuid.uuid5(UUID_NS, '%s/%s/%s' % (table, n, col))))
 
     # ----------------------------------------------------------------- storefront copy
+    def copy_facts(self):
+        """What the copy carries, counted from the input: the figures and the conditions the storefront copy states."""
+        pr, h = self.inp['prices'], self.inp['history']
+        return {
+            'products': len(self.products), 'groups': len(self.groups), 'topGroups': len(self.tops),
+            'groupPrices': len(pr.get('groupPrices') or []), 'contracts': len(pr.get('contracts') or []),
+            'tiers': len(pr.get('tiers') or []),
+            'relations': sum(len(refs) for p in self.products for refs in (p.get('related') or {}).values()),
+            'documents': sum(len(p.get('documents') or []) for p in self.products),
+            'specs': sum(1 for p in self.products if p.get('specs')),
+            'orders': len(h.get('orders') or []), 'quotes': len(h.get('quotes') or []), 'favourites': len(h.get('favourites') or []),
+        }
+
+    def fact_slots(self, f, email, phone):
+        """The storefront copy fields that state a figure or a capability of the catalogue (Foundry #1753). The sample's
+        words there are facts of the Truvio sample catalogue (60 product masters, 36 variant combinations, variant
+        selectors, revised documents); every copy writes them from the input instead: a figure is counted from the
+        file under a label that is true for it, and a capability is named only when the copy carries it. No paragraph
+        is dropped, so every grid keeps its columns."""
+        H, A = 'merge/_content/Swift 2/Home/', 'merge/_content/Swift 2/About/'
+        N, S = 'replace/_content/Swift 2/Navigation/', 'replace/_content/Swift 2/Shop/Product Details/'
+        D = 'merge/_content/Swift 2/Navigation/Footer Navigation/Help and info/Delivery/'
+        c = self.company
+        e = html_escape
+        customer = f['groupPrices'] + f['contracts']
+        # figures: (number, label), each counted from the input
+        home_third = (customer, plural(customer, 'Customer price', 'Customer prices')) if customer else \
+            (f['topGroups'], plural(f['topGroups'], 'Top-level group', 'Top-level groups'))
+        if f['groupPrices']:
+            about_second = (f['groupPrices'], plural(f['groupPrices'], 'Customer-group price', 'Customer-group prices'))
+        elif f['contracts']:
+            about_second = (f['contracts'], plural(f['contracts'], 'Contract price', 'Contract prices'))
+        else:
+            about_second = (f['products'], plural(f['products'], 'List price', 'List prices'))
+        if f['relations']:
+            about_third = (f['relations'], plural(f['relations'], 'Product relation', 'Product relations'))
+        elif f['documents']:
+            about_third = (f['documents'], plural(f['documents'], 'Product document', 'Product documents'))
+        else:
+            about_third = (f['products'], plural(f['products'], 'Product', 'Products'))
+        figures = {
+            'home': [(f['products'], plural(f['products'], 'Product', 'Products')),
+                     (f['groups'], plural(f['groups'], 'Product group', 'Product groups')), home_third],
+            'about': [(f['topGroups'], plural(f['topGroups'], 'Top-level group', 'Top-level groups')), about_second, about_third],
+        }
+        self.report['copyFigures'] = {k: [{'figure': n, 'label': l} for n, l in v] for k, v in figures.items()}
+        # capabilities, named only when the copy carries them
+        price_kinds = ['List'] + (['quantity'] if f['tiers'] else []) + (['customer-group'] if f['groupPrices'] else []) + \
+                      (['contract'] if f['contracts'] else [])
+        account_items = ['orders'] + (['quotes'] if f['quotes'] else []) + (['favourite lists'] if f['favourites'] else []) + ['returns']
+        account_price = 'Signed in, every product shows the price that applies to your account.'
+        data_parts = ['description'] + (['specifications'] if f['specs'] else [])
+        data_text = "Each product page shows the product's %s%s." % (and_join(data_parts), ', and its documents where it has them' if f['documents'] else '')
+        if customer:
+            price_tile = ('Your prices on account', account_price)
+        else:
+            price_tile = ('List prices', 'Every product shows its list price.')
+        stock_tile = ('Stock before you order', 'The product page shows the stock of each product before the order is placed.')
+        second_tile = ('Quantity prices', 'Products with quantity prices show every price break on the product page.') if f['tiers'] else stock_tile
+        third_tile = ('Reorder from your account', 'Your %s stay in the customer center, ready for the next purchase.' % and_join(account_items))
+        promo_one = ('Reorder from your account', 'Your orders stay in the customer center, ready for the next purchase.')
+        if f['tiers']:
+            promo_two = ('Quantity prices', 'Order more, pay less per unit: the price table shows every break before you add to cart.')
+        else:
+            promo_two = price_tile
+        features = [('Your price, not the list price.' if customer else 'The list price.',
+                     'Signed in, the price shown is the one that applies to your account.' if customer else "The price shown is the product's list price.")]
+        if f['tiers']:
+            features.append(('Quantity breaks that show their working.', 'Where a product has quantity prices, every step is on the page before the item reaches the cart.'))
+        features.append(('Stock before you order.', "The product's stock shows on the page."))
+        if f['specs']:
+            features.append(('Specifications in one table.', "The specification table lists the product's own fields."))
+        if f['documents']:
+            features.append(('Documents to download.', 'Where a product has documents, the documents table lists them.'))
+        faq = [('Which price do I see?', 'Signed in, the price that applies to your account%s.' % (', with quantity breaks where a product has them' if f['tiers'] else ''))]
+        faq.append(('Where do I find my earlier orders?', 'In the customer center, with your %s.' % and_join(account_items[1:]) if account_items[1:] else 'In the customer center.'))
+        if f['documents']:
+            faq.append(('What is in the documents table?', 'The documents attached to the product, ready to download.'))
+        if f['relations']:
+            faq.append(('Where do the related products come from?', 'From relations held on the product itself.'))
+        features_html = '<ul class="list-unstyled">%s</ul>' % ''.join('<li><strong>%s</strong> %s</li>' % (e(t), e(x)) for t, x in features)
+        faq_html = ''.join('<p><strong>%s</strong><br>%s</p>' % (e(q), e(a)) for q, a in faq)
+        catalogue_line = '%d %s, %d %s: %s.' % (f['groups'], plural(f['groups'], 'product group', 'product groups'), f['products'],
+                                                plural(f['products'], 'product', 'products'), and_join(g['name'] for g in self.tops))
+        slots = [
+            (H + 'grid-row-4/paragraph-c1-19.yml', 'AltText', 'text', c),
+            (H + 'grid-row-4/paragraph-c2-20.yml', 'Title', 'html', 'Browse the catalogue'),
+            (H + 'grid-row-4/paragraph-c2-20.yml', 'Subtitle', 'html', catalogue_line),
+            (H + 'grid-row-6/paragraph-c1-5.yml', 'Title', 'html', price_tile[0]),
+            (H + 'grid-row-6/paragraph-c1-5.yml', 'Text', 'texts', [price_tile[1]]),
+            (H + 'grid-row-6/paragraph-c2-6.yml', 'Title', 'html', second_tile[0]),
+            (H + 'grid-row-6/paragraph-c2-6.yml', 'Text', 'texts', [second_tile[1]]),
+            (H + 'grid-row-6/paragraph-c3-7.yml', 'Title', 'html', third_tile[0]),
+            (H + 'grid-row-6/paragraph-c3-7.yml', 'Text', 'texts', [third_tile[1]]),
+            (H + 'grid-row-7/paragraph-c1-8.yml', 'AltText', 'text', c),
+            (H + 'grid-row-8/paragraph-c1-10.yml', 'Subtitle', 'html', 'Sign in to see the prices on your account and your order history.'),
+        ]
+        for para, (n, label) in zip(('paragraph-c1-11', 'paragraph-c2-12', 'paragraph-c3-13'), figures['home']):
+            slots += [(H + 'grid-row-9/%s.yml' % para, 'Subtitle', 'html', str(n)), (H + 'grid-row-9/%s.yml' % para, 'Title', 'html', label)]
+        slots += [
+            (A + 'grid-row-2/paragraph-c1-61.yml', 'Title', 'html', 'Product data'),
+            (A + 'grid-row-2/paragraph-c1-61.yml', 'Text', 'html', data_text),
+            (A + 'grid-row-2/paragraph-c2-62.yml', 'Text', 'html', '%s prices show on the product page.' % and_join(price_kinds)),
+            (A + 'grid-row-2/paragraph-c3-63.yml', 'Title', 'html', stock_tile[0]),
+            (A + 'grid-row-2/paragraph-c3-63.yml', 'Text', 'html', stock_tile[1]),
+            (A + 'grid-row-3/paragraph-c1-48.yml', 'Text', 'texts', ['Work with %s' % c, 'Open an account and your prices and order history follow you on every visit.']),
+            (A + 'grid-row-8/paragraph-c1-75.yml', 'Text', 'texts', ['Talk to %s' % c, 'Questions about an order or a price? The contact page lists every route.']),
+            (A + 'Contact/page.yml', 'description', 'text', 'Contact %s about orders, delivery and prices.' % c),
+            (A + 'Contact/grid-row-1/paragraph-c1-9.yml', 'Subtitle', 'html', 'Ask about orders, delivery or prices.'),
+            (A + 'Contact/grid-row-2/paragraph-c2-11.yml', 'Text', 'html', 'Account questions: %s' % email),
+            (D + 'grid-row-4/paragraph-c3-5.yml', 'Text', 'texts', ['Call us', phone]),
+        ]
+        for para, (n, label) in zip(('paragraph-c1-64', 'paragraph-c2-65', 'paragraph-c3-66'), figures['about']):
+            slots.append((A + 'grid-row-4/%s.yml' % para, 'Text', 'texts', [str(n), label]))
+        slots += [
+            (N + 'grid-row-3/paragraph-c1-3.yml', 'AltText', 'text', promo_one[0]),
+            (N + 'grid-row-3/paragraph-c2-4.yml', 'Title', 'text', promo_one[0]),
+            (N + 'grid-row-3/paragraph-c2-4.yml', 'Text', 'text', promo_one[1]),
+            (N + 'grid-row-4/paragraph-c1-5.yml', 'AltText', 'text', promo_two[0]),
+            (N + 'grid-row-4/paragraph-c2-6.yml', 'Title', 'text', promo_two[0]),
+            (N + 'grid-row-4/paragraph-c2-6.yml', 'Text', 'text', promo_two[1]),
+            (N + 'grid-row-5/paragraph-c1-7.yml', 'Text', 'texts', [catalogue_line]),
+            (S + 'grid-row-10/paragraph-c1-20.yml', 'Text', 'raw', features_html),
+            (S + 'grid-row-11/paragraph-c1-21.yml', 'Text', 'raw', faq_html),
+        ]
+        return slots
+
     def build_content(self):
         b = self.inp['brandCopy']
         contact = b.get('contact') or {}
@@ -1731,25 +1914,25 @@ class Generator:
             top_map[st] = (self.gid[g['key']], old_name, g['name'])
         year = b.get('copyrightYear', self.harvest.year)
         copyright_text = b.get('copyright') or '© %d %s. All rights reserved.' % (year, self.company)
-        n_products = len(self.products)
+        f = self.copy_facts()
         top_names = [g['name'] for g in self.tops]
-        hero_text = '%d products across %s.' % (n_products, ', '.join(top_names[:-1]) + ' and ' + top_names[-1] if len(top_names) > 1 else top_names[0])
+        hero_text = '%d %s across %s.' % (f['products'], plural(f['products'], 'product', 'products'), and_join(top_names))
         home = b.get('home') or {}
         about = b.get('about') or {}
         slots = [
             ('merge/_content/Swift 2/Home/page.yml', 'metaTitle', 'text', home.get('metaTitle') or self.company),
-            ('merge/_content/Swift 2/Home/page.yml', 'description', 'text', home.get('metaDescription')),
-            ('merge/_content/Swift 2/Home/grid-row-1/paragraph-c1-18.yml', 'Eyebrow', 'html', home.get('heroEyebrow')),
-            ('merge/_content/Swift 2/Home/grid-row-1/paragraph-c1-18.yml', 'Title', 'html', home.get('heroTitle')),
+            ('merge/_content/Swift 2/Home/page.yml', 'description', 'text', home.get('metaDescription') or '%s: %s' % (self.company, hero_text)),
+            ('merge/_content/Swift 2/Home/grid-row-1/paragraph-c1-18.yml', 'Eyebrow', 'html', home.get('heroEyebrow') or self.company),
+            ('merge/_content/Swift 2/Home/grid-row-1/paragraph-c1-18.yml', 'Title', 'html', home.get('heroTitle') or 'The %s catalogue' % self.company),
             ('merge/_content/Swift 2/Home/grid-row-1/paragraph-c1-18.yml', 'Text', 'html', home.get('heroText') or hero_text),
-            ('merge/_content/Swift 2/Home/grid-row-1/paragraph-c1-18.yml', 'AltText', 'text', home.get('heroAltText')),
+            ('merge/_content/Swift 2/Home/grid-row-1/paragraph-c1-18.yml', 'AltText', 'text', home.get('heroAltText') or self.company),
             ('merge/_content/Swift 2/About/page.yml', 'description', 'text', about.get('metaDescription')),
             ('merge/_content/Swift 2/About/grid-row-1/paragraph-c1-59.yml', 'Title', 'html', about.get('title')),
-            ('merge/_content/Swift 2/About/grid-row-1/paragraph-c1-59.yml', 'Text', 'html', about.get('text')),
+            ('merge/_content/Swift 2/About/grid-row-1/paragraph-c1-59.yml', 'Text', 'html', about.get('text') or '%s: %s' % (self.company, hero_text)),
             ('merge/_content/Swift 2/Header _ Footer/Desktop Footer/grid-row-2/paragraph-c1-24.yml', 'Text', 'html', copyright_text),
             ('merge/_content/Swift 2/Header _ Footer/Mobile Footer/grid-row-4/paragraph-c1-13.yml', 'Text', 'html', copyright_text),
             ('replace/_content/Digital Assets Portal/Header _ Footer/Desktop Footer/grid-row-3/paragraph-c1-5.yml', 'Text', 'html', copyright_text),
-        ]
+        ] + self.fact_slots(f, email, contact.get('phone') or '+1 555 0100')
         by_path = {}
         for path, field, kind, value in slots:
             if value is not None:
@@ -1772,12 +1955,21 @@ class Generator:
                         m = re.match(r'^(\s+"%s": )(".*")$' % re.escape(field), line)
                         if m:
                             old = json.loads(m.group(2))
-                            new = replace_inner_html(old, value) if kind == 'html' else value
+                            if kind == 'html':
+                                new = replace_inner_html(old, value)
+                            elif kind == 'texts':
+                                new = replace_texts(old, value)
+                                if new is None:
+                                    self.warnings.append('copy slot %s in %s: the field carries another number of text runs than %d; the document changed upstream, and the sample text stays'
+                                                         % (field, rel, len(value)))
+                                    break
+                            else:   # 'text' (a plain value) and 'raw' (HTML the generator wrote whole)
+                                new = value
                             lines[i] = m.group(1) + json.dumps(new, ensure_ascii=False)
                             self.report['content']['slotsWritten'] += 1
                             break
                     else:
-                        self.warnings.append('brandCopy slot %s in %s: field not found; the document changed upstream' % (field, rel))
+                        self.warnings.append('copy slot %s in %s: field not found; the document changed upstream' % (field, rel))
                 text = nl.join(lines)
                 for st, (new_gid, old_name, new_name) in top_map.items():
                     if 'GroupID=' + st in text:
@@ -1794,6 +1986,70 @@ class Generator:
                 if text != orig:
                     self.report['content']['documents'] += 1
                 self.files[rel] = (BOM if bom else b'') + text.encode('utf-8')
+        for rel in sorted(set(by_path) - set(self.files)):
+            self.warnings.append('copy slots in %s: the document is not in the source layer (it moved upstream); its slots are not written' % rel)
+
+    # ----------------------------------------------------------------- facet names
+    def build_facets(self):
+        """The storefront facet names (Foundry #1754). Each top group's spec field on its category's facet slot fills the
+        index field another layer's .facets file names (surface-swift TruvioCommerce/Products.facets): the values are the
+        customer's, the Facet Name is the sample's (Material class, Lead time, ...). The copy carries that file with the
+        Name of each facet it fills set to the spec field's label, and Field, QueryParameter and every other byte as the
+        Distribution ships them. A layer of kind sample-data composes after the surfaces, so its file is the one the host
+        serves (Compose-Edition, Publish-RemoteComposition: a later layer wins a path an earlier one ships; the delivery
+        reports the override). A facet the copy does not fill keeps its name and stays hidden (Condition HasValue)."""
+        self.report['facetNames'] = []
+        self.repository_files = []
+        owner = {}
+        if not self.dist:
+            return
+        labels = {}    # (category, field id) -> the label of the spec field that fills it
+        for (cat, fid, label) in self.field_map.values():
+            labels[(cat, fid)] = label
+        for path in sorted((self.dist / 'layers').glob('*/repositories/*/*.facets')):
+            layer = path.parent.parent.parent.name
+            if layer == self.src.name:
+                continue
+            index_fields = {}   # index field SystemName -> (category, field id)
+            for idx in sorted(path.parent.glob('*.index')):
+                for tag in re.findall(r'<Field\b[^>]*>', idx.read_text(encoding='utf-8-sig')):
+                    src = re.search(r'\bSource="ProductCategory\|([^|"]+)\|([^"]+)"', tag)
+                    sysname = re.search(r'\bSystemName="([^"]+)"', tag)
+                    if src and sysname:
+                        index_fields[sysname.group(1)] = (src.group(1), src.group(2))
+            data = path.read_bytes()
+            text = data.decode('utf-8-sig')
+            renamed = []
+
+            def fix(m):
+                tag = m.group(0)
+                if tag.startswith('<!--'):
+                    return tag   # the file's own fill-in recipe
+                field = re.search(r'\bField="([^"]+)"', tag)
+                key = index_fields.get(field.group(1)) if field else None
+                name = re.match(r'(<Facet\s+Name=")([^"]*)(")', tag)
+                if key not in labels or not name:
+                    return tag
+                new = xml_attr(labels[key])
+                if new == name.group(2):
+                    return tag
+                renamed.append({'field': field.group(1), 'category': key[0], 'from': name.group(2), 'to': labels[key]})
+                return name.group(1) + new + name.group(3) + tag[name.end():]
+            out = re.sub(r'<!--.*?-->|<Facet\b[^>]*>', fix, text, flags=re.S)
+            if not renamed:
+                continue
+            rel = 'repositories/%s/%s' % (path.parent.name, path.name)
+            if rel in owner:
+                self.warnings.append('%s: layers %s and %s both ship it; the copy carries the renamed facets of %s' % (rel, owner[rel], layer, owner[rel]))
+                continue
+            self.files[rel] = (BOM if data.startswith(BOM) else b'') + out.encode('utf-8')
+            owner[rel] = layer
+            self.repository_files.append('System/Repositories/%s/%s' % (path.parent.name, path.name))
+            lj = self.dist / 'layers' / layer / 'layer.json'
+            version = load_json(lj).get('version') if lj.is_file() else None
+            for r in renamed:
+                r.update(file=rel, layer=layer, layerVersion=version)
+                self.report['facetNames'].append(r)
 
     # ----------------------------------------------------------------- inventories
     def build_files(self):
@@ -1870,6 +2126,8 @@ class Generator:
         lj['name'] = self.name
         lj['fragmentTables'] = [t for t in lj.get('fragmentTables', []) if t in live]
         lj['files'] = sorted(k[len('files/'):] for k in self.files if k.startswith('files/'))
+        if self.repository_files:
+            lj['repositories'] = list(lj.get('repositories') or []) + [r for r in self.repository_files if r not in (lj.get('repositories') or [])]
         lj['configRows'] = self.config_rows(lj.get('configRows', []))
         if 'ledger' in lj:
             lj['ledger'] = dict(lj['ledger'])
@@ -1979,9 +2237,14 @@ class Generator:
         return out
 
     def provides(self, provides):
+        has = self.carried()
+        return [f for f in provides if has.get(f, True)]
+
+    def carried(self):
+        """The ledger functions whose data the copy carries (True) or leaves out (False)."""
         h = self.inp['history']
         pr = self.inp['prices']
-        has = {
+        return {
             'pim.variants': False,
             'pim.bom': False,
             'pim.assortments': False,
@@ -1993,7 +2256,6 @@ class Generator:
             'orders.named-carts': bool(h.get('carts')),
             'orders.favorite-lists': bool(h.get('favourites')),
         }
-        return [f for f in provides if has.get(f, True)]
 
     # ----------------------------------------------------------------- checks on the result
     def residual_scan(self):
@@ -2030,6 +2292,28 @@ class Generator:
         for rel, data in sorted(self.files.items()):
             if '/_content/' in rel and brand.search(data.decode('utf-8-sig', errors='replace')):
                 hits.append('%s: brand token' % rel)
+        return hits
+
+    def claim_scan(self):
+        """Storefront copy fields that name a capability the copy does not carry, or a fact only the sample catalogue
+        has (Foundry #1753). Reads the field values of every content document (the indented "Field": "value" lines;
+        the paragraph header is an admin label and is not read)."""
+        has = self.carried()
+        rx = [(fn, re.compile(w)) for fn, w in sorted(CLAIM_WORDS.items()) if not has.get(fn, True)]
+        rx.append(('sample catalogue', re.compile(ALWAYS_SAMPLE_CLAIMS)))
+        hits = []
+        for rel, data in sorted(self.files.items()):
+            if '/_content/' not in rel:
+                continue
+            for m in re.finditer(r'^\s+"([^"]+)": (".*")\r?$', data.decode('utf-8-sig', errors='replace'), re.M):
+                try:
+                    v = json.loads(m.group(2))
+                except ValueError:
+                    continue
+                for fn, r in rx:
+                    w = r.search(v)
+                    if w:
+                        hits.append('%s %s: "%s" (%s)' % (rel, m.group(1), w.group(0), fn))
         return hits
 
     def fence_check(self):
@@ -2072,12 +2356,14 @@ class Generator:
         if self.reasons:
             raise Refused(self.reasons)
         self.build_content()
+        self.build_facets()
         self.build_files()
         self.build_inventories()
         for t in sorted(self.tables):
             self.report['tables'][t] = {'sample': len(self.tables[t].rows), 'copy': len(self.out.get(t, {}))}
         self.report['removed'].append({'sampleRowsNotCarried': sum(len(t.rows) for t in self.tables.values()) - sum(len(r) for r in self.out.values())})
         self.report['residualSampleTokens'] = self.residual_scan()
+        self.report['residualSampleClaims'] = self.claim_scan()
         self.report['outsidePredicateFence'] = self.fence_check()
         if self.report['outsidePredicateFence']:
             raise ValueError('generated rows outside their predicate fence: %s' % '; '.join(self.report['outsidePredicateFence'][:5]))
@@ -2151,8 +2437,8 @@ def generate(input_path, out, name=None, source=None, dry_run=False, logins='sta
     return gen.report, files
 
 
-def print_report(report, out=sys.stdout):
-    w = out.write
+def print_report(report, out=None):
+    w = (out or sys.stdout).write
     w('Layer %s from %s %s\n' % (report['layer'], report['source']['layer'], report['source']['version']))
     w('\nTables (sample -> copy):\n')
     for t, c in report['tables'].items():
@@ -2162,6 +2448,10 @@ def print_report(report, out=sys.stdout):
     w('PIM shop: %s, index field %s\n' % (report['pimShop']['name'], report['pimShop']['indexField']))
     w('Storefront documents rewritten: %d, slots written: %d, group links retargeted: %d\n'
       % (report['content']['documents'], report['content']['slotsWritten'], report['content']['groupLinksRetargeted']))
+    for page, tiles in sorted(report.get('copyFigures', {}).items()):
+        w('Figures on %s: %s\n' % (page.capitalize(), ', '.join('%d %s' % (t['figure'], t['label']) for t in tiles)))
+    for r in report.get('facetNames', []):
+        w('Facet %s (%s): "%s" -> "%s", in %s (from %s %s)\n' % (r['field'], r['category'], r['from'], r['to'], r['file'], r['layer'], r['layerVersion']))
     cr = report['configRows']
     w('configRows: %d kept, %d rewritten, %d dropped\n' % (cr['kept'], len(cr['rewritten']), len(cr['dropped'])))
     for d in cr['dropped']:
@@ -2179,6 +2469,10 @@ def print_report(report, out=sys.stdout):
     if report['residualSampleTokens']:
         w('\nSAMPLE TOKENS LEFT IN THE COPY:\n')
         for h in report['residualSampleTokens']:
+            w('  %s\n' % h)
+    if report.get('residualSampleClaims'):
+        w('\nSAMPLE CLAIMS LEFT IN THE STOREFRONT COPY (a capability the copy does not carry, or a sample-only fact):\n')
+        for h in report['residualSampleClaims']:
             w('  %s\n' % h)
     prof = report['ids'].get('buyerSecondProfile')
     w('\nBuyer second profile (Switch account): %s\n' % ('AccessUser 100105 on %s' % prof['account'] if prof else 'none written'))
@@ -2217,6 +2511,7 @@ def main(argv=None):
         return 2
     print_report(report)
     if a.report:
+        Path(a.report).parent.mkdir(parents=True, exist_ok=True)
         Path(a.report).write_text(json.dumps(report, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
     sys.stdout.write('\n%s %s\n' % ('Dry run: nothing written to' if a.dry_run else 'Written:', Path(a.out).resolve()))
     return 0
