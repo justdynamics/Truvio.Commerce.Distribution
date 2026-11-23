@@ -1,5 +1,77 @@
 ﻿# theme-default changelog
 
+## 2.9.0 (2026-11-23)
+
+**MINOR. The product list row is one bordered unit on one grid, and the signed-out price is one
+notice with a plain link per row.** Justin, on a list built from a customer's data: "the PLP looks
+too dense, this is a layer issue and must be fixed there so every demo gets a really good looking
+PLP and PDP", and "we added light borders to the PLP at one point but they are gone again". The
+border had been ruled on 2026-10-08 (register `plp-row-border-1479`, option B) and never built. The
+plan is Foundry #1765; this release is its steps 1 and 2. It also closes both theme items of
+Foundry #1720: the product list columns and the phone header when signed in.
+
+**The row** (`default_custom.css` block #37):
+
+- A full rounded 1 px border on every row. Hover and keyboard focus change its colour and add a
+  shadow; nothing moves. The colour is the token `--td-list-border`, which holds Bootstrap's
+  translucent border colour.
+- The row is a CSS grid and every cell is placed by name: picture, text block, stock, price, cart
+  control. A cell starts at the same x in every row whatever it holds. The flex bases of blocks
+  #10, #14, #15 and #27 no longer size anything in a product list.
+- The text block is the name (16/24, semibold, two lines at most), the item number under it
+  (13 px, muted) and the description (14/20, muted, two lines at most). The item number used to be
+  a 150 px column of its own and the description ran three to five lines of body type.
+- Stock has a dot in its state's colour, and a dash where a product has no stock row. The price is
+  one weight in tabular digits, flush right. The cart form's 16 px bottom margin is gone from the
+  row.
+- A list in which no row carries a cart form has no buy column.
+- Below `lg` the row stacks on the same grid: picture beside name and number, description, stock
+  and price on one line, the cart control across the foot. On a phone the button takes the width
+  the stepper leaves.
+- Tokens a brand may set in `brand.css`: `--td-list-border`, `--td-list-pad`, `--td-list-gap`,
+  `--td-list-thumb`, `--td-list-stock`, `--td-list-price`, `--td-list-buy`, `--td-list-measure`.
+
+**The signed-out price** (owner ruling of 2026-11-23, "Yes one notice"):
+
+- `Paragraph/Swift-v2_ProductPrice/PriceWithSignIn.cshtml`: in a product list the lock is a plain
+  link, "Sign in for price" (class `td-price-lock td-price-lock--list`, link
+  `td-price-lock__link`). It carries the notice's words, the action's label and the sign-in
+  address in three data attributes, all through `Translate`. The detail page's markup is unchanged.
+- `default_custom.js`: places one `p.td-price-notice` in front of the first list that carries a
+  lock ("Sign in to see your account prices." and a "Sign in" link), keeps it at one after "load
+  more", a sort and a facet, and removes it when the list no longer carries a lock. With the script
+  off the row link still works.
+- `default_custom.css` block 24: the list link and the notice. The detail page's lock is one line
+  (padlock, label, the button at its own width) instead of a tinted box across the buy column with
+  the button stretched to its width.
+
+**Measured** on a site built from a customer data file, twelve rows, before (2.8.0 as built) and
+after:
+
+| | 1440 | 390 |
+|---|---|---|
+| Row height, signed out | 83 / 107 / 131 px, then 120 px on every row | 218 to 265 px, then 166 px |
+| Row height, signed in | 83 / 107 / 131 px, then 120 px | 258 to 282 px, then 226 px |
+| Description | 3 to 5 lines of 16 px, then 2 lines of 14 px | 4 to 5 lines, then 2 |
+| Column start spread, signed in | description 4.5, stock 8.9, price 8.9 px, then 0 | stock 15.3, price 9 px, then 0 |
+| Row edge | none, then 1 px | none, then 1 px |
+
+At 576, 768, 992, 1024, 1200, 1366 and 1920: no horizontal overflow, nothing outside its row, every
+column start spread 0 px, signed in and out. Below 1200 a long name takes its second line and that
+row is 144 px. The row link opens the sign-in page, a click anywhere else on the row opens the
+product, and one notice stands after "load more", a sort and a facet.
+
+**The phone header, signed in** (`default_custom.css` block #38, Foundry #1720): one row. Block #28
+capped the signed-in name in Swift's account dropdown; a phone is served the offcanvas variant,
+whose name nothing capped, so the account cell wrapped to a second header row. Below 768 that name
+takes the same cap, and below 480 it is not shown in either variant: the initials are the control
+and the full name reads in the panel. Measured at 390, signed in: 138 px on two rows, then 92 px on
+one.
+
+Not in this release: the product page beyond its signed-out price line (Foundry #1765 steps 3 and
+4), attributes in place of the description (step 5), and a worded stock state for a product with no
+stock row.
+
 ## 2.8.1 (2026-11-22)
 
 **PATCH. The stock column of the product list holds its start on a phone.** Below the `lg`
