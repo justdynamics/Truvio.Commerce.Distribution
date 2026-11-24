@@ -1,7 +1,7 @@
 {
   "_comment": "Machine-readable layer index for Truvio.Commerce.Distribution (P3, RUN-VERSION-CURRENCY T3-01..T3-04). SOURCE OF TRUTH for what layers exist, their kind/version/status, and what a retired name was superseded by. Two consumers read it: (1) tools/ci/Validate-Distribution.ps1 regenerates the `layers` array from the live tree and diffs it clean (drift both directions FAILs), asserts `gateProven` is present, and rejects any edition ref or living-doc mention of a name absent from `layers` (a retired hit names its successor); (2) the DemoAgent currency preflight (Invoke-DemoGate.ps1 `currency` leg) asserts this file parses + carries `gateProven`, and that every layer the demo consumed is live here (a retired hit -> 'retired -> use <supersededBy>'). UPDATE MECHANICS: the `layers` array is regenerated from the tree by Validate-Distribution.ps1 -RegenerateIndex (deterministic); `retired` tombstones are authored on layer retirement (release checklist, FOLLOWUP.md T4-02); `gateProven` is a PROJECTION of the editions record (solution truvio-editions, ruling std-q31-gateproven-from-record), written by the Foundry (tools/harness/Write-IndexGateProven.ps1) with the record extract beside it in layers/editions-record.json and checked by Validate-Distribution.ps1 check 14 -- never hand-authored as trusted. Consumers 'pin origin/main + assert INDEX.gateProven present' (D-CONSUME a). EDITIONS APPEAR IN gateProven.editions ONLY WHEN PROVEN: the map is projected from the proven (or legacy-proof) release lines of the record, so a newly specified edition (base-swift, added in the v5 phase-2 baseline release) is absent from it until its first PASS. An absent edition means unproven, never missing; hand-writing a run id there would fabricate an attestation, which is the one thing this file exists to prevent.",
   "gateProven": {
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "dw": {
       "ring": "R1-NET10",
       "ringNumber": 1,
@@ -35,41 +35,41 @@
       "ruling": "std-q31-gateproven-from-record"
     },
     "editions": {
-      "dap-portal": "20261123-164234",
-      "headless-demo": "20261123-164802",
-      "swift-demo": "20261123-163742"
+      "dap-portal": "20261124-003855",
+      "headless-demo": "20261124-004336",
+      "swift-demo": "20261124-003412"
     },
     "releases": {
       "dap-portal": {
         "tag": "editions/dap-portal/2.5.0",
-        "runId": "20261123-164234",
+        "runId": "20261124-003855",
         "host": "foundry-dap.mydwsite4.com",
-        "ts": "2026-11-23T16:45:21Z",
-        "resultsDigest": "sha256:772f4e3e26c28157b17806360488aac376ac1407971051487e65602a93f6eced",
+        "ts": "2026-11-24T00:41:25Z",
+        "resultsDigest": "sha256:3aa4b8b9aa4695b89aeb6c0054c6d6f4c133f033c32299a6ab719f6591e2cb30",
         "legacy": false
       },
       "headless-demo": {
         "tag": "editions/headless-demo/3.4.0",
-        "runId": "20261123-164802",
+        "runId": "20261124-004336",
         "host": "foundry-blank-dw10-iteration",
-        "ts": "2026-11-23T16:49:50Z",
-        "resultsDigest": "sha256:49fb47ffd7cf6eb9f48210d8da9a56515a01a7d3e4eeafc3c3c881558e9b87cf",
+        "ts": "2026-11-24T00:45:31Z",
+        "resultsDigest": "sha256:22b0fb0a2ba364ff8de81b364ce867e04b0099d5880a326260fc23d57a01fe18",
         "legacy": false
       },
       "swift-demo": {
         "tag": "editions/swift-demo/5.5.0",
-        "runId": "20261123-163742",
+        "runId": "20261124-003412",
         "host": "foundry.mydwsite4.com",
-        "ts": "2026-11-23T16:40:28Z",
-        "resultsDigest": "sha256:8a958d7625be86871299e622633ef5a2acf203e2e90c520991dde16620aea268",
+        "ts": "2026-11-24T00:36:59Z",
+        "resultsDigest": "sha256:98e73e2316a8ea1e46812719ed0e7222927f5fc32d358632836029bdedfb277f",
         "legacy": false
       }
     },
     "proofs": {
       "dap-portal": {
-        "runId": "20261123-164234",
+        "runId": "20261124-003855",
         "release": "editions/dap-portal/2.5.0",
-        "distributionCommit": "1f45703355f59443c443b61f15a44e3de7ea046b",
+        "distributionCommit": "740561ea6df71fc6ac8449c42359cd4edf1eeba7",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -85,15 +85,15 @@
             "hash": "sha256:f0dadf1e0cd55dbf13f116ac96f23299340f54701600559d58504da04ccfa837"
           },
           "theme-default": {
-            "version": "2.9.0",
-            "hash": "sha256:d127a6b59fcf9a608d720a418ab62ff707814b54bdea86e20abede1c883443e6"
+            "version": "2.10.0",
+            "hash": "sha256:9ea691c493de9512280315caf12e79c9e4c9683b53605adb6a9ca508bceb453e"
           }
         }
       },
       "headless-demo": {
-        "runId": "20261123-164802",
+        "runId": "20261124-004336",
         "release": "editions/headless-demo/3.4.0",
-        "distributionCommit": "1f45703355f59443c443b61f15a44e3de7ea046b",
+        "distributionCommit": "740561ea6df71fc6ac8449c42359cd4edf1eeba7",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -111,9 +111,9 @@
         }
       },
       "swift-demo": {
-        "runId": "20261123-163742",
+        "runId": "20261124-003412",
         "release": "editions/swift-demo/5.5.0",
-        "distributionCommit": "1f45703355f59443c443b61f15a44e3de7ea046b",
+        "distributionCommit": "740561ea6df71fc6ac8449c42359cd4edf1eeba7",
         "algorithm": "layer-tree/v1",
         "provenTree": {
           "base": {
@@ -149,12 +149,12 @@
             "hash": "sha256:a270e270d41820ef42f0e7873b511a6433334c31c30530e94f0792f2efe9185f"
           },
           "surface-swift": {
-            "version": "1.19.5",
-            "hash": "sha256:c2485afbe612f5d1f57fbd6145e74453eae44437f37a0907c9b8e63c3432ba7c"
+            "version": "1.19.7",
+            "hash": "sha256:2fa14d2ce6f8d644d99ca8bd93b473b7fe2455200a97a9c169078fc4229e85a6"
           },
           "theme-default": {
-            "version": "2.9.0",
-            "hash": "sha256:d127a6b59fcf9a608d720a418ab62ff707814b54bdea86e20abede1c883443e6"
+            "version": "2.10.0",
+            "hash": "sha256:9ea691c493de9512280315caf12e79c9e4c9683b53605adb6a9ca508bceb453e"
           }
         }
       }
