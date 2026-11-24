@@ -1,5 +1,29 @@
 ﻿# theme-default changelog
 
+## 2.11.0 (2026-11-24)
+
+**MINOR. The desktop category menu is a menu band.** Justin, on the AkzoNobel demo: "The header
+is better, but still a very small font, lots of white space. Make it a well designed menu instead
+of just text links." That demo got it in its own stylesheet; this puts it in the layer, so every
+demo built from it starts with it.
+
+`default_custom.css` block #40, from `lg` up, on the header row that holds the category menu:
+
+- the row is a full-width band in the brand's primary colour (`--td-menubar-bg`, default
+  `--dw-color-button-primary`);
+- the categories are 17 px semibold full-height items in the ink the theme computes against that
+  colour; hover, focus and the open item get a light tint and a 3 px bar;
+- the panels that open from it stay light; the search is a white pill at the right end, at most
+  `--td-menubar-search` (24rem) wide, instead of a field across the rest of the width;
+- in every header search row the search sits in the middle of its row: the search form's 16 px
+  bottom margin was counted when the field was centred, so it sat 8 to 12 px high (measured on the
+  sample catalogue, a site built from a customer data file and the AkzoNobel demo; after: 0 px).
+
+A menu row the demo gave its own colour scheme keeps it, as do the overlay header and the phone
+header. Measured on the sample catalogue, a site built from a customer data file and the AkzoNobel
+demo at 992, 1024, 1200, 1440 and 1920: one line of items, no horizontal overflow, contrast 14.8:1
+and 15.5:1; the AkzoNobel header unchanged.
+
 ## 2.10.0 (2026-11-23)
 
 **MINOR. The product page: a name above its sections, a picture that fills its frame, a buy box in

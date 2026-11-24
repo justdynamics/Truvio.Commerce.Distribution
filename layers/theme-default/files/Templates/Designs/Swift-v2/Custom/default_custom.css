@@ -2773,3 +2773,116 @@ main [data-dw-itemtype="swift-v2_relatedproductslist"] .table-responsive + .text
   main [data-dw-itemtype="swift-v2_relatedproductslist"] table { white-space: normal !important; }
   main [data-dw-itemtype="swift-v2_relatedproductslist"] :is(.td-related__number, .td-related__number-head) { display: none; }
 }
+
+/* =============================================================================
+ * #40 THE MENU BAND - the desktop category menu is a menu, not a line of links
+ *
+ * Justin, on the AkzoNobel demo (2026-11-24): "The header is better, but still a very
+ * small font, lots of white space. Make it a well designed menu instead of just text
+ * links." That demo got it in its own brand.css; every demo built from this layer had
+ * the same header: the category menu as 16px regular text links on white, and a search
+ * field running the rest of the width.
+ *
+ * WHAT IT DOES, from lg up, to the header row that holds the category menu
+ * (Swift-v2_MenuRelatedContent):
+ *   - the row is a full-width band in the brand's primary colour (the token
+ *     --td-menubar-bg, default --dw-color-button-primary) with no padding of its own;
+ *   - each category is a full-height item, 17px semibold, in the ink the theme already
+ *     computes against that colour (--td-button-primary-ink, block #30);
+ *   - hover, keyboard focus and the open item get a light tint and a 3px bar under it;
+ *   - the panels that open from it keep their own light scheme;
+ *   - the search is a white pill of at most --td-menubar-search at the right end;
+ *   - in any header search row, the search form's 16px bottom margin is gone: the header
+ *     centred the field with it counted, so the field sat 8 to 12px above the middle of
+ *     its row (Justin, 2026-11-24, on the AkzoNobel demo and the sample catalogue).
+ *
+ * NOT TOUCHED: a menu row the demo gave a colour scheme of its own (anything but light
+ * or none; the AkzoNobel demo's navy row is one), the floating overlay header (#16),
+ * and the phone header, which is a separate page.
+ *
+ * MEASURED on three sites at 992, 1024, 1200, 1440 and 1920: one line of items, no
+ * horizontal overflow; items white on the brand colour at 14.8:1 (sample catalogue)
+ * and 15.5:1 (a site built from a customer data file).
+ *
+ * THE TOKENS a brand may set in brand.css: --td-menubar-bg, --td-menubar-ink,
+ * --td-menubar-mark, --td-menubar-size, --td-menubar-weight, --td-menubar-search.
+ * ========================================================================== */
+[data-td-block="40"] { --td-block: 40; }
+
+:root {
+  --td-menubar-bg:     var(--dw-color-button-primary, var(--td-ink));            /* the band */
+  --td-menubar-ink:    var(--td-button-primary-ink, var(--dw-color-button-primary-contrast, #fff)); /* its items */
+  --td-menubar-mark:   currentColor;                                             /* the bar under an open or hovered item */
+  --td-menubar-size:   1.0625rem;                                                /* 17px items */
+  --td-menubar-weight: 600;
+  --td-menubar-search: 24rem;                                                    /* the search pill's width */
+}
+
+@media (min-width: 992px) {
+  /* The row that holds the category menu: a full-width band in the brand's primary colour. */
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) {
+    background-color: var(--td-menubar-bg) !important;
+    color: var(--td-menubar-ink);
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) > [data-swift-container] {
+    align-items: stretch;
+    gap: 0 1rem;
+  }
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) > [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"] {
+    display: flex;
+    align-items: stretch;
+  }
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) > [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"] :is(nav, nav > ul, .nav-item) {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+  }
+  /* The items: larger, bolder, a full-height target, and a bar under the one that is open or hovered. */
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) > [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"] .nav-link {
+    display: flex;
+    align-items: center;
+    padding: .9rem 1rem !important;
+    color: var(--td-menubar-ink) !important;
+    font-size: var(--td-menubar-size);
+    font-weight: var(--td-menubar-weight);
+    text-decoration: none !important;
+    box-shadow: inset 0 -3px 0 transparent;
+    transition: box-shadow .15s ease, background-color .15s ease;
+  }
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) > [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"] .nav-link:is(:hover, :focus-visible, .show, .active) {
+    background-color: color-mix(in srgb, var(--td-menubar-ink) 10%, transparent);
+    box-shadow: inset 0 -3px 0 var(--td-menubar-mark);
+  }
+  /* The panels that open from the band keep the page's own light ground. */
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) > [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"] .dropdown-menu {
+    color: var(--dw-color-foreground, var(--td-ink));
+  }
+  /* The search: a white pill at the right end of the band, not a field across the whole width. */
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) [data-dw-itemtype="swift-v2_searchfield"] {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) [data-dw-itemtype="swift-v2_searchfield"] > * {
+    width: 100%;
+    max-width: var(--td-menubar-search);
+    margin-left: auto;
+  }
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) .type-ahead-field {
+    height: 2.5rem;
+    border: 0;
+    border-radius: 999px;
+    background-color: #fff;
+    color: var(--td-ink);
+  }
+  header:not(:has(.td-header-overlay)) [data-swift-gridrow]:is(:not([data-dw-colorscheme]), [data-dw-colorscheme=""], [data-dw-colorscheme="light"]):has(> [data-swift-container] > [data-dw-itemtype="swift-v2_menurelatedcontent"]) [data-dw-itemtype="swift-v2_searchfield"] svg {
+    color: var(--td-ink);
+  }
+  /* The search form carries Bootstrap's 16px bottom margin, and the header centres the field with that margin
+   * counted, so the field sat 8px above the middle of its row. Any header search row, banded or not. */
+  header [data-dw-itemtype="swift-v2_searchfield"] .suggest-form {
+    margin-bottom: 0 !important;
+  }
+}
