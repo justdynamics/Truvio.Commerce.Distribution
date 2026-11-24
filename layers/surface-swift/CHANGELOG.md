@@ -1,5 +1,30 @@
 ﻿# Changelog — surface-swift
 
+## 1.19.7 (2026-11-23)
+
+**PATCH. The price gate holds in the analytics data layer too** (Foundry #1773). The area's
+`AnonymousUsers` field gates prices, and every price position on the page honours it. Two stock
+Swift 2.5.0 templates did not: a signed-out visitor's browser received every price on the page.
+
+- `Paragraph/Swift-v2_ProductListItemRepeater.cshtml` (new override): the `view_item_list` push
+  sent currency, price and discount for every product, and each row's stretched link carried the
+  price in its `onclick` for the `select_item` push. With the gate on, the push leaves them out and
+  the `onclick` passes empty strings.
+- `eCom/ProductCatalog/ProductDetailRenderGrid.cshtml` (new override): the `view_item` push sent
+  currency, value, price and discount. With the gate on it leaves them out.
+
+Both use the gate expression of `Swift-v2_ProductPrice.cshtml` and are otherwise the stock files of
+release `v2.5.0` (archive sha256 `05312fdb…7129`); where prices are public the output is identical
+to stock. The related products list was fixed in 1.19.6.
+
+Measured on a site built from a customer data file, signed out: list page 11 of 11 products priced
+in the data layer and 11 of 11 in `onclick` before, 0 and 0 after; product page `view_item` 1 of 1
+before, 0 after. Signed in, unchanged. Other stock templates that push a price (the cart steps,
+favourites) are reached only with a cart or an account, which the gate already withholds.
+
+`tools/ci/tests/SurfaceSwiftPriceGate.Tests.ps1` keeps both overrides registered and gated. Editions
+base-swift, cpq-demo and swift-demo re-pinned.
+
 ## 1.19.6 (2026-11-23)
 
 **PATCH. The product page's own settings, and the related products row as a link.** Steps 3 and 4 of

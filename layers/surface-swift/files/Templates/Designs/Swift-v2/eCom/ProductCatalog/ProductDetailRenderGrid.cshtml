@@ -1,0 +1,63 @@
+@inherits ViewModelTemplate<ProductViewModel>
+@*
+	ProductDetailRenderGrid - an OVERRIDE of the stock Swift 2.5.0 file of the same path (surface-swift 1.19.7,
+	Foundry #1773). The render path names this file, so it takes effect the moment the layer is on disk.
+
+	WHAT IT FIXES. A data leak. The area's AnonymousUsers field gates prices, and the price template honours it:
+	a signed-out visitor sees a sign-in line where the price would be. The stock view_item push above the grid
+	does not read the gate, so the figure the lock withholds was in the page source and in window.dataLayer.
+
+	HOW. The gate expression of Swift-v2_ProductPrice.cshtml, and with it on the push leaves currency, value,
+	price and discount out. The item's id, name and variant still go. Nothing else differs from stock, and where
+	prices are public the output is byte-identical to stock.
+*@
+@using Dynamicweb.Rendering
+@using Dynamicweb.Ecommerce.ProductCatalog
+
+@{
+	if (Dynamicweb.Context.Current?.Items.Contains("ProductDetails") ?? false)
+	{
+		Dynamicweb.Context.Current.Items["ProductDetails"] = Model;
+	}
+	else
+	{
+		Dynamicweb.Context.Current?.Items.Add("ProductDetails", Model);
+	}
+	var detailPage = GetPageIdByNavigationTag("ProductDetailPage");
+	string anonymousUsersLimitations = Pageview.AreaSettings.GetRawValueString("AnonymousUsers", string.Empty);
+	bool hidePrice = anonymousUsersLimitations.Contains("price") && Pageview.User == null;
+}
+
+<script>
+	window.dataLayer = window.dataLayer || [];
+	window.dataLayer.push({
+		event: "view_item",
+		ecommerce: {
+			@if (!hidePrice)
+		{
+			<text>currency: "@Model.Price.CurrencyCode",
+			value: @Model.Price.ToStringInvariant(),</text>
+		}
+			items: [
+				{
+					item_id: "@Model.Number",
+					item_name: "@Dynamicweb.Core.Encoders.HtmlEncoder.JavaScriptStringEncode(Model.Name)",
+					@if (!string.IsNullOrEmpty(Model.VariantName))
+					{
+						<text>item_variant: "@Dynamicweb.Core.Encoders.HtmlEncoder.JavaScriptStringEncode(Model.VariantName)",</text>
+					}
+					@if (!hidePrice)
+					{
+						<text>currency: "@Model.Price.CurrencyCode",
+					price: @Model.Price.ToStringInvariant(),
+					discount: @Model.Discount.ToStringInvariant()</text>
+					}
+				}
+			]
+		}
+	});
+</script>
+
+<article itemscope itemtype="https://schema.org/Product">
+	@RenderGrid(Model.PrimaryOrDefaultGroup.PrimaryPageId > 0 ? Model.PrimaryOrDefaultGroup.PrimaryPageId : detailPage)
+</article>
