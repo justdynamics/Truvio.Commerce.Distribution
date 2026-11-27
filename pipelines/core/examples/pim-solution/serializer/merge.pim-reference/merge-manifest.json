@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 2,
+  "mode": "merge",
+  "writtenAtUtc": "2026-11-27T00:00:00Z",
+  "complete": true,
+  "excludeFieldsByItemType": {},
+  "excludeXmlElementsByType": {},
+  "entries": [
+    {
+      "providerType": "SqlTable",
+      "table": "EcomCompletionRules",
+      "nameColumn": null,
+      "compareColumns": null,
+      "xmlColumns": [],
+      "resolveLinksInColumns": [],
+      "serviceCaches": [],
+      "schemaSync": null,
+      "entryId": "sql/EcomCompletionRules",
+      "files": [
+        "_sql/EcomCompletionRules/100160.yml",
+        "_sql/EcomCompletionRules/100161.yml",
+        "_sql/EcomCompletionRules/100162.yml",
+        "_sql/EcomCompletionRules/100163.yml",
+        "_sql/EcomCompletionRules/_meta.yml"
+      ]
+    }
+  ]
+}

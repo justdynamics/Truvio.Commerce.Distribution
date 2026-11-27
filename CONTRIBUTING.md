@@ -252,6 +252,16 @@ platform's `Crypto.EncryptPassword`), then recycle the host. An edition's person
 (`base.contract.json` `sampleData.guaranteedRows`) ship without a password in the same way; set
 theirs the same way or through the Management API `UserSetPassword`.
 
+## Pipeline items
+
+`pipelines/<name>/` is a versioned item of deploy tooling ([pipelines/README.md](pipelines/README.md)), not a layer:
+it is outside `gateProven` and its tag attests no gate run. The structural gate (validator check 20) holds every
+item to its schema ([`pipelines/pipeline.schema.json`](pipelines/pipeline.schema.json)), its entry file, a README and
+a CHANGELOG heading for its version, and refuses a changed file under a version whose tag already exists. The unit
+tests under `pipelines/core/tests` run with the validator. What an item has delivered against a live host is
+stated in the `proof` block of its `pipeline.json` and in its CHANGELOG, with what was not measured; a change to
+`pipelines/core` is run against a blank host before it merges, and the numbers go in the pull request.
+
 ## Conventions
 
 - One layer per `layers/<name>/` directory; one edition per `editions/<name>.json`.

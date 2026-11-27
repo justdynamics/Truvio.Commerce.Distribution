@@ -15,6 +15,9 @@ Two modes:
                         (safe to run on every push to main). This is what .github/workflows/
                         release-tags.yml runs post-merge.
 
+Pipeline items (pipelines/<name>/pipeline.json) get pipelines/<name>/<semver>: deploy tooling released
+from main, annotated with the proof state the item states for itself, and never a gate attestation.
+
 Tag scheme: layers/<name>/<semver> and editions/<name>/<semver>, annotated with the gate run id
 + swiftVersion. Both the gate run id and the Swift/DW versions are READ FROM
 layers/INDEX.json `gateProven` (Distribution #77) - never re-typed here. An edition absent from
@@ -226,6 +229,12 @@ $releasePlan = @(Get-BacpacReleasePlan -Index $index | Where-Object { $manifestT
 foreach ($r in @(Get-BacpacReleasePlan -Index $index | Where-Object { $manifestTags -notcontains $_.Tag })) {
     $skipped += "release $($r.Tag) <- $($r.Asset) (held: this manifest does not carry the tag)"
 }
+
+# --- Pipeline items (pipelines/<name>/pipeline.json, tools/ci/Pipelines.ps1). ------------------
+# Deploy tooling, not content: the tag names the item's version and says in so many words that it is
+# no gate attestation. Cut like every other tag: only when missing, at the current main.
+. (Join-Path $PSScriptRoot 'Pipelines.ps1')
+foreach ($p in @(Get-PipelineReleaseTag -RepoRoot $RepoRoot)) { $manifest.Add($p) }
 
 # --- Emit. -----------------------------------------------------------------------------------
 if (-not $Execute) {

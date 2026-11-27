@@ -1,0 +1,7 @@
+﻿"ownership":
+  "mode": "merge"
+"EcomCompletionRuleId": 100160
+"EcomCompletionRuleName": "Commerce data complete"
+"EcomCompletionRuleDescription": "The seven Commerce attributes a Commerce-band master carries before it is fit to sell: price unit, minimum order quantity, quantity break, VAT group, delivery lead time, warranty term, return window."
+"EcomCompletionRuleProductFields": "ProductCategory|tc_commerce|tcPriceUnit,ProductCategory|tc_commerce|tcMinimumOrderQuantity,ProductCategory|tc_commerce|tcQuantityBreak,ProductCategory|tc_commerce|tcVatGroup,ProductCategory|tc_commerce|tcDeliveryLeadTime,ProductCategory|tc_commerce|tcWarrantyTerm,ProductCategory|tc_commerce|tcReturnWindow"
+"EcomCompletionRuleExcludeVariants": true

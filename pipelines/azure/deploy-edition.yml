@@ -1,0 +1,99 @@
+# Truvio Commerce Distribution: Azure Pipelines stage template (pipelines/azure).
+#
+# One stage per environment, in the order given. Each stage is a deployment job bound to an Azure
+# DevOps Environment, so approvals and checks are set on the Environment, not in YAML. The job
+# delivers a Distribution edition onto a Dynamicweb 10 host reached by its URL and an Admin API key,
+# by running pipelines/core/Deploy-Edition.ps1 from the same Distribution ref this template came from.
+#
+# The consuming pipeline declares the Distribution as a repository resource and extends from here:
+#
+#   resources:
+#     repositories:
+#       - repository: distribution
+#         type: github
+#         endpoint: <GitHub service connection>
+#         name: justdynamics/Truvio.Commerce.Distribution
+#         ref: refs/tags/pipelines/azure/1.0.0
+#   stages:
+#     - template: pipelines/azure/deploy-edition.yml@distribution
+#       parameters:
+#         edition: base-only
+#         environments:
+#           - name: test
+#             environment: acme-test
+#             variableGroup: acme-test
+#
+# Each environment entry:
+#   name            test, acceptance or production. Decides what may be delivered: demo data (an
+#                   edition with sampleData true, an extra layer of kind sample-data) only to test.
+#   environment     the Azure DevOps Environment the deployment job targets (approvals live there).
+#   variableGroup   a Library variable group holding DW_HOST_URL and the secret DW_API_KEY; on a
+#                   test environment optionally the secret DW_PERSONA_PASSWORD.
+#   pool            optional; default vmImage windows-latest. A self-hosted pool for a host the
+#                   Microsoft-hosted agents cannot reach.
+#   restart         optional; control-file (default, Dynamicweb Cloud), command or none.
+#   restartCommand  optional; the command line for restart command (a self-hosted agent on the
+#                   web server, or an az webapp restart on an agent signed in to Azure).
+#   hostFiles       optional; auto (default), full, repositories or none.
+#   edition         optional; overrides the template's edition for this environment (an edition
+#                   with sample data on test, the same composition without it further on).
+parameters:
+  - name: edition
+    type: string
+    default: base-only
+  - name: environments
+    type: object
+  # The alias of the Distribution repository resource in the consuming pipeline.
+  - name: distributionRepository
+    type: string
+    default: distribution
+  # Layer folders in the consuming repository, relative to its root, delivered after the edition's
+  # own layers (a customer's data layer). Empty: the consuming repository is not checked out.
+  - name: extraLayers
+    type: object
+    default: []
+  # The solution repository's own part of the release, in the layout pipelines/README.md describes
+  # (layers/, serializer/<mode>.<name>/, files/, settings.json, testdata/): a path in the consuming
+  # repository, '.' for its root. Empty: no solution is delivered, only the edition.
+  - name: solutionPath
+    type: string
+    default: ''
+  - name: areaId
+    type: number
+    default: 1
+  # false is an exception to name in the run record: deserialize with strict mode off.
+  - name: strict
+    type: boolean
+    default: true
+
+stages:
+  - ${{ each env in parameters.environments }}:
+      - stage: deploy_${{ replace(env.name, '-', '_') }}
+        displayName: Deploy ${{ coalesce(env.edition, parameters.edition) }} to ${{ env.name }}
+        variables:
+          - group: ${{ env.variableGroup }}
+        jobs:
+          - deployment: deliver
+            displayName: Deliver ${{ coalesce(env.edition, parameters.edition) }}
+            environment: ${{ env.environment }}
+            ${{ if env.pool }}:
+              pool: ${{ env.pool }}
+            ${{ else }}:
+              pool:
+                vmImage: windows-latest
+            strategy:
+              runOnce:
+                deploy:
+                  steps:
+                    - template: steps/deploy-edition.yml
+                      parameters:
+                        edition: ${{ coalesce(env.edition, parameters.edition) }}
+                        environmentKind: ${{ env.name }}
+                        distributionRepository: ${{ parameters.distributionRepository }}
+                        extraLayers: ${{ parameters.extraLayers }}
+                        solutionPath: ${{ parameters.solutionPath }}
+                        areaId: ${{ parameters.areaId }}
+                        strict: ${{ parameters.strict }}
+                        hostFiles: ${{ coalesce(env.hostFiles, 'auto') }}
+                        restart: ${{ coalesce(env.restart, 'control-file') }}
+                        restartCommand: ${{ coalesce(env.restartCommand, '') }}

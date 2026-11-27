@@ -117,6 +117,12 @@ Checks (all fail-closed; any failure -> exit 1):
                         or {pimShop} declares ledger.inputs.defaultLanguage / pimShop as an
                         EcomLanguages / EcomShops row a composed layer ships; a declared input no
                         locked check uses FAILs too.
+ 20. Pipeline items   - (pipelines/pipeline.schema.json, tools/ci/Pipelines.ps1) every pipelines/<name>/ is
+                        a versioned item: pipeline.json validates, name equals the directory, the entry
+                        file, README.md and a CHANGELOG.md heading for the version exist, requires.core
+                        equals the version of pipelines/core, files are LF, and once the tag
+                        pipelines/<name>/<version> exists the item's tree equals it (a changed file
+                        needs a new version).
  11. Color schemes    - (Foundry #1003) every non-empty "colorSchemeId" in a layer's serialized
                         content names a scheme Id defined by a kind:theme layer's
                         files/System/Styles/ColorSchemes/*.json, compared case-sensitively
@@ -930,6 +936,14 @@ foreach ($directory in $layerDirs) {
         if ($layer.ContainsKey('cpq')) { & $log $true "CPQ declaration $($directory.Name): artifacts and behavior binding" }
     } catch { & $log $false "CPQ declaration $($directory.Name): $($_.Exception.Message)" }
 }
+
+# 20. Pipeline items (pipelines/pipeline.schema.json, tools/ci/Pipelines.ps1): each pipelines/<name>/ is a
+# versioned item with a schema-valid pipeline.json, its entry file, a README and a CHANGELOG heading for its
+# version; requires.core equals pipelines/core; a released tag's tree is not changed without a new version.
+try {
+    . (Join-Path $PSScriptRoot 'Pipelines.ps1')
+    foreach ($r in @(Test-PipelineItem -RepoRoot $RepoRoot)) { & $log $r.ok $r.msg }
+} catch { & $log $false "pipeline items: $($_.Exception.Message)" }
 
 Write-Host ""
 if ($fail.Count -eq 0) {

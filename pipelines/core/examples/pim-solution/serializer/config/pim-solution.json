@@ -1,0 +1,14 @@
+{
+  "outputDirectory": "Serializer",
+  "replaceOutputSubfolder": "replace",
+  "mergeOutputSubfolder": "merge",
+  "predicates": [
+    {
+      "name": "pim-solution EcomCompletionRules",
+      "mode": "Merge",
+      "providerType": "SqlTable",
+      "table": "EcomCompletionRules",
+      "where": "EcomCompletionRuleId >= 100160 AND EcomCompletionRuleId <= 100163"
+    }
+  ]
+}

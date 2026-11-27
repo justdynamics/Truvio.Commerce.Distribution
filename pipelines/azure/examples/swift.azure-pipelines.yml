@@ -1,0 +1,43 @@
+# A Swift storefront: the demo composition with sample data on test, the same storefront without
+# sample data on acceptance and production, and this repository's own solution on top.
+#
+# Besides what pim.azure-pipelines.yml lists, the test variable group may hold
+#   DW_PERSONA_PASSWORD   secret: the password the three sample personas get on the test host
+#
+# The test host here is an IIS site with a self-hosted agent on the web server, which recycles the
+# application pool itself. The other two are Dynamicweb Cloud solutions, restarted through the
+# platform's control file (the default).
+trigger: none
+
+resources:
+  repositories:
+    - repository: distribution
+      type: github
+      endpoint: github-distribution
+      name: justdynamics/Truvio.Commerce.Distribution
+      ref: refs/tags/pipelines/azure/1.0.0
+
+stages:
+  - template: pipelines/azure/deploy-edition.yml@distribution
+    parameters:
+      # The storefront without demo data: base, the Swift surface and the default theme.
+      edition: base-swift
+      # This repository's own part of the release, delivered after the edition's layers.
+      solutionPath: .
+      environments:
+        - name: test
+          # Sample catalogue, personas and orders: a test environment only. The deploy core refuses
+          # this edition on acceptance and production.
+          edition: swift-demo
+          environment: shop-test
+          variableGroup: shop-test
+          pool:
+            name: web-servers
+          restart: command
+          restartCommand: '& "$env:windir\system32\inetsrv\appcmd.exe" recycle apppool /apppool.name:shop-test'
+        - name: acceptance
+          environment: shop-acceptance
+          variableGroup: shop-acceptance
+        - name: production
+          environment: shop-production
+          variableGroup: shop-production

@@ -13,6 +13,7 @@ on:
       - 'contracts/cpq/**'
       - 'contracts/ledger/**'
       - 'tools/ci/**'
+      - 'pipelines/**'
       - 'tools/sample-data/**'
       - '.github/workflows/validate.yml'
   push:
@@ -50,6 +51,12 @@ jobs:
         env:
           BASE_REF: ${{ github.base_ref || 'main' }}
 
+      # A released pipeline item is not changed without a new version (validator check 20): the check
+      # compares the item's tree with its tag, so the pipeline tags must be in this shallow clone.
+      - name: Fetch the pipeline item tags
+        shell: bash
+        run: git fetch --no-tags --depth=1 origin '+refs/tags/pipelines/*:refs/tags/pipelines/*' || true
+
       - name: Validate distribution contract (schema, edition refs, base contract, version spine + floor rule, protected strings, SPEC-06, INDEX.json + gateProven + provenTree proof key + retired tombstones)
         shell: pwsh
         run: ./tools/ci/Validate-Distribution.ps1 -SpineBaseRef "origin/$env:BASE_REF" -SkillsRoot .ledger-skills -SkillsRootsByCommit @{'ac3571b7ab00755b65e7e60c071b146ef014d146'='.ledger-skills'}
@@ -63,3 +70,9 @@ jobs:
           # Cpq.Reader.Tests.ps1 reads the skills-side receipt reader from the CPQ ledger revision checked
           # out above; without this variable its five tests skip (Distribution #133).
           CPQ_SKILLS_ROOT: ${{ github.workspace }}/.ledger-skills-cpq
+
+      # The deploy core (pipelines/core) resolves every edition's plan and composes it into one tree per
+      # mode here, on Linux; the delivery itself needs a live host and is not run on a hosted runner.
+      - name: Deploy core unit tests (pipelines/core/tests, Pester)
+        shell: pwsh
+        run: Invoke-Pester -Path pipelines/core/tests -CI
