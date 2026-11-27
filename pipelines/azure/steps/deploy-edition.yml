@@ -1,0 +1,122 @@
+# Truvio Commerce Distribution: Azure Pipelines step template (pipelines/azure/steps).
+#
+# The steps of one delivery, for a job that already has DW_HOST_URL and the secret DW_API_KEY as
+# variables. deploy-edition.yml uses it inside a deployment job; a pipeline with its own stages and
+# jobs can use it directly. Every step runs pipelines/core/Deploy-Edition.ps1 with a subset of its
+# stages, so a failed step names the stage that failed, and the reports and logs of all steps are
+# published as one artifact whatever the outcome.
+parameters:
+  - name: edition
+    type: string
+    default: base-only
+  - name: environmentKind
+    type: string
+    default: test
+    values: [test, acceptance, production]
+  - name: distributionRepository
+    type: string
+    default: distribution
+  - name: extraLayers
+    type: object
+    default: []
+  - name: solutionPath
+    type: string
+    default: ''
+  - name: areaId
+    type: number
+    default: 1
+  - name: strict
+    type: boolean
+    default: true
+  - name: hostFiles
+    type: string
+    default: auto
+    values: [auto, full, repositories, none]
+  - name: restart
+    type: string
+    default: control-file
+    values: [control-file, command, none]
+  - name: restartCommand
+    type: string
+    default: ''
+  # The delivery, as the steps a run shows. Each entry is one invocation of the script.
+  - name: runs
+    type: object
+    default:
+      - name: plan
+        title: Plan and probe the host
+        stages: plan,probe
+      - name: apps
+        title: Install the required apps
+        stages: apps
+      - name: files
+        title: Push host files, layer files and solution files
+        stages: hostfiles,layerfiles
+      - name: settings
+        title: Apply settings
+        stages: settings
+      - name: content
+        title: Compose and deserialize
+        stages: content
+      - name: index
+        title: Build indexes and verify
+        stages: index,verify
+
+steps:
+  - checkout: ${{ parameters.distributionRepository }}
+    path: distribution
+    fetchDepth: 1
+    displayName: Check out the Distribution
+  - ${{ if or(gt(length(parameters.extraLayers), 0), ne(parameters.solutionPath, '')) }}:
+      - checkout: self
+        path: solution
+        fetchDepth: 1
+        displayName: Check out the solution repository
+
+  - ${{ each run in parameters.runs }}:
+      - pwsh: |
+          $ErrorActionPreference = 'Stop'
+          $workspace = '$(Pipeline.Workspace)'
+          $arguments = @{
+            HostUrl          = '$(DW_HOST_URL)'
+            Edition          = '${{ parameters.edition }}'
+            Environment      = '${{ parameters.environmentKind }}'
+            Stage            = '${{ run.stages }}'
+            RunName          = '${{ run.name }}'
+            HostFiles        = '${{ parameters.hostFiles }}'
+            Restart          = '${{ parameters.restart }}'
+            AreaId           = ${{ parameters.areaId }}
+            DistributionRoot = (Join-Path $workspace 'distribution')
+            WorkDir          = (Join-Path $workspace 'deploy')
+          }
+          $restartCommand = $env:TRUVIO_RESTART_COMMAND
+          if ($restartCommand) { $arguments['RestartCommand'] = $restartCommand }
+          $extra = @('${{ join(';', parameters.extraLayers) }}' -split ';' | Where-Object { $_ } | ForEach-Object { Join-Path (Join-Path $workspace 'solution') $_ })
+          if ($extra.Count -gt 0) { $arguments['ExtraLayer'] = $extra }
+          $solutionPath = '${{ parameters.solutionPath }}'
+          if ($solutionPath) { $arguments['SolutionRoot'] = (Join-Path (Join-Path $workspace 'solution') $solutionPath) }
+          if ('${{ parameters.strict }}' -ne 'True') { $arguments['NonStrict'] = $true }
+          & (Join-Path $workspace 'distribution/pipelines/core/Deploy-Edition.ps1') @arguments
+          exit $LASTEXITCODE
+        displayName: ${{ run.title }}
+        env:
+          DW_API_KEY: $(DW_API_KEY)
+          DW_PERSONA_PASSWORD: $(DW_PERSONA_PASSWORD)
+          TRUVIO_RESTART_COMMAND: ${{ parameters.restartCommand }}
+
+  # The reports of every step sit beside their logs, and the folder exists even when the first step
+  # stopped before writing anything, so the artifact is published whatever the outcome.
+  - pwsh: |
+      $dir = Join-Path '$(Pipeline.Workspace)' 'deploy'
+      $out = Join-Path $dir 'logs'
+      New-Item -ItemType Directory -Force -Path $out | Out-Null
+      Get-ChildItem -LiteralPath $dir -Filter 'deploy-report*.json' -ErrorAction SilentlyContinue | Copy-Item -Destination $out -Force
+      if (-not (Get-ChildItem -LiteralPath $out -Recurse -File)) { 'No step wrote a report or a log.' | Set-Content -LiteralPath (Join-Path $out 'empty.txt') }
+    displayName: Collect the deploy reports
+    condition: always()
+  - task: PublishPipelineArtifact@1
+    displayName: Publish the deploy reports and logs
+    condition: always()
+    inputs:
+      targetPath: $(Pipeline.Workspace)/deploy/logs
+      artifact: deploy-$(System.StageName)-$(System.JobAttempt)

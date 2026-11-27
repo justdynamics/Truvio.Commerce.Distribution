@@ -24,3 +24,7 @@
 *.webp binary
 *.jpeg binary
 *.jpg binary
+
+# The pipeline items (pipelines/) are read as they are by the Azure Pipelines parser and by Linux agents,
+# and the validator refuses a CRLF in them: keep the working tree LF whatever core.autocrlf says.
+pipelines/** text eol=lf

@@ -1,0 +1,16 @@
+{
+  "name": "core",
+  "version": "1.0.0",
+  "kind": "deploy-core",
+  "engine": "powershell",
+  "description": "Engine-neutral delivery of a Distribution edition onto a Dynamicweb 10 host reached by URL and Admin API key. Every pipeline item runs this.",
+  "entry": "Deploy-Edition.ps1",
+  "requires": {
+    "powershell": "7.2"
+  },
+  "proof": {
+    "state": "proven",
+    "date": "2026-11-27",
+    "statement": "Delivered onto blank Dynamicweb 10.30.8 hosts, end to end: base-only (the PIM-only composition) twice, base-only with the example PIM solution on top, and swift-demo (the storefront with sample data). After each, the row counts the edition declares were read back from the database as declared. Run on Windows with PowerShell 7 against IIS hosts restarted by command; a restart through the Dynamicweb Cloud control file and a delivery from a Linux agent are unmeasured."
+  }
+}

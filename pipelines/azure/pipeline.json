@@ -1,0 +1,15 @@
+{
+  "name": "azure",
+  "version": "1.0.0",
+  "kind": "pipeline-template",
+  "engine": "azure-pipelines",
+  "description": "Azure Pipelines templates that deliver a Distribution edition onto a Dynamicweb 10 host: one stage per environment, each a deployment job bound to an Azure DevOps Environment, running the deploy core.",
+  "entry": "deploy-edition.yml",
+  "requires": {
+    "core": "1.0.0"
+  },
+  "proof": {
+    "state": "unproven",
+    "statement": "The templates have not run in Azure DevOps yet. The script every step calls is pipelines/core, which has delivered base-only and swift-demo end to end; the YAML around it parses and is otherwise unmeasured."
+  }
+}

@@ -1,0 +1,44 @@
+# A PIM-only solution: the base-only edition (framework, no storefront) and this repository's own
+# data model, workflows, rules, files and settings on top, onto three environments. Test also gets
+# the sample products under testdata/; acceptance and production get configuration only.
+#
+# Copy this file into the solution's repository as azure-pipelines.yml and create, in the Azure
+# DevOps project:
+#   * a GitHub service connection (here: github-distribution) that can read the Distribution;
+#   * one Environment per stage (here: pim-test, pim-acceptance, pim-production), with an approval
+#     check on the acceptance and production Environments;
+#   * one Library variable group per stage, with the same names, each holding
+#       DW_HOST_URL   the host's address, https://...
+#       DW_API_KEY    secret: an Admin API key of that host (Settings > System > Developer > Api Keys)
+#
+# Stages run in the order listed, each waiting for the one before it and for its Environment's
+# checks. Nothing here deletes anything on a host, and every stage can be run again.
+trigger: none
+
+resources:
+  repositories:
+    - repository: distribution
+      type: github
+      endpoint: github-distribution
+      name: justdynamics/Truvio.Commerce.Distribution
+      # A released version of the templates. The same ref decides the scripts and the layers, so a
+      # run is reproducible. Use refs/heads/main to follow the Distribution instead.
+      ref: refs/tags/pipelines/azure/1.0.0
+
+stages:
+  - template: pipelines/azure/deploy-edition.yml@distribution
+    parameters:
+      edition: base-only
+      # This repository's own part of the release: layers/, serializer/<mode>.<name>/, files/,
+      # settings.json and testdata/ at its root. Leave it out to deliver the edition alone.
+      solutionPath: .
+      environments:
+        - name: test
+          environment: pim-test
+          variableGroup: pim-test
+        - name: acceptance
+          environment: pim-acceptance
+          variableGroup: pim-acceptance
+        - name: production
+          environment: pim-production
+          variableGroup: pim-production

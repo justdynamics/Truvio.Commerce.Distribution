@@ -1,0 +1,51 @@
+﻿"ownership":
+  "mode": "merge"
+"tableName": "EcomCompletionRules"
+"nameColumn": ""
+"compareColumns": ""
+"keyColumns":
+- "EcomCompletionRuleId"
+"identityColumns":
+- "EcomCompletionRuleId"
+"allColumns":
+- "EcomCompletionRuleId"
+- "EcomCompletionRuleName"
+- "EcomCompletionRuleDescription"
+- "EcomCompletionRuleProductFields"
+- "EcomCompletionRuleExcludeVariants"
+"columnDefinitions":
+- "name": "EcomCompletionRuleId"
+  "dataType": "int"
+  "maxLength": 0
+  "precision": 10
+  "scale": 0
+  "isNullable": false
+  "isIdentity": true
+- "name": "EcomCompletionRuleName"
+  "dataType": "nvarchar"
+  "maxLength": 255
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false
+- "name": "EcomCompletionRuleDescription"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "EcomCompletionRuleProductFields"
+  "dataType": "nvarchar"
+  "maxLength": -1
+  "precision": 0
+  "scale": 0
+  "isNullable": true
+  "isIdentity": false
+- "name": "EcomCompletionRuleExcludeVariants"
+  "dataType": "bit"
+  "maxLength": 0
+  "precision": 0
+  "scale": 0
+  "isNullable": false
+  "isIdentity": false

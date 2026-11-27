@@ -17,11 +17,14 @@ layers/            one versioned unit each (base, features, surfaces, themes, sa
 editions/          named compositions of layers (base-swift, base-only, swift-demo, headless-demo, dap-portal)
   edition.schema.json       the edition contract
 tools/ci/          the self-contained PR validator
+pipelines/         versioned deploy tooling: the deploy script and the pipeline templates that run it
 ```
 
 - **[LAYERS.md](LAYERS.md)** — the full catalog (every layer + edition, proven vs Beta).
 - **[GLOSSARY.md](GLOSSARY.md)** — authoritative vocabulary.
 - **[CONTRIBUTING.md](CONTRIBUTING.md)** — the merge gate.
+- **[pipelines/README.md](pipelines/README.md)** — deploying an edition and a solution repository onto a host:
+  the deploy script, the Azure Pipelines templates, and the route without a pipeline engine.
 
 ## Model
 
